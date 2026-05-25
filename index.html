@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Parámetros de Configuración de Tráfico</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      background: #d0d0d0;
+      color: #222;
+    }
+
+    /* ── Page title ── */
+    .page-title {
+      background: #fff;
+      padding: 6px 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 1px solid #ccc;
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      background: #e0e0e0;
+      border-bottom: 2px solid #bbb;
+      gap: 2px;
+      padding: 4px 4px 0 4px;
+    }
+    .tab {
+      padding: 5px 12px;
+      border: 1px solid #bbb;
+      border-bottom: none;
+      background: #d5d5d5;
+      color: #333;
+      cursor: pointer;
+      font-size: 11px;
+      border-radius: 3px 3px 0 0;
+    }
+    .tab.active {
+      background: #E8821A;
+      color: #fff;
+      font-weight: bold;
+      border-color: #c06010;
+    }
+    .tab:hover:not(.active) { background: #c8c8c8; }
+
+    /* ── Form area (tan background) ── */
+    .form-area {
+      background: #C8A06A;
+      padding: 0;
+      border: 1px solid #A07840;
+      margin: 6px;
+    }
+
+    /* ── Section header inside form ── */
+    .section-header {
+      background: #A07840;
+      color: #fff;
+      text-align: center;
+      font-weight: bold;
+      font-size: 12px;
+      padding: 3px 0;
+    }
+
+    /* ── Form rows ── */
+    .form-rows {
+      padding: 8px 10px;
+    }
+    .form-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 6px;
+    }
+    .form-row label {
+      width: 200px;
+      min-width: 200px;
+      color: #222;
+      font-size: 11px;
+      text-align: right;
+      padding-right: 6px;
+    }
+    .form-row input[type=text] {
+      border: 1px solid #999;
+      padding: 2px 5px;
+      font-size: 11px;
+      width: 280px;
+      background: #fff;
+    }
+    .form-row select {
+      border: 1px solid #999;
+      padding: 2px 4px;
+      font-size: 11px;
+      width: 280px;
+      background: #fff;
+    }
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+      padding-left: 10px;
+    }
+    .check-row input[type=checkbox] {
+      accent-color: #cc0000;
+      width: 13px;
+      height: 13px;
+    }
+    .check-row label { font-size: 11px; color: #111; font-weight: bold; }
+
+    /* ── New: notification row with button ── */
+    .notif-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+      padding-left: 10px;
+    }
+    .notif-row input[type=checkbox] {
+      accent-color: #cc0000;
+      width: 13px; height: 13px;
+    }
+    .notif-row label { font-size: 11px; color: #111; font-weight: bold; }
+    .btn-gestionar {
+      padding: 3px 10px;
+      font-size: 11px;
+      background: #A07840;
+      color: #fff;
+      border: 1px solid #7a5820;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 2px;
+    }
+    .btn-gestionar:hover { background: #8a6030; }
+
+    /* ── Config Licencias button ── */
+    .btn-config {
+      padding: 5px 16px;
+      font-size: 11px;
+      background: linear-gradient(to bottom, #d0d0d0, #b0b0b0);
+      color: #333;
+      border: 1px solid #888;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* ═══════════════════════════════════════
+       MODAL
+    ═══════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal {
+      background: #f0f0f0;
+      border: 2px solid #666;
+      width: 860px;
+      box-shadow: 4px 4px 12px rgba(0,0,0,0.5);
+    }
+
+    /* Modal title bar */
+    .modal-titlebar {
+      background: #5a5a5a;
+      color: #fff;
+      padding: 5px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .modal-close {
+      background: #E8821A;
+      color: #fff;
+      border: none;
+      width: 22px;
+      height: 22px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Modal toolbar */
+    .modal-toolbar {
+      background: #e0e0e0;
+      border-bottom: 1px solid #bbb;
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-gray {
+      padding: 3px 14px;
+      font-size: 11px;
+      background: linear-gradient(to bottom, #e8e8e8, #cccccc);
+      color: #222;
+      border: 1px solid #999;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .btn-gray:hover { background: linear-gradient(to bottom, #ddd, #bbb); }
+    .toolbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toolbar-right label { font-size: 11px; }
+    .toolbar-right input[type=checkbox] {
+      accent-color: #cc0000;
+      width: 13px; height: 13px;
+    }
+    .btn-aplicar {
+      padding: 3px 10px;
+      font-size: 11px;
+      background: #E8821A;
+      color: #fff;
+      border: 1px solid #b06010;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 2px;
+    }
+
+    /* Modal subtitle */
+    .modal-subtitle {
+      padding: 8px 10px 2px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+    }
+    .modal-count {
+      text-align: right;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #333;
+    }
+    .modal-count span { font-weight: bold; }
+
+    /* ── Grid ── */
+    .grid-wrapper {
+      margin: 4px 8px 0 8px;
+      border: 1px solid #999;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    thead tr {
+      background: #E8821A;
+    }
+    thead th {
+      padding: 5px 6px;
+      text-align: left;
+      font-weight: bold;
+      color: #fff;
+      border-right: 1px solid #c06010;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    thead th:last-child { border-right: none; }
+    thead th.search-col {
+      text-align: right;
+      color: #fff;
+    }
+    .sort-icon { font-size: 9px; margin-left: 2px; opacity: 0.9; }
+
+    /* Search box in header */
+    .th-search {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+    .th-search span { font-weight: bold; }
+    .th-search input {
+      width: 100px;
+      border: 1px solid #fff;
+      padding: 1px 4px;
+      font-size: 10px;
+      background: #fff8f0;
+    }
+
+    tbody tr { border-bottom: 1px solid #e0e0e0; background: #fff; }
+    tbody tr.selected { background: #E8821A; color: #fff; font-weight: bold; }
+    tbody tr:hover:not(.selected) { background: #fff3e0; }
+    tbody td {
+      padding: 3px 6px;
+      border-right: 1px solid #ececec;
+      vertical-align: middle;
+    }
+    tbody td:last-child { border-right: none; }
+    tbody td.center { text-align: center; }
+
+    input[type=checkbox].toggle {
+      width: 13px; height: 13px;
+      cursor: pointer;
+      accent-color: #E8821A;
+    }
+
+    /* ── Modal footer / pagination ── */
+    .modal-footer {
+      background: #d8d8d8;
+      border-top: 1px solid #bbb;
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #444;
+    }
+    .pagination { display: flex; gap: 2px; }
+    .pag-btn {
+      padding: 2px 8px;
+      font-size: 10px;
+      background: linear-gradient(to bottom, #e8e8e8, #cccccc);
+      border: 1px solid #aaa;
+      cursor: pointer;
+    }
+    .pag-btn.active-page {
+      background: #E8821A;
+      color: #fff;
+      border-color: #c06010;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page title -->
+  <div class="page-title">Parámetros de Configuración de Tráfico</div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab">General</div>
+    <div class="tab">Liquidaciones</div>
+    <div class="tab">Viajes</div>
+    <div class="tab">Permisionarios</div>
+    <div class="tab">Tabla de Valores</div>
+    <div class="tab">Alerta de correos</div>
+    <div class="tab active">Apps Móviles</div>
+    <div class="tab">Notificaciones</div>
+  </div>
+
+  <!-- Form area -->
+  <div class="form-area" style="margin:6px;">
+
+    <!-- Section: Mis Viajes -->
+    <div class="section-header">Mis Viajes</div>
+    <div class="form-rows">
+
+      <div style="display:flex; gap:40px;">
+        <div>
+          <div class="form-row">
+            <label>Correo S.O.S Móvil:</label>
+            <input type="text" value="christopher.calidad@gmtransporterp.com" />
+          </div>
+          <div class="form-row">
+            <label>Mensaje S.O.S Móvil:</label>
+            <input type="text" value="CHRISTOPHER.CALIDAD@GMTRANSPORTERP.C" />
+          </div>
+          <div class="form-row">
+            <label>Recibir correo de notificación del móvil:</label>
+            <input type="text" value="christopher.calidad@gmtransporterp.com" />
+          </div>
+          <div class="form-row">
+            <label>Formato para imprimir liquidación</label>
+            <select><option>LIQUIDACION TIMBRADA</option></select>
+          </div>
+          <div class="form-row">
+            <label>Formato para imprimir carta porte</label>
+            <select><option></option></select>
+          </div>
+
+          <div style="height:8px;"></div>
+          <div class="check-row">
+            <input type="checkbox" checked />
+            <label>Visualizar viajes de hasta 30 días de elaboración</label>
+          </div>
+          <div class="check-row">
+            <input type="checkbox" checked />
+            <label>Registro de entradas, salidas y disponibilidad</label>
+          </div>
+          <div class="check-row">
+            <input type="checkbox" />
+            <label>No modificar hora de salida/llegada</label>
+          </div>
+
+          <!-- ★ NUEVO CAMPO CH-439 ★ -->
+          <div class="notif-row">
+            <input type="checkbox" checked />
+            <label>Enviar notificaciones de llegada a contactos del cliente</label>
+            <button class="btn-gestionar" onclick="document.getElementById('modal').style.display='flex'">
+              Gestionar contactos ▶
+            </button>
+          </div>
+        </div>
+
+        <div style="padding-top:4px;">
+          <button class="btn-config">Config. Licencias</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: GMTERP -->
+    <div class="section-header">GMTERP</div>
+    <div class="form-rows">
+      <div class="form-row">
+        <label>Estatus Salida Válida Móvil</label>
+        <select><option>DOCUMENTADO</option></select>
+      </div>
+      <div class="form-row">
+        <label>Estatus Salida Inválida Móvil</label>
+        <select><option>DOCUMENTADO</option></select>
+      </div>
+      <div class="form-row">
+        <label>En salida inválida enviar correo a</label>
+        <input type="text" value="david.calidad@gmtransporterp.com" />
+      </div>
+      <div class="form-row">
+        <label>Estatus Entrada Válida Móvil</label>
+        <select><option>DOCUMENTADO</option></select>
+      </div>
+      <div class="form-row">
+        <label>Estatus Entrada Inválida Móvil</label>
+        <select><option>DOCUMENTADO</option></select>
+      </div>
+      <div class="form-row">
+        <label>En entrada inválida enviar correo a</label>
+        <input type="text" value="" />
+      </div>
+    </div>
+
+  </div><!-- /form-area -->
+
+
+  <!-- ═══════════ MODAL ═══════════ -->
+  <div id="modal" class="modal-overlay" style="display:none;">
+    <div class="modal">
+
+      <!-- Title bar -->
+      <div class="modal-titlebar">
+        <span>Contactos para Notificaciones — Mis Viajes</span>
+        <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">✕</button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="modal-toolbar">
+        <div class="toolbar-right" style="margin-left:0;">
+          <input type="checkbox" checked id="soloHab" />
+          <label for="soloHab">Únicamente habilitados</label>
+          <button class="btn-aplicar">Aplicar 🔍</button>
+        </div>
+      </div>
+
+      <!-- Subtitle & search & count -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 10px 2px 10px;">
+        <div style="font-size:13px; font-weight:bold; color:#333;">Contactos para notificaciones de llegada</div>
+        <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:#333;">
+          <label style="font-weight:bold;">Buscar:</label>
+          <input type="text" id="buscador" style="border:1px solid #aaa; padding:2px 6px; font-size:11px; width:160px;" placeholder="Cliente o contacto..." oninput="filtrarContactos()" />
+        </div>
+      </div>
+      <div class="modal-count">Contactos con notificación activa: <span id="contadorHab">5</span></div>
+
+      <!-- Grid -->
+      <div class="grid-wrapper">
+        <table id="tablaContactos">
+          <thead>
+            <tr>
+              <th style="width:70px;">Número <span class="sort-icon">⇅</span></th>
+              <th style="width:200px;">Cliente <span class="sort-icon">⇅</span></th>
+              <th style="width:180px;">Contacto <span class="sort-icon">⇅</span></th>
+              <th>Correo Electrónico <span class="sort-icon">⇅</span></th>
+              <th style="width:130px; text-align:center;">Enviar notificación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>000001</td>
+              <td>Empresa ABC S.A.</td>
+              <td>Juan Pérez García</td>
+              <td>juan.perez@abc.com</td>
+              <td class="center"><input type="checkbox" class="toggle" checked /></td>
+            </tr>
+            <tr>
+              <td>000002</td>
+              <td>Empresa ABC S.A.</td>
+              <td>Ana López Martínez</td>
+              <td>ana.lopez@abc.com</td>
+              <td class="center"><input type="checkbox" class="toggle" /></td>
+            </tr>
+            <tr>
+              <td>000003</td>
+              <td>Empresa ABC S.A.</td>
+              <td>Roberto Sánchez</td>
+              <td>r.sanchez@abc.com</td>
+              <td class="center"><input type="checkbox" class="toggle" checked /></td>
+            </tr>
+            <tr>
+              <td>000004</td>
+              <td>Transportes XYZ S.A.</td>
+              <td>Carlos Ruiz Díaz</td>
+              <td>carlos.ruiz@xyz.com.mx</td>
+              <td class="center"><input type="checkbox" class="toggle" checked /></td>
+            </tr>
+            <tr>
+              <td>000005</td>
+              <td>Transportes XYZ S.A.</td>
+              <td>María Torres Vega</td>
+              <td>m.torres@xyz.com.mx</td>
+              <td class="center"><input type="checkbox" class="toggle" checked /></td>
+            </tr>
+            <tr>
+              <td>000006</td>
+              <td>Grupo Logístico del Norte</td>
+              <td>Fernando Mora</td>
+              <td>fmora@glnorte.mx</td>
+              <td class="center"><input type="checkbox" class="toggle" /></td>
+            </tr>
+            <tr>
+              <td>000007</td>
+              <td>Grupo Logístico del Norte</td>
+              <td>Lucía Hernández</td>
+              <td>lhernandez@glnorte.mx</td>
+              <td class="center"><input type="checkbox" class="toggle" /></td>
+            </tr>
+            <tr>
+              <td>000008</td>
+              <td>Distribuidora Central SA</td>
+              <td>Pedro Alvarado</td>
+              <td>pedro@distcentral.com</td>
+              <td class="center"><input type="checkbox" class="toggle" checked /></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer / pagination -->
+      <div class="modal-footer">
+        <span>Mostrando registros del 1 al 8 de un total de 8 registros</span>
+        <div class="pagination">
+          <button class="pag-btn">Primero</button>
+          <button class="pag-btn">Anterior</button>
+          <button class="pag-btn active-page">1</button>
+          <button class="pag-btn">Siguiente</button>
+          <button class="pag-btn">Último</button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /modal -->
+
+<script>
+  function filtrarContactos() {
+    const texto = document.getElementById('buscador').value.toLowerCase();
+    const soloHab = document.getElementById('soloHab').checked;
+    const filas = document.querySelectorAll('#tablaContactos tbody tr');
+    let visibles = 0;
+
+    filas.forEach(fila => {
+      const cliente = fila.cells[1].textContent.toLowerCase();
+      const contacto = fila.cells[2].textContent.toLowerCase();
+      const correo = fila.cells[3].textContent.toLowerCase();
+      const habilitado = fila.querySelector('input[type=checkbox]').checked;
+
+      const coincideTexto = cliente.includes(texto) || contacto.includes(texto) || correo.includes(texto);
+      const coincideHab = soloHab ? habilitado : true;
+
+      if (coincideTexto && coincideHab) {
+        fila.style.display = '';
+        visibles++;
+      } else {
+        fila.style.display = 'none';
+      }
+    });
+
+    document.getElementById('contadorHab').textContent = visibles;
+  }
+
+  document.getElementById('soloHab').addEventListener('change', filtrarContactos);
+</script>
+</body>
+</html>

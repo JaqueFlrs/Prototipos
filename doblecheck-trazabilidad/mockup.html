@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DobleCheck – Trazabilidad</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #F2F2F2; color: #222; font-size: 14px; }
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* Sidebar */
+.sidebar { width: 200px; background: #fff; border-right: 1px solid #eee; display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar-logo { padding: 14px 16px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f5f5f5; }
+.logo-img { display:flex;align-items:center;gap:6px; }
+.logo-dc { background:#FFA101;border-radius:5px;padding:3px 6px;font-size:10px;font-weight:800;color:#fff; }
+.logo-name { font-size:12px;font-weight:700;color:#333; }
+.sidebar-nav { flex:1; padding:8px 0; }
+.nav-item { display:flex;align-items:center;gap:10px;padding:11px 18px;font-size:13px;color:#666;cursor:pointer;border-left:3px solid transparent; }
+.nav-item:hover { background:#fafafa; }
+.nav-item.active { color:#FFA101;font-weight:600;background:#FFF8EE;border-left-color:#FFA101; }
+.nav-item svg { width:15px;height:15px;flex-shrink:0; }
+.nav-config { display:flex;align-items:center;gap:10px;padding:11px 18px;font-size:13px;color:#666;cursor:pointer; }
+.nav-config.active { color:#FFA101;font-weight:600; }
+.sidebar-bottom { padding:10px 0;border-top:1px solid #f5f5f5; }
+.nav-sm { display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:12px;color:#888;cursor:pointer; }
+
+/* Main */
+.main { flex:1;display:flex;flex-direction:column;overflow:hidden; }
+
+/* Topbar */
+.topbar { background:#fff;border-bottom:1px solid #eee;padding:0 20px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0; }
+.topbar-left { display:flex;align-items:center;gap:10px; }
+.hamburger { font-size:18px;color:#555;cursor:pointer; }
+.topbar-right { display:flex;align-items:center;gap:10px; }
+.bell { font-size:16px;color:#aaa;cursor:pointer; }
+.avatar { width:28px;height:28px;border-radius:50%;background:#FFA101;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700; }
+.user-name { font-size:12px;font-weight:600;color:#333; }
+
+/* Screen nav */
+.screen-nav { display:flex;gap:0;background:#fff;border-bottom:2px solid #eee;padding:0 20px;flex-shrink:0; }
+.snav { padding:10px 18px;font-size:12px;font-weight:600;cursor:pointer;color:#999;border-bottom:2px solid transparent;margin-bottom:-2px; }
+.snav.active { color:#FFA101;border-bottom-color:#FFA101; }
+
+/* Screens */
+.screen { display:none;flex:1;overflow-y:auto;flex-direction:column; }
+.screen.active { display:flex; }
+
+/* ══ PANTALLA 1 – Configuración ══ */
+.cfg-wrap { padding:24px 60px; }
+.cfg-card { background:#fff;border-radius:10px;padding:22px 26px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.cfg-card-title { font-size:13px;font-weight:700;color:#333;margin-bottom:16px;display:flex;align-items:center;gap:8px; }
+.cfg-row { display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #f5f5f5; }
+.cfg-row:last-child { border-bottom:none;padding-bottom:0; }
+.cfg-row-lbl { font-size:13px;font-weight:500;color:#222;margin-bottom:2px; }
+.cfg-row-desc { font-size:12px;color:#aaa; }
+
+.traz-card { border:2px solid #FFA101;border-radius:10px;background:#fff;padding:22px 26px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.traz-inner { background:#FFF8EE;border-radius:8px;border:1.5px solid #FFE0A0;padding:16px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px; }
+.new-badge { background:#FFA101;color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px;margin-left:6px; }
+
+/* Toggle */
+.tog-wrap { display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;flex-shrink:0; }
+.tog-track { width:40px;height:22px;border-radius:11px;background:#d0d0d0;position:relative;transition:background .2s;flex-shrink:0; }
+.tog-track.on { background:#FFA101; }
+.tog-thumb { position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s; }
+.tog-track.on .tog-thumb { transform:translateX(18px); }
+.tog-lbl { font-size:12px;color:#aaa;white-space:nowrap; }
+.tog-track.on ~ .tog-lbl { color:#FFA101;font-weight:700; }
+
+.btn-guardar { background:#FFA101;color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px; }
+.btn-guardar:hover { background:#e8920e; }
+
+/* ══ PANTALLA 2 – Listado ══ */
+.list-wrap { flex:1;display:flex;flex-direction:column; }
+
+.list-topbar { background:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;flex-shrink:0; }
+.list-topbar-left { display:flex;align-items:center;gap:8px; }
+.list-title { font-size:16px;font-weight:700;color:#222; }
+.list-count { font-size:14px;color:#aaa;font-weight:400; }
+.btn-export { display:flex;align-items:center;gap:5px;background:none;border:none;font-size:13px;color:#555;cursor:pointer; }
+.btn-nueva { background:#FFA101;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px; }
+.btn-nueva:hover { background:#e8920e; }
+
+.list-filters { background:#fff;padding:10px 20px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #eee;flex-shrink:0; }
+.filter-date { display:flex;align-items:center;gap:6px;border:1.5px solid #e0e0e0;border-radius:8px;padding:7px 10px;font-size:12px;color:#888;background:#fff;cursor:pointer; }
+.filter-date span { font-size:11px; }
+.filter-search { flex:1;border:1.5px solid #e0e0e0;border-radius:8px;padding:7px 12px;font-size:12px;outline:none;color:#555; }
+.filter-search::placeholder { color:#ccc; }
+.btn-filtrar { background:#FFA101;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px; }
+.btn-filtro-av { background:none;border:1.5px solid #e0e0e0;border-radius:8px;padding:7px 14px;font-size:12px;color:#555;cursor:pointer;display:flex;align-items:center;gap:5px; }
+
+/* Lista */
+.insp-list { flex:1;overflow-y:auto;padding:0; }
+.insp-item { background:#fff;border-bottom:1px solid #f0f0f0;padding:14px 20px;display:flex;align-items:center;gap:14px;transition:background .1s; }
+.insp-item:hover { background:#FAFAFA; }
+
+.insp-avatar { width:38px;height:38px;border-radius:50%;background:#FFA101;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0; }
+
+.insp-body { flex:1;min-width:0; }
+.insp-name { font-size:14px;font-weight:700;color:#222;margin-bottom:6px; }
+.insp-tags { display:flex;flex-wrap:wrap;gap:5px; }
+.tag { display:inline-flex;align-items:center;gap:4px;background:#FFF8EE;border:1px solid #FFE0A0;border-radius:6px;padding:3px 9px;font-size:11px;color:#555; }
+.tag svg { width:11px;height:11px;color:#FFA101;flex-shrink:0; }
+.tag-traz { background:#FFF3E0;border-color:#FFA101;color:#FFA101;font-weight:700; }
+
+.insp-right { display:flex;align-items:center;gap:12px;flex-shrink:0; }
+.insp-meta { display:flex;align-items:center;gap:5px;font-size:12px;color:#aaa; }
+.check-icon { color:#22C55E;font-size:14px; }
+.three-dots { color:#bbb;cursor:pointer;font-size:18px;padding:2px 6px;border-radius:4px; }
+.three-dots:hover { background:#f0f0f0;color:#555; }
+
+/* Botón seguimiento — minimalista */
+.btn-seg {
+  display:inline-flex;align-items:center;gap:5px;
+  background:transparent;color:#FFA101;
+  border:1.5px solid #FFA101;
+  border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;
+  cursor:pointer;white-space:nowrap;
+  transition:all .15s;
+}
+.btn-seg:hover { background:#FFF8EE; }
+.seg-dot { width:6px;height:6px;border-radius:50%;background:#FFA101;flex-shrink:0; }
+
+/* ══ DRAWER ══ */
+.overlay { position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:50;display:none; }
+.overlay.open { display:block; }
+.drawer { position:fixed;right:0;top:0;bottom:0;width:430px;background:#fff;z-index:51;box-shadow:-4px 0 24px rgba(0,0,0,.13);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1); }
+.drawer.open { transform:translateX(0); }
+
+.dr-header { padding:18px 22px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;justify-content:space-between; }
+.dr-title { font-size:15px;font-weight:700;color:#222;display:flex;align-items:center;gap:7px; }
+.dr-sub { font-size:12px;color:#888;margin-top:4px; }
+.dr-close { background:none;border:none;font-size:20px;color:#bbb;cursor:pointer;padding:2px 6px;border-radius:5px; }
+.dr-close:hover { background:#f5f5f5;color:#555; }
+.dr-body { flex:1;overflow-y:auto;padding:18px 22px; }
+.dr-footer { padding:14px 22px;border-top:1px solid #f0f0f0; }
+
+/* GPS card */
+.gps-card { background:#EEF2FF;border:1.5px solid #C7D2FE;border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start; }
+.gps-icon { font-size:22px;flex-shrink:0; }
+.gps-lbl { font-size:10px;font-weight:700;color:#6366F1;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px; }
+.gps-coords { font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:2px; }
+.gps-addr { font-size:12px;color:#666; }
+.gps-refresh { margin-top:8px;background:none;border:1.5px solid #C7D2FE;border-radius:6px;padding:4px 10px;font-size:11px;color:#6366F1;font-weight:600;cursor:pointer; }
+.gps-refresh:hover { background:#EEF2FF; }
+
+/* Fields */
+.field { margin-bottom:15px; }
+.field label { display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:5px; }
+.field input,.field textarea { width:100%;border:1.5px solid #e0e0e0;border-radius:8px;padding:8px 12px;font-size:13px;outline:none;font-family:inherit;transition:border .15s; }
+.field input:focus,.field textarea:focus { border-color:#FFA101; }
+.field textarea { min-height:88px;resize:vertical; }
+.field .hint { font-size:11px;color:#bbb;margin-top:3px; }
+.fecha-row { display:flex;gap:8px;align-items:flex-end; }
+.fecha-row .field { flex:1;margin-bottom:0; }
+.btn-hoy { background:#FFF8EE;border:1.5px solid #FFA101;border-radius:8px;padding:8px 12px;font-size:12px;color:#FFA101;font-weight:700;cursor:pointer;white-space:nowrap; }
+
+/* Historial */
+.hist-title { font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin:18px 0 10px; }
+.hist-item { display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f5f5f5; }
+.hist-item:last-child { border-bottom:none; }
+.hist-dot { width:8px;height:8px;border-radius:50%;background:#FFA101;flex-shrink:0;margin-top:5px; }
+.hist-dot.new { background:#10B981; }
+.hist-date { font-size:11px;color:#bbb;margin-bottom:3px; }
+.hist-obs { font-size:13px;color:#333; }
+.hist-loc { font-size:11px;color:#6366F1;margin-top:2px; }
+
+/* Btn notificar */
+.btn-notif { width:100%;background:#FFA101;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px; }
+.btn-notif:hover { background:#e8920e; }
+
+/* Toast */
+.toast { position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:200; }
+.toast.show { opacity:1; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:#ddd;border-radius:3px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-img">
+        <div class="logo-dc">DC</div>
+        <span class="logo-name">Doble Check</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item" onclick="goScreen('config')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+        Formularios
+      </div>
+      <div class="nav-item active" onclick="goScreen('list')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Inspecciones
+      </div>
+      <div class="nav-config">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Configuraciones ▾
+      </div>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="nav-sm">⚠ Reportar Falla</div>
+      <div class="nav-sm">👤 Mi Perfil</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="hamburger">☰</span>
+      </div>
+      <div class="topbar-right">
+        <span class="bell">🔔</span>
+        <div class="avatar">JA</div>
+        <span class="user-name">JAQUELINE</span>
+      </div>
+    </div>
+
+    <!-- Screen nav -->
+    <div class="screen-nav">
+      <div class="snav" id="snav-config" onclick="goScreen('config')">1. Config. Formulario (toggle trazabilidad)</div>
+      <div class="snav active" id="snav-list" onclick="goScreen('list')">2. Listado de Inspecciones</div>
+    </div>
+
+    <!-- ══ PANTALLA 1 — CONFIGURACIÓN ══ -->
+    <div class="screen" id="screen-config">
+      <div class="cfg-wrap">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <div>
+            <div style="font-size:16px;font-weight:700;">Revisión ocular de la unidad de transporte</div>
+            <div style="font-size:12px;color:#aaa;margin-top:2px;">Formulario predefinido · Configuración</div>
+          </div>
+          <button class="btn-guardar" onclick="showToast('✓ Configuración guardada')">💾 Guardar</button>
+        </div>
+
+        <!-- General -->
+        <div class="cfg-card">
+          <div class="cfg-card-title">⚙️ General</div>
+          <div class="cfg-row">
+            <div><div class="cfg-row-lbl">Requerir firma</div><div class="cfg-row-desc">El inspector debe firmar al finalizar</div></div>
+            <div class="tog-wrap" onclick="togRow(this)"><div class="tog-track on"><div class="tog-thumb"></div></div><span class="tog-lbl">Activo</span></div>
+          </div>
+          <div class="cfg-row">
+            <div><div class="cfg-row-lbl">Permitir adjuntar fotos</div><div class="cfg-row-desc">El inspector puede agregar imágenes</div></div>
+            <div class="tog-wrap" onclick="togRow(this)"><div class="tog-track on"><div class="tog-thumb"></div></div><span class="tog-lbl">Activo</span></div>
+          </div>
+          <div class="cfg-row">
+            <div><div class="cfg-row-lbl">Genera reporte de falla</div><div class="cfg-row-desc">Se genera al detectar respuestas negativas</div></div>
+            <div class="tog-wrap" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div><span class="tog-lbl">Inactivo</span></div>
+          </div>
+        </div>
+
+        <!-- TRAZABILIDAD -->
+        <div class="traz-card">
+          <div class="cfg-card-title">📍 Trazabilidad <span class="new-badge">NUEVO</span></div>
+          <div class="traz-inner">
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:600;color:#222;margin-bottom:6px;">Habilitar trazabilidad en inspecciones</div>
+              <div style="font-size:12px;color:#777;line-height:1.6;">Al activar esta opción, cada inspección de este formulario mostrará un botón de <strong>Seguimiento</strong> en el listado. Permite registrar la ubicación GPS, fecha y observaciones del inspector, enviando notificación a los contactos configurados en <strong>Envío de Formulario</strong>.</div>
+            </div>
+            <div class="tog-wrap" onclick="togTraz(this)" style="flex-shrink:0;margin-left:20px;">
+              <div class="tog-track on"><div class="tog-thumb"></div></div>
+              <span class="tog-lbl" style="color:#FFA101;font-weight:700;">Activo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notificaciones -->
+        <div class="cfg-card">
+          <div class="cfg-card-title">📧 Notificaciones</div>
+          <div class="cfg-row">
+            <div><div class="cfg-row-lbl">Envío de correo al completar</div><div class="cfg-row-desc">Notifica a los contactos al finalizar</div></div>
+            <div class="tog-wrap" onclick="togRow(this)"><div class="tog-track on"><div class="tog-thumb"></div></div><span class="tog-lbl">Activo</span></div>
+          </div>
+          <div class="cfg-row">
+            <div><div class="cfg-row-lbl">Notificación automática</div><div class="cfg-row-desc">Se envía al crear la inspección</div></div>
+            <div class="tog-wrap" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div><span class="tog-lbl">Inactivo</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ PANTALLA 2 — LISTADO INSPECCIONES ══ -->
+    <div class="screen active" id="screen-list">
+      <div class="list-wrap">
+
+        <!-- Header -->
+        <div class="list-topbar">
+          <div class="list-topbar-left">
+            <span class="list-title">Inspecciones</span>
+            <span class="list-count">145</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn-export">⬇ Exportar</button>
+            <button class="btn-nueva">+ Inspección</button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="list-filters">
+          <div class="filter-date"><span>📅</span> dd/mm/aaaa</div>
+          <div class="filter-date"><span>📅</span> dd/mm/aaaa</div>
+          <input class="filter-search" placeholder="🔍 Buscar"/>
+          <button class="btn-filtrar">🔽 Filtrar</button>
+          <button class="btn-filtro-av">⚙ Filtro Avanzado</button>
+        </div>
+
+        <!-- Items -->
+        <div class="insp-list">
+
+          <!-- I-145 CON trazabilidad -->
+          <div class="insp-item">
+            <div class="insp-avatar">SE</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-145</div>
+              <div class="insp-tags">
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Formulario Doble Check</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> MA-00005005</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg> CARLOS</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 5v3h-7V8z"/></svg> T-09</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <button class="btn-seg" onclick="openDrawer('I-145','Formulario Doble Check','Carlos')">
+                <span class="seg-dot"></span> Seguimiento
+              </button>
+              <span class="insp-meta"><span class="check-icon">✔</span> 📅 13-05-2026, 10:17 AM</span>
+              <span class="three-dots">⋮</span>
+            </div>
+          </div>
+
+          <!-- I-144 CON trazabilidad -->
+          <div class="insp-item">
+            <div class="insp-avatar">SE</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-144</div>
+              <div class="insp-tags">
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Formulario Doble Check</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> MA-00005005</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> CARLOS</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/></svg> T-09</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <button class="btn-seg" onclick="openDrawer('I-144','Formulario Doble Check','Carlos')">
+                <span class="seg-dot"></span> Seguimiento
+              </button>
+              <span class="insp-meta"><span class="check-icon">✔</span> 📅 13-05-2026, 10:10 AM</span>
+              <span class="three-dots">⋮</span>
+            </div>
+          </div>
+
+          <!-- I-143 SIN trazabilidad -->
+          <div class="insp-item">
+            <div class="insp-avatar">SE</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-143</div>
+              <div class="insp-tags">
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Formulario Doble Check</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> MA-00005006</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> MONICATST</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/></svg> T1</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <span class="insp-meta"><span class="check-icon">✔</span> 📅 13-05-2026, 10:08 AM</span>
+              <span class="three-dots">⋮</span>
+            </div>
+          </div>
+
+          <!-- I-142 SIN trazabilidad -->
+          <div class="insp-item">
+            <div class="insp-avatar">AD</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-142</div>
+              <div class="insp-tags">
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Formulario C-TPAT GM</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> MA-000005004</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> ARTURO</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/></svg> GV55</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <span class="insp-meta"><span class="check-icon">✔</span> 📅 07-05-2026, 10:46 AM</span>
+              <span class="three-dots">⋮</span>
+            </div>
+          </div>
+
+          <!-- I-141 SIN trazabilidad -->
+          <div class="insp-item">
+            <div class="insp-avatar">AD</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-141</div>
+              <div class="insp-tags">
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Formulario C-TPAT GM</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> MA-000005003</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> ARTURO</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/></svg> GV55</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <span class="insp-meta"><span class="check-icon">✔</span> 📅 07-05-2026, 9:25 AM</span>
+              <span class="three-dots">⋮</span>
+            </div>
+          </div>
+
+          <!-- I-140 SIN trazabilidad -->
+          <div class="insp-item">
+            <div class="insp-avatar">AD</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-140</div>
+              <div class="insp-tags">
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Formulario C-TPAT GM</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> MA-000005002</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> ARTURO</span>
+                <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/></svg> GV55</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <span class="insp-meta"><span class="check-icon">✔</span> 📅 07-05-2026, 9:13 AM</span>
+              <span class="three-dots">⋮</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="dr-header">
+    <div>
+      <div class="dr-title">📍 Seguimiento</div>
+      <div class="dr-sub" id="dr-sub">Inspección #I-145 · Carlos</div>
+    </div>
+    <button class="dr-close" onclick="closeDrawer()">✕</button>
+  </div>
+
+  <div class="dr-body">
+    <div class="gps-card">
+      <div class="gps-icon">📍</div>
+      <div>
+        <div class="gps-lbl">Ubicación actual</div>
+        <div class="gps-coords" id="gps-coords">32.6519° N, 115.4683° W</div>
+        <div class="gps-addr">Mexicali, Baja California, México</div>
+        <button class="gps-refresh" onclick="refreshGPS()">↻ Actualizar ubicación</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Fecha y hora</label>
+      <div class="fecha-row">
+        <div class="field"><input type="datetime-local" id="dr-fecha" value="2026-05-28T14:30"/></div>
+        <button class="btn-hoy" onclick="setHoy()">Hoy</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Observaciones</label>
+      <textarea id="dr-obs" placeholder="Describe la situación actual, incidencias o novedades…"></textarea>
+      <div class="hint">Se incluirán en la notificación enviada a los contactos.</div>
+    </div>
+
+    <div class="hist-title">Historial de seguimiento</div>
+    <div class="hist-item">
+      <div class="hist-dot"></div>
+      <div>
+        <div class="hist-date">13/05/2026 10:17 AM · Carlos</div>
+        <div class="hist-obs">Inspección iniciada. Unidad en patio de revisión.</div>
+        <div class="hist-loc">📍 32.6519° N, 115.4683° W</div>
+      </div>
+    </div>
+    <div class="hist-item" id="new-hist" style="display:none;">
+      <div class="hist-dot new"></div>
+      <div>
+        <div class="hist-date" id="new-hist-date"></div>
+        <div class="hist-obs" id="new-hist-obs"></div>
+        <div class="hist-loc">📍 32.6519° N, 115.4683° W</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dr-footer">
+    <button class="btn-notif" onclick="notificar()">🔔 Notificar nueva posición</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  function goScreen(s) {
+    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.snav').forEach(x=>x.classList.remove('active'));
+    document.getElementById('screen-'+s).classList.add('active');
+    document.getElementById('snav-'+s).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach((el,i)=>{
+      el.classList.toggle('active',(s==='config'&&i===0)||(s==='list'&&i===1));
+    });
+  }
+  function togRow(el) {
+    const t=el.querySelector('.tog-track'), l=el.querySelector('.tog-lbl');
+    const on=t.classList.toggle('on');
+    l.textContent=on?'Activo':'Inactivo';
+  }
+  function togTraz(el) {
+    const t=el.querySelector('.tog-track'), l=el.querySelector('.tog-lbl');
+    const on=t.classList.toggle('on');
+    l.textContent=on?'Activo':'Inactivo';
+    l.style.color=on?'#FFA101':'#aaa';
+    l.style.fontWeight=on?'700':'normal';
+  }
+  function openDrawer(folio,form,insp) {
+    document.getElementById('dr-sub').textContent=`Inspección #${folio} · ${insp}`;
+    document.getElementById('dr-obs').value='';
+    document.getElementById('new-hist').style.display='none';
+    document.getElementById('overlay').classList.add('open');
+    document.getElementById('drawer').classList.add('open');
+  }
+  function closeDrawer() {
+    document.getElementById('overlay').classList.remove('open');
+    document.getElementById('drawer').classList.remove('open');
+  }
+  function refreshGPS() {
+    const c=document.getElementById('gps-coords');
+    c.textContent='Obteniendo…';
+    setTimeout(()=>{ c.textContent='32.6524° N, 115.4690° W'; showToast('📍 Ubicación actualizada'); },1100);
+  }
+  function setHoy() {
+    const n=new Date(), p=x=>String(x).padStart(2,'0');
+    document.getElementById('dr-fecha').value=`${n.getFullYear()}-${p(n.getMonth()+1)}-${p(n.getDate())}T${p(n.getHours())}:${p(n.getMinutes())}`;
+  }
+  function notificar() {
+    const obs=document.getElementById('dr-obs').value.trim();
+    if(!obs){showToast('⚠ Escribe una observación');return;}
+    const f=document.getElementById('dr-fecha').value.replace('T',' ');
+    document.getElementById('new-hist-date').textContent=`${f} · Jaqueline`;
+    document.getElementById('new-hist-obs').textContent=obs;
+    document.getElementById('new-hist').style.display='flex';
+    document.getElementById('dr-obs').value='';
+    showToast('✓ Notificación enviada a los contactos');
+    setTimeout(closeDrawer,1800);
+  }
+  let tt;
+  function showToast(m){
+    const t=document.getElementById('toast');
+    t.textContent=m; t.classList.add('show');
+    clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2600);
+  }
+  goScreen('list');
+</script>
+</body>
+</html>

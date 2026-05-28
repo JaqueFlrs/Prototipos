@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<title>Prototipo de Desarrollo – DobleCheck Notificaciones</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #e8e8e8; font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #000; }
+
+  .page-wrap { display: flex; flex-direction: column; align-items: center; padding: 32px 16px; gap: 32px; }
+
+  .page {
+    background: #fff;
+    width: 794px;
+    min-height: 1123px;
+    padding: 80px 90px 80px 90px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-content { flex: 1; }
+
+  /* Header */
+  .doc-header {
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+    border-bottom: 1px solid #aaa;
+    padding-bottom: 8px;
+    margin-bottom: 28px;
+    color: #333;
+    letter-spacing: .5px;
+  }
+
+  /* Footer */
+  .doc-footer {
+    text-align: center;
+    font-size: 8pt;
+    font-style: italic;
+    color: #555;
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+    margin-top: 28px;
+  }
+
+  .title { text-align: center; font-size: 14pt; font-weight: bold; margin-bottom: 28px; }
+  .date { margin-bottom: 14px; }
+  .asunto { margin-bottom: 14px; }
+  .asunto span.label { font-weight: bold; }
+
+  .meta-line { margin-bottom: 5px; }
+  .meta-line span.label { font-weight: bold; }
+
+  .separator { border: none; border-top: 1.5px solid #333; margin: 18px 0 18px; }
+
+  .section-title { font-weight: bold; margin: 16px 0 6px; }
+
+  p.body-text { margin-bottom: 12px; line-height: 1.5; text-align: justify; }
+
+  ul.puntos { margin: 6px 0 14px 22px; padding: 0; }
+  ul.puntos li { margin-bottom: 7px; line-height: 1.5; text-align: justify; list-style-type: disc; }
+
+  .firma-section { margin-top: 60px; }
+  .firma-line { border-top: 1px solid #000; width: 340px; margin: 60px 0 6px; }
+  .firma-label { font-size: 10pt; color: #333; }
+
+  .page-label {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    font-size: 8pt;
+    color: #bbb;
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- PÁGINA 1 -->
+  <div class="page">
+    <span class="page-label">Pág. 1</span>
+    <div class="doc-header">PROTOTIPO DE DESARROLLO</div>
+
+    <div class="page-content">
+      <div class="title">PROTOTIPO DE DESARROLLO</div>
+
+      <p class="date">Mexicali, Baja California a 28 de Mayo de 2026.</p>
+
+      <p class="asunto"><span class="label">Asunto:</span> NOTIFICACIONES POR PREGUNTA Y GRUPOS EN FORMULARIOS – DOBLECHECK</p>
+
+      <p class="meta-line"><span class="label">Nombre del cliente:</span> POR DEFINIR</p>
+      <p class="meta-line" style="margin-bottom:14px;"><span class="label">Contacto cliente:</span> POR DEFINIR</p>
+
+      <p class="body-text">Estimado cliente en relación con su amable solicitud, le detallamos lo siguiente:</p>
+
+      <p class="meta-line"><span class="label">No. De Solicitud:</span> POR DEFINIR</p>
+      <hr class="separator"/>
+
+      <p class="section-title">Objetivo del requerimiento.</p>
+      <p class="body-text">Se requiere agregar la capacidad de configurar notificaciones a nivel de pregunta dentro de los formularios de DobleCheck. El objetivo es que al momento de crear o editar un formulario, el administrador pueda indicar si una pregunta específica debe disparar una notificación al ser contestada (de forma individual) o si debe pertenecer a un grupo de notificación, de tal manera que la notificación se envíe únicamente cuando todas las preguntas del grupo hayan sido respondidas. Los destinatarios de las notificaciones se tomarán automáticamente de la configuración existente en Configuraciones → Envío de Formulario para el cliente correspondiente.</p>
+
+      <p class="section-title">Puntos funcionales del requerimiento</p>
+      <ul class="puntos">
+        <li>En la vista de creación y edición de formulario, cada pregunta contará con un selector de "Notificación" en su sección de configuración. Las opciones disponibles serán: Sin notificación, Individual y Grupo (lista de grupos existentes del formulario).</li>
+        <li>Cuando se selecciona "Individual", al momento de contestar esa pregunta en una inspección se disparará una notificación a los destinatarios configurados en Configuraciones → Envío de Formulario para ese cliente y formulario.</li>
+        <li>El administrador podrá crear grupos de notificación desde un panel en la pantalla de preguntas del formulario. Cada grupo tiene nombre (visible para el inspector) y color identificador.</li>
+        <li>Cuando una pregunta se asigna a un grupo, la notificación se disparará únicamente cuando todas las preguntas pertenecientes al grupo hayan sido contestadas en la inspección.</li>
+        <li>La evaluación del grupo se realiza cada vez que se guarda la inspección, incluyendo guardados parciales. Si el grupo ya disparó la notificación en esa inspección, no se vuelve a enviar.</li>
+        <li>El tipo de notificación por pregunta es excluyente: una pregunta puede ser Individual o pertenecer a un Grupo, pero no ambos al mismo tiempo.</li>
+        <li>Al eliminar un grupo, el sistema solicitará confirmación mediante un diálogo. Si se confirma, todas las preguntas asignadas a ese grupo quedan automáticamente en "Sin notificación".</li>
+        <li>Los destinatarios de las notificaciones (tanto individuales como de grupo) se toman automáticamente de la configuración existente en Configuraciones → Envío de Formulario. No se requiere configuración adicional de destinatarios por pregunta o grupo.</li>
+        <li>La notificación enviada incluirá el nombre del grupo (para notificaciones de grupo) o el título de la pregunta (para notificaciones individuales), junto con los datos de la inspección relacionada.</li>
+      </ul>
+
+      <p class="section-title">Resultado Esperado:</p>
+      <p class="body-text">Al completar este desarrollo, los administradores podrán configurar de manera sencilla qué preguntas de un formulario deben generar notificaciones, ya sea de forma individual o agrupada. Esto permitirá a los clientes recibir alertas oportunas basadas en el llenado de inspecciones, sin necesidad de configurar destinatarios adicionales, aprovechando la configuración de envío ya existente en el sistema.</p>
+    </div>
+
+    <div class="doc-footer">Nos encontramos a sus órdenes Cel. (686)304 3241, Grupo GM Transport SA de CV — Alhóndiga de Granaditas 800 Independencia Mexicali Baja California CP. 21290</div>
+  </div>
+
+  <!-- PÁGINA 2 — Firma -->
+  <div class="page">
+    <span class="page-label">Pág. 2</span>
+    <div class="doc-header">PROTOTIPO DE DESARROLLO</div>
+
+    <div class="page-content">
+      <div class="title">PROTOTIPO DE DESARROLLO</div>
+      <p class="date">Mexicali, Baja California a 28 de Mayo de 2026.</p>
+
+      <div class="firma-section">
+        <p class="section-title">Nombre y firma de aceptación</p>
+        <div class="firma-line"></div>
+        <p class="firma-label">Nombre y firma</p>
+      </div>
+    </div>
+
+    <div class="doc-footer">Nos encontramos a sus órdenes Cel. (686)304 3241, Grupo GM Transport SA de CV — Alhóndiga de Granaditas 800 Independencia Mexicali Baja California CP. 21290</div>
+  </div>
+
+</div>
+</body>
+</html>

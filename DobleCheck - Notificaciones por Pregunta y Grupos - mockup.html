@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DobleCheck – Notificaciones por Pregunta</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #F2F2F2; color: #222; font-size: 14px; }
+
+/* ── Layout ── */
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* Sidebar */
+.sidebar { width: 200px; background: #fff; border-right: 1px solid #eee; display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar-logo { padding: 16px 18px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f5f5f5; }
+.logo-box { background: #FFA101; border-radius: 6px; padding: 4px 7px; font-size: 11px; font-weight: 800; color: #fff; letter-spacing: .3px; }
+.logo-text { font-size: 12px; font-weight: 700; color: #333; }
+.sidebar-nav { flex: 1; padding: 8px 0; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; }
+.nav-item.active { color: #FFA101; font-weight: 600; background: #FFF8EE; border-left: 3px solid #FFA101; }
+.nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+.sidebar-bottom { padding: 12px 0; border-top: 1px solid #f5f5f5; }
+.nav-item-sm { display: flex; align-items: center; gap: 10px; padding: 9px 18px; font-size: 12px; color: #888; cursor: pointer; }
+.nav-item-sm:hover { color: #FFA101; }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Topbar */
+.topbar { background: #fff; border-bottom: 1px solid #eee; padding: 0 24px; height: 54px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.breadcrumb .back { color: #555; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+.breadcrumb .back:hover { color: #FFA101; }
+.breadcrumb .sep { color: #ccc; }
+.breadcrumb .page { color: #FFA101; font-weight: 500; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.icon-btn-top { background: none; border: none; cursor: pointer; color: #FFA101; display: flex; align-items: center; padding: 6px; border-radius: 6px; }
+.icon-btn-top:hover { background: #FFF8EE; }
+.btn-save { background: #FFA101; color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-save:hover { background: #e8920e; }
+.topbar-user { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #333; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: #FFA101; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.bell { font-size: 18px; color: #aaa; cursor: pointer; }
+
+/* Tabs */
+.tab-bar { background: #fff; border-bottom: 1px solid #eee; padding: 0 24px; display: flex; flex-shrink: 0; }
+.tab { padding: 14px 22px; font-size: 13px; color: #999; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab.active { color: #FFA101; border-bottom-color: #FFA101; font-weight: 600; }
+
+/* Content */
+.content { flex: 1; overflow-y: auto; padding: 24px 80px; }
+
+/* Form name card */
+.form-name-card { background: #fff; border-radius: 10px; border-left: 4px solid #FFA101; margin-bottom: 16px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 12px; }
+.form-name-icon { color: #FFA101; font-size: 18px; margin-top: 2px; }
+.form-name-body { flex: 1; }
+.form-name-label { font-size: 12px; color: #999; margin-bottom: 2px; }
+.form-name-value { font-size: 15px; font-weight: 700; color: #222; }
+.form-name-desc { font-size: 13px; color: #888; margin-top: 6px; }
+
+/* Question card */
+.q-card { background: #fff; border-radius: 10px; border-left: 4px solid #FFA101; margin-bottom: 14px; padding: 18px 20px 14px; }
+.q-card.notif-individual { border-left-color: #F59E0B; }
+.q-card.notif-grupo-frenos { border-left-color: #6366F1; }
+.q-card.notif-grupo-luces  { border-left-color: #10B981; }
+
+.q-top { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+.q-title { flex: 1; font-size: 14px; font-weight: 500; color: #222; border: none; border-bottom: 1.5px solid #e8e8e8; padding: 4px 0; outline: none; background: transparent; }
+.q-title:focus { border-bottom-color: #FFA101; }
+.q-title[readonly] { border-bottom-color: transparent; }
+.q-type-wrap { display: flex; align-items: center; gap: 6px; border: 1px solid #e0e0e0; border-radius: 6px; padding: 6px 10px; background: #fff; cursor: pointer; }
+.q-type-wrap:hover { border-color: #FFA101; }
+.q-type-icon { color: #FFA101; font-size: 15px; }
+.q-type-text { font-size: 12px; color: #555; white-space: nowrap; }
+.q-type-caret { font-size: 10px; color: #aaa; }
+
+.q-desc { font-size: 13px; color: #bbb; border: none; border-bottom: 1px solid #f0f0f0; padding: 3px 0; width: 100%; max-width: 520px; outline: none; background: transparent; margin-bottom: 14px; }
+.q-desc:focus { border-bottom-color: #FFA101; }
+.q-desc[readonly] { border-bottom-color: transparent; color: #888; }
+
+/* Evaluacion block */
+.eval-block { margin-bottom: 14px; }
+.eval-label { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px; }
+.radio-opt { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 13px; color: #555; }
+.radio-circle { width: 15px; height: 15px; border-radius: 50%; border: 2px solid #ccc; flex-shrink: 0; }
+.desc-opt-label { font-size: 13px; font-weight: 600; color: #333; margin: 10px 0 4px; }
+.desc-opt-ph { font-size: 13px; color: #ccc; border-bottom: 1px solid #f0f0f0; padding: 4px 0; max-width: 520px; }
+
+/* Footer */
+.q-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid #f5f5f5; gap: 8px; flex-wrap: wrap; }
+.footer-icons { display: flex; gap: 2px; }
+.f-icon-btn { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 6px; color: #FFA101; font-size: 16px; display: flex; align-items: center; }
+.f-icon-btn:hover { background: #FFF8EE; }
+.footer-switches { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* Toggle */
+.toggle-wrap { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+.toggle-track { width: 34px; height: 19px; border-radius: 10px; background: #d0d0d0; position: relative; transition: background .2s; flex-shrink: 0; }
+.toggle-track.on { background: #FFA101; }
+.toggle-thumb { position: absolute; top: 2.5px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+.toggle-track.on .toggle-thumb { transform: translateX(15px); }
+.toggle-label { font-size: 13px; color: #333; white-space: nowrap; }
+
+/* Notificación select */
+.notif-select-wrap { display: flex; align-items: center; gap: 6px; }
+.notif-select-label { font-size: 13px; color: #333; white-space: nowrap; }
+.notif-select { border: 1.5px solid #e0e0e0; border-radius: 7px; padding: 5px 10px; font-size: 12px; color: #555; background: #fff; outline: none; cursor: pointer; transition: border .15s; appearance: none; padding-right: 24px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaa'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+.notif-select:focus, .notif-select:hover { border-color: #FFA101; }
+.notif-select.has-value { border-color: #FFA101; color: #FFA101; font-weight: 600; background-color: #FFF8EE; }
+
+/* Grupo badge inline */
+.grupo-inline-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-left: 4px; }
+
+/* Grupos panel (arriba del listado) */
+.grupos-section { background: #fff; border-radius: 10px; border-left: 4px solid #e0e0e0; margin-bottom: 16px; padding: 16px 20px; }
+.grupos-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.grupos-title { font-size: 13px; font-weight: 700; color: #333; display: flex; align-items: center; gap: 8px; }
+.btn-new-group { display: flex; align-items: center; gap: 5px; background: transparent; border: 1.5px solid #FFA101; border-radius: 7px; padding: 5px 12px; font-size: 12px; color: #FFA101; font-weight: 600; cursor: pointer; }
+.btn-new-group:hover { background: #FFF8EE; }
+.grupos-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.g-chip { display: flex; align-items: center; gap: 6px; border: 1.5px solid #e8e8e8; border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 500; color: #555; background: #fafafa; }
+.g-chip .g-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.g-chip .g-count { font-size: 11px; color: #aaa; }
+.g-chip .g-del { color: #ccc; margin-left: 2px; cursor: pointer; font-size: 13px; line-height: 1; }
+.g-chip .g-del:hover { color: #f87171; }
+.btn-add-chip { display: flex; align-items: center; gap: 5px; background: transparent; border: 1.5px dashed #d0d0d0; border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #aaa; cursor: pointer; }
+.btn-add-chip:hover { border-color: #FFA101; color: #FFA101; }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 100; display: none; }
+.modal-overlay.open { display: flex; }
+
+/* Confirm dialog */
+.confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: none; align-items: center; justify-content: center; z-index: 200; }
+.confirm-overlay.open { display: flex; }
+.confirm-box { background: #fff; border-radius: 14px; padding: 28px; width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+.confirm-icon { font-size: 28px; margin-bottom: 12px; }
+.confirm-title { font-size: 15px; font-weight: 700; color: #222; margin-bottom: 6px; }
+.confirm-msg { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 20px; }
+.confirm-msg strong { color: #EF4444; }
+.confirm-btns { display: flex; justify-content: flex-end; gap: 8px; }
+.btn-danger { background: #EF4444; border: none; border-radius: 8px; padding: 8px 20px; font-size: 13px; font-weight: 600; color: #fff; cursor: pointer; }
+.btn-danger:hover { background: #dc2626; }
+.modal { background: #fff; border-radius: 14px; padding: 28px; width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,.15); }
+.modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.modal .modal-sub { font-size: 13px; color: #888; margin-bottom: 20px; }
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 6px; }
+.field input { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 9px 12px; font-size: 13px; outline: none; }
+.field input:focus { border-color: #FFA101; }
+.colors { display: flex; gap: 8px; margin-top: 4px; }
+.c-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all .15s; }
+.c-dot.sel { border-color: #333; transform: scale(1.2); }
+.modal-btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+.btn-cancel { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 8px 16px; font-size: 13px; color: #555; cursor: pointer; }
+.btn-cancel:hover { background: #f5f5f5; }
+.btn-ok { background: #FFA101; border: none; border-radius: 8px; padding: 8px 20px; font-size: 13px; font-weight: 600; color: #fff; cursor: pointer; }
+.btn-ok:hover { background: #e8920e; }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; right: 24px; background: #222; color: #fff; padding: 11px 16px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 200; }
+.toast.show { opacity: 1; }
+
+/* Add question */
+.btn-add-q { width: 100%; background: transparent; border: 1.5px dashed #d0d0d0; border-radius: 10px; padding: 13px; font-size: 13px; color: #aaa; cursor: pointer; margin-top: 4px; }
+.btn-add-q:hover { border-color: #FFA101; color: #FFA101; background: #FFF8EE; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-box">DC</div>
+      <span class="logo-text">Doble Check</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+        Formularios
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Inspecciones
+      </div>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="nav-item-sm">⚠ Reportar Falla</div>
+      <div class="nav-item-sm">👤 Mi Perfil</div>
+      <div class="nav-item-sm">→ Cerrar Sesión</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="breadcrumb">
+        <span class="back">← Formularios</span>
+        <span class="sep">|</span>
+        <span class="page">Consultar Formulario</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="bell">🔔</span>
+        <div class="topbar-user">
+          <div class="avatar">JA</div>
+          JAQUELINE
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-topbar with actions -->
+    <div style="background:#fff;border-bottom:1px solid #eee;padding:0 24px;height:46px;display:flex;align-items:center;justify-content:flex-end;gap:10px;">
+      <button class="icon-btn-top" title="Vista previa">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      <button class="btn-save" onclick="saveForm()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar
+      </button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <div class="tab active">Preguntas Formulario</div>
+      <div class="tab">Usuarios</div>
+      <div class="tab">Configuración</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Form name -->
+      <div class="form-name-card">
+        <div class="form-name-icon">📄</div>
+        <div class="form-name-body">
+          <div class="form-name-label">Nombre del formulario *</div>
+          <div class="form-name-value">Revisión ocular de la unidad de transporte</div>
+          <div class="form-name-desc">Formulario predefinido para revisión ocular de la unidad de transporte.</div>
+        </div>
+      </div>
+
+      <!-- ── PANEL GRUPOS ── -->
+      <div class="grupos-section">
+        <div class="grupos-header">
+          <span class="grupos-title">🔔 Grupos de notificación</span>
+          <button class="btn-new-group" onclick="openModal()">+ Nuevo grupo</button>
+        </div>
+        <div class="grupos-chips" id="grupos-list">
+          <div class="g-chip" data-value="frenos">
+            <span class="g-dot" style="background:#6366F1;"></span>
+            Sistema de frenos
+            <span class="g-count">(3)</span>
+            <span class="g-del" onclick="removeChip(this)" title="Eliminar grupo">✕</span>
+          </div>
+          <div class="g-chip" data-value="luces">
+            <span class="g-dot" style="background:#10B981;"></span>
+            Iluminación
+            <span class="g-count">(2)</span>
+            <span class="g-del" onclick="removeChip(this)" title="Eliminar grupo">✕</span>
+          </div>
+          <button class="btn-add-chip" onclick="openModal()">+ Agregar grupo</button>
+        </div>
+      </div>
+
+      <!-- ── PREGUNTA 1 — grupo frenos ── -->
+      <div class="q-card notif-grupo-frenos" id="qcard-1">
+        <div class="q-top">
+          <input class="q-title" value="Indicador de presión de aire / vacío" id="qtitle-1"/>
+          <div class="q-type-wrap">
+            <span class="q-type-icon">≡·</span>
+            <span class="q-type-text">Pregunta Evaluación</span>
+            <span class="q-type-caret">▼</span>
+          </div>
+        </div>
+        <input class="q-desc" value="" placeholder="Descripción"/>
+        <div class="eval-block">
+          <div class="eval-label">Evaluación</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Bien</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Mal</div>
+          <div class="radio-opt"><span class="radio-circle"></span> No aplica</div>
+          <div class="desc-opt-label">Descripción (opcional)</div>
+          <div class="desc-opt-ph">Agregue una justificación o descripción adicional</div>
+        </div>
+        <div class="q-footer">
+          <div class="footer-icons">
+            <button class="f-icon-btn" title="Eliminar">🗑</button>
+            <button class="f-icon-btn" title="Adjuntar imagen">⊞</button>
+          </div>
+          <div class="footer-switches">
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Obligatorio</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Adjuntar Evidencia</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Agregar Subpregunta</span>
+            </div>
+            <!-- NUEVO -->
+            <div class="notif-select-wrap">
+              <span class="notif-select-label">Notificación</span>
+              <select class="notif-select has-value" onchange="onNotifChange(this,'1')">
+                <option value="">Sin notificación</option>
+                <option value="individual">Individual</option>
+                <option value="frenos" selected>Grupo: Sistema de frenos</option>
+                <option value="luces">Grupo: Iluminación</option>
+                <option value="new">+ Crear nuevo grupo…</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PREGUNTA 2 — grupo frenos ── -->
+      <div class="q-card notif-grupo-frenos" id="qcard-2">
+        <div class="q-top">
+          <input class="q-title" value="Dispositivo de advertencia de poco aire o vacío" id="qtitle-2"/>
+          <div class="q-type-wrap">
+            <span class="q-type-icon">≡·</span>
+            <span class="q-type-text">Pregunta Evaluación</span>
+            <span class="q-type-caret">▼</span>
+          </div>
+        </div>
+        <input class="q-desc" value="" placeholder="Descripción"/>
+        <div class="eval-block">
+          <div class="eval-label">Evaluación</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Bien</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Mal</div>
+          <div class="radio-opt"><span class="radio-circle"></span> No aplica</div>
+          <div class="desc-opt-label">Descripción (opcional)</div>
+          <div class="desc-opt-ph">Agregue una justificación o descripción adicional</div>
+        </div>
+        <div class="q-footer">
+          <div class="footer-icons">
+            <button class="f-icon-btn">🗑</button>
+            <button class="f-icon-btn">⊞</button>
+          </div>
+          <div class="footer-switches">
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Obligatorio</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Adjuntar Evidencia</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Agregar Subpregunta</span>
+            </div>
+            <div class="notif-select-wrap">
+              <span class="notif-select-label">Notificación</span>
+              <select class="notif-select has-value" onchange="onNotifChange(this,'2')">
+                <option value="">Sin notificación</option>
+                <option value="individual">Individual</option>
+                <option value="frenos" selected>Grupo: Sistema de frenos</option>
+                <option value="luces">Grupo: Iluminación</option>
+                <option value="new">+ Crear nuevo grupo…</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PREGUNTA 3 — notificación individual ── -->
+      <div class="q-card notif-individual" id="qcard-3">
+        <div class="q-top">
+          <input class="q-title" value="Luces del tablero direccionales" id="qtitle-3"/>
+          <div class="q-type-wrap">
+            <span class="q-type-icon">≡·</span>
+            <span class="q-type-text">Pregunta Evaluación</span>
+            <span class="q-type-caret">▼</span>
+          </div>
+        </div>
+        <input class="q-desc" value="" placeholder="Descripción"/>
+        <div class="eval-block">
+          <div class="eval-label">Evaluación</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Bien</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Mal</div>
+          <div class="radio-opt"><span class="radio-circle"></span> No aplica</div>
+          <div class="desc-opt-label">Descripción (opcional)</div>
+          <div class="desc-opt-ph">Agregue una justificación o descripción adicional</div>
+        </div>
+        <div class="q-footer">
+          <div class="footer-icons">
+            <button class="f-icon-btn">🗑</button>
+            <button class="f-icon-btn">⊞</button>
+          </div>
+          <div class="footer-switches">
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Obligatorio</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Adjuntar Evidencia</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Agregar Subpregunta</span>
+            </div>
+            <div class="notif-select-wrap">
+              <span class="notif-select-label">Notificación</span>
+              <select class="notif-select has-value" onchange="onNotifChange(this,'3')" style="border-color:#F59E0B;color:#F59E0B;background:#FFFBEB;">
+                <option value="">Sin notificación</option>
+                <option value="individual" selected>Individual</option>
+                <option value="frenos">Grupo: Sistema de frenos</option>
+                <option value="luces">Grupo: Iluminación</option>
+                <option value="new">+ Crear nuevo grupo…</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PREGUNTA 4 — sin notificación ── -->
+      <div class="q-card" id="qcard-4">
+        <div class="q-top">
+          <input class="q-title" value="Muelles" id="qtitle-4"/>
+          <div class="q-type-wrap">
+            <span class="q-type-icon">≡·</span>
+            <span class="q-type-text">Pregunta Evaluación</span>
+            <span class="q-type-caret">▼</span>
+          </div>
+        </div>
+        <input class="q-desc" value="Suspensión sin hojas sueltas, rotas o con fisuras" placeholder="Descripción"/>
+        <div class="eval-block">
+          <div class="eval-label">Evaluación</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Bien</div>
+          <div class="radio-opt"><span class="radio-circle"></span> Mal</div>
+          <div class="radio-opt"><span class="radio-circle"></span> No aplica</div>
+          <div class="desc-opt-label">Descripción (opcional)</div>
+          <div class="desc-opt-ph">Agregue una justificación o descripción adicional</div>
+        </div>
+        <div class="q-footer">
+          <div class="footer-icons">
+            <button class="f-icon-btn">🗑</button>
+            <button class="f-icon-btn">⊞</button>
+          </div>
+          <div class="footer-switches">
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Obligatorio</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Adjuntar Evidencia</span>
+            </div>
+            <div class="toggle-wrap" onclick="tog(this)">
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Agregar Subpregunta</span>
+            </div>
+            <div class="notif-select-wrap">
+              <span class="notif-select-label">Notificación</span>
+              <select class="notif-select" onchange="onNotifChange(this,'4')">
+                <option value="" selected>Sin notificación</option>
+                <option value="individual">Individual</option>
+                <option value="frenos">Grupo: Sistema de frenos</option>
+                <option value="luces">Grupo: Iluminación</option>
+                <option value="new">+ Crear nuevo grupo…</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-add-q" onclick="showToast('Pregunta agregada')">+ Agregar pregunta</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal nuevo grupo -->
+<div class="modal-overlay" id="modal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Nuevo grupo de notificación</h3>
+    <p class="modal-sub">El nombre será visible para el inspector durante la inspección.</p>
+    <div class="field">
+      <label>Nombre del grupo *</label>
+      <input id="gname" placeholder="Ej. Sistema de frenos, Motor…"/>
+    </div>
+    <div class="field">
+      <label>Color</label>
+      <div class="colors">
+        <div class="c-dot sel" style="background:#6366F1;" onclick="selColor(this)"></div>
+        <div class="c-dot" style="background:#10B981;" onclick="selColor(this)"></div>
+        <div class="c-dot" style="background:#F59E0B;" onclick="selColor(this)"></div>
+        <div class="c-dot" style="background:#EF4444;" onclick="selColor(this)"></div>
+        <div class="c-dot" style="background:#3B82F6;" onclick="selColor(this)"></div>
+        <div class="c-dot" style="background:#8B5CF6;" onclick="selColor(this)"></div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-ok" onclick="createGroup()">Crear grupo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm eliminar grupo -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box" onclick="event.stopPropagation()">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title">¿Eliminar grupo "<span id="confirm-group-name"></span>"?</div>
+    <div class="confirm-msg">
+      Todas las preguntas asignadas a este grupo quedarán en <strong>Sin notificación</strong>. Esta acción no se puede deshacer.
+    </div>
+    <div class="confirm-btns">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-danger" onclick="confirmDelete()">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // Toggle
+  function tog(el) {
+    const track = el.querySelector('.toggle-track');
+    track.classList.toggle('on');
+  }
+
+  // Notif select change
+  const accentMap = { '': '', individual: 'notif-individual', frenos: 'notif-grupo-frenos', luces: 'notif-grupo-luces' };
+  function onNotifChange(sel, id) {
+    if (sel.value === 'new') { sel.value = ''; openModal(); return; }
+    const card = document.getElementById('qcard-' + id);
+    card.className = 'q-card ' + (accentMap[sel.value] || '');
+    if (sel.value) {
+      sel.classList.add('has-value');
+      if (sel.value === 'individual') { sel.style.borderColor='#F59E0B'; sel.style.color='#F59E0B'; sel.style.background='#FFFBEB'; }
+      else if (sel.value === 'frenos') { sel.style.borderColor='#6366F1'; sel.style.color='#6366F1'; sel.style.background='#EEF2FF'; }
+      else if (sel.value === 'luces')  { sel.style.borderColor='#10B981'; sel.style.color='#10B981'; sel.style.background='#ECFDF5'; }
+    } else {
+      sel.classList.remove('has-value');
+      sel.style.borderColor = sel.style.color = sel.style.background = '';
+    }
+  }
+
+  // Modal
+  function openModal() { document.getElementById('modal').classList.add('open'); }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); document.getElementById('gname').value=''; }
+  document.getElementById('modal').addEventListener('click', e => { if(e.target===document.getElementById('modal')) closeModal(); });
+
+  function selColor(el) {
+    document.querySelectorAll('.c-dot').forEach(d => d.classList.remove('sel'));
+    el.classList.add('sel');
+  }
+
+  function createGroup() {
+    const name = document.getElementById('gname').value.trim();
+    if (!name) { showToast('⚠ Escribe el nombre del grupo'); return; }
+    const color = document.querySelector('.c-dot.sel').style.background;
+    // add chip
+    const list = document.getElementById('grupos-list');
+    const addBtn = list.querySelector('.btn-add-chip');
+    const val = name.toLowerCase().replace(/\s+/g, '-');
+    const chip = document.createElement('div');
+    chip.className = 'g-chip';
+    chip.dataset.value = val;
+    chip.innerHTML = `<span class="g-dot" style="background:${color};"></span>${name}<span class="g-count">(0)</span><span class="g-del" onclick="removeChip(this)">✕</span>`;
+    list.insertBefore(chip, addBtn);
+    // add to selects
+    document.querySelectorAll('.notif-select').forEach(sel => {
+      const opt = document.createElement('option');
+      opt.value = name.toLowerCase().replace(/\s+/g,'-');
+      opt.textContent = 'Grupo: ' + name;
+      sel.insertBefore(opt, sel.lastElementChild);
+    });
+    closeModal();
+    showToast('✓ Grupo "' + name + '" creado');
+  }
+
+  let pendingChip = null;
+
+  function removeChip(el) {
+    pendingChip = el.closest('.g-chip');
+    const name = pendingChip.childNodes[1].textContent.trim();
+    document.getElementById('confirm-group-name').textContent = name;
+    document.getElementById('confirm-overlay').classList.add('open');
+  }
+
+  function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.remove('open');
+    pendingChip = null;
+  }
+
+  function confirmDelete() {
+    if (!pendingChip) return;
+    const groupValue = pendingChip.dataset.value;
+
+    document.querySelectorAll('.notif-select').forEach(sel => {
+      // Si la pregunta estaba asignada a este grupo, resetear a Sin notificación
+      if (sel.value === groupValue) {
+        sel.value = '';
+        sel.classList.remove('has-value');
+        sel.style.borderColor = sel.style.color = sel.style.background = '';
+        const card = sel.closest('.q-card');
+        if (card) card.className = 'q-card';
+      }
+      // Eliminar la opción del select
+      Array.from(sel.options).forEach(opt => {
+        if (opt.value === groupValue) sel.removeChild(opt);
+      });
+    });
+
+    pendingChip.remove();
+    closeConfirm();
+    showToast('Grupo eliminado — preguntas restablecidas a Sin notificación');
+  }
+
+  function saveForm() { showToast('✓ Formulario guardado'); }
+
+  let toastT;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+</script>
+</body>
+</html>

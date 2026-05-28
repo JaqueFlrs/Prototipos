@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DobleCheck – C-TPAT Seguimiento y Notificación de Estatus</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #F2F2F2; color: #222; font-size: 14px; }
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── Sidebar ── */
+.sidebar { width: 200px; background: #fff; border-right: 1px solid #eee; display: flex; flex-direction: column; flex-shrink: 0; }
+.sb-logo { padding: 14px 16px 12px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid #f5f5f5; }
+.sb-dc { background: #FFA101; border-radius: 5px; padding: 3px 6px; font-size: 10px; font-weight: 800; color: #fff; }
+.sb-name { font-size: 12px; font-weight: 700; color: #333; }
+.sb-nav { flex: 1; padding: 8px 0; }
+.ni { display: flex; align-items: center; gap: 9px; padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; border-left: 3px solid transparent; }
+.ni:hover { background: #fafafa; }
+.ni.active { color: #FFA101; font-weight: 600; background: #FFF8EE; border-left-color: #FFA101; }
+.ni svg { width: 14px; height: 14px; flex-shrink: 0; }
+.sb-bot { padding: 10px 0; border-top: 1px solid #f5f5f5; }
+.ni-sm { display: flex; align-items: center; gap: 9px; padding: 8px 18px; font-size: 12px; color: #888; cursor: pointer; }
+
+/* ── Main ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { background: #fff; border-bottom: 1px solid #eee; padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.tb-right { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: #FFA101; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.user-name { font-size: 12px; font-weight: 600; color: #333; }
+
+/* Screen nav */
+.snav-bar { display: flex; background: #fff; border-bottom: 2px solid #eee; padding: 0 20px; flex-shrink: 0; overflow-x: auto; }
+.snav { padding: 10px 16px; font-size: 12px; font-weight: 600; color: #aaa; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; }
+.snav.active { color: #FFA101; border-bottom-color: #FFA101; }
+
+/* Screens */
+.screen { display: none; flex: 1; overflow-y: auto; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── Shared components ── */
+.page-wrap { padding: 24px 52px; }
+.card { background: #fff; border-radius: 10px; padding: 22px 26px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+.card-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.badge-new { background: #FFA101; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px; }
+.badge-default { background: #EEF2FF; color: #6366F1; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 5px; }
+.field input, .field select, .field textarea {
+  width: 100%; border: 1.5px solid #e0e0e0; border-radius: 8px;
+  padding: 8px 12px; font-size: 13px; outline: none; font-family: inherit;
+  background: #fff; transition: border .15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: #FFA101; }
+.field textarea { min-height: 80px; resize: vertical; }
+.field .hint { font-size: 11px; color: #bbb; margin-top: 3px; }
+
+/* Toggle */
+.tog { display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
+.tog-track { width: 40px; height: 22px; border-radius: 11px; background: #d0d0d0; position: relative; transition: background .2s; flex-shrink: 0; }
+.tog-track.on { background: #FFA101; }
+.tog-thumb { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+.tog-track.on .tog-thumb { transform: translateX(18px); }
+.tog-lbl { font-size: 12px; color: #aaa; }
+.tog-track.on ~ .tog-lbl { color: #FFA101; font-weight: 700; }
+
+.cfg-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+.cfg-row:last-child { border-bottom: none; padding-bottom: 0; }
+.cfg-lbl { font-size: 13px; font-weight: 500; color: #222; margin-bottom: 2px; }
+.cfg-desc { font-size: 12px; color: #aaa; }
+
+.btn-primary { background: #FFA101; color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary:hover { background: #e8920e; }
+.btn-ghost { background: #fff; color: #555; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 8px 16px; font-size: 13px; cursor: pointer; }
+.btn-ghost:hover { background: #f5f5f5; }
+
+/* ── PANTALLA 1: Config formulario ── */
+.traz-banner { background: #FFF8EE; border: 1.5px solid #FFA101; border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.traz-banner-info { flex: 1; }
+.traz-banner-title { font-size: 13px; font-weight: 700; color: #FFA101; margin-bottom: 3px; }
+.traz-banner-desc { font-size: 12px; color: #888; }
+
+/* Estatus list */
+.estatus-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.estatus-item { display: flex; align-items: center; gap: 8px; }
+.estatus-item input { flex: 1; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 7px 12px; font-size: 13px; outline: none; }
+.estatus-item input:focus { border-color: #FFA101; }
+.btn-del-est { background: none; border: none; color: #ddd; cursor: pointer; font-size: 16px; padding: 4px; border-radius: 5px; }
+.btn-del-est:hover { color: #f87171; background: #fff1f1; }
+.btn-add-est { display: flex; align-items: center; gap: 5px; background: none; border: 1.5px dashed #d0d0d0; border-radius: 8px; padding: 7px 14px; font-size: 12px; color: #aaa; cursor: pointer; width: 100%; justify-content: center; }
+.btn-add-est:hover { border-color: #FFA101; color: #FFA101; background: #FFF8EE; }
+
+.preguntas-preview { border: 1.5px solid #f0f0f0; border-radius: 8px; overflow: hidden; }
+.prev-q { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; gap: 10px; }
+.prev-q:last-child { border-bottom: none; }
+.prev-q-num { width: 22px; height: 22px; border-radius: 50%; background: #FFF8EE; color: #FFA101; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.prev-q-text { flex: 1; font-size: 13px; color: #333; font-weight: 500; }
+.prev-q-type { font-size: 11px; color: #aaa; background: #f5f5f5; padding: 2px 8px; border-radius: 10px; }
+
+/* ── PANTALLA 2: Listado ── */
+.list-topbar { background: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; flex-shrink: 0; }
+.list-title { font-size: 16px; font-weight: 700; }
+.list-count { font-size: 14px; color: #aaa; margin-left: 6px; }
+.btn-export { background: none; border: none; font-size: 13px; color: #555; cursor: pointer; }
+.btn-nueva-insp { background: #FFA101; color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.list-filters { background: #fff; padding: 10px 20px 12px; display: flex; gap: 8px; border-bottom: 1px solid #eee; flex-shrink: 0; align-items: center; }
+.f-date { display: flex; align-items: center; gap: 5px; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 7px 10px; font-size: 12px; color: #aaa; }
+.f-search { flex: 1; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 7px 12px; font-size: 12px; outline: none; }
+.btn-fil { background: #FFA101; color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.btn-fil-av { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 7px 14px; font-size: 12px; color: #555; cursor: pointer; }
+
+.insp-list { overflow-y: auto; }
+.insp-item { background: #fff; border-bottom: 1px solid #f0f0f0; padding: 14px 20px; display: flex; align-items: center; gap: 14px; transition: background .1s; }
+.insp-item:hover { background: #fafafa; }
+.insp-av { width: 38px; height: 38px; border-radius: 50%; background: #FFA101; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.insp-body { flex: 1; min-width: 0; }
+.insp-name { font-size: 14px; font-weight: 700; color: #222; margin-bottom: 6px; }
+.insp-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.tag { display: inline-flex; align-items: center; gap: 4px; background: #FFF8EE; border: 1px solid #FFE0A0; border-radius: 6px; padding: 3px 9px; font-size: 11px; color: #555; }
+.tag-ctpat { background: #EEF2FF; border-color: #C7D2FE; color: #6366F1; font-weight: 700; }
+.tag-estatus { background: #ECFDF5; border-color: #6EE7B7; color: #10B981; font-weight: 600; }
+.insp-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.insp-meta { font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 4px; }
+.check-ok { color: #22C55E; }
+.dots { color: #ccc; cursor: pointer; font-size: 18px; padding: 2px 5px; }
+
+/* Botón seguimiento minimalista */
+.btn-seg { display: inline-flex; align-items: center; gap: 5px; background: transparent; color: #FFA101; border: 1.5px solid #FFA101; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .15s; }
+.btn-seg:hover { background: #FFF8EE; }
+.seg-dot { width: 6px; height: 6px; border-radius: 50%; background: #FFA101; flex-shrink: 0; }
+
+/* ── PANTALLA 3: Forma completa ── */
+.form-header { background: #fff; border-bottom: 1px solid #eee; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.form-header-title { font-size: 15px; font-weight: 700; }
+.form-header-sub { font-size: 12px; color: #aaa; margin-top: 2px; }
+
+.section-title { font-size: 12px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 12px; }
+
+.gps-card { background: #EEF2FF; border: 1.5px solid #C7D2FE; border-radius: 10px; padding: 13px 15px; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; }
+.gps-icon { font-size: 20px; flex-shrink: 0; }
+.gps-lbl { font-size: 10px; font-weight: 700; color: #6366F1; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+.gps-val { font-size: 13px; font-weight: 600; color: #222; }
+.gps-addr { font-size: 11px; color: #777; }
+
+.fecha-row { display: flex; gap: 8px; }
+.fecha-row .field { flex: 1; margin-bottom: 0; }
+.btn-hoy { background: #FFF8EE; border: 1.5px solid #FFA101; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #FFA101; font-weight: 700; cursor: pointer; align-self: flex-end; height: 38px; }
+
+.form-footer { background: #fff; border-top: 1px solid #eee; padding: 14px 20px; display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0; }
+
+/* ── PANTALLA 4: Panel rápido + Bitácora ── */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.28); z-index: 50; display: none; }
+.overlay.open { display: block; }
+.drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 460px; background: #fff; z-index: 51; box-shadow: -4px 0 24px rgba(0,0,0,.13); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
+.drawer.open { transform: translateX(0); }
+.dr-header { padding: 18px 22px 14px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; justify-content: space-between; }
+.dr-title { font-size: 15px; font-weight: 700; }
+.dr-sub { font-size: 12px; color: #aaa; margin-top: 3px; }
+.dr-close { background: none; border: none; font-size: 20px; color: #bbb; cursor: pointer; }
+.dr-close:hover { color: #555; }
+
+/* Tabs del drawer */
+.dr-tabs { display: flex; border-bottom: 1px solid #f0f0f0; padding: 0 22px; flex-shrink: 0; }
+.dr-tab { padding: 10px 14px; font-size: 12px; font-weight: 600; color: #aaa; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.dr-tab.active { color: #FFA101; border-bottom-color: #FFA101; }
+
+.dr-body { flex: 1; overflow-y: auto; padding: 18px 22px; }
+.dr-footer { padding: 14px 22px; border-top: 1px solid #f0f0f0; }
+
+/* Bitácora */
+.bitacora-item { border: 1.5px solid #f0f0f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+.bit-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.bit-num { font-size: 11px; font-weight: 700; color: #aaa; }
+.bit-date { font-size: 11px; color: #aaa; }
+.bit-estatus { display: inline-flex; align-items: center; gap: 5px; background: #ECFDF5; border: 1px solid #6EE7B7; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 600; color: #10B981; margin-bottom: 7px; }
+.bit-estatus.amarillo { background: #FFF8EE; border-color: #FFE0A0; color: #FFA101; }
+.bit-estatus.rojo { background: #FFF1F2; border-color: #FECDD3; color: #F43F5E; }
+.bit-obs { font-size: 13px; color: #555; }
+.bit-loc { font-size: 11px; color: #6366F1; margin-top: 5px; }
+.bit-user { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+/* Info viaje */
+.viaje-info { background: #FAFAFA; border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.vi-label { font-size: 11px; color: #aaa; margin-bottom: 2px; }
+.vi-val { font-size: 13px; font-weight: 600; color: #222; }
+
+/* Toast */
+.toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: #222; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 200; }
+.toast.show { opacity: 1; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-logo"><div class="sb-dc">DC</div><span class="sb-name">Doble Check</span></div>
+    <nav class="sb-nav">
+      <div class="ni" onclick="goScreen('config')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        Formularios
+      </div>
+      <div class="ni active" onclick="goScreen('list')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Inspecciones
+      </div>
+      <div class="ni" onclick="goScreen('config')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Configuraciones
+      </div>
+    </nav>
+    <div class="sb-bot">
+      <div class="ni-sm">⚠ Reportar Falla</div>
+      <div class="ni-sm">👤 Mi Perfil</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <span style="font-size:18px;color:#555;cursor:pointer;">☰</span>
+      <div class="tb-right">
+        <span style="font-size:16px;color:#bbb;">🔔</span>
+        <div class="avatar">JA</div>
+        <span class="user-name">JAQUELINE</span>
+      </div>
+    </div>
+
+    <div class="snav-bar">
+      <div class="snav" id="snav-config" onclick="goScreen('config')">1. Config. Formulario</div>
+      <div class="snav active" id="snav-list" onclick="goScreen('list')">2. Listado Inspecciones</div>
+      <div class="snav" id="snav-form" onclick="goScreen('form')">3. Primera vez / Modo normal</div>
+      <div class="snav" id="snav-bit" onclick="openDrawerBit()">4. Botón Seguimiento + Bitácora</div>
+      <div class="snav" id="snav-email" onclick="goScreen('email')">5. Ejemplo Correo</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANTALLA 1 — CONFIG FORMULARIO (tab Configuración real)
+         ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-config">
+
+      <!-- Header estilo real DobleCheck -->
+      <div style="background:#fff;border-bottom:1px solid #eee;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="font-size:14px;color:#555;">
+          <span style="cursor:pointer;" onclick="showToast('← Formularios')">← Formularios</span>
+          <span style="color:#FFA101;margin-left:8px;font-weight:600;cursor:pointer;">| Consultar Formulario</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span style="color:#FFA101;font-size:18px;cursor:pointer;">👁</span>
+          <button class="btn-ghost" style="display:flex;align-items:center;gap:5px;font-size:13px;color:#FFA101;border-color:#FFA101;" onclick="showToast('Modificar formulario')">✏ Modificar</button>
+        </div>
+      </div>
+
+      <!-- Tabs Preguntas / Usuarios / Configuración -->
+      <div style="background:#fff;border-bottom:2px solid #eee;padding:0 20px;display:flex;flex-shrink:0;">
+        <div style="padding:12px 18px;font-size:13px;font-weight:600;color:#aaa;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;">Preguntas Formulario</div>
+        <div style="padding:12px 18px;font-size:13px;font-weight:600;color:#aaa;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;">Usuarios</div>
+        <div style="padding:12px 18px;font-size:13px;font-weight:600;color:#FFA101;cursor:pointer;border-bottom:2px solid #FFA101;margin-bottom:-2px;">Configuración</div>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;padding:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
+
+          <!-- Columna izquierda -->
+          <div>
+
+            <!-- Envío de notificación -->
+            <div style="background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:#222;">Envío de notificacion de inspección</div>
+                  <div style="font-size:12px;color:#aaa;margin-top:2px;">Configura los correos que recibirán la notificación</div>
+                </div>
+                <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:12px;">
+                <input style="flex:1;border:none;border-bottom:1.5px solid #e0e0e0;padding:7px 4px;font-size:13px;outline:none;color:#aaa;" placeholder="correo@ejemplo.com"/>
+                <button class="btn-primary" style="font-size:12px;padding:7px 14px;">+ Agregar</button>
+              </div>
+            </div>
+
+            <!-- Envío automático reportes de falla -->
+            <div style="background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:13px;color:#aaa;">Envío automático de reportes de falla</div>
+                <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+              </div>
+            </div>
+
+            <!-- ★ NUEVO: Seguimiento y notificación de estatus -->
+            <div id="seg-card" style="background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.06);border:2px solid #FFA101;">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px;">
+                <div>
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="font-size:13px;font-weight:700;color:#222;">Seguimiento y notificación de estatus</span>
+                    <span class="badge-new">NUEVO</span>
+                  </div>
+                  <div style="font-size:12px;color:#aaa;margin-top:3px;">Habilita el botón de Seguimiento en el listado de inspecciones y agrega un campo de estatus en Datos Generales</div>
+                </div>
+                <div class="tog" id="seg-tog" onclick="toggleSeguimiento()"><div class="tog-track on"><div class="tog-thumb"></div></div></div>
+              </div>
+
+              <!-- Panel de estatus (visible cuando está activo) -->
+              <div id="seg-panel" style="margin-top:14px;padding-top:14px;border-top:1px solid #f5f5f5;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                  <div style="font-size:12px;font-weight:700;color:#555;">Estatus del seguimiento</div>
+                  <button onclick="openCopyModal()" style="display:flex;align-items:center;gap:5px;background:none;border:1.5px solid #e0e0e0;border-radius:8px;padding:5px 12px;font-size:11px;color:#666;cursor:pointer;font-weight:600;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                    Copiar de otro formulario
+                  </button>
+                </div>
+
+                <div class="estatus-list" id="estatus-list">
+                  <div class="estatus-item">
+                    <input value="En tránsito"/>
+                    <button class="btn-del-est" onclick="delEstatus(this)">✕</button>
+                  </div>
+                  <div class="estatus-item">
+                    <input value="En aduana"/>
+                    <button class="btn-del-est" onclick="delEstatus(this)">✕</button>
+                  </div>
+                  <div class="estatus-item">
+                    <input value="Detenido"/>
+                    <button class="btn-del-est" onclick="delEstatus(this)">✕</button>
+                  </div>
+                  <div class="estatus-item">
+                    <input value="En destino"/>
+                    <button class="btn-del-est" onclick="delEstatus(this)">✕</button>
+                  </div>
+                  <div class="estatus-item">
+                    <input value="Entregado"/>
+                    <button class="btn-del-est" onclick="delEstatus(this)">✕</button>
+                  </div>
+                </div>
+                <button class="btn-add-est" onclick="addEstatus()">+ Agregar estatus</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Columna derecha -->
+          <div style="background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;">
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div>
+                <div style="font-size:13px;font-weight:500;color:#222;">Firmas</div>
+                <div style="font-size:12px;color:#aaa;margin-top:1px;">Configura las firmas requeridas para este formulario</div>
+              </div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div style="font-size:13px;color:#222;">Requerir Referencia o Guía</div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div style="font-size:13px;color:#222;">Requerir SCAC CODE</div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div style="font-size:13px;color:#222;">Requerir ALPHA CODE</div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div style="font-size:13px;color:#222;">Requerir FAST ID</div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div style="font-size:13px;color:#222;">Cantidad de sellos requeridos</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-size:13px;color:#aaa;">0</span>
+                <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+              </div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div style="font-size:13px;color:#222;">Auto-llenado de información de viaje</div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5;">
+              <div style="font-size:13px;color:#222;">Permitir adjuntar fotos</div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track on"><div class="tog-thumb"></div></div></div>
+            </div>
+            <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-size:13px;color:#222;">Genera reporte de falla</div>
+              <div class="tog" onclick="togRow(this)"><div class="tog-track"><div class="tog-thumb"></div></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANTALLA 2 — LISTADO INSPECCIONES
+         ══════════════════════════════════════════ -->
+    <div class="screen active" id="screen-list">
+      <div style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+        <div class="list-topbar">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="list-title">Inspecciones</span>
+            <span class="list-count">145</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-export">⬇ Exportar</button>
+            <button class="btn-nueva-insp" onclick="goScreen('form')">+ Inspección</button>
+          </div>
+        </div>
+        <div class="list-filters">
+          <div class="f-date">📅 dd/mm/aaaa</div>
+          <div class="f-date">📅 dd/mm/aaaa</div>
+          <input class="f-search" placeholder="🔍 Buscar"/>
+          <button class="btn-fil">🔽 Filtrar</button>
+          <button class="btn-fil-av">⚙ Filtro Avanzado</button>
+        </div>
+        <div class="insp-list">
+
+          <!-- Inspección C-TPAT Seguimiento CON botón -->
+          <div class="insp-item">
+            <div class="insp-av">SE</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-145</div>
+              <div class="insp-tags">
+                <span class="tag tag-ctpat">📍 C-TPAT Seguimiento</span>
+                <span class="tag">👤 MA-00005005</span>
+                <span class="tag">⊙ CARLOS</span>
+                <span class="tag">🚛 T-09</span>
+                <span class="tag tag-estatus">● En tránsito</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <button class="btn-seg" onclick="openDrawer('I-145','T-09','CDMX → Monterrey','Carlos')">
+                <span class="seg-dot"></span> Seguimiento
+              </button>
+              <span class="insp-meta"><span class="check-ok">✔</span> 📅 13-05-2026, 10:17 AM</span>
+              <span class="dots">⋮</span>
+            </div>
+          </div>
+
+          <!-- Otro C-TPAT Seguimiento -->
+          <div class="insp-item">
+            <div class="insp-av">SE</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-144</div>
+              <div class="insp-tags">
+                <span class="tag tag-ctpat">📍 C-TPAT Seguimiento</span>
+                <span class="tag">👤 MA-00005004</span>
+                <span class="tag">⊙ CARLOS</span>
+                <span class="tag">🚛 T-08</span>
+                <span class="tag tag-estatus" style="background:#FFF8EE;border-color:#FFE0A0;color:#FFA101;">● En aduana</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <button class="btn-seg" onclick="openDrawer('I-144','T-08','Nogales → Hermosillo','Carlos')">
+                <span class="seg-dot"></span> Seguimiento
+              </button>
+              <span class="insp-meta"><span class="check-ok">✔</span> 📅 13-05-2026, 10:10 AM</span>
+              <span class="dots">⋮</span>
+            </div>
+          </div>
+
+          <!-- Formulario normal sin botón -->
+          <div class="insp-item">
+            <div class="insp-av">SE</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-143</div>
+              <div class="insp-tags">
+                <span class="tag">📋 Formulario Doble Check</span>
+                <span class="tag">👤 MA-00005006</span>
+                <span class="tag">⊙ MONICATST</span>
+                <span class="tag">🚛 T1</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <span class="insp-meta"><span class="check-ok">✔</span> 📅 13-05-2026, 10:08 AM</span>
+              <span class="dots">⋮</span>
+            </div>
+          </div>
+
+          <div class="insp-item">
+            <div class="insp-av">AD</div>
+            <div class="insp-body">
+              <div class="insp-name">Inspección I-142</div>
+              <div class="insp-tags">
+                <span class="tag">📋 Formulario C-TPAT GM</span>
+                <span class="tag">👤 MA-000005004</span>
+                <span class="tag">⊙ ARTURO</span>
+                <span class="tag">🚛 GV55</span>
+              </div>
+            </div>
+            <div class="insp-right">
+              <span class="insp-meta"><span class="check-ok">✔</span> 📅 07-05-2026, 10:46 AM</span>
+              <span class="dots">⋮</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANTALLA 3 — FORMA COMPLETA (1a vez / normal)
+         ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-form">
+      <!-- Header real DobleCheck -->
+      <div style="background:#fff;border-bottom:1px solid #eee;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="background:#FFF8EE;border-radius:6px;padding:6px 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFA101" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#222;">Formulario C-TPAT Seguimiento</div>
+            <div style="font-size:11px;color:#aaa;">Formulario predefinido de seguimiento y notificación de estatus</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-ghost" onclick="goScreen('list')">Cancelar</button>
+          <button class="btn-primary" onclick="saveForm()">💾 Guardar</button>
+        </div>
+      </div>
+
+      <!-- Tabs Datos Generales / Formulario -->
+      <div style="background:#fff;border-bottom:2px solid #eee;padding:0 20px;display:flex;flex-shrink:0;">
+        <div id="ftab-dg" class="form-tab active-ftab" onclick="switchFTab('dg')" style="padding:11px 18px;font-size:13px;font-weight:600;color:#FFA101;border-bottom:2px solid #FFA101;margin-bottom:-2px;cursor:pointer;">Datos Generales</div>
+        <div id="ftab-fm" class="form-tab" onclick="switchFTab('fm')" style="padding:11px 18px;font-size:13px;font-weight:600;color:#aaa;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;">Formulario</div>
+      </div>
+
+      <!-- TAB: Datos Generales -->
+      <div id="ftab-body-dg" style="flex:1;overflow-y:auto;padding:20px 40px;">
+
+        <!-- Firma de Revisor -->
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px;">Firma de Revisor</div>
+          <div style="font-size:12px;color:#888;margin-bottom:12px;">Nombre de Revisor &nbsp;<span style="font-weight:600;color:#333;">JAQUELINE FLORES</span></div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-ghost" style="font-size:12px;padding:7px 14px;">Agregar Imagen</button>
+            <button class="btn-primary" style="font-size:12px;padding:7px 14px;">Agregar Firma</button>
+          </div>
+        </div>
+
+        <!-- Datos Generales -->
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px;">Datos Generales</div>
+
+          <!-- Tipo de Movimiento -->
+          <div style="margin-bottom:14px;">
+            <div style="font-size:12px;font-weight:600;color:#555;margin-bottom:8px;">Tipo de Movimiento <span style="color:#e53e3e;">*</span></div>
+            <div style="display:flex;align-items:center;gap:18px;">
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="tipoMov" checked style="accent-color:#FFA101;width:14px;height:14px;"> Viaje</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="tipoMov" style="accent-color:#FFA101;width:14px;height:14px;"> Patio</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="tipoMov" style="accent-color:#FFA101;width:14px;height:14px;"> Otro</label>
+              <select style="border:1.5px solid #e0e0e0;border-radius:8px;padding:6px 10px;font-size:13px;margin-left:8px;">
+                <option>Nacional</option>
+                <option>Internacional</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Viaje + Candado -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#555;margin-bottom:5px;">Viaje <span style="color:#e53e3e;">*</span></div>
+              <div style="display:flex;gap:6px;">
+                <input style="flex:1;border:1.5px solid #e0e0e0;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;" placeholder="Selecciona un viaje" value="MA-00005005"/>
+                <button class="btn-primary" style="padding:8px 12px;font-size:12px;white-space:nowrap;">Ver Más</button>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#555;margin-bottom:5px;">Candado Oficial</div>
+              <input style="width:100%;border:1.5px solid #e0e0e0;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;" placeholder=""/>
+            </div>
+          </div>
+
+          <!-- Sucursal -->
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:600;color:#555;margin-bottom:5px;">Sucursal <span style="color:#e53e3e;">*</span></div>
+            <div style="display:flex;gap:6px;">
+              <input style="flex:1;border:1.5px solid #e0e0e0;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;" placeholder="Selecciona una sucursal" value="Mexicali"/>
+              <button class="btn-primary" style="padding:8px 12px;font-size:12px;white-space:nowrap;">Ver Más</button>
+            </div>
+          </div>
+
+          <!-- GPS pill + mapa -->
+          <div style="margin-bottom:10px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;background:#FFA101;color:#fff;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;margin-bottom:10px;">
+              📍 32.6299395°, -115.4342588°
+            </div>
+            <div style="background:#e8e8e8;border-radius:8px;height:90px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;">
+              <div style="position:absolute;inset:0;background:linear-gradient(135deg,#d4d8dd 25%,#c8cdd3 25%,#c8cdd3 50%,#d4d8dd 50%,#d4d8dd 75%,#c8cdd3 75%);background-size:20px 20px;opacity:.4;"></div>
+              <div style="position:relative;z-index:1;text-align:center;">
+                <div style="font-size:20px;">🗺</div>
+                <div style="font-size:11px;color:#666;margin-top:2px;">Mexicali, B.C.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ★ NUEVO: Estatus (visible si Seguimiento activo) -->
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0f0f0;">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;">
+              <span style="font-size:12px;font-weight:600;color:#555;">Estatus del seguimiento</span>
+              <span class="badge-new" style="font-size:10px;">NUEVO</span>
+            </div>
+            <select style="width:100%;border:1.5px solid #FFA101;border-radius:8px;padding:9px 12px;font-size:13px;outline:none;background:#fff;color:#333;">
+              <option value="">Sin estatus (opcional)</option>
+              <option selected>En tránsito</option>
+              <option>En aduana</option>
+              <option>Detenido</option>
+              <option>En destino</option>
+              <option>Entregado</option>
+            </select>
+            <div style="font-size:11px;color:#aaa;margin-top:4px;">Estatus configurados en la pestaña Configuración del formulario</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: Formulario -->
+      <div id="ftab-body-fm" style="flex:1;overflow-y:auto;padding:20px 40px;display:none;">
+
+        <!-- Info del viaje (solo lectura) -->
+        <div style="background:#FAFAFA;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div><div style="font-size:11px;color:#aaa;margin-bottom:2px;">No. de viaje</div><div style="font-size:13px;font-weight:600;color:#222;">MA-00005005</div></div>
+          <div><div style="font-size:11px;color:#aaa;margin-bottom:2px;">Cliente</div><div style="font-size:13px;font-weight:600;color:#222;">Transportes García SA</div></div>
+          <div><div style="font-size:11px;color:#aaa;margin-bottom:2px;">Trayecto</div><div style="font-size:13px;font-weight:600;color:#222;">CDMX → Monterrey</div></div>
+        </div>
+
+        <div class="card">
+          <div class="field">
+            <label style="font-size:13px;font-weight:600;color:#333;">1. Estatus <span style="color:#e53e3e;">*</span></label>
+            <select style="margin-top:6px;">
+              <option value="">Selecciona un estatus…</option>
+              <option selected>En tránsito</option>
+              <option>En aduana</option>
+              <option>Detenido</option>
+              <option>En destino</option>
+              <option>Entregado</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0;">
+            <label style="font-size:13px;font-weight:600;color:#333;">2. Observaciones</label>
+            <textarea placeholder="Describe la situación actual, incidencias o novedades…" style="margin-top:6px;"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANTALLA 5 — EJEMPLO CORREO
+         ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-email">
+      <div style="flex:1;overflow-y:auto;background:#f0f2f5;padding:30px 40px;">
+
+        <!-- Simulador de cliente de correo -->
+        <div style="max-width:680px;margin:0 auto;">
+
+          <!-- Barra tipo cliente correo -->
+          <div style="background:#fff;border-radius:12px 12px 0 0;border:1px solid #ddd;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-size:13px;font-weight:700;color:#333;">Bandeja de entrada</div>
+            <div style="font-size:12px;color:#aaa;">outlook · jaqueline@cliente.com</div>
+          </div>
+
+          <!-- Cabecera del mensaje -->
+          <div style="background:#fff;border-left:1px solid #ddd;border-right:1px solid #ddd;padding:18px 24px 14px;border-bottom:1px solid #f0f0f0;">
+            <div style="font-size:17px;font-weight:700;color:#1a1a1a;margin-bottom:14px;line-height:1.3;">
+              🚛 Actualización de estatus — Viaje MA-00005005
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#666;">
+              <div><span style="display:inline-block;width:48px;font-weight:600;color:#333;">De:</span> DobleCheck Notificaciones &lt;notificaciones@gmtransporterp.com&gt;</div>
+              <div><span style="display:inline-block;width:48px;font-weight:600;color:#333;">Para:</span> operaciones@transportesgarcia.com, logistica@transportesgarcia.com</div>
+              <div><span style="display:inline-block;width:48px;font-weight:600;color:#333;">Fecha:</span> 28 de mayo de 2026, 10:17 a.m.</div>
+            </div>
+          </div>
+
+          <!-- Cuerpo del correo -->
+          <div style="background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 12px 12px;padding:0 0 24px;">
+
+            <!-- Banner superior naranja -->
+            <div style="background:#FFA101;padding:22px 28px;border-radius:0;display:flex;align-items:center;gap:14px;">
+              <div style="background:rgba(255,255,255,.2);border-radius:8px;padding:8px 10px;font-size:22px;">🚛</div>
+              <div>
+                <div style="font-size:16px;font-weight:800;color:#fff;letter-spacing:.3px;">Actualización de Estatus de Viaje</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px;">DobleCheck · C-TPAT Seguimiento y Notificación de Estatus</div>
+              </div>
+            </div>
+
+            <div style="padding:24px 28px;">
+
+              <!-- Intro -->
+              <p style="font-size:13px;color:#444;line-height:1.6;margin-bottom:22px;">
+                Se ha registrado una actualización en el seguimiento del viaje. A continuación encontrará los detalles de la modificación:
+              </p>
+
+              <!-- Datos del viaje -->
+              <div style="background:#FAFAFA;border-radius:10px;border:1px solid #eee;overflow:hidden;margin-bottom:20px;">
+                <div style="background:#F5F5F5;padding:10px 18px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid #eee;">Datos del Viaje</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+                  <div style="padding:13px 18px;border-bottom:1px solid #f0f0f0;border-right:1px solid #f0f0f0;">
+                    <div style="font-size:11px;color:#aaa;margin-bottom:3px;">Número de Viaje</div>
+                    <div style="font-size:14px;font-weight:700;color:#222;">MA-00005005</div>
+                  </div>
+                  <div style="padding:13px 18px;border-bottom:1px solid #f0f0f0;">
+                    <div style="font-size:11px;color:#aaa;margin-bottom:3px;">Cliente</div>
+                    <div style="font-size:14px;font-weight:700;color:#222;">Transportes García SA</div>
+                  </div>
+                  <div style="padding:13px 18px;grid-column:span 2;">
+                    <div style="font-size:11px;color:#aaa;margin-bottom:3px;">Trayecto</div>
+                    <div style="font-size:14px;font-weight:700;color:#222;">CDMX → Monterrey</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actualización de estatus (destacado) -->
+              <div style="background:#FFF8EE;border:2px solid #FFA101;border-radius:10px;padding:18px 20px;margin-bottom:20px;">
+                <div style="font-size:11px;font-weight:700;color:#FFA101;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;">✦ Actualización de Estatus</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                  <div>
+                    <div style="font-size:11px;color:#999;margin-bottom:3px;">Operador</div>
+                    <div style="font-size:13px;font-weight:600;color:#333;">Carlos Mendoza</div>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;color:#999;margin-bottom:3px;">Fecha y Hora</div>
+                    <div style="font-size:13px;font-weight:600;color:#333;">28/05/2026 · 10:17 a.m.</div>
+                  </div>
+                  <div style="grid-column:span 2;">
+                    <div style="font-size:11px;color:#999;margin-bottom:6px;">Nuevo Estatus</div>
+                    <div style="display:inline-flex;align-items:center;gap:7px;background:#FFF8EE;border:1.5px solid #FFA101;border-radius:20px;padding:6px 16px;">
+                      <span style="width:8px;height:8px;border-radius:50%;background:#FFA101;flex-shrink:0;"></span>
+                      <span style="font-size:13px;font-weight:700;color:#FFA101;">En aduana</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Observaciones -->
+              <div style="background:#FAFAFA;border-radius:10px;border:1px solid #eee;padding:16px 20px;margin-bottom:24px;">
+                <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">Observaciones</div>
+                <p style="font-size:13px;color:#444;line-height:1.6;margin:0;">
+                  Unidad detenida en cruce frontal. Revisión de documentos en proceso. Se estima liberación en 2–3 horas.
+                </p>
+              </div>
+
+              <!-- Ubicación -->
+              <div style="display:flex;align-items:center;gap:8px;background:#EEF2FF;border-radius:8px;padding:11px 16px;margin-bottom:26px;">
+                <span style="font-size:16px;">📍</span>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#6366F1;">Ubicación registrada</div>
+                  <div style="font-size:12px;color:#555;">32.5274° N, 116.9354° W — Tijuana, Baja California</div>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div style="border-top:1px solid #eee;margin-bottom:18px;"></div>
+
+              <!-- Footer del cuerpo -->
+              <p style="font-size:11px;color:#aaa;line-height:1.6;margin:0;">
+                Este correo fue generado automáticamente por <strong style="color:#FFA101;">DobleCheck</strong>. Los destinatarios están configurados en <em>Configuraciones → Envío de Formulario</em>.<br>
+                Por favor no responda a este mensaje. Para soporte contacte a <span style="color:#FFA101;">soporte@gmtransporterp.com</span>
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ══════════════════════════════════════════
+     DRAWER — Panel Seguimiento + Bitácora
+     ══════════════════════════════════════════ -->
+<!-- Modal: Copiar estatus de otro formulario -->
+<div id="copy-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;display:none;align-items:center;justify-content:center;" onclick="closeCopyModal(event)">
+  <div style="background:#fff;border-radius:14px;width:460px;max-width:94vw;box-shadow:0 8px 32px rgba(0,0,0,.18);" onclick="event.stopPropagation()">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:#222;">Copiar estatus de otro formulario</div>
+        <div style="font-size:12px;color:#aaa;margin-top:2px;">Selecciona un formulario para importar su lista de estatus</div>
+      </div>
+      <button onclick="closeCopyModal()" style="background:none;border:none;font-size:20px;color:#bbb;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:16px 24px;">
+      <input placeholder="🔍 Buscar formulario…" style="width:100%;border:1.5px solid #e0e0e0;border-radius:8px;padding:9px 12px;font-size:13px;outline:none;margin-bottom:12px;"/>
+      <div style="display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;">
+        <div class="copy-opt" onclick="selectCopyForm(this,'C-TPAT GM',['En tránsito','En aduana','Detenido','En destino','Entregado'])" style="border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 16px;cursor:pointer;transition:all .15s;">
+          <div style="font-size:13px;font-weight:600;color:#222;">Formulario C-TPAT GM</div>
+          <div style="font-size:11px;color:#aaa;margin-top:3px;">5 estatus · En tránsito, En aduana, Detenido…</div>
+        </div>
+        <div class="copy-opt" onclick="selectCopyForm(this,'Inspección de Patio',['Pendiente','En revisión','Aprobado','Rechazado'])" style="border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 16px;cursor:pointer;transition:all .15s;">
+          <div style="font-size:13px;font-weight:600;color:#222;">Inspección de Patio</div>
+          <div style="font-size:11px;color:#aaa;margin-top:3px;">4 estatus · Pendiente, En revisión, Aprobado…</div>
+        </div>
+        <div class="copy-opt" onclick="selectCopyForm(this,'Revisión de Unidad',['Iniciado','En proceso','Completado','Con incidencia'])" style="border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 16px;cursor:pointer;transition:all .15s;">
+          <div style="font-size:13px;font-weight:600;color:#222;">Revisión de Unidad</div>
+          <div style="font-size:11px;color:#aaa;margin-top:3px;">4 estatus · Iniciado, En proceso, Completado…</div>
+        </div>
+        <div class="copy-opt" onclick="selectCopyForm(this,'Entrega de Mercancía',['Salida almacén','En ruta','Entregado','Devuelto'])" style="border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 16px;cursor:pointer;transition:all .15s;">
+          <div style="font-size:13px;font-weight:600;color:#222;">Entrega de Mercancía</div>
+          <div style="font-size:11px;color:#aaa;margin-top:3px;">4 estatus · Salida almacén, En ruta, Entregado…</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 24px 20px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end;gap:8px;">
+      <button class="btn-ghost" onclick="closeCopyModal()">Cancelar</button>
+      <button id="copy-confirm-btn" class="btn-primary" style="opacity:.4;pointer-events:none;" onclick="confirmCopy()">Importar estatus</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="dr-header">
+    <div>
+      <div class="dr-title">📍 Seguimiento</div>
+      <div class="dr-sub" id="dr-sub">Inspección #I-145 · CDMX → Monterrey</div>
+    </div>
+    <button class="dr-close" onclick="closeDrawer()">✕</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="dr-tabs">
+    <div class="dr-tab active" onclick="drTab(this,'nuevo')">Nuevo registro</div>
+    <div class="dr-tab" onclick="drTab(this,'bitacora')">Bitácora <span id="bit-count" style="background:#FFA101;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px;">2</span></div>
+  </div>
+
+  <!-- Tab: Nuevo registro -->
+  <div class="dr-body" id="dr-nuevo">
+
+    <!-- Info del viaje (consulta) -->
+    <div class="viaje-info" id="dr-viaje-info">
+      <div><div class="vi-label">No. de viaje</div><div class="vi-val" id="vi-viaje">V-00890</div></div>
+      <div><div class="vi-label">Cliente</div><div class="vi-val" id="vi-cliente">Transportes García SA</div></div>
+      <div style="grid-column:span 2;"><div class="vi-label">Trayecto</div><div class="vi-val" id="vi-trayecto">CDMX → Monterrey</div></div>
+    </div>
+
+    <!-- GPS -->
+    <div class="gps-card" style="margin-bottom:14px;">
+      <div class="gps-icon">📍</div>
+      <div style="flex:1;">
+        <div class="gps-lbl">Ubicación actual</div>
+        <div class="gps-val" id="dr-coords">32.6519° N, 115.4683° W</div>
+        <div class="gps-addr">Mexicali, Baja California, México</div>
+        <button style="margin-top:7px;background:none;border:1.5px solid #C7D2FE;border-radius:6px;padding:4px 10px;font-size:11px;color:#6366F1;font-weight:600;cursor:pointer;" onclick="refreshGPS()">↻ Actualizar</button>
+      </div>
+    </div>
+
+    <!-- Estatus -->
+    <div class="field">
+      <label>Estatus</label>
+      <select id="dr-estatus">
+        <option value="">Selecciona…</option>
+        <option>En tránsito</option>
+        <option>En aduana</option>
+        <option>Detenido</option>
+        <option>En destino</option>
+        <option>Entregado</option>
+      </select>
+    </div>
+
+    <!-- Fecha -->
+    <div class="field">
+      <label>Fecha y hora</label>
+      <div class="fecha-row">
+        <div class="field" style="margin:0;"><input type="datetime-local" id="dr-fecha" value="2026-05-28T14:30"/></div>
+        <button class="btn-hoy" onclick="setHoy()">Hoy</button>
+      </div>
+    </div>
+
+    <!-- Obs -->
+    <div class="field">
+      <label>Observaciones</label>
+      <textarea id="dr-obs" placeholder="Describe la situación actual…"></textarea>
+      <div class="hint">Se incluirá en la notificación a los contactos.</div>
+    </div>
+  </div>
+
+  <!-- Tab: Bitácora -->
+  <div class="dr-body" id="dr-bitacora" style="display:none;">
+    <div style="font-size:12px;color:#aaa;margin-bottom:14px;">Historial completo de registros de seguimiento. Cada entrada es inmutable.</div>
+
+    <div class="bitacora-item">
+      <div class="bit-header"><span class="bit-num">Registro #2</span><span class="bit-date">28/05/2026 · 10:17 AM</span></div>
+      <div class="bit-estatus amarillo">● En aduana</div>
+      <div class="bit-obs">Unidad detenida en cruce frontal. Revisión de documentos en proceso.</div>
+      <div class="bit-loc">📍 32.5274° N, 116.9354° W — Tijuana, BC</div>
+      <div class="bit-user">👤 Carlos Mendoza</div>
+    </div>
+
+    <div class="bitacora-item">
+      <div class="bit-header"><span class="bit-num">Registro #1</span><span class="bit-date">28/05/2026 · 07:00 AM</span></div>
+      <div class="bit-estatus">● En tránsito</div>
+      <div class="bit-obs">Inspección iniciada. Salida de almacén confirmada. Sin novedad.</div>
+      <div class="bit-loc">📍 19.4326° N, 99.1332° W — Ciudad de México</div>
+      <div class="bit-user">👤 Carlos Mendoza</div>
+    </div>
+
+    <div class="bitacora-item" id="new-bit-item" style="display:none;">
+      <div class="bit-header"><span class="bit-num" id="new-bit-num">Registro #3</span><span class="bit-date" id="new-bit-date"></span></div>
+      <div class="bit-estatus" id="new-bit-est" style="background:#ECFDF5;border-color:#6EE7B7;color:#10B981;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:7px;"></div>
+      <div class="bit-obs" id="new-bit-obs"></div>
+      <div class="bit-loc">📍 32.6519° N, 115.4683° W — Mexicali, BC</div>
+      <div class="bit-user">👤 Jaqueline</div>
+    </div>
+  </div>
+
+  <div class="dr-footer">
+    <button class="btn-primary" style="width:100%;justify-content:center;" onclick="notificar()" id="dr-notify-btn">🔔 Notificar nueva posición</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let bitCount = 2;
+
+  function goScreen(s) {
+    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.snav').forEach(x=>x.classList.remove('active'));
+    document.getElementById('screen-'+s).classList.add('active');
+    document.getElementById('snav-'+s).classList.add('active');
+    document.querySelectorAll('.ni').forEach((el,i)=>{
+      el.classList.toggle('active',(s==='config'&&i===0)||(s==='list'&&i===1)||(s==='config'&&i===2));
+    });
+  }
+
+  function togRow(el) {
+    const t=el.querySelector('.tog-track');
+    t.classList.toggle('on');
+  }
+
+  function toggleSeguimiento() {
+    const tog = document.getElementById('seg-tog').querySelector('.tog-track');
+    const panel = document.getElementById('seg-panel');
+    const card = document.getElementById('seg-card');
+    const on = tog.classList.toggle('on');
+    panel.style.display = on ? 'block' : 'none';
+    card.style.borderColor = on ? '#FFA101' : '#e0e0e0';
+  }
+
+  let pendingCopyEstatus = [];
+  function openCopyModal() {
+    pendingCopyEstatus = [];
+    document.querySelectorAll('.copy-opt').forEach(o => o.style.background='');
+    document.getElementById('copy-confirm-btn').style.opacity='.4';
+    document.getElementById('copy-confirm-btn').style.pointerEvents='none';
+    document.getElementById('copy-overlay').style.display='flex';
+  }
+  function closeCopyModal(e) {
+    if(!e || e.target===document.getElementById('copy-overlay'))
+      document.getElementById('copy-overlay').style.display='none';
+  }
+  function selectCopyForm(el, name, estatus) {
+    document.querySelectorAll('.copy-opt').forEach(o => { o.style.background=''; o.style.borderColor='#e0e0e0'; });
+    el.style.background='#FFF8EE'; el.style.borderColor='#FFA101';
+    pendingCopyEstatus = estatus;
+    document.getElementById('copy-confirm-btn').style.opacity='1';
+    document.getElementById('copy-confirm-btn').style.pointerEvents='auto';
+  }
+  function confirmCopy() {
+    const list = document.getElementById('estatus-list');
+    list.innerHTML = '';
+    pendingCopyEstatus.forEach(e => {
+      const item = document.createElement('div'); item.className='estatus-item';
+      item.innerHTML=`<input value="${e}"/><button class="btn-del-est" onclick="delEstatus(this)">✕</button>`;
+      list.appendChild(item);
+    });
+    document.getElementById('copy-overlay').style.display='none';
+    showToast('✓ Estatus importados correctamente');
+  }
+
+  function addEstatus() {
+    const list=document.getElementById('estatus-list');
+    const item=document.createElement('div'); item.className='estatus-item';
+    item.innerHTML='<input placeholder="Nuevo estatus…" oninput="setEditing(true)"/><button class="btn-del-est" onclick="delEstatus(this)">✕</button>';
+    list.appendChild(item); item.querySelector('input').focus();
+  }
+  function delEstatus(btn) { btn.closest('.estatus-item').remove(); }
+  function setEditing(v) {}
+
+  function openDrawerBit() { openDrawer('I-145','T-09','CDMX → Monterrey','Carlos'); }
+
+  function openDrawer(folio, unidad, trayecto, insp) {
+    document.getElementById('dr-sub').textContent=`Inspección #${folio} · ${trayecto}`;
+    document.getElementById('vi-trayecto').textContent=trayecto;
+    document.getElementById('dr-obs').value='';
+    document.getElementById('dr-estatus').value='';
+    drTab(document.querySelector('.dr-tab'), 'nuevo');
+    document.getElementById('overlay').classList.add('open');
+    document.getElementById('drawer').classList.add('open');
+  }
+  function closeDrawer() {
+    document.getElementById('overlay').classList.remove('open');
+    document.getElementById('drawer').classList.remove('open');
+  }
+
+  function drTab(el, tab) {
+    document.querySelectorAll('.dr-tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('dr-nuevo').style.display = tab==='nuevo'?'block':'none';
+    document.getElementById('dr-bitacora').style.display = tab==='bitacora'?'block':'none';
+    document.getElementById('dr-notify-btn').style.display = tab==='nuevo'?'flex':'none';
+  }
+
+  function refreshGPS() {
+    const c=document.getElementById('dr-coords'); c.textContent='Obteniendo…';
+    setTimeout(()=>{ c.textContent='32.6524° N, 115.4690° W'; showToast('📍 Ubicación actualizada'); },1000);
+  }
+
+  function setHoy() {
+    const n=new Date(), p=x=>String(x).padStart(2,'0');
+    document.getElementById('dr-fecha').value=`${n.getFullYear()}-${p(n.getMonth()+1)}-${p(n.getDate())}T${p(n.getHours())}:${p(n.getMinutes())}`;
+  }
+
+  function notificar() {
+    const obs=document.getElementById('dr-obs').value.trim();
+    const est=document.getElementById('dr-estatus').value;
+    if(!est){showToast('⚠ Selecciona un estatus');return;}
+    const fecha=document.getElementById('dr-fecha').value.replace('T',' ');
+    bitCount++;
+    document.getElementById('new-bit-num').textContent=`Registro #${bitCount}`;
+    document.getElementById('new-bit-date').textContent=fecha;
+    document.getElementById('new-bit-est').textContent=`● ${est}`;
+    document.getElementById('new-bit-obs').textContent=obs;
+    document.getElementById('new-bit-item').style.display='block';
+    document.getElementById('bit-count').textContent=bitCount;
+    document.getElementById('dr-obs').value='';
+    document.getElementById('dr-estatus').value='';
+    showToast('✓ Registro guardado en bitácora · Notificación enviada');
+    setTimeout(()=>{ drTab(document.querySelectorAll('.dr-tab')[1],'bitacora'); },1600);
+  }
+
+  function switchFTab(tab) {
+    document.getElementById('ftab-body-dg').style.display = tab==='dg' ? 'block' : 'none';
+    document.getElementById('ftab-body-fm').style.display = tab==='fm' ? 'block' : 'none';
+    document.getElementById('ftab-dg').style.color = tab==='dg' ? '#FFA101' : '#aaa';
+    document.getElementById('ftab-dg').style.borderBottomColor = tab==='dg' ? '#FFA101' : 'transparent';
+    document.getElementById('ftab-fm').style.color = tab==='fm' ? '#FFA101' : '#aaa';
+    document.getElementById('ftab-fm').style.borderBottomColor = tab==='fm' ? '#FFA101' : 'transparent';
+  }
+
+  function saveForm() { showToast('✓ Inspección guardada'); setTimeout(()=>goScreen('list'),1400); }
+
+  let tt;
+  function showToast(m) {
+    const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show');
+    clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2800);
+  }
+
+  goScreen('list');
+</script>
+</body>
+</html>

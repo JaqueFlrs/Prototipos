@@ -24,46 +24,50 @@
     display:flex; align-items:center; justify-content:space-between;
     height:52px;
   }
-  .nav-logo { font-weight:800; font-size:.9rem; display:flex; align-items:center; gap:.5rem; white-space:nowrap; flex-shrink:0; }
-  .nav-dot { width:9px; height:9px; border-radius:50%; background:var(--teal); }
+  .nav-logo { font-weight:800; font-size:.9rem; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
+  .nav-dot  { width:9px; height:9px; border-radius:50%; background:var(--teal); flex-shrink:0; }
 
-  /* Hamburger button — visible only on small screens */
-  .nav-toggle {
-    display:none; background:none; border:1px solid var(--border);
-    border-radius:6px; padding:.3rem .5rem; cursor:pointer;
-    font-size:.8rem; color:var(--ink); flex-shrink:0;
+  /* Dropdown trigger */
+  .nav-menu { position:relative; }
+  .nav-btn {
+    display:flex; align-items:center; gap:.5rem;
+    background:var(--ink); color:white;
+    border:none; border-radius:8px;
+    padding:.42rem 1rem; font-family:'Sora',sans-serif;
+    font-size:.78rem; font-weight:700; cursor:pointer;
+    transition:background .18s; white-space:nowrap;
   }
+  .nav-btn:hover { background:#1a2233; }
+  .nav-btn .chevron { font-size:.6rem; transition:transform .2s; display:inline-block; }
+  .nav-menu.open .chevron { transform:rotate(180deg); }
 
-  /* Nav menu */
-  .nav-links {
-    display:flex; align-items:center; gap:0;
-    list-style:none; margin:0; padding:0;
+  /* Dropdown panel */
+  .nav-dropdown {
+    display:none;
+    position:absolute; top:calc(100% + 8px); right:0;
+    background:white; border:1px solid var(--border);
+    border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,.12);
+    padding:.5rem; min-width:220px; z-index:200;
   }
-  .nav-links li { position:relative; }
-  .nav-links a {
-    display:block;
-    font-size:.72rem; font-weight:600; text-decoration:none;
-    padding:.32rem .7rem; border-radius:6px;
-    color:var(--muted); transition:all .18s; white-space:nowrap;
+  .nav-menu.open .nav-dropdown { display:block; }
+
+  .nav-dropdown a {
+    display:flex; align-items:center; gap:.75rem;
+    text-decoration:none; padding:.55rem .85rem;
+    border-radius:8px; font-size:.8rem; font-weight:600;
+    color:var(--ink); transition:all .15s;
   }
-  .nav-links a:hover { color:var(--ink); background:rgba(0,0,0,.05); }
+  .nav-dropdown a:hover { background:var(--teal-lt); color:var(--teal); }
+  .nav-dropdown a .nd-num {
+    font-family:'Space Mono',monospace; font-size:.6rem;
+    color:var(--teal); font-weight:700; width:18px;
+    flex-shrink:0; opacity:.7;
+  }
+  .nav-divider { border:none; border-top:1px solid var(--border); margin:.35rem 0; }
 
-  /* Divider between logo and links */
-  .nav-sep { width:1px; height:20px; background:var(--border); margin:0 1rem; flex-shrink:0; }
-
-  @media(max-width:900px){
-    .nav-toggle { display:block; }
-    .nav-links {
-      display:none; flex-direction:column; align-items:flex-start;
-      position:absolute; top:52px; left:0; right:0;
-      background:rgba(245,240,232,0.98); backdrop-filter:blur(12px);
-      border-bottom:1px solid var(--border);
-      padding:.75rem 1.5rem 1rem; gap:.1rem;
-    }
-    .nav-links.open { display:flex; }
-    .nav-links a { font-size:.82rem; padding:.5rem .6rem; width:100%; border-radius:6px; }
-    .nav-links a:hover { background:rgba(0,137,123,.08); color:var(--teal); }
-    .nav-sep { display:none; }
+  @media(max-width:480px){
+    nav { padding:0 1rem; }
+    .nav-logo { font-size:.8rem; }
   }
 
   /* SECTIONS */
@@ -311,24 +315,37 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo"><span class="nav-dot"></span> Kanban · Equipo Mantenimiento</div>
-  <div class="nav-sep"></div>
-  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰ Menú</button>
-  <ul class="nav-links">
-    <li><a href="#glosario">Glosario</a></li>
-    <li><a href="#porque">¿Por qué?</a></li>
-    <li><a href="#que-es">¿Qué es?</a></li>
-    <li><a href="#vs-scrum">Scrum vs Kanban</a></li>
-    <li><a href="#tablero">Tablero</a></li>
-    <li><a href="#wip">WIP</a></li>
-    <li><a href="#metricas">Métricas</a></li>
-    <li><a href="#ceremonias">Reuniones</a></li>
-    <li><a href="#roles">Roles</a></li>
-    <li><a href="#daily">Daily</a></li>
-    <li><a href="#transicion">Transición</a></li>
-    <li><a href="#errores">Errores</a></li>
-    <li><a href="#checklist">Checklist</a></li>
-  </ul>
+  <div class="nav-menu" id="navMenu">
+    <button class="nav-btn" onclick="document.getElementById('navMenu').classList.toggle('open')">
+      ☰ Secciones <span class="chevron">▾</span>
+    </button>
+    <div class="nav-dropdown">
+      <a href="#glosario"   onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">00</span> Glosario</a>
+      <a href="#porque"     onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">01</span> ¿Por qué cambiamos?</a>
+      <a href="#que-es"     onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">02</span> ¿Qué es Kanban?</a>
+      <a href="#vs-scrum"   onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">03</span> Scrum vs Kanban</a>
+      <hr class="nav-divider">
+      <a href="#tablero"    onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">04</span> El Tablero</a>
+      <a href="#wip"        onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">05</span> Límites WIP</a>
+      <a href="#metricas"   onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">06</span> Métricas</a>
+      <a href="#ceremonias" onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">07</span> Reuniones</a>
+      <a href="#daily"      onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">08</span> El Daily</a>
+      <a href="#roles"      onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">09</span> Roles</a>
+      <hr class="nav-divider">
+      <a href="#transicion" onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">10</span> Plan de Transición</a>
+      <a href="#errores"    onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">11</span> Curva de Aprendizaje</a>
+      <a href="#checklist"  onclick="document.getElementById('navMenu').classList.remove('open')"><span class="nd-num">12</span> Checklist + FAQ</a>
+    </div>
+  </div>
 </nav>
+
+<script>
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e){
+    const menu = document.getElementById('navMenu');
+    if (menu && !menu.contains(e.target)) menu.classList.remove('open');
+  });
+</script>
 
 <!-- ═══════════════════ HERO ═══════════════════ -->
 <div id="hero">

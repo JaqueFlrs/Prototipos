@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban — Guía Completa de Transición</title>
+<style>
+  :root {
+    --bg: #f7f8fc;
+    --surface: #ffffff;
+    --primary: #4f46e5;
+    --primary-light: #eef2ff;
+    --accent: #06b6d4;
+    --accent-light: #ecfeff;
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --warn: #f59e0b;
+    --warn-light: #fef3c7;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --text: #1e1b4b;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 14px;
+    --shadow: 0 2px 16px rgba(79,70,229,.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; gap: 8px;
+    overflow-x: auto; white-space: nowrap;
+    height: 52px;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    text-decoration: none; font-size: 12px; font-weight: 600;
+    color: var(--muted); padding: 4px 10px; border-radius: 20px;
+    transition: all .2s;
+  }
+  nav a:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-brand {
+    font-weight: 800; font-size: 13px; color: var(--primary);
+    margin-right: 12px; flex-shrink: 0;
+    border-right: 1px solid var(--border); padding-right: 16px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #06b6d4 100%);
+    color: white; padding: 80px 32px 64px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block; background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 20px; padding: 4px 16px;
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .hero h1 { font-size: clamp(28px, 5vw, 52px); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+  .hero p { font-size: 18px; opacity: .85; max-width: 600px; margin: 0 auto 32px; }
+  .hero-meta {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+    font-size: 13px; opacity: .75;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* WRAPPER */
+  .wrapper { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* SECTION */
+  .section {
+    background: var(--surface); border-radius: var(--radius);
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+    margin-bottom: 32px; overflow: hidden;
+  }
+  .section-header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .section-num {
+    background: var(--primary); color: white;
+    font-size: 11px; font-weight: 800; letter-spacing: 1px;
+    border-radius: 8px; padding: 4px 10px;
+    flex-shrink: 0; margin-top: 4px;
+  }
+  .section-num.cyan { background: var(--accent); }
+  .section-num.green { background: var(--success); }
+  .section-num.amber { background: var(--warn); }
+  .section-num.red { background: var(--danger); }
+  .section-title { font-size: 22px; font-weight: 800; line-height: 1.2; }
+  .section-sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .section-body { padding: 28px 32px; }
+
+  /* CARDS GRID */
+  .grid { display: grid; gap: 16px; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+  .card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px;
+  }
+  .card-icon { font-size: 28px; margin-bottom: 10px; }
+  .card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .card p { font-size: 13px; color: var(--muted); }
+
+  .card.primary { background: var(--primary-light); border-color: #c7d2fe; }
+  .card.cyan { background: var(--accent-light); border-color: #a5f3fc; }
+  .card.green { background: var(--success-light); border-color: #6ee7b7; }
+  .card.amber { background: var(--warn-light); border-color: #fcd34d; }
+  .card.red { background: var(--danger-light); border-color: #fca5a5; }
+
+  /* CALLOUT */
+  .callout {
+    border-radius: 10px; padding: 18px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .callout-icon { font-size: 22px; flex-shrink: 0; }
+  .callout h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .callout p, .callout li { font-size: 13px; }
+  .callout.info { background: var(--primary-light); border: 1px solid #c7d2fe; }
+  .callout.success { background: var(--success-light); border: 1px solid #6ee7b7; }
+  .callout.warn { background: var(--warn-light); border: 1px solid #fcd34d; }
+  .callout.danger { background: var(--danger-light); border: 1px solid #fca5a5; }
+  .callout.cyan { background: var(--accent-light); border: 1px solid #a5f3fc; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th {
+    background: var(--primary); color: white;
+    padding: 12px 16px; text-align: left; font-weight: 700;
+    font-size: 12px; letter-spacing: .5px;
+  }
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #fafafa; }
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+  }
+  .badge-green { background: var(--success-light); color: #065f46; }
+  .badge-red { background: var(--danger-light); color: #7f1d1d; }
+  .badge-amber { background: var(--warn-light); color: #78350f; }
+  .badge-blue { background: var(--primary-light); color: #3730a3; }
+  .badge-cyan { background: var(--accent-light); color: #0e7490; }
+
+  /* GLOSSARY */
+  .gloss-grid { display: grid; gap: 10px; }
+  .gloss-item {
+    display: flex; gap: 12px; padding: 14px 16px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  }
+  .gloss-term { font-weight: 700; min-width: 130px; font-size: 13px; color: var(--primary); flex-shrink: 0; }
+  .gloss-def { font-size: 13px; color: var(--muted); }
+
+  /* BOARD VISUAL */
+  .board {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    margin: 16px 0;
+  }
+  .board-col {
+    border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .board-col-header {
+    padding: 10px 12px;
+    font-size: 11px; font-weight: 800; letter-spacing: .5px;
+    text-transform: uppercase; text-align: center;
+  }
+  .board-col-body { padding: 8px; display: flex; flex-direction: column; gap: 6px; min-height: 120px; }
+  .ticket {
+    background: white; border-radius: 6px; padding: 8px 10px;
+    font-size: 11px; border-left: 3px solid transparent;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .ticket-label { font-weight: 700; font-size: 10px; margin-bottom: 2px; }
+  .ticket-title { color: var(--text); }
+  .ticket.bug { border-left-color: var(--danger); }
+  .ticket.feature { border-left-color: var(--primary); }
+  .ticket.improve { border-left-color: var(--success); }
+  .ticket.debt { border-left-color: var(--warn); }
+  .wip-badge {
+    text-align: center; font-size: 10px; font-weight: 700;
+    padding: 3px 8px; margin: 6px 8px 8px;
+    border-radius: 20px;
+  }
+  .wip-ok { background: var(--success-light); color: #065f46; }
+  .wip-warn { background: var(--warn-light); color: #78350f; }
+  .wip-over { background: var(--danger-light); color: #7f1d1d; }
+  .col-backlog .board-col-header { background: #f3f4f6; color: #374151; }
+  .col-progress .board-col-header { background: #dbeafe; color: #1e40af; }
+  .col-review .board-col-header { background: #fef3c7; color: #92400e; }
+  .col-qa .board-col-header { background: #ede9fe; color: #5b21b6; }
+  .col-done .board-col-header { background: var(--success-light); color: #065f46; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 10px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--primary), var(--accent));
+    border-radius: 2px;
+  }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-dot {
+    position: absolute; left: -27px; top: 4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--primary); border: 2px solid white;
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  .tl-week {
+    font-size: 11px; font-weight: 800; color: var(--primary);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .tl-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .tl-body { font-size: 13px; color: var(--muted); }
+  .tl-actions {
+    margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .tl-action {
+    background: var(--primary-light); color: var(--primary);
+    border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600;
+  }
+
+  /* ROLES */
+  .role-card {
+    border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; margin-bottom: 12px;
+  }
+  .role-header {
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
+    background: var(--bg);
+  }
+  .role-icon { font-size: 24px; }
+  .role-name { font-weight: 700; font-size: 15px; }
+  .role-tag { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .role-body { padding: 16px 18px; }
+  .role-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .role-col h5 { font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .role-col ul { list-style: none; }
+  .role-col ul li { font-size: 13px; color: var(--muted); padding: 3px 0; padding-left: 16px; position: relative; }
+  .role-col ul li::before { content: '→'; position: absolute; left: 0; color: var(--primary); font-size: 11px; }
+
+  /* WEEK CALENDAR */
+  .week-cal { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .day {
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .day-name {
+    background: var(--primary); color: white;
+    text-align: center; font-size: 11px; font-weight: 700;
+    padding: 6px; letter-spacing: .5px;
+  }
+  .day-body { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+  .day-event {
+    border-radius: 5px; padding: 6px 8px; font-size: 11px; font-weight: 600;
+  }
+  .ev-daily { background: #dbeafe; color: #1e40af; }
+  .ev-repl { background: var(--success-light); color: #065f46; }
+  .ev-sdr { background: #ede9fe; color: #5b21b6; }
+  .ev-risk { background: var(--warn-light); color: #78350f; }
+
+  /* ZOHO */
+  .zoho-step {
+    display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start;
+  }
+  .zoho-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #e8530a; color: white;
+    font-size: 14px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .zoho-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .zoho-content p, .zoho-content li { font-size: 13px; color: var(--muted); }
+  .zoho-content ul { padding-left: 16px; margin-top: 4px; }
+  .zoho-path {
+    background: #1e1b4b; color: #a5b4fc;
+    font-family: 'Courier New', monospace; font-size: 12px;
+    border-radius: 6px; padding: 6px 12px; margin-top: 6px;
+    display: inline-block;
+  }
+
+  /* METRICS */
+  .metric-card {
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px; text-align: center;
+  }
+  .metric-num { font-size: 36px; font-weight: 900; }
+  .metric-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .metric-arrow { font-size: 20px; margin: 8px 0; }
+
+  /* CHECKLIST */
+  .check-group { margin-bottom: 24px; }
+  .check-group h4 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 12px; }
+  .check-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 20px; height: 20px; border-radius: 5px;
+    background: var(--success-light); border: 1.5px solid var(--success);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; margin-top: 1px;
+  }
+  .check-text { font-size: 13px; }
+  .check-text strong { display: block; font-size: 13px; margin-bottom: 2px; }
+  .check-text span { color: var(--muted); font-size: 12px; }
+
+  /* FAQ */
+  .faq-item {
+    border: 1px solid var(--border); border-radius: 8px;
+    margin-bottom: 10px; overflow: hidden;
+  }
+  .faq-q {
+    padding: 14px 18px;
+    font-size: 14px; font-weight: 700;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--bg); cursor: default;
+  }
+  .faq-q::after { content: '↓'; color: var(--muted); font-size: 12px; }
+  .faq-a { padding: 14px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
+
+  /* FIRST MONDAY */
+  .monday-step {
+    display: flex; gap: 16px; padding: 18px;
+    border: 1px solid var(--border); border-radius: 10px;
+    margin-bottom: 12px; align-items: flex-start;
+  }
+  .monday-num {
+    background: var(--primary); color: white;
+    font-size: 18px; font-weight: 900;
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .monday-content h4 { font-weight: 700; margin-bottom: 4px; }
+  .monday-content p { font-size: 13px; color: var(--muted); }
+  .monday-time { font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 2px 10px; border-radius: 20px; font-weight: 700; margin-left: auto; flex-shrink: 0; }
+
+  /* LEARNING CURVE */
+  .curve-item {
+    border-left: 3px solid var(--border); padding-left: 20px; margin-bottom: 24px;
+  }
+  .curve-item.active { border-left-color: var(--warn); }
+  .curve-period { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
+  .curve-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .curve-body { font-size: 13px; color: var(--muted); }
+  .symptom-fix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .symptom-fix div { border-radius: 8px; padding: 12px; font-size: 12px; }
+  .symptom { background: var(--danger-light); }
+  .fix { background: var(--success-light); }
+  .symptom strong { color: #7f1d1d; }
+  .fix strong { color: #065f46; }
+
+  /* PRINCIPLE LIST */
+  .principle {
+    display: flex; gap: 16px; padding: 16px;
+    border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px;
+  }
+  .principle-num {
+    font-size: 28px; font-weight: 900; color: var(--primary);
+    opacity: .3; flex-shrink: 0; line-height: 1;
+  }
+  .principle h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .principle p { font-size: 13px; color: var(--muted); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 40px;
+    color: var(--muted); font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    .section-body { padding: 20px 16px; }
+    .section-header { padding: 20px 16px 14px; }
+    .role-cols { grid-template-columns: 1fr; }
+    .symptom-fix { grid-template-columns: 1fr; }
+    .week-cal { grid-template-columns: repeat(3, 1fr); }
+    .gloss-item { flex-direction: column; }
+    .gloss-term { min-width: unset; }
+    .board { grid-template-columns: repeat(3, minmax(110px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">📋 Kanban</span>
+  <a href="#glosario">Glosario</a>
+  <a href="#por-que">¿Por qué?</a>
+  <a href="#que-es">¿Qué es?</a>
+  <a href="#vs">Scrum vs Kanban</a>
+  <a href="#tablero">Tablero</a>
+  <a href="#wip">WIP</a>
+  <a href="#metricas">Métricas</a>
+  <a href="#cadencias">Cadencias</a>
+  <a href="#daily">Daily</a>
+  <a href="#roles">Roles</a>
+  <a href="#zoho">Zoho</a>
+  <a href="#plan">Plan 8 sem</a>
+  <a href="#lunes">Primer Lunes</a>
+  <a href="#curva">Curva</a>
+  <a href="#checklist">Checklist</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Guía completa de transición</div>
+  <h1>Scrum → Kanban</h1>
+  <p>Todo lo que necesitas saber para hacer el cambio: qué es, cómo funciona, cómo arrancamos y qué esperar en el camino.</p>
+  <div class="hero-meta">
+    <span>👥 Analistas · Devs · QA · Gerentes</span>
+    <span>🔧 Herramienta: Zoho</span>
+    <span>⏱ Transición: 8 semanas</span>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- 00 CONTEXTO -->
+  <div class="section" id="contexto">
+    <div class="section-header">
+      <div class="section-num">00</div>
+      <div>
+        <div class="section-title">¿Por qué estamos aquí hoy?</div>
+        <div class="section-sub">El punto de partida — qué hacemos, cómo lo hacemos y qué queremos mejorar</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div>
+          <h4>Antes de hablar de Kanban, hablemos de nosotros</h4>
+          <p>Somos un equipo de mantenimiento y desarrollo: analistas, devs, QA y gerentes. Hoy usamos Scrum. No porque sea malo, sino porque hay contextos donde Kanban funciona mejor — y el nuestro es uno de ellos.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:8px;">
+        <div class="card amber">
+          <div class="card-icon">🐛</div>
+          <h4>Lo que vivimos hoy</h4>
+          <p>Bugs críticos en medio del sprint, trabajo que se arrastra, sprints que "fallan" antes de terminar.</p>
+        </div>
+        <div class="card primary">
+          <div class="card-icon">🎯</div>
+          <h4>Lo que buscamos</h4>
+          <p>Entregar con más fluidez, medir de verdad, y que el equipo no sienta que corre sin llegar a ningún lado.</p>
+        </div>
+        <div class="card green">
+          <div class="card-icon">🗺</div>
+          <h4>Cómo lo haremos</h4>
+          <p>Evolución gradual, no revolución. Kanban sobre lo que ya funciona. Sin tirar todo a la basura.</p>
+        </div>
+      </div>
+
+      <div class="callout success" style="margin-top:20px;">
+        <div class="callout-icon">✅</div>
+        <div>
+          <h4>Lo que NO va a pasar</h4>
+          <p>No perdemos visibilidad. No dejamos de planear. No hay caos. Kanban tiene estructura — solo es diferente a la de Scrum.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 01 GLOSARIO -->
+  <div class="section" id="glosario">
+    <div class="section-header">
+      <div class="section-num cyan">01</div>
+      <div>
+        <div class="section-title">Glosario 📖</div>
+        <div class="section-sub">15 términos que usaremos todo el tiempo — léelos una vez y todo lo demás tendrá sentido</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="gloss-grid">
+        <div class="gloss-item">
+          <div class="gloss-term">Kanban</div>
+          <div class="gloss-def">Sistema de gestión visual creado en Toyota (1948). Significa "señal visual". Controla el flujo de trabajo sin acumular tareas innecesarias.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">WIP</div>
+          <div class="gloss-def"><em>Work In Progress.</em> Las tareas que están activas en este momento. Limitar el WIP es la práctica más importante de Kanban.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Lead Time</div>
+          <div class="gloss-def">Tiempo total desde que el usuario pide algo hasta que llega a producción. La métrica que el negocio siente.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Cycle Time</div>
+          <div class="gloss-def">Tiempo desde que el equipo empieza a trabajar en una tarea hasta que la termina. La métrica interna del equipo.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Throughput</div>
+          <div class="gloss-def">Tareas completadas por semana. Reemplaza la velocidad en puntos de historia. Más honesto y más útil.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">CFD</div>
+          <div class="gloss-def"><em>Cumulative Flow Diagram.</em> Gráfica que muestra cuántas tareas hay en cada estado día a día. Revela cuellos de botella de un vistazo.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Replenishment</div>
+          <div class="gloss-def">Reunión semanal de 30 min donde decidimos qué entra al tablero según la capacidad real del equipo. Reemplaza el Sprint Planning.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Ley de Little</div>
+          <div class="gloss-def">Cycle Time = WIP ÷ Throughput. Si bajas el WIP y mantienes el throughput, las tareas llegan más rápido. Matemática pura.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Clases de servicio</div>
+          <div class="gloss-def">Categorías de urgencia: <strong>Urgente</strong> (bug crítico), <strong>Estándar</strong> (mejora normal), <strong>Diferido</strong> (deuda técnica), <strong>Fecha fija</strong> (requerimiento con deadline).</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">SDR</div>
+          <div class="gloss-def"><em>Service Delivery Review.</em> Reunión quincenal o mensual con datos reales. Une la Sprint Review y la Retrospectiva en una sola sesión.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Scatter Plot</div>
+          <div class="gloss-def">Gráfica de puntos donde cada tarea completada es un punto (tiempo vs fecha). El percentil 85 te dice cuánto tarda el 85% de tus tareas.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Kaizen</div>
+          <div class="gloss-def">Mejora continua incremental. En Kanban no hay "grandes rediseños", hay ajustes pequeños y frecuentes basados en datos.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Definition of Done</div>
+          <div class="gloss-def">Checklist acordada por el equipo que define cuándo una tarea está realmente terminada. Igual que en Scrum, sigue siendo válida.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Políticas de columna</div>
+          <div class="gloss-def">Reglas escritas y visibles que definen qué tiene que pasar para que una tarea avance de columna. Eliminan ambigüedad y discusiones.</div>
+        </div>
+        <div class="gloss-item">
+          <div class="gloss-term">Blocker</div>
+          <div class="gloss-def">Impedimento que detiene una tarea. Se marca visualmente en el tablero (ícono o color). Se resuelve en el Daily ese mismo día.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 POR QUE -->
+  <div class="section" id="por-que">
+    <div class="section-header">
+      <div class="section-num amber">02</div>
+      <div>
+        <div class="section-title">¿Por qué cambiamos? 🤔</div>
+        <div class="section-sub">Scrum no está roto — solo hay contextos donde Kanban encaja mejor</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div>
+          <h4>El problema no es el equipo — es la metodología en este contexto</h4>
+          <p>Scrum fue diseñado para construir productos nuevos con requisitos relativamente estables. Nuestro trabajo es mantenimiento: impredecible, reactivo y continuo. Ese mismatch genera fricción.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:16px;">
+        <div>
+          <h4 style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:12px;">😤 Lo que pasa hoy con Scrum</h4>
+          <div class="card red" style="margin-bottom:10px;">
+            <h4>Sprint interrumpido por bugs</h4>
+            <p>Un bug crítico aparece en producción y rompe el sprint. ¿Lo metemos? ¿Esperamos? No hay respuesta limpia.</p>
+          </div>
+          <div class="card red" style="margin-bottom:10px;">
+            <h4>Sprints que "fallan" siempre</h4>
+            <p>El trabajo se arrastra de sprint en sprint. La planificación se convierte en un ritual sin credibilidad.</p>
+          </div>
+          <div class="card red" style="margin-bottom:10px;">
+            <h4>Multitasking invisible</h4>
+            <p>Una persona tiene 5 tareas "en progreso". Ninguna avanza. Nadie entrega nada en la semana.</p>
+          </div>
+          <div class="card red">
+            <h4>Reuniones largas, poco valor</h4>
+            <p>Sprint Planning de 3 horas para un trabajo que de todos modos va a cambiar antes del viernes.</p>
+          </div>
+        </div>
+        <div>
+          <h4 style="font-size:14px;font-weight:700;color:var(--success);margin-bottom:12px;">✅ Cómo lo resuelve Kanban</h4>
+          <div class="card green" style="margin-bottom:10px;">
+            <h4>Bug urgente entra de inmediato</h4>
+            <p>Existe una clase de servicio "Urgente". El bug entra al tablero sin romper nada, sin reunión de emergencia.</p>
+          </div>
+          <div class="card green" style="margin-bottom:10px;">
+            <h4>Flujo continuo, sin "fallar"</h4>
+            <p>No hay sprints que fallen. Hay tareas que fluyen. La entrega es continua, no cada dos semanas.</p>
+          </div>
+          <div class="card green" style="margin-bottom:10px;">
+            <h4>Límites WIP forzados</h4>
+            <p>Si la columna tiene límite 3, no se pueden empezar 5 tareas. El sistema obliga a terminar antes de empezar.</p>
+          </div>
+          <div class="card green">
+            <h4>Reuniones cortas y enfocadas</h4>
+            <p>Daily de 15 min enfocado en el tablero. Replenishment de 30 min semanal. Nada más hasta que se necesite.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 QUE ES KANBAN -->
+  <div class="section" id="que-es">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-title">¿Qué es Kanban? 🌊</div>
+        <div class="section-sub">Cinco principios, una filosofía: terminar antes de empezar</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout cyan">
+        <div class="callout-icon">🏭</div>
+        <div>
+          <h4>El origen en 30 segundos</h4>
+          <p>Toyota, 1948. Las líneas de ensamblaje usaban tarjetas físicas para señalar cuándo producir más piezas — ni de más, ni de menos. Kanban moderno aplica esa misma idea al trabajo del conocimiento: solo procesa lo que puedes entregar.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:700;margin:24px 0 12px;">Los 5 principios de Kanban</h3>
+
+      <div class="principle">
+        <div class="principle-num">1</div>
+        <div>
+          <h4>👁 Visualiza el trabajo</h4>
+          <p>Todo lo que el equipo tiene en curso debe ser visible en el tablero. Si no está en el tablero, no existe para el equipo. La visibilidad es la base de todo lo demás.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">2</div>
+        <div>
+          <h4>🚦 Limita el WIP</h4>
+          <p>Cada columna tiene un máximo de tareas permitidas. Cuando se llega al límite, no se empieza nada nuevo — se ayuda a desatorar lo que ya está en curso. Esta es la práctica más difícil y más poderosa.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">3</div>
+        <div>
+          <h4>🌊 Gestiona el flujo</h4>
+          <p>El trabajo entra según la capacidad real, no según un calendario fijo. No planeamos "hacer X cosas en 2 semanas" — planeamos "entrar X según lo que podemos mover esta semana".</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">4</div>
+        <div>
+          <h4>📋 Haz las políticas explícitas</h4>
+          <p>Las reglas de cómo fluye el trabajo están escritas y visibles en el tablero. ¿Cuándo pasa una tarea de "En progreso" a "Revisión"? Está escrito. No depende de quién pregunta o quién contesta.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">5</div>
+        <div>
+          <h4>📈 Mejora continuamente</h4>
+          <p>Cada semana hay datos reales. Cada SDR hay ajustes basados en esos datos. Nunca hay un "Kanban perfecto" — siempre hay un Kanban un poco mejor.</p>
+        </div>
+      </div>
+
+      <div class="callout success" style="margin-top:8px;">
+        <div class="callout-icon">🔑</div>
+        <div>
+          <h4>La idea central en una frase</h4>
+          <p><strong>"Stop starting, start finishing."</strong> — Deja de empezar cosas nuevas. Termina lo que ya está en curso. El valor solo llega cuando algo está <em>listo</em>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 SCRUM VS KANBAN -->
+  <div class="section" id="vs">
+    <div class="section-header">
+      <div class="section-num cyan">04</div>
+      <div>
+        <div class="section-title">Scrum vs Kanban ⚔️</div>
+        <div class="section-sub">No es que uno sea mejor — es que cada uno encaja en contextos diferentes</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dimensión</th>
+              <th>Scrum (hoy)</th>
+              <th>Kanban (próximamente)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Ritmo de trabajo</strong></td>
+              <td>Sprints fijos de 1-2 semanas</td>
+              <td>Flujo continuo sin ciclos</td>
+            </tr>
+            <tr>
+              <td><strong>Cambios a mitad</strong></td>
+              <td>❌ Se desaconsejan o posponen</td>
+              <td>✅ Se aceptan si hay capacidad</td>
+            </tr>
+            <tr>
+              <td><strong>Bug crítico hoy</strong></td>
+              <td>Interrumpe el sprint o espera</td>
+              <td>Entra como "Urgente" de inmediato</td>
+            </tr>
+            <tr>
+              <td><strong>Planeación</strong></td>
+              <td>Sprint Planning con compromisos</td>
+              <td>Replenishment de 30 min semanal</td>
+            </tr>
+            <tr>
+              <td><strong>Métrica principal</strong></td>
+              <td>Velocidad (puntos por sprint)</td>
+              <td>Cycle Time + Throughput</td>
+            </tr>
+            <tr>
+              <td><strong>Roles obligatorios</strong></td>
+              <td>Scrum Master, PO, Dev Team</td>
+              <td>Flexibles según el equipo</td>
+            </tr>
+            <tr>
+              <td><strong>Estimaciones</strong></td>
+              <td>Puntos de historia obligatorios</td>
+              <td>Opcionales — se usan datos históricos</td>
+            </tr>
+            <tr>
+              <td><strong>Retrospectiva</strong></td>
+              <td>Cada sprint (obligatoria)</td>
+              <td>SDR quincenal/mensual con datos</td>
+            </tr>
+            <tr>
+              <td><strong>Contexto ideal</strong></td>
+              <td>Proyectos nuevos, backlog estable</td>
+              <td><strong>Mantenimiento, trabajo impredecible ✅</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout info" style="margin-top:20px;">
+        <div class="callout-icon">🧠</div>
+        <div>
+          <h4>Lo que sí conservamos de Scrum</h4>
+          <p>Definition of Done, backlog priorizado, colaboración diaria, mejora continua, retrospectivas (como SDR). Kanban no tira lo bueno — lo adapta.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 TABLERO -->
+  <div class="section" id="tablero">
+    <div class="section-header">
+      <div class="section-num green">05</div>
+      <div>
+        <div class="section-title">El Tablero 🗂</div>
+        <div class="section-sub">La herramienta central — todo el trabajo visible para todos en tiempo real</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:12px;">Así se ve un tablero Kanban con trabajo real de nuestro equipo:</h4>
+
+      <div class="board">
+        <div class="board-col col-backlog">
+          <div class="board-col-header">📋 Backlog</div>
+          <div class="board-col-body">
+            <div class="ticket feature">
+              <div class="ticket-label" style="color:var(--primary);">MEJORA</div>
+              <div class="ticket-title">Reporte mensual exportable a PDF</div>
+            </div>
+            <div class="ticket debt">
+              <div class="ticket-label" style="color:var(--warn);">DEUDA TÉC.</div>
+              <div class="ticket-title">Migrar módulo de auth a OAuth2</div>
+            </div>
+            <div class="ticket bug">
+              <div class="ticket-label" style="color:var(--danger);">BUG</div>
+              <div class="ticket-title">Paginación rota en móvil</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="board-col col-progress">
+          <div class="board-col-header">⚡ En progreso</div>
+          <div class="board-col-body">
+            <div class="ticket bug">
+              <div class="ticket-label" style="color:var(--danger);">🔴 URGENTE</div>
+              <div class="ticket-title">Error en cálculo de nómina — producción</div>
+            </div>
+            <div class="ticket feature">
+              <div class="ticket-label" style="color:var(--primary);">FEATURE</div>
+              <div class="ticket-title">Filtros avanzados en vista de empleados</div>
+            </div>
+          </div>
+          <div class="wip-badge wip-ok">WIP 2/3 ✓</div>
+        </div>
+
+        <div class="board-col col-review">
+          <div class="board-col-header">👀 Revisión</div>
+          <div class="board-col-body">
+            <div class="ticket improve">
+              <div class="ticket-label" style="color:var(--success);">MEJORA</div>
+              <div class="ticket-title">Optimizar queries de reportes</div>
+            </div>
+            <div class="ticket feature">
+              <div class="ticket-label" style="color:var(--primary);">FEATURE</div>
+              <div class="ticket-title">Notificaciones por correo — alta</div>
+            </div>
+          </div>
+          <div class="wip-badge wip-warn">WIP 2/2 ⚠</div>
+        </div>
+
+        <div class="board-col col-qa">
+          <div class="board-col-header">🧪 QA</div>
+          <div class="board-col-body">
+            <div class="ticket bug">
+              <div class="ticket-label" style="color:var(--danger);">BUG</div>
+              <div class="ticket-title">Validación de RFC no acepta espacios</div>
+            </div>
+          </div>
+          <div class="wip-badge wip-ok">WIP 1/2 ✓</div>
+        </div>
+
+        <div class="board-col col-done">
+          <div class="board-col-header">✅ Listo</div>
+          <div class="board-col-body">
+            <div class="ticket improve">
+              <div class="ticket-label" style="color:var(--success);">MEJORA</div>
+              <div class="ticket-title">Búsqueda por nombre en dashboard</div>
+            </div>
+            <div class="ticket bug">
+              <div class="ticket-label" style="color:var(--danger);">BUG</div>
+              <div class="ticket-title">Logout no cerraba sesión en IE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:12px;">¿Qué dice cada tarjeta?</h4>
+      <div class="grid grid-2">
+        <div class="card">
+          <h4>📌 Información básica</h4>
+          <p>Tipo de tarea · Título descriptivo · Persona asignada · Fecha de entrada al tablero</p>
+        </div>
+        <div class="card">
+          <h4>🏷 Clase de servicio</h4>
+          <p><span class="badge badge-red">🔴 Urgente</span> &nbsp;<span class="badge badge-blue">🔵 Estándar</span> &nbsp;<span class="badge badge-amber">🟡 Fecha fija</span> &nbsp;<span class="badge badge-cyan">⬜ Diferido</span></p>
+        </div>
+        <div class="card">
+          <h4>🎨 Colores por tipo</h4>
+          <p>Rojo = Bug &nbsp;·&nbsp; Azul = Feature &nbsp;·&nbsp; Verde = Mejora &nbsp;·&nbsp; Amarillo = Deuda técnica</p>
+        </div>
+        <div class="card">
+          <h4>🚧 Blocker</h4>
+          <p>Ícono de bloqueo visible en la tarjeta. Indica que la tarea no puede avanzar. Se resuelve en el Daily del mismo día.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 WIP -->
+  <div class="section" id="wip">
+    <div class="section-header">
+      <div class="section-num red">06</div>
+      <div>
+        <div class="section-title">Límites WIP 🚦</div>
+        <div class="section-sub">La práctica más contraintuitiva y más poderosa de Kanban</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout danger">
+        <div class="callout-icon">🧠</div>
+        <div>
+          <h4>¿Por qué limitar si podemos hacer más?</h4>
+          <p>Porque no podemos. Hacer 5 cosas "a la vez" no es hacer 5 cosas — es hacer 5 cosas mal y lento. El multitasking no existe: lo que existe es cambio de contexto constante, y eso tiene un costo enorme.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:16px;">
+        <div class="card red">
+          <div class="card-icon">😵</div>
+          <h4>Sin límite WIP</h4>
+          <p>Dev tiene 6 tareas activas. Ninguna avanza lo suficiente. El cliente pregunta por la tarea A. A está en 30%. La B también. La C también. Nadie entrega nada esta semana.</p>
+        </div>
+        <div class="card green">
+          <div class="card-icon">😎</div>
+          <h4>Con límite WIP = 2</h4>
+          <p>Dev tiene máximo 2 tareas activas. Termina una antes de empezar otra. Esta semana entregó 3 tareas completas. El cliente puede usar esas 3 hoy.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:12px;">Fórmula de arranque</h4>
+      <div class="callout info">
+        <div class="callout-icon">🧮</div>
+        <div>
+          <h4>Límite inicial recomendado = Personas en esa etapa × 1.5</h4>
+          <p>Si en "En progreso" hay 3 devs → WIP inicial = 4 o 5. No es definitivo — se ajusta con datos reales en el primer SDR.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:12px;">¿Qué pasa cuando se llega al límite?</h4>
+      <div class="grid grid-3">
+        <div class="card primary">
+          <div class="card-icon">🔍</div>
+          <h4>Paso 1: Ver por qué</h4>
+          <p>¿Hay un blocker? ¿Alguien está esperando algo externo? Identificar antes de actuar.</p>
+        </div>
+        <div class="card primary">
+          <div class="card-icon">🤝</div>
+          <h4>Paso 2: Ayudar</h4>
+          <p>Si hay capacidad libre, la persona disponible ayuda a desatorar la columna llena — no empieza nada nuevo.</p>
+        </div>
+        <div class="card primary">
+          <div class="card-icon">📢</div>
+          <h4>Paso 3: Escalar</h4>
+          <p>Si el blocker es externo (acceso, decisión, aprobación), se escala en ese Daily para resolverlo ese día.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h4 style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:12px;">⚠️ Errores comunes con WIP</h4>
+      <div class="grid grid-2">
+        <div class="card red">
+          <h4>Violar el límite "por urgencia"</h4>
+          <p>Si todo es urgente, nada es urgente. Hay una clase de servicio "Urgente" — úsala. No ignores el límite.</p>
+        </div>
+        <div class="card red">
+          <h4>Poner límites irrealmente altos</h4>
+          <p>WIP de 15 para un equipo de 3 no es un límite — es un tablero decorativo. El límite tiene que generar tensión útil.</p>
+        </div>
+        <div class="card red">
+          <h4>Contar tareas bloqueadas como activas</h4>
+          <p>Una tarea bloqueada no avanza. Se marca como blocker y no ocupa WIP — liberamos ese slot para mover algo más.</p>
+        </div>
+        <div class="card red">
+          <h4>Ajustar el límite cada semana</h4>
+          <p>Los límites se revisan con datos en el SDR, no cuando molestan. Ajustarlos frecuentemente les quita todo el efecto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 METRICAS -->
+  <div class="section" id="metricas">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div>
+        <div class="section-title">Métricas 📊</div>
+        <div class="section-sub">Cuatro números que reemplazan los puntos de historia — y dicen mucho más</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="grid grid-2" style="margin-bottom:24px;">
+        <div class="metric-card" style="border-color:#c7d2fe;">
+          <div class="metric-num" style="color:var(--primary);">Lead Time</div>
+          <div class="metric-label">Desde que el usuario pide → hasta que lo usa en producción</div>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted);">Lo que siente el <strong>negocio</strong></div>
+        </div>
+        <div class="metric-card" style="border-color:#a5f3fc;">
+          <div class="metric-num" style="color:var(--accent);">Cycle Time</div>
+          <div class="metric-label">Desde que el equipo empieza → hasta que termina</div>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted);">Lo que siente el <strong>equipo</strong></div>
+        </div>
+        <div class="metric-card" style="border-color:#6ee7b7;">
+          <div class="metric-num" style="color:var(--success);">Throughput</div>
+          <div class="metric-label">Tareas completadas por semana</div>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted);">Reemplaza <strong>velocidad en puntos</strong></div>
+        </div>
+        <div class="metric-card" style="border-color:#fcd34d;">
+          <div class="metric-num" style="color:var(--warn);">WIP promedio</div>
+          <div class="metric-label">WIP diario promedio en el período</div>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted);">Si sube sin más throughput → <strong>problema</strong></div>
+        </div>
+      </div>
+
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:16px;">📅 ¿Cómo lucen las métricas en el tiempo?</h4>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Período</th>
+              <th>Qué medir</th>
+              <th>Qué esperar</th>
+              <th>Señal de alerta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Semanas 1-2</strong><br><span style="font-size:11px;color:var(--muted)">Visibilidad</span></td>
+              <td>Solo registrar fechas de inicio y fin en Zoho</td>
+              <td>Cycle Times muy variables — normal</td>
+              <td>Si nadie actualiza el tablero</td>
+            </tr>
+            <tr>
+              <td><strong>Semanas 3-6</strong><br><span style="font-size:11px;color:var(--muted)">Estabilización</span></td>
+              <td>Throughput semanal, Cycle Time por tipo</td>
+              <td>7-10 tareas/semana, Cycle Time 3-7 días</td>
+              <td>Throughput cae más de 30% dos semanas seguidas</td>
+            </tr>
+            <tr>
+              <td><strong>Mes 2-3</strong><br><span style="font-size:11px;color:var(--muted)">Flujo maduro</span></td>
+              <td>CFD, Scatter Plot, Lead Time</td>
+              <td>Cycle Time bajando, throughput estable</td>
+              <td>Lead Time sube sin explicación</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout success" style="margin-top:20px;">
+        <div class="callout-icon">💬</div>
+        <div>
+          <h4>Cómo hablar con el negocio sin puntos de historia</h4>
+          <p><strong>Antes:</strong> "Estimamos 34 puntos, velocidad de 21 pts/sprint, listo en 1.6 sprints..."<br>
+          <strong>Ahora:</strong> "Tenemos 24 tareas en backlog. Completamos 8/semana en promedio. Estimado: 3 semanas." — Más claro, más honesto.</p>
+        </div>
+      </div>
+
+      <div class="callout cyan" style="margin-top:12px;">
+        <div class="callout-icon">🔧</div>
+        <div>
+          <h4>En Zoho estas métricas se generan solas</h4>
+          <p>Zoho Projects calcula Cycle Time y Lead Time automáticamente si las tarjetas tienen fecha de inicio y fecha de cierre. No necesitan hojas de cálculo manuales.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 CADENCIAS -->
+  <div class="section" id="cadencias">
+    <div class="section-header">
+      <div class="section-num cyan">08</div>
+      <div>
+        <div class="section-title">Cadencias — Las reuniones en Kanban 📅</div>
+        <div class="section-sub">Menos reuniones, más frecuentes y más cortas — cada una con un propósito claro</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:16px;">Semana tipo en Kanban</h4>
+
+      <div class="week-cal" style="margin-bottom:24px;">
+        <div class="day">
+          <div class="day-name">LUN</div>
+          <div class="day-body">
+            <div class="day-event ev-daily">⚡ Daily 15 min</div>
+            <div class="day-event ev-repl">📋 Replenishment 30 min</div>
+          </div>
+        </div>
+        <div class="day">
+          <div class="day-name">MAR</div>
+          <div class="day-body">
+            <div class="day-event ev-daily">⚡ Daily 15 min</div>
+          </div>
+        </div>
+        <div class="day">
+          <div class="day-name">MIÉ</div>
+          <div class="day-body">
+            <div class="day-event ev-daily">⚡ Daily 15 min</div>
+          </div>
+        </div>
+        <div class="day">
+          <div class="day-name">JUE</div>
+          <div class="day-body">
+            <div class="day-event ev-daily">⚡ Daily 15 min</div>
+          </div>
+        </div>
+        <div class="day">
+          <div class="day-name">VIE</div>
+          <div class="day-body">
+            <div class="day-event ev-daily">⚡ Daily 15 min</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card primary">
+          <div class="card-icon">⚡</div>
+          <h4>Daily Standup — Diario · 15 min</h4>
+          <p>Revisión del tablero, de izquierda a derecha. Foco en blockers. No reportes individuales. El tablero habla.</p>
+        </div>
+        <div class="card green">
+          <div class="card-icon">📋</div>
+          <h4>Replenishment — Lunes · 30 min</h4>
+          <p>¿Qué entra al tablero esta semana? Basado en capacidad real, no en compromisos. Sin estimaciones ni puntos.</p>
+        </div>
+        <div class="card cyan">
+          <div class="card-icon">📈</div>
+          <h4>SDR — Quincenal · 60 min</h4>
+          <p>Service Delivery Review. Une Sprint Review + Retrospectiva. Datos reales, análisis de flujo, ajustes de proceso.</p>
+        </div>
+        <div class="card amber">
+          <div class="card-icon">⚠️</div>
+          <h4>Risk Review — Mensual · 30 min</h4>
+          <p>Tareas envejecidas, deuda técnica acumulada, riesgos que se ven venir. Prevención antes que apagafuegos.</p>
+        </div>
+      </div>
+
+      <div class="callout info" style="margin-top:20px;">
+        <div class="callout-icon">🚀</div>
+        <div>
+          <h4>Cómo arrancar</h4>
+          <p>Las primeras 4 semanas: solo Daily + Replenishment. El SDR y Risk Review se agregan al mes 2. No hay que implementar todo de golpe.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 DAILY -->
+  <div class="section" id="daily">
+    <div class="section-header">
+      <div class="section-num green">09</div>
+      <div>
+        <div class="section-title">El Daily en Kanban ☀️</div>
+        <div class="section-sub">15 minutos enfocados en el tablero, no en el individuo</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="grid grid-2" style="margin-bottom:20px;">
+        <div>
+          <div class="callout danger">
+            <div class="callout-icon">❌</div>
+            <div>
+              <h4>Daily de Scrum (lo que dejamos)</h4>
+              <p>"Ayer hice X, hoy haré Y, no tengo bloqueos."<br>→ Reporte individual · Habla la persona · 3 min por cabeza</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="callout success">
+            <div class="callout-icon">✅</div>
+            <div>
+              <h4>Daily de Kanban (lo que adoptamos)</h4>
+              <p>"La columna QA tiene 3 de 2, ¿quién tiene capacidad para desatorar?"<br>→ Análisis del flujo · Habla el tablero</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:12px;">El flujo del Daily (de derecha a izquierda)</h4>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Paso 1</div>
+          <div class="tl-title">✅ Columna "Listo"</div>
+          <div class="tl-body">¿Qué se completó ayer? ¿Hay algo para desplegar? 30 segundos. Celebrar lo que se terminó.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Paso 2</div>
+          <div class="tl-title">🧪 QA</div>
+          <div class="tl-body">¿Hay blockers? ¿Alguien necesita acceso, ambiente, datos de prueba? ¿Está cerca del límite WIP?</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Paso 3</div>
+          <div class="tl-title">👀 Revisión</div>
+          <div class="tl-body">¿Hay PRs sin revisar? ¿Tareas en revisión hace más de 2 días? → Alguien del equipo los toma.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Paso 4</div>
+          <div class="tl-title">⚡ En Progreso</div>
+          <div class="tl-body">¿Hay blockers? ¿Alguna tarea lleva demasiado tiempo activa? ¿Necesita ayuda?</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--accent);box-shadow:0 0 0 3px var(--accent-light);"></div>
+          <div class="tl-week">Resultado</div>
+          <div class="tl-title">🎯 Acuerdos claros</div>
+          <div class="tl-body">Cada blocker tiene nombre responsable y tiempo de resolución. Si algo no puede resolverse hoy, se escala ahora.</div>
+        </div>
+      </div>
+
+      <div class="callout warn" style="margin-top:8px;">
+        <div class="callout-icon">⏱</div>
+        <div>
+          <h4>Si el Daily dura más de 20 minutos</h4>
+          <p>Hay un problema de diseño. Probable causa: discusiones de soluciones en el Daily. El Daily identifica y asigna — las soluciones se discuten fuera, entre quienes deben resolverlas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 ROLES -->
+  <div class="section" id="roles">
+    <div class="section-header">
+      <div class="section-num amber">10</div>
+      <div>
+        <div class="section-title">Roles del Equipo 👥</div>
+        <div class="section-sub">Qué hace cada quien en Kanban — en el sistema maduro y durante la transición</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">🔍</div>
+          <div class="role-name">Analistas</div>
+          <div class="role-tag">Guardianes del backlog</div>
+        </div>
+        <div class="role-body">
+          <div class="role-cols">
+            <div class="role-col">
+              <h5>En Kanban maduro</h5>
+              <ul>
+                <li>Refinar el backlog antes de Replenishment</li>
+                <li>Escribir criterios de aceptación antes de que la tarea entre al tablero</li>
+                <li>Definir la clase de servicio de cada ítem</li>
+                <li>Mapear dependencias y riesgos visibles</li>
+              </ul>
+            </div>
+            <div class="role-col">
+              <h5>Durante la transición (sem 1-4)</h5>
+              <ul>
+                <li>Migrar los tickets actuales al tablero de Zoho</li>
+                <li>Escribir criterios de aceptación en los tickets que no los tienen</li>
+                <li>Facilitar el primer Replenishment</li>
+                <li>Aprender a categorizar por clase de servicio</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">💻</div>
+          <div class="role-name">Desarrolladores</div>
+          <div class="role-tag">Motores del flujo</div>
+        </div>
+        <div class="role-body">
+          <div class="role-cols">
+            <div class="role-col">
+              <h5>En Kanban maduro</h5>
+              <ul>
+                <li>Mantener el tablero actualizado en tiempo real</li>
+                <li>Ayudar en revisión/QA cuando su WIP está al límite</li>
+                <li>Priorizar terminar antes de empezar algo nuevo</li>
+                <li>Señalar blockers en cuanto aparecen</li>
+              </ul>
+            </div>
+            <div class="role-col">
+              <h5>Durante la transición (sem 1-4)</h5>
+              <ul>
+                <li>Mover sus tareas activas al tablero desde el día 1</li>
+                <li>Adoptar el hábito de actualizar estado en Zoho</li>
+                <li>Participar en definir los límites WIP del equipo</li>
+                <li>Reportar cuando el límite se vuelve obstáculo real</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">🧪</div>
+          <div class="role-name">QA</div>
+          <div class="role-tag">Guardianes de la calidad</div>
+        </div>
+        <div class="role-body">
+          <div class="role-cols">
+            <div class="role-col">
+              <h5>En Kanban maduro</h5>
+              <ul>
+                <li>Co-definir la Definition of Done con analistas y devs</li>
+                <li>Señalar cuando la columna QA es el cuello de botella</li>
+                <li>Validar que las políticas de columna se cumplan</li>
+                <li>Medir cycle time de pruebas para identificar mejoras</li>
+              </ul>
+            </div>
+            <div class="role-col">
+              <h5>Durante la transición (sem 1-4)</h5>
+              <ul>
+                <li>Definir qué significa "en pruebas" vs "aprobado"</li>
+                <li>Proponer el límite WIP de la columna QA</li>
+                <li>Registrar bugs encontrados como nuevas tarjetas, no verbalmente</li>
+                <li>Medir cuántos días tarda una tarea en QA</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">📊</div>
+          <div class="role-name">Gerentes</div>
+          <div class="role-tag">Prioridad y visión de negocio</div>
+        </div>
+        <div class="role-body">
+          <div class="role-cols">
+            <div class="role-col">
+              <h5>En Kanban maduro</h5>
+              <ul>
+                <li>Priorizar el backlog desde el negocio</li>
+                <li>Negociar fechas usando throughput real, no estimaciones</li>
+                <li>Revisar métricas en el SDR</li>
+                <li>Remover impedimentos organizacionales</li>
+              </ul>
+            </div>
+            <div class="role-col">
+              <h5>Durante la transición (sem 1-4)</h5>
+              <ul>
+                <li>Comunicar el cambio a stakeholders externos</li>
+                <li>Aprender a leer el tablero en vez de pedir reportes</li>
+                <li>Dar confianza al equipo durante la curva de aprendizaje</li>
+                <li>No presionar para eliminar límites WIP</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info" style="margin-top:8px;">
+        <div class="callout-icon">🔄</div>
+        <div>
+          <h4>Dos roles informales que alguien debe asumir</h4>
+          <p><strong>Flow Manager</strong> (equivale al Scrum Master): monitorea el flujo, facilita cadencias, detecta blockers antes del Daily. Al mes 3, el equipo rota esta responsabilidad.<br><br>
+          <strong>Service Request Manager</strong> (equivale al Product Owner): decide qué entra al tablero y en qué orden. Tiene visibilidad del backlog completo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 ZOHO -->
+  <div class="section" id="zoho">
+    <div class="section-header">
+      <div class="section-num" style="background:#e8530a;">11</div>
+      <div>
+        <div class="section-title">Zoho — Cómo configurarlo 🔧</div>
+        <div class="section-sub">Paso a paso para tener el tablero Kanban listo en Zoho Projects o Zoho Sprints</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout cyan">
+        <div class="callout-icon">✅</div>
+        <div>
+          <h4>Buenas noticias: no cambiamos de herramienta</h4>
+          <p>Zoho Projects y Zoho Sprints ya soportan tableros Kanban nativamente. Solo hay que configurar el tablero correctamente. No se pierden tickets ni historial.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <h4 style="font-size:15px;font-weight:700;margin-bottom:20px;">Configuración en Zoho Projects</h4>
+
+      <div class="zoho-step">
+        <div class="zoho-num">1</div>
+        <div class="zoho-content">
+          <h4>Activar la vista Kanban en tu proyecto</h4>
+          <p>Abre tu proyecto → pestaña "Tareas" → cambia la vista a <strong>"Tablero"</strong> (ícono de columnas en la barra superior derecha).</p>
+          <div class="zoho-path">Proyecto → Tareas → Vista: Tablero</div>
+        </div>
+      </div>
+
+      <div class="zoho-step">
+        <div class="zoho-num">2</div>
+        <div class="zoho-content">
+          <h4>Crear las columnas del proceso</h4>
+          <p>En la vista tablero → "+ Agregar estado". Crea estos estados en orden:</p>
+          <ul>
+            <li><strong>Backlog</strong> — tareas priorizadas esperando turno</li>
+            <li><strong>En progreso</strong> — en desarrollo activo</li>
+            <li><strong>En revisión</strong> — code review / revisión de analista</li>
+            <li><strong>QA</strong> — en pruebas</li>
+            <li><strong>Listo</strong> — completado y verificado</li>
+          </ul>
+          <div class="zoho-path">Vista Tablero → + Agregar estado → Nombrar → Guardar</div>
+        </div>
+      </div>
+
+      <div class="zoho-step">
+        <div class="zoho-num">3</div>
+        <div class="zoho-content">
+          <h4>Configurar etiquetas por tipo de tarea</h4>
+          <p>Ir a Configuración del Proyecto → Etiquetas → Crear:</p>
+          <ul>
+            <li>🔴 <strong>Bug</strong></li>
+            <li>🔵 <strong>Feature</strong></li>
+            <li>🟢 <strong>Mejora</strong></li>
+            <li>🟡 <strong>Deuda técnica</strong></li>
+          </ul>
+          <div class="zoho-path">Configuración → Etiquetas → + Nueva etiqueta → Color + Nombre</div>
+        </div>
+      </div>
+
+      <div class="zoho-step">
+        <div class="zoho-num">4</div>
+        <div class="zoho-content">
+          <h4>Crear campo personalizado: Clase de Servicio</h4>
+          <p>Configuración del Proyecto → Campos personalizados → Añadir campo de tipo "Lista desplegable" con opciones:</p>
+          <ul>
+            <li>🔴 Urgente</li>
+            <li>🔵 Estándar</li>
+            <li>🟡 Fecha Fija</li>
+            <li>⬜ Diferido</li>
+          </ul>
+          <div class="zoho-path">Configuración → Campos personalizados → + Lista → Opciones → Guardar</div>
+        </div>
+      </div>
+
+      <div class="zoho-step">
+        <div class="zoho-num">5</div>
+        <div class="zoho-content">
+          <h4>Activar tracking de tiempo por estado</h4>
+          <p>Esto permite que Zoho calcule automáticamente el Cycle Time de cada tarea. Se activa en Configuración → Flujo de trabajo → habilitar "Registrar tiempo por estado".</p>
+          <div class="zoho-path">Configuración → Flujo de trabajo → Registrar tiempo por estado → Activar</div>
+        </div>
+      </div>
+
+      <div class="zoho-step">
+        <div class="zoho-num">6</div>
+        <div class="zoho-content">
+          <h4>Configurar WIP limits con filtros</h4>
+          <p>Zoho Projects no tiene límites WIP nativos como Jira. La solución práctica: crear una vista con filtro por estado y añadir el límite como <strong>descripción de columna visible</strong> o como un <strong>campo de texto</strong> en el encabezado del sprint.</p>
+          <p style="margin-top:6px;">Alternativa: usar <strong>Zoho Sprints</strong> que sí soporta límites WIP nativos por columna.</p>
+          <div class="zoho-path">Zoho Sprints → Tablero → Editar columna → WIP Limit → número</div>
+        </div>
+      </div>
+
+      <div class="zoho-step">
+        <div class="zoho-num">7</div>
+        <div class="zoho-content">
+          <h4>Ver métricas de flujo</h4>
+          <p>En Zoho Projects: Reportes → "Informe de tareas" → filtrar por estado y fechas. Para Cycle Time: exportar a CSV y calcular en hoja de cálculo las primeras semanas. Al mes 2, Zoho Analytics puede conectarse para dashboards automáticos.</p>
+          <div class="zoho-path">Reportes → Informe de tareas → Filtros → Exportar CSV</div>
+        </div>
+      </div>
+
+      <div class="callout warn" style="margin-top:8px;">
+        <div class="callout-icon">💡</div>
+        <div>
+          <h4>Recomendación: empezar con Zoho Sprints en modo Kanban</h4>
+          <p>Zoho Sprints tiene soporte nativo para tableros Kanban, WIP limits por columna y métricas de flujo. Si el equipo ya lo usa, es más fácil cambiar a modo Kanban que configurar Projects desde cero.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 PLAN -->
+  <div class="section" id="plan">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <div>
+        <div class="section-title">Plan de Transición — 8 Semanas 🗓</div>
+        <div class="section-sub">Evolución gradual, no revolución — semana a semana, con objetivos claros</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout info">
+        <div class="callout-icon">🧭</div>
+        <div>
+          <h4>Principio guía</h4>
+          <p>Kanban dice: "empieza con lo que tienes". No tiramos los tickets actuales, no descartamos los procesos que funcionan. Añadimos visibilidad y límites encima de lo que ya existe.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Semana 1</div>
+          <div class="tl-title">🔭 Visibilidad total</div>
+          <div class="tl-body">No cambiamos el proceso — solo lo hacemos visible.</div>
+          <div class="tl-actions">
+            <span class="tl-action">Crear tablero en Zoho</span>
+            <span class="tl-action">Migrar tickets activos</span>
+            <span class="tl-action">Primer Daily con el tablero</span>
+            <span class="tl-action">Definir columnas del proceso real</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Semana 2</div>
+          <div class="tl-title">🏷 Tipificar el trabajo</div>
+          <div class="tl-body">Categorizar lo que ya está en el tablero. Sin presión — solo aprender a ver el trabajo.</div>
+          <div class="tl-actions">
+            <span class="tl-action">Etiquetar tickets por tipo</span>
+            <span class="tl-action">Asignar clase de servicio</span>
+            <span class="tl-action">Daily sigue, tablero como foco</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Semana 3</div>
+          <div class="tl-title">🚦 Definir límites WIP</div>
+          <div class="tl-body">Reunión de 30 min con todo el equipo para acordar los límites por columna. Se documenta.</div>
+          <div class="tl-actions">
+            <span class="tl-action">Calcular personas por columna × 1.5</span>
+            <span class="tl-action">Acordar límites en equipo</span>
+            <span class="tl-action">Anotar las políticas de columna</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Semana 4</div>
+          <div class="tl-title">🌊 Último sprint → Flujo continuo</div>
+          <div class="tl-body">Se cierra el último sprint. A partir de aquí, no hay sprints — hay flujo. El Replenishment semanal reemplaza al Sprint Planning.</div>
+          <div class="tl-actions">
+            <span class="tl-action">Cerrar sprint activo</span>
+            <span class="tl-action">Primer Replenishment (lunes)</span>
+            <span class="tl-action">Bugs urgentes entran directo</span>
+            <span class="tl-action">Sin puntos de historia</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--accent);"></div>
+          <div class="tl-week">Semanas 5-6</div>
+          <div class="tl-title">📊 Arrancar métricas</div>
+          <div class="tl-body">Activar tracking de tiempo por estado en Zoho. Empezar a registrar throughput semanal.</div>
+          <div class="tl-actions">
+            <span class="tl-action">Activar time tracking en Zoho</span>
+            <span class="tl-action">Registrar throughput semanal</span>
+            <span class="tl-action">Capacitar a stakeholders en nuevas métricas</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--accent);"></div>
+          <div class="tl-week">Semanas 7-8</div>
+          <div class="tl-title">📈 Primer SDR</div>
+          <div class="tl-body">Primera Service Delivery Review con datos reales. Revisar cycle time, throughput, cuellos de botella. Ajustar WIP si los datos lo justifican.</div>
+          <div class="tl-actions">
+            <span class="tl-action">Preparar datos de las 8 semanas</span>
+            <span class="tl-action">Primer SDR (60 min)</span>
+            <span class="tl-action">Ajustar límites WIP con evidencia</span>
+            <span class="tl-action">Plan mes 3+</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--success);"></div>
+          <div class="tl-week">Mes 3+</div>
+          <div class="tl-title">✅ Kanban operativo</div>
+          <div class="tl-body">El equipo opera en flujo continuo. Las conversaciones con el negocio usan throughput y cycle time. Mejora continua con cada SDR.</div>
+          <div class="tl-actions">
+            <span class="tl-action">SDR quincenal rutinario</span>
+            <span class="tl-action">Risk Review mensual</span>
+            <span class="tl-action">Datos guían decisiones</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 PRIMER LUNES -->
+  <div class="section" id="lunes">
+    <div class="section-header">
+      <div class="section-num green">13</div>
+      <div>
+        <div class="section-title">El Primer Lunes 🚀</div>
+        <div class="section-sub">Qué hacemos exactamente el primer día — sin excusas para no arrancar</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout success">
+        <div class="callout-icon">🎯</div>
+        <div>
+          <h4>Esta semana, solo necesitamos lograr una cosa</h4>
+          <p>Que todo el trabajo activo esté visible en el tablero de Zoho y que el equipo haga el Daily mirando ese tablero. Eso solo ya da el 80% del valor de Kanban.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <div class="monday-step">
+          <div class="monday-num">1</div>
+          <div class="monday-content">
+            <h4>Crear el tablero en Zoho (antes de la reunión)</h4>
+            <p>Quien configure Zoho crea el proyecto con las 5 columnas: Backlog · En progreso · En revisión · QA · Listo. Activar etiquetas de tipo.</p>
+          </div>
+          <div class="monday-time">~20 min</div>
+        </div>
+
+        <div class="monday-step">
+          <div class="monday-num">2</div>
+          <div class="monday-content">
+            <h4>Reunión de kick-off (todo el equipo)</h4>
+            <p>Mostrar el tablero. Explicar las columnas. Cada persona mueve sus tickets activos a la columna correcta en ese momento. Si hay dudas sobre dónde va algo, se decide en grupo.</p>
+          </div>
+          <div class="monday-time">45 min</div>
+        </div>
+
+        <div class="monday-step">
+          <div class="monday-num">3</div>
+          <div class="monday-content">
+            <h4>Primer Replenishment</h4>
+            <p>¿Qué entra al tablero esta semana desde el backlog? Decidir en conjunto según la capacidad visible. No más de lo que el equipo puede mover.</p>
+          </div>
+          <div class="monday-time">30 min</div>
+        </div>
+
+        <div class="monday-step">
+          <div class="monday-num">4</div>
+          <div class="monday-content">
+            <h4>Primer Daily de Kanban (al día siguiente, martes)</h4>
+            <p>Abrir el tablero. Revisar de derecha a izquierda. Identificar blockers. Asignar responsables. Duración objetivo: 15 minutos.</p>
+          </div>
+          <div class="monday-time">15 min/día</div>
+        </div>
+
+        <div class="monday-step">
+          <div class="monday-num">5</div>
+          <div class="monday-content">
+            <h4>Compromiso del equipo</h4>
+            <p>Si una tarea avanza, se mueve en Zoho ese mismo día. No al final de la semana, no "cuando me acuerde". El tablero vale solo si está actualizado en tiempo real.</p>
+          </div>
+          <div class="monday-time">siempre</div>
+        </div>
+      </div>
+
+      <div class="callout warn" style="margin-top:8px;">
+        <div class="callout-icon">⚠️</div>
+        <div>
+          <h4>Lo que NO hay que hacer el primer lunes</h4>
+          <p>No definir los WIP limits (eso es semana 3). No eliminar estimaciones todavía (semana 4). No configurar métricas avanzadas. Solo visibilidad.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 CURVA -->
+  <div class="section" id="curva">
+    <div class="section-header">
+      <div class="section-num red">14</div>
+      <div>
+        <div class="section-title">Curva de Aprendizaje 📉📈</div>
+        <div class="section-sub">Lo que va a pasar, cuándo va a pasar, y qué hacer cuando pase</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="callout danger">
+        <div class="callout-icon">🙏</div>
+        <div>
+          <h4>Esto va a pasar — y está bien</h4>
+          <p>Todos los equipos que adoptan Kanban pasan por los mismos tropiezos. No es señal de que algo está mal con el equipo. Es parte del proceso. El mes 1 se siente incómodo. El mes 2-3, el flujo aparece solo.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="curve-item active">
+          <div class="curve-period">Semanas 1-2</div>
+          <div class="curve-title">😅 "¿Esto para qué sirve?" — El tablero no se actualiza</div>
+          <div class="curve-body">El equipo tiene el tablero pero sigue trabajando "en su cabeza" o en otros sistemas. El Daily dura 25 minutos porque nadie sabe dónde están las cosas.</div>
+          <div class="symptom-fix">
+            <div class="symptom"><strong>🔴 Síntoma</strong><br>Cards sin mover. Daily largo. "¿En qué está esto?"</div>
+            <div class="fix"><strong>🟢 Respuesta</strong><br>El facilitador mueve las cards en vivo durante el Daily. Hábito se forma en 5-7 días.</div>
+          </div>
+        </div>
+
+        <div class="curve-item active">
+          <div class="curve-period">Semanas 2-4</div>
+          <div class="curve-title">😤 "Este límite WIP está mal" — El límite se viola con excusas</div>
+          <div class="curve-body">Las tareas se añaden a columnas llenas con justificación de urgencia. El WIP de "En progreso" tiene 7 tareas con límite de 4.</div>
+          <div class="symptom-fix">
+            <div class="symptom"><strong>🔴 Síntoma</strong><br>Columna roja. "Es que este sí es urgente de verdad."</div>
+            <div class="fix"><strong>🟢 Respuesta</strong><br>En el Daily: "QA tiene 4 de 3 — ¿qué hacemos?" El equipo resuelve, no el facilitador.</div>
+          </div>
+        </div>
+
+        <div class="curve-item active">
+          <div class="curve-period">Semanas 3-5</div>
+          <div class="curve-title">😰 "¿Cómo le digo al cliente cuándo va a estar listo?"</div>
+          <div class="curve-body">Sin sprints, sin puntos, ¿cómo se dan fechas? Gerentes y stakeholders sienten que perdieron el control.</div>
+          <div class="symptom-fix">
+            <div class="symptom"><strong>🔴 Síntoma</strong><br>"Sin sprint planning, ¿cómo comprometemos fechas?"</div>
+            <div class="fix"><strong>🟢 Respuesta</strong><br>"Completamos 8 tareas/semana. Hay 16 antes de esta. Estimado: 2 semanas." — Más honesto que cualquier punto.</div>
+          </div>
+        </div>
+
+        <div class="curve-item active">
+          <div class="curve-period">Semanas 4-6</div>
+          <div class="curve-title">😱 "El backlog creció" — Visibilidad vs crecimiento real</div>
+          <div class="curve-body">El backlog parece haberse duplicado. En realidad siempre existió — ahora es visible por primera vez.</div>
+          <div class="symptom-fix">
+            <div class="symptom"><strong>🔴 Síntoma</strong><br>"Tenemos más trabajo que antes de Kanban."</div>
+            <div class="fix"><strong>🟢 Respuesta</strong><br>El Replenishment decide qué entra esta semana. El resto espera priorizado. No todo tiene que estar "en progreso".</div>
+          </div>
+        </div>
+
+        <div class="curve-item">
+          <div class="curve-period">Mes 2-3</div>
+          <div class="curve-title">😌 El flujo aparece solo</div>
+          <div class="curve-body">El Daily dura 10 minutos. Las cards se mueven solas. El equipo ayuda a desatorar sin que nadie lo pida. Los stakeholders leen el tablero en vez de preguntar estatus. Cycle time bajando.</div>
+          <div class="symptom-fix">
+            <div class="symptom" style="background:var(--success-light);"><strong style="color:#065f46;">✅ Señal 1</strong><br>Daily de 10 min, fluido, sin discusiones largas.</div>
+            <div class="fix"><strong>✅ Señal 2</strong><br>Devs van a QA a ayudar cuando ven la columna llena. Sin que nadie lo pida.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 CHECKLIST + FAQ -->
+  <div class="section" id="checklist">
+    <div class="section-header">
+      <div class="section-num cyan">15</div>
+      <div>
+        <div class="section-title">Checklist + Preguntas Frecuentes ✅</div>
+        <div class="section-sub">Para saber si vamos bien — y respuestas a lo que siempre se pregunta</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="check-group">
+        <h4>🗂 Tablero y proceso</h4>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Tablero creado en Zoho con las 5 columnas del proceso</strong>
+            <span>Backlog · En progreso · En revisión · QA · Listo</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Todos los tickets activos migrados a la columna correcta</strong>
+            <span>Nadie tiene trabajo activo fuera del tablero</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Tipos y colores configurados en Zoho</strong>
+            <span>Bug · Feature · Mejora · Deuda técnica</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Clases de servicio como campo personalizado en Zoho</strong>
+            <span>Urgente · Estándar · Fecha fija · Diferido</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>WIP limits acordados por el equipo (semana 3)</strong>
+            <span>Fórmula: personas × 1.5. Documentados y visibles.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <h4>📅 Cadencias</h4>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Daily de 15 min con el tablero como centro</strong>
+            <span>De derecha a izquierda. Foco en blockers.</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Replenishment semanal agendado (lunes, 30 min)</strong>
+            <span>Reemplaza Sprint Planning. Sin puntos de historia.</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Primer SDR agendado para la semana 7-8</strong>
+            <span>Con datos reales de las primeras semanas.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <h4>📊 Métricas</h4>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Time tracking por estado activado en Zoho</strong>
+            <span>Para calcular Cycle Time automáticamente.</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Throughput semanal siendo registrado</strong>
+            <span>¿Cuántas tareas completamos esta semana?</span>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <strong>Stakeholders informados del nuevo lenguaje de métricas</strong>
+            <span>No más puntos. Ahora: tareas/semana y días de cycle time.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">❓ Preguntas Frecuentes</h3>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Seguimos haciendo releases en fechas específicas?</div>
+        <div class="faq-a">Sí. Kanban no dicta cuándo haces release — eso lo decide el negocio. Kanban mejora la <em>predictabilidad</em> de lo que estará listo para cada fecha. Puedes tener releases semanales, quincenales o acumulados.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Cómo manejamos un bug crítico que llega en martes a las 3pm?</div>
+        <div class="faq-a">Entra al tablero como tarjeta con clase de servicio <strong>Urgente</strong>. Va directo a "En progreso" aunque el WIP esté al límite (los Urgentes tienen prioridad implícita). No hay reunión de emergencia. No hay sprint roto. El tablero lo absorbe.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Cómo le decimos al cliente cuánto va a tardar algo sin fechas fijas?</div>
+        <div class="faq-a">Con datos: "Completamos 8 tareas por semana en promedio. Tienes 24 en la fila antes de esta. Estimado: 3 semanas." Más honesto que "serán 21 puntos a velocidad de 18". La transparencia genera más confianza que la precisión falsa.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Cambiamos de herramienta? ¿Perdemos el historial de Zoho?</div>
+        <div class="faq-a">No. Seguimos en Zoho. Solo reconfiguramos el tablero. El historial de tickets, comentarios y tiempo registrado se conserva completamente.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Desaparece el Sprint Planning?</div>
+        <div class="faq-a">Se convierte en el Replenishment: misma función (¿qué hacemos?), misma frecuencia semanal, pero 30 minutos en vez de 2-3 horas. Sin estimaciones, sin compromisos de sprint. Basado en capacidad real y datos históricos.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Cómo sabemos si Kanban está funcionando?</div>
+        <div class="faq-a">Tres señales claras: 1) El Cycle Time promedio baja en el mes 2. 2) El Throughput es consistente semana a semana. 3) Los blockers se resuelven el mismo día en que aparecen. Si dos meses después ninguna de las tres mejoró, algo en los WIP limits o las políticas necesita ajuste.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Qué pasa si el equipo no actualiza el tablero?</div>
+        <div class="faq-a">El Daily lo hace evidente de inmediato: "¿Dónde está esta tarea?" Si nadie lo sabe, el facilitador la mueve en ese momento. En 1-2 semanas el hábito se forma porque el Daily incomoda cuando el tablero está desactualizado.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">¿Podemos volver a Scrum si no funciona?</div>
+        <div class="faq-a">Sí. Kanban es aditivo — no destruye tu proceso actual. En el peor caso, tienes un tablero mejor organizado y algunas métricas nuevas. Pero dale al menos 8 semanas completas antes de evaluar. El mes 1 siempre es el más difícil.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p style="font-size:18px;margin-bottom:8px;">🚀 <strong>Stop starting. Start finishing.</strong></p>
+  <p>Guía de transición Scrum → Kanban · Equipo GM Transport</p>
+  <p style="margin-top:8px;font-size:12px;color:#9ca3af;">Herramienta: Zoho · Metodología: Kanban · Horizonte: 8 semanas</p>
+</footer>
+
+</body>
+</html>

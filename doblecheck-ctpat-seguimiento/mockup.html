@@ -10,24 +10,74 @@ body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #F2F2F2;
 .app { display: flex; height: 100vh; overflow: hidden; }
 
 /* ── Sidebar ── */
-.sidebar { width: 200px; background: #fff; border-right: 1px solid #eee; display: flex; flex-direction: column; flex-shrink: 0; }
-.sb-logo { padding: 14px 16px 12px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid #f5f5f5; }
-.sb-dc { background: #FFA101; border-radius: 5px; padding: 3px 6px; font-size: 10px; font-weight: 800; color: #fff; }
+.sidebar {
+  width: 200px; background: #fff; border-right: 1px solid #eee;
+  display: flex; flex-direction: column; flex-shrink: 0;
+  transition: width .25s cubic-bezier(.4,0,.2,1), transform .25s cubic-bezier(.4,0,.2,1);
+  overflow: hidden; z-index: 40; position: relative;
+}
+/* Tablet: solo íconos */
+.sidebar.collapsed { width: 60px; }
+.sidebar.collapsed .sb-name,
+.sidebar.collapsed .ni-label,
+.sidebar.collapsed .ni-sm-label { display: none; }
+.sidebar.collapsed .ni { justify-content: center; padding: 13px 0; }
+.sidebar.collapsed .ni-sm { justify-content: center; padding: 9px 0; }
+.sidebar.collapsed .sb-logo { justify-content: center; padding: 14px 0; }
+
+/* Móvil: overlay */
+.sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 39; }
+.sb-overlay.open { display: block; }
+@media (max-width: 767px) {
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; transform: translateX(-100%); width: 220px !important; z-index: 40; box-shadow: 4px 0 20px rgba(0,0,0,.15); }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .sidebar.collapsed { width: 220px !important; }
+  .sidebar.collapsed .sb-name, .sidebar.collapsed .ni-label, .sidebar.collapsed .ni-sm-label { display: inline !important; }
+  .sidebar.collapsed .ni { justify-content: flex-start; padding: 11px 18px; }
+  .sidebar.collapsed .ni-sm { justify-content: flex-start; padding: 8px 18px; }
+  .sidebar.collapsed .sb-logo { justify-content: flex-start; padding: 14px 16px; }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar { width: 60px; }
+  .sidebar .sb-name, .sidebar .ni-label, .sidebar .ni-sm-label { display: none; }
+  .sidebar .ni { justify-content: center; padding: 13px 0; }
+  .sidebar .ni-sm { justify-content: center; padding: 9px 0; }
+  .sidebar .sb-logo { justify-content: center; padding: 14px 0; }
+  .sidebar.expanded { width: 200px; }
+  .sidebar.expanded .sb-name, .sidebar.expanded .ni-label, .sidebar.expanded .ni-sm-label { display: inline; }
+  .sidebar.expanded .ni { justify-content: flex-start; padding: 11px 18px; }
+  .sidebar.expanded .ni-sm { justify-content: flex-start; padding: 8px 18px; }
+  .sidebar.expanded .sb-logo { justify-content: flex-start; padding: 14px 16px; }
+}
+
+.sb-logo { padding: 14px 16px 12px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid #f5f5f5; white-space: nowrap; }
+.sb-dc { background: #FFA101; border-radius: 5px; padding: 3px 6px; font-size: 10px; font-weight: 800; color: #fff; flex-shrink: 0; }
 .sb-name { font-size: 12px; font-weight: 700; color: #333; }
 .sb-nav { flex: 1; padding: 8px 0; }
-.ni { display: flex; align-items: center; gap: 9px; padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; border-left: 3px solid transparent; }
+.ni { display: flex; align-items: center; gap: 9px; padding: 11px 18px; font-size: 13px; color: #666; cursor: pointer; border-left: 3px solid transparent; white-space: nowrap; }
 .ni:hover { background: #fafafa; }
 .ni.active { color: #FFA101; font-weight: 600; background: #FFF8EE; border-left-color: #FFA101; }
-.ni svg { width: 14px; height: 14px; flex-shrink: 0; }
+.ni svg { width: 16px; height: 16px; flex-shrink: 0; }
 .sb-bot { padding: 10px 0; border-top: 1px solid #f5f5f5; }
-.ni-sm { display: flex; align-items: center; gap: 9px; padding: 8px 18px; font-size: 12px; color: #888; cursor: pointer; }
+.ni-sm { display: flex; align-items: center; gap: 9px; padding: 8px 18px; font-size: 12px; color: #888; cursor: pointer; white-space: nowrap; }
+.ni-sm svg { width: 15px; height: 15px; flex-shrink: 0; }
+/* tooltip en modo colapsado */
+.ni[data-tip] { position: relative; }
+.sidebar.collapsed .ni[data-tip]:hover::after,
+.sidebar:not(.expanded) .ni[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; left: 62px; top: 50%; transform: translateY(-50%);
+  background: #333; color: #fff; font-size: 11px; padding: 4px 9px;
+  border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 99;
+}
 
 /* ── Main ── */
-.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.topbar { background: #fff; border-bottom: 1px solid #eee; padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid #eee; padding: 0 16px; height: 50px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .tb-right { display: flex; align-items: center; gap: 10px; }
 .avatar { width: 28px; height: 28px; border-radius: 50%; background: #FFA101; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
 .user-name { font-size: 12px; font-weight: 600; color: #333; }
+@media (max-width: 480px) { .user-name { display: none; } }
 
 /* Screen nav */
 .snav-bar { display: flex; background: #fff; border-bottom: 2px solid #eee; padding: 0 20px; flex-shrink: 0; overflow-x: auto; }
@@ -196,33 +246,53 @@ body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #F2F2F2;
 <body>
 <div class="app">
 
+  <!-- Overlay móvil para cerrar sidebar -->
+  <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
   <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sb-logo"><div class="sb-dc">DC</div><span class="sb-name">Doble Check</span></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-dc">DC</div>
+      <span class="sb-name ni-label">Doble Check</span>
+    </div>
     <nav class="sb-nav">
-      <div class="ni" onclick="goScreen('config')">
+      <div class="ni" data-tip="Formularios" onclick="goScreen('config');closeSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-        Formularios
+        <span class="ni-label">Formularios</span>
       </div>
-      <div class="ni active" onclick="goScreen('list')">
+      <div class="ni active" data-tip="Inspecciones" onclick="goScreen('list');closeSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Inspecciones
+        <span class="ni-label">Inspecciones</span>
       </div>
-      <div class="ni" onclick="goScreen('config')">
+      <div class="ni" data-tip="Configuraciones" onclick="goScreen('config');closeSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        Configuraciones
+        <span class="ni-label">Configuraciones</span>
       </div>
     </nav>
     <div class="sb-bot">
-      <div class="ni-sm">⚠ Reportar Falla</div>
-      <div class="ni-sm">👤 Mi Perfil</div>
+      <div class="ni-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span class="ni-sm-label">Reportar Falla</span>
+      </div>
+      <div class="ni-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="ni-sm-label">Mi Perfil</span>
+      </div>
+      <div class="ni-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span class="ni-sm-label">Cerrar Sesión</span>
+      </div>
     </div>
   </div>
 
   <!-- Main -->
   <div class="main">
     <div class="topbar">
-      <span style="font-size:18px;color:#555;cursor:pointer;">☰</span>
+      <button onclick="toggleSidebar()" style="background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;display:flex;flex-direction:column;gap:4px;" aria-label="Menú">
+        <span style="display:block;width:20px;height:2px;background:#555;border-radius:2px;"></span>
+        <span style="display:block;width:20px;height:2px;background:#555;border-radius:2px;"></span>
+        <span style="display:block;width:20px;height:2px;background:#555;border-radius:2px;"></span>
+      </button>
       <div class="tb-right">
         <span style="font-size:16px;color:#bbb;">🔔</span>
         <div class="avatar">JA</div>
@@ -916,6 +986,38 @@ body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #F2F2F2;
 <script>
   let bitCount = 2;
 
+  // ── Sidebar responsive ──
+  function isMobile() { return window.innerWidth < 768; }
+  function isTablet() { return window.innerWidth >= 768 && window.innerWidth <= 1024; }
+
+  function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sb-overlay');
+    if (isMobile()) {
+      const open = sb.classList.toggle('mobile-open');
+      ov.classList.toggle('open', open);
+    } else {
+      // tablet/desktop: toggle entre colapsado y expandido
+      sb.classList.toggle('expanded');
+      sb.classList.toggle('collapsed');
+    }
+  }
+
+  function closeSidebar() {
+    if (!isMobile()) return;
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('sb-overlay').classList.remove('open');
+  }
+
+  function initSidebar() {
+    const sb = document.getElementById('sidebar');
+    sb.classList.remove('collapsed','expanded','mobile-open');
+    if (isTablet()) sb.classList.add('collapsed');
+  }
+
+  window.addEventListener('resize', initSidebar);
+  initSidebar();
+
   function goScreen(s) {
     document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('.snav').forEach(x=>x.classList.remove('active'));
@@ -1049,7 +1151,18 @@ body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #F2F2F2;
     clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2800);
   }
 
-  goScreen('list');
+  // URL param override: ?s=config|list|form|email  &drawer=1&tab=bitacora
+  const _urlParams = new URLSearchParams(window.location.search);
+  const _urlS = _urlParams.get('s');
+  goScreen(_urlS || 'list');
+  if (_urlParams.get('drawer') === '1') {
+    setTimeout(() => {
+      openDrawer('I-145','T-09','CDMX → Monterrey','Carlos');
+      if (_urlParams.get('tab') === 'bitacora') {
+        setTimeout(() => drTab(document.querySelectorAll('.dr-tab')[1], 'bitacora'), 200);
+      }
+    }, 300);
+  }
 </script>
 </body>
 </html>

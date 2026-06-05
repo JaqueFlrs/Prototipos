@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mockup — Envío de Notificación SOS sin Interfaz GPS (#35074)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12px; background: #f0f0f0; padding: 20px; }
+
+    /* PAGE HEADER */
+    .page-header { text-align: center; margin-bottom: 16px; }
+    .page-header h1 { font-size: 16px; font-weight: bold; color: #333; }
+    .page-header p { font-size: 11px; color: #777; margin-top: 3px; }
+
+    /* ===== PROTO TABS ===== */
+    .proto-tabs-bar { display: flex; gap: 0; max-width: 980px; margin: 0 auto; }
+    .proto-tab {
+      padding: 10px 18px; cursor: pointer; background: #e8e8e8; color: #444;
+      font-size: 13px; font-weight: normal; border: 1px solid #ccc; border-bottom: none;
+      border-radius: 6px 6px 0 0; margin-right: 4px; user-select: none; transition: background 0.15s;
+    }
+    .proto-tab:hover { background: #ddd; }
+    .proto-tab.active {
+      background: #fff; color: #222; font-weight: bold;
+      border-top: 3px solid #F2940E; border-left: 1px solid #ccc;
+      border-right: 1px solid #ccc; border-bottom: none;
+    }
+    .proto-tab-content {
+      display: none; background: #fff; border: 1px solid #ccc;
+      border-radius: 0 6px 6px 6px; max-width: 980px; margin: 0 auto; padding: 0;
+    }
+    .proto-tab-content.active { display: block; }
+    .proto-tab-content.phone-tab {
+      display: none; background: #f0f0f0; border: 1px solid #ccc;
+      border-radius: 0 6px 6px 6px; max-width: 980px; margin: 0 auto; padding: 32px 24px;
+    }
+    .proto-tab-content.phone-tab.active { display: flex; justify-content: center; align-items: flex-start; }
+
+    /* ===== ERP PANEL (Tab 1) ===== */
+    .panel { width: 100%; background: #F5A623; border: 1px solid #ccc; }
+    .panel-title { background: #F2940E; color: #fff; font-weight: bold; font-size: 13px; padding: 6px 10px; }
+
+    /* ERP inner tabs */
+    .tabs { display: flex; border-bottom: 2px solid #F2940E; background: #e0e0e0; flex-wrap: wrap; }
+    .tab { padding: 6px 12px; cursor: pointer; border: 1px solid #ccc; border-bottom: none; margin-right: 2px; background: #e0e0e0; color: #333; font-size: 12px; user-select: none; }
+    .tab:hover { background: #d0d0d0; }
+    .tab.active { background: #F2940E; color: #fff; font-weight: bold; border-color: #F2940E; }
+
+    .tab-content { display: none; padding: 10px 14px; background: #F5A623; }
+    .tab-content.active { display: block; }
+
+    /* Inner white panel */
+    .inner-panel { background: #fff; border: 1px solid #ccc; padding: 8px 12px; }
+
+    /* Section title */
+    .section-title { background: #ddd; text-align: center; font-weight: bold; font-size: 12px; padding: 4px 0; margin: 8px 0 6px 0; border: 1px solid #ccc; }
+
+    /* Field row */
+    .field-row { display: flex; align-items: center; margin-bottom: 5px; padding: 1px 0; gap: 6px; }
+    .field-row label { min-width: 265px; color: #555; font-size: 12px; flex-shrink: 0; }
+    .field-row input[type="text"], .field-row select {
+      flex: 1; max-width: 340px; border: 1px solid #ccc; padding: 3px 5px;
+      font-size: 12px; font-family: Calibri, sans-serif; background: #fff;
+    }
+    .field-row .field-extra { margin-left: 4px; flex-shrink: 0; }
+
+    /* Checkbox row */
+    .checkbox-row { display: flex; align-items: center; margin-bottom: 5px; gap: 6px; }
+    .checkbox-row input[type="checkbox"] { width: 14px; height: 14px; flex-shrink: 0; }
+    .checkbox-row label { color: #555; font-size: 12px; cursor: pointer; }
+
+    /* Inline checkbox with button */
+    .checkbox-btn-row { display: flex; align-items: center; margin-bottom: 5px; gap: 8px; }
+    .checkbox-btn-row input[type="checkbox"] { width: 14px; height: 14px; flex-shrink: 0; }
+    .checkbox-btn-row label { color: #555; font-size: 12px; cursor: pointer; }
+
+    /* Buttons */
+    .btn-primary { background: #F2940E; color: #fff; border: none; padding: 4px 14px; font-size: 12px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
+    .btn-secondary { background: #888; color: #fff; border: none; padding: 4px 14px; font-size: 12px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
+    .btn-dark { background: #555; color: #fff; border: none; padding: 3px 10px; font-size: 11px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
+    .btn-add { background: #4CAF50; color: #fff; border: none; padding: 3px 10px; font-size: 13px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; font-weight: bold; }
+    .btn-delete { background: none; border: none; cursor: pointer; font-size: 14px; color: #666; padding: 2px 6px; }
+    .btn-delete:hover { color: #c00; }
+    .btn-gestionar { background: #F2940E; color: #fff; border: none; padding: 3px 10px; font-size: 11px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
+    .btn-configurar-sos { background: #F2940E; color: #fff; border: none; padding: 4px 12px; font-size: 11px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; display: none; }
+
+    /* Table */
+    .sos-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    .sos-table thead tr { background: #F2940E; color: #fff; font-size: 12px; }
+    .sos-table thead th { padding: 5px 8px; text-align: left; font-weight: bold; border: 1px solid #d07000; }
+    .sos-table tbody tr { background: #fff; }
+    .sos-table tbody tr.selected { background: #F2940E; }
+    .sos-table tbody tr.selected td { color: #fff; }
+    .sos-table tbody td { padding: 4px 8px; border: 1px solid #e8e8e8; font-size: 12px; }
+    .sos-table tbody tr:hover { background: #fde8c0; }
+    .sos-table tbody tr.selected:hover { background: #e08000; }
+
+    .placeholder-text { color: #aaa; font-style: italic; padding: 20px; text-align: center; }
+    .bottom-bar { display: flex; justify-content: flex-end; gap: 8px; padding: 8px 10px; border-top: 1px solid #ddd; background: #f5f5f5; }
+
+    /* ===== MODAL SOS ===== */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-panel { background: #fff; width: 700px; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); overflow: hidden; }
+    .modal-header {
+      background: #e8e8e8; color: #333; font-weight: bold; font-size: 13px;
+      padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+    .modal-close-x {
+      cursor: pointer; font-size: 16px; background: #F2940E; color: #fff;
+      border: none; font-weight: bold; line-height: 1; width: 22px; height: 22px;
+      border-radius: 3px; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-body { padding: 12px 16px; }
+    .modal-filter-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .modal-filter-row input[type="text"] { border: 1px solid #ccc; padding: 3px 6px; font-size: 12px; font-family: Calibri, sans-serif; width: 180px; }
+    .modal-filter-row label { font-size: 12px; color: #555; }
+    .modal-filter-row input[type="checkbox"] { accent-color: #F2940E; width: 13px; height: 13px; }
+    .modal-input-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+    .modal-input-row label { color: #555; font-size: 12px; white-space: nowrap; }
+    .modal-input-row .inp-nombre { width: 130px; border: 1px solid #ccc; padding: 3px 5px; font-size: 12px; font-family: Calibri, sans-serif; }
+    .modal-input-row .inp-correo { width: 230px; border: 1px solid #ccc; padding: 3px 5px; font-size: 12px; font-family: Calibri, sans-serif; }
+    .modal-input-row input.invalid { border-color: #e00; }
+    .modal-error { color: #c00; font-size: 11px; margin-bottom: 6px; display: none; }
+    .modal-pagination { display: flex; justify-content: center; align-items: center; gap: 4px; font-size: 12px; padding: 8px 16px; }
+    .modal-pagination span { padding: 2px 8px; border: 1px solid #ccc; cursor: pointer; }
+    .modal-pagination span.active { background: #F2940E; color: #fff; border-color: #F2940E; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 10px 16px; border-top: 1px solid #ddd; background: #f5f5f5; }
+
+    /* ===== TAB 2: ERP CAMPANITA ===== */
+    .erp-wrapper { width: 100%; border: 1px solid #ccc; background: #fff; position: relative; }
+    .erp-navbar {
+      background: #f8f8f8; border-bottom: 1px solid #ddd;
+      display: flex; align-items: center; padding: 5px 12px; gap: 8px; position: relative; z-index: 10;
+    }
+    .erp-logo-block { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .erp-logo-icon { width: 28px; height: 28px; background: #F2940E; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; font-weight: bold; }
+    .erp-logo-text { font-size: 13px; font-weight: bold; color: #333; line-height: 1.2; }
+    .erp-logo-text small { display: block; font-size: 10px; font-weight: normal; color: #888; }
+    .erp-search-bar { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 4px; padding: 3px 8px; gap: 5px; background: #fff; flex-shrink: 0; }
+    .erp-search-bar input { border: none; outline: none; font-size: 12px; width: 160px; font-family: Calibri, sans-serif; }
+    .erp-search-bar .search-icon { color: #aaa; font-size: 13px; }
+    .erp-navbar-spacer { flex: 1; }
+    .erp-navbar-icons { display: flex; align-items: center; gap: 6px; }
+    .erp-nav-icon { font-size: 16px; color: #888; cursor: pointer; padding: 3px 5px; border-radius: 4px; transition: background 0.15s; position: relative; }
+    .erp-nav-icon:hover { background: #f0f0f0; color: #555; }
+    .bell-wrapper { position: relative; display: inline-block; }
+    .bell-badge { position: absolute; top: -3px; right: -3px; background: #F2940E; color: #fff; font-size: 9px; font-weight: bold; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    .erp-client-block { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 3px 6px; border-radius: 4px; }
+    .erp-client-block:hover { background: #f0f0f0; }
+    .erp-client-seal { width: 30px; height: 30px; border-radius: 50%; background: #2e7d32; display: flex; align-items: center; justify-content: center; font-size: 7px; color: #fff; font-weight: bold; text-align: center; line-height: 1.1; border: 2px solid #4CAF50; }
+    .erp-client-info { font-size: 10px; color: #555; line-height: 1.3; }
+    .erp-client-info strong { color: #333; font-size: 11px; display: block; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .erp-client-arrow { color: #888; font-size: 10px; }
+
+    /* Notif dropdown */
+    .notif-dropdown {
+      display: none; position: absolute; top: calc(100% + 6px); right: 0;
+      width: 340px; background: #fff; border: 1px solid #ddd;
+      border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.18); z-index: 100; overflow: hidden;
+    }
+    .notif-dropdown.open { display: block; }
+    .notif-dropdown-header {
+      padding: 10px 14px 8px 14px; font-weight: bold; font-size: 13px; color: #222;
+      border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;
+    }
+    .notif-silence { font-size: 14px; cursor: pointer; color: #888; }
+    .notif-dropdown-body { max-height: 320px; overflow-y: auto; }
+    .notif-item-sos {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; background: #ffe4e1; cursor: pointer; transition: background 0.15s;
+      border-bottom: 1px solid #f5c0b8;
+    }
+    .notif-item-sos:hover { background: #ffd0cb; }
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 14px; background: #f9f9f9; cursor: pointer; transition: background 0.15s;
+      border-bottom: 1px solid #eee;
+    }
+    .notif-item:hover { background: #f0f0f0; }
+    .notif-icon-col { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .notif-text-col { flex: 1; min-width: 0; }
+    .notif-title { font-weight: bold; font-size: 12px; color: #c0392b; margin-bottom: 2px; }
+    .notif-title-gray { font-weight: bold; font-size: 11px; color: #444; margin-bottom: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .notif-sub { font-size: 11px; color: #555; margin-bottom: 1px; }
+    .notif-time { font-size: 10px; color: #999; margin-top: 2px; }
+    .notif-time-gray { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+    .erp-body { display: flex; min-height: 380px; }
+    .erp-sidebar {
+      width: 165px; background: #2d2d2d; display: flex; flex-direction: column;
+      padding: 8px 0; gap: 1px; flex-shrink: 0;
+    }
+    .erp-sidebar-item {
+      display: flex; align-items: center; gap: 7px; padding: 7px 12px;
+      color: #bbb; font-size: 11px; cursor: pointer; transition: background 0.15s; user-select: none;
+    }
+    .erp-sidebar-item:hover { background: #3d3d3d; color: #fff; }
+    .erp-sidebar-item.active { background: #F2940E; color: #fff; }
+    .erp-sidebar-item .si-icon { font-size: 13px; flex-shrink: 0; }
+    .erp-sidebar-item .si-text { flex: 1; }
+    .erp-sidebar-item .si-arrow { font-size: 8px; color: #777; }
+    .erp-sidebar-item.active .si-arrow { color: #ffe0b0; }
+    .erp-main-content { flex: 1; padding: 20px; background: #e8e8e8; }
+    .erp-indicators-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .erp-indicator-card {
+      background: #fff; border: 1px solid #ddd; border-radius: 6px;
+      padding: 28px 16px; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 8px; cursor: pointer; transition: box-shadow 0.15s; min-height: 110px;
+    }
+    .erp-indicator-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
+    .erp-indicator-card .card-icon { font-size: 30px; color: #ccc; }
+    .erp-indicator-card .card-plus { font-size: 20px; color: #4CAF50; font-weight: bold; }
+    .erp-indicator-card .card-label { font-size: 11px; color: #999; text-align: center; }
+
+    /* ===== TAB 3: CORREO SOS ===== */
+    .email-client { max-width: 780px; margin: 0 auto; font-family: Calibri, 'Segoe UI', Arial, sans-serif; }
+    .email-toolbar { background: #f5f5f5; border: 1px solid #ddd; border-bottom: none; padding: 6px 12px; display: flex; align-items: center; gap: 14px; }
+    .email-toolbar button { background: none; border: none; font-size: 12px; color: #555; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 3px 6px; border-radius: 3px; }
+    .email-toolbar button:hover { background: #e8e8e8; }
+    .email-panel { border: 1px solid #ddd; background: #fff; }
+    .email-meta { padding: 10px 16px; border-bottom: 1px solid #eee; }
+    .email-meta-row { display: flex; gap: 8px; margin-bottom: 5px; font-size: 12px; }
+    .email-meta-row .meta-label { color: #888; min-width: 55px; font-weight: bold; }
+    .email-meta-row .meta-value { color: #333; }
+    .email-meta-row .meta-asunto { color: #222; font-weight: bold; font-size: 13px; }
+    .email-header-bar { background: #F2940E; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+    .email-logo-text { color: #fff; font-size: 16px; font-weight: bold; }
+    .email-logo-text small { display: block; font-size: 11px; font-weight: normal; opacity: 0.85; }
+    .sos-badge { background: #fff; color: #F2940E; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 4px; margin-left: auto; }
+    .email-content-area { padding: 24px 28px; font-size: 13px; color: #333; }
+    .email-title { font-size: 18px; font-weight: bold; color: #c0392b; margin-bottom: 6px; }
+    .email-intro { font-size: 13px; color: #555; margin-bottom: 18px; }
+    .email-divider { border: none; border-top: 2px solid #eee; margin: 16px 0; }
+    .email-section-title { font-size: 13px; font-weight: bold; color: #F2940E; margin-bottom: 10px; }
+    .email-data-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+    .email-data-table td { padding: 5px 8px; font-size: 12px; }
+    .email-data-table td:first-child { color: #888; width: 220px; padding-left: 0; }
+    .email-data-table td:last-child { color: #222; font-weight: 500; }
+    .email-note { font-size: 11px; color: #999; text-align: center; padding: 14px 0 6px 0; border-top: 1px solid #eee; margin-top: 10px; }
+    .email-footer-bar { background: #f5f5f5; border-top: 1px solid #ddd; padding: 10px 20px; text-align: center; font-size: 11px; color: #999; }
+
+    /* ===== PHONE FRAME ===== */
+    .phone-frame { width: 284px; background: #1a1a2e; border-radius: 36px; padding: 14px 10px; box-shadow: 0 6px 30px rgba(0,0,0,0.45); }
+    .phone-notch { width: 80px; height: 18px; background: #1a1a2e; border-radius: 0 0 14px 14px; margin: 0 auto 4px auto; }
+    .phone-screen { background: #f4f4f4; border-radius: 24px; overflow: hidden; min-height: 520px; display: flex; flex-direction: column; }
+    .phone-status-bar { background: #F2940E; color: #fff; font-size: 10px; padding: 3px 12px; display: flex; justify-content: space-between; align-items: center; }
+    .phone-app-header { background: #F2940E; color: #fff; font-size: 14px; font-weight: bold; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+    .phone-content { flex: 1; padding: 10px; overflow: auto; }
+    .trip-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.13); padding: 10px 12px; margin-bottom: 10px; }
+    .trip-card .trip-number { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 4px; }
+    .trip-card .trip-row { font-size: 11px; color: #555; margin-bottom: 3px; display: flex; gap: 4px; align-items: center; }
+    .trip-card .trip-row .trip-label { color: #999; min-width: 60px; }
+    .trip-badge-green { display: inline-block; background: #27ae60; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 7px; border-radius: 10px; margin-top: 4px; }
+    .map-placeholder { background: #d8d8d8; border-radius: 8px; height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; margin-bottom: 10px; gap: 4px; }
+    .map-placeholder .map-icon { font-size: 22px; }
+    .sos-btn { display: block; width: 100%; background: #e53935; color: #fff; font-size: 15px; font-weight: bold; border: none; border-radius: 8px; padding: 12px; cursor: pointer; letter-spacing: 0.5px; text-align: center; margin-bottom: 10px; box-shadow: 0 3px 10px rgba(229,57,53,0.35); }
+    .sos-btn:hover { background: #c62828; }
+    .phone-toast { display: none; background: #2e7d32; color: #fff; border-radius: 6px; padding: 7px 10px; font-size: 11px; text-align: center; margin-bottom: 8px; }
+    .phone-nav { background: #fff; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 6px 0 4px 0; }
+    .phone-nav-item { display: flex; flex-direction: column; align-items: center; font-size: 9px; color: #888; gap: 2px; cursor: pointer; }
+    .phone-nav-item span.nav-icon { font-size: 16px; }
+    .phone-nav-item.active { color: #F2940E; }
+    .phone-home-bar { width: 60px; height: 4px; background: #444; border-radius: 2px; margin: 8px auto 0 auto; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Mockup &mdash; Env&iacute;o de Notificaci&oacute;n SOS sin Interfaz GPS &nbsp;|&nbsp; Requerimiento #35074</h1>
+  <p>Prototipo de referencia &mdash; GM Transport ERP &amp; App Mis Viajes</p>
+</div>
+
+<!-- PROTO TABS BAR -->
+<div class="proto-tabs-bar">
+  <div class="proto-tab active" onclick="switchProtoTab('erp-correos')">&#128421;&#65039; ERP &mdash; Correos SOS</div>
+  <div class="proto-tab" onclick="switchProtoTab('erp-campanita')">&#128276; ERP &mdash; Campanita</div>
+  <div class="proto-tab" onclick="switchProtoTab('correo-sos')">&#128231; Correo SOS</div>
+  <div class="proto-tab" onclick="switchProtoTab('app-viajes')">&#128241; App Mis Viajes</div>
+</div>
+
+<!-- ===== TAB 1: ERP Correos SOS ===== -->
+<div id="proto-erp-correos" class="proto-tab-content active">
+  <div class="panel">
+    <div class="panel-title">Par&aacute;metros de Configuraci&oacute;n de Tr&aacute;fico</div>
+
+    <div class="tabs">
+      <div class="tab" onclick="switchTab('general')">General</div>
+      <div class="tab" onclick="switchTab('liquidaciones')">Liquidaciones</div>
+      <div class="tab" onclick="switchTab('viajes')">Viajes</div>
+      <div class="tab" onclick="switchTab('permisionarios')">Permisionarios</div>
+      <div class="tab" onclick="switchTab('tabla-valores')">Tabla de Valores</div>
+      <div class="tab" onclick="switchTab('alerta-correos')">Alerta de correos</div>
+      <div class="tab active" onclick="switchTab('apps-moviles')">Apps M&oacute;viles</div>
+      <div class="tab" onclick="switchTab('notificaciones')">Notificaciones</div>
+    </div>
+
+    <div id="tab-general" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a General</div></div></div>
+    <div id="tab-liquidaciones" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Liquidaciones</div></div></div>
+    <div id="tab-viajes" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Viajes</div></div></div>
+    <div id="tab-permisionarios" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Permisionarios</div></div></div>
+    <div id="tab-tabla-valores" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Tabla de Valores</div></div></div>
+    <div id="tab-alerta-correos" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Alerta de correos</div></div></div>
+    <div id="tab-notificaciones" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Notificaciones</div></div></div>
+
+    <!-- TAB: Apps Moviles (ACTIVO) -->
+    <div id="tab-apps-moviles" class="tab-content active">
+      <div class="inner-panel">
+
+        <div class="section-title">Mis Viajes</div>
+
+        <div class="field-row">
+          <label>Correo S.O.S M&oacute;vil:</label>
+          <input type="text" value="christopher.calidad@gmtransporterp.com">
+          <button class="btn-dark field-extra">Config. Licencias</button>
+        </div>
+        <div class="field-row">
+          <label>Mensaje S.O.S M&oacute;vil:</label>
+          <input type="text" value="CHRISTOPHER.CALIDAD@GMTRANSPORTERP.C">
+        </div>
+        <div class="field-row">
+          <label>Recibir correo de notificaci&oacute;n del m&oacute;vil:</label>
+          <input type="text" value="christopher.calidad@gmtransporterp.com">
+        </div>
+        <div class="field-row">
+          <label>Formato para imprimir liquidaci&oacute;n:</label>
+          <select><option>LIQUIDACION GRAL</option></select>
+        </div>
+        <div class="field-row">
+          <label>Formato para imprimir carta porte:</label>
+          <select><option>CARTA PORTE QR</option></select>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="chk-30dias" checked style="accent-color:#cc0000;">
+          <label for="chk-30dias">Visualizar viajes de hasta 30 d&iacute;as de elaboraci&oacute;n</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="chk-registro">
+          <label for="chk-registro">Registro de entradas, salidas y disponibilidad</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="chk-hora">
+          <label for="chk-hora">No modificar hora de salida/llegada</label>
+        </div>
+
+        <div class="field-row">
+          <label>Estatus Salida M&oacute;vil:</label>
+          <select><option>DOCUMENTADOWDWCWDC</option></select>
+        </div>
+        <div class="field-row">
+          <label>Estatus Entrada M&oacute;vil:</label>
+          <select><option>TERMINADO</option></select>
+        </div>
+
+        <div class="checkbox-btn-row">
+          <input type="checkbox" id="chk-notif-llegada" checked style="accent-color:#cc0000;">
+          <label for="chk-notif-llegada">Enviar notificaciones de llegada a contactos del cliente</label>
+          <button class="btn-gestionar">Gestionar contactos</button>
+        </div>
+
+        <!-- NUEVO: Checkbox SOS -->
+        <div class="checkbox-btn-row" style="margin-top:8px;">
+          <input type="checkbox" id="chk-sos" onchange="toggleSOSBtn(this)" style="accent-color:#F2940E;">
+          <label for="chk-sos">Enviar notificaci&oacute;n SOS por correo</label>
+          <button class="btn-configurar-sos" id="btn-configurar-sos" onclick="abrirModalSOS()">Configurar correos SOS</button>
+        </div>
+
+        <div class="section-title" style="margin-top:12px;">GMTERP</div>
+
+        <div class="field-row">
+          <label>Estatus Salida V&aacute;lida M&oacute;vil:</label>
+          <select><option>TERMINADO</option></select>
+        </div>
+        <div class="field-row">
+          <label>Estatus Salida Inv&aacute;lida M&oacute;vil:</label>
+          <select><option>DOCUMENTADOWDWCWDC</option></select>
+        </div>
+        <div class="field-row">
+          <label>En salida inv&aacute;lida enviar correo a:</label>
+          <input type="text" value="david.calidad@gmtransporterp.com">
+        </div>
+        <div class="field-row">
+          <label>Estatus Entrada V&aacute;lida M&oacute;vil:</label>
+          <select><option>DOCUMENTADOWDWCWDC</option></select>
+        </div>
+        <div class="field-row">
+          <label>Estatus Entrada Inv&aacute;lida M&oacute;vil:</label>
+          <select><option>DOCUMENTADOWDWCWDC</option></select>
+        </div>
+        <div class="field-row">
+          <label>En entrada inv&aacute;lida enviar correo a:</label>
+          <input type="text" value="">
+        </div>
+
+      </div>
+    </div><!-- fin tab apps-moviles -->
+
+    <div class="bottom-bar">
+      <button class="btn-primary">Aceptar</button>
+      <button class="btn-secondary">Cancelar</button>
+    </div>
+  </div>
+</div><!-- fin proto-erp-correos -->
+
+
+<!-- ===== TAB 2: ERP Campanita ===== -->
+<div id="proto-erp-campanita" class="proto-tab-content">
+  <div class="erp-wrapper">
+
+    <div class="erp-navbar">
+      <div class="erp-logo-block">
+        <div class="erp-logo-icon">G</div>
+        <div class="erp-logo-text">gm Transport Software&reg;<small>ERP</small></div>
+      </div>
+      <div class="erp-search-bar" style="margin-left:10px;">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" placeholder="Buscar" readonly>
+      </div>
+      <div class="erp-navbar-spacer"></div>
+      <div class="erp-navbar-icons">
+        <div class="erp-nav-icon" title="Favoritos">&#9734;</div>
+        <div class="bell-wrapper">
+          <div class="erp-nav-icon" title="Notificaciones" onclick="toggleNotifDropdown()" id="bell-btn">&#128276;</div>
+          <div class="bell-badge" id="bell-badge">9</div>
+          <!-- Notif Dropdown -->
+          <div class="notif-dropdown" id="notif-dropdown">
+            <div class="notif-dropdown-header">
+              <span>Notificaciones (9)</span>
+              <span class="notif-silence" title="Silenciar notificaciones">&#128276;&#824;</span>
+            </div>
+            <div class="notif-dropdown-body">
+              <!-- SOS destacado al inicio -->
+              <div class="notif-item-sos" onclick="marcarLeida()">
+                <div class="notif-icon-col">&#128314;</div>
+                <div class="notif-text-col">
+                  <div class="notif-title">&#128314; SOS &mdash; CARLOS MENDOZA</div>
+                  <div class="notif-sub">Viaje #VJ-2024-0583 &middot; GUADALAJARA &rarr; MONTERREY &middot; Unidad: ABC-123-X</div>
+                  <div class="notif-sub">Ubicaci&oacute;n del celular: 20.6597&deg; N, 103.3496&deg; O</div>
+                  <div class="notif-time">Hace 2 minutos</div>
+                </div>
+              </div>
+              <!-- Notificaciones grises existentes -->
+              <div class="notif-item">
+                <div class="notif-icon-col" style="font-size:13px;color:#aaa;">&#128196;</div>
+                <div class="notif-text-col">
+                  <div class="notif-title-gray">WebHook T11</div>
+                  <div class="notif-time-gray">3 horas 13 minutos 4 segundos</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon-col" style="font-size:13px;color:#aaa;">&#128196;</div>
+                <div class="notif-text-col">
+                  <div class="notif-title-gray">WebHook T11</div>
+                  <div class="notif-time-gray">8 minutos 15 segundos</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon-col" style="font-size:13px;color:#aaa;">&#128196;</div>
+                <div class="notif-text-col">
+                  <div class="notif-title-gray">TEMP_ReporteKardexPEPS_20260604002323238.zip</div>
+                  <div class="notif-time-gray">1 d&iacute;as 15 horas...</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon-col" style="font-size:13px;color:#aaa;">&#128196;</div>
+                <div class="notif-text-col">
+                  <div class="notif-title-gray">TEMP_ReporteKardexPEPSPDF_20260604101002205.zi</div>
+                  <div class="notif-time-gray">1 d&iacute;as 5 horas...</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon-col" style="font-size:13px;color:#aaa;">&#128196;</div>
+                <div class="notif-text-col">
+                  <div class="notif-title-gray">TEMP_ReporteKardexPEPSPDF_20260604101011480.zi</div>
+                  <div class="notif-time-gray">1 d&iacute;as 5 horas...</div>
+                </div>
+              </div>
+              <div class="notif-item">
+                <div class="notif-icon-col" style="font-size:13px;color:#aaa;">&#128196;</div>
+                <div class="notif-text-col">
+                  <div class="notif-title-gray">TEMP_ReporteKardexPEPS_20260604103132745.zip</div>
+                  <div class="notif-time-gray">1 d&iacute;as 5 horas...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="erp-nav-icon" title="Ayuda">&#10067;</div>
+        <div class="erp-client-block">
+          <div class="erp-client-seal">QC<br>OK</div>
+          <div class="erp-client-info">
+            <strong>INDISTRIA ILUMINADORA DE...</strong>
+            <span>RFC: IIA040805DZ4</span>
+          </div>
+          <span class="erp-client-arrow">&#9660;</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="erp-body">
+      <!-- Sidebar -->
+      <div class="erp-sidebar">
+        <div class="erp-sidebar-item"><span class="si-icon">&#128202;</span><span class="si-text">Indicadores</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#9881;&#65039;</span><span class="si-text">Configuraci&oacute;n</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#129534;</span><span class="si-text">Facturaci&oacute;n</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#128176;</span><span class="si-text">Cobranza</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item active"><span class="si-icon">&#128666;</span><span class="si-text">Tr&aacute;fico</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#127981;</span><span class="si-text">Banco</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#128203;</span><span class="si-text">Cuentas Por Pagar</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#128218;</span><span class="si-text">Contabilidad</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#128295;</span><span class="si-text">Mantenimiento</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#128230;</span><span class="si-text">Inventarios</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#9899;</span><span class="si-text">Llantas</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#128200;</span><span class="si-text">Informes Gerenciales</span><span class="si-arrow">&#9660;</span></div>
+        <div class="erp-sidebar-item"><span class="si-icon">&#128225;</span><span class="si-text">EDI</span><span class="si-arrow">&#9660;</span></div>
+      </div>
+
+      <!-- Main content grid -->
+      <div class="erp-main-content">
+        <div class="erp-indicators-grid">
+          <div class="erp-indicator-card"><span class="card-icon">&#128196;</span><span class="card-plus">+</span><span class="card-label">Configura tus indicadores</span></div>
+          <div class="erp-indicator-card"><span class="card-icon">&#128196;</span><span class="card-plus">+</span><span class="card-label">Configura tus indicadores</span></div>
+          <div class="erp-indicator-card"><span class="card-icon">&#128196;</span><span class="card-plus">+</span><span class="card-label">Configura tus indicadores</span></div>
+          <div class="erp-indicator-card"><span class="card-icon">&#128196;</span><span class="card-plus">+</span><span class="card-label">Configura tus indicadores</span></div>
+          <div class="erp-indicator-card"><span class="card-icon">&#128196;</span><span class="card-plus">+</span><span class="card-label">Configura tus indicadores</span></div>
+          <div class="erp-indicator-card"><span class="card-icon">&#128196;</span><span class="card-plus">+</span><span class="card-label">Configura tus indicadores</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- fin proto-erp-campanita -->
+
+
+<!-- ===== TAB 3: Correo SOS ===== -->
+<div id="proto-correo-sos" class="proto-tab-content" style="padding:20px; background:#e8e8e8;">
+  <div class="email-client">
+    <div class="email-toolbar">
+      <button>&#8592; Atr&aacute;s</button>
+      <button>&#128465; Eliminar</button>
+      <button>&#128193; Mover</button>
+    </div>
+    <div class="email-panel">
+      <div class="email-meta">
+        <div class="email-meta-row">
+          <span class="meta-label">De:</span>
+          <span class="meta-value">sistema@gmtransporterp.com</span>
+        </div>
+        <div class="email-meta-row">
+          <span class="meta-label">Para:</span>
+          <span class="meta-value">luis.calidad@gmtransporterp.com; david.calidad@gmtransporterp.com</span>
+        </div>
+        <div class="email-meta-row">
+          <span class="meta-label">Asunto:</span>
+          <span class="meta-asunto">&#128314; ALERTA SOS &mdash; Viaje #VJ-2024-0583</span>
+        </div>
+        <div class="email-meta-row">
+          <span class="meta-label">Fecha:</span>
+          <span class="meta-value">05/06/2026 14:32</span>
+        </div>
+      </div>
+      <!-- Email body card -->
+      <div class="email-header-bar">
+        <div class="email-logo-text">gm Transport Software&reg;<small>ERP Platform</small></div>
+        <div class="sos-badge">&#128314; SOS</div>
+      </div>
+      <div class="email-content-area">
+        <div class="email-title">&#128314; NOTIFICACI&Oacute;N SOS</div>
+        <div class="email-intro">Se ha activado una alerta SOS desde la aplicaci&oacute;n Mis Viajes.</div>
+        <hr class="email-divider">
+
+        <div class="email-section-title">&#128203; DATOS DEL VIAJE</div>
+        <table class="email-data-table">
+          <tr><td>N&uacute;mero de viaje:</td><td>#VJ-2024-0583</td></tr>
+          <tr><td>Operador:</td><td>CARLOS MENDOZA</td></tr>
+          <tr><td>Origen:</td><td>GUADALAJARA, JAL</td></tr>
+          <tr><td>Destino:</td><td>MONTERREY, NL</td></tr>
+          <tr><td>Trayecto:</td><td>GUADALAJARA - MONTERREY (V&Iacute;A 15D)</td></tr>
+          <tr><td>Unidad:</td><td>ABC-123-X</td></tr>
+        </table>
+
+        <hr class="email-divider">
+        <div class="email-section-title">&#128205; UBICACI&Oacute;N AL MOMENTO DEL SOS</div>
+        <table class="email-data-table">
+          <tr><td>Ubicaci&oacute;n GPS:</td><td style="color:#c0392b;">No disponible (cliente sin GPS)</td></tr>
+          <tr><td>Ubicaci&oacute;n del celular:</td><td>20.6597&deg; N, 103.3496&deg; O</td></tr>
+        </table>
+
+        <hr class="email-divider">
+        <table class="email-data-table">
+          <tr><td>&#128336; Fecha y hora:</td><td>05/06/2026 &nbsp; 14:32:07</td></tr>
+        </table>
+
+        <div class="email-note">
+          Este es un mensaje autom&aacute;tico generado por GM Transport ERP.<br>
+          Por favor, tome las acciones necesarias de inmediato.
+        </div>
+      </div>
+      <div class="email-footer-bar">
+        GM Transport Software&reg; &nbsp;&middot;&nbsp; Alh&oacute;ndiga de Granaditas 800, Mexicali BC
+      </div>
+    </div>
+  </div>
+</div><!-- fin proto-correo-sos -->
+
+
+<!-- ===== TAB 4: App Mis Viajes ===== -->
+<div id="proto-app-viajes" class="proto-tab-content phone-tab">
+  <div class="phone-frame">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div class="phone-status-bar">
+        <span>9:41</span>
+        <span>&#9679;&#9679;&#9679; &#128267; 100%</span>
+      </div>
+      <div class="phone-app-header">
+        <span>&#9776;</span>
+        <span>Mis Viajes</span>
+        <span>&#128276;</span>
+      </div>
+      <div class="phone-content">
+        <div class="trip-card">
+          <div class="trip-number">#VJ-2024-0583</div>
+          <div class="trip-row"><span class="trip-label">Operador:</span><span>CARLOS MENDOZA</span></div>
+          <div class="trip-row"><span class="trip-label">Ruta:</span><span>GUADALAJARA &#8594; MONTERREY</span></div>
+          <div class="trip-row"><span class="trip-label">Unidad:</span><span>ABC-123-X</span></div>
+          <div class="trip-row"><span class="trip-label">Estatus:</span><span class="trip-badge-green">EN TR&Aacute;NSITO</span></div>
+        </div>
+        <div class="map-placeholder">
+          <span class="map-icon">&#128205;</span>
+          <span>Ubicaci&oacute;n GPS no disponible</span>
+        </div>
+        <div id="phone-toast" class="phone-toast">&#9989; Notificaci&oacute;n SOS enviada</div>
+        <button class="sos-btn" onclick="enviarSOS()">&#128314; ENVIAR SOS</button>
+      </div>
+      <div class="phone-nav">
+        <div class="phone-nav-item"><span class="nav-icon">&#127968;</span><span>Inicio</span></div>
+        <div class="phone-nav-item active"><span class="nav-icon">&#128203;</span><span>Viajes</span></div>
+        <div class="phone-nav-item"><span class="nav-icon">&#128276;</span><span>Alertas</span></div>
+        <div class="phone-nav-item"><span class="nav-icon">&#128100;</span><span>Perfil</span></div>
+      </div>
+    </div>
+    <div class="phone-home-bar"></div>
+  </div>
+</div><!-- fin proto-app-viajes -->
+
+
+<!-- ===== MODAL: Configurar Correos SOS ===== -->
+<div class="modal-overlay" id="modal-sos">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <span>Configurar Correos SOS</span>
+      <button class="modal-close-x" onclick="cerrarModalSOS()" title="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <!-- Filter row -->
+      <div class="modal-filter-row">
+        <input type="text" placeholder="Buscar...">
+        <input type="checkbox" id="chk-activos" checked>
+        <label for="chk-activos">&Uacute;nicamente activos</label>
+        <button class="btn-primary" style="display:inline-flex;align-items:center;gap:4px;">&#128269; Aplicar</button>
+      </div>
+      <!-- Add row -->
+      <div class="modal-input-row">
+        <label>Nombre:</label>
+        <input type="text" id="modal-inp-nombre" class="inp-nombre" placeholder="Nombre">
+        <label>Correo electr&oacute;nico:</label>
+        <input type="text" id="modal-inp-correo" class="inp-correo" placeholder="correo@empresa.com">
+        <button class="btn-add" onclick="agregarSOSModal()">+</button>
+      </div>
+      <div id="modal-sos-error" class="modal-error"></div>
+
+      <table class="sos-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo electr&oacute;nico</th>
+            <th style="text-align:center;">Enviar notificaci&oacute;n</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="modal-sos-tbody">
+          <tr class="selected">
+            <td>LUIS</td>
+            <td>LUIS.CALIDAD@GMTRANSPORTERP.COM</td>
+            <td style="text-align:center;"><input type="checkbox" checked style="accent-color:#fff;"></td>
+            <td><button class="btn-delete" onclick="eliminarFilaModal(this)" title="Eliminar">&#128465;&#65039;</button></td>
+          </tr>
+          <tr>
+            <td>DAVID</td>
+            <td>DAVID.CALIDAD@GMTRANSPORTERP.COM</td>
+            <td style="text-align:center;"><input type="checkbox" checked style="accent-color:#F2940E;"></td>
+            <td><button class="btn-delete" onclick="eliminarFilaModal(this)" title="Eliminar">&#128465;&#65039;</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-pagination">
+      <span>&laquo;</span>
+      <span class="active">1</span>
+      <span>2</span>
+      <span>&raquo;</span>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="cerrarModalSOS()">Aceptar</button>
+      <button class="btn-secondary" onclick="cerrarModalSOS()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ===== PROTO TABS ===== */
+  var protoTabIds = ['erp-correos', 'erp-campanita', 'correo-sos', 'app-viajes'];
+
+  function switchProtoTab(name) {
+    document.querySelectorAll('.proto-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.proto-tab-content').forEach(function(c) { c.classList.remove('active'); });
+    var idx = protoTabIds.indexOf(name);
+    if (idx >= 0) document.querySelectorAll('.proto-tab')[idx].classList.add('active');
+    var el = document.getElementById('proto-' + name);
+    if (el) el.classList.add('active');
+  }
+
+  /* ===== ERP INNER TABS ===== */
+  function switchTab(name) {
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+    document.querySelectorAll('.tab').forEach(function(t) {
+      if (t.getAttribute('onclick') === "switchTab('" + name + "')") t.classList.add('active');
+    });
+    var content = document.getElementById('tab-' + name);
+    if (content) content.classList.add('active');
+  }
+
+  function toggleSOSBtn(chk) {
+    var btn = document.getElementById('btn-configurar-sos');
+    btn.style.display = chk.checked ? 'inline-block' : 'none';
+  }
+
+  /* ===== MODAL SOS ===== */
+  function abrirModalSOS() {
+    document.getElementById('modal-sos').classList.add('active');
+    ocultarErrorModal();
+  }
+
+  function cerrarModalSOS() {
+    document.getElementById('modal-sos').classList.remove('active');
+    document.getElementById('modal-inp-nombre').classList.remove('invalid');
+    document.getElementById('modal-inp-correo').classList.remove('invalid');
+    ocultarErrorModal();
+  }
+
+  document.getElementById('modal-sos').addEventListener('click', function(e) {
+    if (e.target === this) cerrarModalSOS();
+  });
+
+  function mostrarErrorModal(msg) {
+    var el = document.getElementById('modal-sos-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function ocultarErrorModal() {
+    var el = document.getElementById('modal-sos-error');
+    el.style.display = 'none';
+    el.textContent = '';
+  }
+
+  function esCorreoValido(correo) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+  }
+
+  function agregarSOSModal() {
+    var inpNombre = document.getElementById('modal-inp-nombre');
+    var inpCorreo = document.getElementById('modal-inp-correo');
+    var nombre = inpNombre.value.trim();
+    var correo = inpCorreo.value.trim();
+    var tbody = document.getElementById('modal-sos-tbody');
+
+    inpNombre.classList.remove('invalid');
+    inpCorreo.classList.remove('invalid');
+    ocultarErrorModal();
+
+    if (!nombre) { inpNombre.classList.add('invalid'); mostrarErrorModal('El nombre no puede estar vacío.'); return; }
+    if (!esCorreoValido(correo)) { inpCorreo.classList.add('invalid'); mostrarErrorModal('Ingresa un correo electrónico válido.'); return; }
+
+    var filas = tbody.querySelectorAll('tr');
+    if (filas.length >= 5) { mostrarErrorModal('Se permite un máximo de 5 correos SOS.'); return; }
+
+    var correoUpper = correo.toUpperCase();
+    var duplicado = false;
+    filas.forEach(function(fila) {
+      var celdas = fila.querySelectorAll('td');
+      if (celdas.length >= 2 && celdas[1].textContent.toUpperCase() === correoUpper) duplicado = true;
+    });
+    if (duplicado) { inpCorreo.classList.add('invalid'); mostrarErrorModal('Este correo ya está en la lista.'); return; }
+
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + nombre.toUpperCase() + '</td><td>' + correo.toUpperCase() + '</td><td style="text-align:center;"><input type="checkbox" checked style="accent-color:#F2940E;"></td><td><button class="btn-delete" onclick="eliminarFilaModal(this)" title="Eliminar">&#128465;&#65039;</button></td>';
+    tbody.appendChild(tr);
+    inpNombre.value = '';
+    inpCorreo.value = '';
+    ocultarErrorModal();
+  }
+
+  function eliminarFilaModal(btn) {
+    btn.closest('tr').remove();
+    ocultarErrorModal();
+  }
+
+  /* ===== PHONE SOS TOAST ===== */
+  var toastTimer = null;
+  function enviarSOS() {
+    var toast = document.getElementById('phone-toast');
+    toast.style.display = 'block';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { toast.style.display = 'none'; }, 3000);
+  }
+
+  /* ===== NOTIF DROPDOWN ===== */
+  function toggleNotifDropdown() {
+    var dd = document.getElementById('notif-dropdown');
+    dd.classList.toggle('open');
+  }
+
+  function marcarLeida() {
+    var badge = document.getElementById('bell-badge');
+    if (badge) badge.style.display = 'none';
+  }
+
+  document.addEventListener('click', function(e) {
+    var bellBtn = document.getElementById('bell-btn');
+    var dd = document.getElementById('notif-dropdown');
+    if (dd && dd.classList.contains('open')) {
+      if (!dd.contains(e.target) && bellBtn && !bellBtn.contains(e.target)) {
+        dd.classList.remove('open');
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

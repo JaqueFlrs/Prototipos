@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA-GM — Consulta Inteligente del ERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gm-orange:#F3791E;--gm-orange-light:#FF9E33;--gm-orange-deep:#DC5E00;
+    --gm-grad:linear-gradient(120deg,#FF9E33 0%,#F3791E 45%,#DC5E00 100%);
+    --gm-ink:#2A2D33;--gm-ink-soft:#3C4046;--gm-gray:#6E7378;--gm-gray-2:#9CA1A7;
+    --gm-line:#E4E7EB;--gm-bg:#FFFFFF;--gm-soft:#F4F6F8;--gm-soft-2:#EEF1F4;
+    --serif:'Sora',system-ui,sans-serif;--sans:'Manrope',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#1b1d20;}
+  deck-stage:not(:defined){visibility:hidden;}
+  section{font-family:var(--sans);color:var(--gm-ink);background:var(--gm-bg);overflow:hidden;}
+  .pad{position:absolute;inset:0;padding:90px 110px;display:flex;flex-direction:column;}
+  h1,h2,h3,h4,p{margin:0;}
+
+  .eyebrow{font-family:var(--sans);font-weight:700;font-size:21px;letter-spacing:.22em;text-transform:uppercase;color:var(--gm-orange);display:flex;align-items:center;gap:14px;}
+  .eyebrow.on-dark{color:var(--gm-orange-light);}
+  .eyebrow .tick{width:38px;height:4px;border-radius:2px;background:var(--gm-orange);}
+  .eyebrow.on-dark .tick{background:var(--gm-orange-light);}
+
+  .display{font-family:var(--serif);font-weight:800;color:var(--gm-ink);line-height:1.02;letter-spacing:-.02em;}
+  .accent{color:var(--gm-orange);}
+
+  .wm{font-family:var(--serif);font-weight:800;letter-spacing:-.02em;line-height:1;display:inline-flex;align-items:center;gap:.16em;color:var(--gm-ink);width:max-content;}
+  .wm .wm-name{display:flex;align-items:baseline;gap:.12em;}
+  .wm .wm-gm{color:var(--gm-orange);}
+  .wm .wm-sw{font-family:var(--sans);font-weight:700;font-size:.38em;letter-spacing:.24em;text-transform:uppercase;color:var(--gm-gray-2);padding-left:.6em;margin-left:.55em;border-left:2px solid var(--gm-line);align-self:center;}
+  .wm.on-dark{color:#fff;} .wm.on-dark .wm-gm{color:var(--gm-orange-light);}
+  .wm.on-dark .wm-sw{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.22);}
+
+  .footer{position:absolute;left:110px;right:110px;bottom:46px;display:flex;justify-content:space-between;align-items:center;font-size:21px;color:var(--gm-gray-2);font-weight:600;letter-spacing:.04em;}
+  .footer .dotline{flex:1;height:1px;background:var(--gm-line);margin:0 22px;}
+  .footer.on-dark{color:rgba(255,255,255,.5);} .footer.on-dark .dotline{background:rgba(255,255,255,.18);}
+
+  /* phone */
+  .phone{width:290px;height:600px;background:#16181b;border-radius:42px;padding:11px;box-shadow:0 40px 80px -24px rgba(28,30,33,.6);position:relative;flex:none;}
+  .phone .screen{width:100%;height:100%;background:#fff;border-radius:32px;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+  .phone .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:110px;height:22px;background:#16181b;border-radius:0 0 13px 13px;z-index:6;}
+  .pstatus{display:flex;justify-content:space-between;align-items:center;padding:11px 20px 4px;font-size:13px;font-weight:700;color:var(--gm-ink);}
+
+  /* question tag */
+  .qtag{background:#fff;border:1.5px solid var(--gm-line);border-radius:12px;padding:14px 18px;font-size:21px;font-weight:600;color:var(--gm-ink);display:flex;align-items:flex-start;gap:12px;line-height:1.35;}
+  .qtag .qi{width:28px;height:28px;border-radius:8px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px;}
+  .qtag.highlight{background:#FFF6EE;border-color:rgba(243,121,30,.3);}
+
+  /* module row */
+  .mrow{display:flex;flex-direction:column;gap:10px;}
+  .mrow .mlabel{font-family:var(--serif);font-weight:700;font-size:24px;color:var(--gm-ink);display:flex;align-items:center;gap:12px;margin-bottom:2px;}
+  .mrow .mlabel .mdot{width:10px;height:10px;border-radius:50%;background:var(--gm-orange);flex:none;}
+  .mrow .mbullets{display:flex;flex-direction:column;gap:7px;padding-left:22px;}
+  .mrow .mbullets li{font-size:19px;color:var(--gm-gray);font-weight:500;list-style:none;padding-left:16px;position:relative;line-height:1.3;}
+  .mrow .mbullets li::before{content:'—';position:absolute;left:0;color:var(--gm-gray-2);}
+
+  /* feature pill */
+  .fpill{display:flex;align-items:center;gap:16px;background:var(--gm-soft);border-radius:14px;padding:20px 22px;}
+  .fpill .fi{width:46px;height:46px;border-radius:12px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;}
+  .fpill h4{font-family:var(--serif);font-weight:700;font-size:23px;color:var(--gm-ink);margin-bottom:4px;}
+  .fpill p{font-size:18px;color:var(--gm-gray);font-weight:500;line-height:1.3;}
+  .icstroke{stroke:var(--gm-orange-deep);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+<!-- ====== 1. PORTADA ====== -->
+<section data-label="Portada" style="background:var(--gm-ink);">
+  <div style="position:absolute;right:-40px;bottom:-80px;font-family:var(--serif);font-weight:800;font-size:500px;line-height:.8;color:rgba(255,255,255,.035);letter-spacing:-.04em;pointer-events:none;user-select:none;">IA</div>
+  <svg style="position:absolute;left:0;top:0;" width="480" height="480" viewBox="0 0 480 480" fill="none">
+    <circle cx="60" cy="60" r="350" stroke="url(#p1a)" stroke-width="2" opacity=".4"/>
+    <circle cx="60" cy="60" r="220" stroke="url(#p1a)" stroke-width="2" opacity=".28"/>
+    <defs><linearGradient id="p1a" x1="0" y1="0" x2="480" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9E33"/><stop offset="1" stop-color="#DC5E00" stop-opacity="0"/></linearGradient></defs>
+  </svg>
+  <div class="pad" style="justify-content:center;">
+    <div class="wm on-dark" style="font-size:34px;margin-bottom:60px;"><span class="wm-name"><span class="wm-gm">GM</span><span style="color:#fff;">Transport</span></span><span class="wm-sw">Software</span></div>
+    <div class="eyebrow on-dark" style="margin-bottom:26px;"><span class="tick"></span>Asistente Inteligente del ERP</div>
+    <h1 class="display" style="font-size:170px;color:#fff;margin-bottom:22px;line-height:.9;">IA-<span class="accent">GM</span></h1>
+    <p style="font-size:36px;font-weight:500;color:rgba(255,255,255,.65);max-width:820px;line-height:1.4;">Consulta tu ERP en lenguaje natural.<br>Respuestas inmediatas, sin reportes, sin menús.</p>
+  </div>
+  <div class="footer on-dark"><span>GM Transport Software</span><span class="dotline"></span><span>gmtransporterp.com</span></div>
+</section>
+
+<!-- ====== 2. QUÉ HACE ====== -->
+<section data-label="¿Qué hace?">
+  <svg style="position:absolute;top:0;right:0;" width="540" height="320" viewBox="0 0 540 320" fill="none">
+    <path d="M540 0 H250 L370 320 H540 Z" fill="#F4F6F8"/>
+    <path d="M540 0 H420 L510 230 H540 Z" fill="url(#p2a)" opacity=".4"/>
+    <defs><linearGradient id="p2a" x1="420" y1="0" x2="540" y2="230" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9E33"/><stop offset="1" stop-color="#DC5E00"/></linearGradient></defs>
+  </svg>
+  <div class="pad">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px;"><span class="tick"></span>El producto</div>
+        <h2 class="display" style="font-size:86px;">Pregúntale al ERP.<br>Obtén la respuesta.</h2>
+      </div>
+      <div class="wm" style="font-size:26px;"><span class="wm-name"><span class="wm-gm">GM</span><span>Transport</span></span><span class="wm-sw">Software</span></div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-content:center;">
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:22px;padding:38px 36px;display:flex;flex-direction:column;gap:18px;">
+        <div style="width:66px;height:66px;border-radius:16px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;">
+          <svg width="32" height="32" viewBox="0 0 24 24" class="icstroke"><circle cx="11" cy="11" r="7"/><path d="m21 21-3.5-3.5"/></svg>
+        </div>
+        <h3 style="font-family:var(--serif);font-weight:700;font-size:30px;">Consulta en segundos</h3>
+        <p style="font-size:22px;line-height:1.5;color:var(--gm-gray);font-weight:500;">Sin abrir reportes ni navegar menús. Escribe la pregunta y listo.</p>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:22px;padding:38px 36px;display:flex;flex-direction:column;gap:18px;">
+        <div style="width:66px;height:66px;border-radius:16px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;">
+          <svg width="32" height="32" viewBox="0 0 24 24" class="icstroke"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3 style="font-family:var(--serif);font-weight:700;font-size:30px;">Lenguaje natural</h3>
+        <p style="font-size:22px;line-height:1.5;color:var(--gm-gray);font-weight:500;">Pregunta como si le mandaras un mensaje. IA-GM entiende el contexto.</p>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:22px;padding:38px 36px;display:flex;flex-direction:column;gap:18px;">
+        <div style="width:66px;height:66px;border-radius:16px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;">
+          <svg width="32" height="32" viewBox="0 0 24 24" class="icstroke"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <h3 style="font-family:var(--serif);font-weight:700;font-size:30px;">Datos en tiempo real</h3>
+        <p style="font-size:22px;line-height:1.5;color:var(--gm-gray);font-weight:500;">Conectado directo al ERP. La información que ves es la del sistema, al momento.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. PREGUNTAS — TODAS LAS CATEGORÍAS ====== -->
+<section data-label="Preguntas" style="background:var(--gm-soft);">
+  <div class="pad" style="padding:74px 110px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:12px;"><span class="tick"></span>Ejemplos de consulta</div>
+        <h2 class="display" style="font-size:68px;">Lo que puedes preguntar</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;background:var(--gm-ink);border-radius:14px;padding:13px 20px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gm-orange-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span style="font-size:17px;font-weight:700;color:#fff;letter-spacing:.04em;">En lenguaje natural, como un mensaje</span>
+      </div>
+    </div>
+
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-content:start;">
+
+      <!-- COLUMNA 1: Tráfico y Unidades -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gm-ink);border-radius:10px;margin-bottom:4px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gm-orange-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V6h11v10M14 9h4l3 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+          <span style="font-size:16px;font-weight:800;color:#fff;letter-spacing:.06em;text-transform:uppercase;">Tráfico y Unidades</span>
+        </div>
+        <div class="qtag highlight" style="font-size:19px;padding:12px 16px;">¿Cuántos viajes tengo hoy?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Qué viajes están en ruta?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Qué viajes están pendientes de liquidar?</div>
+        <div class="qtag highlight" style="font-size:19px;padding:12px 16px;">¿Qué unidades están disponibles?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">Top 5 operadores con más viajes</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Cuál fue el último viaje de TR-118?</div>
+      </div>
+
+      <!-- COLUMNA 2: Cobranza y Finanzas -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gm-ink);border-radius:10px;margin-bottom:4px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gm-orange-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg>
+          <span style="font-size:16px;font-weight:800;color:#fff;letter-spacing:.06em;text-transform:uppercase;">Cobranza y Finanzas</span>
+        </div>
+        <div class="qtag highlight" style="font-size:19px;padding:12px 16px;">¿Cuál es el estado de cuenta del cliente X?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Qué clientes tienen adeudo de más de 15 días?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Cuáles son los costos de liquidación del mes?</div>
+        <div class="qtag highlight" style="font-size:19px;padding:12px 16px;">¿Cuál es el saldo disponible en el banco?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Qué cheques están pendientes de cobro?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Qué retenciones están pendientes de pago?</div>
+      </div>
+
+      <!-- COLUMNA 3: Flota y Documentos -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gm-ink);border-radius:10px;margin-bottom:4px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gm-orange-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 5v2M12 17v2M5 12H3M21 12h-2M7.05 7.05 5.63 5.63M18.37 18.37l-1.42-1.42M7.05 16.95l-1.42 1.42M18.37 5.63l-1.42 1.42"/></svg>
+          <span style="font-size:16px;font-weight:800;color:#fff;letter-spacing:.06em;text-transform:uppercase;">Flota y Documentos</span>
+        </div>
+        <div class="qtag highlight" style="font-size:19px;padding:12px 16px;">¿Qué mantenimientos están programados esta semana?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">Bitácora de cargas de combustible del mes</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Qué llantas están instaladas en la unidad X?</div>
+        <div class="qtag highlight" style="font-size:19px;padding:12px 16px;">¿Cuándo vencen las placas de TR-102?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">¿Qué seguros vencen este mes?</div>
+        <div class="qtag" style="font-size:19px;padding:12px 16px;">Permisos SCT próximos a vencer</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. MÓDULOS CUBIERTOS ====== -->
+<section data-label="Módulos">
+  <div class="pad" style="padding:80px 110px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px;"><span class="tick"></span>Cobertura actual</div>
+        <h2 class="display" style="font-size:72px;">7 módulos del ERP,<br>todos conectados</h2>
+      </div>
+      <div style="background:var(--gm-ink);border-radius:16px;padding:16px 24px;text-align:center;">
+        <p style="font-family:var(--serif);font-weight:800;font-size:54px;color:var(--gm-orange-light);margin:0;line-height:1;">7</p>
+        <p style="font-size:16px;font-weight:700;color:rgba(255,255,255,.6);margin:4px 0 0;letter-spacing:.06em;text-transform:uppercase;">Módulos</p>
+      </div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr;gap:18px;align-content:center;">
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:18px;padding:24px 22px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" class="icstroke"><path d="M3 16V6h11v10M14 9h4l3 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;">Tráfico</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Viajes activos, cancelados, liquidados</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Por periodo, cliente u operador</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Just In Time y top operadores</li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:18px;padding:24px 22px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" class="icstroke"><path d="M9 11.5a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z"/><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;">Unidades</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Activas, en ruta o inactivas</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Con o sin carga</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Último viaje y estatus actual</li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:18px;padding:24px 22px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" class="icstroke"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;">Facturación</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Liquidaciones pendientes</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Costos por periodo</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Liquidaciones autorizadas y cerradas</li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:18px;padding:24px 22px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" class="icstroke"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;">Cobranza</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Estado de cuenta por cliente</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Adeudos por antigüedad</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Cliente con mayor adeudo</li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:18px;padding:24px 22px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" class="icstroke"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;">CxP y Bancos</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Saldos y movimientos bancarios</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Cheques y contra recibos pendientes</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Retenciones y pagos a proveedores</li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:18px;padding:24px 22px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" class="icstroke"><circle cx="12" cy="12" r="3"/><path d="M12 5v2M12 17v2M5 12H3M21 12h-2M7.05 7.05 5.63 5.63M18.37 18.37l-1.42-1.42M7.05 16.95l-1.42 1.42M18.37 5.63l-1.42 1.42"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;">Mantenimiento</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Servicios programados e historial</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Combustible: existencia y bitácora</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Costos por unidad</li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--gm-line);border-radius:18px;padding:24px 22px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#FFF1E3,#FFE2C7);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" class="icstroke"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;">Llantas</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Instaladas, gastadas, en recubrimiento</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Inventario y vida útil</li>
+          <li style="font-size:17px;color:var(--gm-gray);font-weight:500;display:flex;gap:8px;align-items:baseline;"><span style="color:var(--gm-orange);font-weight:700;">·</span>Historial de reposiciones</li>
+        </ul>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#FFF1E3,#FFE2C7);border:1px solid rgba(243,121,30,.2);border-radius:18px;padding:24px 22px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:46px;height:46px;border-radius:12px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div>
+          <span style="font-family:var(--serif);font-weight:700;font-size:22px;color:var(--gm-orange-deep);">Documentos</span>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:17px;color:var(--gm-orange-deep);font-weight:600;display:flex;gap:8px;align-items:baseline;"><span style="font-weight:700;">·</span>Vencimiento de placas y seguros</li>
+          <li style="font-size:17px;color:var(--gm-orange-deep);font-weight:600;display:flex;gap:8px;align-items:baseline;"><span style="font-weight:700;">·</span>Permisos SCT próximos a vencer</li>
+          <li style="font-size:17px;color:var(--gm-orange-deep);font-weight:600;display:flex;gap:8px;align-items:baseline;"><span style="font-weight:700;">·</span>Alertas antes del vencimiento</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. LA APP — FUNCIONALIDADES ====== -->
+<section data-label="La app" style="background:var(--gm-ink);">
+  <svg style="position:absolute;right:0;top:0;bottom:0;" width="660" height="1080" viewBox="0 0 660 1080" fill="none" preserveAspectRatio="none">
+    <path d="M660 0 V1080 H220 Z" fill="rgba(255,255,255,.022)"/>
+    <g stroke="url(#p6a)" stroke-width="3" fill="none" opacity=".7">
+      <path d="M460 240 L600 360 L460 480"/><path d="M560 240 L700 360 L560 480"/>
+    </g>
+    <defs><linearGradient id="p6a" x1="460" y1="240" x2="700" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9E33"/><stop offset="1" stop-color="#DC5E00"/></linearGradient></defs>
+  </svg>
+  <div class="pad" style="flex-direction:row;gap:80px;align-items:center;">
+    <!-- left: features -->
+    <div style="flex:0 0 44%;">
+      <div class="eyebrow on-dark" style="margin-bottom:20px;"><span class="tick"></span>La aplicación</div>
+      <h2 class="display" style="font-size:72px;color:#fff;margin-bottom:28px;">Funcionalidades<br>de la <span class="accent">app</span></h2>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+
+        <div class="fpill" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);">
+          <div class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M17 7h4M17 11h3"/></svg></div>
+          <div><h4 style="color:#fff;">Login con credenciales del ERP</h4><p style="color:rgba(255,255,255,.55);">Sin cuentas nuevas. Sin contraseñas extra.</p></div>
+        </div>
+
+        <div class="fpill" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);">
+          <div class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div><h4 style="color:#fff;">Chat con memoria de contexto</h4><p style="color:rgba(255,255,255,.55);">Sigue la conversación sin repetir información.</p></div>
+        </div>
+
+        <div class="fpill" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);">
+          <div class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h10"/></svg></div>
+          <div><h4 style="color:#fff;">Catálogo de preguntas predefinidas</h4><p style="color:rgba(255,255,255,.55);">Preguntas listas para no empezar desde cero.</p></div>
+        </div>
+
+        <div class="fpill" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);">
+          <div class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <div><h4 style="color:#fff;">Historial de chats</h4><p style="color:rgba(255,255,255,.55);">Cada chat es una conversación independiente. Revisa, renombra o elimina cuando quieras.</p></div>
+        </div>
+
+        <div class="fpill" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);">
+          <div class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9h.01M15 9h.01M9.5 14.5a4 4 0 0 0 5 0"/></svg></div>
+          <div><h4 style="color:#fff;">Modo oscuro y reporte de fallas</h4><p style="color:rgba(255,255,255,.55);">Experiencia personalizable con soporte integrado.</p></div>
+        </div>
+
+        <div class="fpill" style="background:rgba(255,121,30,.18);border:1px solid rgba(255,158,51,.35);">
+          <div class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/><path d="M12 8a4 4 0 0 1 4 4"/></svg></div>
+          <div><h4 style="color:var(--gm-orange-light);">Consulta de consumo</h4><p style="color:rgba(255,255,255,.55);">Visualiza el % de uso de IA-GM en el periodo actual.</p></div>
+        </div>
+
+      </div>
+    </div>
+    <!-- phone -->
+    <div style="flex:1;display:flex;justify-content:center;align-items:center;position:relative;">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="pstatus"><span>9:41</span></div>
+          <div style="padding:8px 18px 8px;background:#fff;border-bottom:1px solid var(--gm-line);display:flex;align-items:center;gap:10px;">
+            <div style="width:34px;height:34px;border-radius:10px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            </div>
+            <div><p style="margin:0;font-family:var(--serif);font-weight:800;font-size:15px;color:var(--gm-ink);">IA-GM</p><p style="margin:0;font-size:11px;color:#1F8A4C;font-weight:600;">En línea</p></div>
+          </div>
+          <div style="flex:1;padding:12px 14px 6px;display:flex;flex-direction:column;gap:10px;background:#F8F9FA;overflow:hidden;">
+            <div style="align-self:flex-end;background:var(--gm-grad);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:13px;font-weight:600;max-width:85%;">¿Qué clientes tienen adeudo de más de 15 días?</div>
+            <div style="align-self:flex-start;background:#fff;border:1px solid var(--gm-line);padding:10px 14px;border-radius:4px 14px 14px 14px;max-width:90%;">
+              <p style="margin:0 0 5px;font-size:12px;color:var(--gm-gray);font-weight:600;">Encontré 4 clientes:</p>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;"><span style="color:var(--gm-ink);">Comercial Olímpica</span><span style="color:var(--gm-orange-deep);">$48,200</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;"><span style="color:var(--gm-ink);">Grupo Aries</span><span style="color:var(--gm-orange-deep);">$31,500</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;"><span style="color:var(--gm-ink);">Logística del Norte</span><span style="color:var(--gm-orange-deep);">$18,900</span></div>
+              </div>
+            </div>
+            <div style="align-self:flex-end;background:var(--gm-grad);color:#fff;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:13px;font-weight:600;max-width:85%;">¿Cuánto consumo llevo este mes?</div>
+            <div style="align-self:flex-start;background:#fff;border:1px solid var(--gm-line);padding:10px 14px;border-radius:4px 14px 14px 14px;max-width:90%;">
+              <p style="margin:0 0 6px;font-size:12px;color:var(--gm-gray);font-weight:600;">Consumo del periodo:</p>
+              <div style="height:8px;background:var(--gm-soft-2);border-radius:4px;overflow:hidden;margin-bottom:6px;"><div style="width:68%;height:100%;background:var(--gm-grad);border-radius:4px;"></div></div>
+              <p style="margin:0;font-family:var(--serif);font-weight:800;font-size:20px;color:var(--gm-ink);">68% <span style="font-size:13px;font-weight:600;color:var(--gm-gray);">de tu cuota</span></p>
+            </div>
+          </div>
+          <div style="padding:8px 12px;border-top:1px solid var(--gm-line);background:#fff;display:flex;align-items:center;gap:6px;">
+            <!-- mic: voz -->
+            <div style="width:30px;height:30px;border-radius:50%;background:var(--gm-soft);display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gm-gray)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+            </div>
+            <div style="flex:1;background:var(--gm-soft);border-radius:20px;padding:9px 14px;font-size:12px;color:var(--gm-gray-2);font-weight:500;">Texto o voz…</div>
+            <div style="width:34px;height:34px;border-radius:50%;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7Z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer on-dark"><span>IA-GM</span><span class="dotline"></span><span>Consulta Inteligente del ERP</span></div>
+</section>
+
+<!-- ====== 6. PORTAL IA ====== -->
+<section data-label="Portal IA" style="background:var(--gm-soft);">
+  <div class="pad" style="padding:72px 110px;flex-direction:row;gap:60px;">
+
+    <!-- LEFT: descripción -->
+    <div style="flex:0 0 310px;display:flex;flex-direction:column;justify-content:center;gap:28px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px;"><span class="tick"></span>Administración</div>
+        <h2 class="display" style="font-size:52px;line-height:1.05;">Portal IA</h2>
+        <p style="font-size:20px;color:var(--gm-gray);font-weight:600;margin-top:10px;line-height:1.45;">Control de permisos de acceso a IA-GM directamente desde el ERP.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:34px;height:34px;border-radius:10px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M17 7h4M17 11h3"/></svg>
+          </div>
+          <div>
+            <p style="font-family:var(--serif);font-weight:700;font-size:19px;color:var(--gm-ink);margin-bottom:2px;">Activa o desactiva acceso</p>
+            <p style="font-size:16px;color:var(--gm-gray);font-weight:500;line-height:1.4;">Usuario por usuario o en bloque desde la lista.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:34px;height:34px;border-radius:10px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+          </div>
+          <div>
+            <p style="font-family:var(--serif);font-weight:700;font-size:19px;color:var(--gm-ink);margin-bottom:2px;">Asigna perfiles</p>
+            <p style="font-size:16px;color:var(--gm-gray);font-weight:500;line-height:1.4;">Gerencial, Administrativo u Operativo. <span style="color:var(--gm-orange-deep);font-weight:700;">Gerencial tiene acceso completo.</span></p>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:34px;height:34px;border-radius:10px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;flex:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <div>
+            <p style="font-family:var(--serif);font-weight:700;font-size:19px;color:var(--gm-ink);margin-bottom:2px;">Mismo login del ERP</p>
+            <p style="font-size:16px;color:var(--gm-gray);font-weight:500;line-height:1.4;">Sin cuentas nuevas. Los accesos ya están en el sistema.</p>
+          </div>
+        </div>
+      </div>
+      <!-- stat -->
+      <div style="background:var(--gm-ink);border-radius:16px;padding:20px 22px;display:flex;align-items:center;gap:18px;">
+        <div>
+          <p style="font-family:var(--serif);font-weight:800;font-size:44px;color:var(--gm-orange-light);margin:0;line-height:1;">294</p>
+          <p style="font-size:14px;font-weight:700;color:rgba(255,255,255,.5);margin:2px 0 0;text-transform:uppercase;letter-spacing:.06em;">usuarios con IA activa</p>
+        </div>
+        <div style="width:1px;height:44px;background:rgba(255,255,255,.15);"></div>
+        <div>
+          <p style="font-family:var(--serif);font-weight:800;font-size:44px;color:var(--gm-orange-light);margin:0;line-height:1;">3</p>
+          <p style="font-size:14px;font-weight:700;color:rgba(255,255,255,.5);margin:2px 0 0;text-transform:uppercase;letter-spacing:.06em;">perfiles disponibles</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: browser mockup -->
+    <div style="flex:1;background:#fff;border-radius:18px 18px 0 0;box-shadow:0 36px 72px -28px rgba(42,45,51,.32);overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--gm-line);border-bottom:none;">
+      <!-- browser bar -->
+      <div style="height:50px;background:#fff;border-bottom:1px solid var(--gm-line);display:flex;align-items:center;gap:8px;padding:0 20px;flex:none;">
+        <span style="width:12px;height:12px;border-radius:50%;background:#FF5F57;"></span>
+        <span style="width:12px;height:12px;border-radius:50%;background:#FEBC2E;"></span>
+        <span style="width:12px;height:12px;border-radius:50%;background:#28C840;"></span>
+        <div style="margin-left:14px;background:var(--gm-soft);border-radius:7px;height:28px;flex:1;max-width:460px;display:flex;align-items:center;padding:0 14px;font-size:14px;color:var(--gm-gray-2);font-weight:600;">ia-portal.gmtransport.co/portal/usuarios</div>
+      </div>
+      <!-- app layout -->
+      <div style="flex:1;display:flex;">
+        <!-- sidebar -->
+        <div style="width:210px;background:var(--gm-ink);padding:20px 14px;display:flex;flex-direction:column;gap:4px;flex:none;">
+          <div style="margin:2px 4px 18px;">
+            <p style="margin:0;font-family:var(--serif);font-weight:800;font-size:16px;color:var(--gm-orange-light);line-height:1;">GM Portal IA</p>
+            <p style="margin:2px 0 0;font-size:11px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.08em;text-transform:uppercase;">Control de Permisos</p>
+          </div>
+          <!-- nav items -->
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:rgba(255,255,255,.5);font-size:14px;font-weight:600;">Dashboard</div>
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;padding:8px 12px 4px;">Usuarios</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:8px;background:var(--gm-grad);font-size:14px;font-weight:700;color:#fff;"><span>Todos</span><span style="background:rgba(255,255,255,.25);border-radius:999px;padding:2px 9px;font-size:12px;">296</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:8px;color:rgba(255,255,255,.6);font-size:14px;font-weight:600;"><span>Con IA</span><span style="background:rgba(255,255,255,.12);border-radius:999px;padding:2px 9px;font-size:12px;">294</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:8px;color:rgba(255,255,255,.6);font-size:14px;font-weight:600;"><span>Sin IA</span><span style="background:rgba(255,255,255,.12);border-radius:999px;padding:2px 9px;font-size:12px;">2</span></div>
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;">Por Perfil</div>
+          <div style="padding:8px 12px;border-radius:8px;color:rgba(255,255,255,.55);font-size:14px;font-weight:600;">Gerencial</div>
+          <div style="padding:8px 12px;border-radius:8px;color:rgba(255,255,255,.55);font-size:14px;font-weight:600;">Administrativo</div>
+          <div style="padding:8px 12px;border-radius:8px;color:rgba(255,255,255,.55);font-size:14px;font-weight:600;">Operativo</div>
+        </div>
+        <!-- main content -->
+        <div style="flex:1;padding:22px 28px;display:flex;flex-direction:column;gap:16px;background:#FBFCFD;">
+          <!-- toolbar -->
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="flex:1;max-width:380px;background:#fff;border:1px solid var(--gm-line);border-radius:22px;height:36px;display:flex;align-items:center;padding:0 16px;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gm-gray-2)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-3.5-3.5"/></svg>
+              <span style="font-size:13px;color:var(--gm-gray-2);font-weight:500;">Buscar por nombre, usuario o email…</span>
+            </div>
+            <div style="background:#fff;border:1px solid var(--gm-line);border-radius:8px;height:36px;display:flex;align-items:center;padding:0 14px;gap:6px;font-size:13px;color:var(--gm-ink);font-weight:600;">Todos los estados <span style="color:var(--gm-gray-2);">▾</span></div>
+            <div style="background:#fff;border:1px solid var(--gm-line);border-radius:8px;height:36px;display:flex;align-items:center;padding:0 14px;gap:6px;font-size:13px;color:var(--gm-ink);font-weight:600;">Acceso IA (todos) <span style="color:var(--gm-gray-2);">▾</span></div>
+            <div style="background:var(--gm-grad);border-radius:8px;height:36px;display:flex;align-items:center;padding:0 16px;font-size:13px;color:#fff;font-weight:700;">Activar IA</div>
+          </div>
+          <!-- table -->
+          <div style="background:#fff;border:1px solid var(--gm-line);border-radius:12px;overflow:hidden;flex:1;">
+            <!-- header -->
+            <div style="display:grid;grid-template-columns:2fr 2fr 3fr 1.2fr 1.2fr 1.5fr 1.2fr;padding:12px 20px;border-bottom:1px solid var(--gm-line);font-size:12px;color:var(--gm-gray-2);font-weight:800;text-transform:uppercase;letter-spacing:.06em;align-items:center;gap:8px;">
+              <span style="display:flex;align-items:center;gap:4px;"><span style="width:16px;height:16px;border-radius:4px;border:1.5px solid var(--gm-line);display:inline-block;"></span>USUARIO</span>
+              <span>NOMBRE</span><span>EMAIL</span><span>ESTADO</span><span>ACCESO IA</span><span>PERFIL</span><span>SUCURSAL</span>
+            </div>
+            <!-- rows -->
+            <div style="display:grid;grid-template-columns:2fr 2fr 3fr 1.2fr 1.2fr 1.5fr 1.2fr;padding:11px 20px;border-bottom:1px solid var(--gm-soft-2);font-size:13px;font-weight:600;align-items:center;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border-radius:4px;border:1.5px solid var(--gm-line);display:inline-block;"></span><div style="width:28px;height:28px;border-radius:50%;background:var(--gm-soft-2);"></div><div><p style="margin:0;color:var(--gm-ink);">YULIANA D</p><p style="margin:0;font-size:11px;color:var(--gm-gray-2);font-weight:500;">ID: 113</p></div></div>
+              <span style="color:var(--gm-gray);">YULIANA DIAZ</span>
+              <span style="color:var(--gm-gray);font-size:12px;">ydiaz@tiastica.com</span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Activo</span></span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Sí</span></span>
+              <span><span style="background:#EAF1FB;color:#2563C9;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">Gerencial</span></span>
+              <span style="color:var(--gm-gray);font-size:12px;">MATRIZ</span>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 2fr 3fr 1.2fr 1.2fr 1.5fr 1.2fr;padding:11px 20px;border-bottom:1px solid var(--gm-soft-2);font-size:13px;font-weight:600;align-items:center;background:#FAFBFC;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border-radius:4px;border:1.5px solid var(--gm-line);display:inline-block;"></span><div style="width:28px;height:28px;border-radius:50%;background:var(--gm-soft-2);"></div><div><p style="margin:0;color:var(--gm-ink);">VIVIANAJ</p><p style="margin:0;font-size:11px;color:var(--gm-gray-2);font-weight:500;">ID: 38</p></div></div>
+              <span style="color:var(--gm-gray);">VIVIANA JUAREZ</span>
+              <span style="color:var(--gm-gray);font-size:12px;">viviana-vz@hotmail.com</span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Activo</span></span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Sí</span></span>
+              <span><span style="background:#EAF1FB;color:#2563C9;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">Gerencial</span></span>
+              <span style="color:var(--gm-gray);font-size:12px;">MATRIZ</span>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 2fr 3fr 1.2fr 1.2fr 1.5fr 1.2fr;padding:11px 20px;border-bottom:1px solid var(--gm-soft-2);font-size:13px;font-weight:600;align-items:center;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border-radius:4px;border:1.5px solid var(--gm-line);display:inline-block;"></span><div style="width:28px;height:28px;border-radius:50%;background:var(--gm-soft-2);"></div><div><p style="margin:0;color:var(--gm-ink);">VICTOR</p><p style="margin:0;font-size:11px;color:var(--gm-gray-2);font-weight:500;">ID: 96</p></div></div>
+              <span style="color:var(--gm-gray);">VICTOR</span>
+              <span style="color:var(--gm-gray);font-size:12px;">XX@XX.COM</span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Activo</span></span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Sí</span></span>
+              <span><span style="background:#EAF1FB;color:#2563C9;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">Gerencial</span></span>
+              <span style="color:var(--gm-gray);font-size:12px;">MATRIZ</span>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 2fr 3fr 1.2fr 1.2fr 1.5fr 1.2fr;padding:11px 20px;font-size:13px;font-weight:600;align-items:center;background:#FAFBFC;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border-radius:4px;border:1.5px solid var(--gm-line);display:inline-block;"></span><div style="width:28px;height:28px;border-radius:50%;background:var(--gm-soft-2);"></div><div><p style="margin:0;color:var(--gm-ink);">UsuarioPruebaIA1</p><p style="margin:0;font-size:11px;color:var(--gm-gray-2);font-weight:500;">ID: 176</p></div></div>
+              <span style="color:var(--gm-gray);">JOSE</span>
+              <span style="color:var(--gm-gray);font-size:12px;">roberto.desarrollo@gmtransporterp.com</span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Activo</span></span>
+              <span><span style="background:#E6F6EC;color:#1F8A4C;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">✓ Sí</span></span>
+              <span><span style="background:#EAF1FB;color:#2563C9;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;">Gerencial</span></span>
+              <span style="color:var(--gm-gray);font-size:12px;">MATRIZ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 7. ROLES DE PERFIL ====== -->
+<section data-label="Roles de Perfil" style="background:var(--gm-ink);">
+  <svg style="position:absolute;left:0;top:0;" width="420" height="420" viewBox="0 0 420 420" fill="none">
+    <circle cx="60" cy="60" r="300" stroke="url(#rpg)" stroke-width="2" opacity=".35"/>
+    <circle cx="60" cy="60" r="190" stroke="url(#rpg)" stroke-width="2" opacity=".22"/>
+    <defs><linearGradient id="rpg" x1="0" y1="0" x2="420" y2="420" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9E33"/><stop offset="1" stop-color="#DC5E00" stop-opacity="0"/></linearGradient></defs>
+  </svg>
+  <div class="pad" style="padding:88px 110px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;">
+      <div>
+        <div class="eyebrow on-dark" style="margin-bottom:16px;"><span class="tick"></span>Portal IA</div>
+        <h2 class="display" style="font-size:78px;color:#fff;">Roles de <span class="accent">Perfil</span></h2>
+      </div>
+      <p style="font-size:21px;color:rgba(255,255,255,.55);font-weight:500;max-width:520px;text-align:right;line-height:1.5;">Al activar el acceso IA debes asignar un perfil. Define qué funciones puede utilizar el colaborador.</p>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-content:center;">
+
+      <!-- GERENCIAL -->
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(243,121,30,.45);border-radius:22px;padding:38px 36px;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:var(--gm-grad);border-radius:22px 22px 0 0;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:56px;height:56px;border-radius:16px;background:var(--gm-grad);display:flex;align-items:center;justify-content:center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v4H3zM3 10h7v11H3zM14 10h7v11h-7z"/></svg>
+          </div>
+          <div>
+            <p style="margin:0;font-family:var(--serif);font-weight:800;font-size:30px;color:#fff;">Gerencial</p>
+            <p style="margin:2px 0 0;font-size:16px;font-weight:700;color:var(--gm-orange-light);letter-spacing:.06em;text-transform:uppercase;">Nivel directivo · Acceso completo</p>
+          </div>
+        </div>
+        <p style="font-size:21px;color:rgba(255,255,255,.75);font-weight:500;line-height:1.5;margin:0;">Para directores y gerentes. Dashboards ejecutivos, análisis avanzados, reportes y predicciones con IA.</p>
+      </div>
+
+      <!-- ADMINISTRATIVO -->
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:38px 36px;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.25);border-radius:22px 22px 0 0;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="14" height="18" rx="2"/><path d="M8 8h6M8 12h6M8 16h4"/></svg>
+          </div>
+          <div>
+            <p style="margin:0;font-family:var(--serif);font-weight:800;font-size:30px;color:#fff;">Administrativo</p>
+            <p style="margin:2px 0 0;font-size:16px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.06em;text-transform:uppercase;">Nivel gestión</p>
+          </div>
+        </div>
+        <p style="font-size:21px;color:rgba(255,255,255,.65);font-weight:500;line-height:1.5;margin:0;">Para administración, contabilidad y RRHH. Asistente de documentos, automatización y análisis administrativo.</p>
+      </div>
+
+      <!-- OPERATIVO -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:38px 36px;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.15);border-radius:22px 22px 0 0;"></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V6h11v10M14 9h4l3 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+          </div>
+          <div>
+            <p style="margin:0;font-family:var(--serif);font-weight:800;font-size:30px;color:#fff;">Operativo</p>
+            <p style="margin:2px 0 0;font-size:16px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.06em;text-transform:uppercase;">Nivel operaciones</p>
+          </div>
+        </div>
+        <p style="font-size:21px;color:rgba(255,255,255,.55);font-weight:500;line-height:1.5;margin:0;">Para operadores y personal de campo. Asistente operativo, soporte en tareas diarias y guías operativas.</p>
+      </div>
+
+    </div>
+  </div>
+  <div class="footer on-dark"><span>IA-GM</span><span class="dotline"></span><span>Portal IA — Control de Permisos</span></div>
+</section>
+
+<!-- ====== 8. CIERRE ====== -->
+<section data-label="Cierre" style="background:var(--gm-orange);">
+  <div style="position:absolute;inset:0;background:var(--gm-grad);"></div>
+  <svg style="position:absolute;right:-80px;top:-80px;" width="560" height="560" viewBox="0 0 560 560" fill="none">
+    <circle cx="280" cy="280" r="279" stroke="#fff" stroke-width="2" opacity=".18"/>
+    <circle cx="280" cy="280" r="180" stroke="#fff" stroke-width="2" opacity=".18"/>
+    <circle cx="280" cy="280" r="90" stroke="#fff" stroke-width="2" opacity=".18"/>
+  </svg>
+  <svg style="position:absolute;left:-60px;bottom:-60px;" width="380" height="380" viewBox="0 0 380 380" fill="none">
+    <circle cx="80" cy="300" r="240" stroke="#fff" stroke-width="2" opacity=".12"/>
+  </svg>
+  <div class="pad" style="justify-content:center;align-items:center;text-align:center;position:relative;">
+    <div class="eyebrow on-dark" style="color:#fff;justify-content:center;margin-bottom:24px;"><span class="tick" style="background:#fff;"></span>Atención al cliente y soporte</div>
+    <div style="font-family:var(--serif);font-weight:800;font-size:140px;color:#fff;line-height:.9;letter-spacing:-.03em;margin-bottom:32px;">IA-<span style="color:rgba(255,255,255,.7);">GM</span></div>
+    <div style="display:flex;flex-direction:column;gap:16px;align-items:center;">
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.35);border-radius:16px;padding:18px 34px;min-width:560px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
+        <span style="font-size:30px;font-weight:700;color:#fff;">(686) 564-9263</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.35);border-radius:16px;padding:18px 34px;min-width:560px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg>
+        <span style="font-size:26px;font-weight:700;color:#fff;">servicio.soporte@gmtransporterp.com</span>
+      </div>
+    </div>
+    <div class="wm on-dark" style="font-size:30px;margin-top:38px;opacity:.7;"><span class="wm-name"><span class="wm-gm">GM</span><span>Transport</span></span><span class="wm-sw">Software</span></div>
+  </div>
+</section>
+
+</deck-stage>
+<script src="deck-stage.js"></script>
+</body>
+</html>

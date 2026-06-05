@@ -8,414 +8,531 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #f5f5f5;
-      color: #1a1a2e;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f4f5f7;
+      color: #1f2937;
       min-height: 100vh;
-    }
-
-    header {
-      background: #fff;
-      border-bottom: 1px solid #e2e5ea;
-      padding: 20px 32px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
+      flex-direction: column;
     }
-    header h1 {
-      font-size: 1.25rem;
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 36px 24px 32px;
+      text-align: center;
+    }
+
+    .header-logo {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .header-logo .brand { color: #F2940E; }
+    .header-logo .sep   { color: #ffffff; opacity: 0.4; margin: 0 6px; }
+    .header-logo .sub   { color: #ffffff; }
+
+    .header-subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .header-badge {
+      display: inline-block;
+      margin-top: 14px;
+      background: #F2940E;
+      color: #fff;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: -0.3px;
-      color: #1a1a2e;
-    }
-    #counter {
-      font-size: 0.82rem;
-      color: #6b7280;
-      white-space: nowrap;
+      padding: 4px 14px;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
     }
 
+    /* ── SEARCH AREA ── */
     .search-area {
-      max-width: 680px;
-      margin: 28px auto 0;
-      padding: 0 24px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 0 24px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
     }
 
-    #search {
+    .search-wrapper {
+      position: relative;
       width: 100%;
-      padding: 12px 16px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      border: 1.5px solid #d1d5db;
-      border-radius: 8px;
-      background: #fff;
+      max-width: 600px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    #searchInput {
+      width: 100%;
+      height: 48px;
+      padding: 0 18px 0 48px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      color: #1f2937;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
       outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      color: #1a1a2e;
+      transition: box-shadow 0.2s;
     }
-    #search:focus {
-      border-color: #F2940E;
-      box-shadow: 0 0 0 3px rgba(242,148,14,0.12);
-    }
+    #searchInput:focus { box-shadow: 0 4px 20px rgba(242,148,14,0.35); }
+    #searchInput::placeholder { color: #9ca3af; }
 
     .filters {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 12px;
+      justify-content: center;
+      max-width: 600px;
+      width: 100%;
     }
-    .filter-btn {
-      padding: 5px 14px;
-      border-radius: 20px;
-      border: 1.5px solid transparent;
-      font-size: 0.8rem;
-      font-weight: 600;
+
+    .filter-pill {
       cursor: pointer;
-      font-family: inherit;
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
-      background: #e5e7eb;
-      color: #4b5563;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid #e5e7eb;
+      background: #fff;
+      color: #374151;
+      transition: all 0.15s;
+      user-select: none;
     }
-    .filter-btn:hover { background: #d1d5db; }
-    .filter-btn.active {
-      background: #1a1a2e;
-      color: #fff;
-      border-color: #1a1a2e;
-    }
+    .filter-pill:hover { border-color: #F2940E; color: #F2940E; }
+    .filter-pill.active { background: #F2940E; border-color: #F2940E; color: #fff; }
 
-    main {
-      max-width: 680px;
-      margin: 24px auto 48px;
-      padding: 0 24px;
+    /* ── TOOLBAR ── */
+    .toolbar {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      margin: 24px auto 0;
+      padding: 0 24px;
+      width: 100%;
     }
 
+    #counter {
+      font-size: 13px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .sort-btns { display: flex; gap: 8px; }
+
+    .sort-btn {
+      cursor: pointer;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid #e5e7eb;
+      background: #fff;
+      color: #374151;
+      transition: all 0.15s;
+    }
+    .sort-btn:hover { border-color: #F2940E; color: #F2940E; }
+    .sort-btn.active { background: #F2940E; border-color: #F2940E; color: #fff; }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1160px;
+      margin: 16px auto 32px;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── CARD ── */
     .card {
       background: #fff;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      padding: 16px 18px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      transition: box-shadow 0.15s;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.18s, box-shadow 0.18s;
     }
     .card:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.14);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
     }
-    .card.hidden { display: none; }
 
-    .card-body { flex: 1; min-width: 0; }
+    .card-band {
+      height: 8px;
+      width: 100%;
+      flex-shrink: 0;
+    }
 
-    .card-top {
+    .card-body {
+      padding: 16px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 8px;
+    }
+
+    .card-meta {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .card-name {
-      font-size: 0.92rem;
+    .badge-proyecto {
+      font-size: 11px;
       font-weight: 700;
-      color: #1a1a2e;
-    }
-
-    .project-badge {
-      display: inline-block;
-      padding: 2px 9px;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
       color: #fff;
       white-space: nowrap;
     }
-    .badge-doblecheck   { background: #3B82F6; }
-    .badge-misviajes    { background: #F2940E; }
-    .badge-hermes       { background: #10B981; }
-    .badge-ch439        { background: #8B5CF6; }
-    .badge-presentaciones { background: #6B7280; }
 
-    .ticket-tag {
-      display: inline-block;
-      font-size: 0.72rem;
+    .badge-ticket {
+      font-size: 11px;
       font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: #f3f4f6;
       color: #6b7280;
-      background: #f0f1f4;
-      border-radius: 4px;
-      padding: 2px 6px;
       white-space: nowrap;
+    }
+
+    .card-fecha {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .card-nombre {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.3;
     }
 
     .card-desc {
-      font-size: 0.8rem;
+      font-size: 13px;
       color: #6b7280;
-      margin-top: 5px;
-      line-height: 1.4;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    .btn-open {
-      display: inline-block;
-      padding: 8px 16px;
+    .card-footer { padding: 0 16px 16px; }
+
+    .btn-abrir {
+      display: block;
+      width: 100%;
+      padding: 10px;
       background: #F2940E;
       color: #fff;
-      text-decoration: none;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      white-space: nowrap;
-      transition: background 0.12s;
-      flex-shrink: 0;
-      align-self: center;
-    }
-    .btn-open:hover { background: #d97e0a; }
-
-    .empty-state {
       text-align: center;
-      padding: 48px 24px;
-      color: #9ca3af;
-      font-size: 0.9rem;
-      display: none;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: background 0.15s;
     }
+    .btn-abrir:hover { background: #d97e0a; }
 
-    @media (max-width: 600px) {
-      header { padding: 16px; }
-      .search-area, main { padding: 0 12px; }
-      .card { flex-direction: column; gap: 10px; }
-      .btn-open { width: 100%; text-align: center; }
+    /* ── EMPTY STATE ── */
+    .empty {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px 24px;
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-title { font-size: 18px; font-weight: 700; color: #374151; }
+    .empty-sub { font-size: 14px; color: #9ca3af; margin-top: 6px; }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: auto;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #6b7280;
+      text-align: center;
+      font-size: 13px;
+      padding: 20px 24px;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>GM Transport &middot; Prototipos</h1>
-  <span id="counter">10 prototipos</span>
+  <div class="header-logo">
+    <span class="brand">GM Transport</span>
+    <span class="sep">·</span>
+    <span class="sub">Prototipos</span>
+  </div>
+  <div class="header-subtitle">Maquetas y mockups de funcionalidades</div>
+  <span class="header-badge" id="totalBadge">10 prototipos</span>
 </header>
 
 <div class="search-area">
-  <input type="text" id="search" placeholder="Buscar prototipo, ticket o modulo..." autocomplete="off" />
+  <div class="search-wrapper">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Buscar por nombre, ticket o módulo..." />
+  </div>
   <div class="filters">
-    <button class="filter-btn active" data-filter="todos">Todos</button>
-    <button class="filter-btn" data-filter="DobleCheck">DobleCheck</button>
-    <button class="filter-btn" data-filter="Mis Viajes">Mis Viajes</button>
-    <button class="filter-btn" data-filter="Hermes">Hermes</button>
-    <button class="filter-btn" data-filter="CH-439">CH-439</button>
-    <button class="filter-btn" data-filter="Presentaciones">Presentaciones</button>
+    <div class="filter-pill active" data-filter="Todos">Todos</div>
+    <div class="filter-pill" data-filter="Mis Viajes">Mis Viajes</div>
+    <div class="filter-pill" data-filter="DobleCheck">DobleCheck</div>
+    <div class="filter-pill" data-filter="Hermes">Hermes</div>
+    <div class="filter-pill" data-filter="CH-439">CH-439</div>
+    <div class="filter-pill" data-filter="Presentaciones">Presentaciones</div>
   </div>
 </div>
 
-<main id="grid">
-
-  <div class="card"
-    data-nombre="SOS sin GPS"
-    data-ticket="#35074"
-    data-proyecto="Mis Viajes"
-    data-desc="Notificacion SOS cuando el cliente no tiene GPS correo campanita ERP">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">SOS sin GPS</span>
-        <span class="project-badge badge-misviajes">Mis Viajes</span>
-        <span class="ticket-tag">#35074</span>
-      </div>
-      <div class="card-desc">Notificacion SOS cuando el cliente no tiene GPS &mdash; correo + campanita ERP</div>
-    </div>
-    <a href="mis-viajes-sos/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
+<div class="toolbar">
+  <span id="counter">Mostrando 10 de 10</span>
+  <div class="sort-btns">
+    <button class="sort-btn active" id="btnReciente">↓ Más reciente</button>
+    <button class="sort-btn" id="btnAntiguo">↑ Más antiguo</button>
   </div>
+</div>
 
-  <div class="card"
-    data-nombre="C-TPAT Seguimiento"
-    data-ticket=""
-    data-proyecto="DobleCheck"
-    data-desc="Seguimiento y notificacion de estatus en formularios DobleCheck">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">C-TPAT Seguimiento</span>
-        <span class="project-badge badge-doblecheck">DobleCheck</span>
-      </div>
-      <div class="card-desc">Seguimiento y notificacion de estatus en formularios DobleCheck</div>
-    </div>
-    <a href="doblecheck-ctpat-seguimiento/mockup.html" target="_blank" class="btn-open">Abrir &rarr;</a>
+<div class="grid" id="grid">
+  <!-- Cards rendered by JS -->
+  <div class="empty" id="empty">
+    <div class="empty-icon">🔎</div>
+    <div class="empty-title">Sin resultados</div>
+    <div class="empty-sub">Intenta con otro término o limpia los filtros</div>
   </div>
+</div>
 
-  <div class="card"
-    data-nombre="Notificaciones por Pregunta"
-    data-ticket=""
-    data-proyecto="DobleCheck"
-    data-desc="Notificaciones por pregunta y grupos en formularios">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">Notificaciones por Pregunta</span>
-        <span class="project-badge badge-doblecheck">DobleCheck</span>
-      </div>
-      <div class="card-desc">Notificaciones por pregunta y grupos en formularios</div>
-    </div>
-    <a href="doblecheck-notificaciones/DobleCheck - Notificaciones por Pregunta y Grupos - mockup.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-  <div class="card"
-    data-nombre="Trazabilidad en Inspecciones"
-    data-ticket=""
-    data-proyecto="DobleCheck"
-    data-desc="Trazabilidad de inspecciones en formularios DobleCheck">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">Trazabilidad en Inspecciones</span>
-        <span class="project-badge badge-doblecheck">DobleCheck</span>
-      </div>
-      <div class="card-desc">Trazabilidad de inspecciones en formularios DobleCheck</div>
-    </div>
-    <a href="doblecheck-trazabilidad/mockup.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-  <div class="card"
-    data-nombre="Portal Cliente Mejoras IA"
-    data-ticket=""
-    data-proyecto="Hermes"
-    data-desc="Portal de cliente con mejoras de IA para cotizaciones ERP">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">Portal Cliente + Mejoras IA</span>
-        <span class="project-badge badge-hermes">Hermes</span>
-      </div>
-      <div class="card-desc">Portal de cliente con mejoras de IA para cotizaciones ERP</div>
-    </div>
-    <a href="hermes-portal-cliente/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-  <div class="card"
-    data-nombre="CH-439"
-    data-ticket="CH-439"
-    data-proyecto="CH-439"
-    data-desc="Prototipo CH-439">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">CH-439</span>
-        <span class="project-badge badge-ch439">CH-439</span>
-        <span class="ticket-tag">CH-439</span>
-      </div>
-      <div class="card-desc">Prototipo CH-439</div>
-    </div>
-    <a href="CH-439/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-  <div class="card"
-    data-nombre="CH-439 Correo"
-    data-ticket="CH-439"
-    data-proyecto="CH-439"
-    data-desc="Variante de correo para CH-439">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">CH-439 Correo</span>
-        <span class="project-badge badge-ch439">CH-439</span>
-        <span class="ticket-tag">CH-439</span>
-      </div>
-      <div class="card-desc">Variante de correo para CH-439</div>
-    </div>
-    <a href="CH-439-correo/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-  <div class="card"
-    data-nombre="Presentacion IA GM"
-    data-ticket=""
-    data-proyecto="Presentaciones"
-    data-desc="Presentacion ejecutiva de IA para GM Transport">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">Presentacion IA GM</span>
-        <span class="project-badge badge-presentaciones">Presentaciones</span>
-      </div>
-      <div class="card-desc">Presentacion ejecutiva de IA para GM Transport</div>
-    </div>
-    <a href="presentaciones/ia-gm/IA-GM Presentacion.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-  <div class="card"
-    data-nombre="Kanban Guia Completa"
-    data-ticket=""
-    data-proyecto="Presentaciones"
-    data-desc="Guia completa de metodologia Kanban para el equipo">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">Kanban Guia Completa</span>
-        <span class="project-badge badge-presentaciones">Presentaciones</span>
-      </div>
-      <div class="card-desc">Guia completa de metodologia Kanban para el equipo</div>
-    </div>
-    <a href="presentaciones/kanban/kanban-guia-completa.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-  <div class="card"
-    data-nombre="Kanban Guia Transicion"
-    data-ticket=""
-    data-proyecto="Presentaciones"
-    data-desc="Guia de transicion a Kanban">
-    <div class="card-body">
-      <div class="card-top">
-        <span class="card-name">Kanban Guia Transicion</span>
-        <span class="project-badge badge-presentaciones">Presentaciones</span>
-      </div>
-      <div class="card-desc">Guia de transicion a Kanban</div>
-    </div>
-    <a href="presentaciones/kanban/kanban-guia-transicion.html" target="_blank" class="btn-open">Abrir &rarr;</a>
-  </div>
-
-</main>
-
-<div class="empty-state" id="empty">No se encontraron prototipos para esa busqueda.</div>
+<footer>GM Transport Software® · Prototipos internos</footer>
 
 <script>
-  const TOTAL = 10;
-  const cards = Array.from(document.querySelectorAll('.card'));
-  const searchInput = document.getElementById('search');
-  const counter = document.getElementById('counter');
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const emptyState = document.getElementById('empty');
-  let activeFilter = 'todos';
+  const PROYECTO_COLORS = {
+    "Mis Viajes":     "#F2940E",
+    "DobleCheck":     "#3B82F6",
+    "Hermes":         "#10B981",
+    "CH-439":         "#8B5CF6",
+    "Presentaciones": "#6B7280",
+  };
+  const DEFAULT_COLOR = "#F59E0B";
 
-  function normalize(str) {
-    return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-  }
-
-  function applyFilters() {
-    const query = normalize(searchInput.value.trim());
-    let visible = 0;
-    cards.forEach(card => {
-      const nombre = normalize(card.dataset.nombre || '');
-      const ticket = normalize(card.dataset.ticket || '');
-      const proyecto = card.dataset.proyecto || '';
-      const desc = normalize(card.dataset.desc || '');
-      const matchSearch = !query || nombre.includes(query) || ticket.includes(query) || desc.includes(query) || normalize(proyecto).includes(query);
-      const matchFilter = activeFilter === 'todos' || proyecto === activeFilter;
-      if (matchSearch && matchFilter) {
-        card.classList.remove('hidden');
-        visible++;
-      } else {
-        card.classList.add('hidden');
-      }
-    });
-    if (visible === TOTAL) {
-      counter.textContent = TOTAL + ' prototipos';
-    } else {
-      counter.textContent = 'Mostrando ' + visible + ' de ' + TOTAL + ' prototipos';
+  const PROTOTIPOS = [
+    {
+      nombre: "SOS sin GPS",
+      ticket: "#35074",
+      proyecto: "Mis Viajes",
+      descripcion: "Notificación SOS cuando el cliente no tiene GPS — correo + campanita ERP",
+      url: "mis-viajes-sos/index.html",
+      fecha: "2026-06-05"
+    },
+    {
+      nombre: "Portal Cliente + Mejoras IA",
+      ticket: "",
+      proyecto: "Hermes",
+      descripcion: "Portal de cliente con mejoras de IA para cotizaciones ERP",
+      url: "hermes-portal-cliente/index.html",
+      fecha: "2026-05-01"
+    },
+    {
+      nombre: "CH-439 Correo",
+      ticket: "CH-439",
+      proyecto: "CH-439",
+      descripcion: "Variante de correo para CH-439",
+      url: "CH-439-correo/index.html",
+      fecha: "2026-04-15"
+    },
+    {
+      nombre: "CH-439",
+      ticket: "CH-439",
+      proyecto: "CH-439",
+      descripcion: "Prototipo principal CH-439",
+      url: "CH-439/index.html",
+      fecha: "2026-04-10"
+    },
+    {
+      nombre: "Trazabilidad en Inspecciones",
+      ticket: "",
+      proyecto: "DobleCheck",
+      descripcion: "Trazabilidad de inspecciones en formularios DobleCheck",
+      url: "doblecheck-trazabilidad/mockup.html",
+      fecha: "2026-03-20"
+    },
+    {
+      nombre: "Notificaciones por Pregunta",
+      ticket: "",
+      proyecto: "DobleCheck",
+      descripcion: "Notificaciones por pregunta y grupos en formularios",
+      url: "doblecheck-notificaciones/DobleCheck - Notificaciones por Pregunta y Grupos - mockup.html",
+      fecha: "2026-03-10"
+    },
+    {
+      nombre: "C-TPAT Seguimiento",
+      ticket: "",
+      proyecto: "DobleCheck",
+      descripcion: "Seguimiento y notificación de estatus en formularios DobleCheck",
+      url: "doblecheck-ctpat-seguimiento/mockup.html",
+      fecha: "2026-02-15"
+    },
+    {
+      nombre: "Presentación IA GM",
+      ticket: "",
+      proyecto: "Presentaciones",
+      descripcion: "Presentación ejecutiva de IA para GM Transport",
+      url: "presentaciones/ia-gm/IA-GM Presentacion.html",
+      fecha: "2026-01-20"
+    },
+    {
+      nombre: "Kanban Guía Completa",
+      ticket: "",
+      proyecto: "Presentaciones",
+      descripcion: "Guía completa de metodología Kanban para el equipo",
+      url: "presentaciones/kanban/kanban-guia-completa.html",
+      fecha: "2025-12-10"
+    },
+    {
+      nombre: "Kanban Guía Transición",
+      ticket: "",
+      proyecto: "Presentaciones",
+      descripcion: "Guía de transición a Kanban",
+      url: "presentaciones/kanban/kanban-guia-transicion.html",
+      fecha: "2025-12-10"
     }
-    emptyState.style.display = visible === 0 ? 'block' : 'none';
+  ];
+
+  const TOTAL = PROTOTIPOS.length;
+
+  function formatFecha(iso) {
+    const [y, m] = iso.split('-');
+    const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    return meses[parseInt(m,10)-1] + ' ' + y;
   }
 
-  searchInput.addEventListener('input', applyFilters);
+  function colorOf(proyecto) { return PROYECTO_COLORS[proyecto] || DEFAULT_COLOR; }
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeFilter = btn.dataset.filter;
-      applyFilters();
+  function buildCard(p) {
+    const color = colorOf(p.proyecto);
+    const ticketHtml = p.ticket
+      ? `<span class="badge-ticket">${p.ticket}</span>` : '';
+    return `
+      <div class="card" data-proyecto="${p.proyecto}" data-search="${[p.nombre, p.ticket, p.descripcion, p.proyecto].join(' ').toLowerCase()}">
+        <div class="card-band" style="background:${color}"></div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="badge-proyecto" style="background:${color}">${p.proyecto}</span>
+            ${ticketHtml}
+            <span class="card-fecha">${formatFecha(p.fecha)}</span>
+          </div>
+          <div class="card-nombre">${p.nombre}</div>
+          <div class="card-desc">${p.descripcion}</div>
+        </div>
+        <div class="card-footer">
+          <a class="btn-abrir" href="${p.url}" target="_blank">Abrir →</a>
+        </div>
+      </div>`;
+  }
+
+  let sortDesc = true;
+  let activeFilter = 'Todos';
+  let searchTerm = '';
+
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  const counter = document.getElementById('counter');
+
+  function render() {
+    let list = [...PROTOTIPOS];
+
+    // Sort
+    list.sort((a, b) => {
+      const diff = a.fecha < b.fecha ? -1 : a.fecha > b.fecha ? 1 : 0;
+      return sortDesc ? -diff : diff;
+    });
+
+    // Filter by proyecto
+    if (activeFilter !== 'Todos') {
+      list = list.filter(p => p.proyecto === activeFilter);
+    }
+
+    // Filter by search
+    if (searchTerm) {
+      list = list.filter(p =>
+        [p.nombre, p.ticket, p.descripcion, p.proyecto].join(' ').toLowerCase().includes(searchTerm)
+      );
+    }
+
+    // Clear cards (keep empty div)
+    const cards = grid.querySelectorAll('.card');
+    cards.forEach(c => c.remove());
+
+    if (list.length === 0) {
+      empty.style.display = 'flex';
+      counter.textContent = 'Mostrando 0 de ' + TOTAL;
+    } else {
+      empty.style.display = 'none';
+      list.forEach(p => {
+        grid.insertAdjacentHTML('afterbegin', buildCard(p));
+      });
+      // Re-order so cards appear before empty div
+      const newCards = grid.querySelectorAll('.card');
+      newCards.forEach(c => grid.insertBefore(c, empty));
+      counter.textContent = `Mostrando ${list.length} de ${TOTAL}`;
+    }
+  }
+
+  // Initial render
+  render();
+
+  // Search
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchTerm = e.target.value.trim().toLowerCase();
+    render();
+  });
+
+  // Filters
+  document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeFilter = pill.dataset.filter;
+      render();
     });
   });
-</script>
 
+  // Sort
+  document.getElementById('btnReciente').addEventListener('click', () => {
+    sortDesc = true;
+    document.getElementById('btnReciente').classList.add('active');
+    document.getElementById('btnAntiguo').classList.remove('active');
+    render();
+  });
+  document.getElementById('btnAntiguo').addEventListener('click', () => {
+    sortDesc = false;
+    document.getElementById('btnAntiguo').classList.add('active');
+    document.getElementById('btnReciente').classList.remove('active');
+    render();
+  });
+</script>
 </body>
 </html>

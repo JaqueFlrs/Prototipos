@@ -3,354 +3,419 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prototipos GM Transport</title>
+  <title>GM Transport · Prototipos</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #f5f6f8;
+      background: #f5f5f5;
       color: #1a1a2e;
       min-height: 100vh;
     }
 
     header {
       background: #fff;
-      border-bottom: 2px solid #e2e5ea;
-      padding: 24px 32px 20px;
+      border-bottom: 1px solid #e2e5ea;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
     }
     header h1 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
       letter-spacing: -0.3px;
+      color: #1a1a2e;
     }
-    header .meta {
-      margin-top: 4px;
+    #counter {
       font-size: 0.82rem;
       color: #6b7280;
+      white-space: nowrap;
+    }
+
+    .search-area {
+      max-width: 680px;
+      margin: 28px auto 0;
+      padding: 0 24px;
+    }
+
+    #search {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      color: #1a1a2e;
+    }
+    #search:focus {
+      border-color: #F2940E;
+      box-shadow: 0 0 0 3px rgba(242,148,14,0.12);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .filter-btn {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1.5px solid transparent;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+    .filter-btn:hover { background: #d1d5db; }
+    .filter-btn.active {
+      background: #1a1a2e;
+      color: #fff;
+      border-color: #1a1a2e;
     }
 
     main {
-      max-width: 860px;
-      margin: 32px auto;
-      padding: 0 24px 48px;
+      max-width: 680px;
+      margin: 24px auto 48px;
+      padding: 0 24px;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 12px;
     }
 
-    .group {
+    .card {
       background: #fff;
-      border: 1px solid #e2e5ea;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .group-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 20px;
-      border-bottom: 1px solid #e2e5ea;
-    }
-    .group-header h2 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-    }
-
-    .badge {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .badge-blue   { background: #3b82f6; }
-    .badge-orange { background: #f97316; }
-    .badge-green  { background: #22c55e; }
-    .badge-purple { background: #a855f7; }
-    .badge-gray   { background: #6b7280; }
-    .badge-indigo { background: #6366f1; }
-
-    .items {
-      list-style: none;
-    }
-    .items li {
-      border-bottom: 1px solid #f0f1f4;
-    }
-    .items li:last-child { border-bottom: none; }
-
-    .items a {
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 16px 18px;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      padding: 13px 20px;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.12s;
+      justify-content: space-between;
+      gap: 16px;
+      transition: box-shadow 0.15s;
     }
-    .items a:hover { background: #f8f9fb; }
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.14);
+    }
+    .card.hidden { display: none; }
 
-    .item-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      margin-top: 6px;
-      flex-shrink: 0;
-      opacity: 0.6;
+    .card-body { flex: 1; min-width: 0; }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .item-body { flex: 1; }
-
-    .item-name {
-      font-size: 0.9rem;
-      font-weight: 600;
+    .card-name {
+      font-size: 0.92rem;
+      font-weight: 700;
       color: #1a1a2e;
     }
 
-    .item-ticket {
+    .project-badge {
       display: inline-block;
-      margin-left: 6px;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .badge-doblecheck   { background: #3B82F6; }
+    .badge-misviajes    { background: #F2940E; }
+    .badge-hermes       { background: #10B981; }
+    .badge-ch439        { background: #8B5CF6; }
+    .badge-presentaciones { background: #6B7280; }
+
+    .ticket-tag {
+      display: inline-block;
       font-size: 0.72rem;
       font-weight: 600;
       color: #6b7280;
       background: #f0f1f4;
       border-radius: 4px;
-      padding: 1px 5px;
-      vertical-align: middle;
+      padding: 2px 6px;
+      white-space: nowrap;
     }
 
-    .item-desc {
-      font-size: 0.78rem;
+    .card-desc {
+      font-size: 0.8rem;
       color: #6b7280;
-      margin-top: 1px;
+      margin-top: 5px;
+      line-height: 1.4;
     }
 
-    .item-path {
-      font-size: 0.72rem;
-      color: #9ca3af;
-      font-family: ui-monospace, monospace;
-      margin-top: 2px;
+    .btn-open {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #F2940E;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: background 0.12s;
+      flex-shrink: 0;
+      align-self: center;
     }
+    .btn-open:hover { background: #d97e0a; }
 
-    .arrow {
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
       color: #9ca3af;
-      font-size: 0.85rem;
-      margin-top: 3px;
+      font-size: 0.9rem;
+      display: none;
     }
 
     @media (max-width: 600px) {
-      header { padding: 18px 16px 14px; }
-      main { padding: 0 12px 40px; margin-top: 20px; }
-      .items a { padding: 12px 14px; }
-      .group-header { padding: 12px 14px; }
+      header { padding: 16px; }
+      .search-area, main { padding: 0 12px; }
+      .card { flex-direction: column; gap: 10px; }
+      .btn-open { width: 100%; text-align: center; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>&#128193; Prototipos GM Transport</h1>
-  <p class="meta">Ultima actualizacion: junio 2026 &nbsp;&middot;&nbsp; Repositorio de mockups y prototipos internos</p>
+  <h1>GM Transport &middot; Prototipos</h1>
+  <span id="counter">10 prototipos</span>
 </header>
 
-<main>
+<div class="search-area">
+  <input type="text" id="search" placeholder="Buscar prototipo, ticket o modulo..." autocomplete="off" />
+  <div class="filters">
+    <button class="filter-btn active" data-filter="todos">Todos</button>
+    <button class="filter-btn" data-filter="DobleCheck">DobleCheck</button>
+    <button class="filter-btn" data-filter="Mis Viajes">Mis Viajes</button>
+    <button class="filter-btn" data-filter="Hermes">Hermes</button>
+    <button class="filter-btn" data-filter="CH-439">CH-439</button>
+    <button class="filter-btn" data-filter="Presentaciones">Presentaciones</button>
+  </div>
+</div>
 
-  <!-- DobleCheck -->
-  <div class="group">
-    <div class="group-header">
-      <span class="badge badge-blue"></span>
-      <h2>DobleCheck</h2>
+<main id="grid">
+
+  <div class="card"
+    data-nombre="SOS sin GPS"
+    data-ticket="#35074"
+    data-proyecto="Mis Viajes"
+    data-desc="Notificacion SOS cuando el cliente no tiene GPS correo campanita ERP">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">SOS sin GPS</span>
+        <span class="project-badge badge-misviajes">Mis Viajes</span>
+        <span class="ticket-tag">#35074</span>
+      </div>
+      <div class="card-desc">Notificacion SOS cuando el cliente no tiene GPS &mdash; correo + campanita ERP</div>
     </div>
-    <ul class="items">
-      <li>
-        <a href="doblecheck-ctpat-seguimiento/mockup.html" target="_blank">
-          <span class="item-dot badge-blue"></span>
-          <div class="item-body">
-            <div class="item-name">C-TPAT Seguimiento</div>
-            <div class="item-desc">Modulo de seguimiento de inspecciones C-TPAT</div>
-            <div class="item-path">doblecheck-ctpat-seguimiento/mockup.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-      <li>
-        <a href="doblecheck-notificaciones/DobleCheck - Notificaciones por Pregunta y Grupos - mockup.html" target="_blank">
-          <span class="item-dot badge-blue"></span>
-          <div class="item-body">
-            <div class="item-name">Notificaciones por Pregunta y Grupos</div>
-            <div class="item-desc">Configuracion de notificaciones agrupadas por pregunta en inspecciones</div>
-            <div class="item-path">doblecheck-notificaciones/mockup.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-      <li>
-        <a href="doblecheck-trazabilidad/mockup.html" target="_blank">
-          <span class="item-dot badge-blue"></span>
-          <div class="item-body">
-            <div class="item-name">Trazabilidad en Inspecciones</div>
-            <div class="item-desc">Vista de trazabilidad por inspeccion dentro de DobleCheck</div>
-            <div class="item-path">doblecheck-trazabilidad/mockup.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-    </ul>
+    <a href="mis-viajes-sos/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
   </div>
 
-  <!-- Mis Viajes -->
-  <div class="group">
-    <div class="group-header">
-      <span class="badge badge-orange"></span>
-      <h2>Mis Viajes</h2>
+  <div class="card"
+    data-nombre="C-TPAT Seguimiento"
+    data-ticket=""
+    data-proyecto="DobleCheck"
+    data-desc="Seguimiento y notificacion de estatus en formularios DobleCheck">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">C-TPAT Seguimiento</span>
+        <span class="project-badge badge-doblecheck">DobleCheck</span>
+      </div>
+      <div class="card-desc">Seguimiento y notificacion de estatus en formularios DobleCheck</div>
     </div>
-    <ul class="items">
-      <li>
-        <a href="mis-viajes-sos/index.html" target="_blank">
-          <span class="item-dot badge-orange"></span>
-          <div class="item-body">
-            <div class="item-name">SOS sin GPS <span class="item-ticket">#35074</span></div>
-            <div class="item-desc">Flujo de alerta SOS para operadores sin senal GPS activa</div>
-            <div class="item-path">mis-viajes-sos/index.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-    </ul>
+    <a href="doblecheck-ctpat-seguimiento/mockup.html" target="_blank" class="btn-open">Abrir &rarr;</a>
   </div>
 
-  <!-- Hermes -->
-  <div class="group">
-    <div class="group-header">
-      <span class="badge badge-green"></span>
-      <h2>Hermes</h2>
+  <div class="card"
+    data-nombre="Notificaciones por Pregunta"
+    data-ticket=""
+    data-proyecto="DobleCheck"
+    data-desc="Notificaciones por pregunta y grupos en formularios">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">Notificaciones por Pregunta</span>
+        <span class="project-badge badge-doblecheck">DobleCheck</span>
+      </div>
+      <div class="card-desc">Notificaciones por pregunta y grupos en formularios</div>
     </div>
-    <ul class="items">
-      <li>
-        <a href="hermes-portal-cliente/index.html" target="_blank">
-          <span class="item-dot badge-green"></span>
-          <div class="item-body">
-            <div class="item-name">Portal Cliente + Mejoras IA</div>
-            <div class="item-desc">Portal interactivo para clientes con funcionalidades de cotizacion por IA</div>
-            <div class="item-path">hermes-portal-cliente/index.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-      <li>
-        <a href="#Hermes Portal Cliente + Mejoras IA GM - mockup.html" target="_blank">
-          <span class="item-dot badge-green"></span>
-          <div class="item-body">
-            <div class="item-name">Portal Cliente Mockup (raiz)</div>
-            <div class="item-desc">Version mockup estatico del portal Hermes en raiz del repo</div>
-            <div class="item-path">#Hermes Portal Cliente + Mejoras IA GM - mockup.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-    </ul>
+    <a href="doblecheck-notificaciones/DobleCheck - Notificaciones por Pregunta y Grupos - mockup.html" target="_blank" class="btn-open">Abrir &rarr;</a>
   </div>
 
-  <!-- CH-439 -->
-  <div class="group">
-    <div class="group-header">
-      <span class="badge badge-purple"></span>
-      <h2>CH-439</h2>
+  <div class="card"
+    data-nombre="Trazabilidad en Inspecciones"
+    data-ticket=""
+    data-proyecto="DobleCheck"
+    data-desc="Trazabilidad de inspecciones en formularios DobleCheck">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">Trazabilidad en Inspecciones</span>
+        <span class="project-badge badge-doblecheck">DobleCheck</span>
+      </div>
+      <div class="card-desc">Trazabilidad de inspecciones en formularios DobleCheck</div>
     </div>
-    <ul class="items">
-      <li>
-        <a href="CH-439/index.html" target="_blank">
-          <span class="item-dot badge-purple"></span>
-          <div class="item-body">
-            <div class="item-name">CH-439 <span class="item-ticket">CH-439</span></div>
-            <div class="item-desc">Prototipo principal del ticket CH-439</div>
-            <div class="item-path">CH-439/index.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-      <li>
-        <a href="CH-439-correo/index.html" target="_blank">
-          <span class="item-dot badge-purple"></span>
-          <div class="item-body">
-            <div class="item-name">CH-439 Correo <span class="item-ticket">CH-439</span></div>
-            <div class="item-desc">Flujo de notificacion por correo electronico para CH-439</div>
-            <div class="item-path">CH-439-correo/index.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-    </ul>
+    <a href="doblecheck-trazabilidad/mockup.html" target="_blank" class="btn-open">Abrir &rarr;</a>
   </div>
 
-  <!-- Otros -->
-  <div class="group">
-    <div class="group-header">
-      <span class="badge badge-gray"></span>
-      <h2>Otros</h2>
+  <div class="card"
+    data-nombre="Portal Cliente Mejoras IA"
+    data-ticket=""
+    data-proyecto="Hermes"
+    data-desc="Portal de cliente con mejoras de IA para cotizaciones ERP">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">Portal Cliente + Mejoras IA</span>
+        <span class="project-badge badge-hermes">Hermes</span>
+      </div>
+      <div class="card-desc">Portal de cliente con mejoras de IA para cotizaciones ERP</div>
     </div>
-    <ul class="items">
-      <li>
-        <a href="HU41881.html" target="_blank">
-          <span class="item-dot badge-gray"></span>
-          <div class="item-body">
-            <div class="item-name">HU41881 <span class="item-ticket">#41881</span></div>
-            <div class="item-desc">Prototipo para historia de usuario 41881</div>
-            <div class="item-path">HU41881.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-    </ul>
+    <a href="hermes-portal-cliente/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
   </div>
 
-  <!-- Presentaciones -->
-  <div class="group">
-    <div class="group-header">
-      <span class="badge badge-indigo"></span>
-      <h2>Presentaciones</h2>
+  <div class="card"
+    data-nombre="CH-439"
+    data-ticket="CH-439"
+    data-proyecto="CH-439"
+    data-desc="Prototipo CH-439">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">CH-439</span>
+        <span class="project-badge badge-ch439">CH-439</span>
+        <span class="ticket-tag">CH-439</span>
+      </div>
+      <div class="card-desc">Prototipo CH-439</div>
     </div>
-    <ul class="items">
-      <li>
-        <a href="presentaciones/ia-gm/IA-GM Presentacion.html" target="_blank">
-          <span class="item-dot badge-indigo"></span>
-          <div class="item-body">
-            <div class="item-name">IA GM</div>
-            <div class="item-desc">Presentacion de capacidades de Inteligencia Artificial en GM Transport</div>
-            <div class="item-path">presentaciones/ia-gm/IA-GM Presentacion.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-      <li>
-        <a href="presentaciones/kanban/kanban-guia-completa.html" target="_blank">
-          <span class="item-dot badge-indigo"></span>
-          <div class="item-body">
-            <div class="item-name">Kanban &#8212; Guia Completa</div>
-            <div class="item-desc">Guia completa del metodo Kanban para el equipo</div>
-            <div class="item-path">presentaciones/kanban/kanban-guia-completa.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-      <li>
-        <a href="presentaciones/kanban/kanban-guia-transicion.html" target="_blank">
-          <span class="item-dot badge-indigo"></span>
-          <div class="item-body">
-            <div class="item-name">Kanban &#8212; Guia de Transicion</div>
-            <div class="item-desc">Guia de transicion hacia el flujo de trabajo Kanban</div>
-            <div class="item-path">presentaciones/kanban/kanban-guia-transicion.html</div>
-          </div>
-          <span class="arrow">&#8599;</span>
-        </a>
-      </li>
-    </ul>
+    <a href="CH-439/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
+  </div>
+
+  <div class="card"
+    data-nombre="CH-439 Correo"
+    data-ticket="CH-439"
+    data-proyecto="CH-439"
+    data-desc="Variante de correo para CH-439">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">CH-439 Correo</span>
+        <span class="project-badge badge-ch439">CH-439</span>
+        <span class="ticket-tag">CH-439</span>
+      </div>
+      <div class="card-desc">Variante de correo para CH-439</div>
+    </div>
+    <a href="CH-439-correo/index.html" target="_blank" class="btn-open">Abrir &rarr;</a>
+  </div>
+
+  <div class="card"
+    data-nombre="Presentacion IA GM"
+    data-ticket=""
+    data-proyecto="Presentaciones"
+    data-desc="Presentacion ejecutiva de IA para GM Transport">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">Presentacion IA GM</span>
+        <span class="project-badge badge-presentaciones">Presentaciones</span>
+      </div>
+      <div class="card-desc">Presentacion ejecutiva de IA para GM Transport</div>
+    </div>
+    <a href="presentaciones/ia-gm/IA-GM Presentacion.html" target="_blank" class="btn-open">Abrir &rarr;</a>
+  </div>
+
+  <div class="card"
+    data-nombre="Kanban Guia Completa"
+    data-ticket=""
+    data-proyecto="Presentaciones"
+    data-desc="Guia completa de metodologia Kanban para el equipo">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">Kanban Guia Completa</span>
+        <span class="project-badge badge-presentaciones">Presentaciones</span>
+      </div>
+      <div class="card-desc">Guia completa de metodologia Kanban para el equipo</div>
+    </div>
+    <a href="presentaciones/kanban/kanban-guia-completa.html" target="_blank" class="btn-open">Abrir &rarr;</a>
+  </div>
+
+  <div class="card"
+    data-nombre="Kanban Guia Transicion"
+    data-ticket=""
+    data-proyecto="Presentaciones"
+    data-desc="Guia de transicion a Kanban">
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-name">Kanban Guia Transicion</span>
+        <span class="project-badge badge-presentaciones">Presentaciones</span>
+      </div>
+      <div class="card-desc">Guia de transicion a Kanban</div>
+    </div>
+    <a href="presentaciones/kanban/kanban-guia-transicion.html" target="_blank" class="btn-open">Abrir &rarr;</a>
   </div>
 
 </main>
+
+<div class="empty-state" id="empty">No se encontraron prototipos para esa busqueda.</div>
+
+<script>
+  const TOTAL = 10;
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const searchInput = document.getElementById('search');
+  const counter = document.getElementById('counter');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const emptyState = document.getElementById('empty');
+  let activeFilter = 'todos';
+
+  function normalize(str) {
+    return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+
+  function applyFilters() {
+    const query = normalize(searchInput.value.trim());
+    let visible = 0;
+    cards.forEach(card => {
+      const nombre = normalize(card.dataset.nombre || '');
+      const ticket = normalize(card.dataset.ticket || '');
+      const proyecto = card.dataset.proyecto || '';
+      const desc = normalize(card.dataset.desc || '');
+      const matchSearch = !query || nombre.includes(query) || ticket.includes(query) || desc.includes(query) || normalize(proyecto).includes(query);
+      const matchFilter = activeFilter === 'todos' || proyecto === activeFilter;
+      if (matchSearch && matchFilter) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    if (visible === TOTAL) {
+      counter.textContent = TOTAL + ' prototipos';
+    } else {
+      counter.textContent = 'Mostrando ' + visible + ' de ' + TOTAL + ' prototipos';
+    }
+    emptyState.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+</script>
 
 </body>
 </html>

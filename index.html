@@ -8,9 +8,9 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f4f5f7;
-      color: #1f2937;
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      background: #f0f0f0;
+      color: #222;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -18,100 +18,120 @@
 
     /* ── HEADER ── */
     header {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 36px 24px 32px;
-      text-align: center;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .header-logo {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+    .erp-logo-icon {
+      width: 32px; height: 32px;
+      background: #F2940E;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: #fff;
+      flex-shrink: 0;
     }
-    .header-logo .brand { color: #F2940E; }
-    .header-logo .sep   { color: #ffffff; opacity: 0.4; margin: 0 6px; }
-    .header-logo .sub   { color: #ffffff; }
 
-    .header-subtitle {
-      margin-top: 6px;
-      font-size: 13px;
-      color: #9ca3af;
+    .erp-logo-text {
+      font-size: 13px; font-weight: bold; color: #333; line-height: 1.2;
+    }
+    .erp-logo-text small {
+      display: block; font-size: 10px; font-weight: normal; color: #888;
+    }
+
+    .header-sep {
+      width: 1px; height: 30px; background: #ddd; flex-shrink: 0; margin: 0 6px;
+    }
+
+    .header-title {
+      font-size: 14px; font-weight: bold; color: #555;
     }
 
     .header-badge {
-      display: inline-block;
-      margin-top: 14px;
+      margin-left: auto;
       background: #F2940E;
       color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 14px;
-      border-radius: 999px;
-      letter-spacing: 0.3px;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 12px;
+      border-radius: 2px;
+    }
+
+    /* ── PANEL TITLE ── */
+    .panel-title {
+      background: #F2940E;
+      color: #fff;
+      font-weight: bold;
+      font-size: 13px;
+      padding: 6px 24px;
     }
 
     /* ── SEARCH AREA ── */
     .search-area {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 0 24px 32px;
+      background: #e8e8e8;
+      border-bottom: 1px solid #ccc;
+      padding: 10px 24px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .search-wrapper {
       position: relative;
-      width: 100%;
-      max-width: 600px;
+      min-width: 180px;
+      max-width: 320px;
+      flex: 1;
     }
 
     .search-icon {
       position: absolute;
-      left: 16px;
+      left: 10px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 18px;
+      font-size: 13px;
+      color: #888;
       pointer-events: none;
     }
 
     #searchInput {
       width: 100%;
-      height: 48px;
-      padding: 0 18px 0 48px;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      color: #1f2937;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      height: 30px;
+      padding: 0 10px 0 30px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      font-size: 12px;
+      font-family: Calibri, sans-serif;
+      color: #333;
+      background: #fff;
       outline: none;
-      transition: box-shadow 0.2s;
     }
-    #searchInput:focus { box-shadow: 0 4px 20px rgba(242,148,14,0.35); }
-    #searchInput::placeholder { color: #9ca3af; }
+    #searchInput:focus { border-color: #F2940E; }
+    #searchInput::placeholder { color: #aaa; }
 
     .filters {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      max-width: 600px;
-      width: 100%;
+      gap: 5px;
     }
 
     .filter-pill {
       cursor: pointer;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-      border: 2px solid #e5e7eb;
+      padding: 4px 12px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: bold;
+      border: 1px solid #bbb;
       background: #fff;
-      color: #374151;
-      transition: all 0.15s;
+      color: #555;
+      transition: all 0.12s;
       user-select: none;
+      font-family: Calibri, sans-serif;
     }
-    .filter-pill:hover { border-color: #F2940E; color: #F2940E; }
+    .filter-pill:hover { border-color: #F2940E; color: #F2940E; background: #fff9f0; }
     .filter-pill.active { background: #F2940E; border-color: #F2940E; color: #fff; }
 
     /* ── TOOLBAR ── */
@@ -119,30 +139,30 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1160px;
-      margin: 24px auto 0;
+      max-width: 1080px;
+      margin: 16px auto 0;
       padding: 0 24px;
       width: 100%;
     }
 
     #counter {
-      font-size: 13px;
-      color: #6b7280;
-      font-weight: 500;
+      font-size: 12px;
+      color: #888;
     }
 
-    .sort-btns { display: flex; gap: 8px; }
+    .sort-btns { display: flex; gap: 5px; }
 
     .sort-btn {
       cursor: pointer;
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      border: 2px solid #e5e7eb;
+      padding: 4px 12px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: bold;
+      border: 1px solid #bbb;
       background: #fff;
-      color: #374151;
-      transition: all 0.15s;
+      color: #555;
+      transition: all 0.12s;
+      font-family: Calibri, sans-serif;
     }
     .sort-btn:hover { border-color: #F2940E; color: #F2940E; }
     .sort-btn.active { background: #F2940E; border-color: #F2940E; color: #fff; }
@@ -150,58 +170,49 @@
     /* ── GRID ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 1160px;
-      margin: 16px auto 32px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 1080px;
+      margin: 12px auto 32px;
       padding: 0 24px;
       width: 100%;
     }
 
-    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
 
     /* ── CARD ── */
     .card {
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #ddd;
+      border-left: 5px solid #F2940E;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      transition: transform 0.18s, box-shadow 0.18s;
+      transition: box-shadow 0.15s;
     }
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
-    }
-
-    .card-band {
-      height: 8px;
-      width: 100%;
-      flex-shrink: 0;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.13);
     }
 
     .card-body {
-      padding: 16px 16px 12px;
+      padding: 12px 14px 8px;
       display: flex;
       flex-direction: column;
       flex: 1;
-      gap: 8px;
+      gap: 6px;
     }
 
     .card-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .badge-proyecto {
       font-size: 11px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 999px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 2px;
       color: #fff;
       white-space: nowrap;
     }
@@ -209,30 +220,31 @@
     .badge-ticket {
       font-size: 11px;
       font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 6px;
-      background: #f3f4f6;
-      color: #6b7280;
+      padding: 2px 7px;
+      border-radius: 2px;
+      background: #f0f0f0;
+      color: #777;
+      border: 1px solid #e0e0e0;
       white-space: nowrap;
     }
 
     .card-fecha {
       font-size: 11px;
-      color: #9ca3af;
+      color: #aaa;
       margin-left: auto;
       white-space: nowrap;
     }
 
     .card-nombre {
-      font-size: 16px;
-      font-weight: 700;
-      color: #111827;
+      font-size: 15px;
+      font-weight: bold;
+      color: #222;
       line-height: 1.3;
     }
 
     .card-desc {
-      font-size: 13px;
-      color: #6b7280;
+      font-size: 12px;
+      color: #666;
       line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -240,20 +252,23 @@
       overflow: hidden;
     }
 
-    .card-footer { padding: 0 16px 16px; }
+    .card-footer {
+      padding: 0 14px 12px;
+    }
 
     .btn-abrir {
       display: block;
       width: 100%;
-      padding: 10px;
+      padding: 7px;
       background: #F2940E;
       color: #fff;
       text-align: center;
       text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      border-radius: 8px;
-      transition: background 0.15s;
+      font-size: 13px;
+      font-weight: bold;
+      font-family: Calibri, sans-serif;
+      border-radius: 2px;
+      transition: background 0.12s;
     }
     .btn-abrir:hover { background: #d97e0a; }
 
@@ -263,41 +278,45 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 64px 24px;
+      padding: 60px 24px;
       grid-column: 1 / -1;
       text-align: center;
     }
-    .empty-icon { font-size: 48px; margin-bottom: 16px; }
-    .empty-title { font-size: 18px; font-weight: 700; color: #374151; }
-    .empty-sub { font-size: 14px; color: #9ca3af; margin-top: 6px; }
+    .empty-icon { font-size: 36px; margin-bottom: 10px; }
+    .empty-title { font-size: 15px; font-weight: bold; color: #666; }
+    .empty-sub { font-size: 12px; color: #aaa; margin-top: 4px; }
 
     /* ── FOOTER ── */
     footer {
       margin-top: auto;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      color: #6b7280;
+      background: #e0e0e0;
+      border-top: 1px solid #ccc;
+      color: #999;
       text-align: center;
-      font-size: 13px;
-      padding: 20px 24px;
+      font-size: 12px;
+      padding: 14px 24px;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-logo">
-    <span class="brand">GM Transport</span>
-    <span class="sep">·</span>
-    <span class="sub">Prototipos</span>
+  <div class="erp-logo-icon">G</div>
+  <div class="erp-logo-text">
+    gm Transport Software&reg;
+    <small>ERP</small>
   </div>
-  <div class="header-subtitle">Maquetas y mockups de funcionalidades</div>
+  <div class="header-sep"></div>
+  <div class="header-title">Prototipos</div>
   <span class="header-badge" id="totalBadge">10 prototipos</span>
 </header>
 
+<div class="panel-title">Maquetas y mockups de funcionalidades</div>
+
 <div class="search-area">
   <div class="search-wrapper">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Buscar por nombre, ticket o módulo..." />
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="searchInput" placeholder="Buscar por nombre, ticket o m&oacute;dulo..." />
   </div>
   <div class="filters">
     <div class="filter-pill active" data-filter="Todos">Todos</div>
@@ -312,21 +331,20 @@
 <div class="toolbar">
   <span id="counter">Mostrando 10 de 10</span>
   <div class="sort-btns">
-    <button class="sort-btn active" id="btnReciente">↓ Más reciente</button>
-    <button class="sort-btn" id="btnAntiguo">↑ Más antiguo</button>
+    <button class="sort-btn active" id="btnReciente">&#8595; M&aacute;s reciente</button>
+    <button class="sort-btn" id="btnAntiguo">&#8593; M&aacute;s antiguo</button>
   </div>
 </div>
 
 <div class="grid" id="grid">
-  <!-- Cards rendered by JS -->
   <div class="empty" id="empty">
-    <div class="empty-icon">🔎</div>
+    <div class="empty-icon">&#128269;</div>
     <div class="empty-title">Sin resultados</div>
-    <div class="empty-sub">Intenta con otro término o limpia los filtros</div>
+    <div class="empty-sub">Intenta con otro t&eacute;rmino o limpia los filtros</div>
   </div>
 </div>
 
-<footer>GM Transport Software® · Prototipos internos</footer>
+<footer>GM Transport Software&reg; &nbsp;&middot;&nbsp; Prototipos internos</footer>
 
 <script>
   const PROYECTO_COLORS = {
@@ -436,8 +454,7 @@
     const ticketHtml = p.ticket
       ? `<span class="badge-ticket">${p.ticket}</span>` : '';
     return `
-      <div class="card" data-proyecto="${p.proyecto}" data-search="${[p.nombre, p.ticket, p.descripcion, p.proyecto].join(' ').toLowerCase()}">
-        <div class="card-band" style="background:${color}"></div>
+      <div class="card" style="border-left-color:${color}" data-proyecto="${p.proyecto}" data-search="${[p.nombre, p.ticket, p.descripcion, p.proyecto].join(' ').toLowerCase()}">
         <div class="card-body">
           <div class="card-meta">
             <span class="badge-proyecto" style="background:${color}">${p.proyecto}</span>
@@ -448,7 +465,7 @@
           <div class="card-desc">${p.descripcion}</div>
         </div>
         <div class="card-footer">
-          <a class="btn-abrir" href="${p.url}" target="_blank">Abrir →</a>
+          <a class="btn-abrir" href="${p.url}" target="_blank">Abrir &rarr;</a>
         </div>
       </div>`;
   }
@@ -464,25 +481,21 @@
   function render() {
     let list = [...PROTOTIPOS];
 
-    // Sort
     list.sort((a, b) => {
       const diff = a.fecha < b.fecha ? -1 : a.fecha > b.fecha ? 1 : 0;
       return sortDesc ? -diff : diff;
     });
 
-    // Filter by proyecto
     if (activeFilter !== 'Todos') {
       list = list.filter(p => p.proyecto === activeFilter);
     }
 
-    // Filter by search
     if (searchTerm) {
       list = list.filter(p =>
         [p.nombre, p.ticket, p.descripcion, p.proyecto].join(' ').toLowerCase().includes(searchTerm)
       );
     }
 
-    // Clear cards (keep empty div)
     const cards = grid.querySelectorAll('.card');
     cards.forEach(c => c.remove());
 
@@ -494,23 +507,19 @@
       list.forEach(p => {
         grid.insertAdjacentHTML('afterbegin', buildCard(p));
       });
-      // Re-order so cards appear before empty div
       const newCards = grid.querySelectorAll('.card');
       newCards.forEach(c => grid.insertBefore(c, empty));
       counter.textContent = `Mostrando ${list.length} de ${TOTAL}`;
     }
   }
 
-  // Initial render
   render();
 
-  // Search
   document.getElementById('searchInput').addEventListener('input', e => {
     searchTerm = e.target.value.trim().toLowerCase();
     render();
   });
 
-  // Filters
   document.querySelectorAll('.filter-pill').forEach(pill => {
     pill.addEventListener('click', () => {
       document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
@@ -520,7 +529,6 @@
     });
   });
 
-  // Sort
   document.getElementById('btnReciente').addEventListener('click', () => {
     sortDesc = true;
     document.getElementById('btnReciente').classList.add('active');
@@ -533,6 +541,8 @@
     document.getElementById('btnReciente').classList.remove('active');
     render();
   });
+
+  document.getElementById('totalBadge').textContent = TOTAL + ' prototipos';
 </script>
 </body>
 </html>

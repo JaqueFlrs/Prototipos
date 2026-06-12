@@ -4,134 +4,174 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GM Transport · Prototipos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
-      background: #f0f0f0;
-      color: #222;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── HEADER ── */
     header {
       background: #fff;
-      border-bottom: 1px solid #ddd;
-      padding: 10px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 32px;
+      height: 58px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
-    .erp-logo-icon {
-      width: 32px; height: 32px;
+    .logo-icon {
+      width: 30px; height: 30px;
       background: #F2940E;
-      border-radius: 4px;
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 900; color: #fff;
+      font-size: 15px; font-weight: 700; color: #fff;
       flex-shrink: 0;
+      letter-spacing: -0.5px;
     }
 
-    .erp-logo-text {
-      font-size: 13px; font-weight: bold; color: #333; line-height: 1.2;
-    }
-    .erp-logo-text small {
-      display: block; font-size: 10px; font-weight: normal; color: #888;
-    }
-
-    .header-sep {
-      width: 1px; height: 30px; background: #ddd; flex-shrink: 0; margin: 0 6px;
+    .logo-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
     }
 
-    .header-title {
-      font-size: 14px; font-weight: bold; color: #555;
+    .logo-sep {
+      color: #cbd5e1;
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1;
+      padding: 0 2px;
     }
 
-    .header-badge {
+    .logo-section {
+      font-size: 14px;
+      font-weight: 400;
+      color: #64748b;
+    }
+
+    .header-right {
       margin-left: auto;
-      background: #F2940E;
-      color: #fff;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 3px 12px;
-      border-radius: 2px;
-    }
-
-    /* ── PANEL TITLE ── */
-    .panel-title {
-      background: #F2940E;
-      color: #fff;
-      font-weight: bold;
-      font-size: 13px;
-      padding: 6px 24px;
-    }
-
-    /* ── SEARCH AREA ── */
-    .search-area {
-      background: #e8e8e8;
-      border-bottom: 1px solid #ccc;
-      padding: 10px 24px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .badge-count {
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 36px 32px 32px;
+    }
+
+    .hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.4px;
+      margin-bottom: 4px;
+    }
+
+    .hero p {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .search-wrapper {
       position: relative;
-      min-width: 180px;
-      max-width: 320px;
       flex: 1;
+      min-width: 200px;
+      max-width: 380px;
     }
 
-    .search-icon {
+    .search-wrapper svg {
       position: absolute;
-      left: 10px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 13px;
-      color: #888;
+      width: 16px; height: 16px;
+      color: #94a3b8;
       pointer-events: none;
+      flex-shrink: 0;
     }
 
     #searchInput {
       width: 100%;
-      height: 30px;
-      padding: 0 10px 0 30px;
-      border: 1px solid #ccc;
-      border-radius: 2px;
-      font-size: 12px;
-      font-family: Calibri, sans-serif;
-      color: #333;
+      height: 38px;
+      padding: 0 14px 0 38px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
       background: #fff;
       outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    #searchInput:focus { border-color: #F2940E; }
-    #searchInput::placeholder { color: #aaa; }
+    #searchInput:focus {
+      border-color: #F2940E;
+      box-shadow: 0 0 0 3px rgba(242,148,14,0.12);
+    }
+    #searchInput::placeholder { color: #94a3b8; }
 
     .filters {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 6px;
     }
 
     .filter-pill {
       cursor: pointer;
-      padding: 4px 12px;
-      border-radius: 2px;
-      font-size: 12px;
-      font-weight: bold;
-      border: 1px solid #bbb;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid #e2e8f0;
       background: #fff;
-      color: #555;
+      color: #64748b;
       transition: all 0.12s;
       user-select: none;
-      font-family: Calibri, sans-serif;
     }
-    .filter-pill:hover { border-color: #F2940E; color: #F2940E; background: #fff9f0; }
+    .filter-pill:hover { border-color: #F2940E; color: #F2940E; background: #fff8ef; }
     .filter-pill.active { background: #F2940E; border-color: #F2940E; color: #fff; }
 
     /* ── TOOLBAR ── */
@@ -140,32 +180,33 @@
       align-items: center;
       justify-content: space-between;
       max-width: 1080px;
-      margin: 16px auto 0;
-      padding: 0 24px;
+      margin: 24px auto 0;
+      padding: 0 32px;
       width: 100%;
     }
 
     #counter {
-      font-size: 12px;
-      color: #888;
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 500;
     }
 
-    .sort-btns { display: flex; gap: 5px; }
+    .sort-btns { display: flex; gap: 6px; }
 
     .sort-btn {
       cursor: pointer;
-      padding: 4px 12px;
-      border-radius: 2px;
-      font-size: 12px;
-      font-weight: bold;
-      border: 1px solid #bbb;
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid #e2e8f0;
       background: #fff;
-      color: #555;
+      color: #64748b;
       transition: all 0.12s;
-      font-family: Calibri, sans-serif;
     }
     .sort-btn:hover { border-color: #F2940E; color: #F2940E; }
-    .sort-btn.active { background: #F2940E; border-color: #F2940E; color: #fff; }
+    .sort-btn.active { background: #0f172a; border-color: #0f172a; color: #fff; }
 
     /* ── GRID ── */
     .grid {
@@ -173,79 +214,88 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
       max-width: 1080px;
-      margin: 12px auto 32px;
-      padding: 0 24px;
+      margin: 16px auto 48px;
+      padding: 0 32px;
       width: 100%;
     }
 
-    @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
 
     /* ── CARD ── */
     .card {
       background: #fff;
-      border: 1px solid #ddd;
-      border-left: 5px solid #F2940E;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
       display: flex;
       flex-direction: column;
-      transition: box-shadow 0.15s;
+      transition: box-shadow 0.18s, transform 0.18s;
+      overflow: hidden;
     }
     .card:hover {
-      box-shadow: 0 3px 12px rgba(0,0,0,0.13);
+      box-shadow: 0 8px 24px rgba(15,23,42,0.10);
+      transform: translateY(-2px);
+    }
+
+    .card-accent {
+      height: 3px;
+      width: 100%;
+      flex-shrink: 0;
     }
 
     .card-body {
-      padding: 12px 14px 8px;
+      padding: 18px 20px 14px;
       display: flex;
       flex-direction: column;
       flex: 1;
-      gap: 6px;
+      gap: 8px;
     }
 
     .card-meta {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       flex-wrap: wrap;
     }
 
     .badge-proyecto {
       font-size: 11px;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 2px;
-      color: #fff;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 999px;
       white-space: nowrap;
     }
 
     .badge-ticket {
       font-size: 11px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 2px;
-      background: #f0f0f0;
-      color: #777;
-      border: 1px solid #e0e0e0;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
       white-space: nowrap;
     }
 
     .card-fecha {
       font-size: 11px;
-      color: #aaa;
+      color: #94a3b8;
       margin-left: auto;
       white-space: nowrap;
+      font-weight: 500;
     }
 
     .card-nombre {
-      font-size: 15px;
-      font-weight: bold;
-      color: #222;
-      line-height: 1.3;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.35;
+      letter-spacing: -0.2px;
     }
 
     .card-desc {
-      font-size: 12px;
-      color: #666;
-      line-height: 1.5;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.55;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -253,24 +303,25 @@
     }
 
     .card-footer {
-      padding: 0 14px 12px;
+      padding: 0 20px 18px;
     }
 
     .btn-abrir {
       display: block;
       width: 100%;
-      padding: 7px;
-      background: #F2940E;
+      padding: 9px;
+      background: #0f172a;
       color: #fff;
       text-align: center;
       text-decoration: none;
       font-size: 13px;
-      font-weight: bold;
-      font-family: Calibri, sans-serif;
-      border-radius: 2px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      border-radius: 8px;
       transition: background 0.12s;
+      letter-spacing: 0.1px;
     }
-    .btn-abrir:hover { background: #d97e0a; }
+    .btn-abrir:hover { background: #1e293b; }
 
     /* ── EMPTY STATE ── */
     .empty {
@@ -278,53 +329,68 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 60px 24px;
+      padding: 80px 24px;
       grid-column: 1 / -1;
       text-align: center;
     }
-    .empty-icon { font-size: 36px; margin-bottom: 10px; }
-    .empty-title { font-size: 15px; font-weight: bold; color: #666; }
-    .empty-sub { font-size: 12px; color: #aaa; margin-top: 4px; }
+
+    .empty-icon-wrap {
+      width: 56px; height: 56px;
+      background: #f1f5f9;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .empty-icon-wrap svg { width: 26px; height: 26px; color: #94a3b8; }
+    .empty-title { font-size: 15px; font-weight: 600; color: #334155; }
+    .empty-sub { font-size: 13px; color: #94a3b8; margin-top: 4px; }
 
     /* ── FOOTER ── */
     footer {
       margin-top: auto;
-      background: #e0e0e0;
-      border-top: 1px solid #ccc;
-      color: #999;
+      border-top: 1px solid #e2e8f0;
+      background: #fff;
+      color: #94a3b8;
       text-align: center;
       font-size: 12px;
-      padding: 14px 24px;
+      font-weight: 500;
+      padding: 18px 24px;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="erp-logo-icon">G</div>
-  <div class="erp-logo-text">
-    gm Transport Software&reg;
-    <small>ERP</small>
+  <div class="logo-icon">G</div>
+  <span class="logo-name">GM Transport</span>
+  <span class="logo-sep">/</span>
+  <span class="logo-section">Prototipos</span>
+  <div class="header-right">
+    <span class="badge-count" id="totalBadge">10 prototipos</span>
   </div>
-  <div class="header-sep"></div>
-  <div class="header-title">Prototipos</div>
-  <span class="header-badge" id="totalBadge">10 prototipos</span>
 </header>
 
-<div class="panel-title">Maquetas y mockups de funcionalidades</div>
-
-<div class="search-area">
-  <div class="search-wrapper">
-    <span class="search-icon">&#128269;</span>
-    <input type="text" id="searchInput" placeholder="Buscar por nombre, ticket o m&oacute;dulo..." />
-  </div>
-  <div class="filters">
-    <div class="filter-pill active" data-filter="Todos">Todos</div>
-    <div class="filter-pill" data-filter="Mis Viajes">Mis Viajes</div>
-    <div class="filter-pill" data-filter="DobleCheck">DobleCheck</div>
-    <div class="filter-pill" data-filter="Hermes">Hermes</div>
-    <div class="filter-pill" data-filter="CH-439">CH-439</div>
-    <div class="filter-pill" data-filter="Presentaciones">Presentaciones</div>
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Maquetas y mockups</h1>
+    <p>Prototipos de funcionalidades para GM Transport ERP, Mis Viajes, DobleCheck y m&aacute;s.</p>
+    <div class="search-row">
+      <div class="search-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 6.15 6.15a7.5 7.5 0 0 0 10.5 10.5Z"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Buscar por nombre, ticket o m&oacute;dulo&hellip;" />
+      </div>
+      <div class="filters">
+        <div class="filter-pill active" data-filter="Todos">Todos</div>
+        <div class="filter-pill" data-filter="Mis Viajes">Mis Viajes</div>
+        <div class="filter-pill" data-filter="DobleCheck">DobleCheck</div>
+        <div class="filter-pill" data-filter="Hermes">Hermes</div>
+        <div class="filter-pill" data-filter="CH-439">CH-439</div>
+        <div class="filter-pill" data-filter="Presentaciones">Presentaciones</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -338,7 +404,11 @@
 
 <div class="grid" id="grid">
   <div class="empty" id="empty">
-    <div class="empty-icon">&#128269;</div>
+    <div class="empty-icon-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 6.15 6.15a7.5 7.5 0 0 0 10.5 10.5Z"/>
+      </svg>
+    </div>
     <div class="empty-title">Sin resultados</div>
     <div class="empty-sub">Intenta con otro t&eacute;rmino o limpia los filtros</div>
   </div>
@@ -348,13 +418,13 @@
 
 <script>
   const PROYECTO_COLORS = {
-    "Mis Viajes":     "#F2940E",
-    "DobleCheck":     "#3B82F6",
-    "Hermes":         "#10B981",
-    "CH-439":         "#8B5CF6",
-    "Presentaciones": "#6B7280",
+    "Mis Viajes":     { accent: "#F2940E", bg: "#fff7ed", text: "#9a3412" },
+    "DobleCheck":     { accent: "#3B82F6", bg: "#eff6ff", text: "#1e40af" },
+    "Hermes":         { accent: "#10B981", bg: "#ecfdf5", text: "#065f46" },
+    "CH-439":         { accent: "#8B5CF6", bg: "#f5f3ff", text: "#5b21b6" },
+    "Presentaciones": { accent: "#64748b", bg: "#f8fafc", text: "#334155" },
   };
-  const DEFAULT_COLOR = "#F59E0B";
+  const DEFAULT_COLOR = { accent: "#F59E0B", bg: "#fffbeb", text: "#92400e" };
 
   const PROTOTIPOS = [
     {
@@ -450,14 +520,15 @@
   function colorOf(proyecto) { return PROYECTO_COLORS[proyecto] || DEFAULT_COLOR; }
 
   function buildCard(p) {
-    const color = colorOf(p.proyecto);
+    const c = colorOf(p.proyecto);
     const ticketHtml = p.ticket
       ? `<span class="badge-ticket">${p.ticket}</span>` : '';
     return `
-      <div class="card" style="border-left-color:${color}" data-proyecto="${p.proyecto}" data-search="${[p.nombre, p.ticket, p.descripcion, p.proyecto].join(' ').toLowerCase()}">
+      <div class="card" data-proyecto="${p.proyecto}" data-search="${[p.nombre, p.ticket, p.descripcion, p.proyecto].join(' ').toLowerCase()}">
+        <div class="card-accent" style="background:${c.accent}"></div>
         <div class="card-body">
           <div class="card-meta">
-            <span class="badge-proyecto" style="background:${color}">${p.proyecto}</span>
+            <span class="badge-proyecto" style="background:${c.bg};color:${c.text}">${p.proyecto}</span>
             ${ticketHtml}
             <span class="card-fecha">${formatFecha(p.fecha)}</span>
           </div>
@@ -496,24 +567,21 @@
       );
     }
 
-    const cards = grid.querySelectorAll('.card');
-    cards.forEach(c => c.remove());
+    grid.querySelectorAll('.card').forEach(c => c.remove());
 
     if (list.length === 0) {
       empty.style.display = 'flex';
-      counter.textContent = 'Mostrando 0 de ' + TOTAL;
+      counter.textContent = 'Sin resultados';
     } else {
       empty.style.display = 'none';
-      list.forEach(p => {
-        grid.insertAdjacentHTML('afterbegin', buildCard(p));
-      });
-      const newCards = grid.querySelectorAll('.card');
-      newCards.forEach(c => grid.insertBefore(c, empty));
+      list.forEach(p => grid.insertAdjacentHTML('afterbegin', buildCard(p)));
+      grid.querySelectorAll('.card').forEach(c => grid.insertBefore(c, empty));
       counter.textContent = `Mostrando ${list.length} de ${TOTAL}`;
     }
   }
 
   render();
+  document.getElementById('totalBadge').textContent = TOTAL + ' prototipos';
 
   document.getElementById('searchInput').addEventListener('input', e => {
     searchTerm = e.target.value.trim().toLowerCase();
@@ -541,8 +609,6 @@
     document.getElementById('btnReciente').classList.remove('active');
     render();
   });
-
-  document.getElementById('totalBadge').textContent = TOTAL + ' prototipos';
 </script>
 </body>
 </html>

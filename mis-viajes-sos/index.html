@@ -83,6 +83,7 @@
     .btn-delete:hover { color: #c00; }
     .btn-gestionar { background: #F2940E; color: #fff; border: none; padding: 3px 10px; font-size: 11px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
     .btn-configurar-sos { background: #F2940E; color: #fff; border: none; padding: 4px 12px; font-size: 11px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; display: none; }
+    .disabled-section { opacity: 0.4; pointer-events: none; user-select: none; }
 
     /* Table */
     .sos-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
@@ -280,14 +281,19 @@
   <div style="display:flex;align-items:flex-start;gap:12px;">
     <span style="font-size:20px;line-height:1.3;">💡</span>
     <div>
-      <div style="font-weight:bold;color:#222;font-size:13px;margin-bottom:5px;">Sobre este prototipo</div>
-      <div style="color:#444;font-size:13px;line-height:1.6;">
-        Este prototipo es una representación visual de la funcionalidad solicitada — no es código final ni limita las ideas. <strong>Siéntete libre de sugerir mejoras o agregar tu toque.</strong>
-        <br><br>
-        Para el <strong>ERP GM Transport</strong>, los colores, estructura y diseño deben respetarse siempre para mantener la armonía visual del sistema. En otros proyectos, se respetan los colores propios de cada uno.
-        <br><br>
-        Si algo del diseño se ve fuera de lugar o descabellado, <strong>coméntalo</strong> — lo ajustamos juntos. 🙌
-      </div>
+      <p style="margin:0 0 6px; font-weight:700; font-size:13px; color:#1a1a1a;">Sobre este prototipo</p>
+      <p style="margin:0 0 6px; font-size:13px; color:#444; line-height:1.6;">
+        Este prototipo es una <strong>representación visual de la funcionalidad solicitada</strong>, no un diseño final ni una especificación pixel a pixel.
+        Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.
+      </p>
+      <p style="margin:0 0 6px; font-size:13px; color:#444; line-height:1.6;">
+        ⚠️ <strong>El prototipo no debe copiarse tal cual.</strong> Lo que sí debe respetarse siempre es la apariencia del sistema destino:
+        para el <strong>ERP GM Transport</strong>, eso significa colores, tipografía, estructura de paneles y componentes propios del ERP.
+        Para otros proyectos (apps, portales, etc.), se respetan los estilos y guías de cada sistema.
+      </p>
+      <p style="margin:0; font-size:13px; color:#444; line-height:1.6;">
+        Si algo del diseño propuesto aquí no encaja o parece descabellado, <strong>coméntalo antes de implementarlo</strong> — lo ajustamos juntos. 🙌
+      </p>
     </div>
   </div>
 </div>
@@ -328,6 +334,7 @@
     <div id="tab-apps-moviles" class="tab-content active">
       <div class="inner-panel">
 
+        <div class="disabled-section">
         <div class="section-title">Mis Viajes</div>
 
         <div class="field-row">
@@ -379,6 +386,7 @@
           <label for="chk-notif-llegada">Enviar notificaciones de llegada a contactos del cliente</label>
           <button class="btn-gestionar">Gestionar contactos</button>
         </div>
+        </div>
 
         <!-- NUEVO: Checkbox SOS -->
         <div class="checkbox-btn-row" style="margin-top:8px;">
@@ -387,6 +395,7 @@
           <button class="btn-configurar-sos" id="btn-configurar-sos" onclick="abrirModalSOS()">Configurar correos SOS</button>
         </div>
 
+        <div class="disabled-section">
         <div class="section-title" style="margin-top:12px;">GMTERP</div>
 
         <div class="field-row">
@@ -413,11 +422,12 @@
           <label>En entrada inv&aacute;lida enviar correo a:</label>
           <input type="text" value="">
         </div>
+        </div>
 
       </div>
     </div><!-- fin tab apps-moviles -->
 
-    <div class="bottom-bar">
+    <div class="bottom-bar disabled-section">
       <button class="btn-primary">Aceptar</button>
       <button class="btn-secondary">Cancelar</button>
     </div>

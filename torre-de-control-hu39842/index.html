@@ -139,36 +139,32 @@
 <!-- ===== TAB 1: CONFIGURACIÓN ===== -->
 <div id="proto-cfg" class="proto-tab-content active">
   <div class="panel">
-    <div class="panel-title">Par&aacute;metros de Configuraci&oacute;n de Tr&aacute;fico</div>
+    <div class="panel-title">Par&aacute;metros Generales</div>
 
     <div class="tabs">
-      <div class="tab" onclick="switchTab('cfg','general')">General</div>
-      <div class="tab" onclick="switchTab('cfg','liquidaciones')">Liquidaciones</div>
-      <div class="tab" onclick="switchTab('cfg','viajes')">Viajes</div>
-      <div class="tab" onclick="switchTab('cfg','permisionarios')">Permisionarios</div>
+      <div class="tab" onclick="switchTab('cfg','empresa')">Empresa</div>
+      <div class="tab" onclick="switchTab('cfg','fiscal')">Datos Fiscales</div>
+      <div class="tab" onclick="switchTab('cfg','correos')">Correos</div>
       <div class="tab active" onclick="switchTab('cfg','torre-control')">Torre de Control</div>
-      <div class="tab" onclick="switchTab('cfg','notificaciones')">Notificaciones</div>
+      <div class="tab" onclick="switchTab('cfg','otros')">Otros</div>
     </div>
 
-    <div id="cfg-general" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a General</div></div></div>
-    <div id="cfg-liquidaciones" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Liquidaciones</div></div></div>
-    <div id="cfg-viajes" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Viajes</div></div></div>
-    <div id="cfg-permisionarios" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Permisionarios</div></div></div>
-    <div id="cfg-notificaciones" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Contenido de la pesta&ntilde;a Notificaciones</div></div></div>
+    <div id="cfg-empresa" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Configuraci&oacute;n general de la empresa</div></div></div>
+    <div id="cfg-fiscal" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Datos fiscales (RFC, Raz&oacute;n Social ya configurados aqu&iacute;)</div></div></div>
+    <div id="cfg-correos" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Configuraci&oacute;n de correos electr&oacute;nicos</div></div></div>
+    <div id="cfg-otros" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Otros par&aacute;metros generales</div></div></div>
 
     <div id="cfg-torre-control" class="tab-content active">
       <div class="inner-panel">
 
-        <div class="section-title">Torre de Control</div>
+        <div class="section-title">Integraci&oacute;n Torre de Control (ControlT)</div>
 
-        <div class="checkbox-row" style="margin-bottom:10px;">
+        <div class="checkbox-row" style="margin-bottom:14px;">
           <input type="checkbox" id="chk-ct" onchange="toggleCT(this)">
           <label for="chk-ct"><strong>Habilitar integraci&oacute;n con ControlT</strong></label>
         </div>
 
         <div id="ct-fields" class="disabled-section">
-          <div class="section-title">Credenciales de conexi&oacute;n</div>
-
           <div class="field-row">
             <label>URL del servicio <span style="color:#c00">*</span></label>
             <input type="text" value="https://api.controlt.com/v1">
@@ -181,33 +177,13 @@
             <label>Contrase&ntilde;a <span style="color:#c00">*</span></label>
             <input type="password" value="password123">
           </div>
-
-          <div class="section-title" style="margin-top:10px;">Par&aacute;metros de la empresa</div>
-
           <div class="field-row">
             <label>C&oacute;digo de compa&ntilde;&iacute;a <span style="color:#c00">*</span></label>
             <input type="text" value="GM-001">
           </div>
-          <div class="field-row">
-            <label>RFC de la empresa de transporte <span style="color:#c00">*</span></label>
-            <input type="text" value="GMG030101AAA">
-          </div>
-          <div class="field-row">
-            <label>Raz&oacute;n social de la empresa <span style="color:#c00">*</span></label>
-            <input type="text" value="GRUPO GM TRANSPORT SA DE CV">
-          </div>
-          <div class="field-row">
-            <label>Zona horaria (UTC) <span style="color:#c00">*</span></label>
-            <select>
-              <option selected>UTC-06:00 (M&eacute;xico Centro)</option>
-              <option>UTC-05:00 (M&eacute;xico Este)</option>
-              <option>UTC-07:00 (M&eacute;xico Noroeste)</option>
-              <option>UTC-06:00 (Guatemala)</option>
-            </select>
-          </div>
         </div>
 
-        <div id="ct-save-msg" style="display:none;margin:8px 0;background:#d4edda;border:1px solid #c3e6cb;border-radius:3px;padding:6px 10px;font-size:12px;color:#155724;">
+        <div id="ct-save-msg" style="display:none;margin:10px 0 0 0;background:#d4edda;border:1px solid #c3e6cb;border-radius:3px;padding:8px 12px;font-size:13px;color:#155724;">
           &#10004; Configuraci&oacute;n guardada. Los viajes comenzar&aacute;n a transmitirse a ControlT al asignar operador.
         </div>
 
@@ -222,115 +198,85 @@
 </div>
 
 
-<!-- ===== TAB 2: TIPOS DE VIAJE ===== -->
+<!-- ===== TAB 2: REGISTRO DE VIAJE (con Tipo de Viaje) ===== -->
 <div id="proto-tipos" class="proto-tab-content">
   <div class="panel">
-    <div class="panel-title">Cat&aacute;logo de Tipos de Viaje</div>
+    <div class="panel-title">Alta / Modificaci&oacute;n de Viaje</div>
 
     <div class="tabs">
-      <div class="tab active">Tipos de Viaje</div>
+      <div class="tab active" onclick="switchTab('tipos','general')">General</div>
+      <div class="tab" onclick="switchTab('tipos','carga')">Carga</div>
+      <div class="tab" onclick="switchTab('tipos','documentos')">Documentos</div>
+      <div class="tab" onclick="switchTab('tipos','gastos')">Gastos</div>
     </div>
 
-    <div class="tab-content active">
+    <div id="tipos-carga" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Detalle de carga del viaje</div></div></div>
+    <div id="tipos-documentos" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Documentos asociados al viaje</div></div></div>
+    <div id="tipos-gastos" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Gastos y anticipos del viaje</div></div></div>
+
+    <div id="tipos-general" class="tab-content active">
       <div class="inner-panel">
 
-        <table class="ct-table" id="tipos-tabla">
-          <thead>
-            <tr>
-              <th style="width:60px">Clave</th>
-              <th>Descripci&oacute;n</th>
-              <th style="width:55px;text-align:center">Activo</th>
-              <th style="width:195px">Equivalencia ControlT</th>
-              <th style="width:65px;text-align:center">Editar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>PAQ</td><td>Paqueter&iacute;a Local</td>
-              <td style="text-align:center"><input type="checkbox" checked style="accent-color:#F2940E"></td>
-              <td><span style="color:#1a6b2e;font-weight:bold">1 &mdash; Paqueteo</span></td>
-              <td style="text-align:center"><button class="btn-small" onclick="editarTipo(this,'PAQ','Paquetería Local','1')">Editar</button></td>
-            </tr>
-            <tr>
-              <td>URB</td><td>Urbano / Ciudad</td>
-              <td style="text-align:center"><input type="checkbox" checked style="accent-color:#F2940E"></td>
-              <td><span style="color:#1a6b2e;font-weight:bold">2 &mdash; Urbano</span></td>
-              <td style="text-align:center"><button class="btn-small" onclick="editarTipo(this,'URB','Urbano / Ciudad','2')">Editar</button></td>
-            </tr>
-            <tr>
-              <td>REG</td><td>Regional</td>
-              <td style="text-align:center"><input type="checkbox" checked style="accent-color:#F2940E"></td>
-              <td><span style="color:#1a6b2e;font-weight:bold">3 &mdash; Regional</span></td>
-              <td style="text-align:center"><button class="btn-small" onclick="editarTipo(this,'REG','Regional','3')">Editar</button></td>
-            </tr>
-            <tr>
-              <td>NAC</td><td>Nacional</td>
-              <td style="text-align:center"><input type="checkbox" checked style="accent-color:#F2940E"></td>
-              <td><span style="color:#856404;font-weight:bold">&mdash; Sin asignar</span></td>
-              <td style="text-align:center"><button class="btn-small" onclick="editarTipo(this,'NAC','Nacional','')">Editar</button></td>
-            </tr>
-            <tr>
-              <td>INT</td><td>Internacional</td>
-              <td style="text-align:center"><input type="checkbox" checked style="accent-color:#F2940E"></td>
-              <td><span style="color:#856404;font-weight:bold">&mdash; Sin asignar</span></td>
-              <td style="text-align:center"><button class="btn-small" onclick="editarTipo(this,'INT','Internacional','')">Editar</button></td>
-            </tr>
-            <tr>
-              <td>TRS</td><td>Traslados Internos</td>
-              <td style="text-align:center"><input type="checkbox" checked style="accent-color:#F2940E"></td>
-              <td><span style="color:#1a6b2e;font-weight:bold">8 &mdash; Traslados</span></td>
-              <td style="text-align:center"><button class="btn-small" onclick="editarTipo(this,'TRS','Traslados Internos','8')">Editar</button></td>
-            </tr>
-            <tr>
-              <td>OTR</td><td>Otros</td>
-              <td style="text-align:center"><input type="checkbox" checked style="accent-color:#F2940E"></td>
-              <td><span style="color:#856404;font-weight:bold">&mdash; Sin asignar</span></td>
-              <td style="text-align:center"><button class="btn-small" onclick="editarTipo(this,'OTR','Otros','')">Editar</button></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="section-title">Datos del viaje</div>
 
-        <div id="tipos-edit-form" style="display:none;margin-top:10px;background:#f5f5f5;border:1px solid #ddd;padding:10px 12px;">
-          <div class="section-title">Editar tipo de viaje</div>
-          <div class="field-row">
-            <label>Clave</label>
-            <input type="text" id="edit-clave" style="max-width:80px" readonly>
-          </div>
-          <div class="field-row">
-            <label>Descripci&oacute;n</label>
-            <input type="text" id="edit-desc">
-          </div>
-          <div class="checkbox-row">
-            <input type="checkbox" id="edit-activo" checked style="accent-color:#F2940E">
-            <label for="edit-activo">Activo</label>
-          </div>
-          <div class="field-row">
-            <label>Tipo de viaje ControlT</label>
-            <select id="edit-equivalencia">
-              <option value="">&mdash; Sin equivalencia &mdash;</option>
-              <option value="1">1 &mdash; Paqueteo</option>
-              <option value="2">2 &mdash; Urbano</option>
-              <option value="3">3 &mdash; Regional</option>
-              <option value="4">4 &mdash; Nacional</option>
-              <option value="5">5 &mdash; Internacional</option>
-              <option value="6">6 &mdash; Inter Cedi</option>
-              <option value="7">7 &mdash; Inter Plantas</option>
-              <option value="8">8 &mdash; Traslados</option>
-              <option value="9">9 &mdash; Otros</option>
-            </select>
-          </div>
-          <div style="font-size:11px;color:#777;margin-bottom:6px;">Los viajes con tipo sin equivalencia asignada registrar&aacute;n error al transmitir a ControlT.</div>
-          <div style="display:flex;gap:6px;">
-            <button class="btn-primary" onclick="guardarTipo()">Aceptar</button>
-            <button class="btn-secondary" onclick="document.getElementById('tipos-edit-form').style.display='none'">Cancelar</button>
-          </div>
+        <div class="field-row">
+          <label>No. de viaje</label>
+          <input type="text" value="V-10052" style="max-width:120px;" readonly>
+        </div>
+        <div class="field-row">
+          <label>Fecha <span style="color:#c00">*</span></label>
+          <input type="text" value="15/06/2026" style="max-width:120px;">
+        </div>
+        <div class="field-row">
+          <label>Cliente <span style="color:#c00">*</span></label>
+          <input type="text" value="CEMEX SA DE CV">
+        </div>
+        <div class="field-row">
+          <label>Tipo de viaje <span style="color:#c00">*</span></label>
+          <select id="sel-tipo-viaje" style="max-width:320px;">
+            <option value="">-- Seleccionar --</option>
+            <option value="PAQ">Paqueter&iacute;a Local</option>
+            <option value="URB">Urbano / Ciudad</option>
+            <option value="REG" selected>Regional</option>
+            <option value="NAC">Nacional</option>
+            <option value="INT">Internacional</option>
+            <option value="TRS">Traslados Internos</option>
+            <option value="OTR">Otros</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label>Origen <span style="color:#c00">*</span></label>
+          <input type="text" value="Mexicali, BC">
+        </div>
+        <div class="field-row">
+          <label>Destino <span style="color:#c00">*</span></label>
+          <input type="text" value="Guadalajara, Jal.">
+        </div>
+
+        <div class="section-title" style="margin-top:14px;">Operador y unidad</div>
+
+        <div class="field-row">
+          <label>Operador <span style="color:#c00">*</span></label>
+          <input type="text" value="L&Oacute;PEZ HERN&Aacute;NDEZ JUAN">
+        </div>
+        <div class="field-row">
+          <label>Unidad <span style="color:#c00">*</span></label>
+          <input type="text" value="GM-145 &mdash; KENWORTH T680">
+        </div>
+        <div class="field-row">
+          <label>Caja / Remolque</label>
+          <input type="text" value="R-2234">
+        </div>
+
+        <div class="section-title" style="margin-top:14px;">Observaciones</div>
+        <div style="padding:2px 0 6px 0;">
+          <textarea style="width:100%;max-width:680px;height:56px;border:1px solid #ccc;font-size:13px;font-family:Calibri,sans-serif;padding:4px 6px;resize:vertical;"></textarea>
         </div>
 
       </div>
     </div>
 
     <div class="bottom-bar">
-      <button class="btn-primary">Nuevo</button>
       <button class="btn-primary">Aceptar</button>
       <button class="btn-secondary">Cancelar</button>
     </div>

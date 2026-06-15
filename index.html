@@ -397,7 +397,7 @@
   <span class="header-sep">/</span>
   <span class="logo-sub">Prototipos</span>
   <div class="header-end">
-    <span class="count-chip" id="totalBadge">10 prototipos</span>
+    <span class="count-chip" id="totalBadge">11 prototipos</span>
   </div>
 </header>
 
@@ -418,6 +418,7 @@
       <button class="ftab" data-filter="Hermes">Hermes</button>
       <button class="ftab" data-filter="CH-439">CH-439</button>
       <button class="ftab" data-filter="Presentaciones">Presentaciones</button>
+      <button class="ftab" data-filter="ERP">ERP</button>
     </div>
   </div>
 </div>
@@ -454,10 +455,14 @@
     "Hermes":         { badge: "rgba(16,185,129,0.1)",  text: "#065f46" },
     "CH-439":         { badge: "rgba(139,92,246,0.1)",  text: "#5b21b6" },
     "Presentaciones": { badge: "rgba(100,116,139,0.1)", text: "#374151" },
+    "ERP":            { badge: "rgba(242,148,14,0.12)", text: "#92400e" },
   };
   const CD = { badge: "rgba(242,148,14,0.12)", text: "#92400e" };
 
   const DATA = [
+    { nombre:"Torre de Control — Integración ControlT", ticket:"#HU39842", proyecto:"ERP",
+      desc:"Configuración, tipos de viaje y listado de viajes con estatus de transmisión automática a ControlT al asignar operador.",
+      url:"torre-de-control-hu39842/index.html", fecha:"2026-06-15" },
     { nombre:"SOS sin GPS", ticket:"#35074", proyecto:"Mis Viajes",
       desc:"Notificación SOS cuando el cliente no tiene GPS — correo + campanita ERP",
       url:"mis-viajes-sos/index.html", fecha:"2026-06-05" },
@@ -491,7 +496,7 @@
       url:"presentaciones/kanban/kanban-guia-transicion.html", fecha:"2025-12-10" },
   ];
 
-  const TOTAL = DATA.length;
+  const TOTAL = DATA.length; // actualizar al agregar prototipos
   const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
   function fmt(iso) {

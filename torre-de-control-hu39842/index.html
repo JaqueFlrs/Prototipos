@@ -5,308 +5,333 @@
   <title>Mockup &mdash; Torre de Control ControlT | HU39842</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 13px; background: #f0f0f0; padding: 16px 24px; }
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12px; background: #e8e8e8; padding: 14px 20px; }
 
-    .page-header { text-align: center; margin-bottom: 12px; }
-    .page-header h1 { font-size: 18px; font-weight: bold; color: #333; }
-    .page-header p { font-size: 12px; color: #777; margin-top: 3px; }
-
-    .proto-tabs-bar { display: flex; gap: 0; margin: 0; flex-wrap: wrap; }
-    .proto-tab { padding: 10px 22px; cursor: pointer; background: #e8e8e8; color: #444; font-size: 14px; font-weight: normal; border: 1px solid #ccc; border-bottom: none; border-radius: 6px 6px 0 0; margin-right: 4px; margin-bottom: 0; user-select: none; transition: background .15s; }
-    .proto-tab:hover { background: #ddd; }
-    .proto-tab.active { background: #fff; color: #222; font-weight: bold; border-top: 3px solid #F2940E; border-left: 1px solid #ccc; border-right: 1px solid #ccc; border-bottom: none; }
-    .proto-tab-content { display: none; background: #fff; border: 1px solid #ccc; border-radius: 0 6px 6px 6px; margin: 0; padding: 0; overflow: hidden; }
+    /* Proto tabs externos */
+    .proto-tabs-bar { display: flex; gap: 0; flex-wrap: wrap; }
+    .proto-tab { padding: 8px 20px; cursor: pointer; background: #d0d0d0; color: #444; font-size: 13px; border: 1px solid #bbb; border-bottom: none; border-radius: 5px 5px 0 0; margin-right: 3px; user-select: none; }
+    .proto-tab:hover { background: #c4c4c4; }
+    .proto-tab.active { background: #fff; color: #222; font-weight: bold; border-top: 3px solid #F2940E; border-bottom: none; }
+    .proto-tab-content { display: none; background: #fff; border: 1px solid #bbb; }
     .proto-tab-content.active { display: block; }
 
-    .panel { width: 100%; background: #F5A623; border: 1px solid #ccc; }
-    .panel-title { background: #F2940E; color: #fff; font-weight: bold; font-size: 14px; padding: 8px 12px; }
+    /* Header página (título gris oscuro como ERP nuevo) */
+    .page-header { text-align: center; margin-bottom: 10px; }
+    .page-header h1 { font-size: 16px; font-weight: bold; color: #333; }
+    .page-header p { font-size: 11px; color: #888; margin-top: 2px; }
 
-    .tabs { display: flex; border-bottom: 2px solid #F2940E; background: #e0e0e0; flex-wrap: wrap; }
-    .tab { padding: 7px 16px; cursor: pointer; border: 1px solid #ccc; border-bottom: none; margin-right: 2px; background: #e0e0e0; color: #333; font-size: 13px; user-select: none; }
-    .tab:hover { background: #d0d0d0; }
-    .tab.active { background: #F2940E; color: #fff; font-weight: bold; border-color: #F2940E; }
-    .tab-content { display: none; padding: 12px 16px; background: #F5A623; }
-    .tab-content.active { display: block; }
+    /* Banner prototipo */
+    .proto-banner { margin: 0 0 12px 0; background: #fffdf9; border-left: 4px solid #F2940E; border-radius: 4px; padding: 10px 16px; }
+    .proto-banner p { font-size: 12px; color: #444; line-height: 1.5; margin: 0 0 4px; }
+    .proto-banner p:last-child { margin: 0; }
 
-    .inner-panel { background: #fff; border: 1px solid #ccc; padding: 12px 16px; }
-    .section-title { background: #ddd; text-align: center; font-weight: bold; font-size: 13px; padding: 5px 0; margin: 10px 0 8px 0; border: 1px solid #ccc; }
-    .placeholder-text { color: #aaa; font-style: italic; padding: 20px; text-align: center; }
+    /* ===== ESTILOS ERP VIEJO (Parámetros Generales + Agregando Viaje) ===== */
+    .erp-old { background: #fff; border: 1px solid #aaa; }
+    .erp-old-titlebar { background: #5a5a5a; color: #fff; font-size: 13px; font-weight: bold; padding: 5px 10px; }
+    .erp-old-body { padding: 8px 10px; background: #fff; }
 
-    .field-row { display: flex; align-items: center; margin-bottom: 6px; padding: 1px 0; gap: 8px; }
-    .field-row label { min-width: 280px; color: #555; font-size: 13px; flex-shrink: 0; }
-    .field-row input[type="text"],
-    .field-row input[type="password"],
-    .field-row select { flex: 1; max-width: 480px; border: 1px solid #ccc; padding: 4px 6px; font-size: 13px; font-family: Calibri, sans-serif; background: #fff; }
-    .field-row input:disabled, .field-row select:disabled { background: #f5f5f5; color: #999; }
+    .erp-old-section { background: #d8d8d8; text-align: center; font-weight: bold; font-size: 12px; padding: 3px 0; border: 1px solid #aaa; margin: 8px 0 5px 0; }
 
-    .checkbox-row { display: flex; align-items: center; margin-bottom: 6px; gap: 6px; }
-    .checkbox-row input[type="checkbox"] { width: 14px; height: 14px; flex-shrink: 0; accent-color: #F2940E; }
-    .checkbox-row label { color: #555; font-size: 12px; cursor: pointer; }
+    .fr { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; flex-wrap: wrap; }
+    .fr label { color: #333; font-size: 12px; white-space: nowrap; }
+    .fr input[type="text"], .fr input[type="password"], .fr select, .fr textarea {
+      border: 1px solid #aaa; padding: 2px 4px; font-size: 12px; font-family: Calibri,sans-serif; background: #fff;
+    }
+    .fr input:disabled, .fr select:disabled { background: #e8e8e8; color: #888; }
 
-    .btn-primary { background: #F2940E; color: #fff; border: none; padding: 4px 14px; font-size: 12px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
-    .btn-primary:hover { background: #d07a0a; }
-    .btn-secondary { background: #888; color: #fff; border: none; padding: 4px 14px; font-size: 12px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
-    .btn-secondary:hover { background: #666; }
-    .btn-dark { background: #555; color: #fff; border: none; padding: 3px 10px; font-size: 11px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
-    .btn-small { background: #F2940E; color: #fff; border: none; padding: 2px 8px; font-size: 11px; cursor: pointer; border-radius: 2px; }
-    .btn-small:hover { background: #d07a0a; }
+    .erp-old-tabs { display: flex; flex-wrap: wrap; gap: 0; border-bottom: none; }
+    .erp-old-tab { padding: 4px 10px; font-size: 11px; cursor: pointer; background: #d8d8d8; border: 1px solid #aaa; border-bottom: none; color: #333; margin-right: 1px; user-select: none; }
+    .erp-old-tab.active { background: #F2940E; color: #fff; font-weight: bold; }
+    .erp-old-tab-content { display: none; border: 1px solid #aaa; border-top: 2px solid #F2940E; padding: 6px 8px; }
+    .erp-old-tab-content.active { display: block; }
 
-    .bottom-bar { display: flex; justify-content: flex-end; gap: 8px; padding: 8px 10px; border-top: 1px solid #ddd; background: #f5f5f5; }
-    .disabled-section { opacity: .4; pointer-events: none; user-select: none; }
+    .erp-btn { background: #5a5a5a; color: #fff; border: 1px solid #444; padding: 3px 12px; font-size: 12px; font-family: Calibri,sans-serif; cursor: pointer; }
+    .erp-btn:hover { background: #444; }
+    .erp-btn-orange { background: #F2940E; color: #fff; border: 1px solid #cc7700; padding: 3px 12px; font-size: 12px; font-family: Calibri,sans-serif; cursor: pointer; }
+    .erp-btn-orange:hover { background: #d07a0a; }
+    .erp-btn-small { background: #5a5a5a; color: #fff; border: 1px solid #444; padding: 2px 8px; font-size: 11px; font-family: Calibri,sans-serif; cursor: pointer; }
 
-    .ct-table { width: 100%; border-collapse: collapse; }
-    .ct-table thead tr { background: #F2940E; color: #fff; font-size: 12px; }
-    .ct-table thead th { padding: 7px 10px; text-align: left; font-weight: bold; border: 1px solid #d07000; }
-    .ct-table tbody tr { background: #fff; }
-    .ct-table tbody tr:nth-child(even) { background: #fafafa; }
-    .ct-table tbody td { padding: 6px 10px; border: 1px solid #e8e8e8; font-size: 13px; }
-    .ct-table tbody tr:hover { background: #fde8c0; }
+    .erp-grid { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    .erp-grid thead tr { background: #d8d8d8; }
+    .erp-grid thead th { padding: 3px 6px; font-size: 11px; font-weight: bold; border: 1px solid #bbb; text-align: left; color: #333; }
+    .erp-grid tbody td { padding: 3px 6px; font-size: 11px; border: 1px solid #ddd; }
+    .erp-grid tbody tr:hover { background: #f0f0f0; }
 
-    .erp-wrapper { width: 100%; border: 1px solid #ccc; background: #fff; }
-    .erp-navbar { background: #f8f8f8; border-bottom: 1px solid #ddd; display: flex; align-items: center; padding: 5px 12px; gap: 8px; }
-    .erp-logo-icon { width: 28px; height: 28px; background: #F2940E; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; font-weight: bold; flex-shrink: 0; }
-    .erp-logo-text { font-size: 13px; font-weight: bold; color: #333; line-height: 1.2; }
-    .erp-logo-text small { display: block; font-size: 10px; font-weight: normal; color: #888; }
-    .erp-body { display: flex; min-height: 520px; }
-    .erp-sidebar { width: 195px; background: #2d2d2d; padding: 8px 0; flex-shrink: 0; }
-    .erp-sidebar-item { display: flex; align-items: center; gap: 7px; padding: 9px 14px; color: #bbb; font-size: 12px; cursor: pointer; transition: background .15s; user-select: none; }
-    .erp-sidebar-item:hover { background: #3d3d3d; color: #fff; }
-    .erp-sidebar-item.active { background: #F2940E; color: #fff; }
-    .erp-sidebar-item .si-text { flex: 1; }
-    .erp-sidebar-item .si-arrow { font-size: 8px; color: #777; }
-    .erp-sidebar-item.active .si-arrow { color: #ffe0b0; }
-    .erp-main-content { flex: 1; padding: 8px; background: #e8e8e8; }
+    /* ===== ESTILOS ERP NUEVO (Listado de Viajes) ===== */
+    .erp-new { display: flex; height: 620px; background: #fff; border: 1px solid #bbb; overflow: hidden; }
 
-    .filter-bar { background: #f5f5f5; border: 1px solid #ddd; padding: 5px 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
-    .filter-bar label { font-size: 12px; color: #555; flex-shrink: 0; }
-    .filter-bar input[type="text"], .filter-bar select { border: 1px solid #ccc; padding: 2px 5px; font-size: 12px; font-family: Calibri, sans-serif; }
+    /* Sidebar */
+    .erp-new-sidebar { width: 160px; background: #3a3a3a; flex-shrink: 0; display: flex; flex-direction: column; }
+    .erp-new-sidebar-logo { padding: 12px 10px 8px; border-bottom: 1px solid #555; }
+    .erp-new-sidebar-logo img { width: 100%; }
+    .erp-new-sidebar-logo-text { color: #fff; font-size: 13px; font-weight: bold; }
+    .erp-new-sidebar-logo-text span { color: #F2940E; }
+    .erp-new-sidebar-search { margin: 8px 8px 4px; background: #555; border: none; border-radius: 3px; padding: 4px 8px; color: #ccc; font-size: 11px; width: calc(100% - 16px); font-family: Calibri,sans-serif; }
+    .erp-new-sidebar-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; color: #ccc; font-size: 12px; cursor: pointer; user-select: none; }
+    .erp-new-sidebar-item:hover { background: #4a4a4a; color: #fff; }
+    .erp-new-sidebar-item.active { color: #fff; }
+    .erp-new-sidebar-item .arrow { font-size: 9px; color: #888; }
 
-    .status-enviado { color: #1a6b2e; font-weight: bold; font-size: 11px; }
-    .status-error { color: #c00; font-weight: bold; font-size: 11px; cursor: pointer; }
-    .status-error:hover { text-decoration: underline; }
-    .status-pendiente { color: #856404; font-weight: bold; font-size: 11px; }
-    .status-noaplica { color: #888; font-size: 11px; }
+    /* Main area */
+    .erp-new-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .erp-new-topbar { background: #fff; border-bottom: 1px solid #ddd; padding: 6px 12px; display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+    .erp-new-content { flex: 1; padding: 8px 10px; overflow: auto; background: #f5f5f5; }
 
-    .error-bg { background: #f0f0f0; padding: 24px; display: flex; justify-content: center; align-items: flex-start; min-height: 340px; }
-    .error-modal { background: #fff; width: 520px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.25); }
-    .error-modal-header { background: #e8e8e8; color: #333; font-weight: bold; font-size: 13px; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
-    .error-modal-close { background: #F2940E; color: #fff; border: none; width: 22px; height: 22px; border-radius: 3px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; }
-    .error-modal-body { padding: 12px 16px; }
-    .error-row { display: flex; gap: 8px; margin-bottom: 8px; font-size: 12px; }
-    .error-row .lbl { color: #666; min-width: 165px; flex-shrink: 0; }
-    .error-row .val { color: #333; font-weight: bold; flex: 1; }
-    .error-box { background: #fee; border: 1px solid #fcc; border-radius: 3px; padding: 8px 10px; font-size: 12px; color: #900; margin: 0; line-height: 1.5; flex: 1; }
-    .error-modal-footer { padding: 8px 14px 12px; display: flex; gap: 8px; }
+    /* Toolbar naranja (botones de acción del listado) */
+    .erp-toolbar { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 6px; }
+    .erp-toolbar-btn { background: #F2940E; color: #fff; border: none; padding: 4px 10px; font-size: 11px; font-family: Calibri,sans-serif; cursor: pointer; border-radius: 2px; }
+    .erp-toolbar-btn:hover { background: #d07a0a; }
+    .erp-toolbar-btn-gray { background: #666; color: #fff; border: none; padding: 4px 10px; font-size: 11px; font-family: Calibri,sans-serif; cursor: pointer; border-radius: 2px; }
+    .erp-toolbar-btn-gray:hover { background: #444; }
+    .erp-toolbar-btn-dark { background: #444; color: #fff; border: none; padding: 4px 10px; font-size: 11px; font-family: Calibri,sans-serif; cursor: pointer; border-radius: 2px; }
+
+    /* Filter bar */
+    .erp-filter-bar { background: #fff; border: 1px solid #ddd; padding: 5px 8px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-bottom: 5px; }
+    .erp-filter-bar label { font-size: 11px; color: #555; white-space: nowrap; }
+    .erp-filter-bar input, .erp-filter-bar select { border: 1px solid #ccc; padding: 2px 4px; font-size: 11px; font-family: Calibri,sans-serif; }
+    .erp-filter-btn { background: #F2940E; color: #fff; border: none; padding: 3px 10px; font-size: 11px; font-family: Calibri,sans-serif; cursor: pointer; border-radius: 2px; }
+
+    /* Listado header naranja */
+    .erp-list-header { background: #F2940E; color: #fff; font-size: 13px; font-weight: bold; padding: 4px 8px; margin-bottom: 2px; }
+
+    /* Grid del listado nuevo */
+    .erp-list-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .erp-list-table thead tr { background: #d0d0d0; }
+    .erp-list-table thead th { padding: 4px 6px; border: 1px solid #bbb; font-weight: bold; color: #333; white-space: nowrap; }
+    .erp-list-table thead th .sort { color: #F2940E; margin-left: 2px; font-size: 9px; }
+    .erp-list-table tbody td { padding: 3px 6px; border: 1px solid #e0e0e0; white-space: nowrap; }
+    .erp-list-table tbody tr:hover { background: #fde8c0; cursor: pointer; }
+    .erp-list-table tbody tr.selected { background: #F2940E; color: #fff; }
+
+    /* Status chips */
+    .chip { display: inline-block; padding: 1px 6px; border-radius: 2px; font-size: 10px; font-weight: bold; }
+    .chip-tesd { background: #F2940E; color: #fff; }
+    .chip-doc { background: #17a2b8; color: #fff; }
+    .chip-cancel { background: #dc3545; color: #fff; }
+    .chip-pend { background: #ffc107; color: #333; }
+
+    /* ControlT status */
+    .ct-ok { color: #1a6b2e; font-weight: bold; font-size: 11px; }
+    .ct-err { color: #c00; font-weight: bold; font-size: 11px; cursor: pointer; }
+    .ct-err:hover { text-decoration: underline; }
+    .ct-pend { color: #856404; font-weight: bold; font-size: 11px; }
+    .ct-na { color: #aaa; font-size: 11px; }
+
+    /* Error modal */
+    .modal-overlay { background: rgba(0,0,0,.35); position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 100; }
+    .modal-box { background: #fff; width: 540px; border: 1px solid #aaa; border-radius: 3px; box-shadow: 0 4px 24px rgba(0,0,0,.3); overflow: hidden; }
+    .modal-hdr { background: #e8e8e8; padding: 8px 14px; font-weight: bold; font-size: 13px; color: #333; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
+    .modal-close { background: #F2940E; color: #fff; border: none; width: 22px; height: 22px; border-radius: 2px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .modal-body { padding: 12px 16px; }
+    .modal-row { display: flex; gap: 8px; margin-bottom: 7px; font-size: 12px; }
+    .modal-row .lbl { color: #666; min-width: 170px; flex-shrink: 0; }
+    .modal-row .val { color: #222; font-weight: bold; }
+    .modal-err { background: #fee; border: 1px solid #fcc; border-radius: 2px; padding: 7px 10px; font-size: 12px; color: #900; line-height: 1.5; }
+    .modal-ftr { padding: 8px 14px 12px; display: flex; gap: 8px; border-top: 1px solid #eee; background: #fafafa; }
+
+    /* Bottom bar */
+    .erp-bottom-bar { display: flex; justify-content: center; gap: 10px; padding: 8px; border-top: 1px solid #ddd; background: #f0f0f0; }
+
+    /* Toggle switch */
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; }
+    .toggle { position: relative; width: 36px; height: 18px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: #ccc; border-radius: 18px; cursor: pointer; transition: .2s; }
+    .toggle-slider:before { content:''; position: absolute; width: 14px; height: 14px; left: 2px; bottom: 2px; background: #fff; border-radius: 50%; transition: .2s; }
+    .toggle input:checked + .toggle-slider { background: #1565c0; }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+    /* Disponibilidad / Trayectos panel */
+    .disp-panel { background: #f5f5f5; border: 1px solid #ddd; padding: 6px 8px; margin-top: 6px; }
+    .disp-panel-hdr { background: #F2940E; color: #fff; font-weight: bold; font-size: 12px; padding: 3px 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
   </style>
 </head>
 <body>
 
 <div class="page-header">
   <h1>Mockup &mdash; Integración Torre de Control (ControlT) &nbsp;|&nbsp; HU39842</h1>
-  <p>Prototipo de referencia &mdash; GM Transport ERP &middot; M&oacute;dulo Tr&aacute;fico</p>
+  <p>Prototipo de referencia &mdash; GM Transport ERP &middot; Módulo Tráfico</p>
 </div>
 
-<!-- Nota de prototipo -->
-<div style="margin:0 0 14px 0;background:#fffdf9;border-left:4px solid #F2940E;border-radius:6px;padding:14px 18px;box-shadow:0 1px 3px rgba(0,0,0,.06);">
-  <div style="display:flex;align-items:flex-start;gap:12px;">
-    <span style="font-size:20px;line-height:1.3;">&#128161;</span>
-    <div>
-      <p style="margin:0 0 6px; font-weight:700; font-size:13px; color:#1a1a1a;">Sobre este prototipo</p>
-      <p style="margin:0 0 6px; font-size:13px; color:#444; line-height:1.6;">
-        Este prototipo es una <strong>representaci&oacute;n visual de la funcionalidad solicitada</strong>, no un dise&ntilde;o final ni una especificaci&oacute;n pixel a pixel.
-        Su prop&oacute;sito es comunicar el flujo, los elementos y la intenci&oacute;n &mdash; no reemplazar el criterio del desarrollador ni del dise&ntilde;ador.
-      </p>
-      <p style="margin:0 0 6px; font-size:13px; color:#444; line-height:1.6;">
-        &#9888;&#65039; <strong>El prototipo no debe copiarse tal cual.</strong> Lo que s&iacute; debe respetarse siempre es la apariencia del sistema destino:
-        para el <strong>ERP GM Transport</strong>, eso significa colores, tipograf&iacute;a, estructura de paneles y componentes propios del ERP.
-      </p>
-      <p style="margin:0; font-size:13px; color:#444; line-height:1.6;">
-        Si algo del dise&ntilde;o propuesto aqu&iacute; no encaja, <strong>com&eacute;ntalo antes de implementarlo</strong> &mdash; lo ajustamos juntos. &#128588;
-      </p>
-    </div>
-  </div>
+<div class="proto-banner">
+  <p>&#128161; <strong>Sobre este prototipo:</strong> Representación visual de la funcionalidad solicitada. No es diseño final. El estilo debe replicar fielmente el ERP GM Transport.</p>
+  <p>&#9888;&#65039; <strong>No copiar tal cual.</strong> Si algo no encaja, comentarlo antes de implementar.</p>
 </div>
 
-<!-- PROTO TABS BAR -->
+<!-- PROTO TABS -->
 <div class="proto-tabs-bar">
-  <div class="proto-tab active" onclick="switchProtoTab('cfg')">&#9881;&#65039; Configuraci&oacute;n</div>
-  <div class="proto-tab" onclick="switchProtoTab('tipos')">&#128203; Tipos de Viaje</div>
-  <div class="proto-tab" onclick="switchProtoTab('listado')">&#128666; Listado de Viajes</div>
+  <div class="proto-tab active" onclick="switchProtoTab('cfg')">&#9881;&#65039; Parámetros Generales</div>
+  <div class="proto-tab" onclick="switchProtoTab('viaje')">&#128666; Agregando Viaje</div>
+  <div class="proto-tab" onclick="switchProtoTab('listado')">&#128203; Listado de Viajes</div>
   <div class="proto-tab" onclick="switchProtoTab('error')">&#10006; Detalle de Error</div>
 </div>
 
 
-<!-- ===== TAB 1: CONFIGURACIÓN ===== -->
+<!-- ===== TAB 1: PARÁMETROS GENERALES ===== -->
 <div id="proto-cfg" class="proto-tab-content active">
-  <div style="background:#fff;border:1px solid #ccc;">
+  <div class="erp-old">
+    <div class="erp-old-titlebar">Parámetros Generales</div>
+    <div class="erp-old-body">
 
-    <!-- Título de pantalla estilo ERP -->
-    <div style="background:#e8e8e8;border-bottom:1px solid #ccc;padding:8px 14px;font-size:15px;font-weight:bold;color:#222;">
-      Par&aacute;metros Generales
-    </div>
-
-    <!-- Tabs internos al estilo de la pantalla real -->
-    <div style="display:flex;border-bottom:2px solid #c0c0c0;background:#f0f0f0;padding:0 10px;gap:2px;margin-top:2px;">
-      <div class="pg-tab" onclick="switchPG('general')" style="padding:6px 16px;cursor:pointer;border:1px solid #ccc;border-bottom:none;background:#f0f0f0;color:#555;font-size:13px;border-radius:3px 3px 0 0;margin-top:4px;">General</div>
-      <div class="pg-tab pg-tab-active" onclick="switchPG('torre')" style="padding:6px 16px;cursor:pointer;border:1px solid #aaa;border-bottom:2px solid #fff;background:#fff;color:#222;font-size:13px;font-weight:bold;border-radius:3px 3px 0 0;margin-top:4px;">Torre de Control</div>
-    </div>
-
-    <!-- Pestaña General (placeholder del contenido existente) -->
-    <div id="pg-general" style="display:none;padding:14px 16px;">
-      <div style="display:flex;gap:16px;">
-        <!-- Columna izquierda -->
-        <div style="flex:1;min-width:0;">
-          <div class="field-row"><label style="min-width:130px;">RFC</label>
-            <input type="text" value="GMG030101AAA" style="width:140px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
-            <label style="min-width:120px;margin-left:8px;">Registro Patronal</label>
-            <input type="text" value="A458699999999" style="width:140px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
-          </div>
-          <div class="field-row"><label style="min-width:130px;">Nombre Fiscal</label>
-            <input type="text" value="GRUPO GM TRANSPORT SA DE CV" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
-          </div>
-          <div class="field-row"><label style="min-width:130px;">Nombre Comercial</label>
-            <input type="text" value="GM TRANSPORT" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
-          </div>
-          <div class="field-row"><label style="min-width:130px;">R&eacute;gimen Fiscal</label>
-            <select style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>GENERAL DE LEY PERSONAS MORALES</option></select>
-          </div>
-          <div class="field-row"><label style="min-width:130px;">Retenci&oacute;n IVA</label>
-            <select style="width:180px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>RETENCION IVA 4%</option></select>
-          </div>
-          <div style="margin:6px 0;display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" checked style="accent-color:#1565c0;width:14px;height:14px;">
-            <label style="font-size:13px;color:#333;">Varios centros de trabajo IMSS</label>
-          </div>
-          <div style="margin:4px 0;display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" style="accent-color:#1565c0;width:14px;height:14px;">
-            <label style="font-size:13px;color:#333;">Solicitar cambio de contrase&ntilde;a al usuario</label>
-          </div>
-          <div style="margin:4px 0;display:flex;gap:16px;">
-            <div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" style="accent-color:#1565c0;width:14px;height:14px;"><label style="font-size:13px;color:#333;">Usuarios inactivos</label></div>
-            <div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" checked style="accent-color:#1565c0;width:14px;height:14px;"><label style="font-size:13px;color:#333;">Activar doble autenticaci&oacute;n al usuario</label></div>
-          </div>
-        </div>
-        <!-- Columna derecha: Usuario Timbrado -->
-        <div style="width:300px;flex-shrink:0;border:1px solid #ccc;padding:8px 10px;">
-          <div style="background:#e8e8e8;text-align:center;font-weight:bold;font-size:12px;padding:3px 0;margin-bottom:8px;border:1px solid #ccc;">Usuario Servicios de Timbrado/Servicios WEB</div>
-          <div class="field-row"><label style="min-width:90px;font-size:12px;">Usuario</label><input type="text" value="GMG030101AAA" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
-          <div class="field-row"><label style="min-width:90px;font-size:12px;">Contrase&ntilde;a</label><input type="password" value="password" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
-          <div style="display:flex;align-items:center;gap:6px;margin:4px 0;"><input type="checkbox" style="accent-color:#1565c0;width:14px;height:14px;"><label style="font-size:12px;color:#333;">Timbrar de Pruebas</label></div>
-          <div class="field-row" style="margin-top:6px;"><label style="min-width:90px;font-size:12px;">Api Key</label><input type="text" value="wsWB/7jvtlaUklPL93..." style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
+      <!-- Fila 1 -->
+      <div class="fr" style="gap:10px;">
+        <label>RFC</label><input type="text" value="GMG030101AAA" style="width:110px;">
+        <label style="margin-left:8px;">Registro Patronal</label><input type="text" value="A458699999999" style="width:130px;">
+        <div style="flex:1"></div>
+        <!-- Bloque Timbrado -->
+        <div style="border:1px solid #aaa;padding:4px 8px;background:#fafafa;">
+          <div class="erp-old-section" style="margin:0 0 5px;">Usuario Servicios de Timbrado/Servicios WEB</div>
+          <div class="fr"><label style="min-width:80px;">Usuario</label><input type="text" value="GMG030101AAA" style="width:140px;"></div>
+          <div class="fr"><label style="min-width:80px;">Contraseña</label><input type="password" value="password" style="width:140px;"></div>
+          <div class="fr"><input type="checkbox" style="accent-color:#1565c0;"><label>Timbrar de Pruebas</label></div>
+          <div class="fr"><label style="min-width:80px;">Api Key</label><input type="text" value="wsWB/7jvtlaUklPL93oWZd9BMySmeU" style="width:220px;"></div>
         </div>
       </div>
-      <!-- Domicilio Fiscal + Logo -->
-      <div style="display:flex;gap:16px;margin-top:10px;">
+
+      <div class="fr"><label style="min-width:110px;">Nombre Fiscal</label><input type="text" value="GRUPO GM TRANSPORT SA DE CV" style="width:340px;"></div>
+      <div class="fr"><label style="min-width:110px;">Nombre Comercial</label><input type="text" value="GM TRANSPORT" style="width:340px;"></div>
+      <div class="fr"><label style="min-width:110px;">Régimen Fiscal</label><select style="width:280px;"><option>GENERAL DE LEY PERSONAS MORALES</option></select></div>
+      <div class="fr">
+        <label style="min-width:110px;">Retención IVA</label><select style="width:160px;"><option>RETENCION IVA 4%</option></select>
+        <span style="margin-left:14px;"><input type="checkbox" checked style="accent-color:#1565c0;"> <label>Varios centros de trabajo IMSS</label></span>
+      </div>
+      <div class="fr"><input type="checkbox" style="accent-color:#1565c0;"><label>Solicitar cambio de contraseña al usuario</label></div>
+      <div class="fr" style="gap:16px;">
+        <span><input type="checkbox" style="accent-color:#1565c0;"> <label>Usuarios inactivos</label></span>
+        <span><input type="checkbox" checked style="accent-color:#1565c0;"> <label>Activar doble autenticación al usuario</label></span>
+      </div>
+
+      <!-- Domicilio Fiscal -->
+      <div style="display:flex;gap:12px;margin-top:6px;">
         <div style="flex:1;">
-          <div style="background:#ddd;text-align:center;font-weight:bold;font-size:12px;padding:4px 0;border:1px solid #ccc;margin-bottom:6px;">Domicilio Fiscal</div>
-          <div class="field-row"><label style="min-width:130px;">Pa&iacute;s</label><select style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>M&Eacute;XICO</option></select></div>
-          <div class="field-row"><label style="min-width:130px;">C&oacute;digo Postal</label><input type="text" value="21290" style="width:80px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><button class="btn-dark" style="margin-left:6px;">Buscar</button></div>
-          <div class="field-row"><label style="min-width:130px;">Estado</label><select style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>BAJA CALIFORNIA</option></select></div>
-          <div class="field-row"><label style="min-width:130px;">Municipio</label><input type="text" value="MEXICALI" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"></div>
-          <div class="field-row"><label style="min-width:130px;">Calle</label><input type="text" value="ALHÓNDIGA DE GRANADITAS" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"></div>
-          <div class="field-row"><label style="min-width:130px;">No. Exterior</label><input type="text" value="800" style="width:80px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><label style="min-width:90px;margin-left:10px;">No. Interior</label><input type="text" style="width:80px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"></div>
+          <div class="erp-old-section">Domicilio Fiscal</div>
+          <div class="fr"><label style="min-width:100px;">País</label><select style="width:150px;"><option>MÉXICO</option></select></div>
+          <div class="fr"><label style="min-width:100px;">Código Postal</label><input type="text" value="21290" style="width:70px;"><button class="erp-btn" style="margin-left:4px;">Buscar</button></div>
+          <div class="fr"><label style="min-width:100px;">Estado</label><select style="width:200px;"><option>BAJA CALIFORNIA</option></select></div>
+          <div class="fr"><label style="min-width:100px;">Municipio</label><input type="text" value="MEXICALI" style="width:200px;"></div>
+          <div class="fr"><label style="min-width:100px;">Localidad</label><input type="text" value="MEXICALI" style="width:200px;"></div>
+          <div class="fr"><label style="min-width:100px;">Colonia</label><input type="text" value="INDEPENDENCIA" style="width:200px;"></div>
+          <div class="fr"><label style="min-width:100px;">Calle</label><input type="text" value="ALHÓNDIGA DE GRANADITAS" style="width:200px;"></div>
+          <div class="fr">
+            <label style="min-width:100px;">No. Exterior</label><input type="text" value="800" style="width:60px;">
+            <label style="margin-left:8px;">No. Interior</label><input type="text" style="width:60px;">
+          </div>
+          <div class="fr"><label style="min-width:100px;">Teléfonos</label><input type="text" style="width:200px;"></div>
         </div>
-        <div style="width:300px;flex-shrink:0;color:#aaa;font-style:italic;font-size:12px;border:1px solid #ccc;padding:8px 10px;text-align:center;">
-          <div style="background:#ddd;text-align:center;font-weight:bold;font-size:12px;padding:3px 0;margin-bottom:8px;border:1px solid #ccc;color:#333;font-style:normal;">Logo Empresa</div>
-          Logo de la empresa
+        <div style="width:220px;flex-shrink:0;">
+          <div class="erp-old-section">Logo Empresa</div>
+          <div class="fr"><button class="erp-btn-small">Seleccionar archivo</button><span style="font-size:11px;color:#888;margin-left:4px;">NINGÚN AR…ECCIONADO</span></div>
+          <div style="width:100%;height:130px;border:1px solid #ddd;margin-top:6px;display:flex;align-items:center;justify-content:center;background:#fafafa;">
+            <span style="font-size:11px;color:#aaa;font-style:italic;">Logo de la empresa</span>
+          </div>
+          <div class="fr" style="margin-top:6px;"><label style="min-width:80px;font-size:11px;">C. Encabezado</label><input type="text" value="F9B233" style="width:60px;font-size:11px;"></div>
+          <div class="fr"><label style="min-width:80px;font-size:11px;">C. Pie Página</label><input type="text" value="F9B233" style="width:60px;font-size:11px;"></div>
         </div>
       </div>
-    </div>
 
-    <!-- Pestaña Torre de Control -->
-    <div id="pg-torre" style="display:block;padding:16px 18px;">
-      <div style="display:flex;gap:16px;">
-        <!-- Izquierda: config ControlT -->
-        <div style="flex:1;min-width:0;">
-          <div style="background:#ddd;text-align:center;font-weight:bold;font-size:13px;padding:4px 0;border:1px solid #ccc;margin-bottom:10px;">Integraci&oacute;n ControlT</div>
+      <!-- ===== SECCIÓN NUEVA: TORRE DE CONTROL ===== -->
+      <div class="erp-old-section" style="margin-top:12px;background:#ffe8cc;border-color:#F2940E;color:#7a3800;">&#9881; Torre de Control (ControlT) — <small style="font-weight:normal;">Nueva configuración</small></div>
 
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-            <input type="checkbox" id="chk-ct" onchange="toggleCT(this)" style="width:15px;height:15px;accent-color:#1565c0;">
-            <label for="chk-ct" style="font-size:13px;color:#333;font-weight:bold;">Habilitar integraci&oacute;n con Torre de Control (ControlT)</label>
-          </div>
-
-          <div id="ct-fields" class="disabled-section">
-            <div class="field-row">
-              <label style="min-width:200px;">URL del servicio <span style="color:#c00">*</span></label>
-              <input type="text" value="https://api.controlt.com/v1" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
-            </div>
-            <div class="field-row">
-              <label style="min-width:200px;">Usuario <span style="color:#c00">*</span></label>
-              <input type="text" value="gmtransport_api" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
-            </div>
-            <div class="field-row">
-              <label style="min-width:200px;">Contrase&ntilde;a <span style="color:#c00">*</span></label>
-              <input type="password" value="password123" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
-            </div>
-            <div class="field-row">
-              <label style="min-width:200px;">C&oacute;digo de compa&ntilde;&iacute;a <span style="color:#c00">*</span></label>
-              <input type="text" value="GM-001" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
-            </div>
-          </div>
-
-          <div id="ct-save-msg" style="display:none;margin-top:12px;background:#d4edda;border:1px solid #c3e6cb;border-radius:3px;padding:8px 12px;font-size:13px;color:#155724;">
-            &#10004; Configuraci&oacute;n guardada correctamente.
-          </div>
-        </div>
-
-        <!-- Derecha: nota informativa -->
-        <div style="width:280px;flex-shrink:0;border:1px solid #dce;background:#fafafa;padding:12px 14px;border-radius:3px;">
-          <div style="font-weight:bold;font-size:12px;color:#555;margin-bottom:8px;border-bottom:1px solid #ddd;padding-bottom:4px;">&#8505; Sobre esta integraci&oacute;n</div>
-          <p style="font-size:12px;color:#555;line-height:1.6;margin:0 0 8px;">Al habilitar, los viajes se transmitir&aacute;n autom&aacute;ticamente a <strong>ControlT</strong> cuando se asigne un operador.</p>
-          <p style="font-size:12px;color:#555;line-height:1.6;margin:0 0 8px;">El RFC y la Raz&oacute;n Social se toman de los <strong>Datos Fiscales</strong> ya registrados en el sistema.</p>
-          <p style="font-size:12px;color:#555;line-height:1.6;margin:0;">La zona horaria se determina autom&aacute;ticamente seg&uacute;n la sucursal del viaje.</p>
-        </div>
+      <div class="fr" style="margin-bottom:8px;">
+        <input type="checkbox" id="chk-ct" onchange="toggleCT(this)" style="width:14px;height:14px;accent-color:#F2940E;">
+        <label for="chk-ct" style="font-weight:bold;font-size:13px;">Habilitar integración con ControlT</label>
       </div>
-    </div>
 
-    <!-- Botones inferiores al estilo ERP real -->
-    <div style="display:flex;justify-content:center;gap:12px;padding:10px;border-top:1px solid #ddd;background:#f5f5f5;">
-      <button onclick="guardarCfg()" style="background:#7a6040;color:#fff;border:none;padding:5px 22px;font-size:13px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;">Grabar</button>
-      <button style="background:#888;color:#fff;border:none;padding:5px 22px;font-size:13px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;">Regresar</button>
-    </div>
+      <div id="ct-fields" style="opacity:.4;pointer-events:none;">
+        <div class="fr"><label style="min-width:160px;">URL del servicio <span style="color:#c00">*</span></label><input type="text" value="https://api.controlt.com/v1" style="width:320px;"></div>
+        <div class="fr"><label style="min-width:160px;">Usuario <span style="color:#c00">*</span></label><input type="text" value="gmtransport_api" style="width:200px;"></div>
+        <div class="fr"><label style="min-width:160px;">Contraseña <span style="color:#c00">*</span></label><input type="password" value="password123" style="width:200px;"></div>
+        <div class="fr"><label style="min-width:160px;">Código de compañía <span style="color:#c00">*</span></label><input type="text" value="GM-001" style="width:120px;"></div>
+        <div style="font-size:11px;color:#777;margin-top:2px;padding-left:165px;">El RFC y Razón Social se toman automáticamente de Datos Fiscales. La zona horaria se determina por sucursal del viaje.</div>
+      </div>
 
+      <div id="ct-save-msg" style="display:none;margin-top:8px;background:#d4edda;border:1px solid #c3e6cb;border-radius:2px;padding:6px 10px;font-size:12px;color:#155724;">
+        &#10004; Configuración guardada. Los viajes comenzarán a transmitirse a ControlT al asignar operador.
+      </div>
+
+    </div>
+    <div class="erp-bottom-bar">
+      <button class="erp-btn" onclick="guardarCfg()" style="background:#7a6040;">Grabar</button>
+      <button class="erp-btn">Regresar</button>
+    </div>
   </div>
 </div>
 
 
-<!-- ===== TAB 2: REGISTRO DE VIAJE (con Tipo de Viaje) ===== -->
-<div id="proto-tipos" class="proto-tab-content">
-  <div class="panel">
-    <div class="panel-title">Alta / Modificaci&oacute;n de Viaje</div>
+<!-- ===== TAB 2: AGREGANDO VIAJE ===== -->
+<div id="proto-viaje" class="proto-tab-content">
+  <div class="erp-old">
+    <div class="erp-old-titlebar">Agregando Viaje</div>
+    <div class="erp-old-body">
 
-    <div class="tabs">
-      <div class="tab active" onclick="switchTab('tipos','general')">General</div>
-      <div class="tab" onclick="switchTab('tipos','carga')">Carga</div>
-      <div class="tab" onclick="switchTab('tipos','documentos')">Documentos</div>
-      <div class="tab" onclick="switchTab('tipos','gastos')">Gastos</div>
-    </div>
-
-    <div id="tipos-carga" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Detalle de carga del viaje</div></div></div>
-    <div id="tipos-documentos" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Documentos asociados al viaje</div></div></div>
-    <div id="tipos-gastos" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Gastos y anticipos del viaje</div></div></div>
-
-    <div id="tipos-general" class="tab-content active">
-      <div class="inner-panel">
-
-        <div class="section-title">Datos del viaje</div>
-
-        <div class="field-row">
-          <label>No. de viaje</label>
-          <input type="text" value="V-10052" style="max-width:120px;" readonly>
+      <!-- Fila superior: campos de cabecera -->
+      <div style="border:1px solid #aaa;padding:5px 7px;background:#fafafa;margin-bottom:5px;">
+        <div class="fr" style="flex-wrap:nowrap;gap:8px;">
+          <label>Sucursal</label><input type="text" value="MXL" style="width:45px;">
+          <label>Tipo de Cobro</label><select style="width:140px;"><option>POR CONCEPTO</option></select>
+          <label>Documento</label><select style="width:180px;"><option>CARTA PORTE CFDI - MXLI</option></select>
+          <label>Folio</label><input type="text" value="000000000713" style="width:95px;">
+          <label>No. Viaje Cliente</label><input type="text" style="width:80px;">
+          <label>Fecha</label><input type="text" value="15/06/2026" style="width:75px;">
+          <label>Hora</label><input type="text" value="15:29" style="width:44px;">
+          <label>Moneda</label><select style="width:70px;"><option>PESOS</option></select>
+          <label>T.C.</label><input type="text" value="$17.256300" style="width:75px;">
+          <label>Crédito Disponible</label><input type="text" value="$0.00" style="width:70px;" disabled>
         </div>
-        <div class="field-row">
-          <label>Fecha <span style="color:#c00">*</span></label>
-          <input type="text" value="15/06/2026" style="max-width:120px;">
+        <div class="fr" style="margin-top:4px;">
+          <label>Nro Cliente</label><input type="text" style="width:70px;"><input type="text" style="width:220px;">
+          <button class="erp-btn-small" style="padding:2px 6px;">…</button>
+          <span style="margin-left:10px;">
+            <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+          </span>
+          <label style="margin-left:4px;color:#1565c0;font-size:12px;">Timbrar(SAT) con complemento carta porte</label>
         </div>
-        <div class="field-row">
-          <label>Cliente <span style="color:#c00">*</span></label>
-          <input type="text" value="CEMEX SA DE CV">
+      </div>
+
+      <!-- Tabs internos del viaje -->
+      <div class="erp-old-tabs">
+        <div class="erp-old-tab active" onclick="switchViajeTab('general')">General</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('carga')">Desc./Materiales Carga</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('conceptos')">Conceptos Facturación</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('pedimentos')">Pedimentos/Doctos</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('fianzas')">Fianzas/Pedimentos I.T.</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('adicional')">Inf. Adicional/CFDI</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('traslado')">Traslado Combustible</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('seguros')">Seguros</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('cargos')">Cargos Adicionales</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('evidencias')">Control de Evidencias</div>
+        <div class="erp-old-tab" onclick="switchViajeTab('tam')">Movimiento T.A.M.</div>
+      </div>
+
+      <!-- Tab General (único con contenido) -->
+      <div id="vt-general" class="erp-old-tab-content active">
+        <div class="fr" style="gap:10px;flex-wrap:nowrap;">
+          <label>Ruta</label><input type="text" style="width:60px;"><input type="text" style="width:160px;">
+          <button class="erp-btn-small">…</button>
+          <span style="margin-left:8px;"><input type="checkbox" checked style="accent-color:#1565c0;"> <label>Facturable</label></span>
+          <span><input type="checkbox" style="accent-color:#1565c0;"> <label>Kilómetros</label><input type="text" style="width:60px;"></span>
+          <span><label>Millas</label><input type="text" style="width:50px;"></span>
+          <span style="margin-left:10px;"><input type="checkbox" style="accent-color:#1565c0;"><label>Viaje reparto/recolecta</label></span>
         </div>
-        <div class="field-row">
-          <label>Tipo de viaje <span style="color:#c00">*</span></label>
-          <select id="sel-tipo-viaje" style="max-width:320px;">
+        <div class="fr" style="gap:8px;margin-top:3px;">
+          <label>Item</label><input type="text" style="width:80px;">
+          <label>Planta</label><input type="text" style="width:80px;">
+          <label>Convenio</label><input type="text" style="width:80px;">
+          <span style="margin-left:12px;"><input type="checkbox" style="accent-color:#1565c0;"> <label>Viaje Internacional</label></span>
+          <span style="margin-left:8px;"><input type="radio" name="imp" checked style="accent-color:#1565c0;"> <label>Importación</label></span>
+          <span><input type="radio" name="imp" style="accent-color:#1565c0;"> <label>Exportación</label></span>
+          <label>NO APLICA</label><select style="width:100px;"><option>NO APLICA</option></select>
+        </div>
+        <div class="fr" style="gap:8px;margin-top:3px;">
+          <label>Estatus</label><select style="width:130px;"><option>DOCUMENTADO</option></select>
+          <input type="text" value="15/06/2026" style="width:80px;">
+          <input type="text" value="15:29" style="width:44px;">
+          <label style="margin-left:8px;">#. Movtos</label><input type="text" value="1.00" style="width:55px;">
+          <!-- ===== CAMPO NUEVO: TIPO DE VIAJE ===== -->
+          <label style="margin-left:12px;font-weight:bold;color:#7a3800;">Tipo de Viaje</label>
+          <select id="sel-tipo-viaje" style="width:160px;border:2px solid #F2940E;">
             <option value="">-- Seleccionar --</option>
-            <option value="PAQ">Paqueter&iacute;a Local</option>
+            <option value="PAQ">Paquetería Local</option>
             <option value="URB">Urbano / Ciudad</option>
             <option value="REG" selected>Regional</option>
             <option value="NAC">Nacional</option>
@@ -315,41 +340,70 @@
             <option value="OTR">Otros</option>
           </select>
         </div>
-        <div class="field-row">
-          <label>Origen <span style="color:#c00">*</span></label>
-          <input type="text" value="Mexicali, BC">
-        </div>
-        <div class="field-row">
-          <label>Destino <span style="color:#c00">*</span></label>
-          <input type="text" value="Guadalajara, Jal.">
+        <div class="fr" style="gap:8px;margin-top:3px;">
+          <label>Candado Oficial</label><input type="text" style="width:100px;">
+          <label style="margin-left:8px;">Identificador</label><input type="text" style="width:120px;">
+          <label style="margin-left:8px;">Tipo de Unidad</label><input type="text" style="width:120px;">
+          <span style="margin-left:auto;"><input type="checkbox" style="accent-color:#1565c0;"><label>Región ISTMO</label></span>
         </div>
 
-        <div class="section-title" style="margin-top:14px;">Operador y unidad</div>
+        <!-- Remitente / Destinatario -->
+        <div style="display:flex;gap:0;margin-top:6px;border:1px solid #F2940E;">
+          <div style="flex:1;padding:6px 8px;border-right:1px solid #F2940E;">
+            <div style="background:#d8d8d8;text-align:center;font-weight:bold;font-size:12px;padding:2px 0;margin-bottom:5px;border:1px solid #aaa;">Remitente</div>
+            <div class="fr"><label>Remitente</label><input type="text" style="width:70px;"><button class="erp-btn-small">…</button><label style="margin-left:6px;">Fecha Carga</label><input type="text" value="15/06/2026" style="width:75px;"><input type="text" value="15.29" style="width:44px;"></div>
+            <textarea style="width:100%;height:40px;border:1px solid #aaa;font-size:11px;font-family:Calibri,sans-serif;resize:none;padding:2px 4px;margin-top:3px;"></textarea>
+            <div class="fr" style="margin-top:4px;"><label>Recoger En</label><input type="text" style="flex:1;"></div>
+          </div>
+          <div style="flex:1;padding:6px 8px;">
+            <div style="background:#d8d8d8;text-align:center;font-weight:bold;font-size:12px;padding:2px 0;margin-bottom:5px;border:1px solid #aaa;">Destinatario</div>
+            <div class="fr"><label>Destinatario</label><input type="text" style="width:70px;"><button class="erp-btn-small">…</button><label style="margin-left:6px;">Fecha Entrega</label><input type="text" style="width:75px;"><input type="text" style="width:44px;"></div>
+            <textarea style="width:100%;height:40px;border:1px solid #aaa;font-size:11px;font-family:Calibri,sans-serif;resize:none;padding:2px 4px;margin-top:3px;"></textarea>
+            <div class="fr" style="margin-top:4px;"><label>Entregar En</label><input type="text" style="flex:1;"></div>
+          </div>
+        </div>
 
-        <div class="field-row">
-          <label>Operador <span style="color:#c00">*</span></label>
-          <input type="text" value="L&Oacute;PEZ HERN&Aacute;NDEZ JUAN">
-        </div>
-        <div class="field-row">
-          <label>Unidad <span style="color:#c00">*</span></label>
-          <input type="text" value="GM-145 &mdash; KENWORTH T680">
-        </div>
-        <div class="field-row">
-          <label>Caja / Remolque</label>
-          <input type="text" value="R-2234">
+        <!-- Convoy -->
+        <div style="border:1px solid #F2940E;margin-top:5px;padding:5px 8px;">
+          <div style="background:#d8d8d8;text-align:center;font-weight:bold;font-size:12px;padding:2px 0;margin-bottom:5px;border:1px solid #aaa;">Convoy</div>
+          <div class="fr"><label style="min-width:55px;">Remolque</label><input type="text" style="width:70px;"><button class="erp-btn-small">…</button><input type="text" style="flex:1;max-width:240px;"><span style="color:#F2940E;font-size:11px;margin-left:8px;cursor:pointer;">Claves SAT</span><label style="margin-left:10px;">Placas</label><input type="text" style="width:80px;"><input type="text" style="width:120px;"></div>
+          <div class="fr"><label style="min-width:55px;">Dolly</label><input type="text" style="width:70px;"><button class="erp-btn-small">…</button><input type="text" style="flex:1;max-width:240px;"><input type="text" style="width:120px;margin-left:auto;"></div>
+          <div class="fr"><label style="min-width:55px;">Remolque</label><input type="text" style="width:70px;"><button class="erp-btn-small">…</button><input type="text" style="flex:1;max-width:240px;"><span style="color:#F2940E;font-size:11px;margin-left:8px;cursor:pointer;">Claves SAT</span><label style="margin-left:10px;">Placas</label><input type="text" style="width:80px;"><input type="text" style="width:120px;"></div>
         </div>
 
-        <div class="section-title" style="margin-top:14px;">Observaciones</div>
-        <div style="padding:2px 0 6px 0;">
-          <textarea style="width:100%;max-width:680px;height:56px;border:1px solid #ccc;font-size:13px;font-family:Calibri,sans-serif;padding:4px 6px;resize:vertical;"></textarea>
+        <!-- Botones Asignar Operador -->
+        <div class="fr" style="margin-top:6px;gap:4px;">
+          <button class="erp-btn-orange">Asignar Operador/Camión</button>
+          <button class="erp-btn-orange">Más Trayectos</button>
+          <button class="erp-btn">Consultar</button>
+          <button class="erp-btn">Eliminar</button>
         </div>
+
+        <!-- Grid trayectos vacío -->
+        <table class="erp-grid" style="margin-top:4px;">
+          <thead><tr>
+            <th>Nro Oper</th><th>Oper/Perm</th><th>Camión</th><th>Origen</th><th>Destino</th><th>C/V R1</th><th>C/V R2</th><th>CCP</th>
+          </tr></thead>
+          <tbody><tr><td colspan="8" style="text-align:center;color:#aaa;padding:12px;font-style:italic;">Sin trayectos asignados</td></tr></tbody>
+        </table>
 
       </div>
-    </div>
 
-    <div class="bottom-bar">
-      <button class="btn-primary">Aceptar</button>
-      <button class="btn-secondary">Cancelar</button>
+      <div id="vt-carga" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Desc./Materiales Carga</div></div>
+      <div id="vt-conceptos" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Conceptos Facturación</div></div>
+      <div id="vt-pedimentos" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Pedimentos/Doctos</div></div>
+      <div id="vt-fianzas" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Fianzas/Pedimentos I.T.</div></div>
+      <div id="vt-adicional" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Inf. Adicional/CFDI</div></div>
+      <div id="vt-traslado" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Traslado Combustible</div></div>
+      <div id="vt-seguros" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Seguros</div></div>
+      <div id="vt-cargos" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Cargos Adicionales</div></div>
+      <div id="vt-evidencias" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Control de Evidencias</div></div>
+      <div id="vt-tam" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Movimiento T.A.M.</div></div>
+
+    </div>
+    <div class="erp-bottom-bar">
+      <button class="erp-btn" style="background:#5a5a5a;">Aceptar</button>
+      <button class="erp-btn">Cancelar</button>
     </div>
   </div>
 </div>
@@ -357,179 +411,221 @@
 
 <!-- ===== TAB 3: LISTADO DE VIAJES ===== -->
 <div id="proto-listado" class="proto-tab-content">
-  <div class="erp-wrapper">
+  <div class="erp-new">
 
-    <div class="erp-navbar">
-      <div class="erp-logo-icon">G</div>
-      <div class="erp-logo-text">gm Transport Software&reg;<small>ERP</small></div>
-      <div style="flex:1"></div>
-      <div style="border:1px solid #ddd;border-radius:4px;padding:3px 8px;background:#fff;display:flex;align-items:center;gap:5px;font-size:11px;color:#aaa;">
-        &#128269; <input type="text" style="border:none;outline:none;font-size:11px;width:130px;font-family:Calibri,sans-serif;" placeholder="Buscar" readonly>
+    <!-- Sidebar -->
+    <div class="erp-new-sidebar">
+      <div style="padding:10px 12px;border-bottom:1px solid #555;">
+        <div style="color:#fff;font-size:13px;font-weight:bold;line-height:1.2;"><span style="color:#F2940E;">gm</span>Transport<br><span style="font-size:10px;font-weight:normal;color:#aaa;">Software®</span></div>
       </div>
-      <div style="position:relative;margin-left:8px;">
-        <span style="font-size:16px;cursor:pointer;padding:3px 5px;">&#128276;</span>
-        <span style="position:absolute;top:-2px;right:-2px;background:#F2940E;color:#fff;font-size:9px;font-weight:bold;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">3</span>
-      </div>
+      <input class="erp-new-sidebar-search" type="text" placeholder="🔍 Buscar" readonly>
+      <div class="erp-new-sidebar-item"><span>📊</span><span style="flex:1;">Indicadores</span></div>
+      <div class="erp-new-sidebar-item"><span>⚙️</span><span style="flex:1;">Configuración</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>🧾</span><span style="flex:1;">Facturación</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>💰</span><span style="flex:1;">Cobranza</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item active" style="background:#F2940E;"><span>🚛</span><span style="flex:1;color:#fff;">Tráfico</span><span class="arrow" style="color:#ffe0b0;">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>🏦</span><span style="flex:1;">Banco</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>📋</span><span style="flex:1;">Cuentas Por Pagar</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>📚</span><span style="flex:1;">Contabilidad</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>🔧</span><span style="flex:1;">Mantenimiento</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>📦</span><span style="flex:1;">Inventarios</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>🚗</span><span style="flex:1;">Llantas</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>📈</span><span style="flex:1;">Informes Gerenciales</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>📄</span><span style="flex:1;">EDI</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>👤</span><span style="flex:1;">Nómina</span><span class="arrow">▼</span></div>
+      <div class="erp-new-sidebar-item"><span>🚌</span><span style="flex:1;">Transporte de Personal</span><span class="arrow">▼</span></div>
     </div>
 
-    <div class="erp-body">
-      <div class="erp-sidebar">
-        <div class="erp-sidebar-item"><span>&#128202;</span><span class="si-text">Indicadores</span></div>
-        <div class="erp-sidebar-item"><span>&#9881;&#65039;</span><span class="si-text">Configuraci&oacute;n</span><span class="si-arrow">&#9660;</span></div>
-        <div class="erp-sidebar-item"><span>&#129534;</span><span class="si-text">Facturaci&oacute;n</span><span class="si-arrow">&#9660;</span></div>
-        <div class="erp-sidebar-item"><span>&#128176;</span><span class="si-text">Cobranza</span><span class="si-arrow">&#9660;</span></div>
-        <div class="erp-sidebar-item active"><span>&#128666;</span><span class="si-text">Tr&aacute;fico</span><span class="si-arrow" style="color:#ffe0b0">&#9660;</span></div>
-        <div class="erp-sidebar-item"><span>&#127981;</span><span class="si-text">Banco</span><span class="si-arrow">&#9660;</span></div>
-        <div class="erp-sidebar-item"><span>&#128203;</span><span class="si-text">Cuentas Por Pagar</span><span class="si-arrow">&#9660;</span></div>
-        <div class="erp-sidebar-item"><span>&#128218;</span><span class="si-text">Contabilidad</span><span class="si-arrow">&#9660;</span></div>
-        <div class="erp-sidebar-item"><span>&#128295;</span><span class="si-text">Mantenimiento</span><span class="si-arrow">&#9660;</span></div>
-        <div class="erp-sidebar-item"><span>&#128230;</span><span class="si-text">Inventarios</span><span class="si-arrow">&#9660;</span></div>
-      </div>
-
-      <div class="erp-main-content">
-        <div class="panel">
-          <div class="panel-title">Listado de Viajes</div>
-
-          <div class="tabs">
-            <div class="tab active">Viajes</div>
-            <div class="tab">Por Facturar</div>
-            <div class="tab">Cancelados</div>
-          </div>
-
-          <div class="tab-content active" style="padding:6px 8px;">
-            <div class="inner-panel">
-
-              <div class="filter-bar">
-                <label>Fecha del:</label>
-                <input type="text" value="01/06/2026" style="width:80px">
-                <label>al:</label>
-                <input type="text" value="15/06/2026" style="width:80px">
-                <label>Cliente:</label>
-                <input type="text" style="width:110px" placeholder="Todos">
-                <label>ControlT:</label>
-                <select style="font-size:12px;border:1px solid #ccc;padding:2px 5px;font-family:Calibri,sans-serif;">
-                  <option>Todos</option>
-                  <option>Enviado</option>
-                  <option>Error</option>
-                  <option>Pendiente</option>
-                  <option>No aplica</option>
-                </select>
-                <button class="btn-primary" style="padding:2px 10px;">Aplicar</button>
-              </div>
-
-              <table class="ct-table">
-                <thead>
-                  <tr>
-                    <th style="width:65px">No. Viaje</th>
-                    <th style="width:70px">Fecha</th>
-                    <th>Cliente</th>
-                    <th>Origen</th>
-                    <th>Destino</th>
-                    <th style="width:65px">Tipo</th>
-                    <th style="width:85px">Operador</th>
-                    <th style="width:65px">Estatus</th>
-                    <th style="width:82px;text-align:center">ControlT</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>V-10045</td><td>15/06/26</td><td>CEMEX SA</td><td>Mexicali</td><td>Guadalajara</td><td>Nacional</td><td>L&oacute;pez J.</td>
-                    <td><span style="background:#d4edda;color:#155724;padding:1px 5px;border-radius:2px;font-size:10px;font-weight:bold;">ACTIVO</span></td>
-                    <td style="text-align:center"><span class="status-enviado" title="Enviado a ControlT">&#10004; Enviado</span></td>
-                  </tr>
-                  <tr>
-                    <td>V-10046</td><td>15/06/26</td><td>BIMBO SA</td><td>Tijuana</td><td>CDMX</td><td>Regional</td><td>Mart&iacute;nez R.</td>
-                    <td><span style="background:#d4edda;color:#155724;padding:1px 5px;border-radius:2px;font-size:10px;font-weight:bold;">ACTIVO</span></td>
-                    <td style="text-align:center"><span class="status-error" title="Error — clic para ver detalle" onclick="switchProtoTab('error')">&#10006; Error &#8635;</span></td>
-                  </tr>
-                  <tr>
-                    <td>V-10047</td><td>15/06/26</td><td>LALA SA</td><td>Monterrey</td><td>Chihuahua</td><td>Regional</td><td>Garc&iacute;a P.</td>
-                    <td><span style="background:#fff3cd;color:#856404;padding:1px 5px;border-radius:2px;font-size:10px;font-weight:bold;">PROCESO</span></td>
-                    <td style="text-align:center"><span class="status-pendiente" title="Pendiente de transmisi&oacute;n">&#9200; Pendiente</span></td>
-                  </tr>
-                  <tr>
-                    <td>V-10048</td><td>14/06/26</td><td>SORIANA</td><td>Hermosillo</td><td>Culiac&aacute;n</td><td>Urbano</td><td>P&eacute;rez A.</td>
-                    <td><span style="background:#d4edda;color:#155724;padding:1px 5px;border-radius:2px;font-size:10px;font-weight:bold;">ACTIVO</span></td>
-                    <td style="text-align:center"><span class="status-noaplica" title="No aplica &mdash; integraci&oacute;n desactivada">&mdash; N/A</span></td>
-                  </tr>
-                  <tr>
-                    <td>V-10049</td><td>14/06/26</td><td>OXXO SA</td><td>Le&oacute;n</td><td>Quer&eacute;taro</td><td>Paqueter&iacute;a</td><td>Ruiz F.</td>
-                    <td><span style="background:#d4edda;color:#155724;padding:1px 5px;border-radius:2px;font-size:10px;font-weight:bold;">ACTIVO</span></td>
-                    <td style="text-align:center"><span class="status-enviado" title="Enviado a ControlT">&#10004; Enviado</span></td>
-                  </tr>
-                  <tr>
-                    <td>V-10050</td><td>14/06/26</td><td>FEMSA</td><td>Canc&uacute;n</td><td>M&eacute;rida</td><td>Regional</td><td>&mdash;</td>
-                    <td><span style="background:#f8d7da;color:#721c24;padding:1px 5px;border-radius:2px;font-size:10px;font-weight:bold;">PENDIENTE</span></td>
-                    <td style="text-align:center"><span class="status-pendiente" title="Pendiente &mdash; sin operador">&#9200; Pendiente</span></td>
-                  </tr>
-                  <tr>
-                    <td>V-10051</td><td>13/06/26</td><td>ALSEA SA</td><td>CDMX</td><td>Puebla</td><td>Urbano</td><td>Flores M.</td>
-                    <td><span style="background:#d4edda;color:#155724;padding:1px 5px;border-radius:2px;font-size:10px;font-weight:bold;">ACTIVO</span></td>
-                    <td style="text-align:center"><span class="status-enviado" title="Enviado a ControlT">&#10004; Enviado</span></td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <div style="margin-top:6px;padding:4px 0;font-size:11px;color:#777;display:flex;flex-wrap:wrap;gap:12px;">
-                <span><strong style="color:#1a6b2e">&#10004; Enviado</strong> &mdash; transmitido a ControlT</span>
-                <span><strong style="color:#c00">&#10006; Error &#8635;</strong> &mdash; error de transmisi&oacute;n (clic = ver detalle + reintentar)</span>
-                <span><strong style="color:#856404">&#9200; Pendiente</strong> &mdash; sin operador asignado</span>
-                <span><strong style="color:#888">&mdash; N/A</strong> &mdash; integraci&oacute;n no activa</span>
-              </div>
-
-            </div>
-          </div>
+    <!-- Main -->
+    <div class="erp-new-main">
+      <!-- Topbar -->
+      <div class="erp-new-topbar">
+        <span style="font-size:11px;color:#888;">☆</span>
+        <span style="font-size:12px;color:#444;position:relative;">🔔<span style="position:absolute;top:-4px;right:-6px;background:#dc3545;color:#fff;font-size:9px;font-weight:bold;width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">3</span></span>
+        <span style="font-size:11px;color:#888;">❓</span>
+        <div style="border:1px solid #ddd;border-radius:4px;padding:4px 10px;font-size:11px;display:flex;gap:8px;align-items:center;">
+          <strong style="font-size:12px;">GRUPO GM TRANSPORT SA DE CV</strong>
+          <span style="color:#888;font-size:10px;">RFC: GMG030101AAA</span>
+          <span>▼</span>
         </div>
       </div>
-    </div>
 
+      <div class="erp-new-content">
+        <!-- Toolbar -->
+        <div class="erp-toolbar">
+          <button class="erp-toolbar-btn">Carta Porte</button>
+          <button class="erp-toolbar-btn">Viaje</button>
+          <button class="erp-toolbar-btn">Pasar a CP ▾</button>
+          <button class="erp-toolbar-btn">Modificar ▾</button>
+          <button class="erp-toolbar-btn-gray">Consultar</button>
+          <button class="erp-toolbar-btn">Cancelar ▾</button>
+          <button class="erp-toolbar-btn-gray">Copiar</button>
+          <button class="erp-toolbar-btn-gray">Imprimir</button>
+          <button class="erp-toolbar-btn-gray">Correo</button>
+          <button class="erp-toolbar-btn-gray">Descargar</button>
+          <button class="erp-toolbar-btn">Facturar</button>
+          <button class="erp-toolbar-btn-dark">Eliminar</button>
+          <button class="erp-toolbar-btn-gray">Estatus</button>
+          <button class="erp-toolbar-btn-gray">Mas ▾</button>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="erp-filter-bar">
+          <label>Desde</label><input type="text" value="15/06/2026" style="width:75px;">
+          <label>Hasta</label><input type="text" value="15/06/2026" style="width:75px;">
+          <label>Sucursal</label><select style="width:80px;font-size:11px;border:1px solid #ccc;padding:2px 4px;font-family:Calibri,sans-serif;"><option>TODAS</option></select>
+          <label>Estatus</label><select style="width:75px;font-size:11px;border:1px solid #ccc;padding:2px 4px;font-family:Calibri,sans-serif;"><option>TODOS</option></select>
+          <label>Viajes</label><select style="width:75px;font-size:11px;border:1px solid #ccc;padding:2px 4px;font-family:Calibri,sans-serif;"><option>AMBOS</option></select>
+          <label>Unidad/Operador</label><select style="width:80px;font-size:11px;border:1px solid #ccc;padding:2px 4px;font-family:Calibri,sans-serif;"><option></option></select>
+          <label>Tipo de viaje</label><select style="width:90px;font-size:11px;border:1px solid #ccc;padding:2px 4px;font-family:Calibri,sans-serif;"><option>TODOS</option><option>Paquetería</option><option>Urbano</option><option>Regional</option><option>Nacional</option><option>Internacional</option></select>
+          <label>Clasificación</label><select style="width:75px;font-size:11px;border:1px solid #ccc;padding:2px 4px;font-family:Calibri,sans-serif;"><option>TODOS</option></select>
+          <label>Documento</label><select style="width:75px;font-size:11px;border:1px solid #ccc;padding:2px 4px;font-family:Calibri,sans-serif;"><option>TODOS</option></select>
+          <button class="erp-filter-btn">Grupos</button>
+          <button class="erp-filter-btn">Aplicar 🔍</button>
+        </div>
+
+        <!-- Listado -->
+        <div class="erp-list-header">Listado de Viajes <span style="float:right;font-size:11px;font-weight:normal;">Buscar: <input type="text" style="width:120px;border:1px solid #aaa;padding:2px 4px;font-size:11px;font-family:Calibri,sans-serif;background:#fff;"></span></div>
+
+        <div style="overflow-x:auto;">
+          <table class="erp-list-table">
+            <thead>
+              <tr>
+                <th><span class="sort">⬆⬇</span> Est</th>
+                <th><span class="sort">⬆⬇</span> Fecha/Hora</th>
+                <th><span class="sort">⬆⬇</span> Viaje</th>
+                <th><span class="sort">⬆⬇</span> Cliente</th>
+                <th><span class="sort">⬆⬇</span> Origen</th>
+                <th><span class="sort">⬆⬇</span> Destino</th>
+                <th><span class="sort">⬆⬇</span> Rem 1</th>
+                <th><span class="sort">⬆⬇</span> Dolly</th>
+                <th><span class="sort">⬆⬇</span> Rem 2</th>
+                <th style="background:#ffe8cc;color:#7a3800;border-color:#F2940E;">ControlT &#9881;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="selected">
+                <td><span class="chip chip-tesd">TESD</span></td>
+                <td>15/06/2026 13:57</td>
+                <td>MXL-000000716</td>
+                <td>ADOLFO NUÑEZ GALLARDO</td>
+                <td>MEXICALI, BAJA CALIFORNIA</td>
+                <td>PUERTO PEÑASCO, SONORA</td>
+                <td>UT-01</td><td></td><td></td>
+                <td style="text-align:center;"><span style="color:#fff;font-weight:bold;">✔ Enviado</span></td>
+              </tr>
+              <tr>
+                <td><span class="chip chip-doc">DOC</span></td>
+                <td>15/06/2026 10:22</td>
+                <td>MXL-000000715</td>
+                <td>CEMEX SA DE CV</td>
+                <td>MEXICALI, BAJA CALIFORNIA</td>
+                <td>GUADALAJARA, JALISCO</td>
+                <td>UT-05</td><td></td><td></td>
+                <td style="text-align:center;"><span class="ct-err" onclick="document.getElementById('modal-error').style.display='flex'">✖ Error ↻</span></td>
+              </tr>
+              <tr>
+                <td><span class="chip chip-pend">PEND</span></td>
+                <td>15/06/2026 09:10</td>
+                <td>MXL-000000714</td>
+                <td>BIMBO SA DE CV</td>
+                <td>TIJUANA, BAJA CALIFORNIA</td>
+                <td>CDMX</td>
+                <td></td><td></td><td></td>
+                <td style="text-align:center;"><span class="ct-pend">⏱ Pendiente</span></td>
+              </tr>
+              <tr>
+                <td><span class="chip chip-doc">DOC</span></td>
+                <td>14/06/2026 17:45</td>
+                <td>MXL-000000713</td>
+                <td>LALA SA DE CV</td>
+                <td>HERMOSILLO, SONORA</td>
+                <td>CHIHUAHUA</td>
+                <td>UT-03</td><td></td><td></td>
+                <td style="text-align:center;"><span class="ct-ok">✔ Enviado</span></td>
+              </tr>
+              <tr>
+                <td><span class="chip chip-cancel">CANC</span></td>
+                <td>14/06/2026 08:00</td>
+                <td>MXL-000000712</td>
+                <td>FEMSA SA DE CV</td>
+                <td>LEÓN, GUANAJUATO</td>
+                <td>QUERÉTARO</td>
+                <td></td><td></td><td></td>
+                <td style="text-align:center;"><span class="ct-na">— N/A</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:4px;font-size:11px;color:#666;">Mostrando registros del 1 al 5 de un total de 5 registros</div>
+
+        <!-- Disponibilidad equipo / Trayectos -->
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <div style="flex:1;">
+            <div class="disp-panel-hdr">Disponibilidad equipo <span style="font-size:11px;cursor:pointer;">Cambiar Disp.</span> <span style="margin-left:auto;">Buscar: <input type="text" style="width:80px;border:1px solid #aaa;padding:1px 4px;font-size:10px;font-family:Calibri,sans-serif;background:#fff;"></span></div>
+            <table class="erp-grid">
+              <thead><tr><th>Unidad</th><th>Tipo Uni</th><th>Est.</th><th>Días</th><th>Ubicac.</th></tr></thead>
+              <tbody>
+                <tr><td>GV65</td><td>TORTON</td><td><span class="chip" style="background:#28a745;color:#fff;">DISPO</span></td><td>868.00</td><td>TEST BBB</td></tr>
+                <tr><td>002789-A</td><td>PICKUP</td><td><span class="chip" style="background:#28a745;color:#fff;">DISPO</span></td><td>522.00</td><td>TIJUANA, BAJA CALIFORNIA</td></tr>
+                <tr><td>04444</td><td>CONTENEDOR</td><td><span class="chip" style="background:#ffc107;color:#333;">MANTO</span></td><td>1,253.00</td><td>PATIOS EMPRESA</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="flex:1;">
+            <div class="disp-panel-hdr">Trayectos viaje</div>
+            <table class="erp-grid">
+              <thead><tr><th>Camión</th><th>Oper/Perm</th><th>Salida</th><th>Origen</th><th>Llegada</th><th>Destino</th><th>R1</th><th>R2</th></tr></thead>
+              <tbody><tr><td colspan="8" style="text-align:center;color:#aaa;font-style:italic;padding:8px;">Seleccione un viaje</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Leyenda ControlT -->
+        <div style="margin-top:8px;padding:5px 8px;background:#fffdf9;border:1px solid #F2940E;border-radius:2px;font-size:11px;color:#555;display:flex;gap:14px;flex-wrap:wrap;">
+          <strong style="color:#F2940E;">ControlT:</strong>
+          <span><strong style="color:#1a6b2e;">✔ Enviado</strong> — transmitido exitosamente</span>
+          <span><strong style="color:#c00;">✖ Error ↻</strong> — clic para ver detalle y reintentar</span>
+          <span><strong style="color:#856404;">⏱ Pendiente</strong> — sin operador asignado aún</span>
+          <span><strong style="color:#aaa;">— N/A</strong> — viaje cancelado o integración no activa</span>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
 
 
 <!-- ===== TAB 4: DETALLE DE ERROR ===== -->
 <div id="proto-error" class="proto-tab-content">
-  <div class="panel">
-    <div class="panel-title">Detalle de Error de Transmisi&oacute;n &mdash; ControlT</div>
-    <div class="tab-content active" style="padding:14px;">
-      <div style="font-size:11px;color:#333;margin-bottom:10px;font-style:italic;">
-        Panel que aparece al hacer clic en <strong style="color:#c00">&#10006; Error</strong> en el listado de viajes.
-      </div>
-      <div class="error-bg">
-        <div class="error-modal">
-          <div class="error-modal-header">
-            <span>Detalle de Transmisi&oacute;n ControlT &mdash; V-10046</span>
-            <button class="error-modal-close">&#10005;</button>
+  <div class="erp-old">
+    <div class="erp-old-titlebar">Detalle de Error de Transmisión — ControlT</div>
+    <div class="erp-old-body" style="padding:20px;">
+      <div style="font-size:11px;color:#777;margin-bottom:12px;font-style:italic;">Panel que aparece al hacer clic en <strong style="color:#c00;">✖ Error</strong> en el listado de viajes.</div>
+      <div style="display:flex;justify-content:center;">
+        <div style="background:#fff;width:540px;border:1px solid #aaa;border-radius:3px;box-shadow:0 3px 16px rgba(0,0,0,.2);overflow:hidden;">
+          <div style="background:#e8e8e8;padding:7px 14px;font-weight:bold;font-size:13px;color:#333;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ccc;">
+            <span>Detalle de Transmisión ControlT — MXL-000000715</span>
+            <button style="background:#F2940E;color:#fff;border:none;width:22px;height:22px;border-radius:2px;cursor:pointer;font-weight:bold;font-size:13px;">✕</button>
           </div>
-          <div class="error-modal-body">
-            <div class="error-row">
-              <span class="lbl">No. de viaje</span>
-              <span class="val">V-10046</span>
-            </div>
-            <div class="error-row">
-              <span class="lbl">Fecha y hora del intento</span>
-              <span class="val">15/06/2026 &nbsp; 09:14:32</span>
-            </div>
-            <div class="error-row">
-              <span class="lbl">Operador</span>
-              <span class="val">MART&Iacute;NEZ RODR&Iacute;GUEZ R.</span>
-            </div>
-            <div class="error-row">
-              <span class="lbl">Tipo de viaje</span>
-              <span class="val">Regional (REG)</span>
-            </div>
-            <div class="error-row" style="align-items:flex-start;">
+          <div style="padding:12px 16px;">
+            <div class="modal-row"><span class="lbl">No. de viaje</span><span class="val">MXL-000000715</span></div>
+            <div class="modal-row"><span class="lbl">Fecha y hora del intento</span><span class="val">15/06/2026 &nbsp; 10:22:45</span></div>
+            <div class="modal-row"><span class="lbl">Operador</span><span class="val">LÓPEZ HERNÁNDEZ JUAN</span></div>
+            <div class="modal-row"><span class="lbl">Tipo de viaje</span><span class="val">Nacional (NAC)</span></div>
+            <div class="modal-row" style="align-items:flex-start;">
               <span class="lbl">Mensaje de error</span>
-              <div class="error-box">
-                <strong>Error 422 &mdash; Unprocessable Entity</strong><br>
-                Campo <code>code_city</code> inv&aacute;lido: el origen &ldquo;TIJUANA-01&rdquo; no tiene c&oacute;digo postal registrado en el cat&aacute;logo de Or&iacute;genes y Destinos.<br>
-                <span style="font-size:11px;color:#666;margin-top:4px;display:block;">Soluci&oacute;n: registrar el c&oacute;digo postal en el cat&aacute;logo de Or&iacute;genes/Destinos y reintentar la transmisi&oacute;n.</span>
+              <div class="modal-err">
+                <strong>Error 422 — Unprocessable Entity</strong><br>
+                Campo <code>code_type_trip</code> requerido: el tipo de viaje "NAC — Nacional" no tiene equivalencia configurada en ControlT.<br>
+                <span style="font-size:11px;color:#666;margin-top:4px;display:block;">Solución: asignar equivalencia ControlT al tipo de viaje en el catálogo y reintentar la transmisión.</span>
               </div>
             </div>
           </div>
-          <div class="error-modal-footer">
-            <button class="btn-primary" onclick="this.textContent='&#10003; Reintentando...'; setTimeout(()=>{this.textContent='&#8635; Reintentar transmisi&oacute;n';},1800);">&#8635; Reintentar transmisi&oacute;n</button>
-            <button class="btn-secondary">Cerrar</button>
+          <div style="padding:8px 14px 12px;display:flex;gap:8px;border-top:1px solid #eee;background:#fafafa;">
+            <button class="erp-btn-orange" onclick="this.textContent='✓ Reintentando…';setTimeout(()=>{this.textContent='↻ Reintentar transmisión'},1800)">↻ Reintentar transmisión</button>
+            <button class="erp-btn">Cerrar</button>
           </div>
         </div>
       </div>
@@ -538,84 +634,65 @@
 </div>
 
 
-<script>
-var editingRow = null;
+<!-- Modal error (desde listado) -->
+<div id="modal-error" class="modal-overlay" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span>Detalle de Transmisión ControlT — MXL-000000715</span>
+      <button class="modal-close" onclick="document.getElementById('modal-error').style.display='none'">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row"><span class="lbl">No. de viaje</span><span class="val">MXL-000000715</span></div>
+      <div class="modal-row"><span class="lbl">Fecha y hora del intento</span><span class="val">15/06/2026 &nbsp; 10:22:45</span></div>
+      <div class="modal-row"><span class="lbl">Operador</span><span class="val">LÓPEZ HERNÁNDEZ JUAN</span></div>
+      <div class="modal-row"><span class="lbl">Tipo de viaje</span><span class="val">Nacional (NAC)</span></div>
+      <div class="modal-row" style="align-items:flex-start;">
+        <span class="lbl">Mensaje de error</span>
+        <div class="modal-err">
+          <strong>Error 422 — Unprocessable Entity</strong><br>
+          Campo <code>code_type_trip</code>: el tipo "NAC — Nacional" no tiene equivalencia ControlT configurada.<br>
+          <span style="font-size:11px;color:#666;margin-top:4px;display:block;">Asignar equivalencia en el catálogo de tipos de viaje y reintentar.</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ftr">
+      <button class="erp-btn-orange" onclick="this.textContent='✓ Reintentando…';setTimeout(()=>{this.textContent='↻ Reintentar transmisión'},1800)">↻ Reintentar transmisión</button>
+      <button class="erp-btn" onclick="document.getElementById('modal-error').style.display='none'">Cerrar</button>
+    </div>
+  </div>
+</div>
 
+
+<script>
 function switchProtoTab(id) {
-  document.querySelectorAll('.proto-tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('.proto-tab-content').forEach(function(c) { c.classList.remove('active'); });
-  var ids = ['cfg','tipos','listado','error'];
+  document.querySelectorAll('.proto-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.proto-tab-content').forEach(c => c.classList.remove('active'));
+  var ids = ['cfg','viaje','listado','error'];
   var idx = ids.indexOf(id);
   if (idx >= 0) document.querySelectorAll('.proto-tab')[idx].classList.add('active');
   var el = document.getElementById('proto-' + id);
   if (el) el.classList.add('active');
 }
 
-function switchTab(panel, name) {
-  var panelEl = document.getElementById('proto-' + panel);
-  if (!panelEl) return;
-  panelEl.querySelectorAll('.tabs .tab').forEach(function(t) { t.classList.remove('active'); });
-  panelEl.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-  panelEl.querySelectorAll('.tabs .tab').forEach(function(t) {
-    if (t.getAttribute('onclick') === "switchTab('" + panel + "','" + name + "')") t.classList.add('active');
-  });
-  var el = document.getElementById(panel + '-' + name);
+function switchViajeTab(id) {
+  document.querySelectorAll('.erp-old-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.erp-old-tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  var el = document.getElementById('vt-' + id);
   if (el) el.classList.add('active');
 }
 
-function switchPG(id) {
-  document.querySelectorAll('.pg-tab').forEach(function(t) {
-    t.style.background = '#f0f0f0';
-    t.style.color = '#555';
-    t.style.fontWeight = 'normal';
-    t.style.borderBottom = 'none';
-    t.classList.remove('pg-tab-active');
-  });
-  document.getElementById('pg-general').style.display = 'none';
-  document.getElementById('pg-torre').style.display = 'none';
-  document.getElementById('pg-' + id).style.display = 'block';
-  // highlight active tab
-  var tabs = document.querySelectorAll('.pg-tab');
-  var idx = id === 'general' ? 0 : 1;
-  tabs[idx].style.background = '#fff';
-  tabs[idx].style.color = '#222';
-  tabs[idx].style.fontWeight = 'bold';
-  tabs[idx].style.borderBottom = '2px solid #fff';
-}
-
 function toggleCT(chk) {
-  var fields = document.getElementById('ct-fields');
-  if (chk.checked) { fields.classList.remove('disabled-section'); }
-  else { fields.classList.add('disabled-section'); document.getElementById('ct-save-msg').style.display = 'none'; }
+  var f = document.getElementById('ct-fields');
+  f.style.opacity = chk.checked ? '1' : '.4';
+  f.style.pointerEvents = chk.checked ? 'auto' : 'none';
+  if (!chk.checked) document.getElementById('ct-save-msg').style.display = 'none';
 }
 
 function guardarCfg() {
   if (document.getElementById('chk-ct').checked) {
     document.getElementById('ct-save-msg').style.display = 'block';
   }
-}
-
-function editarTipo(btn, clave, desc, equiv) {
-  editingRow = btn.closest('tr');
-  document.getElementById('edit-clave').value = clave;
-  document.getElementById('edit-desc').value = desc;
-  document.getElementById('edit-equivalencia').value = equiv;
-  document.getElementById('tipos-edit-form').style.display = 'block';
-}
-
-function guardarTipo() {
-  if (!editingRow) return;
-  var equiv = document.getElementById('edit-equivalencia').value;
-  var equivMap = {'1':'1 — Paqueteo','2':'2 — Urbano','3':'3 — Regional','4':'4 — Nacional',
-    '5':'5 — Internacional','6':'6 — Inter Cedi','7':'7 — Inter Plantas','8':'8 — Traslados','9':'9 — Otros'};
-  var cell = editingRow.cells[3];
-  if (equiv) {
-    cell.innerHTML = '<span style="color:#1a6b2e;font-weight:bold">' + equivMap[equiv] + '</span>';
-  } else {
-    cell.innerHTML = '<span style="color:#856404;font-weight:bold">— Sin asignar</span>';
-  }
-  editingRow.cells[1].textContent = document.getElementById('edit-desc').value;
-  document.getElementById('tipos-edit-form').style.display = 'none';
 }
 </script>
 

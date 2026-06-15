@@ -138,62 +138,133 @@
 
 <!-- ===== TAB 1: CONFIGURACIÓN ===== -->
 <div id="proto-cfg" class="proto-tab-content active">
-  <div class="panel">
-    <div class="panel-title">Par&aacute;metros Generales</div>
+  <div style="background:#fff;border:1px solid #ccc;">
 
-    <div class="tabs">
-      <div class="tab" onclick="switchTab('cfg','empresa')">Empresa</div>
-      <div class="tab" onclick="switchTab('cfg','fiscal')">Datos Fiscales</div>
-      <div class="tab" onclick="switchTab('cfg','correos')">Correos</div>
-      <div class="tab active" onclick="switchTab('cfg','torre-control')">Torre de Control</div>
-      <div class="tab" onclick="switchTab('cfg','otros')">Otros</div>
+    <!-- Título de pantalla estilo ERP -->
+    <div style="background:#e8e8e8;border-bottom:1px solid #ccc;padding:8px 14px;font-size:15px;font-weight:bold;color:#222;">
+      Par&aacute;metros Generales
     </div>
 
-    <div id="cfg-empresa" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Configuraci&oacute;n general de la empresa</div></div></div>
-    <div id="cfg-fiscal" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Datos fiscales (RFC, Raz&oacute;n Social ya configurados aqu&iacute;)</div></div></div>
-    <div id="cfg-correos" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Configuraci&oacute;n de correos electr&oacute;nicos</div></div></div>
-    <div id="cfg-otros" class="tab-content"><div class="inner-panel"><div class="placeholder-text">Otros par&aacute;metros generales</div></div></div>
+    <!-- Tabs internos al estilo de la pantalla real -->
+    <div style="display:flex;border-bottom:2px solid #c0c0c0;background:#f0f0f0;padding:0 10px;gap:2px;margin-top:2px;">
+      <div class="pg-tab" onclick="switchPG('general')" style="padding:6px 16px;cursor:pointer;border:1px solid #ccc;border-bottom:none;background:#f0f0f0;color:#555;font-size:13px;border-radius:3px 3px 0 0;margin-top:4px;">General</div>
+      <div class="pg-tab pg-tab-active" onclick="switchPG('torre')" style="padding:6px 16px;cursor:pointer;border:1px solid #aaa;border-bottom:2px solid #fff;background:#fff;color:#222;font-size:13px;font-weight:bold;border-radius:3px 3px 0 0;margin-top:4px;">Torre de Control</div>
+    </div>
 
-    <div id="cfg-torre-control" class="tab-content active">
-      <div class="inner-panel">
-
-        <div class="section-title">Integraci&oacute;n Torre de Control (ControlT)</div>
-
-        <div class="checkbox-row" style="margin-bottom:14px;">
-          <input type="checkbox" id="chk-ct" onchange="toggleCT(this)">
-          <label for="chk-ct"><strong>Habilitar integraci&oacute;n con ControlT</strong></label>
+    <!-- Pestaña General (placeholder del contenido existente) -->
+    <div id="pg-general" style="display:none;padding:14px 16px;">
+      <div style="display:flex;gap:16px;">
+        <!-- Columna izquierda -->
+        <div style="flex:1;min-width:0;">
+          <div class="field-row"><label style="min-width:130px;">RFC</label>
+            <input type="text" value="GMG030101AAA" style="width:140px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
+            <label style="min-width:120px;margin-left:8px;">Registro Patronal</label>
+            <input type="text" value="A458699999999" style="width:140px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
+          </div>
+          <div class="field-row"><label style="min-width:130px;">Nombre Fiscal</label>
+            <input type="text" value="GRUPO GM TRANSPORT SA DE CV" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
+          </div>
+          <div class="field-row"><label style="min-width:130px;">Nombre Comercial</label>
+            <input type="text" value="GM TRANSPORT" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;">
+          </div>
+          <div class="field-row"><label style="min-width:130px;">R&eacute;gimen Fiscal</label>
+            <select style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>GENERAL DE LEY PERSONAS MORALES</option></select>
+          </div>
+          <div class="field-row"><label style="min-width:130px;">Retenci&oacute;n IVA</label>
+            <select style="width:180px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>RETENCION IVA 4%</option></select>
+          </div>
+          <div style="margin:6px 0;display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" checked style="accent-color:#1565c0;width:14px;height:14px;">
+            <label style="font-size:13px;color:#333;">Varios centros de trabajo IMSS</label>
+          </div>
+          <div style="margin:4px 0;display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" style="accent-color:#1565c0;width:14px;height:14px;">
+            <label style="font-size:13px;color:#333;">Solicitar cambio de contrase&ntilde;a al usuario</label>
+          </div>
+          <div style="margin:4px 0;display:flex;gap:16px;">
+            <div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" style="accent-color:#1565c0;width:14px;height:14px;"><label style="font-size:13px;color:#333;">Usuarios inactivos</label></div>
+            <div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" checked style="accent-color:#1565c0;width:14px;height:14px;"><label style="font-size:13px;color:#333;">Activar doble autenticaci&oacute;n al usuario</label></div>
+          </div>
         </div>
-
-        <div id="ct-fields" class="disabled-section">
-          <div class="field-row">
-            <label>URL del servicio <span style="color:#c00">*</span></label>
-            <input type="text" value="https://api.controlt.com/v1">
-          </div>
-          <div class="field-row">
-            <label>Usuario <span style="color:#c00">*</span></label>
-            <input type="text" value="gmtransport_api">
-          </div>
-          <div class="field-row">
-            <label>Contrase&ntilde;a <span style="color:#c00">*</span></label>
-            <input type="password" value="password123">
-          </div>
-          <div class="field-row">
-            <label>C&oacute;digo de compa&ntilde;&iacute;a <span style="color:#c00">*</span></label>
-            <input type="text" value="GM-001">
-          </div>
+        <!-- Columna derecha: Usuario Timbrado -->
+        <div style="width:300px;flex-shrink:0;border:1px solid #ccc;padding:8px 10px;">
+          <div style="background:#e8e8e8;text-align:center;font-weight:bold;font-size:12px;padding:3px 0;margin-bottom:8px;border:1px solid #ccc;">Usuario Servicios de Timbrado/Servicios WEB</div>
+          <div class="field-row"><label style="min-width:90px;font-size:12px;">Usuario</label><input type="text" value="GMG030101AAA" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
+          <div class="field-row"><label style="min-width:90px;font-size:12px;">Contrase&ntilde;a</label><input type="password" value="password" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
+          <div style="display:flex;align-items:center;gap:6px;margin:4px 0;"><input type="checkbox" style="accent-color:#1565c0;width:14px;height:14px;"><label style="font-size:12px;color:#333;">Timbrar de Pruebas</label></div>
+          <div class="field-row" style="margin-top:6px;"><label style="min-width:90px;font-size:12px;">Api Key</label><input type="text" value="wsWB/7jvtlaUklPL93..." style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
         </div>
-
-        <div id="ct-save-msg" style="display:none;margin:10px 0 0 0;background:#d4edda;border:1px solid #c3e6cb;border-radius:3px;padding:8px 12px;font-size:13px;color:#155724;">
-          &#10004; Configuraci&oacute;n guardada. Los viajes comenzar&aacute;n a transmitirse a ControlT al asignar operador.
+      </div>
+      <!-- Domicilio Fiscal + Logo -->
+      <div style="display:flex;gap:16px;margin-top:10px;">
+        <div style="flex:1;">
+          <div style="background:#ddd;text-align:center;font-weight:bold;font-size:12px;padding:4px 0;border:1px solid #ccc;margin-bottom:6px;">Domicilio Fiscal</div>
+          <div class="field-row"><label style="min-width:130px;">Pa&iacute;s</label><select style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>M&Eacute;XICO</option></select></div>
+          <div class="field-row"><label style="min-width:130px;">C&oacute;digo Postal</label><input type="text" value="21290" style="width:80px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><button class="btn-dark" style="margin-left:6px;">Buscar</button></div>
+          <div class="field-row"><label style="min-width:130px;">Estado</label><select style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><option>BAJA CALIFORNIA</option></select></div>
+          <div class="field-row"><label style="min-width:130px;">Municipio</label><input type="text" value="MEXICALI" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"></div>
+          <div class="field-row"><label style="min-width:130px;">Calle</label><input type="text" value="ALHÓNDIGA DE GRANADITAS" style="flex:1;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"></div>
+          <div class="field-row"><label style="min-width:130px;">No. Exterior</label><input type="text" value="800" style="width:80px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"><label style="min-width:90px;margin-left:10px;">No. Interior</label><input type="text" style="width:80px;border:1px solid #ccc;padding:3px 5px;font-size:13px;font-family:Calibri,sans-serif;"></div>
         </div>
-
+        <div style="width:300px;flex-shrink:0;color:#aaa;font-style:italic;font-size:12px;border:1px solid #ccc;padding:8px 10px;text-align:center;">
+          <div style="background:#ddd;text-align:center;font-weight:bold;font-size:12px;padding:3px 0;margin-bottom:8px;border:1px solid #ccc;color:#333;font-style:normal;">Logo Empresa</div>
+          Logo de la empresa
+        </div>
       </div>
     </div>
 
-    <div class="bottom-bar">
-      <button class="btn-primary" onclick="guardarCfg()">Aceptar</button>
-      <button class="btn-secondary">Cancelar</button>
+    <!-- Pestaña Torre de Control -->
+    <div id="pg-torre" style="display:block;padding:16px 18px;">
+      <div style="display:flex;gap:16px;">
+        <!-- Izquierda: config ControlT -->
+        <div style="flex:1;min-width:0;">
+          <div style="background:#ddd;text-align:center;font-weight:bold;font-size:13px;padding:4px 0;border:1px solid #ccc;margin-bottom:10px;">Integraci&oacute;n ControlT</div>
+
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <input type="checkbox" id="chk-ct" onchange="toggleCT(this)" style="width:15px;height:15px;accent-color:#1565c0;">
+            <label for="chk-ct" style="font-size:13px;color:#333;font-weight:bold;">Habilitar integraci&oacute;n con Torre de Control (ControlT)</label>
+          </div>
+
+          <div id="ct-fields" class="disabled-section">
+            <div class="field-row">
+              <label style="min-width:200px;">URL del servicio <span style="color:#c00">*</span></label>
+              <input type="text" value="https://api.controlt.com/v1" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
+            </div>
+            <div class="field-row">
+              <label style="min-width:200px;">Usuario <span style="color:#c00">*</span></label>
+              <input type="text" value="gmtransport_api" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
+            </div>
+            <div class="field-row">
+              <label style="min-width:200px;">Contrase&ntilde;a <span style="color:#c00">*</span></label>
+              <input type="password" value="password123" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
+            </div>
+            <div class="field-row">
+              <label style="min-width:200px;">C&oacute;digo de compa&ntilde;&iacute;a <span style="color:#c00">*</span></label>
+              <input type="text" value="GM-001" style="flex:1;max-width:380px;border:1px solid #ccc;padding:4px 6px;font-size:13px;font-family:Calibri,sans-serif;">
+            </div>
+          </div>
+
+          <div id="ct-save-msg" style="display:none;margin-top:12px;background:#d4edda;border:1px solid #c3e6cb;border-radius:3px;padding:8px 12px;font-size:13px;color:#155724;">
+            &#10004; Configuraci&oacute;n guardada correctamente.
+          </div>
+        </div>
+
+        <!-- Derecha: nota informativa -->
+        <div style="width:280px;flex-shrink:0;border:1px solid #dce;background:#fafafa;padding:12px 14px;border-radius:3px;">
+          <div style="font-weight:bold;font-size:12px;color:#555;margin-bottom:8px;border-bottom:1px solid #ddd;padding-bottom:4px;">&#8505; Sobre esta integraci&oacute;n</div>
+          <p style="font-size:12px;color:#555;line-height:1.6;margin:0 0 8px;">Al habilitar, los viajes se transmitir&aacute;n autom&aacute;ticamente a <strong>ControlT</strong> cuando se asigne un operador.</p>
+          <p style="font-size:12px;color:#555;line-height:1.6;margin:0 0 8px;">El RFC y la Raz&oacute;n Social se toman de los <strong>Datos Fiscales</strong> ya registrados en el sistema.</p>
+          <p style="font-size:12px;color:#555;line-height:1.6;margin:0;">La zona horaria se determina autom&aacute;ticamente seg&uacute;n la sucursal del viaje.</p>
+        </div>
+      </div>
     </div>
+
+    <!-- Botones inferiores al estilo ERP real -->
+    <div style="display:flex;justify-content:center;gap:12px;padding:10px;border-top:1px solid #ddd;background:#f5f5f5;">
+      <button onclick="guardarCfg()" style="background:#7a6040;color:#fff;border:none;padding:5px 22px;font-size:13px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;">Grabar</button>
+      <button style="background:#888;color:#fff;border:none;padding:5px 22px;font-size:13px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;">Regresar</button>
+    </div>
+
   </div>
 </div>
 
@@ -490,6 +561,26 @@ function switchTab(panel, name) {
   });
   var el = document.getElementById(panel + '-' + name);
   if (el) el.classList.add('active');
+}
+
+function switchPG(id) {
+  document.querySelectorAll('.pg-tab').forEach(function(t) {
+    t.style.background = '#f0f0f0';
+    t.style.color = '#555';
+    t.style.fontWeight = 'normal';
+    t.style.borderBottom = 'none';
+    t.classList.remove('pg-tab-active');
+  });
+  document.getElementById('pg-general').style.display = 'none';
+  document.getElementById('pg-torre').style.display = 'none';
+  document.getElementById('pg-' + id).style.display = 'block';
+  // highlight active tab
+  var tabs = document.querySelectorAll('.pg-tab');
+  var idx = id === 'general' ? 0 : 1;
+  tabs[idx].style.background = '#fff';
+  tabs[idx].style.color = '#222';
+  tabs[idx].style.fontWeight = 'bold';
+  tabs[idx].style.borderBottom = '2px solid #fff';
 }
 
 function toggleCT(chk) {

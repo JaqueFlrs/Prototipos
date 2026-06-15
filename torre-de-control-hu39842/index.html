@@ -132,6 +132,24 @@
     /* Bottom bar */
     .erp-bottom-bar { display: flex; justify-content: center; gap: 10px; padding: 8px; border-top: 1px solid #ddd; background: #f0f0f0; }
 
+    /* ===== EXISTENTE vs NUEVO ===== */
+    /* Todo lo que ya existe en el ERP se muestra grisado/deshabilitado */
+    .existente { opacity: .38; filter: grayscale(60%); pointer-events: none; user-select: none; }
+    .existente input, .existente select, .existente textarea, .existente button { background: #f0f0f0 !important; color: #bbb !important; border-color: #ddd !important; cursor: default !important; }
+    /* Lo nuevo resalta con borde naranja y fondo cálido */
+    .nuevo { position: relative; }
+    .nuevo-label { font-weight: bold; color: #7a3800 !important; }
+    .nuevo input, .nuevo select, .nuevo textarea { border: 2px solid #F2940E !important; background: #fff9f0 !important; color: #222 !important; }
+    .nuevo-badge { display: inline-block; background: #F2940E; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 6px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+    /* Sección nueva: fondo cálido */
+    .nueva-seccion { background: #fff4e6; border: 2px solid #F2940E; border-radius: 3px; padding: 8px 10px; margin-top: 10px; }
+    /* Columna nueva en la tabla */
+    th.col-nueva { background: #F2940E !important; color: #fff !important; border-color: #cc7700 !important; }
+    td.col-nueva { background: #fff9f0 !important; }
+    /* Griseado por columna en el listado */
+    .erp-list-table th:not(.col-nueva) { opacity: .38; filter: grayscale(60%); }
+    .erp-list-table td:not(.col-nueva) { opacity: .38; filter: grayscale(60%); }
+
     /* Toggle switch */
     .toggle-wrap { display: flex; align-items: center; gap: 8px; }
     .toggle { position: relative; width: 36px; height: 18px; flex-shrink: 0; }
@@ -172,6 +190,9 @@
   <div class="erp-old">
     <div class="erp-old-titlebar">Parámetros Generales</div>
     <div class="erp-old-body">
+
+      <!-- Todo lo existente va grisado -->
+      <div class="existente">
 
       <!-- Fila 1 -->
       <div class="fr" style="gap:10px;">
@@ -229,24 +250,30 @@
         </div>
       </div>
 
+      </div><!-- /existente -->
+
       <!-- ===== SECCIÓN NUEVA: TORRE DE CONTROL ===== -->
-      <div class="erp-old-section" style="margin-top:12px;background:#ffe8cc;border-color:#F2940E;color:#7a3800;">&#9881; Torre de Control (ControlT) — <small style="font-weight:normal;">Nueva configuración</small></div>
+      <div class="nueva-seccion">
+        <div style="background:#F2940E;color:#fff;font-weight:bold;font-size:12px;padding:4px 8px;margin:-8px -10px 10px;border-radius:2px 2px 0 0;">
+          ⚙ Torre de Control (ControlT) <span style="background:#fff;color:#F2940E;font-size:10px;padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:bold;">NUEVO</span>
+        </div>
 
-      <div class="fr" style="margin-bottom:8px;">
-        <input type="checkbox" id="chk-ct" onchange="toggleCT(this)" style="width:14px;height:14px;accent-color:#F2940E;">
-        <label for="chk-ct" style="font-weight:bold;font-size:13px;">Habilitar integración con ControlT</label>
-      </div>
+        <div class="fr" style="margin-bottom:10px;">
+          <input type="checkbox" id="chk-ct" onchange="toggleCT(this)" style="width:14px;height:14px;accent-color:#F2940E;">
+          <label for="chk-ct" style="font-weight:bold;font-size:13px;color:#333;">Habilitar integración con ControlT</label>
+        </div>
 
-      <div id="ct-fields" style="opacity:.4;pointer-events:none;">
-        <div class="fr"><label style="min-width:160px;">URL del servicio <span style="color:#c00">*</span></label><input type="text" value="https://api.controlt.com/v1" style="width:320px;"></div>
-        <div class="fr"><label style="min-width:160px;">Usuario <span style="color:#c00">*</span></label><input type="text" value="gmtransport_api" style="width:200px;"></div>
-        <div class="fr"><label style="min-width:160px;">Contraseña <span style="color:#c00">*</span></label><input type="password" value="password123" style="width:200px;"></div>
-        <div class="fr"><label style="min-width:160px;">Código de compañía <span style="color:#c00">*</span></label><input type="text" value="GM-001" style="width:120px;"></div>
-        <div style="font-size:11px;color:#777;margin-top:2px;padding-left:165px;">El RFC y Razón Social se toman automáticamente de Datos Fiscales. La zona horaria se determina por sucursal del viaje.</div>
-      </div>
+        <div id="ct-fields" style="opacity:.4;pointer-events:none;">
+          <div class="fr"><label style="min-width:180px;">URL del servicio <span style="color:#c00">*</span></label><input type="text" value="https://api.controlt.com/v1" style="width:320px;border:1px solid #ccc;padding:2px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
+          <div class="fr"><label style="min-width:180px;">Usuario <span style="color:#c00">*</span></label><input type="text" value="gmtransport_api" style="width:200px;border:1px solid #ccc;padding:2px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
+          <div class="fr"><label style="min-width:180px;">Contraseña <span style="color:#c00">*</span></label><input type="password" value="password123" style="width:200px;border:1px solid #ccc;padding:2px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
+          <div class="fr"><label style="min-width:180px;">Código de compañía <span style="color:#c00">*</span></label><input type="text" value="GM-001" style="width:120px;border:1px solid #ccc;padding:2px 5px;font-size:12px;font-family:Calibri,sans-serif;"></div>
+          <div style="font-size:11px;color:#888;margin-top:4px;padding-left:183px;">RFC y Razón Social se toman de Datos Fiscales. Zona horaria según sucursal del viaje.</div>
+        </div>
 
-      <div id="ct-save-msg" style="display:none;margin-top:8px;background:#d4edda;border:1px solid #c3e6cb;border-radius:2px;padding:6px 10px;font-size:12px;color:#155724;">
-        &#10004; Configuración guardada. Los viajes comenzarán a transmitirse a ControlT al asignar operador.
+        <div id="ct-save-msg" style="display:none;margin-top:10px;background:#d4edda;border:1px solid #c3e6cb;border-radius:2px;padding:6px 10px;font-size:12px;color:#155724;">
+          ✔ Configuración guardada. Los viajes comenzarán a transmitirse a ControlT al asignar operador.
+        </div>
       </div>
 
     </div>
@@ -263,7 +290,7 @@
   <div class="erp-old">
     <div class="erp-old-titlebar">Agregando Viaje</div>
     <div class="erp-old-body">
-
+      <div class="existente">
       <!-- Fila superior: campos de cabecera -->
       <div style="border:1px solid #aaa;padding:5px 7px;background:#fafafa;margin-bottom:5px;">
         <div class="fr" style="flex-wrap:nowrap;gap:8px;">
@@ -322,23 +349,29 @@
           <span><input type="radio" name="imp" style="accent-color:#1565c0;"> <label>Exportación</label></span>
           <label>NO APLICA</label><select style="width:100px;"><option>NO APLICA</option></select>
         </div>
-        <div class="fr" style="gap:8px;margin-top:3px;">
-          <label>Estatus</label><select style="width:130px;"><option>DOCUMENTADO</option></select>
-          <input type="text" value="15/06/2026" style="width:80px;">
-          <input type="text" value="15:29" style="width:44px;">
-          <label style="margin-left:8px;">#. Movtos</label><input type="text" value="1.00" style="width:55px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap;">
+          <!-- campos existentes -->
+          <span class="existente" style="display:flex;align-items:center;gap:6px;">
+            <label>Estatus</label><select style="width:130px;"><option>DOCUMENTADO</option></select>
+            <input type="text" value="15/06/2026" style="width:80px;">
+            <input type="text" value="15:29" style="width:44px;">
+            <label style="margin-left:8px;">#. Movtos</label><input type="text" value="1.00" style="width:55px;">
+          </span>
           <!-- ===== CAMPO NUEVO: TIPO DE VIAJE ===== -->
-          <label style="margin-left:12px;font-weight:bold;color:#7a3800;">Tipo de Viaje</label>
-          <select id="sel-tipo-viaje" style="width:160px;border:2px solid #F2940E;">
-            <option value="">-- Seleccionar --</option>
-            <option value="PAQ">Paquetería Local</option>
-            <option value="URB">Urbano / Ciudad</option>
-            <option value="REG" selected>Regional</option>
-            <option value="NAC">Nacional</option>
-            <option value="INT">Internacional</option>
-            <option value="TRS">Traslados Internos</option>
-            <option value="OTR">Otros</option>
-          </select>
+          <span style="display:flex;align-items:center;gap:6px;margin-left:12px;background:#fff4e6;border:2px solid #F2940E;border-radius:3px;padding:3px 8px;">
+            <label style="font-weight:bold;color:#7a3800;">Tipo de Viaje</label>
+            <span style="background:#F2940E;color:#fff;font-size:10px;font-weight:bold;padding:1px 6px;border-radius:10px;">NUEVO</span>
+            <select id="sel-tipo-viaje" style="width:160px;border:1px solid #F2940E;background:#fff9f0;font-family:Calibri,sans-serif;font-size:12px;padding:2px 4px;">
+              <option value="">-- Seleccionar --</option>
+              <option value="PAQ">Paquetería Local</option>
+              <option value="URB">Urbano / Ciudad</option>
+              <option value="REG" selected>Regional</option>
+              <option value="NAC">Nacional</option>
+              <option value="INT">Internacional</option>
+              <option value="TRS">Traslados Internos</option>
+              <option value="OTR">Otros</option>
+            </select>
+          </span>
         </div>
         <div class="fr" style="gap:8px;margin-top:3px;">
           <label>Candado Oficial</label><input type="text" style="width:100px;">
@@ -388,6 +421,8 @@
         </table>
 
       </div>
+
+      </div><!-- /existente Tab2 -->
 
       <div id="vt-carga" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Desc./Materiales Carga</div></div>
       <div id="vt-conceptos" class="erp-old-tab-content"><div style="padding:16px;color:#aaa;font-style:italic;text-align:center;">Conceptos Facturación</div></div>
@@ -451,6 +486,7 @@
       </div>
 
       <div class="erp-new-content">
+        <div class="existente">
         <!-- Toolbar -->
         <div class="erp-toolbar">
           <button class="erp-toolbar-btn">Carta Porte</button>
@@ -487,6 +523,8 @@
         <!-- Listado -->
         <div class="erp-list-header">Listado de Viajes <span style="float:right;font-size:11px;font-weight:normal;">Buscar: <input type="text" style="width:120px;border:1px solid #aaa;padding:2px 4px;font-size:11px;font-family:Calibri,sans-serif;background:#fff;"></span></div>
 
+        </div><!-- /existente toolbar+filtros -->
+
         <div style="overflow-x:auto;">
           <table class="erp-list-table">
             <thead>
@@ -500,7 +538,7 @@
                 <th><span class="sort">⬆⬇</span> Rem 1</th>
                 <th><span class="sort">⬆⬇</span> Dolly</th>
                 <th><span class="sort">⬆⬇</span> Rem 2</th>
-                <th style="background:#ffe8cc;color:#7a3800;border-color:#F2940E;">ControlT &#9881;</th>
+                <th class="col-nueva">ControlT ⚙ <span style="background:#fff;color:#F2940E;font-size:9px;font-weight:bold;padding:1px 5px;border-radius:8px;margin-left:3px;">NUEVO</span></th>
               </tr>
             </thead>
             <tbody>
@@ -512,7 +550,7 @@
                 <td>MEXICALI, BAJA CALIFORNIA</td>
                 <td>PUERTO PEÑASCO, SONORA</td>
                 <td>UT-01</td><td></td><td></td>
-                <td style="text-align:center;"><span style="color:#fff;font-weight:bold;">✔ Enviado</span></td>
+                <td class="col-nueva" style="text-align:center;"><span style="color:#fff;font-weight:bold;">✔ Enviado</span></td>
               </tr>
               <tr>
                 <td><span class="chip chip-doc">DOC</span></td>
@@ -522,7 +560,7 @@
                 <td>MEXICALI, BAJA CALIFORNIA</td>
                 <td>GUADALAJARA, JALISCO</td>
                 <td>UT-05</td><td></td><td></td>
-                <td style="text-align:center;"><span class="ct-err" onclick="document.getElementById('modal-error').style.display='flex'">✖ Error ↻</span></td>
+                <td class="col-nueva" style="text-align:center;"><span class="ct-err" onclick="document.getElementById('modal-error').style.display='flex'">✖ Error ↻</span></td>
               </tr>
               <tr>
                 <td><span class="chip chip-pend">PEND</span></td>
@@ -532,7 +570,7 @@
                 <td>TIJUANA, BAJA CALIFORNIA</td>
                 <td>CDMX</td>
                 <td></td><td></td><td></td>
-                <td style="text-align:center;"><span class="ct-pend">⏱ Pendiente</span></td>
+                <td class="col-nueva" style="text-align:center;"><span class="ct-pend">⏱ Pendiente</span></td>
               </tr>
               <tr>
                 <td><span class="chip chip-doc">DOC</span></td>
@@ -542,7 +580,7 @@
                 <td>HERMOSILLO, SONORA</td>
                 <td>CHIHUAHUA</td>
                 <td>UT-03</td><td></td><td></td>
-                <td style="text-align:center;"><span class="ct-ok">✔ Enviado</span></td>
+                <td class="col-nueva" style="text-align:center;"><span class="ct-ok">✔ Enviado</span></td>
               </tr>
               <tr>
                 <td><span class="chip chip-cancel">CANC</span></td>
@@ -552,16 +590,16 @@
                 <td>LEÓN, GUANAJUATO</td>
                 <td>QUERÉTARO</td>
                 <td></td><td></td><td></td>
-                <td style="text-align:center;"><span class="ct-na">— N/A</span></td>
+                <td class="col-nueva" style="text-align:center;"><span class="ct-na">— N/A</span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <div style="margin-top:4px;font-size:11px;color:#666;">Mostrando registros del 1 al 5 de un total de 5 registros</div>
+        <div class="existente" style="margin-top:4px;font-size:11px;color:#666;">Mostrando registros del 1 al 5 de un total de 5 registros</div>
 
         <!-- Disponibilidad equipo / Trayectos -->
-        <div style="display:flex;gap:8px;margin-top:8px;">
+        <div class="existente" style="display:flex;gap:8px;margin-top:8px;">
           <div style="flex:1;">
             <div class="disp-panel-hdr">Disponibilidad equipo <span style="font-size:11px;cursor:pointer;">Cambiar Disp.</span> <span style="margin-left:auto;">Buscar: <input type="text" style="width:80px;border:1px solid #aaa;padding:1px 4px;font-size:10px;font-family:Calibri,sans-serif;background:#fff;"></span></div>
             <table class="erp-grid">
@@ -582,8 +620,8 @@
           </div>
         </div>
 
-        <!-- Leyenda ControlT -->
-        <div style="margin-top:8px;padding:5px 8px;background:#fffdf9;border:1px solid #F2940E;border-radius:2px;font-size:11px;color:#555;display:flex;gap:14px;flex-wrap:wrap;">
+        <!-- Leyenda ControlT — nueva, no va en existente -->
+        <div style="margin-top:8px;padding:5px 8px;background:#fff4e6;border:2px solid #F2940E;border-radius:2px;font-size:11px;color:#555;display:flex;gap:14px;flex-wrap:wrap;">
           <strong style="color:#F2940E;">ControlT:</strong>
           <span><strong style="color:#1a6b2e;">✔ Enviado</strong> — transmitido exitosamente</span>
           <span><strong style="color:#c00;">✖ Error ↻</strong> — clic para ver detalle y reintentar</span>

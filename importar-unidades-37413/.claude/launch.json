@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "importar-unidades-37413",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3413", "."],
+      "port": 3413
+    }
+  ]
+}

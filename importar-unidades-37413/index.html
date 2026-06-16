@@ -58,7 +58,7 @@
     .erp-toolbar { padding: 8px 12px; background: #fff; border-bottom: 1px solid #e0e0e0; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; flex-shrink: 0; }
     .tb-btn { background: #F2940E; color: #fff; border: none; padding: 5px 13px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; white-space: nowrap; }
     .tb-btn:hover { background: #d07a0a; }
-    .tb-btn:disabled { background: #ccc; color: #999; cursor: not-allowed; }
+    .tb-btn[disabled], .tb-btn:disabled { background: #d8d8d8 !important; color: #aaa !important; cursor: not-allowed !important; border: 1px solid #ccc !important; }
     .tb-btn-dark { background: #5a5a5a; color: #fff; border: none; padding: 5px 13px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; white-space: nowrap; }
     .tb-btn-dark:hover { background: #444; }
 

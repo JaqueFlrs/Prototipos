@@ -7,6 +7,13 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; background: #fff; }
 
+    /* ── Disclaimer ── */
+    .proto-disclaimer { background: #fffdf9; border: 1px solid #f0d9b5; border-left: 5px solid #F2940E; margin: 12px 16px; border-radius: 4px; padding: 12px 16px; font-size: 12px; color: #444; line-height: 1.6; }
+    .proto-disclaimer .disc-title { font-weight: bold; font-size: 13px; color: #c06000; margin-bottom: 6px; }
+    .proto-disclaimer .disc-warn { font-weight: bold; color: #b35c00; margin-top: 8px; margin-bottom: 4px; }
+    .proto-disclaimer p { margin-bottom: 4px; }
+    .proto-disclaimer p:last-child { margin-bottom: 0; }
+
     /* ── Proto meta (fuera del ERP) ── */
     .proto-meta { background: #fff8f0; border-bottom: 3px solid #F2940E; padding: 8px 16px; font-size: 11px; color: #555; }
     .proto-meta strong { color: #c06000; }
@@ -178,6 +185,15 @@
   <strong>Prototipo #37413</strong> — Importar Unidades v2 &nbsp;|&nbsp; Datos de ejemplo. Controles en gris = funcionalidad existente sin cambios.
 </div>
 
+<!-- Disclaimer -->
+<div class="proto-disclaimer">
+  <div class="disc-title">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <div class="disc-warn">⚠️ El prototipo no debe copiarse tal cual.</div>
+  <p>Lo que sí debe respetarse siempre es la apariencia del sistema destino: para el ERP GM Transport, eso significa colores, tipografía, estructura de paneles y componentes propios del ERP. Para otros proyectos (apps, portales, etc.), se respetan los estilos y guías de cada sistema.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
 <!-- Tabs externos -->
 <div class="proto-tabs-bar">
   <div class="proto-tab active" onclick="switchPT(0)">1 · Catálogo de Unidades</div>
@@ -219,7 +235,7 @@
 
       <div class="erp-main">
         <div class="erp-toolbar">
-          <button class="tb-btn">Agregar</button>
+          <button class="tb-btn" disabled>Agregar</button>
 
           <div class="dropdown" id="dd1">
             <button class="tb-btn" onclick="toggleDD('dd1')">Importar ▾</button>
@@ -229,26 +245,26 @@
             </div>
           </div>
 
-          <button class="tb-btn">Modificar</button>
-          <button class="tb-btn">Eliminar</button>
-          <button class="tb-btn">Consultar</button>
-          <button class="tb-btn">Modificar Código</button>
-          <button class="tb-btn">Imprimir Documentos</button>
-          <button class="tb-btn">Imprimir</button>
-          <button class="tb-btn">Asignar / Desasignar Llanta</button>
+          <button class="tb-btn" disabled>Modificar</button>
+          <button class="tb-btn" disabled>Eliminar</button>
+          <button class="tb-btn" disabled>Consultar</button>
+          <button class="tb-btn" disabled>Modificar Código</button>
+          <button class="tb-btn" disabled>Imprimir Documentos</button>
+          <button class="tb-btn" disabled>Imprimir</button>
+          <button class="tb-btn" disabled>Asignar / Desasignar Llanta</button>
         </div>
 
-        <div class="erp-filters">
-          <input type="checkbox" checked id="f1"><label for="f1"> Únicamente activas</label>
+        <div class="erp-filters" style="opacity:.45;pointer-events:none;">
+          <input type="checkbox" checked id="f1" disabled><label for="f1"> Únicamente activas</label>
           &nbsp;
-          <input type="checkbox" id="f2"><label for="f2"> Filtrar Unidades con Identificador Satelital</label>
+          <input type="checkbox" id="f2" disabled><label for="f2"> Filtrar Unidades con Identificador Satelital</label>
           &nbsp;
-          <input type="checkbox" checked id="f3"><label for="f3"> No Visualizar Unidades Rentadas</label>
+          <input type="checkbox" checked id="f3" disabled><label for="f3"> No Visualizar Unidades Rentadas</label>
           &nbsp;
-          <button class="filter-apply">Aplicar 🔍</button>
+          <button class="filter-apply" disabled>Aplicar 🔍</button>
         </div>
 
-        <div class="erp-list-title">
+        <div class="erp-list-title" style="opacity:.45;">
           <div><span>Catálogo de Unidades</span></div>
           <div class="erp-list-title-right">
             <span class="erp-buscar-label">Buscar:</span>
@@ -256,7 +272,7 @@
           </div>
         </div>
 
-        <div class="erp-grid-wrap">
+        <div class="erp-grid-wrap" style="opacity:.45;pointer-events:none;">
           <table class="erp-grid">
             <thead>
               <tr>
@@ -290,7 +306,7 @@
           </table>
         </div>
 
-        <div class="erp-statusbar">
+        <div class="erp-statusbar" style="opacity:.45;pointer-events:none;">
           <div>
             <span style="color:#F2940E;cursor:pointer;margin-right:6px;">EXCEL</span>
             <span style="color:#F2940E;cursor:pointer;">PDF</span>

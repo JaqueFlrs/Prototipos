@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gherkin — Gestión de Combustibles Importados</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f4f6f9;
+      color: #1e2533;
+      padding: 32px 24px;
+    }
+
+    .page-header {
+      max-width: 860px;
+      margin: 0 auto 28px;
+    }
+
+    .badge-lang {
+      display: inline-block;
+      background: #e8f0fe;
+      color: #3b5bdb;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 99px;
+      letter-spacing: .5px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1e2533;
+      margin-bottom: 6px;
+    }
+
+    .feature-meta {
+      font-size: 13.5px;
+      color: #5c6680;
+      line-height: 1.7;
+    }
+
+    .stats-bar {
+      max-width: 860px;
+      margin: 0 auto 28px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: #fff;
+      border: 1px solid #e2e6ef;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 13px;
+      color: #5c6680;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat strong { color: #1e2533; font-size: 20px; font-weight: 700; }
+
+    .section {
+      max-width: 860px;
+      margin: 0 auto 24px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #9aa3b8;
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+
+    .background-card {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-left: 4px solid #f59f00;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 0 auto 28px;
+      max-width: 860px;
+      font-size: 13.5px;
+    }
+
+    .background-card .bg-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #e67700;
+      margin-bottom: 8px;
+    }
+
+    .background-card .step { color: #5c4400; line-height: 1.8; }
+
+    .scenario-card {
+      background: #fff;
+      border: 1px solid #e2e6ef;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: box-shadow .15s;
+    }
+
+    .scenario-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+
+    .scenario-header {
+      padding: 14px 18px 12px;
+      border-bottom: 1px solid #f0f2f7;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .scenario-number {
+      min-width: 26px;
+      height: 26px;
+      background: #f0f2f7;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #7a85a0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .scenario-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #1e2533;
+      line-height: 1.4;
+    }
+
+    .scenario-body {
+      padding: 12px 18px 14px 54px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .step {
+      font-size: 13.5px;
+      line-height: 1.5;
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .kw {
+      font-weight: 700;
+      min-width: 52px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .kw.given { color: #2f9e44; }
+    .kw.when  { color: #1971c2; }
+    .kw.then  { color: #e67700; }
+    .kw.and   { color: #845ef7; }
+    .kw.but   { color: #c92a2a; }
+
+    .step-text { color: #3a4259; }
+    .step-text em {
+      font-style: normal;
+      background: #f0f2f7;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 12.5px;
+      color: #1e2533;
+      font-family: 'Consolas', monospace;
+    }
+
+    /* Section color accents */
+    .sec-fecha    .scenario-card { border-left: 3px solid #74c0fc; }
+    .sec-busqueda .scenario-card { border-left: 3px solid #a9e34b; }
+    .sec-visib    .scenario-card { border-left: 3px solid #da77f2; }
+    .sec-individual .scenario-card { border-left: 3px solid #ff6b6b; }
+    .sec-masiva   .scenario-card { border-left: 3px solid #ffa94d; }
+    .sec-borde    .scenario-card { border-left: 3px solid #63e6be; }
+
+    .sec-fecha    .section-title { color: #1971c2; }
+    .sec-busqueda .section-title { color: #5c940d; }
+    .sec-visib    .section-title { color: #9c36b5; }
+    .sec-individual .section-title { color: #c92a2a; }
+    .sec-masiva   .section-title { color: #d9480f; }
+    .sec-borde    .section-title { color: #099268; }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <div class="badge-lang"># language: es</div>
+    <h1>Feature: Gestión de registros de combustible importados</h1>
+    <div class="feature-meta">
+      <div>Como <strong>usuario de GM Integra</strong></div>
+      <div>Quiero <strong>consultar, buscar y eliminar registros de combustible importados</strong></div>
+      <div>Para <strong>corregir importaciones incorrectas sin generar duplicados en el ERP</strong></div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><strong>18</strong> escenarios</div>
+    <div class="stat"><strong>6</strong> bloques</div>
+    <div class="stat"><strong>1</strong> Background</div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="background-card" style="max-width:860px;margin:0 auto 28px;">
+    <div class="bg-label">Background</div>
+    <div class="step">✦ Given el usuario tiene sesión activa en GM Integra</div>
+    <div class="step">✦ And el usuario tiene acceso al módulo de logs de consumos de combustible</div>
+  </div>
+
+  <!-- CONSULTA POR FECHA -->
+  <div class="section sec-fecha">
+    <div class="section-title">📅 Consulta por fecha</div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">1</div>
+        <div class="scenario-title">Consultar registros de combustible de un día específico</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existen registros de combustible importados en el sistema</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario filtra por fecha del <em>"2026-06-01"</em> al <em>"2026-06-01"</em></span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra únicamente los registros cuya fecha de importación corresponde al 01/06/2026</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">los registros eliminados no aparecen en el listado</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">2</div>
+        <div class="scenario-title">Consultar registros de un rango de fechas</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existen registros de combustible importados en distintas fechas</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario filtra por fecha desde el <em>"2026-06-01"</em> hasta el <em>"2026-06-05"</em></span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra todos los registros activos dentro de ese rango</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">los registros eliminados no aparecen en el listado</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">3</div>
+        <div class="scenario-title">No existen registros para la fecha consultada</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">no hay registros de combustible importados en la fecha indicada</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario filtra por fecha del <em>"2026-06-03"</em> al <em>"2026-06-03"</em></span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra el listado vacío</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra un mensaje indicando que no se encontraron registros</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÚSQUEDA -->
+  <div class="section sec-busqueda">
+    <div class="section-title">🔍 Búsqueda de registro específico</div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">4</div>
+        <div class="scenario-title">Buscar registro por número de tarjeta</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">el listado de registros de combustible está visible</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario escribe el número de tarjeta <em>"4152310000123456"</em> en el campo de búsqueda</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra únicamente los registros cuya tarjeta coincide con <em>"4152310000123456"</em></span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">5</div>
+        <div class="scenario-title">Buscar registro por número de comprobante</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">el listado de registros de combustible está visible</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario escribe el número de comprobante <em>"987654"</em> en el campo de búsqueda</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra únicamente el registro cuyo número de comprobante es <em>"987654"</em></span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">6</div>
+        <div class="scenario-title">Búsqueda sin resultados</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">el listado de registros de combustible está visible</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario escribe un número de tarjeta que no existe en el sistema</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra el listado vacío</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra un mensaje indicando que no se encontraron registros con ese criterio</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISIBILIDAD -->
+  <div class="section sec-visib">
+    <div class="section-title">👁 Visibilidad de registros eliminados</div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">7</div>
+        <div class="scenario-title">Los registros eliminados no aparecen por defecto</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existen registros de combustible activos y eliminados en el sistema</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario consulta el listado sin activar la opción "Mostrar eliminados"</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra únicamente los registros activos</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">los registros con baja lógica no aparecen en la lista</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">8</div>
+        <div class="scenario-title">Ver registros eliminados activando el check correspondiente</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existen registros de combustible activos y eliminados en el sistema</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario activa la opción "Mostrar eliminados"</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra tanto los registros activos como los eliminados</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">los registros eliminados se muestran con un indicador visual diferenciado (tachados o en color gris)</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">se muestra quién eliminó el registro y en qué fecha</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELIMINACIÓN INDIVIDUAL -->
+  <div class="section sec-individual">
+    <div class="section-title">🗑 Eliminación individual — soft delete</div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">9</div>
+        <div class="scenario-title">Eliminar un registro que ya no existe en el ERP</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existe un registro de combustible activo en el sistema</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el registro NO existe en el ERP de Tráfico</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario selecciona el registro y hace clic en "Eliminar"</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">confirma la eliminación en el modal de advertencia</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema marca el registro como eliminado (baja lógica)</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">registra la fecha y hora de eliminación</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">registra el usuario que realizó la eliminación</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el registro deja de aparecer en el listado por defecto</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">10</div>
+        <div class="scenario-title">Intentar eliminar un registro que todavía existe en el ERP</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existe un registro de combustible activo con estatus "insertado exitosamente"</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el registro EXISTE en el ERP de Tráfico</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario selecciona el registro y hace clic en "Eliminar"</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema bloquea la eliminación</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra el mensaje: <em>"El registro todavía existe en el ERP. Bórrelo primero en el módulo de Tráfico antes de eliminarlo aquí"</em></span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el registro permanece activo sin cambios</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">11</div>
+        <div class="scenario-title">Intentar eliminar cuando el ERP no responde</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existe un registro de combustible activo en el sistema</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el servicio de verificación del ERP no está disponible</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario selecciona el registro y hace clic en "Eliminar"</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema bloquea la eliminación por precaución</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra un mensaje indicando que no fue posible verificar el estado del registro en el ERP</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">sugiere intentarlo nuevamente más tarde</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">12</div>
+        <div class="scenario-title">Eliminar un registro que falló en la importación</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existe un registro de combustible con estatus "fallido" (no insertado en ERP)</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario selecciona el registro y hace clic en "Eliminar"</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">confirma la eliminación en el modal de advertencia</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema marca el registro como eliminado sin consultar el ERP</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el registro deja de aparecer en el listado por defecto</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">13</div>
+        <div class="scenario-title">Cancelar la eliminación desde el modal de confirmación</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existe un registro de combustible activo en el sistema</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario selecciona el registro y hace clic en "Eliminar"</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el modal de advertencia se muestra</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el usuario hace clic en "Cancelar"</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema cierra el modal sin realizar ningún cambio</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el registro permanece activo en el listado</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELIMINACIÓN MASIVA -->
+  <div class="section sec-masiva">
+    <div class="section-title">🗂 Eliminación masiva</div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">14</div>
+        <div class="scenario-title">Eliminar múltiples registros que no existen en el ERP</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existen varios registros de combustible activos en el sistema</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">ninguno de los registros seleccionados existe en el ERP</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario selecciona 3 registros y hace clic en "Eliminar seleccionados"</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">confirma la eliminación en el modal de advertencia</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema marca los 3 registros como eliminados</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra un resumen: <em>"3 registros eliminados correctamente"</em></span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">15</div>
+        <div class="scenario-title">Eliminación masiva con algunos registros bloqueados por el ERP</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existen varios registros de combustible activos en el sistema</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">2 de los registros seleccionados existen en el ERP</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">3 de los registros seleccionados NO existen en el ERP</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario selecciona los 5 registros y confirma la eliminación</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema elimina únicamente los 3 registros que no existen en el ERP</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra un resumen indicando: <em>"3 registros eliminados, 2 bloqueados"</em></span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">para cada registro bloqueado muestra el motivo: <em>"Existe en el ERP de Tráfico"</em></span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">16</div>
+        <div class="scenario-title">Intentar eliminar en masa cuando todos los registros existen en el ERP</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">el usuario selecciona 4 registros que todos existen en el ERP</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario confirma la eliminación masiva</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema no elimina ningún registro</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra el mensaje: <em>"No se pudo eliminar ningún registro. Todos existen en el ERP de Tráfico"</em></span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">17</div>
+        <div class="scenario-title">Intentar ejecutar eliminación masiva sin seleccionar registros</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">el listado de registros de combustible está visible con al menos un registro</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario hace clic en "Eliminar seleccionados" sin haber marcado ningún registro</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra un mensaje indicando que debe seleccionar al menos un registro</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">no realiza ninguna acción</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASOS BORDE -->
+  <div class="section sec-borde">
+    <div class="section-title">⚠️ Casos borde</div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">18</div>
+        <div class="scenario-title">El listado queda vacío al eliminar el único registro activo</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existe únicamente un registro de combustible activo para la fecha consultada</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el registro NO existe en el ERP</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario lo elimina y confirma</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema muestra el listado vacío</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">muestra un mensaje indicando que no hay registros activos para esa fecha</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">19</div>
+        <div class="scenario-title">Reimportación después de eliminar un registro fallido</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">un registro de combustible fue eliminado porque tenía estatus "fallido"</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario ejecuta nuevamente el proceso de importación para el mismo día</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema intenta insertar el registro en el ERP nuevamente</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">si la inserción es exitosa, crea un nuevo registro de log con estatus "insertado"</span></div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div class="scenario-number">20</div>
+        <div class="scenario-title">Ciclo completo: borrar en ERP → eliminar en Integra → reimportar</div>
+      </div>
+      <div class="scenario-body">
+        <div class="step"><span class="kw given">Given</span><span class="step-text">existe un registro con estatus "insertado exitosamente"</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el usuario ya borró el consumo correspondiente en el módulo de Tráfico del ERP</span></div>
+        <div class="step"><span class="kw when">When</span><span class="step-text">el usuario intenta eliminar el registro en GM Integra</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el ERP confirma que el registro ya no existe</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">el usuario confirma la eliminación en el modal</span></div>
+        <div class="step"><span class="kw then">Then</span><span class="step-text">el sistema marca el registro como eliminado</span></div>
+        <div class="step"><span class="kw and">And</span><span class="step-text">la próxima importación del mismo día podrá insertar el consumo nuevamente en el ERP</span></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

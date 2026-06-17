@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doble Check - Configuración de Envíos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dcOrange: '#f59e0b',
+                        dcOrangeHover: '#ea580c',
+                        dcOrangeLight: '#fffbeb',
+                        dcDark: '#1e293b',
+                        dcBg: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .chip { animation: chipIn 0.18s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes chipIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+
+        .form-card { transition: border-color 0.25s, box-shadow 0.25s; }
+        .form-card.error-highlight {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.12) !important;
+        }
+
+        /* Tooltip nativo mejorado */
+        [data-tooltip] { position: relative; }
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute; bottom: calc(100% + 6px); left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b; color: #fff; font-size: 11px; font-weight: 600;
+            white-space: nowrap; padding: 4px 10px; border-radius: 6px;
+            opacity: 0; pointer-events: none; transition: opacity 0.15s;
+            z-index: 100;
+        }
+        [data-tooltip]:hover::after { opacity: 1; }
+    </style>
+</head>
+<body class="bg-dcBg text-slate-800 font-sans h-screen flex overflow-hidden">
+
+    <!-- ── Menú Lateral ─────────────────────────────────────────────── -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col hidden md:flex shadow-sm z-10 shrink-0">
+        <div class="h-16 flex items-center px-6 border-b border-slate-200">
+            <div class="flex items-center">
+                <i class="fas fa-check-double text-dcOrange text-xl mr-2"></i>
+                <span class="text-slate-800 text-lg font-bold">Doble<span class="text-dcOrange">Check</span></span>
+            </div>
+        </div>
+        <nav class="flex-1 py-4 flex flex-col justify-between overflow-y-auto">
+            <div class="space-y-0.5">
+                <a href="#" class="flex items-center space-x-3 px-6 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-700 rounded-lg mx-2 transition-colors text-sm font-medium">
+                    <i class="far fa-file-alt w-4 text-center"></i><span>Formularios</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-6 py-2.5 text-slate-500 hover:bg-slate-50 hover:text-slate-700 rounded-lg mx-2 transition-colors text-sm font-medium">
+                    <i class="fas fa-search w-4 text-center"></i><span>Inspecciones</span>
+                </a>
+                <div class="pt-3 mt-2 border-t border-slate-100">
+                    <button onclick="toggleConfigMenu()"
+                        class="w-full flex items-center justify-between px-6 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-lg mx-0 transition-colors text-sm font-semibold">
+                        <span class="flex items-center gap-3">
+                            <i class="fas fa-cog w-4 text-center text-slate-400"></i>
+                            Configuraciones
+                        </span>
+                        <i id="config-chevron" class="fas fa-chevron-down text-slate-300 text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div id="config-submenu" class="overflow-hidden transition-all duration-200" style="max-height: 60px;">
+                        <a href="#" class="flex items-center space-x-3 pl-10 pr-4 py-2 bg-dcOrangeLight text-dcOrange rounded-lg mx-2 mt-0.5 text-sm font-bold">
+                            <i class="fas fa-paper-plane w-4 text-center"></i><span>Envío de Formularios</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-100 pt-3 space-y-0.5">
+                <a href="#" class="flex items-center space-x-3 px-6 py-2.5 text-slate-500 hover:bg-slate-50 rounded-lg mx-2 transition-colors text-sm">
+                    <i class="far fa-user w-4 text-center"></i><span>Mi Perfil</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-6 py-2.5 text-slate-500 hover:bg-slate-50 rounded-lg mx-2 transition-colors text-sm">
+                    <i class="fas fa-sign-out-alt w-4 text-center"></i><span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- ── Contenido Principal ──────────────────────────────────────── -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden">
+
+        <!-- Header -->
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0 z-10">
+            <div>
+                <h1 class="text-lg font-black text-slate-800 tracking-tight">Reglas de Envío</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Configura qué documentos reciben tus clientes y cómo.</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-400 hover:text-dcOrange hover:bg-orange-50 transition-colors">
+                    <i class="far fa-bell"></i>
+                </button>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center space-x-2.5 cursor-pointer">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-dcOrange to-orange-400 text-white flex items-center justify-center font-bold text-xs shadow">JA</div>
+                    <div class="hidden md:block">
+                        <span class="text-sm font-bold text-slate-700 block leading-none">Jaqueline Flores</span>
+                        <span class="text-[10px] text-slate-400 uppercase tracking-wide">Administrador</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-slate-300 text-xs"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Selector de cliente -->
+        <div class="bg-white px-8 py-4 border-b border-slate-200 shrink-0 z-20">
+            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Cliente activo</label>
+            <div class="relative dropdown-container max-w-2xl">
+                <button onclick="toggleClientDropdown()"
+                    class="w-full flex items-center justify-between bg-white border-2 border-slate-200 hover:border-dcOrange px-4 py-3 rounded-xl transition-all focus:outline-none focus:ring-4 focus:ring-orange-50 shadow-sm group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-orange-50 text-dcOrange flex items-center justify-center shrink-0">
+                            <i class="far fa-building"></i>
+                        </div>
+                        <div class="text-left">
+                            <span id="client-display-name" class="block text-sm font-black text-slate-800">TRANSPORTES LÓPEZ S.A. DE C.V.</span>
+                            <span id="client-display-rfc" class="block text-[11px] text-slate-400 font-mono">RFC: TLO991020XYZ</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-slate-400 group-hover:text-dcOrange transition-colors">
+                        <span class="text-xs font-semibold hidden sm:block">Cambiar</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                </button>
+
+                <!-- Dropdown clientes -->
+                <div id="client-dropdown" class="hidden absolute top-full left-0 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden z-50">
+                    <div class="p-3 border-b border-slate-100 bg-slate-50">
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3.5 top-3 text-slate-300 text-xs"></i>
+                            <input id="client-search" type="text" oninput="filtrarClientes(this.value)"
+                                placeholder="Buscar por nombre o RFC..."
+                                class="w-full pl-9 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-dcOrange outline-none">
+                        </div>
+                    </div>
+                    <div class="max-h-60 overflow-y-auto p-2 space-y-0.5" id="client-list">
+                        <div data-rfc="TLO991020XYZ" data-name="transportes lopez"
+                            onclick="seleccionarCliente('TLO991020XYZ','TRANSPORTES LÓPEZ S.A. DE C.V.')"
+                            class="client-item p-3 rounded-lg bg-orange-50 border border-orange-200 cursor-pointer flex justify-between items-center">
+                            <div>
+                                <span class="block text-sm font-bold text-slate-800">TRANSPORTES LÓPEZ S.A. DE C.V.</span>
+                                <span class="block text-[11px] text-slate-500 font-mono mt-0.5">TLO991020XYZ</span>
+                            </div>
+                            <i class="fas fa-check-circle text-dcOrange"></i>
+                        </div>
+                        <div data-rfc="LNO880515ABC" data-name="logistica del norte"
+                            onclick="seleccionarCliente('LNO880515ABC','LOGÍSTICA DEL NORTE S. DE R.L.')"
+                            class="client-item p-3 rounded-lg hover:bg-slate-50 border border-transparent cursor-pointer transition-colors">
+                            <span class="block text-sm font-bold text-slate-700">LOGÍSTICA DEL NORTE S. DE R.L.</span>
+                            <span class="block text-[11px] text-slate-500 font-mono mt-0.5">LNO880515ABC</span>
+                        </div>
+                        <div data-rfc="DNC770310RST" data-name="distribuidora nacional"
+                            onclick="seleccionarCliente('DNC770310RST','DISTRIBUIDORA NACIONAL S.A.')"
+                            class="client-item p-3 rounded-lg hover:bg-slate-50 border border-transparent cursor-pointer transition-colors">
+                            <span class="block text-sm font-bold text-slate-700">DISTRIBUIDORA NACIONAL S.A.</span>
+                            <span class="block text-[11px] text-slate-500 font-mono mt-0.5">DNC770310RST</span>
+                        </div>
+                        <p id="no-client-results" class="hidden text-xs text-slate-400 text-center py-3">Sin resultados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área de trabajo -->
+        <div class="flex-1 overflow-y-auto bg-slate-50 p-8">
+            <div class="max-w-7xl mx-auto space-y-6">
+
+                <!-- Preferencias generales -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm px-5 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <!-- Izquierda: label + toggle -->
+                    <div class="flex items-center gap-4">
+                        <div class="shrink-0">
+                            <p class="text-xs font-bold text-slate-700">Modo de envío</p>
+                            <p class="text-[11px] text-slate-400 mt-0.5"><span id="pref-client-name">Transportes López</span></p>
+                        </div>
+                        <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                            <button id="btn-auto" onclick="setMode('auto')"
+                                class="px-3.5 py-1.5 rounded-md text-xs font-bold bg-white text-dcOrange shadow-sm ring-1 ring-black/5 transition-all">
+                                <i class="fas fa-bolt mr-1.5"></i>Automático
+                            </button>
+                            <button id="btn-manual" onclick="setMode('manual')"
+                                class="px-3.5 py-1.5 rounded-md text-xs font-bold text-slate-400 hover:text-slate-600 transition-all">
+                                <i class="far fa-hand-pointer mr-1.5"></i>Preguntar
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Derecha: progreso + guardar -->
+                    <div class="flex items-center gap-5 shrink-0">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-xs text-slate-400 mb-1.5">
+                                <span id="configured-count" class="font-bold text-dcOrange">2</span> de 3 configurados
+                            </p>
+                            <div class="w-36 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div id="progress-bar" class="h-full bg-dcOrange rounded-full transition-all duration-500" style="width: 66.6%"></div>
+                            </div>
+                        </div>
+                        <button onclick="guardarConfiguracion()"
+                            class="px-5 py-2 bg-dcOrange hover:bg-dcOrangeHover text-white font-bold rounded-xl transition-all shadow-sm flex items-center gap-2 text-sm">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grid de formularios -->
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+
+                    <!-- ── FORMULARIO 1 (configurado) ── -->
+                    <div id="card-form-1" class="form-card bg-white rounded-2xl border-2 border-l-4 border-slate-200 border-l-green-400 shadow-sm hover:shadow-md transition-all flex flex-col overflow-visible">
+                        <!-- Card header -->
+                        <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-3">
+                            <div class="flex items-start gap-3 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-orange-50 text-dcOrange flex items-center justify-center text-lg shrink-0">
+                                    <i class="far fa-file-alt"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h3 class="text-sm font-bold text-slate-800">Revisión ocular de la unidad</h3>
+                                        <span id="status-form-1" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-200 shrink-0">
+                                            <i class="fas fa-check-circle"></i> Configurado
+                                        </span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Se envía al terminar la inspección vehicular.</p>
+                                </div>
+                            </div>
+                            <button onclick="abrirModalCopia('container-form-1','Revisión ocular de la unidad')"
+                                data-tooltip="Copiar destinatarios a otro formulario"
+                                class="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-slate-500 hover:text-dcOrange border border-slate-200 hover:border-orange-200 hover:bg-orange-50 rounded-lg transition-all shrink-0">
+                                <i class="fas fa-copy"></i>
+                                <span class="hidden sm:inline">Copiar a…</span>
+                            </button>
+                        </div>
+                        <!-- Card body -->
+                        <div class="p-5 bg-slate-50/40 flex-1 rounded-b-2xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fas fa-users opacity-60"></i>
+                                    Destinatarios (<span class="chip-count text-dcOrange">2</span>)
+                                </span>
+                                <button onclick="seleccionarTodos('container-form-1','dropdown-form-1')"
+                                    class="text-[10px] font-bold text-dcOrange hover:text-dcOrangeHover flex items-center gap-1 px-2.5 py-1 rounded-md bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors">
+                                    <i class="fas fa-user-plus"></i> Todos
+                                </button>
+                            </div>
+                            <!-- Chips -->
+                            <div class="flex flex-wrap gap-2 items-center" id="container-form-1">
+                                <div class="chip inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm" data-name="Juan Ramírez" title="jramirez@translopez.com">
+                                    <div class="w-6 h-6 rounded-full bg-dcOrange text-white flex items-center justify-center text-[9px] font-bold shrink-0">JR</div>
+                                    <span class="text-sm font-semibold text-slate-700">Juan Ramírez</span>
+                                    <button onclick="removeChip(this)" class="text-slate-300 hover:text-red-400 transition-colors ml-0.5"><i class="fas fa-times text-[10px]"></i></button>
+                                </div>
+                                <div class="chip inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm" data-name="Sofía Méndez" title="smendez@translopez.com">
+                                    <div class="w-6 h-6 rounded-full bg-dcOrange text-white flex items-center justify-center text-[9px] font-bold shrink-0">SM</div>
+                                    <span class="text-sm font-semibold text-slate-700">Sofía Méndez</span>
+                                    <button onclick="removeChip(this)" class="text-slate-300 hover:text-red-400 transition-colors ml-0.5"><i class="fas fa-times text-[10px]"></i></button>
+                                </div>
+                                <!-- Botón añadir -->
+                                <div class="relative dropdown-container">
+                                    <button onclick="toggleContactDropdown('dropdown-form-1','container-form-1')"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold text-dcOrange border border-dashed border-dcOrange hover:bg-orange-50 transition-colors bg-white">
+                                        <i class="fas fa-plus text-xs"></i> Añadir
+                                    </button>
+                                    <div id="dropdown-form-1" class="hidden absolute left-0 top-full mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 overflow-hidden">
+                                        <div class="p-2.5 border-b border-slate-100">
+                                            <div class="relative">
+                                                <i class="fas fa-search absolute left-3 top-2.5 text-slate-300 text-xs"></i>
+                                                <input type="text" class="contact-search w-full pl-8 pr-3 py-2 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-dcOrange outline-none"
+                                                    placeholder="Buscar contacto..."
+                                                    data-dropdown="dropdown-form-1" data-container="container-form-1"
+                                                    oninput="filterDropdown(this)" onclick="event.stopPropagation()">
+                                            </div>
+                                        </div>
+                                        <div class="p-1.5 max-h-52 overflow-y-auto contact-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── FORMULARIO 2 (configurado) ── -->
+                    <div id="card-form-2" class="form-card bg-white rounded-2xl border-2 border-l-4 border-slate-200 border-l-green-400 shadow-sm hover:shadow-md transition-all flex flex-col overflow-visible">
+                        <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-3">
+                            <div class="flex items-start gap-3 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-orange-50 text-dcOrange flex items-center justify-center text-lg shrink-0">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h3 class="text-sm font-bold text-slate-800">Formulario C-TPAT (Seguridad)</h3>
+                                        <span id="status-form-2" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-200 shrink-0">
+                                            <i class="fas fa-check-circle"></i> Configurado
+                                        </span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Revisión de seguridad física de la unidad.</p>
+                                </div>
+                            </div>
+                            <button onclick="abrirModalCopia('container-form-2','Formulario C-TPAT (Seguridad)')"
+                                data-tooltip="Copiar destinatarios a otro formulario"
+                                class="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-slate-500 hover:text-dcOrange border border-slate-200 hover:border-orange-200 hover:bg-orange-50 rounded-lg transition-all shrink-0">
+                                <i class="fas fa-copy"></i>
+                                <span class="hidden sm:inline">Copiar a…</span>
+                            </button>
+                        </div>
+                        <div class="p-5 bg-slate-50/40 flex-1 rounded-b-2xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fas fa-users opacity-60"></i>
+                                    Destinatarios (<span class="chip-count text-dcOrange">1</span>)
+                                </span>
+                                <button onclick="seleccionarTodos('container-form-2','dropdown-form-2')"
+                                    class="text-[10px] font-bold text-dcOrange hover:text-dcOrangeHover flex items-center gap-1 px-2.5 py-1 rounded-md bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors">
+                                    <i class="fas fa-user-plus"></i> Todos
+                                </button>
+                            </div>
+                            <div class="flex flex-wrap gap-2 items-center" id="container-form-2">
+                                <div class="chip inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm" data-name="Carlos Villanueva" title="cvillanueva@translopez.com">
+                                    <div class="w-6 h-6 rounded-full bg-dcOrange text-white flex items-center justify-center text-[9px] font-bold shrink-0">CV</div>
+                                    <span class="text-sm font-semibold text-slate-700">Carlos Villanueva</span>
+                                    <button onclick="removeChip(this)" class="text-slate-300 hover:text-red-400 transition-colors ml-0.5"><i class="fas fa-times text-[10px]"></i></button>
+                                </div>
+                                <div class="relative dropdown-container">
+                                    <button onclick="toggleContactDropdown('dropdown-form-2','container-form-2')"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold text-dcOrange border border-dashed border-dcOrange hover:bg-orange-50 transition-colors bg-white">
+                                        <i class="fas fa-plus text-xs"></i> Añadir
+                                    </button>
+                                    <div id="dropdown-form-2" class="hidden absolute left-0 top-full mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 overflow-hidden">
+                                        <div class="p-2.5 border-b border-slate-100">
+                                            <div class="relative">
+                                                <i class="fas fa-search absolute left-3 top-2.5 text-slate-300 text-xs"></i>
+                                                <input type="text" class="contact-search w-full pl-8 pr-3 py-2 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-dcOrange outline-none"
+                                                    placeholder="Buscar contacto..."
+                                                    data-dropdown="dropdown-form-2" data-container="container-form-2"
+                                                    oninput="filterDropdown(this)" onclick="event.stopPropagation()">
+                                            </div>
+                                        </div>
+                                        <div class="p-1.5 max-h-52 overflow-y-auto contact-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── FORMULARIO 3 (sin configurar) ── -->
+                    <div id="card-form-3" class="form-card bg-white rounded-2xl border-2 border-l-4 border-slate-200 border-l-amber-300 shadow-sm hover:shadow-md transition-all flex flex-col overflow-visible">
+                        <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-3">
+                            <div class="flex items-start gap-3 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-orange-50 text-dcOrange flex items-center justify-center text-lg shrink-0">
+                                    <i class="far fa-file"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h3 class="text-sm font-bold text-slate-800">Formulario Auto - 3 Casillas</h3>
+                                        <span id="status-form-3" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-200 shrink-0">
+                                            <i class="fas fa-exclamation-circle"></i> Sin configurar
+                                        </span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Inspección automatizada de tres puntos.</p>
+                                </div>
+                            </div>
+                            <button onclick="abrirModalCopia('container-form-3','Formulario Auto - 3 Casillas')"
+                                data-tooltip="Copiar destinatarios a otro formulario"
+                                class="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-slate-500 hover:text-dcOrange border border-slate-200 hover:border-orange-200 hover:bg-orange-50 rounded-lg transition-all shrink-0">
+                                <i class="fas fa-copy"></i>
+                                <span class="hidden sm:inline">Copiar a…</span>
+                            </button>
+                        </div>
+                        <div class="p-5 bg-slate-50/40 flex-1 rounded-b-2xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fas fa-users opacity-60"></i>
+                                    Destinatarios (<span class="chip-count text-dcOrange">0</span>)
+                                </span>
+                                <button onclick="seleccionarTodos('container-form-3','dropdown-form-3')"
+                                    class="text-[10px] font-bold text-dcOrange hover:text-dcOrangeHover flex items-center gap-1 px-2.5 py-1 rounded-md bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors">
+                                    <i class="fas fa-user-plus"></i> Todos
+                                </button>
+                            </div>
+                            <div class="flex flex-wrap gap-2 items-center" id="container-form-3">
+                                <!-- Empty state -->
+                                <div class="empty-state w-full flex flex-col items-center justify-center py-6 text-center">
+                                    <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+                                        <i class="fas fa-user-slash text-slate-300"></i>
+                                    </div>
+                                    <p class="text-xs font-semibold text-slate-400">Sin destinatarios configurados</p>
+                                    <p class="text-[11px] text-slate-300 mt-0.5">Usa <span class="text-dcOrange font-bold">+ Añadir</span> o <span class="text-dcOrange font-bold">Todos</span></p>
+                                </div>
+                                <!-- Botón añadir -->
+                                <div class="relative dropdown-container">
+                                    <button onclick="toggleContactDropdown('dropdown-form-3','container-form-3')"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold text-dcOrange border border-dashed border-dcOrange hover:bg-orange-50 transition-colors bg-white">
+                                        <i class="fas fa-plus text-xs"></i> Añadir
+                                    </button>
+                                    <div id="dropdown-form-3" class="hidden absolute left-0 top-full mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 overflow-hidden">
+                                        <div class="p-2.5 border-b border-slate-100">
+                                            <div class="relative">
+                                                <i class="fas fa-search absolute left-3 top-2.5 text-slate-300 text-xs"></i>
+                                                <input type="text" class="contact-search w-full pl-8 pr-3 py-2 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-dcOrange outline-none"
+                                                    placeholder="Buscar contacto..."
+                                                    data-dropdown="dropdown-form-3" data-container="container-form-3"
+                                                    oninput="filterDropdown(this)" onclick="event.stopPropagation()">
+                                            </div>
+                                        </div>
+                                        <div class="p-1.5 max-h-52 overflow-y-auto contact-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── MODAL: Copiar destinatarios ─────────────────────────────── -->
+    <div id="modal-copy" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="cerrarModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <!-- Header modal -->
+            <div class="p-5 border-b border-slate-100 flex items-start justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <div class="w-8 h-8 rounded-lg bg-orange-50 text-dcOrange flex items-center justify-center">
+                            <i class="fas fa-copy text-sm"></i>
+                        </div>
+                        <h3 class="text-base font-black text-slate-800">Copiar destinatarios</h3>
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Origen: <span id="modal-copy-title" class="font-bold text-slate-700"></span>
+                    </p>
+                </div>
+                <button onclick="cerrarModal()" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Preview destinatarios -->
+            <div class="px-5 py-4 bg-slate-50 border-b border-slate-100">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Se copiarán estos destinatarios</p>
+                <div id="modal-recipients-preview" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <!-- Formularios destino -->
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Destinos</p>
+                    <button onclick="toggleTodosFormularios(true)" class="text-xs font-bold text-dcOrange hover:text-dcOrangeHover transition-colors">
+                        Seleccionar todos
+                    </button>
+                </div>
+                <div id="modal-forms-list" class="space-y-2 max-h-44 overflow-y-auto"></div>
+            </div>
+            <!-- Acciones -->
+            <div class="px-5 pb-5 flex gap-2.5">
+                <button onclick="cerrarModal()"
+                    class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors">
+                    Cancelar
+                </button>
+                <button onclick="confirmarCopia()"
+                    class="flex-1 px-4 py-2.5 bg-dcOrange hover:bg-dcOrangeHover text-white rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-copy"></i> Copiar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Toast ──────────────────────────────────────────────────────── -->
+    <div id="toast" class="fixed bottom-6 right-6 transform translate-y-24 opacity-0 transition-all duration-300 z-50">
+        <div class="bg-slate-800 text-white px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[260px]">
+            <div id="toast-icon" class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center shrink-0">
+                <i id="toast-icon-i" class="fas fa-check text-white text-xs"></i>
+            </div>
+            <div>
+                <p id="toast-title" class="text-sm font-bold leading-tight"></p>
+                <p id="toast-msg"   class="text-[11px] text-slate-400 mt-0.5"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Script ──────────────────────────────────────────────────────── -->
+    <script>
+        // ── Datos ─────────────────────────────────────────────────────
+        const catalogoFormularios = [
+            { id: 'container-form-1', cardId: 'card-form-1', statusId: 'status-form-1', name: 'Revisión ocular de la unidad' },
+            { id: 'container-form-2', cardId: 'card-form-2', statusId: 'status-form-2', name: 'Formulario C-TPAT (Seguridad)' },
+            { id: 'container-form-3', cardId: 'card-form-3', statusId: 'status-form-3', name: 'Formulario Auto - 3 Casillas' },
+        ];
+
+        const clienteCatalogos = {
+            'TLO991020XYZ': [
+                { name: 'Juan Ramírez',      initials: 'JR', email: 'jramirez@translopez.com' },
+                { name: 'Sofía Méndez',      initials: 'SM', email: 'smendez@translopez.com' },
+                { name: 'Pedro Gómez',       initials: 'PG', email: 'pgomez@translopez.com' },
+                { name: 'Laura Torres',      initials: 'LT', email: 'ltorres@translopez.com' },
+                { name: 'Carlos Villanueva', initials: 'CV', email: 'cvillanueva@translopez.com' },
+            ],
+            'LNO880515ABC': [
+                { name: 'María García',    initials: 'MG', email: 'mgarcia@lognorte.com' },
+                { name: 'Roberto Sánchez', initials: 'RS', email: 'rsanchez@lognorte.com' },
+                { name: 'Diana Herrera',   initials: 'DH', email: 'dherrera@lognorte.com' },
+            ],
+            'DNC770310RST': [
+                { name: 'Ana López',     initials: 'AL', email: 'alopez@disnac.com' },
+                { name: 'Fernando Cruz', initials: 'FC', email: 'fcruz@disnac.com' },
+            ],
+        };
+
+        let currentClientRFC  = 'TLO991020XYZ';
+        let currentCopySourceId = null;
+
+        function getCurrentCatalogo() {
+            return clienteCatalogos[currentClientRFC] || [];
+        }
+
+        // ── Menú Configuraciones ──────────────────────────────────────
+        let configMenuOpen = true;
+        function toggleConfigMenu() {
+            configMenuOpen = !configMenuOpen;
+            const submenu  = document.getElementById('config-submenu');
+            const chevron  = document.getElementById('config-chevron');
+            submenu.style.maxHeight = configMenuOpen ? '60px' : '0px';
+            chevron.style.transform = configMenuOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+        }
+
+        // ── Modo de envío ─────────────────────────────────────────────
+        function setMode(mode) {
+            const active   = 'px-3.5 py-1.5 rounded-md text-xs font-bold bg-white text-dcOrange shadow-sm ring-1 ring-black/5 transition-all';
+            const inactive = 'px-3.5 py-1.5 rounded-md text-xs font-bold text-slate-400 hover:text-slate-600 transition-all';
+            document.getElementById('btn-auto').className   = mode === 'auto'   ? active : inactive;
+            document.getElementById('btn-manual').className = mode === 'manual' ? active : inactive;
+        }
+
+        // ── Seleccionar cliente ───────────────────────────────────────
+        function seleccionarCliente(rfc, nombre) {
+            currentClientRFC = rfc;
+            document.getElementById('client-display-name').textContent = nombre;
+            document.getElementById('client-display-rfc').textContent  = 'RFC: ' + rfc;
+            document.getElementById('pref-client-name').textContent    = nombre.split(' ').slice(0, 2).join(' ');
+
+            // Actualizar activo en lista
+            document.querySelectorAll('.client-item').forEach(item => {
+                const activo = item.dataset.rfc === rfc;
+                item.className = `client-item p-3 rounded-lg cursor-pointer flex justify-between items-center transition-colors ${
+                    activo ? 'bg-orange-50 border border-orange-200' : 'hover:bg-slate-50 border border-transparent'
+                }`;
+                const chk = item.querySelector('.fa-check-circle');
+                if (chk) chk.remove();
+                if (activo) {
+                    const i = document.createElement('i');
+                    i.className = 'fas fa-check-circle text-dcOrange';
+                    item.appendChild(i);
+                }
+            });
+
+            limpiarTodosLosFormularios();
+            document.getElementById('client-dropdown').classList.add('hidden');
+            showToast('success', 'Cliente seleccionado', `Configurando: ${nombre}`);
+        }
+
+        function limpiarTodosLosFormularios() {
+            catalogoFormularios.forEach(f => {
+                const container = document.getElementById(f.id);
+                container.querySelectorAll('.chip').forEach(c => c.remove());
+                mostrarEmptyState(container);
+                updateFormStatus(container);
+            });
+        }
+
+        function mostrarEmptyState(container) {
+            if (!container.querySelector('.empty-state')) {
+                const div = document.createElement('div');
+                div.className = 'empty-state w-full flex flex-col items-center justify-center py-6 text-center';
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+                        <i class="fas fa-user-slash text-slate-300"></i>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-400">Sin destinatarios configurados</p>
+                    <p class="text-[11px] text-slate-300 mt-0.5">Usa <span class="text-dcOrange font-bold">+ Añadir</span> o <span class="text-dcOrange font-bold">Todos</span></p>`;
+                container.insertBefore(div, container.querySelector('.dropdown-container'));
+            }
+        }
+
+        // ── Filtrar clientes ──────────────────────────────────────────
+        function filtrarClientes(query) {
+            const q = query.toLowerCase();
+            let hay = false;
+            document.querySelectorAll('.client-item').forEach(item => {
+                const coincide = item.dataset.name.includes(q) || item.dataset.rfc.toLowerCase().includes(q);
+                item.classList.toggle('hidden', !coincide);
+                if (coincide) hay = true;
+            });
+            document.getElementById('no-client-results').classList.toggle('hidden', hay);
+        }
+
+        // ── Dropdowns ─────────────────────────────────────────────────
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.dropdown-container')) {
+                document.getElementById('client-dropdown').classList.add('hidden');
+                document.querySelectorAll('[id^="dropdown-form-"]').forEach(el => el.classList.add('hidden'));
+            }
+        });
+
+        function toggleClientDropdown() {
+            document.querySelectorAll('[id^="dropdown-form-"]').forEach(el => el.classList.add('hidden'));
+            const dd = document.getElementById('client-dropdown');
+            dd.classList.toggle('hidden');
+            if (!dd.classList.contains('hidden')) {
+                document.getElementById('client-search').value = '';
+                filtrarClientes('');
+                setTimeout(() => document.getElementById('client-search').focus(), 50);
+            }
+        }
+
+        function toggleContactDropdown(dropdownId, containerId) {
+            document.getElementById('client-dropdown').classList.add('hidden');
+            document.querySelectorAll('[id^="dropdown-form-"]').forEach(el => {
+                if (el.id !== dropdownId) el.classList.add('hidden');
+            });
+            const dd = document.getElementById(dropdownId);
+            const abriendo = dd.classList.contains('hidden');
+            dd.classList.toggle('hidden');
+            if (abriendo) {
+                const search = dd.querySelector('.contact-search');
+                if (search) search.value = '';
+                renderContactDropdown(dropdownId, containerId);
+                setTimeout(() => { if (search) search.focus(); }, 50);
+            }
+        }
+
+        function filterDropdown(input) {
+            renderContactDropdown(input.dataset.dropdown, input.dataset.container);
+        }
+
+        function renderContactDropdown(dropdownId, containerId) {
+            const catalog = getCurrentCatalogo();
+            const dd      = document.getElementById(dropdownId);
+            const listEl  = dd.querySelector('.contact-list');
+            const query   = (dd.querySelector('.contact-search')?.value || '').toLowerCase().trim();
+
+            // Nombres ya agregados
+            const container  = document.getElementById(containerId);
+            const addedNames = new Set(
+                Array.from(container.querySelectorAll('.chip')).map(c => c.dataset.name || '')
+            );
+
+            const filtered = query
+                ? catalog.filter(c => c.name.toLowerCase().includes(query) || c.email.toLowerCase().includes(query))
+                : catalog;
+
+            listEl.innerHTML = '';
+
+            if (catalog.length === 0) {
+                listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Sin contactos disponibles.</p>`;
+                return;
+            }
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Sin resultados.</p>`;
+                return;
+            }
+
+            // ¿Todos ya añadidos?
+            const allAdded = !query && catalog.every(c => addedNames.has(c.name));
+            if (allAdded) {
+                listEl.innerHTML = `
+                    <div class="flex flex-col items-center py-6 text-center">
+                        <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mb-2">
+                            <i class="fas fa-check-double text-green-400 text-sm"></i>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-500">Todos los contactos añadidos</p>
+                    </div>`;
+                return;
+            }
+
+            filtered.forEach(c => {
+                const added = addedNames.has(c.name);
+                const div = document.createElement('div');
+                div.className = `p-2.5 rounded-lg flex items-center justify-between gap-2 transition-colors ${
+                    added ? 'cursor-default opacity-60' : 'hover:bg-slate-50 cursor-pointer'
+                }`;
+                div.innerHTML = `
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold
+                            ${added ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-slate-600'}">
+                            ${added ? '<i class="fas fa-check text-[9px]"></i>' : c.initials}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold truncate ${added ? 'text-slate-400' : 'text-slate-700'}">${c.name}</p>
+                            <p class="text-[10px] text-slate-400 truncate">${c.email}</p>
+                        </div>
+                    </div>
+                    ${added ? '<span class="text-[10px] font-bold text-green-500 shrink-0">Añadido</span>' : '<i class="fas fa-plus text-slate-300 text-xs shrink-0"></i>'}`;
+                if (!added) div.onclick = () => addSpecificContact(containerId, c.name, c.initials, dropdownId, c.email);
+                listEl.appendChild(div);
+            });
+        }
+
+        // ── Añadir contacto ───────────────────────────────────────────
+        function addSpecificContact(containerId, name, initials, dropdownId, email = '') {
+            const container = document.getElementById(containerId);
+            // Evitar duplicados
+            if (Array.from(container.querySelectorAll('.chip')).some(c => c.dataset.name === name)) {
+                document.getElementById(dropdownId).classList.add('hidden');
+                return;
+            }
+
+            // Quitar empty state
+            container.querySelector('.empty-state')?.remove();
+
+            // Quitar highlight error
+            container.closest('.form-card')?.classList.remove('error-highlight');
+
+            const chip = document.createElement('div');
+            chip.className    = 'chip inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm';
+            chip.dataset.name = name;
+            chip.title        = email;
+            chip.innerHTML    = `
+                <div class="w-6 h-6 rounded-full bg-dcOrange text-white flex items-center justify-center text-[9px] font-bold shrink-0">${initials}</div>
+                <span class="text-sm font-semibold text-slate-700">${name}</span>
+                <button onclick="removeChip(this)" class="text-slate-300 hover:text-red-400 transition-colors ml-0.5"><i class="fas fa-times text-[10px]"></i></button>`;
+            container.insertBefore(chip, container.querySelector('.dropdown-container'));
+            updateFormStatus(container);
+            document.getElementById(dropdownId).classList.add('hidden');
+        }
+
+        // ── Seleccionar todos ─────────────────────────────────────────
+        function seleccionarTodos(containerId, dropdownId) {
+            const catalog = getCurrentCatalogo();
+            if (catalog.length === 0) {
+                showToast('warning', 'Sin contactos', 'El cliente no tiene contactos en el catálogo.');
+                return;
+            }
+            catalog.forEach(c => addSpecificContact(containerId, c.name, c.initials, dropdownId, c.email));
+            showToast('success', 'Contactos añadidos', 'Se agregaron todos los contactos del catálogo.');
+        }
+
+        // ── Remover chip ──────────────────────────────────────────────
+        function removeChip(btn) {
+            const container = btn.closest('[id^="container-form-"]');
+            btn.parentElement.remove();
+            if (container.querySelectorAll('.chip').length === 0) {
+                mostrarEmptyState(container);
+            }
+            updateFormStatus(container);
+        }
+
+        // ── Actualizar estado visual de la tarjeta ────────────────────
+        function updateFormStatus(container) {
+            const count = container.querySelectorAll('.chip').length;
+            const card  = container.closest('.form-card');
+
+            // Contador
+            const countSpan = card?.querySelector('.chip-count');
+            if (countSpan) countSpan.textContent = count;
+
+            // Badge de estado
+            const formDef = catalogoFormularios.find(f => f.id === container.id);
+            if (formDef) {
+                const badge = document.getElementById(formDef.statusId);
+                if (badge) {
+                    if (count > 0) {
+                        badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-200 shrink-0';
+                        badge.innerHTML = '<i class="fas fa-check-circle"></i> Configurado';
+                    } else {
+                        badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-200 shrink-0';
+                        badge.innerHTML = '<i class="fas fa-exclamation-circle"></i> Sin configurar';
+                    }
+                }
+            }
+
+            // Borde izquierdo de la tarjeta
+            if (card) {
+                card.classList.remove('border-l-green-400', 'border-l-amber-300', 'border-l-red-400');
+                card.classList.add(count > 0 ? 'border-l-green-400' : 'border-l-amber-300');
+            }
+
+            // Barra de progreso global
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total      = catalogoFormularios.length;
+            const configured = catalogoFormularios.filter(f =>
+                document.getElementById(f.id).querySelectorAll('.chip').length > 0
+            ).length;
+
+            const countEl = document.getElementById('configured-count');
+            const barEl   = document.getElementById('progress-bar');
+            if (countEl) countEl.textContent = configured;
+            if (barEl) {
+                barEl.style.width = `${(configured / total) * 100}%`;
+                barEl.className   = `h-full rounded-full transition-all duration-500 ${
+                    configured === total ? 'bg-green-500' : configured > 0 ? 'bg-dcOrange' : 'bg-slate-300'
+                }`;
+            }
+        }
+
+        // ── Guardar con validación ────────────────────────────────────
+        function guardarConfiguracion() {
+            const vacios = catalogoFormularios.filter(f =>
+                document.getElementById(f.id).querySelectorAll('.chip').length === 0
+            );
+
+            if (vacios.length > 0) {
+                vacios.forEach(f => {
+                    const card = document.getElementById(f.cardId);
+                    card.classList.add('error-highlight');
+                    setTimeout(() => card.classList.remove('error-highlight'), 3000);
+                });
+                showToast('error', 'Faltan destinatarios', `${vacios.length} formulario(s) sin configurar.`);
+                return;
+            }
+
+            showToast('success', '¡Configuración guardada!',
+                `Las reglas para ${document.getElementById('client-display-name').textContent} se han actualizado.`);
+        }
+
+        // ── Modal copiar ──────────────────────────────────────────────
+        function abrirModalCopia(sourceId, sourceName) {
+            currentCopySourceId = sourceId;
+            document.getElementById('modal-copy-title').textContent = sourceName;
+
+            const container = document.getElementById(sourceId);
+            const chips     = container.querySelectorAll('.chip');
+            const preview   = document.getElementById('modal-recipients-preview');
+            preview.innerHTML = '';
+
+            if (chips.length === 0) {
+                preview.innerHTML = '<span class="text-xs text-slate-400 italic">Sin destinatarios asignados.</span>';
+            } else {
+                chips.forEach(chip => {
+                    const name     = chip.dataset.name || '';
+                    const initials = chip.querySelector('.rounded-full')?.textContent.trim() || '';
+                    preview.innerHTML += `
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-orange-50 text-dcOrange border border-orange-200">
+                            <span class="w-4 h-4 rounded-full bg-dcOrange text-white flex items-center justify-center text-[8px]">${initials}</span>
+                            ${name}
+                        </span>`;
+                });
+            }
+
+            const formsList = document.getElementById('modal-forms-list');
+            formsList.innerHTML = '';
+            catalogoFormularios.forEach(form => {
+                if (form.id === sourceId) return;
+                const count = document.getElementById(form.id).querySelectorAll('.chip').length;
+                formsList.innerHTML += `
+                    <label class="flex items-center p-3 rounded-xl hover:bg-slate-50 cursor-pointer border border-slate-200 hover:border-dcOrange transition-all gap-3">
+                        <input type="checkbox" class="w-4 h-4 accent-amber-500 shrink-0" value="${form.id}" checked>
+                        <div class="flex-1 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-file-alt text-slate-300 text-sm"></i>
+                                <span class="text-sm font-semibold text-slate-700">${form.name}</span>
+                            </div>
+                            <span class="text-[10px] font-bold ${count > 0 ? 'text-green-500' : 'text-amber-500'}">
+                                ${count > 0 ? count + ' destinatario' + (count > 1 ? 's' : '') : 'Sin configurar'}
+                            </span>
+                        </div>
+                    </label>`;
+            });
+
+            document.getElementById('modal-copy').classList.remove('hidden');
+        }
+
+        function toggleTodosFormularios(checked) {
+            document.querySelectorAll('#modal-forms-list input[type="checkbox"]').forEach(cb => cb.checked = checked);
+        }
+
+        function confirmarCopia() {
+            const sourceContainer = document.getElementById(currentCopySourceId);
+            const sourceChips     = sourceContainer.querySelectorAll('.chip');
+            const checked         = document.querySelectorAll('#modal-forms-list input[type="checkbox"]:checked');
+
+            if (checked.length === 0) {
+                showToast('warning', 'Sin destino', 'Selecciona al menos un formulario de destino.');
+                return;
+            }
+
+            checked.forEach(cb => {
+                const target = document.getElementById(cb.value);
+                target.querySelectorAll('.chip').forEach(c => c.remove());
+                target.querySelector('.empty-state')?.remove();
+                sourceChips.forEach(chip => {
+                    const cloned = chip.cloneNode(true);
+                    target.insertBefore(cloned, target.querySelector('.dropdown-container'));
+                });
+                target.closest('.form-card')?.classList.remove('error-highlight');
+                updateFormStatus(target);
+            });
+
+            cerrarModal();
+            showToast('success', '¡Destinatarios copiados!', `Aplicados a ${checked.length} formulario(s).`);
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-copy').classList.add('hidden');
+        }
+
+        // ── Toast ─────────────────────────────────────────────────────
+        let toastTimer = null;
+        function showToast(type, title, msg) {
+            const iconEl = document.getElementById('toast-icon');
+            const iconI  = document.getElementById('toast-icon-i');
+
+            const configs = {
+                success: { bg: 'bg-green-500',  icon: 'fas fa-check' },
+                error:   { bg: 'bg-red-500',    icon: 'fas fa-times' },
+                warning: { bg: 'bg-amber-500',  icon: 'fas fa-exclamation' },
+            };
+            const { bg, icon } = configs[type] || configs.success;
+            iconEl.className = `w-8 h-8 rounded-full ${bg} flex items-center justify-center shrink-0`;
+            iconI.className  = `${icon} text-white text-xs`;
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-msg').textContent   = msg;
+
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 3200);
+        }
+
+        // ── Init ──────────────────────────────────────────────────────
+        // Sincronizar progreso con estado inicial del HTML
+        updateProgress();
+    </script>
+</body>
+</html>

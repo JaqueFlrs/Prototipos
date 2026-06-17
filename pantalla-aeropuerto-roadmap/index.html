@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap y Análisis IA - Transporte Personal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; margin: 0; }
+        .figma-card { box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        /* Modal Transitions */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
+        .modal-exit { opacity: 1; transform: scale(1); }
+        .modal-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 300ms, transform 300ms; }
+    </style>
+</head>
+<body class="p-8 min-h-screen relative">
+
+    <!-- Header -->
+    <div class="mb-10 w-full max-w-[1600px] mx-auto">
+        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Estrategia de Desarrollo Asistido por <span class="text-emerald-600">Claude</span></h1>
+        <p class="text-lg text-slate-500 font-medium mt-2">Proyecto: Transporte de Personal • Visualización lineal con tareas en paralelo</p>
+    </div>
+
+    <!-- ==================== CONTENEDOR TIMELINE ==================== -->
+    <div class="flex items-center gap-6 overflow-x-auto pb-10 pt-4 px-4 w-full mb-16 max-w-[1600px] mx-auto border-b-2 border-slate-200">
+
+        <!-- PASO 1 -->
+        <div class="bg-white rounded-[24px] figma-card border border-slate-200 w-[320px] flex-shrink-0 flex flex-col relative overflow-hidden h-[240px]">
+            <div class="bg-blue-600 px-5 py-2.5 flex justify-between items-center">
+                <span class="text-white font-bold text-[10px] tracking-widest uppercase">👤 Dirección</span>
+                <span class="text-white font-black text-lg opacity-90">1</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 text-base mb-1">Contexto de Negocio</h3>
+                <p class="text-slate-500 text-[13px] leading-snug">Se inyecta la visión operativa y los objetivos exactos a <span class="text-emerald-600 font-bold">Claude</span>.</p>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[12h]</span></span>
+                    <span class="text-emerald-600 font-bold">⚡ Claude: [2h]</span>
+                </div>
+                <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+            </div>
+        </div>
+
+        <div class="w-6 h-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+
+        <!-- PASO 2 -->
+        <div class="bg-white rounded-[24px] figma-card border border-slate-200 w-[320px] flex-shrink-0 flex flex-col relative overflow-hidden h-[240px]">
+            <div class="bg-purple-600 px-5 py-2.5 flex justify-between items-center">
+                <span class="text-white font-bold text-[10px] tracking-widest uppercase">🤖 IA Copiloto</span>
+                <span class="text-white font-black text-lg opacity-90">2</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 text-base mb-1">Historias de Usuario</h3>
+                <p class="text-slate-500 text-[13px] leading-snug"><span class="text-emerald-600 font-bold">Claude</span> estructura los requerimientos bajo formato Gherkin.</p>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[24h]</span></span>
+                    <span class="text-emerald-600 font-bold">⚡ Claude: [4h]</span>
+                </div>
+                <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+            </div>
+        </div>
+
+        <div class="w-6 h-1 bg-slate-300 rounded-full flex-shrink-0 relative">
+            <!-- Líneas de ramificación para el paso paralelo -->
+            <div class="absolute top-1/2 left-1/2 w-1 h-[130px] bg-slate-300 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+
+        <!-- ================= STACK PARALELO (PASO 3 Y 4) ================= -->
+        <div class="flex flex-col gap-6 flex-shrink-0">
+            <!-- PASO 3 -->
+            <div class="bg-slate-800 rounded-[24px] figma-card border border-slate-700 w-[320px] flex flex-col relative overflow-hidden h-[240px]">
+                <div class="bg-slate-900 px-5 py-2.5 flex justify-between items-center">
+                    <span class="text-emerald-400 font-bold text-[10px] tracking-widest uppercase">🏗️ Ingeniería</span>
+                    <span class="text-white font-black text-lg opacity-90">3</span>
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                    <h3 class="font-bold text-white text-base mb-1">Arquitectura Manual</h3>
+                    <p class="text-slate-300 text-[13px] leading-snug">Diseño de BD Multitenant hecho por humanos para darle contexto a <span class="text-emerald-400 font-bold">Claude</span>.</p>
+                </div>
+                <div class="bg-slate-900 border-t border-slate-700 p-3 flex justify-between items-center text-xs">
+                    <div class="flex flex-col gap-0.5">
+                        <span class="text-slate-400 font-medium">👨‍💻 Persona: <span class="text-white">[30h]</span></span>
+                        <span class="text-emerald-400 font-bold">⚡ Claude: [5h]</span>
+                    </div>
+                    <span class="bg-emerald-900/50 border border-emerald-500/30 text-emerald-400 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+                </div>
+            </div>
+
+            <!-- PASO 4 -->
+            <div class="bg-white rounded-[24px] figma-card border border-slate-200 w-[320px] flex flex-col relative overflow-hidden h-[240px]">
+                <div class="bg-blue-600 px-5 py-2.5 flex justify-between items-center">
+                    <span class="text-white font-bold text-[10px] tracking-widest uppercase">👤 Dirección</span>
+                    <span class="text-white font-black text-lg opacity-90">4</span>
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                    <h3 class="font-bold text-slate-900 text-base mb-1">Prompts</h3>
+                    <p class="text-slate-500 text-[13px] leading-snug">Imposición de reglas a <span class="text-emerald-600 font-bold">Claude</span> para evitar desviaciones en el desarrollo.</p>
+                </div>
+                <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                    <div class="flex flex-col gap-0.5">
+                        <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[8h]</span></span>
+                        <span class="text-emerald-600 font-bold">⚡ Claude: [1h]</span>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+                </div>
+            </div>
+        </div>
+        <!-- ================= FIN STACK PARALELO ================= -->
+
+        <div class="w-6 h-1 bg-slate-300 rounded-full flex-shrink-0 relative">
+            <div class="absolute top-1/2 left-1/2 w-1 h-[130px] bg-slate-300 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+
+        <!-- PASO 5 -->
+        <div class="bg-white rounded-[24px] figma-card border border-slate-200 w-[320px] flex-shrink-0 flex flex-col relative overflow-hidden h-[240px]">
+            <div class="bg-purple-600 px-5 py-2.5 flex justify-between items-center">
+                <span class="text-white font-bold text-[10px] tracking-widest uppercase">🤖 IA Copiloto</span>
+                <span class="text-white font-black text-lg opacity-90">5</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 text-base mb-1">Prototipado UI</h3>
+                <p class="text-slate-500 text-[13px] leading-snug"><span class="text-emerald-600 font-bold">Claude</span> propone interfaces visuales basándose en las reglas corporativas.</p>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[40h]</span></span>
+                    <span class="text-emerald-600 font-bold">⚡ Claude: [8h]</span>
+                </div>
+                <div class="flex gap-1">
+                    <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+                    <span class="bg-slate-200 text-slate-700 px-2.5 py-1 rounded text-[10px] font-bold">FIGMA</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-6 h-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+
+        <!-- PASO 7 -->
+        <div class="bg-white rounded-[24px] figma-card border border-slate-200 w-[320px] flex-shrink-0 flex flex-col relative overflow-hidden h-[240px]">
+            <div class="bg-purple-600 px-5 py-2.5 flex justify-between items-center">
+                <span class="text-white font-bold text-[10px] tracking-widest uppercase">🤖 IA Copiloto</span>
+                <span class="text-white font-black text-lg opacity-90">7</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 text-base mb-1">Desarrollo Acelerado</h3>
+                <p class="text-slate-500 text-[13px] leading-snug">Generación de módulos de código usando a <span class="text-emerald-600 font-bold">Claude</span> como ejecutor principal.</p>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[120h]</span></span>
+                    <span class="text-emerald-600 font-bold">⚡ Claude: [35h]</span>
+                </div>
+                <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+            </div>
+        </div>
+
+        <div class="w-6 h-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+
+        <!-- PASO 8 -->
+        <div class="bg-white rounded-[24px] figma-card border border-slate-200 w-[320px] flex-shrink-0 flex flex-col relative overflow-hidden h-[240px]">
+            <div class="bg-slate-700 px-5 py-2.5 flex justify-between items-center">
+                <span class="text-white font-bold text-[10px] tracking-widest uppercase">🏗️ Ingeniería</span>
+                <span class="text-white font-black text-lg opacity-90">8</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 text-base mb-1">Revisión de Código</h3>
+                <p class="text-slate-500 text-[13px] leading-snug">Revisión exhaustiva para garantizar la calidad del código emitido por <span class="text-emerald-600 font-bold">Claude</span>.</p>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[20h]</span></span>
+                    <span class="text-emerald-600 font-bold">⚡ Claude: [8h]</span>
+                </div>
+                <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+            </div>
+        </div>
+
+        <div class="w-6 h-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+
+        <!-- PASO 9 -->
+        <div class="bg-white rounded-[24px] figma-card border border-orange-200 w-[320px] flex-shrink-0 flex flex-col relative overflow-hidden h-[240px]">
+            <div class="bg-orange-500 px-5 py-2.5 flex justify-between items-center">
+                <span class="text-white font-bold text-[10px] tracking-widest uppercase">🏗️ QA / Pruebas</span>
+                <span class="text-white font-black text-lg opacity-90">9</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 text-base mb-1">Clonación y Setup</h3>
+                <p class="text-slate-500 text-[13px] leading-snug">Se clona el repositorio local para que <span class="text-emerald-600 font-bold">Claude</span> apoye en los scripts de QA.</p>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[8h]</span></span>
+                    <span class="text-emerald-600 font-bold">⚡ Claude: [2h]</span>
+                </div>
+                <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+            </div>
+        </div>
+
+        <div class="w-6 h-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+
+        <!-- PASO 10 -->
+        <div class="bg-white rounded-[24px] figma-card border border-orange-200 w-[320px] flex-shrink-0 flex flex-col relative overflow-hidden h-[240px]">
+            <div class="bg-orange-500 px-5 py-2.5 flex justify-between items-center">
+                <span class="text-white font-bold text-[10px] tracking-widest uppercase">🤖 Auto QA</span>
+                <span class="text-white font-black text-lg opacity-90">10</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+                <h3 class="font-bold text-slate-900 text-base mb-1">Pruebas Automáticas</h3>
+                <p class="text-slate-500 text-[13px] leading-snug"><span class="text-emerald-600 font-bold">Claude</span> ejecuta scripts automatizados sobre los módulos desarrollados.</p>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-3 flex justify-between items-center text-xs">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-slate-500 font-medium">👨‍💻 Persona: <span class="text-slate-800">[40h]</span></span>
+                    <span class="text-emerald-600 font-bold">⚡ Claude: [12h]</span>
+                </div>
+                <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded text-[10px] font-bold">CLAUDE IA</span>
+            </div>
+        </div>
+
+        <!-- ================= CARD RESUMEN FINAL ================= -->
+        <div class="w-8 h-2 bg-emerald-400 rounded-full flex-shrink-0 mx-4"></div>
+
+        <div class="bg-emerald-50 rounded-[32px] figma-card border-2 border-emerald-400 w-[420px] flex-shrink-0 flex flex-col p-8">
+            <div class="text-4xl mb-4">🏆</div>
+            <h3 class="font-black text-emerald-900 text-2xl mb-2">Resumen de Impacto</h3>
+            <p class="text-emerald-800 text-sm font-medium mb-6 leading-relaxed">La integración estratégica de <span class="text-emerald-600 font-extrabold">Claude</span> ha permitido optimizar recursos sin perder el control de la arquitectura.</p>
+            
+            <div class="bg-emerald-600 text-white p-5 rounded-2xl shadow-inner text-center">
+                <p class="text-emerald-100 text-[11px] font-bold tracking-widest uppercase mb-1">Ahorro Estimado del Proyecto</p>
+                <p class="text-4xl font-black tracking-tighter">-65% <span class="text-lg font-medium tracking-normal opacity-90">en Horas Hombre</span></p>
+            </div>
+            <p class="text-center text-xs font-bold text-emerald-700 mt-5 uppercase tracking-wider">Metodología Híbrida Aprobada</p>
+        </div>
+
+    </div>
+
+
+    <!-- ==================== SECCIÓN: EQUIPO Y BUSINESS CASE ==================== -->
+    <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12">
+        
+        <!-- Columna 1: Equipo (Layout Compacto) -->
+        <div class="bg-white p-6 rounded-[24px] border border-slate-200 figma-card lg:col-span-3 h-max">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                    <span>👥</span> Equipo Involucrado
+                </h2>
+                <span class="bg-emerald-100 text-emerald-700 font-bold text-[10px] px-2 py-1 rounded-md uppercase tracking-wide">8 Licencias</span>
+            </div>
+            
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">SL</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Sergio Lizárraga</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">Analista</p></div>
+                </div>
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">JF</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Jaqueline Flores</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">Analista</p></div>
+                </div>
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs">JM</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Julio Molina</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">Líder Técnico</p></div>
+                </div>
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs">JR</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Javier Rochin</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">Desarrollador</p></div>
+                </div>
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs">OF</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Omar Flores</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">Desarrollador</p></div>
+                </div>
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs">AN</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Alfredo Navarro</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">Desarrollador</p></div>
+                </div>
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs">FV</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Fernando Vizcarra</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">QA Engineer</p></div>
+                </div>
+                <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs">LS</div>
+                    <div class="leading-tight"><p class="font-bold text-slate-800 text-[13px]">Luis Sánchez</p><p class="text-slate-500 text-[10px] uppercase tracking-wide mt-0.5">QA Engineer</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna 2: Justificación Directiva Claude -->
+        <div class="lg:col-span-9 flex flex-col gap-6">
+            
+            <!-- Licencias (Formato Tabla/Tarjetas Compactas) -->
+            <div class="bg-white p-6 rounded-[24px] border border-slate-200 figma-card relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-4 py-1.5 rounded-bl-xl uppercase tracking-wider z-10">Recomendación Oficial: Plan Team</div>
+                
+                <h2 class="text-xl font-bold text-slate-900 mb-5 flex items-center gap-2">
+                    <span class="text-emerald-600">Opciones de Licencia</span> Claude IA
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Pro -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                        <h3 class="font-bold text-slate-900 mb-1">1. Claude Pro</h3>
+                        <p class="text-slate-500 text-xs font-medium mb-3">$20 USD / mes por usuario</p>
+                        <p class="text-xs text-slate-700 mb-3 leading-relaxed">✨ Acceso individual al modelo Claude 3.5 Sonnet con límites estándar de uso.</p>
+                        <p class="text-xs text-slate-600 leading-relaxed">📌 <strong class="text-slate-800">Consideración:</strong> Entorno de trabajo aislado. Impide compartir el contexto del proyecto (Base de datos, reglas) entre los miembros y genera una facturación descentralizada.</p>
+                    </div>
+                    <!-- Team -->
+                    <div class="p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors relative flex flex-col h-full">
+                        <h3 class="font-bold text-slate-900 mb-1">2. Claude Team</h3>
+                        <p class="text-slate-500 text-xs font-medium mb-3">$30 USD / mes por usuario</p>
+                        <p class="text-xs text-emerald-800 font-medium mb-3 leading-relaxed flex-grow">🚀 Espacio de conocimiento unificado. Todo el equipo comparte la arquitectura, prompts y chats. Control y facturación centralizada.</p>
+                        <p class="text-xs text-emerald-700/90 leading-relaxed mb-4">📌 <strong class="text-emerald-900">Consideración:</strong> Requiere designar a un administrador interno en el equipo para gestionar los accesos de los 8 usuarios y mantener estructurada la biblioteca de conocimiento común.</p>
+                        
+                        <!-- GEMINI AI BUTTON -->
+                        <button onclick="generatePitch()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-lg text-xs transition-colors shadow flex items-center justify-center gap-2 mt-auto">
+                            ✨ Generar Pitch para CFO
+                        </button>
+                    </div>
+                    <!-- Enterprise -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                        <h3 class="font-bold text-slate-900 mb-1">3. Claude Enterprise</h3>
+                        <p class="text-slate-500 text-xs font-medium mb-3">Precio Personalizado</p>
+                        <p class="text-xs text-slate-700 mb-3 leading-relaxed">🛡️ Integración nativa con GitHub, Single Sign-On (SSO) y capacidad de memoria expandida (500k tokens).</p>
+                        <p class="text-xs text-slate-600 leading-relaxed">📌 <strong class="text-slate-800">Consideración:</strong> Nivel de inversión sustancial. Su estructura y costos están orientados a macro-corporativos, excediendo las necesidades actuales del proyecto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal for Gemini AI Pitch Generation -->
+    <div id="aiModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center modal-enter">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col mx-4 relative">
+            
+            <div class="bg-gradient-to-r from-emerald-600 to-emerald-800 px-6 py-4 flex items-center justify-between">
+                <h3 class="text-white font-bold text-lg flex items-center gap-2">✨ Asistente IA <span class="text-emerald-200 text-sm font-normal">| Pitch Ejecutivo para CFO</span></h3>
+                <button onclick="closeModal()" class="text-emerald-100 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="p-8">
+                <div id="pitchContent" class="text-slate-700 text-sm leading-relaxed">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+            
+            <div id="modalFooter" class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-between items-center hidden">
+                <span class="text-xs text-slate-400 font-medium">Generado por Gemini API</span>
+                <button onclick="copyToClipboard()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center gap-2 shadow transition-all active:scale-95">
+                    📋 Copiar Texto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 text-white px-6 py-3 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-50">
+        <span class="text-emerald-400">✓</span> ¡Texto copiado al portapapeles!
+    </div>
+
+    <!-- JS Logic for Gemini API -->
+    <script>
+        const apiKey = "";
+        let generatedTextForCopy = "";
+
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                    if (i === maxRetries - 1) throw new Error(`Error de la API: ${response.status}`);
+                } catch (err) {
+                    if (i === maxRetries - 1) throw err;
+                }
+                console.warn(`Reintentando API (intento ${i + 1})...`);
+                await new Promise(res => setTimeout(res, delays[i]));
+            }
+        }
+
+        async function generatePitch() {
+            const modal = document.getElementById('aiModal');
+            const content = document.getElementById('pitchContent');
+            const footer = document.getElementById('modalFooter');
+            
+            modal.classList.remove('hidden');
+            modal.classList.remove('modal-exit-active');
+            modal.classList.add('modal-enter-active');
+            footer.classList.add('hidden');
+
+            content.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 space-y-4">
+                    <div class="animate-spin rounded-full h-10 w-10 border-4 border-slate-200 border-t-emerald-600"></div>
+                    <p class="text-slate-500 font-medium animate-pulse">Redactando justificación estratégica y analizando ROI...</p>
+                </div>
+            `;
+
+            const prompt = `Actúa como un Director de Tecnología (CTO) o Consultor Estratégico altamente persuasivo.
+            
+            Redacta un correo muy breve y directo (máximo 2 párrafos cortos y precisos) dirigido al Director Financiero (CFO). 
+            
+            El objetivo es solicitar y justificar la aprobación de un presupuesto mensual de $240 USD para contratar 8 licencias del plan "Claude Team" ($30 USD/usuario mensual) para el equipo de tecnología del proyecto "Transporte de Personal".
+            
+            Argumentos que debes incluir fluidamente:
+            - La herramienta reducirá el tiempo de desarrollo (Time-to-Market) del proyecto en un 30%.
+            - Estimamos un ahorro del 65% en horas-hombre.
+            - El plan "Team" centraliza la facturación y protege la privacidad/seguridad del código (no se usa para entrenar IA pública).
+            
+            El tono debe ser netamente corporativo, enfocado en el Retorno de Inversión (ROI), mitigación de riesgos y eficiencia. Termina con una breve llamada a la acción para que autorice el gasto. Evita saludos genéricos largos.`;
+
+            try {
+                const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                const result = await response.json();
+                const text = result.candidates[0].content.parts[0].text;
+                
+                // Guardar texto sin formato HTML para el portapapeles
+                generatedTextForCopy = text;
+
+                // Formatear texto simple para HTML
+                const formattedHtml = text
+                    .replace(/\n\n/g, '</p><p class="mb-4">')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900">$1</strong>');
+                
+                content.innerHTML = `<p class="mb-4">${formattedHtml}</p>`;
+                footer.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error generating pitch:", error);
+                content.innerHTML = `
+                    <div class="bg-red-50 text-red-700 p-4 rounded-xl border border-red-200 flex items-start gap-3">
+                        <span>⚠️</span>
+                        <div>
+                            <p class="font-bold">Error al generar la justificación.</p>
+                            <p class="text-sm opacity-90 mt-1">Por favor, verifica la conexión o intenta más tarde.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('aiModal');
+            modal.classList.remove('modal-enter-active');
+            modal.classList.add('modal-exit-active');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('modal-exit-active');
+            }, 300);
+        }
+
+        function copyToClipboard() {
+            // Utilizamos textarea temporal para sortear restricciones de iframe
+            const el = document.createElement('textarea');
+            el.value = generatedTextForCopy;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            showToast();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GM Fiscal — Prototipo Etapa 2</title>
+<style>
+:root{
+  --navy:#0f2133;--navy2:#162c45;--navyHover:#1e3a57;
+  --orange:#f97316;--orange2:#ea6c0a;--orangeSoft:#fff4ec;--orangeLine:#fed7aa;
+  --bg:#f3f5f9;--card:#fff;--line:#e5e9f0;
+  --text:#1e293b;--muted:#64748b;--subtle:#94a3b8;
+  --green:#10b981;--greenBg:#ecfdf5;
+  --red:#ef4444;--redBg:#fef2f2;
+  --yellow:#f59e0b;--yellowBg:#fffbeb;
+  --blue:#3b82f6;--blueBg:#eff6ff;
+  --purple:#8b5cf6;--purpleBg:#f5f3ff;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --shadowMd:0 4px 24px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.side{background:var(--navy);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{padding:20px 16px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-box{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:grid;place-items:center;flex-shrink:0}
+.logo-box svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.brand-text h1{font-size:13px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.brand-text span{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.08em}
+.profile-area{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#f59e0b,var(--orange2));color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800;flex-shrink:0}
+.profile-info strong{display:block;font-size:11px;color:#e2e8f0;font-weight:700}
+.profile-info span{font-size:10px;color:rgba(255,255,255,.35)}
+.nav-section{padding:14px 10px 4px}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.25);font-weight:700;padding:0 8px 6px}
+.nav button{width:100%;border:0;background:transparent;border-radius:8px;padding:9px 10px;text-align:left;font:inherit;font-size:13px;cursor:pointer;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:9px;transition:background .15s,color .15s}
+.nav button:hover{background:var(--navyHover);color:rgba(255,255,255,.85)}
+.nav button.active{background:rgba(249,115,22,.15);color:var(--orange);font-weight:600}
+.nav button .ico{width:16px;text-align:center;flex-shrink:0;font-size:15px}
+.nav button .badge-nav{margin-left:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:700;border-radius:20px;padding:1px 6px;min-width:18px;text-align:center}
+.side-footer{margin-top:auto;padding:10px;border-top:1px solid rgba(255,255,255,.08)}
+.side-footer button{width:100%;border:0;background:transparent;border-radius:8px;padding:9px 10px;text-align:left;font:inherit;font-size:12px;cursor:pointer;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:9px}
+.side-footer button:hover{color:rgba(255,255,255,.7);background:var(--navyHover)}
+.side-footer .logout{color:#ef4444}
+
+/* ── MAIN ── */
+.main{padding:24px;overflow:hidden;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;gap:16px}
+.topbar h2{font-size:22px;font-weight:700;letter-spacing:-.03em}
+.topbar p{margin-top:4px;color:var(--muted);font-size:13px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:8px;font-size:13px;font-weight:500;padding:8px 14px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn:hover{background:#f8fafc;border-color:#d1d5db}
+.btn.cta{border:0;background:var(--orange);color:#fff;box-shadow:0 4px 12px rgba(249,115,22,.28)}
+.btn.cta:hover{background:var(--orange2)}
+.btn.ghost{border:0;background:transparent;color:var(--muted)}
+.btn.danger{background:var(--red);border:0;color:#fff}
+.btn.sm{padding:6px 10px;font-size:12px}
+
+/* ── PAGES ── */
+.page{display:none}.page.active{display:block}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px}
+.card-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.card-desc{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:14px}
+
+/* ── GRIDS ── */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}
+.g12{grid-template-columns:1.3fr 0.7fr}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;white-space:nowrap}
+.badge.ok{background:var(--greenBg);color:var(--green)}.badge.bad{background:var(--redBg);color:var(--red)}
+.badge.warn{background:var(--yellowBg);color:var(--yellow)}.badge.info{background:var(--blueBg);color:var(--blue)}
+.badge.purple{background:var(--purpleBg);color:var(--purple)}.badge.gray{background:#f1f5f9;color:var(--muted)}
+.badge.orange{background:var(--orangeSoft);color:var(--orange)}
+
+/* ── TABLE ── */
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:12px 14px;border-bottom:1px solid #f0f3f8;text-align:left;vertical-align:middle}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:#fafbfd;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td strong{display:block;font-size:13px;font-weight:600}
+td .sub{font-size:11px;color:var(--muted);margin-top:2px}
+.actions-cell{display:flex;gap:6px}
+
+/* ── SELECTABLE ROWS ── */
+tr.selectable{cursor:pointer;transition:background .12s}
+tr.selectable:hover td{background:#fffbf7}
+tr.selectable.selected td{background:var(--orangeSoft);border-bottom-color:var(--orangeLine)}
+tr.selectable.selected td:first-child{border-left:3px solid var(--orange)}
+tr.selectable.selected td:first-child{padding-left:11px}
+
+/* ── FILTERS ── */
+.filters{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.filter-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.filter-field{display:flex;flex-direction:column;gap:4px;min-width:150px;flex:1}
+.filter-field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+input,select{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--orange)}
+input.err,select.err{border-color:var(--red);background:#fff8f8}
+input[readonly]{background:#f8fafc;color:var(--muted);cursor:default}
+
+/* ── STATS ── */
+.stat-row{display:flex;gap:8px;flex-wrap:wrap}
+.stat-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px;flex:1;min-width:100px;text-align:center}
+.stat-box .sv{font-size:28px;font-weight:800;letter-spacing:-.04em}
+.stat-box .sk{font-size:11px;color:var(--muted);margin-top:4px}
+.stat-box.hi{border-color:var(--orange);background:var(--orangeSoft)}
+.stat-box.hi .sv{color:var(--orange)}
+.metric .k{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.metric .v{font-size:30px;font-weight:800;letter-spacing:-.04em;margin-top:8px}
+.metric .d{font-size:12px;color:var(--muted);margin-top:6px}
+.pct-hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:24px;margin-bottom:18px}
+.pct-num{font-size:56px;font-weight:900;letter-spacing:-.05em;color:var(--orange)}
+.pct-detail h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
+.pct-detail p{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5}
+
+/* ── LIST ITEMS ── */
+.list{display:flex;flex-direction:column;gap:10px}
+.list-item{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.list-item h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.list-item p{font-size:12px;color:var(--muted);line-height:1.4}
+.val-box{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px}
+.val-line{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.val-line:last-child{border-bottom:0}
+
+/* ── QA GRID (dashboard) ── */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.qa-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:box-shadow .15s,border-color .15s;display:flex;align-items:center;gap:12px}
+.qa-card:hover{border-color:var(--orange);box-shadow:0 4px 16px rgba(249,115,22,.12)}
+.qa-icon{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.qa-card h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.qa-card p{font-size:11px;color:var(--muted)}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sec-header h3{font-size:14px;font-weight:700}
+.sec-header a{font-size:12px;color:var(--orange);cursor:pointer}
+.recent-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:18px}
+.recent-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f3f8;font-size:13px}
+.recent-row:last-child{border-bottom:0}
+.recent-row .rdate{color:var(--muted);font-size:11px}
+.notif-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f0f3f8;font-size:13px}
+.notif-row:last-child{border-bottom:0}
+.notif-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);margin-top:5px;flex-shrink:0}
+.notif-row .ntime{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.notif-row h4{font-size:13px;font-weight:600;margin-bottom:2px}
+.notif-row p{font-size:11px;color:var(--muted)}
+
+/* ══════════════════════════════════════
+   DRAWER — Panel lateral de acciones ERP
+══════════════════════════════════════ */
+.drawer-bg{position:fixed;inset:0;background:rgba(15,33,51,.45);z-index:200;display:none;backdrop-filter:blur(2px)}
+.drawer-bg.open{display:block}
+.drawer{position:fixed;right:0;top:0;height:100vh;width:420px;background:#fff;z-index:201;box-shadow:-12px 0 40px rgba(0,0,0,.18);transform:translateX(100%);transition:transform .28s cubic-bezier(.25,.8,.25,1);overflow-y:auto;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-head{padding:18px 20px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-shrink:0;position:sticky;top:0;background:#fff;z-index:1}
+.drawer-head h3{font-size:15px;font-weight:700;flex:1}
+.drawer-close{border:0;background:transparent;cursor:pointer;color:var(--muted);font-size:18px;padding:4px 8px;border-radius:6px;line-height:1}
+.drawer-close:hover{background:#f1f5f9;color:var(--text)}
+.drawer-body{padding:18px 20px;flex:1}
+.drawer-section{margin-bottom:18px}
+.drawer-section-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+/* CFDI Summary card en drawer */
+.cfdi-summary{background:var(--orangeSoft);border:1px solid var(--orangeLine);border-radius:10px;padding:14px 16px}
+.cfdi-summary .cs-uuid{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.04em;margin-bottom:8px}
+.cfdi-summary .cs-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cs-field .csfl{font-size:10px;color:var(--orange2);opacity:.7;text-transform:uppercase;letter-spacing:.06em}
+.cs-field .csfv{font-size:13px;font-weight:700;color:var(--navy);margin-top:2px}
+
+/* Proveedor detection en drawer */
+.prov-detect{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+.prov-detect .pd-icon{width:38px;height:38px;border-radius:8px;background:#f1f5f9;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.prov-detect .pd-info h4{font-size:13px;font-weight:700;margin-bottom:3px}
+.prov-detect .pd-info p{font-size:11px;color:var(--muted)}
+.prov-detect .pd-status{margin-left:auto;flex-shrink:0}
+.prov-detect.found{border-color:var(--greenBg);background:var(--greenBg)}
+.prov-detect.missing{border-color:var(--yellowBg);background:var(--yellowBg)}
+
+/* Acciones ERP en drawer */
+.accion-item{border:1px solid var(--line);border-radius:10px;padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;margin-bottom:8px;background:#fff}
+.accion-item:hover{border-color:var(--orange);background:var(--orangeSoft);box-shadow:0 2px 8px rgba(249,115,22,.1)}
+.accion-item:last-child{margin-bottom:0}
+.accion-icon{width:36px;height:36px;border-radius:8px;display:grid;place-items:center;font-size:17px;flex-shrink:0}
+.accion-item h4{font-size:13px;font-weight:600;margin-bottom:2px}
+.accion-item p{font-size:11px;color:var(--muted);line-height:1.35}
+.accion-arrow{margin-left:auto;color:var(--muted);font-size:16px;flex-shrink:0}
+.accion-item:hover .accion-arrow{color:var(--orange)}
+
+/* Disabled action (proveedor inexistente) */
+.accion-item.disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+
+/* ══════════════════════════════════════
+   MODAL — Ejecución de acción ERP
+══════════════════════════════════════ */
+.modal-bg{position:fixed;inset:0;background:rgba(15,33,51,.55);z-index:300;display:none;place-items:center;padding:20px;backdrop-filter:blur(3px)}
+.modal-bg.open{display:grid}
+.modal{background:#fff;border-radius:16px;width:700px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);display:flex;flex-direction:column}
+.modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px;position:sticky;top:0;background:#fff;z-index:1;border-radius:16px 16px 0 0}
+.modal-head-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.modal-head h3{font-size:16px;font-weight:700;margin-bottom:3px;flex:1}
+.modal-head p{font-size:12px;color:var(--muted)}
+.modal-close{border:0;background:transparent;cursor:pointer;color:var(--muted);font-size:20px;padding:4px 8px;border-radius:6px;line-height:1;flex-shrink:0}
+.modal-close:hover{background:#f1f5f9;color:var(--text)}
+.modal-body{padding:20px 24px;flex:1}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:#fff;border-radius:0 0 16px 16px}
+
+/* Bloque "heredado del XML" en modal */
+.xml-block{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:18px}
+.xml-block-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.xml-block-label span{background:#e2e8f0;color:var(--muted);padding:2px 6px;border-radius:4px;font-size:10px}
+.xml-fields-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.xml-field{display:flex;flex-direction:column;gap:3px}
+.xml-field .xfl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.xml-field .xfv{font-size:13px;font-weight:600;color:var(--text);background:#edf2f7;border-radius:6px;padding:7px 10px;border:1px dashed #cbd5e0}
+.xml-field .xfv.amount{color:var(--orange);font-size:14px;font-weight:800}
+
+/* Bloque editable en modal */
+.edit-block{margin-bottom:18px}
+.edit-block-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.edit-block-label span{background:var(--orangeSoft);color:var(--orange);padding:2px 6px;border-radius:4px;font-size:10px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.form-field{display:flex;flex-direction:column;gap:5px}
+.form-field label{font-size:12px;font-weight:600;color:var(--text)}
+.form-field .req{color:var(--red)}
+.form-field .hint{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── TOAST ── */
+.toast{position:fixed;right:20px;bottom:20px;background:var(--navy);color:#fff;padding:14px 18px;border-radius:12px;min-width:300px;transform:translateY(120px);opacity:0;transition:.25s;box-shadow:var(--shadowMd);z-index:9999}
+.toast b{display:block;font-size:13px;margin-bottom:3px}
+.toast span{font-size:12px;color:rgba(255,255,255,.7)}
+
+/* ── MISC ── */
+.cancel-timeline{display:flex;flex-direction:column}
+.tl-step{display:flex;gap:12px;position:relative;padding-bottom:16px}
+.tl-step:last-child{padding-bottom:0}
+.tl-dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;flex-shrink:0}
+.tl-dot.done{background:var(--green);color:#fff}.tl-dot.pending{background:var(--yellowBg);color:var(--yellow);border:2px solid var(--yellow)}.tl-dot.idle{background:var(--line);color:var(--muted)}
+.tl-line{position:absolute;left:14px;top:28px;bottom:0;width:1px;background:var(--line)}
+.tl-content h4{font-size:13px;font-weight:600;margin-bottom:3px}.tl-content p{font-size:12px;color:var(--muted)}
+.pdf-preview{background:#fff;border:2px dashed var(--line);border-radius:12px;padding:20px;min-height:340px}
+.pdf-header{display:flex;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid var(--text);margin-bottom:14px}
+.pdf-logo{width:52px;height:36px;background:linear-gradient(135deg,var(--orange),var(--orange2));border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:11px}
+.pdf-field{background:#f8fafc;border-radius:6px;padding:8px 10px}
+.pdf-field .pfl{font-size:10px;color:var(--muted)}.pdf-field .pfv{font-size:12px;font-weight:600;margin-top:2px}
+
+@media(max-width:1100px){.g4,.g3,.g5,.qa-grid,.recent-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="side">
+  <div class="brand">
+    <div class="logo-box">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    </div>
+    <div class="brand-text"><h1>GM Fiscal</h1><span>V2.01 · PROTOTIPO ETAPA 2</span></div>
+  </div>
+  <div class="profile-area">
+    <div class="avatar">U</div>
+    <div class="profile-info"><strong>USUARIO GM SOPORTE</strong><span>MOVIMIENTOS TERRESTRES · MTC0109038R4</span></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Navegación</div>
+    <div class="nav">
+      <button class="active" data-page="dashboard"><span class="ico">⊞</span>Dashboard</button>
+      <button data-page="solicitudes"><span class="ico">📋</span>Solicitudes</button>
+      <button data-page="conciliaciones"><span class="ico">⚖</span>Conciliaciones</button>
+      <button data-page="reportes"><span class="ico">📊</span>Reportes</button>
+      <button data-page="descargas"><span class="ico">⬇</span>Descargas</button>
+      <button data-page="notificaciones"><span class="ico">🔔</span>Notificaciones <span class="badge-nav">7</span></button>
+    </div>
+  </div>
+  <div class="nav-section" style="padding-top:6px">
+    <div class="nav-label">Etapa 2 — Sprint 6</div>
+    <div class="nav">
+      <button data-page="conc-avanzada"><span class="ico">🔍</span>Conciliación avanzada</button>
+      <button data-page="proveedores"><span class="ico">🏢</span>Alta de proveedores</button>
+      <button data-page="cancelacion"><span class="ico">✕</span>Cancelación de CFDI</button>
+      <button data-page="pdf"><span class="ico">📄</span>PDF desde XML</button>
+      <button data-page="cumplimiento"><span class="ico">✔</span>Cumplimiento fiscal</button>
+      <button data-page="dashboards"><span class="ico">📈</span>Dashboards fiscales</button>
+    </div>
+  </div>
+  <div class="side-footer">
+    <div class="nav-label" style="padding:4px 8px 6px;font-size:10px;color:rgba(255,255,255,.2)">Soporte</div>
+    <button><span class="ico">❓</span>Ayuda</button>
+    <button><span class="ico">⚙</span>Configuración</button>
+    <button><span class="ico">⚠</span>Reportar falla</button>
+    <button class="logout"><span class="ico" style="color:inherit">↩</span>Cerrar sesión</button>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- ── DASHBOARD ── -->
+  <section class="page active" id="page-dashboard">
+    <div class="topbar"><div><h2>Dashboard</h2><p>Resumen del estado fiscal y operativo del período</p></div><div class="tools"><button class="btn">📅 abr 2026</button><button class="btn cta" onclick="go('solicitudes')">+ Crear solicitud</button></div></div>
+    <div style="margin-bottom:18px"><div class="sec-header"><h3>Acciones rápidas</h3></div>
+      <div class="qa-grid">
+        <div class="qa-card" onclick="go('solicitudes')"><div class="qa-icon" style="background:#fff0e6">➕</div><div><h4>Crear solicitud</h4><p>Nueva conciliación o reporte</p></div></div>
+        <div class="qa-card" onclick="toast('Conciliación del mes','Iniciando conciliación abr 2026...')"><div class="qa-icon" style="background:#ecfdf5">⚖</div><div><h4>Conciliación del mes</h4><p>abr 2026</p></div></div>
+        <div class="qa-card" onclick="go('reportes')"><div class="qa-icon" style="background:#eff6ff">📊</div><div><h4>Reporte R21</h4><p>abr 2026</p></div></div>
+        <div class="qa-card" onclick="go('reportes')"><div class="qa-icon" style="background:#f5f3ff">📈</div><div><h4>Reporte AMCI</h4><p>abr 2026</p></div></div>
+      </div>
+    </div>
+    <div style="margin-bottom:18px"><div class="sec-header"><h3>Resumen de solicitudes</h3></div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="sv">47</div><div class="sk">Total</div></div>
+        <div class="stat-box"><div class="sv">0</div><div class="sk">En proceso</div></div>
+        <div class="stat-box hi"><div class="sv">0</div><div class="sk">Listas para conciliar</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--blue)">1</div><div class="sk">Listas para generar</div></div>
+        <div class="stat-box"><div class="sv">0</div><div class="sk">Con error</div></div>
+      </div>
+    </div>
+    <div class="recent-grid">
+      <div class="card"><div class="sec-header"><h3>Últimas solicitudes</h3><a onclick="go('solicitudes')">Ver todas →</a></div>
+        <div class="recent-row"><div><strong>Conciliación</strong><div class="rdate">31 dic 25 — 10 ene 26</div></div><span class="badge ok">Conciliada</span></div>
+        <div class="recent-row"><div><strong>Reporte R21</strong><div class="rdate">31 dic 25 — 31 ene 26</div></div><span class="badge info">Generado</span></div>
+        <div class="recent-row"><div><strong>Conciliación</strong><div class="rdate">31 dic 25 — 3 ene 26</div></div><span class="badge ok">Conciliada</span></div>
+        <div class="recent-row"><div><strong>Conciliación</strong><div class="rdate">31 dic 25 — 7 ene 26</div></div><span class="badge ok">Conciliada</span></div>
+      </div>
+      <div class="card"><div class="sec-header"><h3>Últimas conciliaciones</h3><a onclick="go('conciliaciones')">Ver todas →</a></div>
+        <div class="recent-row"><div><strong>Conciliación</strong><div class="rdate">31 dic 25 — 10 ene 26</div></div><span class="badge ok">Conciliada</span></div>
+        <div class="recent-row"><div><strong>Conciliación</strong><div class="rdate">31 dic 25 — 7 ene 26</div></div><span class="badge ok">Conciliada</span></div>
+        <div class="recent-row"><div><strong>Conciliación</strong><div class="rdate">31 dic 25 — 6 ene 26</div></div><span class="badge ok">Conciliada</span></div>
+        <div class="recent-row"><div><strong>Conciliación</strong><div class="rdate">31 dic 25 — 5 ene 26</div></div><span class="badge ok">Conciliada</span></div>
+      </div>
+      <div class="card"><div class="sec-header"><h3>Últimos reportes</h3><a onclick="go('reportes')">Ver todos →</a></div>
+        <div class="recent-row"><div><strong>R21</strong><div class="rdate">31 dic 25 — 31 ene 26</div></div><span class="badge info">Generado</span></div>
+        <div class="recent-row"><div><strong>R21</strong><div class="rdate">31 ene 26 — 28 feb 26</div></div><span class="badge warn">Listo para generar</span></div>
+        <div class="recent-row"><div><strong>RAMCI</strong><div class="rdate">31 dic 25 — 31 ene 26</div></div><span class="badge info">Generado</span></div>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="sec-header"><h3>🔔 Notificaciones <span class="badge" style="background:var(--orange);color:#fff;margin-left:4px">7</span></h3><a onclick="go('notificaciones')">Ver todas →</a></div>
+        <div class="notif-row"><div class="notif-dot"></div><div><h4>Conciliación creada</h4><p>Nueva conciliación de facturas registrada</p></div><span class="ntime">10 min</span></div>
+        <div class="notif-row"><div class="notif-dot"></div><div><h4>Comparando facturas</h4><p>Las facturas SAT y ERP están siendo cruzadas</p></div><span class="ntime">10 min</span></div>
+        <div class="notif-row"><div class="notif-dot"></div><div><h4>Pipeline ERP</h4><p>Datos ERP sincronizados correctamente</p></div><span class="ntime">10 min</span></div>
+        <div class="notif-row"><div class="notif-dot"></div><div><h4>Solicitud lista</h4><p>Pipeline de pre-conciliación completó</p></div><span class="ntime">10 min</span></div>
+      </div>
+      <div class="card"><div class="sec-header"><h3>⬇ Descargas disponibles</h3><a onclick="go('descargas')">Ver todas →</a></div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:140px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">📂</div><p style="font-size:13px">Sin descargas pendientes</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SOLICITUDES ── -->
+  <section class="page" id="page-solicitudes">
+    <div class="topbar"><div><h2>Solicitudes</h2><p>Administra y visualiza todas las solicitudes de facturas</p></div><div class="tools"><button class="btn">☰ Cómodo</button><button class="btn">⊞ Cuadrícula</button><button class="btn">⚙ Filtros</button><button class="btn">≡ Columnas</button><button class="btn">↻ Actualizar</button><button class="btn cta">+ Crear solicitud</button></div></div>
+    <div class="filters"><div class="filter-row">
+      <div class="filter-field"><label>Estatus</label><select><option>Todos</option><option>Conciliada</option><option>En proceso</option><option>Error</option></select></div>
+      <div class="filter-field"><label>Tipo Solicitud</label><select><option>Todos</option><option>Conciliación</option><option>Reporte R21</option></select></div>
+      <div class="filter-field" style="min-width:180px"><label>Tipos de Factura</label><select><option>Seleccionar...</option><option>Ingreso</option><option>Egreso</option><option>Pago</option></select></div>
+      <div class="filter-field"><label>Fecha inicio</label><input type="date"></div>
+      <div class="filter-field"><label>Fecha fin</label><input type="date"></div>
+      <div style="display:flex;gap:8px;padding-top:2px"><button class="btn ghost">Limpiar</button><button class="btn cta" onclick="toast('Filtros aplicados','Resultados actualizados.')">Aplicar</button></div>
+    </div></div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Fecha Solicitud ↕</th><th>Estatus ↕</th><th>Tipo Solicitud ↕</th><th>Tipos de Factura</th><th>Fecha Inicio ↕</th><th>Fecha Fin ↕</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <tr><td><strong>10/04/2026, 08:53</strong></td><td><span class="badge ok">Conciliada</span></td><td><span class="badge info">Conciliación</span></td><td><span class="badge info">Ingreso</span> <span class="badge purple">Pago</span> <span class="badge ok">Egreso</span> <span class="badge gray">Traslado</span></td><td>01/01/2026</td><td>10/04/2026</td><td class="actions-cell"><button class="btn sm" onclick="go('conciliaciones')">👁 Visualizar</button><button class="btn sm danger">🗑</button></td></tr>
+        <tr><td><strong>07/04/2026, 11:30</strong></td><td><span class="badge info">Generado</span></td><td><span class="badge warn">Reporte R21</span></td><td><span class="badge info">Ingreso</span></td><td>01/01/2026</td><td>31/01/2026</td><td class="actions-cell"><button class="btn sm danger">🗑</button></td></tr>
+        <tr><td><strong>07/04/2026, 11:30</strong></td><td><span class="badge ok">Conciliada</span></td><td><span class="badge info">Conciliación</span></td><td><span class="badge info">Ingreso</span></td><td>03/01/2026</td><td>31/03/2026</td><td class="actions-cell"><button class="btn sm" onclick="go('conciliaciones')">👁 Visualizar</button><button class="btn sm danger">🗑</button></td></tr>
+      </tbody></table>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;color:var(--muted)"><span>Mostrar <select style="width:auto;padding:4px 8px;font-size:12px"><option>25</option><option>50</option></select> por página</span><span>1 - 3 de 47 registros</span></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       CONCILIACIONES — Con selección de CFDI + Panel de Acciones
+  ══════════════════════════════════════════════════════════ -->
+  <section class="page" id="page-conciliaciones">
+    <div class="topbar">
+      <div><h2>Conciliaciones</h2><p>Selecciona un CFDI para ver las acciones ERP disponibles</p></div>
+      <div class="tools"><button class="btn">⚙ Filtros</button><button class="btn">↻ Actualizar</button></div>
+    </div>
+
+    <div class="pct-hero">
+      <div class="pct-num">82.7%</div>
+      <div class="pct-detail"><h3>Tasa de conciliación del período</h3><p>2,283 CFDI procesados · 1,887 coincidentes · 396 con diferencias<br>Período: 01/01/2026 — 10/04/2026</p></div>
+    </div>
+
+    <div class="grid g5" style="margin-bottom:18px">
+      <div class="card metric"><div class="k">Total SAT</div><div class="v">2,283</div></div>
+      <div class="card metric"><div class="k">Total ERP</div><div class="v">2,194</div></div>
+      <div class="card metric"><div class="k">Ambos</div><div class="v" style="color:var(--green)">1,887</div></div>
+      <div class="card metric"><div class="k">Solo SAT</div><div class="v" style="color:var(--yellow)">214</div></div>
+      <div class="card metric"><div class="k">Solo ERP</div><div class="v" style="color:var(--red)">182</div></div>
+    </div>
+
+    <div class="filters" style="margin-bottom:16px">
+      <div class="filter-row">
+        <div class="filter-field"><label>RFC Emisor</label><input value="MTC0109038R4"></div>
+        <div class="filter-field"><label>RFC Receptor</label><input placeholder="RFC receptor"></div>
+        <div class="filter-field"><label>Tipo CFDI</label><select><option>Todos</option><option>Ingreso</option><option>Egreso</option><option>Pago</option><option>Traslado</option></select></div>
+        <div class="filter-field"><label>Relacionamos</label><select><option>Todos</option><option>AMBOS</option><option>Solo SAT</option><option>Solo ERP</option></select></div>
+        <button class="btn cta" style="margin-top:2px" onclick="toast('Filtrado','Conciliaciones actualizadas.')">Aplicar</button>
+      </div>
+    </div>
+
+    <!-- Hint de selección -->
+    <div id="select-hint" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:var(--muted);background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 14px">
+      <span style="font-size:16px">👆</span>
+      <span>Haz clic en cualquier fila para seleccionar un CFDI y ver las <strong>acciones ERP disponibles</strong></span>
+    </div>
+
+    <div class="table-wrap">
+      <table id="conc-table">
+        <thead><tr><th></th><th>Relacionamos</th><th>Folio</th><th>UUID</th><th>Tipo</th><th>RFC Emisor</th><th>RFC Receptor</th><th>Total</th><th>Fecha</th></tr></thead>
+        <tbody>
+          <tr class="selectable" onclick="selectCFDI(this,'ingreso-erp')" data-id="0">
+            <td><span style="font-size:16px;color:var(--muted)">○</span></td>
+            <td><span class="badge ok">AMBOS</span></td><td>A 204</td>
+            <td><strong>FFD462EF-FA09-473E...</strong><div class="sub">Timbrado · MXN</div></td>
+            <td><span class="badge info">Ingreso</span></td>
+            <td class="sub">MTC0109038R4</td><td class="sub">GGT081209393</td>
+            <td><strong>$116,000.00</strong></td><td class="sub">08/04/2026</td>
+          </tr>
+          <tr class="selectable" onclick="selectCFDI(this,'egreso-erp')" data-id="1">
+            <td><span style="font-size:16px;color:var(--muted)">○</span></td>
+            <td><span class="badge ok">AMBOS</span></td><td>A 205</td>
+            <td><strong>D5E2E4BD-8012-4262...</strong><div class="sub">Timbrado · USD</div></td>
+            <td><span class="badge ok">Egreso</span></td>
+            <td class="sub">MTC0109038R4</td><td class="sub">NVVM9709244W4</td>
+            <td><strong>$58,000.00</strong></td><td class="sub">07/04/2026</td>
+          </tr>
+          <tr class="selectable" onclick="selectCFDI(this,'pago-erp')" data-id="2">
+            <td><span style="font-size:16px;color:var(--muted)">○</span></td>
+            <td><span class="badge warn">Solo SAT</span></td><td>—</td>
+            <td><strong>32404B5F-C0D2-4A1F...</strong><div class="sub">Timbrado · MXN</div></td>
+            <td><span class="badge purple">Pago</span></td>
+            <td class="sub">TSO991022PB6</td><td class="sub">MTC0109038R4</td>
+            <td><strong>$145,000.00</strong></td><td class="sub">06/04/2026</td>
+          </tr>
+          <tr class="selectable" onclick="selectCFDI(this,'sin-proveedor')" data-id="3">
+            <td><span style="font-size:16px;color:var(--muted)">○</span></td>
+            <td><span class="badge ok">AMBOS</span></td><td>B 019</td>
+            <td><strong>AA901-C234-8F3A...</strong><div class="sub">Timbrado · MXN</div></td>
+            <td><span class="badge info">Ingreso</span></td>
+            <td class="sub">MTC0109038R4</td><td class="sub">NUEVO991022RFG</td>
+            <td><strong>$29,000.00</strong></td><td class="sub">05/04/2026</td>
+          </tr>
+          <tr class="selectable" onclick="selectCFDI(this,'egreso-compra')" data-id="4">
+            <td><span style="font-size:16px;color:var(--muted)">○</span></td>
+            <td><span class="badge ok">AMBOS</span></td><td>C 088</td>
+            <td><strong>BB201-D891-7C44...</strong><div class="sub">Timbrado · MXN</div></td>
+            <td><span class="badge ok">Egreso</span></td>
+            <td class="sub">MTC0109038R4</td><td class="sub">GGT081209393</td>
+            <td><strong>$43,500.00</strong></td><td class="sub">04/04/2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;display:flex;justify-content:space-between;font-size:12px;color:var(--muted)">
+      <span>Mostrar <select style="width:auto;padding:4px;font-size:12px"><option>25</option></select> por página</span>
+      <span>1 - 5 de 2,283 registros</span>
+    </div>
+  </section>
+
+  <!-- ── REPORTES ── -->
+  <section class="page" id="page-reportes">
+    <div class="topbar"><div><h2>Reportes</h2><p>Genera reportes R21 y RAMCI del período fiscal</p></div><div class="tools"><button class="btn cta">+ Nuevo reporte</button></div></div>
+    <div class="grid g2">
+      <div class="card"><div class="card-title">📊 Reporte R21</div><div class="card-desc">IVA causado vs acreditable. Excluye CFDI cancelados y tipo P como emisor.</div><div class="list"><div class="list-item"><div><h4>R21 · Ene 2026</h4><p>01/01/2026 — 31/01/2026</p></div><span class="badge info">Generado</span></div><div class="list-item"><div><h4>R21 · Feb 2026</h4><p>01/02/2026 — 28/02/2026</p></div><span class="badge warn">Listo para generar</span></div></div><button class="btn cta" style="margin-top:14px" onclick="toast('Reporte R21','Generando reporte del período...')">Generar R21</button></div>
+      <div class="card"><div class="card-title">📈 Reporte RAMCI</div><div class="card-desc">Ingresos, Egresos, Nómina, Notas de crédito, Ingresos recibidos.</div><div class="list"><div class="list-item"><div><h4>RAMCI · Ene 2026</h4><p>01/01/2026 — 31/01/2026</p></div><span class="badge info">Generado</span></div><div class="list-item"><div><h4>RAMCI · Feb 2026</h4><p>01/02/2026 — 28/02/2026</p></div><span class="badge gray">Pendiente</span></div></div><button class="btn cta" style="margin-top:14px" onclick="toast('Reporte RAMCI','Generando RAMCI del período...')">Generar RAMCI</button></div>
+    </div>
+  </section>
+
+  <!-- ── DESCARGAS ── -->
+  <section class="page" id="page-descargas">
+    <div class="topbar"><div><h2>Descargas</h2><p>Archivos disponibles</p></div></div>
+    <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;color:var(--muted)"><div style="font-size:48px;margin-bottom:12px">📂</div><p>Sin descargas pendientes</p></div>
+  </section>
+
+  <!-- ── NOTIFICACIONES ── -->
+  <section class="page" id="page-notificaciones">
+    <div class="topbar"><div><h2>Notificaciones</h2><p>Actividad reciente del sistema</p></div></div>
+    <div class="card">
+      <div class="notif-row"><div class="notif-dot"></div><div><h4>Conciliación creada</h4><p>Nueva conciliación de facturas registrada</p></div><span class="ntime">10 min</span></div>
+      <div class="notif-row"><div class="notif-dot"></div><div><h4>Comparando facturas</h4><p>Las facturas SAT y ERP están siendo cruzadas y conciliadas</p></div><span class="ntime">10 min</span></div>
+      <div class="notif-row"><div class="notif-dot"></div><div><h4>Pipeline ERP</h4><p>Datos ERP sincronizados correctamente</p></div><span class="ntime">10 min</span></div>
+      <div class="notif-row"><div class="notif-dot"></div><div><h4>Solicitud lista</h4><p>El pipeline de pre-conciliación completó exitosamente</p></div><span class="ntime">10 min</span></div>
+      <div class="notif-row"><div class="notif-dot"></div><div><h4>Reporte generado</h4><p>Reporte R21 Ene 2026 disponible para descarga</p></div><span class="ntime">2 hrs</span></div>
+    </div>
+  </section>
+
+  <!-- ═══════ ETAPA 2 PAGES ═══════ -->
+
+  <!-- ── HU9: CONCILIACIÓN AVANZADA ── -->
+  <section class="page" id="page-conc-avanzada">
+    <div class="topbar"><div><h2>Conciliación avanzada XML vs ERP</h2><p>Comparación estructural por cabecera, impuestos, conceptos y relaciones CFDI</p></div></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      <div class="card metric"><div class="k">Correcto</div><div class="v" style="color:var(--green)">1,703</div></div>
+      <div class="card metric"><div class="k">Con diferencias</div><div class="v" style="color:var(--yellow)">312</div></div>
+      <div class="card metric"><div class="k">No conciliado</div><div class="v" style="color:var(--red)">84</div></div>
+      <div class="card metric"><div class="k">Total evaluados</div><div class="v">2,099</div></div>
+    </div>
+    <div class="table-wrap">
+      <table><thead><tr><th>UUID</th><th>Tipo</th><th>Cabecera</th><th>Impuestos</th><th>Conceptos</th><th>Relaciones</th><th>Resultado</th><th>Acción</th></tr></thead>
+      <tbody>
+        <tr><td><strong>FFD462EF-FA09...</strong><div class="sub">MTC0109038R4</div></td><td><span class="badge info">Ingreso</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge warn">Dif. IVA</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge warn">Con diferencias</span></td><td><button class="btn sm" onclick="toast('Comparativo','Detalle campo a campo cargado.')">Ver detalle</button></td></tr>
+        <tr><td><strong>32404B5F-C0D2...</strong><div class="sub">TSO991022PB6</div></td><td><span class="badge purple">Pago</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge gray">N/A</span></td><td><span class="badge bad">Faltante</span></td><td><span class="badge bad">No conciliado</span></td><td><button class="btn sm" onclick="go('conciliaciones')">Ir a conciliaciones</button></td></tr>
+        <tr><td><strong>D5E2E4BD-8012...</strong><div class="sub">NVVM9709244W4</div></td><td><span class="badge ok">Egreso</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge ok">Coincide</span></td><td><span class="badge ok">Correcto</span></td><td><button class="btn sm" onclick="go('conciliaciones')">Ir a conciliaciones</button></td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- ── HU3: ALTA DE PROVEEDORES ── -->
+  <section class="page" id="page-proveedores">
+    <div class="topbar"><div><h2>Alta controlada de proveedores desde XML</h2><p>Valida RFC, EFOS y estructura del layout ERP antes del alta</p></div></div>
+    <div style="background:var(--orangeSoft);border:1px solid var(--orangeLine);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;display:flex;gap:10px;align-items:center"><span>💡</span><span>Este flujo también se activa automáticamente cuando se selecciona un CFDI en <strong>Conciliaciones</strong> y el proveedor no está registrado en ERP.</span></div>
+    <div class="grid g12" style="align-items:start">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:4px">Datos del proveedor detectado desde XML</div>
+        <div class="card-desc">Campos requeridos: RFC, NombreFiscal, Calle, Municipio, IdEstado, CodigoPostal, TipoProveedor</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="filter-field"><label>NumeroProveedor</label><input id="pn" value="0"><div style="font-size:11px;color:var(--muted);margin-top:3px">Opcional · Solo numérico ≥ 0</div></div>
+          <div class="filter-field"><label>RFC *</label><input id="pr" value="GGT081209393"></div>
+          <div class="filter-field" style="grid-column:span 2"><label>NombreFiscal *</label><input id="pnom" value="GRUPO GASOLINERO DEL TRANSPORTE SA DE CV"></div>
+          <div class="filter-field"><label>TipoProveedor *</label><select id="ptp"><option value="1" selected>1 · Nacional</option><option value="2">2 · Extranjero</option><option value="9">9 · Inválido</option></select></div>
+          <div class="filter-field"><label>Calle *</label><input id="pca" value="AV INDUSTRIA FISCAL 1200"></div>
+          <div class="filter-field"><label>Municipio *</label><input id="pm" value="MONTERREY"></div>
+          <div class="filter-field"><label>IdEstado *</label><select id="pe"><option value="19" selected>19 · Nuevo León</option><option value="01">01 · Aguascalientes</option><option value="CA">CA · California</option><option value="XX">XX · Inválido</option></select></div>
+          <div class="filter-field"><label>CodigoPostal *</label><input id="pcp" value="64000"></div>
+          <div class="filter-field"><label>DiasCredito</label><input id="pdc" value="30"></div>
+          <div class="filter-field"><label>CreditoPesos</label><input id="pcpes" value="50000.00"></div>
+        </div>
+        <div class="tools" style="margin-top:16px;flex-wrap:wrap">
+          <button class="btn cta" onclick="validarProveedor()">Validar alta ERP</button>
+          <button class="btn" onclick="casoProveedor('efos')">Simular EFOS</button>
+          <button class="btn" onclick="casoProveedor('invalido')">Layout inválido</button>
+          <button class="btn" onclick="casoProveedor('duplicado')">RFC duplicado</button>
+          <button class="btn" onclick="casoProveedor('valido')">Caso válido</button>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card"><div class="card-title" style="margin-bottom:10px">Resultado</div><div id="prov-res" class="list"><div class="list-item"><div><h4>Esperando validación</h4><p>EFOS · Duplicidad RFC · Layout ERP</p></div><span class="badge gray">Pendiente</span></div></div></div>
+        <div class="card"><div class="card-title" style="margin-bottom:8px">Mensaje del sistema</div><div id="prov-msg" class="badge info" style="font-size:12px;white-space:normal;padding:8px 12px;border-radius:8px">Esperando validación del proveedor</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HU5: CANCELACIÓN ── -->
+  <section class="page" id="page-cancelacion">
+    <div class="topbar"><div><h2>Cancelación de CFDI desde GM Fiscal</h2><p>Ventana SAT/PAC 24–72h · sincronización asíncrona · CFDI sustitutos</p></div></div>
+    <div class="grid g12" style="align-items:start">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:4px">Solicitar cancelación</div>
+        <div class="card-desc">La cancelación se gestiona ante el SAT/PAC. El estatus se sincroniza de forma asíncrona. Los sustitutos quedan relacionados automáticamente.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="filter-field" style="grid-column:span 2"><label>UUID a cancelar</label><input value="FFD462EF-FA09-473E-A8DB-EF90857340E4"></div>
+          <div class="filter-field"><label>Motivo</label><select><option value="01">01 · Comprobante con errores con relación</option><option value="02">02 · Comprobante con errores sin relación</option><option value="03">03 · No se llevó a cabo la operación</option><option value="04">04 · Operación nominativa en factura global</option></select></div>
+          <div class="filter-field"><label>UUID sustituto (si aplica)</label><input placeholder="Solo motivo 01"></div>
+        </div>
+        <div class="tools">
+          <button class="btn cta" onclick="toast('Cancelación enviada','Dentro de ventana. Estatus se actualizará en 24–72h.')">Cancelar — En ventana</button>
+          <button class="btn" onclick="toast('Fuera de ventana','El CFDI supera el tiempo permitido.')">Fuera de ventana</button>
+          <button class="btn" onclick="toast('Receptor rechazó','El CFDI permanece vigente.')">Receptor rechaza</button>
+        </div>
+      </div>
+      <div class="card"><div class="card-title" style="margin-bottom:12px">Flujo de cancelación</div>
+        <div class="cancel-timeline">
+          <div class="tl-step"><div class="tl-dot done">1</div><div class="tl-line"></div><div class="tl-content"><h4>Solicitud enviada al SAT/PAC</h4><p>Se valida ventana de tiempo y motivo</p></div></div>
+          <div class="tl-step"><div class="tl-dot pending">2</div><div class="tl-line"></div><div class="tl-content"><h4>En espera de confirmación</h4><p>El SAT/PAC procesa la solicitud (24–72h)</p></div></div>
+          <div class="tl-step"><div class="tl-dot idle">3</div><div class="tl-line"></div><div class="tl-content"><h4>Confirmado o rechazado</h4><p>Sincronización asíncrona del nuevo estatus</p></div></div>
+          <div class="tl-step"><div class="tl-dot idle">4</div><div class="tl-content"><h4>Notificación al usuario</h4><p>Cambio visible en GM Fiscal</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HU6: PDF ── -->
+  <section class="page" id="page-pdf">
+    <div class="topbar"><div><h2>Generación de PDF a partir de XML</h2><p>Visualiza, descarga y adjunta la representación impresa del CFDI</p></div></div>
+    <div class="grid g12" style="align-items:start">
+      <div>
+        <div class="card" style="margin-bottom:16px"><div class="card-title" style="margin-bottom:12px">CFDI seleccionado</div>
+          <div class="filter-field" style="margin-bottom:12px"><label>UUID</label><input value="FFD462EF-FA09-473E-A8DB-EF90857340E4" readonly></div>
+          <div class="tools"><button class="btn" onclick="toast('PDF generado','Representación construida desde el XML timbrado.')">👁 Visualizar</button><button class="btn" onclick="toast('Descarga iniciada','Archivo PDF siendo preparado.')">⬇ Descargar</button><button class="btn cta" onclick="toast('Adjunto ERP','PDF ligado al pasivo ERP.')">📎 Adjuntar a ERP</button></div>
+        </div>
+        <div class="pdf-preview">
+          <div class="pdf-header"><div><div class="pdf-logo">GM</div><div style="margin-top:6px;font-size:11px;font-weight:700">GRUPO GM TRANSPORT</div><div style="font-size:10px;color:var(--muted)">RFC: MTC0109038R4</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:800;color:var(--orange)">CFDI</div><div style="font-size:11px;font-weight:700;margin-top:2px">Comprobante Fiscal Digital</div><div style="font-size:10px;color:var(--muted)">Ingreso · MXN</div></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            <div class="pdf-field"><div class="pfl">UUID</div><div class="pfv" style="font-size:10px">FFD462EF-FA09-473E-A8DB...</div></div>
+            <div class="pdf-field"><div class="pfl">Fecha</div><div class="pfv">10/04/2026</div></div>
+            <div class="pdf-field"><div class="pfl">Emisor RFC</div><div class="pfv">MTC0109038R4</div></div>
+            <div class="pdf-field"><div class="pfl">Receptor RFC</div><div class="pfv">GGT081209393</div></div>
+            <div class="pdf-field"><div class="pfl">Subtotal</div><div class="pfv">$100,000.00</div></div>
+            <div class="pdf-field"><div class="pfl">Total</div><div class="pfv" style="color:var(--orange)">$116,000.00 MXN</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="card-title" style="margin-bottom:12px">Relaciones documentales</div>
+        <div class="val-box">
+          <div class="val-line"><span>XML timbrado</span><span class="badge ok">Disponible</span></div>
+          <div class="val-line"><span>PDF generado</span><span class="badge ok">Listo</span></div>
+          <div class="val-line"><span>Almacenado en Bóveda</span><span class="badge info">Azure Blob</span></div>
+          <div class="val-line"><span>Registro ERP vinculado</span><span class="badge info">Adjuntable</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HU7: CUMPLIMIENTO ── -->
+  <section class="page" id="page-cumplimiento">
+    <div class="topbar"><div><h2>Validaciones y cumplimiento fiscal</h2><p>EFOS · opinión SAT · deducibilidad · tasas · reglas sector transporte</p></div></div>
+    <div class="grid g3" style="margin-bottom:18px">
+      <div class="card"><span class="badge ok" style="margin-bottom:12px;display:inline-block">Cumplido</span><div class="card-title">Deducibilidad</div><div class="card-desc">CFDI con impuestos consistentes y soporte documental.</div></div>
+      <div class="card"><span class="badge bad" style="margin-bottom:12px;display:inline-block">Bloqueo</span><div class="card-title">Proveedor en EFOS</div><div class="card-desc">Impide alta, gastos, compras y aplicación de pagos.</div></div>
+      <div class="card"><span class="badge warn" style="margin-bottom:12px;display:inline-block">Advertencia</span><div class="card-title">Opinión negativa SAT</div><div class="card-desc">Permite revisión controlada con alerta visible.</div></div>
+    </div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Regla</th><th>Origen</th><th>RFC evaluado</th><th>Resultado</th><th>Impacto</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tasa IVA válida</strong><div class="sub">IVA 16% en XML</div></td><td>Catálogo SAT</td><td class="sub">GGT081209393</td><td><span class="badge ok">Cumple</span></td><td>Permite avanzar</td></tr>
+        <tr><td><strong>Proveedor en EFOS</strong><div class="sub">RFC consultado</div></td><td>Lista EFOS SAT</td><td class="sub">EFS010203AAA</td><td><span class="badge bad">Incumple</span></td><td>Bloquea todas las acciones ERP</td></tr>
+        <tr><td><strong>Opinión de cumplimiento</strong><div class="sub">Consulta SAT 69-B</div></td><td>SAT</td><td class="sub">TSO991022PB6</td><td><span class="badge warn">Negativa</span></td><td>Advertencia — requiere revisión</td></tr>
+        <tr><td><strong>Carta porte requerida</strong><div class="sub">Sector transporte</div></td><td>Regla negocio</td><td class="sub">MTC0109038R4</td><td><span class="badge warn">Requiere captura</span></td><td>Solicita complemento adicional</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- ── HU8: DASHBOARDS ── -->
+  <section class="page" id="page-dashboards">
+    <div class="topbar"><div><h2>Dashboards e indicadores fiscales</h2><p>KPIs por período, proveedor, tipo CFDI y deducibilidad</p></div><div class="tools"><button class="btn">📅 abr 2026</button><button class="btn cta">⬇ Exportar</button></div></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      <div class="card metric"><div class="k">IVA Causado</div><div class="v" style="color:var(--red)">$1,842,430</div><div class="d">Emisor tipo I</div></div>
+      <div class="card metric"><div class="k">IVA Acreditable</div><div class="v" style="color:var(--green)">$1,204,820</div><div class="d">Receptor tipo I</div></div>
+      <div class="card metric"><div class="k">ISR Provisional</div><div class="v" style="color:var(--yellow)">$487,600</div><div class="d">Estimado del período</div></div>
+      <div class="card metric"><div class="k">CFDI con EFOS</div><div class="v" style="color:var(--red)">12</div><div class="d">Riesgo fiscal detectado</div></div>
+    </div>
+    <div class="grid g2" style="margin-bottom:18px">
+      <div class="card"><div class="card-title" style="margin-bottom:14px">Pólizas vs REP</div><div class="val-box"><div class="val-line"><span>Total REPs recibidos</span><span style="font-weight:700">184</span></div><div class="val-line"><span>Con póliza vinculada</span><span class="badge ok">157</span></div><div class="val-line"><span>Sin póliza</span><span class="badge warn">27</span></div><div class="val-line"><span>Cobertura</span><span style="font-weight:700;color:var(--green)">85.3%</span></div></div></div>
+      <div class="card"><div class="card-title" style="margin-bottom:14px">Deducibilidad del período</div><div class="val-box"><div class="val-line"><span>CFDI deducibles</span><span class="badge ok">845</span></div><div class="val-line"><span>No deducibles</span><span class="badge bad">38</span></div><div class="val-line"><span>En revisión</span><span class="badge warn">24</span></div><div class="val-line"><span>Monto deducible</span><span style="font-weight:700;color:var(--green)">$8,241,300</span></div></div></div>
+    </div>
+    <div class="card"><div class="card-title" style="margin-bottom:12px">Desglose por tipo de CFDI</div>
+      <div class="table-wrap"><table><thead><tr><th>Tipo</th><th>Cantidad</th><th>Monto total</th><th>IVA</th><th>Deducibles</th><th>EFOS</th><th>Estado</th></tr></thead><tbody>
+        <tr><td><span class="badge info">Ingreso (I)</span></td><td>1,204</td><td>$42,100,000</td><td>$6,736,000</td><td><span class="badge ok">1,180</span></td><td><span class="badge ok">0</span></td><td><span class="badge ok">Sin riesgo</span></td></tr>
+        <tr><td><span class="badge ok">Egreso (E)</span></td><td>487</td><td>$18,430,000</td><td>$2,948,800</td><td><span class="badge ok">471</span></td><td><span class="badge warn">4</span></td><td><span class="badge warn">Revisión</span></td></tr>
+        <tr><td><span class="badge purple">Pago (P)</span></td><td>312</td><td>—</td><td>—</td><td><span class="badge gray">N/A</span></td><td><span class="badge ok">0</span></td><td><span class="badge ok">Sin riesgo</span></td></tr>
+        <tr><td><span class="badge gray">Traslado (T)</span></td><td>280</td><td>$0</td><td>$0</td><td><span class="badge gray">N/A</span></td><td><span class="badge bad">8</span></td><td><span class="badge bad">Riesgo</span></td></tr>
+      </tbody></table></div>
+    </div>
+  </section>
+
+</main><!-- /main -->
+
+<!-- ══════════════════════════════════════════════════════════
+     DRAWER — Panel lateral de acciones ERP (fuera del main)
+══════════════════════════════════════════════════════════ -->
+<div class="drawer-bg" id="drawerBg" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <h3 id="dr-title">Acciones ERP</h3>
+    <span id="dr-tipo"></span>
+  </div>
+  <div class="drawer-body">
+
+    <!-- Resumen CFDI -->
+    <div class="drawer-section">
+      <div class="drawer-section-title">📄 CFDI seleccionado</div>
+      <div class="cfdi-summary">
+        <div class="cs-uuid" id="dr-uuid">UUID: —</div>
+        <div class="cs-grid">
+          <div class="cs-field"><div class="csfl">Tipo</div><div class="csfv" id="dr-tipo2">—</div></div>
+          <div class="cs-field"><div class="csfl">Moneda</div><div class="csfv" id="dr-moneda">—</div></div>
+          <div class="cs-field"><div class="csfl">Total</div><div class="csfv" id="dr-total">—</div></div>
+          <div class="cs-field"><div class="csfl">Fecha</div><div class="csfv" id="dr-fecha">—</div></div>
+          <div class="cs-field" style="grid-column:span 2"><div class="csfl">RFC Emisor</div><div class="csfv" id="dr-emisor">—</div></div>
+          <div class="cs-field" style="grid-column:span 2"><div class="csfl">RFC Receptor</div><div class="csfv" id="dr-receptor">—</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detección de proveedor -->
+    <div class="drawer-section">
+      <div class="drawer-section-title">🏢 Proveedor detectado</div>
+      <div class="prov-detect" id="dr-prov">
+        <div class="pd-icon">🏢</div>
+        <div class="pd-info"><h4 id="dr-prov-name">—</h4><p id="dr-prov-rfc">RFC: —</p></div>
+        <div class="pd-status"><span id="dr-prov-badge"></span></div>
+      </div>
+      <div id="dr-prov-alta" style="display:none;margin-top:10px">
+        <button class="btn cta" style="width:100%" onclick="closeDrawer();go('proveedores');toast('Alta de proveedor','Completa los datos del layout ERP para dar de alta al proveedor.')">➕ Dar de alta en ERP primero</button>
+      </div>
+    </div>
+
+    <!-- Acciones ERP -->
+    <div class="drawer-section" id="dr-acciones-section">
+      <div class="drawer-section-title">⚡ Acciones ERP disponibles</div>
+      <div id="dr-acciones"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL — Formulario de acción ERP con datos heredados
+══════════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-head-icon" id="mod-icon"></div>
+      <div><h3 id="mod-title">Acción ERP</h3><p id="mod-sub">UUID: —</p></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Bloque heredado del XML -->
+      <div class="xml-block">
+        <div class="xml-block-label">📎 Datos heredados del XML <span>Solo lectura · No editables</span></div>
+        <div class="xml-fields-grid">
+          <div class="xml-field" style="grid-column:span 4"><div class="xfl">UUID</div><div class="xfv" id="mod-uuid" style="font-size:11px">—</div></div>
+          <div class="xml-field"><div class="xfl">Tipo CFDI</div><div class="xfv" id="mod-tipo">—</div></div>
+          <div class="xml-field"><div class="xfl">Moneda</div><div class="xfv" id="mod-moneda">—</div></div>
+          <div class="xml-field"><div class="xfl">Fecha emisión</div><div class="xfv" id="mod-fecha">—</div></div>
+          <div class="xml-field"><div class="xfl">Relacionamos</div><div class="xfv" id="mod-rel">—</div></div>
+          <div class="xml-field" style="grid-column:span 2"><div class="xfl">RFC Emisor</div><div class="xfv" id="mod-emisor">—</div></div>
+          <div class="xml-field" style="grid-column:span 2"><div class="xfl">RFC Receptor</div><div class="xfv" id="mod-receptor">—</div></div>
+          <div class="xml-field"><div class="xfl">Subtotal</div><div class="xfv" id="mod-subtotal">—</div></div>
+          <div class="xml-field"><div class="xfl">IVA</div><div class="xfv" id="mod-iva">—</div></div>
+          <div class="xml-field"><div class="xfl">ISR Ret.</div><div class="xfv" id="mod-isr">—</div></div>
+          <div class="xml-field"><div class="xfl">Total</div><div class="xfv amount" id="mod-total">—</div></div>
+        </div>
+      </div>
+
+      <!-- Formulario editable (cambia según la acción) -->
+      <div class="edit-block">
+        <div class="edit-block-label">✏ Completar para ERP <span>Campos requeridos</span></div>
+        <div class="form-grid" id="mod-form"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn cta" id="mod-submit" onclick="submitAccion()">Enviar al ERP</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><b id="tt"></b><span id="tx"></span></div>
+
+<!-- ════════ SCRIPT ════════ -->
+<script>
+// ── Navegación ──
+const navBtns = [...document.querySelectorAll('.nav button')];
+const pages = [...document.querySelectorAll('.page')];
+navBtns.forEach(b => b.onclick = () => go(b.dataset.page));
+function go(p) {
+  navBtns.forEach(b => b.classList.toggle('active', b.dataset.page === p));
+  pages.forEach(s => s.classList.toggle('active', s.id === 'page-' + p));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Toast ──
+function toast(t, x) {
+  document.getElementById('tt').textContent = t;
+  document.getElementById('tx').textContent = x;
+  const e = document.getElementById('toast');
+  e.style.transform = 'translateY(0)'; e.style.opacity = '1';
+  clearTimeout(window._to);
+  window._to = setTimeout(() => { e.style.transform = 'translateY(120px)'; e.style.opacity = '0'; }, 3200);
+}
+
+// ─────────────────────────────────────────────────────────
+// DATOS DE LOS CFDIs en la tabla de conciliaciones
+// Cada caso define: datos del CFDI + estado del proveedor + acciones disponibles
+// ─────────────────────────────────────────────────────────
+const CFDI_DATA = {
+  'ingreso-erp': {
+    uuid: 'FFD462EF-FA09-473E-A8DB-EF90857340E4',
+    tipo: 'Ingreso', moneda: 'MXN', total: '$116,000.00',
+    subtotal: '$100,000.00', iva: '$16,000.00', isr: '$0.00',
+    fecha: '08/04/2026', relacionamos: 'AMBOS',
+    rfcEmisor: 'MTC0109038R4', rfcReceptor: 'GGT081209393',
+    provNombre: 'GRUPO GASOLINERO DEL TRANSPORTE SA DE CV',
+    provRFC: 'GGT081209393', provEnERP: true,
+    acciones: ['gasto', 'pasivo', 'gasto-general', 'pdf', 'cancelar']
+  },
+  'egreso-erp': {
+    uuid: 'D5E2E4BD-8012-4262-951E-4939651FC070',
+    tipo: 'Egreso', moneda: 'USD', total: '$58,000.00',
+    subtotal: '$50,000.00', iva: '$8,000.00', isr: '$0.00',
+    fecha: '07/04/2026', relacionamos: 'AMBOS',
+    rfcEmisor: 'MTC0109038R4', rfcReceptor: 'NVVM9709244W4',
+    provNombre: 'NAVITMEX NAVIERA DE MEXICO SA DE CV',
+    provRFC: 'NVVM9709244W4', provEnERP: true,
+    acciones: ['gasto', 'pasivo', 'gasto-general', 'compra', 'pdf', 'cancelar']
+  },
+  'pago-erp': {
+    uuid: '32404B5F-C0D2-4A1F-B301-884F22C10890',
+    tipo: 'Pago (P)', moneda: 'MXN', total: '$145,000.00',
+    subtotal: '—', iva: '—', isr: '—',
+    fecha: '06/04/2026', relacionamos: 'Solo SAT',
+    rfcEmisor: 'TSO991022PB6', rfcReceptor: 'MTC0109038R4',
+    provNombre: 'TRANSPORTES SOL OCCIDENTE SA DE CV',
+    provRFC: 'TSO991022PB6', provEnERP: true,
+    acciones: ['pago', 'pdf', 'cancelar']
+  },
+  'sin-proveedor': {
+    uuid: 'AA901-C234-8F3A-2D11-003FC8821AA0',
+    tipo: 'Ingreso', moneda: 'MXN', total: '$29,000.00',
+    subtotal: '$25,000.00', iva: '$4,000.00', isr: '$0.00',
+    fecha: '05/04/2026', relacionamos: 'AMBOS',
+    rfcEmisor: 'MTC0109038R4', rfcReceptor: 'NUEVO991022RFG',
+    provNombre: 'NUEVOS TRANSPORTES REGIONALES SA DE CV',
+    provRFC: 'NUEVO991022RFG', provEnERP: false,
+    acciones: []
+  },
+  'egreso-compra': {
+    uuid: 'BB201-D891-7C44-8A02-FC1107290B44',
+    tipo: 'Egreso', moneda: 'MXN', total: '$43,500.00',
+    subtotal: '$37,500.00', iva: '$6,000.00', isr: '$0.00',
+    fecha: '04/04/2026', relacionamos: 'AMBOS',
+    rfcEmisor: 'MTC0109038R4', rfcReceptor: 'GGT081209393',
+    provNombre: 'GRUPO GASOLINERO DEL TRANSPORTE SA DE CV',
+    provRFC: 'GGT081209393', provEnERP: true,
+    acciones: ['compra', 'gasto', 'pdf', 'cancelar']
+  }
+};
+
+const ACCIONES_CONFIG = {
+  'gasto':       { label: 'Generar gasto de viaje',       icon: '💸', bg: '#fff0e6', desc: 'Registra el gasto en el ERP vinculado a un viaje',    form: 'formGasto' },
+  'pasivo':      { label: 'Generar pasivo',                icon: '📋', bg: '#eff6ff', desc: 'Genera un pasivo definitivo en el ERP',                form: 'formPasivo' },
+  'gasto-general':{ label: 'Generar gasto general',       icon: '📦', bg: '#f5f3ff', desc: 'Gasto general sin relación a viaje específico',        form: 'formGastoGeneral' },
+  'compra':      { label: 'Generar compra / inventario',   icon: '🛒', bg: '#ecfdf5', desc: 'Genera entrada a inventario con OC autorizada',        form: 'formCompra' },
+  'pago':        { label: 'Aplicar pago (tipo P)',         icon: '💳', bg: '#f5f3ff', desc: 'Marca facturas relacionadas como pagadas en ERP',      form: 'formPago' },
+  'pdf':         { label: 'Generar PDF del CFDI',          icon: '📄', bg: '#fafafa', desc: 'Genera representación impresa del CFDI',               form: null },
+  'cancelar':    { label: 'Cancelar CFDI',                 icon: '✕',  bg: '#fff1f1', desc: 'Inicia proceso de cancelación ante SAT/PAC',           form: 'formCancelar' }
+};
+
+// Formularios editables para cada acción
+const FORMS = {
+  formGasto: `
+    <div class="form-field"><label>Tipo de operación <span class="req">*</span></label><select><option selected>Gasto de viaje</option><option>Gasto de operación</option></select></div>
+    <div class="form-field"><label>Viaje relacionado <span class="req">*</span></label><select><option selected>VJ-2026-004381 · Monterrey → Tijuana</option><option>VJ-2026-004389 · Saltillo → Nuevo Laredo</option><option>VJ-2026-004401 · CDMX → Guadalajara</option></select><div class="hint">El viaje debe estar registrado en ERP</div></div>
+    <div class="form-field"><label>Concepto contable</label><input placeholder="Ej: Combustible operativo" value="Combustible ruta noreste"></div>
+    <div class="form-field"><label>Centro de costo</label><select><option>CC-001 · Operaciones Norte</option><option>CC-002 · Flota Nacional</option></select></div>
+    <div class="form-field" style="grid-column:span 2"><label>Notas adicionales</label><input placeholder="Observaciones para el contador"></div>`,
+
+  formPasivo: `
+    <div class="form-field"><label>Tipo de pasivo <span class="req">*</span></label><select><option selected>Pasivo por pagar</option><option>Pasivo diferido</option></select></div>
+    <div class="form-field"><label>Cuenta contable <span class="req">*</span></label><select><option selected>2000 · Proveedores</option><option>2100 · Cuentas por pagar</option></select></div>
+    <div class="form-field"><label>Fecha de vencimiento</label><input type="date" value="2026-05-10"></div>
+    <div class="form-field"><label>Días de crédito</label><input value="30"></div>
+    <div class="form-field" style="grid-column:span 2"><label>Notas</label><input placeholder="Referencia interna del pasivo"></div>`,
+
+  formGastoGeneral: `
+    <div class="form-field"><label>Tipo de gasto <span class="req">*</span></label><select><option selected>Gasto operativo</option><option>Gasto administrativo</option><option>Gasto de ventas</option></select></div>
+    <div class="form-field"><label>Centro de costo <span class="req">*</span></label><select><option selected>CC-001 · Operaciones Norte</option><option>CC-003 · Administración</option></select></div>
+    <div class="form-field"><label>Cuenta de gasto</label><select><option selected>6000 · Gastos de operación</option><option>6100 · Gastos administrativos</option></select></div>
+    <div class="form-field"><label>Referencia</label><input placeholder="Referencia interna"></div>`,
+
+  formCompra: `
+    <div class="form-field"><label>Orden de compra <span class="req">*</span></label><select><option selected>OC-2026-11042 · GGT081209393</option><option>OC-2026-11038 · GGT081209393</option></select></div>
+    <div class="form-field"><label>Almacén destino <span class="req">*</span></label><select><option selected>ALM-01 · Almacén Monterrey</option><option>ALM-02 · Almacén CDMX</option></select></div>
+    <div class="form-field"><label>Tipo de entrada</label><select><option selected>Compra directa</option><option>Entrada por OC</option></select></div>
+    <div class="form-field"><label>Referencia OC</label><input value="OC-2026-11042" readonly></div>`,
+
+  formPago: `
+    <div class="form-field" style="grid-column:span 2"><label>Facturas relacionadas detectadas <span class="req">*</span></label><select><option selected>FAC-001 · $145,000.00 — Pago total</option><option>FAC-002 · $52,480.00 — Pago parcial</option></select></div>
+    <div class="form-field"><label>Tipo de pago detectado</label><input value="Pago total" readonly></div>
+    <div class="form-field"><label>Monto aplicado</label><input value="$145,000.00" readonly></div>
+    <div class="form-field" style="grid-column:span 2"><label>Notas de aplicación</label><input placeholder="Observaciones del pago"></div>`,
+
+  formCancelar: `
+    <div class="form-field" style="grid-column:span 2"><label>Motivo de cancelación <span class="req">*</span></label><select><option>01 · Comprobante emitido con errores con relación</option><option>02 · Comprobante con errores sin relación</option><option>03 · No se llevó a cabo la operación</option><option>04 · Operación nominativa en factura global</option></select></div>
+    <div class="form-field" style="grid-column:span 2"><label>UUID sustituto (motivo 01 con reemplazo)</label><input placeholder="UUID del CFDI que sustituye a este"><div class="hint">Dejar vacío si no hay sustitución</div></div>`
+};
+
+// ── Selección de CFDI en tabla ──
+let currentCFDI = null;
+
+function selectCFDI(row, tipo) {
+  // Marcar fila
+  document.querySelectorAll('#conc-table tr.selectable').forEach(r => {
+    r.classList.remove('selected');
+    r.querySelector('td:first-child span').textContent = '○';
+  });
+  row.classList.add('selected');
+  row.querySelector('td:first-child span').textContent = '●';
+
+  const data = CFDI_DATA[tipo];
+  currentCFDI = data;
+  populateDrawer(data);
+  openDrawer();
+}
+
+function populateDrawer(d) {
+  document.getElementById('dr-uuid').textContent = 'UUID: ' + d.uuid;
+  document.getElementById('dr-title').textContent = 'Acciones ERP';
+  document.getElementById('dr-tipo').innerHTML = `<span class="badge ${tipoBadge(d.tipo)}" style="font-size:10px">${d.tipo}</span>`;
+  document.getElementById('dr-tipo2').textContent = d.tipo;
+  document.getElementById('dr-moneda').textContent = d.moneda;
+  document.getElementById('dr-total').textContent = d.total;
+  document.getElementById('dr-fecha').textContent = d.fecha;
+  document.getElementById('dr-emisor').textContent = d.rfcEmisor;
+  document.getElementById('dr-receptor').textContent = d.rfcReceptor;
+
+  // Proveedor
+  const pdEl = document.getElementById('dr-prov');
+  document.getElementById('dr-prov-name').textContent = d.provNombre;
+  document.getElementById('dr-prov-rfc').textContent = 'RFC: ' + d.provRFC;
+  const badgeEl = document.getElementById('dr-prov-badge');
+  const altaEl = document.getElementById('dr-prov-alta');
+
+  if (d.provEnERP) {
+    pdEl.className = 'prov-detect found';
+    badgeEl.innerHTML = '<span class="badge ok">✓ En ERP</span>';
+    altaEl.style.display = 'none';
+  } else {
+    pdEl.className = 'prov-detect missing';
+    badgeEl.innerHTML = '<span class="badge warn">⚠ No en ERP</span>';
+    altaEl.style.display = 'block';
+  }
+
+  // Acciones
+  const container = document.getElementById('dr-acciones');
+  const section = document.getElementById('dr-acciones-section');
+  if (!d.provEnERP) {
+    container.innerHTML = `<div style="font-size:12px;color:var(--muted);background:#f8fafc;border-radius:8px;padding:12px;border:1px solid var(--line)">⚠ Las acciones ERP estarán disponibles una vez que el proveedor sea dado de alta en el ERP.</div>`;
+    section.style.display = 'block';
+    return;
+  }
+  if (d.acciones.length === 0) {
+    container.innerHTML = `<div style="font-size:12px;color:var(--muted)">Sin acciones disponibles para este tipo de CFDI.</div>`;
+    return;
+  }
+  container.innerHTML = d.acciones.map(a => {
+    const ac = ACCIONES_CONFIG[a];
+    return `<div class="accion-item" onclick="openModal('${a}')">
+      <div class="accion-icon" style="background:${ac.bg}">${ac.icon}</div>
+      <div><h4>${ac.label}</h4><p>${ac.desc}</p></div>
+      <div class="accion-arrow">›</div>
+    </div>`;
+  }).join('');
+}
+
+function tipoBadge(t) {
+  if (t.includes('Ingreso')) return 'info';
+  if (t.includes('Egreso')) return 'ok';
+  if (t.includes('Pago')) return 'purple';
+  if (t.includes('Traslado')) return 'gray';
+  return 'gray';
+}
+
+// ── Drawer open/close ──
+function openDrawer() {
+  document.getElementById('drawerBg').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawerBg').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.querySelectorAll('#conc-table tr.selectable').forEach(r => {
+    r.classList.remove('selected');
+    r.querySelector('td:first-child span').textContent = '○';
+  });
+  currentCFDI = null;
+}
+
+// ── Modal open/close ──
+function openModal(accion) {
+  if (!currentCFDI) return;
+  const d = currentCFDI;
+  const ac = ACCIONES_CONFIG[accion];
+
+  // Header
+  document.getElementById('mod-icon').textContent = ac.icon;
+  document.getElementById('mod-icon').style.background = ac.bg;
+  document.getElementById('mod-title').textContent = ac.label;
+  document.getElementById('mod-sub').textContent = 'CFDI: ' + d.uuid.substring(0,18) + '...';
+  document.getElementById('mod-submit').textContent = accion === 'cancelar' ? '⚠ Solicitar cancelación' : '✓ Enviar al ERP';
+  document.getElementById('mod-submit').className = 'btn ' + (accion === 'cancelar' ? 'danger' : 'cta');
+
+  // Datos XML heredados (read-only)
+  document.getElementById('mod-uuid').textContent = d.uuid;
+  document.getElementById('mod-tipo').textContent = d.tipo;
+  document.getElementById('mod-moneda').textContent = d.moneda;
+  document.getElementById('mod-fecha').textContent = d.fecha;
+  document.getElementById('mod-rel').textContent = d.relacionamos;
+  document.getElementById('mod-emisor').textContent = d.rfcEmisor;
+  document.getElementById('mod-receptor').textContent = d.rfcReceptor;
+  document.getElementById('mod-subtotal').textContent = d.subtotal;
+  document.getElementById('mod-iva').textContent = d.iva;
+  document.getElementById('mod-isr').textContent = d.isr;
+  document.getElementById('mod-total').textContent = d.total;
+
+  // Formulario editable
+  const formKey = ac.form;
+  document.getElementById('mod-form').innerHTML = formKey ? FORMS[formKey] : '<p style="color:var(--muted);font-size:13px">Esta acción no requiere datos adicionales.</p>';
+
+  document.getElementById('modalBg').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('open');
+}
+
+function submitAccion() {
+  closeModal();
+  const title = document.getElementById('mod-title').textContent;
+  toast('Operación enviada al ERP', title + ' — Registro procesado correctamente.');
+}
+
+// ── Alta proveedor ──
+function casoProveedor(m) {
+  const pr=document.getElementById('pr'), pe=document.getElementById('pe'),
+        pcp=document.getElementById('pcp'), pn=document.getElementById('pn'),
+        pdc=document.getElementById('pdc'), pcpes=document.getElementById('pcpes'),
+        ptp=document.getElementById('ptp'), pnom=document.getElementById('pnom'),
+        pm=document.getElementById('pm');
+  if (m==='efos'){pr.value='EFS010203AAA';pe.value='19';pcp.value='64000';pn.value='0';pdc.value='30';pcpes.value='50000.00';ptp.value='1';pnom.value='EMPRESA FISCAL SOSPECHOSA SA';pm.value='MONTERREY';validarProveedor('efos');}
+  else if (m==='invalido'){pr.value='GGT-081209-393';pe.value='XX';pcp.value='12A4';pn.value='-10';pdc.value='-30';pcpes.value='-100.00';ptp.value='9';pnom.value='';pm.value='';validarProveedor();}
+  else if (m==='duplicado'){pr.value='MTC0109038R4';pe.value='19';pcp.value='64000';pn.value='0';pdc.value='30';pcpes.value='0.00';ptp.value='1';pnom.value='MOVIMIENTOS TERRESTRES SA';pm.value='MONTERREY';validarProveedor('dup');}
+  else{pr.value='GGT081209393';pe.value='19';pcp.value='64000';pn.value='0';pdc.value='30';pcpes.value='50000.00';ptp.value='1';pnom.value='GRUPO GASOLINERO DEL TRANSPORTE SA DE CV';pm.value='MONTERREY';validarProveedor();}
+}
+
+function liItem(h,p,s,c){return `<div class="list-item"><div><h4>${h}</h4><p>${p}</p></div><span class="badge ${c}">${s}</span></div>`;}
+
+function validarProveedor(mode) {
+  ['pn','pr','pnom','pm','pe','pcp','pdc','pcpes'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('err');});
+  const pr=document.getElementById('pr'),pe=document.getElementById('pe'),
+        pcp=document.getElementById('pcp'),pn=document.getElementById('pn'),
+        pdc=document.getElementById('pdc'),pcpes=document.getElementById('pcpes'),
+        ptp=document.getElementById('ptp'),pnom=document.getElementById('pnom'),pm=document.getElementById('pm');
+  let msg='Proveedor listo para alta controlada en ERP', bad=false;
+  if(!/^[A-Z0-9&Ñ]{12,13}$/i.test(pr.value.trim())||pr.value.includes('-')||/\s/.test(pr.value)){bad=true;msg='El RFC debe capturarse sin guiones y con formato fiscal válido';pr.classList.add('err');}
+  else if(pn.value.trim()!==''&&(!/^\d+$/.test(pn.value.trim())||Number(pn.value)<0)){bad=true;msg='El NumeroProveedor debe ser numérico y no negativo';pn.classList.add('err');}
+  else if(!pnom.value.trim()){bad=true;msg='El campo NombreFiscal es obligatorio para dar de alta al proveedor';pnom.classList.add('err');}
+  else if(!pm.value.trim()){bad=true;msg='El campo Municipio es obligatorio para dar de alta al proveedor';pm.classList.add('err');}
+  else if(!/^\d{5}$/.test(pcp.value.trim())){bad=true;msg='El CodigoPostal debe ser numérico de 5 dígitos';pcp.classList.add('err');}
+  else if(pdc.value&&(!/^\d+$/.test(pdc.value.trim())||Number(pdc.value)<0)){bad=true;msg='DiasCredito debe ser un entero numérico no negativo';pdc.classList.add('err');}
+  else if(pcpes.value&&(isNaN(Number(pcpes.value))||Number(pcpes.value)<0)){bad=true;msg='CreditoPesos debe ser numérico decimal y no negativo';pcpes.classList.add('err');}
+  else if(!['19','01','CA'].includes(pe.value)){bad=true;msg='El IdEstado no existe en el catálogo permitido';pe.classList.add('err');}
+  else if(!['1','2'].includes(ptp.value)){bad=true;msg='TipoProveedor debe ser 1 Nacional o 2 Extranjero';ptp.classList.add('err');}
+  if(mode==='efos'||pr.value.trim()==='EFS010203AAA'){bad=true;msg='No es posible dar de alta al proveedor por riesgo fiscal (EFOS)';}
+  if(mode==='dup'){bad=true;msg='El proveedor ya existe en ERP con el RFC indicado';}
+  const msgEl=document.getElementById('prov-msg');
+  msgEl.className='badge '+(bad?'bad':'ok');
+  msgEl.style.cssText='font-size:12px;white-space:normal;padding:8px 12px;border-radius:8px';
+  msgEl.textContent=msg;
+  document.getElementById('prov-res').innerHTML=bad
+    ?liItem('Alta bloqueada',msg,'Bloqueado','bad')+liItem('Acción requerida','Corregir el campo indicado o detener el proceso.','Revisar','warn')
+    :liItem('RFC no duplicado','Validación preventiva de duplicidad OK.','OK','ok')+liItem('Sin EFOS','RFC no aparece en listas negras fiscales.','Limpio','ok')+liItem('Trazabilidad XML','Se conservará vínculo RFC ↔ XML origen ↔ alta ERP.','Se generará','info');
+  toast(bad?'Alta bloqueada':'Alta validada', msg);
+}
+</script>
+</body>
+</html>

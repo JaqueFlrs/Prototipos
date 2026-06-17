@@ -397,7 +397,7 @@
   <span class="header-sep">/</span>
   <span class="logo-sub">Prototipos</span>
   <div class="header-end">
-    <span class="count-chip" id="totalBadge">11 prototipos</span>
+    <span class="count-chip" id="totalBadge">19 prototipos</span>
   </div>
 </header>
 
@@ -419,6 +419,9 @@
       <button class="ftab" data-filter="CH-439">CH-439</button>
       <button class="ftab" data-filter="Presentaciones">Presentaciones</button>
       <button class="ftab" data-filter="ERP">ERP</button>
+      <button class="ftab" data-filter="Fiscal">Fiscal</button>
+      <button class="ftab" data-filter="GM Integra">GM Integra</button>
+      <button class="ftab" data-filter="Aeropuerto">Aeropuerto</button>
     </div>
   </div>
 </div>
@@ -456,16 +459,43 @@
     "CH-439":         { badge: "rgba(139,92,246,0.1)",  text: "#5b21b6" },
     "Presentaciones": { badge: "rgba(100,116,139,0.1)", text: "#374151" },
     "ERP":            { badge: "rgba(242,148,14,0.12)", text: "#92400e" },
+    "Fiscal":         { badge: "rgba(234,88,12,0.1)",  text: "#9a3412" },
+    "GM Integra":     { badge: "rgba(20,184,166,0.1)", text: "#0f766e" },
+    "Aeropuerto":     { badge: "rgba(14,165,233,0.1)", text: "#0369a1" },
   };
   const CD = { badge: "rgba(242,148,14,0.12)", text: "#92400e" };
 
   const DATA = [
+    { nombre:"GM Mis Viajes — Liquidaciones", ticket:"", proyecto:"Mis Viajes",
+      desc:"Pantalla de liquidaciones para operadores en la app Mis Viajes.",
+      url:"mis-viajes-liquidaciones-v2/index.html", fecha:"2026-07-01" },
+    { nombre:"Importar Unidades v2", ticket:"#37413", proyecto:"ERP",
+      desc:"Prototipo para importación masiva de unidades versión 2.",
+      url:"importar-unidades-37413/index.html", fecha:"2026-06-16" },
     { nombre:"Torre de Control — Integración ControlT", ticket:"#HU39842", proyecto:"ERP",
       desc:"Configuración, tipos de viaje y listado de viajes con estatus de transmisión automática a ControlT al asignar operador.",
       url:"torre-de-control-hu39842/index.html", fecha:"2026-06-15" },
+    { nombre:"Doble Check — Configuración de Envíos", ticket:"", proyecto:"DobleCheck",
+      desc:"Configuración de notificaciones y envíos en formularios DobleCheck.",
+      url:"doblecheck-config-envios/index.html", fecha:"2026-06-01" },
+    { nombre:"GM Fiscal — Etapa 2", ticket:"", proyecto:"Fiscal",
+      desc:"Prototipo de la segunda etapa del módulo GM Fiscal.",
+      url:"fiscal-etapa-2/index.html", fecha:"2026-06-01" },
+    { nombre:"Gestión de Combustibles Importados", ticket:"", proyecto:"GM Integra",
+      desc:"Vista de gestión y seguimiento de combustibles importados en GM Integra.",
+      url:"gm-integra-combustible/index.html", fecha:"2026-06-01" },
     { nombre:"SOS sin GPS", ticket:"#35074", proyecto:"Mis Viajes",
       desc:"Notificación SOS cuando el cliente no tiene GPS — correo + campanita ERP",
       url:"mis-viajes-sos/index.html", fecha:"2026-06-05" },
+    { nombre:"GM Mis Viajes — Liquidaciones (v1)", ticket:"#HU41881", proyecto:"Mis Viajes",
+      desc:"Primera versión del prototipo de liquidaciones para operadores.",
+      url:"HU41881.html", fecha:"2026-05-08" },
+    { nombre:"Pantalla Aeropuerto — Sprint 2026-5", ticket:"", proyecto:"Aeropuerto",
+      desc:"Prototipo de pantalla de seguimiento en aeropuerto, sprint mayo 2026.",
+      url:"pantalla-aeropuerto-sprint5/index.html", fecha:"2026-05-01" },
+    { nombre:"Roadmap y Análisis IA — Transporte Personal", ticket:"", proyecto:"Aeropuerto",
+      desc:"Análisis de roadmap e integración de IA para Transporte Personal.",
+      url:"pantalla-aeropuerto-roadmap/index.html", fecha:"2026-05-01" },
     { nombre:"Portal Cliente + Mejoras IA", ticket:"", proyecto:"Hermes",
       desc:"Portal de cliente con mejoras de IA para cotizaciones ERP",
       url:"hermes-portal-cliente/index.html", fecha:"2026-05-01" },

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilería Terminación Masiva Órdenes de Servicio — ERP GM Transport</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 12px; background: #f0f0f0; padding: 20px; }
+
+    .page-header { background: #2d2d2d; color: #fff; padding: 8px 14px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+    .page-header span { color: #F2940E; }
+
+    .panel { width: 100%; background: #F5A623; border: 1px solid #ccc; }
+    .panel-title { background: #F2940E; color: #fff; font-weight: bold; font-size: 13px; padding: 6px 10px; }
+
+    .proto-tabs { display: flex; background: #ddd; border-bottom: 2px solid #F2940E; flex-wrap: wrap; }
+    .proto-tab { padding: 7px 16px; cursor: pointer; font-size: 12px; background: #e8e8e8; color: #555; border-right: 1px solid #ccc; user-select: none; }
+    .proto-tab.active { background: #fff; color: #333; font-weight: bold; border-top: 3px solid #F2940E; padding-top: 4px; }
+
+    .tab-content { display: none; padding: 10px 14px; background: #F5A623; }
+    .tab-content.active { display: block; }
+
+    .inner-panel { background: #fff; border: 1px solid #ccc; padding: 10px 14px; margin-bottom: 8px; }
+    .section-title { background: #ddd; text-align: center; font-weight: bold; font-size: 12px; padding: 4px 0; margin: 8px 0 6px 0; border: 1px solid #ccc; }
+
+    .field-row { display: flex; align-items: center; margin-bottom: 5px; gap: 6px; flex-wrap: wrap; }
+    .field-row label { min-width: 180px; color: #555; font-size: 12px; flex-shrink: 0; }
+    .field-row input, .field-row select { border: 1px solid #ccc; padding: 3px 5px; font-size: 12px; font-family: Calibri, sans-serif; background: #fff; }
+    .field-row input[type="date"] { width: 140px; }
+    .field-row input[type="text"] { width: 260px; }
+
+    .btn-primary { background: #F2940E; color: #fff; border: none; padding: 4px 14px; font-size: 12px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
+    .btn-primary:hover { background: #d07a00; }
+    .btn-secondary { background: #888; color: #fff; border: none; padding: 4px 14px; font-size: 12px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
+    .btn-terminar { background: #1a6b3a; color: #fff; border: none; padding: 4px 14px; font-size: 12px; font-family: Calibri, sans-serif; cursor: pointer; border-radius: 3px; }
+    .btn-terminar:hover { background: #145430; }
+    .btn-terminar:disabled { background: #ccc; cursor: not-allowed; }
+
+    .bottom-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 10px; border-top: 1px solid #ddd; background: #f5f5f5; }
+
+    .erp-table { width: 100%; border-collapse: collapse; }
+    .erp-table thead tr { background: #F2940E; color: #fff; }
+    .erp-table thead th { padding: 5px 8px; text-align: left; font-weight: bold; border: 1px solid #d07000; font-size: 12px; white-space: nowrap; }
+    .erp-table thead th.center { text-align: center; }
+    .erp-table tbody td { padding: 4px 8px; border: 1px solid #e8e8e8; font-size: 12px; }
+    .erp-table tbody tr:hover { background: #fde8c0; }
+
+    .badge-abierta   { background: #e3f2fd; color: #1565c0; padding: 1px 7px; border-radius: 10px; font-size: 11px; border: 1px solid #90caf9; }
+    .badge-autorizada{ background: #e8f5e9; color: #2e7d32; padding: 1px 7px; border-radius: 10px; font-size: 11px; border: 1px solid #a5d6a7; }
+    .badge-terminada { background: #eeeeee; color: #555; padding: 1px 7px; border-radius: 10px; font-size: 11px; border: 1px solid #bdbdbd; }
+
+    .counter-bar { background: #fffbf0; border: 1px solid #F2940E; padding: 5px 10px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .counter-bar strong { color: #c05000; }
+
+    .fecha-cierre-section { background: #f0fff4; border: 1px solid #2e7d32; padding: 8px 12px; margin-top: 8px; }
+    .fecha-cierre-section label { font-weight: bold; color: #1a6b3a; font-size: 12px; }
+    .required-mark { color: #c0392b; }
+
+    .empty-state { text-align: center; padding: 30px; color: #888; font-size: 13px; }
+
+    .info-msg { background: #fff3cd; border: 1px solid #ffc107; padding: 6px 10px; font-size: 12px; margin-bottom: 6px; color: #856404; }
+    .err-msg { background: #fce4e4; border: 1px solid #c0392b; padding: 6px 10px; font-size: 12px; color: #c0392b; display: none; margin-bottom: 6px; }
+    .err-msg.show { display: block; }
+
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal-box { background: #fff; border: 1px solid #ccc; width: 420px; }
+    .modal-header { background: #e8e8e8; font-weight: bold; font-size: 13px; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
+    .modal-close-x { background: #F2940E; color: #fff; border: none; width: 22px; height: 22px; border-radius: 3px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .modal-body { padding: 16px; font-size: 12px; line-height: 1.7; }
+    .modal-body .highlight { color: #1a6b3a; font-weight: bold; font-size: 14px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 10px 16px; border-top: 1px solid #ddd; background: #f5f5f5; }
+
+    .toast { display: none; position: fixed; bottom: 24px; right: 24px; background: #1a6b3a; color: #fff; padding: 10px 18px; border-radius: 4px; font-size: 13px; z-index: 2000; }
+    .toast.show { display: block; }
+
+    .tipo-prev { background: #e8f5e9; color: #2e7d32; padding: 1px 6px; border-radius: 3px; font-size: 11px; }
+    .tipo-corr { background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 3px; font-size: 11px; }
+    .res-card { flex: 1; min-width: 120px; padding: 12px; text-align: center; border-radius: 3px; }
+    .res-num { font-size: 28px; font-weight: bold; }
+    .res-label { font-size: 11px; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  🔧 Mantenimiento &rsaquo; <span>Utilería: Terminación Masiva de Órdenes de Servicio</span>
+</div>
+
+<!-- Banner obligatorio -->
+<div style="background:#fffdf9;border-left:4px solid #F2940E;border-radius:6px;padding:14px 18px;margin:16px auto;max-width:980px;box-sizing:border-box;font-family:Calibri,system-ui,sans-serif;">
+  <div style="display:flex;gap:12px;align-items:flex-start;">
+    <span style="font-size:20px;margin-top:2px;">💡</span>
+    <div>
+      <p style="margin:0 0 6px;font-weight:700;font-size:13px;color:#1a1a1a;">Sobre este prototipo</p>
+      <p style="margin:0 0 6px;font-size:13px;color:#444;line-height:1.6;">Este prototipo es una <strong>representación visual de la funcionalidad solicitada</strong>, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+      <p style="margin:0 0 6px;font-size:13px;color:#444;line-height:1.6;">⚠️ <strong>El prototipo no debe copiarse tal cual.</strong> Lo que sí debe respetarse siempre es la apariencia del sistema destino: para el <strong>ERP GM Transport</strong>, eso significa colores, tipografía, estructura de paneles y componentes propios del ERP.</p>
+      <p style="margin:0;font-size:13px;color:#444;line-height:1.6;">Si algo del diseño propuesto aquí no encaja o parece descabellado, <strong>coméntalo antes de implementarlo</strong> — lo ajustamos juntos. 🙌</p>
+    </div>
+  </div>
+</div>
+
+<!-- Proto-tabs -->
+<div style="max-width:980px;margin:0 auto;">
+  <div class="proto-tabs">
+    <div class="proto-tab active" onclick="showTab('filtros',this)">Filtros y Resultados</div>
+    <div class="proto-tab" onclick="showTab('vacio',this)">Sin resultados</div>
+    <div class="proto-tab" onclick="showTab('confirmacion',this)">Confirmación</div>
+    <div class="proto-tab" onclick="showTab('resultado',this)">Resultado</div>
+  </div>
+
+  <!-- TAB 1: Filtros y Resultados -->
+  <div id="tab-filtros" class="tab-content active">
+    <div class="panel">
+      <div class="panel-title">🔍 Filtros de búsqueda</div>
+      <div class="inner-panel">
+        <div class="section-title">Parámetros de búsqueda</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+          <div class="field-row">
+            <label>Fecha inicio: <span class="required-mark">*</span></label>
+            <input type="date" value="2026-06-01">
+          </div>
+          <div class="field-row">
+            <label>Fecha fin: <span class="required-mark">*</span></label>
+            <input type="date" value="2026-06-22">
+          </div>
+          <div class="field-row">
+            <label>Unidad(es):</label>
+            <input type="text" placeholder="Ej: T-001, T-002 (vacío = todas)">
+          </div>
+          <button class="btn-primary">🔍 Buscar</button>
+          <button class="btn-secondary">✖ Limpiar</button>
+        </div>
+        <div class="info-msg" style="margin-top:8px;">
+          ℹ️ Solo se muestran Órdenes de Servicio en estado <strong>Abierta</strong> o <strong>Autorizada</strong>. Las OS ya terminadas o canceladas no aparecen en los resultados.
+        </div>
+      </div>
+
+      <div class="inner-panel">
+        <div class="section-title">Resultados — Órdenes de Servicio</div>
+
+        <div id="err1" class="err-msg">⚠️ Debe capturar la fecha de cierre antes de continuar.</div>
+
+        <div class="counter-bar">
+          <span>Total encontrado: <strong id="tc">7</strong> OS | Seleccionadas: <strong id="sc">0</strong></span>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+            <input type="checkbox" id="chkAll" onchange="togAll(this)"> Seleccionar todas
+          </label>
+        </div>
+
+        <div style="overflow-x:auto;">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th class="center" style="width:32px;"></th>
+              <th>Folio OS</th>
+              <th>Fecha apertura</th>
+              <th>Unidad</th>
+              <th>Tipo</th>
+              <th>Modalidad</th>
+              <th>Descripción / Concepto</th>
+              <th class="center">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="center"><input type="checkbox" class="cr" onchange="upd()"></td>
+              <td>OS-0003841</td>
+              <td>02/06/2026</td>
+              <td>T-025</td>
+              <td><span class="tipo-corr">Correctivo</span></td>
+              <td>Interno</td>
+              <td>Reparación sistema de frenos delanteros</td>
+              <td class="center"><span class="badge-autorizada">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" class="cr" onchange="upd()"></td>
+              <td>OS-0003845</td>
+              <td>04/06/2026</td>
+              <td>T-031</td>
+              <td><span class="tipo-corr">Correctivo</span></td>
+              <td>Externo</td>
+              <td>Cambio de aceite y filtros — taller externo</td>
+              <td class="center"><span class="badge-abierta">Abierta</span></td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" class="cr" onchange="upd()"></td>
+              <td>OS-0003849</td>
+              <td>06/06/2026</td>
+              <td>T-025</td>
+              <td><span class="tipo-prev">Preventivo</span></td>
+              <td>Interno</td>
+              <td>Mantenimiento preventivo 20,000 km</td>
+              <td class="center"><span class="badge-autorizada">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" class="cr" onchange="upd()"></td>
+              <td>OS-0003852</td>
+              <td>08/06/2026</td>
+              <td>T-042</td>
+              <td><span class="tipo-corr">Correctivo</span></td>
+              <td>Externo</td>
+              <td>Diagnóstico y reparación ABS</td>
+              <td class="center"><span class="badge-abierta">Abierta</span></td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" class="cr" onchange="upd()"></td>
+              <td>OS-0003857</td>
+              <td>11/06/2026</td>
+              <td>T-018</td>
+              <td><span class="tipo-prev">Preventivo</span></td>
+              <td>Interno</td>
+              <td>Revisión general y afinación</td>
+              <td class="center"><span class="badge-autorizada">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" class="cr" onchange="upd()"></td>
+              <td>OS-0003861</td>
+              <td>14/06/2026</td>
+              <td>T-055</td>
+              <td><span class="tipo-corr">Correctivo</span></td>
+              <td>Externo</td>
+              <td>Balanceo y alineación — 4 llantas</td>
+              <td class="center"><span class="badge-abierta">Abierta</span></td>
+            </tr>
+            <tr>
+              <td class="center"><input type="checkbox" class="cr" onchange="upd()"></td>
+              <td>OS-0003864</td>
+              <td>17/06/2026</td>
+              <td>T-042</td>
+              <td><span class="tipo-prev">Preventivo</span></td>
+              <td>Interno</td>
+              <td>Revisión de llantas y presión</td>
+              <td class="center"><span class="badge-abierta">Abierta</span></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+        <!-- Fecha de cierre -->
+        <div class="fecha-cierre-section" style="margin-top:8px;">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <label>Fecha de cierre: <span class="required-mark">*</span></label>
+            <input type="date" id="fechaCierre" value="2026-06-22" style="border:1px solid #2e7d32;padding:3px 6px;font-size:12px;">
+            <span style="font-size:11px;color:#555;">Esta fecha se aplicará a todas las OS seleccionadas al momento de terminarlas.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-bar">
+        <span style="color:#888;">Módulo: Mantenimiento | Ticket #42840</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-terminar" id="btnTerminar" onclick="abrirModal()" disabled>✔ Terminar seleccionadas</button>
+          <button class="btn-secondary">↩ Salir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Sin resultados -->
+  <div id="tab-vacio" class="tab-content">
+    <div class="panel">
+      <div class="panel-title">🔍 Filtros de búsqueda</div>
+      <div class="inner-panel">
+        <div class="section-title">Parámetros de búsqueda</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+          <div class="field-row">
+            <label>Fecha inicio: <span class="required-mark">*</span></label>
+            <input type="date" value="2026-01-01">
+          </div>
+          <div class="field-row">
+            <label>Fecha fin: <span class="required-mark">*</span></label>
+            <input type="date" value="2026-01-31">
+          </div>
+          <div class="field-row">
+            <label>Unidad(es):</label>
+            <input type="text">
+          </div>
+          <button class="btn-primary">🔍 Buscar</button>
+          <button class="btn-secondary">✖ Limpiar</button>
+        </div>
+      </div>
+      <div class="inner-panel">
+        <div class="empty-state">
+          <div style="font-size:32px;margin-bottom:8px;">🔧</div>
+          <div>No se encontraron Órdenes de Servicio activas con los filtros aplicados.</div>
+          <div style="margin-top:6px;color:#aaa;font-size:11px;">Solo se muestran OS en estado Abierta o Autorizada. Ajuste el rango de fechas o las unidades.</div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <span style="color:#888;">Módulo: Mantenimiento | Ticket #42840</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-terminar" disabled>✔ Terminar seleccionadas</button>
+          <button class="btn-secondary">↩ Salir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Confirmación -->
+  <div id="tab-confirmacion" class="tab-content">
+    <div class="panel">
+      <div class="panel-title">🔍 Filtros de búsqueda</div>
+      <div class="inner-panel">
+        <div style="background:rgba(0,0,0,0.12);padding:40px 20px;display:flex;align-items:center;justify-content:center;min-height:320px;">
+          <div class="modal-box">
+            <div class="modal-header">
+              ✔ Confirmar terminación masiva
+              <button class="modal-close-x">✕</button>
+            </div>
+            <div class="modal-body">
+              <p>Está a punto de <strong>terminar masivamente</strong> las Órdenes de Servicio seleccionadas.</p>
+              <br>
+              <p>Órdenes a terminar: <span class="highlight">4 registros</span></p>
+              <p style="margin-top:6px;">Fecha de cierre: <strong>22/06/2026</strong></p>
+              <br>
+              <p style="color:#1a6b3a;font-size:11px;">ℹ️ Los reportes de falla vinculados a estas OS quedarán en estado <strong>Atendido</strong>.</p>
+              <br>
+              <p style="color:#c0392b;font-size:11px;">⚠️ Esta acción <strong>no se puede deshacer</strong>.</p>
+              <br>
+              <p>¿Desea continuar?</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-terminar">✔ Sí, terminar</button>
+              <button class="btn-secondary">✖ No, regresar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <span style="color:#888;">Módulo: Mantenimiento | Ticket #42840</span>
+        <button class="btn-secondary">↩ Salir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Resultado -->
+  <div id="tab-resultado" class="tab-content">
+    <div class="panel">
+      <div class="panel-title">📋 Resultado del proceso</div>
+      <div class="inner-panel">
+        <div class="section-title">Resumen de terminación masiva</div>
+        <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
+          <div class="res-card" style="background:#e8f5e9;border:1px solid #4caf50;">
+            <div class="res-num" style="color:#2e7d32;">4</div>
+            <div class="res-label" style="color:#388e3c;">Terminadas correctamente</div>
+          </div>
+          <div class="res-card" style="background:#fce4e4;border:1px solid #e74c3c;">
+            <div class="res-num" style="color:#c0392b;">1</div>
+            <div class="res-label" style="color:#c0392b;">Con error</div>
+          </div>
+          <div class="res-card" style="background:#fffde7;border:1px solid #fbc02d;">
+            <div class="res-num" style="color:#f57f17;">5</div>
+            <div class="res-label" style="color:#f57f17;">Total seleccionadas</div>
+          </div>
+        </div>
+
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>Folio OS</th>
+              <th>Fecha apertura</th>
+              <th>Unidad</th>
+              <th>Descripción</th>
+              <th>Fecha cierre</th>
+              <th class="center">Resultado</th>
+              <th>Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>OS-0003841</td>
+              <td>02/06/2026</td>
+              <td>T-025</td>
+              <td>Reparación sistema de frenos</td>
+              <td>22/06/2026</td>
+              <td class="center"><span style="background:#c8e6c9;color:#2e7d32;padding:1px 8px;border-radius:10px;font-size:11px;">✔ Terminada</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>OS-0003845</td>
+              <td>04/06/2026</td>
+              <td>T-031</td>
+              <td>Cambio de aceite y filtros</td>
+              <td>22/06/2026</td>
+              <td class="center"><span style="background:#c8e6c9;color:#2e7d32;padding:1px 8px;border-radius:10px;font-size:11px;">✔ Terminada</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>OS-0003849</td>
+              <td>06/06/2026</td>
+              <td>T-025</td>
+              <td>Mantenimiento preventivo 20,000 km</td>
+              <td>22/06/2026</td>
+              <td class="center"><span style="background:#c8e6c9;color:#2e7d32;padding:1px 8px;border-radius:10px;font-size:11px;">✔ Terminada</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>OS-0003852</td>
+              <td>08/06/2026</td>
+              <td>T-042</td>
+              <td>Diagnóstico y reparación ABS</td>
+              <td>22/06/2026</td>
+              <td class="center"><span style="background:#c8e6c9;color:#2e7d32;padding:1px 8px;border-radius:10px;font-size:11px;">✔ Terminada</span></td>
+              <td></td>
+            </tr>
+            <tr style="background:#fce4e4;">
+              <td>OS-0003857</td>
+              <td>11/06/2026</td>
+              <td>T-018</td>
+              <td>Revisión general y afinación</td>
+              <td>—</td>
+              <td class="center"><span style="background:#ffcdd2;color:#c62828;padding:1px 8px;border-radius:10px;font-size:11px;">✖ Error</span></td>
+              <td style="font-size:11px;color:#c0392b;">Error al procesar — reintente individualmente</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="bottom-bar">
+        <span style="color:#555;font-size:12px;">Proceso completado el 22/06/2026 11:15 hrs</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-primary">🔍 Nueva búsqueda</button>
+          <button class="btn-secondary">↩ Salir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal funcional -->
+<div class="modal-overlay" id="modalConf">
+  <div class="modal-box">
+    <div class="modal-header">
+      ✔ Confirmar terminación masiva
+      <button class="modal-close-x" onclick="cerrarM()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>Está a punto de <strong>terminar masivamente</strong> las Órdenes de Servicio seleccionadas.</p>
+      <br>
+      <p>Órdenes a terminar: <span class="highlight" id="mcount">0 registro(s)</span></p>
+      <p style="margin-top:6px;">Fecha de cierre: <strong id="mfecha">—</strong></p>
+      <br>
+      <p style="color:#1a6b3a;font-size:11px;">ℹ️ Los reportes de falla vinculados quedarán en estado <strong>Atendido</strong>.</p>
+      <br>
+      <p style="color:#c0392b;font-size:11px;">⚠️ Esta acción <strong>no se puede deshacer</strong>.</p>
+      <br>
+      <p>¿Desea continuar?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-terminar" onclick="ejecutar()">✔ Sí, terminar</button>
+      <button class="btn-secondary" onclick="cerrarM()">✖ No, regresar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✔ Órdenes de Servicio terminadas correctamente.</div>
+
+<script>
+  function showTab(n, el) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.proto-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + n).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function upd() {
+    var s = document.querySelectorAll('.cr:checked').length;
+    document.getElementById('sc').textContent = s;
+    document.getElementById('btnTerminar').disabled = s === 0;
+    var all = document.querySelectorAll('.cr').length;
+    document.getElementById('chkAll').checked = s === all && all > 0;
+  }
+
+  function togAll(c) {
+    document.querySelectorAll('.cr').forEach(function(x) { x.checked = c.checked; });
+    upd();
+  }
+
+  function abrirModal() {
+    var fecha = document.getElementById('fechaCierre').value;
+    var err = document.getElementById('err1');
+    if (!fecha) {
+      err.classList.add('show');
+      document.getElementById('fechaCierre').focus();
+      return;
+    }
+    err.classList.remove('show');
+    var s = document.querySelectorAll('.cr:checked').length;
+    document.getElementById('mcount').textContent = s + ' registro(s)';
+    var partes = fecha.split('-');
+    document.getElementById('mfecha').textContent = partes[2] + '/' + partes[1] + '/' + partes[0];
+    document.getElementById('modalConf').classList.add('show');
+  }
+
+  function cerrarM() {
+    document.getElementById('modalConf').classList.remove('show');
+  }
+
+  function ejecutar() {
+    cerrarM();
+    var toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 3000);
+    document.querySelectorAll('.cr:checked').forEach(function(c) {
+      c.closest('tr').style.opacity = '0.4';
+      c.checked = false;
+    });
+    upd();
+  }
+
+  upd();
+</script>
+</body>
+</html>

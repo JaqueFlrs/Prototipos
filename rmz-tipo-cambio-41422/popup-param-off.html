@@ -1,0 +1,46 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;font-size:13px;color:#2a2a2a;background:#f2efe9;width:820px;}
+.ann-header{background:#7a2020;color:#fff;padding:8px 14px;}
+.ann-header .title{font-weight:bold;font-size:13px;margin-bottom:4px;}
+.ann-header ul{margin-left:16px;font-size:12px;line-height:1.6;}
+.wf-frame{border:1px solid #b0a898;background:#ece9e2;}
+.wf-topbar{background:#5a5550;color:#f0ede6;padding:6px 10px;font-weight:bold;font-size:13px;}
+.wf-modal-bg{background:rgba(60,55,50,0.3);display:flex;align-items:center;justify-content:center;padding:40px;min-height:200px;}
+.wf-modal{background:#ece9e2;border:2px solid #9a9088;width:290px;}
+.wf-modal-header{background:#d0ccc4;padding:6px 10px;font-weight:bold;font-size:13px;border-bottom:1px solid #b0a898;text-align:center;}
+.wf-modal-body{padding:14px 18px;}
+.wf-modal-footer{display:flex;justify-content:center;gap:8px;padding:8px;border-top:1px solid #b0a898;background:#e4e0d8;}
+.modal-field{display:flex;align-items:center;margin-bottom:8px;gap:6px;}
+.modal-field label{width:130px;font-size:12px;}
+.modal-field input{border:1px solid #9a9088;padding:2px 5px;font-size:12px;background:#faf8f4;width:120px;}
+.btn{border:1px solid #9a9088;padding:4px 18px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;}
+.btn-p{background:#5a5550;color:#f0ede6;border-color:#44413e;}
+.btn-s{background:#dedad3;color:#3a3733;}
+</style>
+<div class="ann-header">
+  <div class="title">Cómo se vería el popup con el parámetro apagado</div>
+  <ul>
+    <li>El check está <strong>desmarcado</strong>. El popup aparece igual que hoy:</li>
+    <li>El campo "Tipo de cambio" viene precargado con el valor de Banxico del día.</li>
+  </ul>
+</div>
+<div class="wf-frame">
+  <div class="wf-topbar">ERP GM Transport — Iniciando sesión</div>
+  <div class="wf-modal-bg">
+    <div class="wf-modal">
+      <div class="wf-modal-header">Agregando tipo de cambio</div>
+      <div class="wf-modal-body">
+        <div class="modal-field"><label>Fecha</label><input value="01/07/2026" readonly></div>
+        <div class="modal-field">
+          <label>Tipo de cambio</label>
+          <input value="17.215500" style="color:#1a3a8a;font-weight:bold;">
+        </div>
+      </div>
+      <div class="wf-modal-footer">
+        <button class="btn btn-p">Aceptar</button>
+        <button class="btn btn-s">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

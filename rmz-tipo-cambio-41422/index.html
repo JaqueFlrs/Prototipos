@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>#41422 Parametrizar Tipo de Cambio Inicial</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f2efe9; padding: 20px; color: #2a2a2a; }
+    h1 { font-size: 16px; font-weight: bold; margin-bottom: 4px; }
+    p { font-size: 12px; color: #7a7570; margin-bottom: 20px; }
+    .grid { display: flex; flex-direction: column; gap: 10px; max-width: 700px; }
+    a.card {
+      display: block; background: #ece9e2; border: 1px solid #b0a898;
+      padding: 14px 18px; text-decoration: none; color: #2a2a2a;
+    }
+    a.card:hover { background: #e4e0d8; }
+    .card-title { font-size: 13px; font-weight: bold; margin-bottom: 3px; }
+    .card-desc { font-size: 11px; color: #7a7570; }
+  </style>
+</head>
+<body>
+  <h1>#41422 — Parametrizar valor inicial del tipo de cambio</h1>
+  <p>Selecciona una pantalla para ver el wireframe.</p>
+  <div class="grid">
+    <a class="card" href="pantalla-configuracion.html">
+      <div class="card-title">① Pantalla de Configuración</div>
+      <div class="card-desc">Nuevo checkbox "Iniciar tipo de cambio en cero al agregar" en Parámetros Generales → Seguridad y acceso</div>
+    </a>
+    <a class="card" href="popup-param-off.html">
+      <div class="card-title">② Popup — Parámetro desmarcado (comportamiento actual)</div>
+      <div class="card-desc">El campo Tipo de cambio se precarga con el valor de Banxico del día</div>
+    </a>
+    <a class="card" href="popup-param-on.html">
+      <div class="card-title">③ Popup — Parámetro marcado (nuevo comportamiento)</div>
+      <div class="card-desc">El campo inicia en cero; el valor de Banxico se muestra como referencia debajo del campo</div>
+    </a>
+    <a class="card" href="wireframe-cliente.html">
+      <div class="card-title">Versión cliente (sin anotaciones)</div>
+      <div class="card-desc">Vista limpia para enviar al cliente</div>
+    </a>
+  </div>
+</body>
+</html>

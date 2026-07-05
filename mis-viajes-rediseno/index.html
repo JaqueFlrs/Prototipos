@@ -129,7 +129,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <div class="tile" id="tile-reportes" onclick="nav('page-reportes')"><div class="tic" style="background:#FDECEA"><i class="ti ti-chart-bar" style="font-size:21px;color:#C62828" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Reportes</span></div>
           <div class="tile" onclick="nav('page-perfil')"><div class="tic" style="background:#F1F1F1"><i class="ti ti-user" style="font-size:21px;color:#666" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Mi perfil</span></div>
         </div>
-        <div style="margin:2px 16px 16px;border-top:1px solid #eee;padding-top:16px">
+        <div id="sos-wrap" style="margin:2px 16px 16px;border-top:1px solid #eee;padding-top:16px">
           <div id="sos-idle">
             <div id="sos-btn" role="button" tabindex="0" style="background:#fff;border:2px solid #D32F2F;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;cursor:pointer" onclick="sosActivate()">
               <i class="ti ti-alert-triangle" style="font-size:18px;color:#D32F2F" aria-hidden="true"></i><span style="font-size:13.5px;font-weight:500;color:#D32F2F">SOS &mdash; Emergencia</span>
@@ -634,7 +634,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       <div style="font-size:11px;font-weight:500;color:#333;margin-bottom:6px">Operador</div>
       <div style="display:flex;gap:8px">
         <input id="operador-search" type="text" placeholder="Buscar operador..." style="flex:1;border:1px solid #ccc;border-radius:4px;padding:8px;font-size:11px;background:#fff">
-        <button style="background:#fff;border:1px solid #ccc;padding:8px 14px;border-radius:4px;cursor:pointer;font-size:11px;color:#555" onclick="alert('Copiar configuración de Flores a otros operadores')">📋 Copiar a otros</button>
+        <button style="background:#fff;border:1px solid #ccc;padding:8px 14px;border-radius:4px;cursor:pointer;font-size:11px;color:#555" onclick="document.getElementById('modal-copiar').style.display='flex'">📋 Copiar a otros</button>
       </div>
       <div style="margin-top:8px;padding:8px;background:#fff;border-radius:4px;border:1px solid #ccc">
         <div style="font-size:10px;color:#666">Seleccionado:</div>
@@ -697,40 +697,89 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
       </div>
 
-      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🚗 3.5 CAMPOS EN SALIDA Y LLEGADA</div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;margin-bottom:12px">
+      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🚗 3.5 CAMPOS Y VALORES POR DEFAULT — SALIDA / LLEGADA</div>
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;margin-bottom:6px">
+        <div style="font-size:9px;color:#888;margin-bottom:8px">Si el operador NO captura un campo, la app usa automáticamente el valor por default configurado aquí.</div>
         <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #eee">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-estatus',this.checked)">Estatus viaje</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-fecha',this.checked)">Fecha y hora</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-odometro',this.checked)">Odómetro</label>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eee">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('sal-estatus',this.checked)">Estatus viaje (captura)</label>
+            <span id="sal-estatus-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>EN RUTA</option><option>CARGADO</option><option>VACÍO</option></select></span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('sal-fecha',this.checked)">Fecha y hora (captura)</label>
+            <span id="sal-fecha-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('sal-odometro',this.checked)">Odómetro (captura)</label>
+            <span id="sal-odometro-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+          </div>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-gps',this.checked)">Info GPS</label>
         </div>
         <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Llegada</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-estatus',this.checked)">Estatus viaje</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-fecha',this.checked)">Fecha y hora</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-odometro',this.checked)">Odómetro</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad</label>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('lleg-estatus',this.checked)">Estatus viaje (captura)</label>
+            <span id="lleg-estatus-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>DESCARGADO</option><option>EN ESPERA</option></select></span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('lleg-fecha',this.checked)">Fecha y hora (captura)</label>
+            <span id="lleg-fecha-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('lleg-odometro',this.checked)">Odómetro (captura)</label>
+            <span id="lleg-odometro-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad (Camión, Carga, Dolly)</label>
         </div>
       </div>
 
-      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">📦 4. MÓDULOS DISPONIBLES</div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 10px;font-size:11px">
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('evidencia',this.checked)">Evidencia</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('estatus',this.checked)">Estatus</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('chat',this.checked)">Chat</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('solicitudes',this.checked)">Solicitudes</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('gastos',this.checked)">Gastos</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('liq',this.checked)">Liquidaciones</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('insp',this.checked)">Inspecciones</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('cartaporte',this.checked)">Carta porte</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('falla',this.checked)">Reportar falla</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('turno',this.checked)">Mi turno</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('notif',this.checked)">Notificaciones</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('reportes',this.checked)">Reportes</label>
+      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🔑 4. DERECHOS DEL OPERADOR — ÁRBOL EN CASCADA (como el ERP)</div>
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px 10px 8px;margin-bottom:6px">
+        <div style="font-size:9px;color:#888;margin-bottom:8px">Toca una fila para ver sus sub-procesos. Desmarca el checkbox para quitarle ese derecho al operador — se refleja en el celular de arriba.</div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden;background:#fafafa">
+            <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
+            <div id="derechos-col1" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+          </div>
+          <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden;background:#fafafa">
+            <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
+            <div id="derechos-col2" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+          </div>
+          <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden;background:#fafafa">
+            <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
+            <div id="derechos-col3" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+          </div>
+        </div>
       </div>
-      <div style="font-size:9px;color:#5a4415;margin-top:8px;line-height:1.4">Desmarca un módulo y desaparece del celular — el operador solo ve lo que su empresa necesita usar.</div>
+      <div style="font-size:9px;color:#5a4415;line-height:1.4">Si una rama no abre más columnas (ej. "Descargar documentos"), es normal — ese permiso ya no tiene más sub-procesos, no es un error.</div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-copiar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;align-items:center;justify-content:center;font-family:Calibri,'Segoe UI',Arial,sans-serif">
+  <div style="background:#fff;border-radius:6px;width:430px;max-width:92vw;max-height:80vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.3)">
+    <div style="background:#e8e8e8;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ccc">
+      <span style="font-weight:600;font-size:12.5px;color:#333">Copiar configuración de FLORES a...</span>
+      <button onclick="document.getElementById('modal-copiar').style.display='none'" style="background:#F2940E;color:#fff;border:none;width:22px;height:22px;border-radius:3px;cursor:pointer;font-weight:700;font-size:14px">×</button>
+    </div>
+    <div style="padding:10px 14px;border-bottom:1px solid #eee">
+      <input placeholder="Buscar operador..." style="width:100%;border:1px solid #ccc;border-radius:4px;padding:7px 9px;font-size:11px;box-sizing:border-box">
+      <label style="display:flex;align-items:center;gap:7px;margin-top:8px;font-size:10.5px;color:#555;cursor:pointer"><input type="checkbox" id="copiar-todos" style="accent-color:#F2940E" onclick="document.querySelectorAll('.copiar-op').forEach(c=>c.checked=this.checked)">Seleccionar todos</label>
+    </div>
+    <div style="overflow-y:auto;flex:1;padding:4px 0">
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Gutiérrez Sánchez Ariel Eduardo</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Gómez Martínez Rigoberto</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">De Jesús Godínez Hugo Alejandro</span><span style="color:#999;font-size:9.5px">Patios Piedras Negras</span></label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Turrubiates García Pedro</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Martínez Castillo Mariano</span><span style="color:#999;font-size:9.5px">Nacional</span></label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Villanueva Mondragón Luis Rolando</span><span style="color:#999;font-size:9.5px">Matriz</span></label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Rodríguez Castillo Omar Américo</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Mazorra Alvarado Jorge Luis</span><span style="color:#999;font-size:9.5px">Matriz</span></label>
+    </div>
+    <div style="padding:10px 14px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:8px;background:#f5f5f5">
+      <button onclick="document.getElementById('modal-copiar').style.display='none'" style="background:#888;color:#fff;border:none;padding:7px 16px;border-radius:3px;cursor:pointer;font-size:11px">Cancelar</button>
+      <button onclick="alert('Configuración de FLORES copiada a los operadores seleccionados.');document.getElementById('modal-copiar').style.display='none'" style="background:#F2940E;color:#fff;border:none;padding:7px 16px;border-radius:3px;cursor:pointer;font-size:11px;font-weight:500">Aplicar</button>
     </div>
   </div>
 </div>
@@ -869,9 +918,98 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
+}
+function campoDefault(key,on){
+  (PROC[key]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
+  var def=document.getElementById(key+'-def');
+  if(def){ def.style.display=on?'none':'inline-flex'; }
+}
+
+var DERECHOS_TREE={
+  col1:[
+    {id:'d-solicitudes',label:'Alta Solicitudes Viaje',checked:true,proc:'solicitudes'},
+    {id:'d-viajes',label:'Mis Viajes',checked:true,children:'col2-viajes'},
+    {id:'d-asistencia',label:'Mis Solicitudes de Asistencia',checked:true,proc:'asistencia'},
+    {id:'d-altafalla',label:'Alta Reporte de Fallas',checked:true,proc:'falla'},
+    {id:'d-listfallas',label:'Listado de Reporte de Fallas',checked:true,proc:'reportes'},
+    {id:'d-liq',label:'Imprimir Liquidación',checked:true,proc:'liq'},
+    {id:'d-regent',label:'Registro de Entrada',checked:true},
+    {id:'d-regsal',label:'Registro de Salidas',checked:true},
+    {id:'d-sos',label:'SOS Emergencia',checked:true,proc:'sos'},
+    {id:'d-grua',label:'Asistencia Grúa',checked:true},
+    {id:'d-chat',label:'Chat',checked:true,proc:'chat'},
+    {id:'d-insp',label:'Inspecciones',checked:true,proc:'insp'},
+    {id:'d-turno',label:'Mi Turno',checked:true,proc:'turno'},
+    {id:'d-notif',label:'Notificaciones',checked:true,proc:'notif'}
+  ],
+  'col2-viajes':[
+    {id:'v-listado',label:'Listado de viajes',checked:true},
+    {id:'v-trayectos',label:'Ver trayectos',checked:true},
+    {id:'v-detalle',label:'Detalle del trayecto',checked:true},
+    {id:'v-salman',label:'Dar salida (manual)',checked:true},
+    {id:'v-salsol',label:'Dar salida (solicitud)',checked:true},
+    {id:'v-salgeo',label:'Dar salida (geocerca)',checked:true},
+    {id:'v-llegman',label:'Dar llegada (manual)',checked:true},
+    {id:'v-llegsol',label:'Dar llegada (solicitud)',checked:true},
+    {id:'v-lleggeo',label:'Dar llegada (geocerca)',checked:true},
+    {id:'v-evid',label:'Evidencias',checked:true,proc:'evidencia',children:'col3-evid'},
+    {id:'v-docs',label:'Documentos',checked:true,proc:'cartaporte',children:'col3-docs'},
+    {id:'v-gastos',label:'Gastos de Viaje',checked:true,proc:'gastos',children:'col3-gastos'},
+    {id:'v-estsal',label:'Estatus Salida',checked:true},
+    {id:'v-estlleg',label:'Estatus Llegada',checked:true,proc:'estatus'},
+    {id:'v-asigest',label:'Asignar Estatus',checked:true}
+  ],
+  'col3-docs':[
+    {id:'d-verdoc',label:'Ver documentos',checked:true},
+    {id:'d-descdoc',label:'Descargar documentos',checked:true},
+    {id:'d-firmadoc',label:'Firmar documentos PDF',checked:true}
+  ],
+  'col3-evid':[
+    {id:'e-foto',label:'Evidencia fotográfica',checked:true},
+    {id:'e-docs',label:'Evidencia Documentos',checked:true},
+    {id:'e-firma',label:'Firma del cliente',checked:true}
+  ],
+  'col3-gastos':[
+    {id:'g-sol',label:'Solicitar gastos',checked:true},
+    {id:'g-bal',label:'Ver balance gastos/anticipo',checked:true}
+  ]
+};
+var derechosSel={col1:'d-viajes',col2:'v-docs'};
+function findItem(list,id){ return (list||[]).find(function(x){return x.id===id;}); }
+function renderDerechosCol(containerId,items,level){
+  var el=document.getElementById(containerId);
+  if(!items||!items.length){ el.innerHTML=''; return; }
+  el.innerHTML=items.map(function(it){
+    var isSel=(level===1&&derechosSel.col1===it.id)||(level===2&&derechosSel.col2===it.id);
+    var style=isSel?'background:#F2940E;color:#fff;':'color:#1a1a1a;';
+    return '<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;cursor:pointer;font-size:10px;'+style+'" onclick="derechosSelect('+level+',\''+it.id+'\')">'
+      +'<input type="checkbox" '+(it.checked?'checked':'')+' style="accent-color:#F2940E;width:12px;height:12px;flex-shrink:0" onclick="event.stopPropagation();derechosCheck(\''+it.id+'\',this.checked,\''+(it.proc||'')+'\')">'
+      +'<span>'+it.label+'</span></div>';
+  }).join('');
+}
+function renderDerechos(){
+  renderDerechosCol('derechos-col1',DERECHOS_TREE.col1,1);
+  var c1=findItem(DERECHOS_TREE.col1,derechosSel.col1);
+  var col2data=c1&&c1.children?DERECHOS_TREE[c1.children]:[];
+  renderDerechosCol('derechos-col2',col2data,2);
+  var c2=findItem(col2data,derechosSel.col2);
+  var col3data=c2&&c2.children?DERECHOS_TREE[c2.children]:[];
+  renderDerechosCol('derechos-col3',col3data,3);
+}
+function derechosSelect(level,id){
+  if(level===1){ derechosSel.col1=id; derechosSel.col2=null; }
+  if(level===2){ derechosSel.col2=id; }
+  renderDerechos();
+}
+function derechosCheck(id,on,proc){
+  [DERECHOS_TREE.col1,DERECHOS_TREE['col2-viajes'],DERECHOS_TREE['col3-docs'],DERECHOS_TREE['col3-evid'],DERECHOS_TREE['col3-gastos']].forEach(function(list){
+    var it=findItem(list,id); if(it){ it.checked=on; }
+  });
+  if(proc){ (PROC[proc]||[]).forEach(function(elId){ var e=document.getElementById(elId); if(e){ e.style.display=on?'':'none'; } }); }
+  renderDerechos();
 }
 function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
@@ -884,6 +1022,7 @@ function formMode(m){
   document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #F2940E':'1px solid #ccc';
 }
 renderHome();
+renderDerechos();
 </script>
 </body>
 </html>

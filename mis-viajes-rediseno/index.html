@@ -266,6 +266,12 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 
       <div class="pg" id="page-liq">
         <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FF7043"><i class="ti ti-receipt" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Liquidaciones</div><div class="t2">Consulta y descarga tus pagos</div></div></div></div>
+        <div style="padding:8px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid #eee">
+          <div class="seg on" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Todas</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Pagadas</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Pendientes</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Rechazadas</div>
+        </div>
         <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:9px">
           <div class="cd" style="border-left:5px solid #FF7043;border-radius:6px 16px 16px 6px">
             <div class="rw" style="justify-content:space-between;margin-bottom:3px"><span style="font-size:13.5px;font-weight:500">Última liquidación</span><span class="pill" style="background:#E8F5E8;color:#1B5E20">Pagada</span></div>
@@ -277,8 +283,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <div style="font-size:11.5px;color:#888;margin-bottom:9px">Folio 117 &middot; 1&ndash;15 jun &middot; <strong style="color:#1B5E20;font-size:13px">$11,980.00 MXN</strong></div>
             <div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;background:#E1F4FF;color:#0D47A1"><i class="ti ti-download" style="font-size:16px" aria-hidden="true"></i>Descargar PDF</div>
           </div>
-          <div style="font-size:11.5px;font-weight:500;color:#555;margin-top:4px">Todas</div>
-          <input placeholder="Buscar por folio..." style="margin-bottom:0;border-radius:22px;padding:11px 16px">
+          <input placeholder="Buscar por folio..." style="margin-bottom:9px;border-radius:22px;padding:11px 16px">
           <div class="cd rw" style="justify-content:space-between"><div><div style="font-size:12.5px;font-weight:500">Folio 116 &middot; 16&ndash;31 may</div><div style="font-size:10.5px;color:#888">$12,105.00 MXN &middot; Pagada 05/06</div></div><span class="pill" style="background:#E8F5E8;color:#1B5E20">Cerrada</span></div>
           <div class="cd rw" style="justify-content:space-between"><div><div style="font-size:12.5px;font-weight:500">Folio 115 &middot; 1&ndash;15 may</div><div style="font-size:10.5px;color:#888">$10,870.00 MXN &middot; Pagada 20/05</div></div><span class="pill" style="background:#E8F5E8;color:#1B5E20">Cerrada</span></div>
           <div class="cd rw" style="justify-content:space-between"><div><div style="font-size:12.5px;font-weight:500">Folio 114 &middot; 16&ndash;30 abr</div><div style="font-size:10.5px;color:#888">$11,240.00 MXN &middot; Sin pagar</div></div><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Abierta</span></div>
@@ -515,6 +520,12 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 
       <div class="pg" id="page-trips">
         <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-truck" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Mis viajes</div><div class="t2">Gestiona y rastrea tus rutas</div></div></div><div class="bk"><i class="ti ti-filter" aria-hidden="true"></i></div></div></div>
+        <div style="padding:8px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid #eee">
+          <div class="seg on" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Todos</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">En ruta</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Terminados</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Pendientes</div>
+        </div>
         <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
           <div class="cd" style="cursor:pointer;border-left:5px solid #FF7043;border-radius:6px 16px 16px 6px" onclick="nav('page-home')">
             <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Puerto Peñasco</span><span class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div>

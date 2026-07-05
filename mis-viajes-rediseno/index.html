@@ -151,8 +151,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <div class="tile" id="tile-insp" onclick="nav('page-insp')"><div class="tic" style="background:#EDE7F6"><i class="ti ti-clipboard-list" style="font-size:21px;color:#5E35B1" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Inspecciones</span></div>
           <div class="tile" id="tile-turno" onclick="nav('page-turno')"><div class="tic" style="background:#FFF8E1"><i class="ti ti-clock" style="font-size:21px;color:#B45309" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Mi turno</span></div>
           <div class="tile" id="tile-ayuda" onclick="nav('page-ayuda')"><div class="tic" style="background:#E1F4FF"><i class="ti ti-headset" style="font-size:21px;color:#1976D2" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Asistencia</span></div>
-          <div class="tile" id="tile-falla" onclick="nav('page-falla')"><div class="tic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:21px;color:#C62828" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Reportar falla</span></div>
-          <div class="tile" id="tile-reportes" onclick="nav('page-reportes')"><div class="tic" style="background:#FDECEA"><i class="ti ti-chart-bar" style="font-size:21px;color:#C62828" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Reportes</span></div>
+          <div class="tile" id="tile-reportes" onclick="nav('page-reportes')"><div class="tic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:21px;color:#C62828" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Fallas</span></div>
           <div class="tile" onclick="nav('page-perfil')"><div class="tic" style="background:#F1F1F1"><i class="ti ti-user" style="font-size:21px;color:#666" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Mi perfil</span></div>
         </div>
         <div id="sos-wrap" style="margin:2px 16px 16px;border-top:1px solid #eee;padding-top:16px">
@@ -466,53 +465,6 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
       </div>
 
-      <div class="pg" id="page-falla">
-        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#D32F2F"><i class="ti ti-alert-triangle" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Reportar falla</div><div class="t2">Registra incidentes y problemas técnicos</div></div></div></div>
-        <div style="padding:0 16px 16px">
-          <div class="rw" style="background:#fff;border:1px solid #f0f0f0;border-radius:12px;padding:10px 11px;margin-bottom:11px"><i class="ti ti-truck" style="font-size:16px;color:#999" aria-hidden="true"></i><span style="font-size:11px;color:#777">Unidad T12 &middot; Sucursal Mexicali &middot; hoy 10:18 &mdash; se llenan solos</span></div>
-          <div class="lb">Código de falla *</div>
-          <select style="margin-bottom:11px">
-            <option value="">Selecciona el código de falla...</option>
-            <optgroup label="Motor y combustible">
-              <option value="M001">M001 - Fuga de aceite</option>
-              <option value="M002">M002 - Bajo rendimiento del motor</option>
-              <option value="M003">M003 - Fuga de refrigerante</option>
-              <option value="M004">M004 - Problemas de combustión</option>
-            </optgroup>
-            <optgroup label="Sistema de frenos">
-              <option value="F001">F001 - Desgaste de pastillas</option>
-              <option value="F002">F002 - Fuga de líquido de frenos</option>
-              <option value="F003">F003 - Frenos esponjosos</option>
-              <option value="F004">F004 - Cilindro maestro defectuoso</option>
-            </optgroup>
-            <optgroup label="Llantas y ruedas">
-              <option value="L001">L001 - Llanta pinchada</option>
-              <option value="L002">L002 - Desgaste irregular</option>
-              <option value="L003">L003 - Llanta reventada</option>
-              <option value="L004">L004 - Alineación defectuosa</option>
-            </optgroup>
-            <optgroup label="Suspensión y dirección">
-              <option value="S001">S001 - Amortiguador defectuoso</option>
-              <option value="S002">S002 - Resorte roto</option>
-              <option value="S003">S003 - Problemas de alineación</option>
-              <option value="S004">S004 - Dirección defectuosa</option>
-            </optgroup>
-            <optgroup label="Sistema eléctrico">
-              <option value="E001">E001 - Batería muerta</option>
-              <option value="E002">E002 - Alternador defectuoso</option>
-              <option value="E003">E003 - Luces dañadas</option>
-              <option value="E004">E004 - Fusibles quemados</option>
-            </optgroup>
-            <optgroup label="Otro">
-              <option value="X001">X001 - Otro problema</option>
-            </optgroup>
-          </select>
-          <div class="campo-opcional"><div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:9px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Agregar foto (opcional)</div>
-          <textarea placeholder="Cuéntanos más (opcional)..." style="height:54px"></textarea></div>
-          <div class="bp" role="button" tabindex="0" style="background:#D32F2F" onclick="okThen('Reporte enviado','page-reportes')">Enviar reporte</div>
-        </div>
-      </div>
-
       <div class="pg" id="page-perfil">
         <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#E8600F"><i class="ti ti-user" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Mi perfil</div><div class="t2">Consulta tu información</div></div></div></div>
         <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:9px">
@@ -628,7 +580,56 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
 
       <div class="pg" id="page-reportes">
-        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FDECEA"><i class="ti ti-chart-bar" style="font-size:19px;color:#C62828" aria-hidden="true"></i></div><div><div class="t1">Mis reportes de fallas</div><div class="t2">Historial de fallas reportadas</div></div></div><span class="pill" style="background:#E8600F;color:#fff;cursor:pointer" onclick="nav('page-falla')">+ Reportar</span></div></div>
+        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:19px;color:#C62828" aria-hidden="true"></i></div><div><div class="t1">Reportes de falla</div><div class="t2">Reporta y consulta tus fallas</div></div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div class="bp" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px;background:#D32F2F" onclick="fallaFormToggle()">
+            <i class="ti ti-plus" id="falla-form-icon" style="font-size:17px;color:#fff" aria-hidden="true"></i><span id="falla-form-label">Reportar falla</span>
+          </div>
+          <div id="falla-form-wrap" style="display:none">
+            <div class="rw" style="background:#fff;border:1px solid #f0f0f0;border-radius:12px;padding:10px 11px;margin-bottom:11px"><i class="ti ti-truck" style="font-size:16px;color:#999" aria-hidden="true"></i><span style="font-size:11px;color:#777">Unidad T12 &middot; Sucursal Mexicali &middot; hoy 10:18 &mdash; se llenan solos</span></div>
+            <div class="lb">Código de falla *</div>
+            <select style="margin-bottom:11px">
+              <option value="">Selecciona el código de falla...</option>
+              <optgroup label="Motor y combustible">
+                <option value="M001">M001 - Fuga de aceite</option>
+                <option value="M002">M002 - Bajo rendimiento del motor</option>
+                <option value="M003">M003 - Fuga de refrigerante</option>
+                <option value="M004">M004 - Problemas de combustión</option>
+              </optgroup>
+              <optgroup label="Sistema de frenos">
+                <option value="F001">F001 - Desgaste de pastillas</option>
+                <option value="F002">F002 - Fuga de líquido de frenos</option>
+                <option value="F003">F003 - Frenos esponjosos</option>
+                <option value="F004">F004 - Cilindro maestro defectuoso</option>
+              </optgroup>
+              <optgroup label="Llantas y ruedas">
+                <option value="L001">L001 - Llanta pinchada</option>
+                <option value="L002">L002 - Desgaste irregular</option>
+                <option value="L003">L003 - Llanta reventada</option>
+                <option value="L004">L004 - Alineación defectuosa</option>
+              </optgroup>
+              <optgroup label="Suspensión y dirección">
+                <option value="S001">S001 - Amortiguador defectuoso</option>
+                <option value="S002">S002 - Resorte roto</option>
+                <option value="S003">S003 - Problemas de alineación</option>
+                <option value="S004">S004 - Dirección defectuosa</option>
+              </optgroup>
+              <optgroup label="Sistema eléctrico">
+                <option value="E001">E001 - Batería muerta</option>
+                <option value="E002">E002 - Alternador defectuoso</option>
+                <option value="E003">E003 - Luces dañadas</option>
+                <option value="E004">E004 - Fusibles quemados</option>
+              </optgroup>
+              <optgroup label="Otro">
+                <option value="X001">X001 - Otro problema</option>
+              </optgroup>
+            </select>
+            <div class="campo-opcional"><div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:9px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Agregar foto (opcional)</div>
+            <textarea placeholder="Cuéntanos más (opcional)..." style="height:54px"></textarea></div>
+            <div class="bp" role="button" tabindex="0" style="background:#D32F2F" onclick="submitFalla()">Enviar reporte</div>
+          </div>
+        </div>
+        <div style="padding:0 16px 6px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">MIS REPORTES</div>
         <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
           <div class="cd">
             <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span class="pill" style="background:#FFF2E8;color:#E64A19"># Folio 41</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Pendiente</span></div>
@@ -888,9 +889,18 @@ function asisSend(){
   document.getElementById('asis-mias').innerHTML='<div class="cd"><div class="rw" style="justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">Mi solicitud</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Pendiente</span></div><div style="font-size:11px;color:#888">Enviada hoy 9:41 &middot; con tu ubicación GPS</div></div>';
   showOk('Solicitud enviada');
 }
-function fallaSel(el){
-  el.parentNode.querySelectorAll('.tile').forEach(function(t){ t.style.background='#fff'; t.style.border='1px solid #eee'; t.querySelector('i').style.color='#666'; var s=t.querySelector('span'); s.style.color='#666'; s.style.fontWeight='400'; });
-  el.style.background='#D32F2F'; el.style.border='1px solid #D32F2F'; el.querySelector('i').style.color='#fff'; var s2=el.querySelector('span'); s2.style.color='#fff'; s2.style.fontWeight='500';
+function fallaFormToggle(){
+  var w=document.getElementById('falla-form-wrap');
+  var open=w.style.display==='block';
+  w.style.display=open?'none':'block';
+  document.getElementById('falla-form-label').textContent=open?'Reportar falla':'Cancelar';
+  document.getElementById('falla-form-icon').className=open?'ti ti-plus':'ti ti-x';
+}
+function submitFalla(){
+  document.getElementById('falla-form-wrap').style.display='none';
+  document.getElementById('falla-form-label').textContent='Reportar falla';
+  document.getElementById('falla-form-icon').className='ti ti-plus';
+  showOk('Reporte enviado');
 }
 function segOn(el){ el.parentNode.querySelectorAll('.seg').forEach(function(s){s.classList.remove('on');}); el.classList.add('on'); }
 var wizTotal={sv:3,ga:5,in:5};
@@ -935,7 +945,7 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }
@@ -950,13 +960,9 @@ var DERECHOS_TREE={
     {id:'d-solicitudes',label:'Alta Solicitudes Viaje',checked:true,proc:'solicitudes'},
     {id:'d-viajes',label:'Mis Viajes',checked:true,children:'col2-viajes'},
     {id:'d-asistencia',label:'Mis Solicitudes de Asistencia',checked:true,proc:'asistencia'},
-    {id:'d-altafalla',label:'Alta Reporte de Fallas',checked:true,proc:'falla'},
-    {id:'d-listfallas',label:'Listado de Reporte de Fallas',checked:true,proc:'reportes'},
+    {id:'d-fallas',label:'Reporte de Fallas',checked:true,proc:'reportes'},
     {id:'d-liq',label:'Imprimir Liquidación',checked:true,proc:'liq'},
-    {id:'d-regent',label:'Registro de Entrada',checked:true},
-    {id:'d-regsal',label:'Registro de Salidas',checked:true},
     {id:'d-sos',label:'SOS Emergencia',checked:true,proc:'sos'},
-    {id:'d-grua',label:'Asistencia Grúa',checked:true},
     {id:'d-chat',label:'Chat',checked:true,proc:'chat'},
     {id:'d-insp',label:'Inspecciones',checked:true,proc:'insp'},
     {id:'d-turno',label:'Mi Turno',checked:true,proc:'turno'},

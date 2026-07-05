@@ -103,7 +103,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <div style="position:absolute;bottom:0;right:0;font-size:10.5px;color:#888">Puerto Peñasco</div>
           </div>
           <div style="font-size:19px;font-weight:500;margin:6px 0 2px">Puerto Peñasco, Son.</div>
-          <div class="rw" style="gap:5px;margin-bottom:12px"><i class="ti ti-map-pin" style="font-size:12px;color:#999" aria-hidden="true"></i><span style="font-size:11px;color:#999">297 km &middot; Descarga 25/06 12:10 &middot;</span><span style="font-size:11px;color:#1976D2;cursor:pointer;font-weight:500" onclick="nav('page-mapa')">Ver mapa</span></div>
+          <div class="rw" style="gap:5px;margin-bottom:12px"><i class="ti ti-map-pin" style="font-size:12px;color:#999" aria-hidden="true"></i><span style="font-size:11px;color:#999">297 km &middot; Descarga 25/06 12:10</span><span id="vermapa-link" style="font-size:11px;color:#1976D2;cursor:pointer;font-weight:500" onclick="nav('page-mapa')">&nbsp;&middot; Ver mapa</span></div>
           <div class="bp" id="pa-btn" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:9px;padding:16px;font-size:15.5px;box-shadow:0 4px 14px rgba(255,112,67,.28)">
             <i class="ti ti-player-play" id="pa-icon" style="font-size:24px;color:#fff" aria-hidden="true"></i>
             <span id="pa-label" style="color:#fff">Registrar salida</span>
@@ -575,6 +575,10 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <input type="checkbox" checked style="accent-color:#F2940E;width:15px;height:15px" onclick="tgSucursal(this.checked)">
         <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Mostrar hora de sucursal</div><div style="font-size:9px;color:#777">Muestra la comparación hora local vs sucursal en la tarjeta del viaje — útil para operadores en otra zona horaria</div></div>
       </label>
+      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;cursor:pointer;margin-top:8px">
+        <input type="checkbox" checked style="accent-color:#F2940E;width:15px;height:15px" onclick="tgVerMapa(this.checked)">
+        <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Mostrar "Ver mapa"</div><div style="font-size:9px;color:#777">Habilita el acceso al mapa del trayecto desde la tarjeta del viaje en el inicio</div></div>
+      </label>
       <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Listado de viajes en la app</div>
       <div style="display:flex;gap:10px">
         <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
@@ -736,6 +740,7 @@ function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }
 function tgSucursal(on){ var e=document.getElementById('sucursal-mini'); if(e){ e.style.display=on?'':'none'; } }
+function tgVerMapa(on){ var e=document.getElementById('vermapa-link'); if(e){ e.style.display=on?'':'none'; } }
 function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
   document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #F2940E':'1px solid #ccc';

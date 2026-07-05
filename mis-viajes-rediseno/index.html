@@ -83,7 +83,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <div style="width:38px;height:38px;border-radius:50%;background:#FFF2E8;color:#E64A19;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">FL</div>
             <div><div style="font-size:10.5px;color:#999">Buenas noches</div><div style="font-size:13px;font-weight:500">Flores</div></div>
           </div>
-          <div style="position:relative;cursor:pointer;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid #f0f0f0;display:flex;align-items:center;justify-content:center" onclick="nav('page-notif')"><i class="ti ti-bell" style="font-size:26px;color:#FF7043" aria-hidden="true"></i><div style="position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#D32F2F;border:2px solid #fff"></div></div>
+          <div id="home-bell" style="position:relative;cursor:pointer;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid #f0f0f0;display:flex;align-items:center;justify-content:center" onclick="nav('page-notif')"><i class="ti ti-bell" style="font-size:26px;color:#FF7043" aria-hidden="true"></i><div style="position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#D32F2F;border:2px solid #fff"></div></div>
         </div>
         <div class="rw" style="padding:0 18px 16px;gap:6px"><i class="ti ti-route" style="font-size:14px;color:#E64A19" aria-hidden="true"></i><span style="font-size:12.5px;color:#555;font-weight:500">Viaje MA-000005103 &middot; Unidad T12</span></div>
 
@@ -111,18 +111,12 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
 
         <div class="rw" style="padding:0 16px 16px;gap:10px">
-          <div class="tile" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:16px;padding:13px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-evidencias')"><div class="tic" style="background:#FFF2E8"><i class="ti ti-camera" style="font-size:24px;color:#E64A19" aria-hidden="true"></i></div><span style="font-size:11.5px;font-weight:500;color:#444">Evidencia</span></div>
-          <div class="tile" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:16px;padding:12px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-estatus')"><div class="tic" style="background:#FFF8E1"><i class="ti ti-clipboard-check" style="font-size:24px;color:#B45309" aria-hidden="true"></i></div><span style="font-size:11.5px;font-weight:500;color:#444">Estatus</span></div>
-          <div class="tile" id="qa-chat" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:16px;padding:13px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-chat')"><div class="tic" style="background:#E1F4FF;position:relative"><i class="ti ti-message-circle" style="font-size:24px;color:#1976D2" aria-hidden="true"></i><div style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#D32F2F"></div></div><span style="font-size:11.5px;font-weight:500;color:#444">Chat</span></div>
+          <div class="tile" id="qa-evidencia" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:14px;padding:10px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-evidencias')"><div class="tic" style="background:#FFF2E8;width:40px;height:40px"><i class="ti ti-camera" style="font-size:21px;color:#E64A19" aria-hidden="true"></i></div><span style="font-size:11px;font-weight:500;color:#444">Evidencia</span></div>
+          <div class="tile" id="qa-estatus" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:14px;padding:10px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-estatus')"><div class="tic" style="background:#FFF8E1;width:40px;height:40px"><i class="ti ti-clipboard-check" style="font-size:21px;color:#B45309" aria-hidden="true"></i></div><span style="font-size:11px;font-weight:500;color:#444">Estatus</span></div>
+          <div class="tile" id="qa-chat" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:14px;padding:10px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-chat')"><div class="tic" style="background:#E1F4FF;width:40px;height:40px;position:relative"><i class="ti ti-message-circle" style="font-size:21px;color:#1976D2" aria-hidden="true"></i><div style="position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#D32F2F"></div></div><span style="font-size:11px;font-weight:500;color:#444">Chat</span></div>
         </div>
 
-        <div style="padding:0 16px 18px">
-          <div class="bp" id="sos-btn" role="button" tabindex="0" style="background:#D32F2F;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px" onclick="sosGo()">
-            <i class="ti ti-alert-triangle" style="font-size:18px;color:#fff" aria-hidden="true"></i><span style="font-size:13.5px;font-weight:500;color:#fff">SOS &mdash; Emergencia</span>
-          </div>
-        </div>
-
-        <div style="padding:0 16px 10px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">TODO LO DEMÁS</div>
+        <div style="padding:0 16px 10px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">MÁS HERRAMIENTAS</div>
         <div style="padding:0 16px 22px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px">
           <div class="tile" id="tile-cp" onclick="nav('page-cartaporte')"><div class="tic" style="background:#FFF2E8"><i class="ti ti-file-text" style="font-size:21px;color:#E64A19" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Carta porte</span></div>
           <div class="tile" id="tile-gastos" onclick="nav('page-gastos')"><div class="tic" style="background:#E8F5E8"><i class="ti ti-wallet" style="font-size:21px;color:#2E7D32" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Gastos</span></div>
@@ -132,6 +126,27 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <div class="tile" id="tile-ayuda" onclick="nav('page-ayuda')"><div class="tic" style="background:#E1F4FF"><i class="ti ti-headset" style="font-size:21px;color:#1976D2" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Asistencia</span></div>
           <div class="tile" id="tile-falla" onclick="nav('page-falla')"><div class="tic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:21px;color:#C62828" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Reportar falla</span></div>
           <div class="tile" onclick="nav('page-perfil')"><div class="tic" style="background:#F1F1F1"><i class="ti ti-user" style="font-size:21px;color:#666" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Mi perfil</span></div>
+        </div>
+        <div style="margin:2px 16px 16px;border-top:1px solid #eee;padding-top:16px">
+          <div id="sos-idle">
+            <div id="sos-btn" role="button" tabindex="0" style="background:#fff;border:2px solid #D32F2F;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;cursor:pointer" onclick="sosAsk()">
+              <i class="ti ti-alert-triangle" style="font-size:18px;color:#D32F2F" aria-hidden="true"></i><span style="font-size:13.5px;font-weight:500;color:#D32F2F">SOS &mdash; Emergencia</span>
+            </div>
+            <div style="text-align:center;font-size:9.5px;color:#aaa;margin-top:6px">Solo para emergencias reales &middot; te pedirá confirmar</div>
+          </div>
+          <div id="sos-confirm" style="display:none;background:#FDECEA;border:1px solid #f2c2bc;border-radius:14px;padding:14px;text-align:center">
+            <div style="font-size:13.5px;font-weight:500;color:#B71C1C;margin-bottom:3px">¿Estás en una emergencia?</div>
+            <div style="font-size:10.5px;color:#a5564f;margin-bottom:12px">Se enviará tu ubicación GPS a la central</div>
+            <div class="rw" style="gap:9px">
+              <div class="bs" role="button" tabindex="0" style="flex:1" onclick="sosCancel()">No, cancelar</div>
+              <div class="bp" role="button" tabindex="0" style="flex:1;background:#D32F2F" onclick="sosActivate()">Sí, activar SOS</div>
+            </div>
+          </div>
+          <div id="sos-active" style="display:none;background:#D32F2F;border-radius:14px;padding:15px;text-align:center">
+            <div style="font-size:14.5px;font-weight:500;color:#fff;margin-bottom:2px"><i class="ti ti-alert-triangle" style="font-size:16px" aria-hidden="true"></i> SOS activado</div>
+            <div style="font-size:10.5px;color:#ffd6d0;margin-bottom:12px">Te estamos ubicando &middot; mantén la calma</div>
+            <div class="bs" role="button" tabindex="0" style="background:#fff;color:#B71C1C;font-weight:500" onclick="sosStop()">Cancelar SOS</div>
+          </div>
         </div>
         <div style="height:62px;flex:0 0 auto"></div>
       </div>
@@ -571,14 +586,6 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <input type="checkbox" id="erp-geo" style="accent-color:#F2940E;width:15px;height:15px" onclick="erpGeo(this.checked)">
         <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Trayecto con geocerca activada</div><div style="font-size:9px;color:#777">La salida y llegada se registran automáticamente al cruzar la zona — en el celular se bloquea el registro manual y aparece el chip "Geocerca"</div></div>
       </label>
-      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;cursor:pointer;margin-top:8px">
-        <input type="checkbox" checked style="accent-color:#F2940E;width:15px;height:15px" onclick="tgSucursal(this.checked)">
-        <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Mostrar hora de sucursal</div><div style="font-size:9px;color:#777">Muestra la comparación hora local vs sucursal en la tarjeta del viaje — útil para operadores en otra zona horaria</div></div>
-      </label>
-      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;cursor:pointer;margin-top:8px">
-        <input type="checkbox" checked style="accent-color:#F2940E;width:15px;height:15px" onclick="tgVerMapa(this.checked)">
-        <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Mostrar "Ver mapa"</div><div style="font-size:9px;color:#777">Habilita el acceso al mapa del trayecto desde la tarjeta del viaje en el inicio</div></div>
-      </label>
       <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Listado de viajes en la app</div>
       <div style="display:flex;gap:10px">
         <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
@@ -593,16 +600,21 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
       </div>
       <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Procesos visibles para el operador</div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px 10px">
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 10px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('evidencia',this.checked)">Evidencia</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('estatus',this.checked)">Estatus</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('chat',this.checked)">Chat</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('asistencia',this.checked)">Asistencia</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('solicitudes',this.checked)">Solicitudes de viaje</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('solicitudes',this.checked)">Solicitudes</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('gastos',this.checked)">Gastos</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('liq',this.checked)">Liquidaciones</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('insp',this.checked)">Inspecciones</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('cartaporte',this.checked)">Carta porte</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('falla',this.checked)">Reportar falla</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('turno',this.checked)">Mi turno</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('notif',this.checked)">Notificaciones</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
       </div>
       <div style="font-size:10px;color:#5a4415;margin-top:8px">Desmarca un proceso y desaparece del celular de arriba — así el operador solo ve lo que su empresa usa.</div>
     </div>
@@ -650,7 +662,15 @@ function renderHome(){
 }
 function doSalida(){ tripStep=1; renderHome(); okThen('Salida registrada','page-home'); }
 function doLlegada(){ tripStep=2; renderHome(); okThen('Llegada registrada','page-home'); }
-function sosGo(){ var b=document.getElementById('sos-btn'); b.querySelector('span').textContent='SOS activado — te estamos ubicando'; b.style.background='#8B1A1A'; }
+function sosShow(state){
+  document.getElementById('sos-idle').style.display = state==='idle'?'block':'none';
+  document.getElementById('sos-confirm').style.display = state==='confirm'?'block':'none';
+  document.getElementById('sos-active').style.display = state==='active'?'block':'none';
+}
+function sosAsk(){ sosShow('confirm'); }
+function sosCancel(){ sosShow('idle'); }
+function sosActivate(){ sosShow('active'); }
+function sosStop(){ sosShow('idle'); showOk('SOS cancelado'); }
 function attachEv(id){ var c=document.getElementById(id); c.querySelector('.rw').innerHTML='<div style="flex:1;background:#E8F5E8;border-radius:11px;padding:11px;text-align:center;font-size:12px;color:#1B5E20;font-weight:500"><i class="ti ti-check" style="font-size:14px" aria-hidden="true"></i> Evidencia adjuntada</div>'; }
 var pdfOn=false;
 function tgPdf(){ pdfOn=!pdfOn; document.getElementById('pdf-t').style.background=pdfOn?'#FF7043':'#ccc'; document.getElementById('pdf-k').style.left=pdfOn?'21px':'2px'; }
@@ -735,12 +755,10 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],sucursal:['sucursal-mini'],vermapa:['vermapa-link']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }
-function tgSucursal(on){ var e=document.getElementById('sucursal-mini'); if(e){ e.style.display=on?'':'none'; } }
-function tgVerMapa(on){ var e=document.getElementById('vermapa-link'); if(e){ e.style.display=on?'':'none'; } }
 function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
   document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #F2940E':'1px solid #ccc';

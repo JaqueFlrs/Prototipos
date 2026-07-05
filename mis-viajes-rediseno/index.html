@@ -624,7 +624,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
   </div>
 </div>
 
-<div style="max-width:600px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
+<div style="max-width:900px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
   <div style="text-align:center;font-size:9.5px;color:#999;letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase">Wireframe ERP — referencia funcional, no es el diseño visual final</div>
   <div style="background:#f7f7f7;border:1px dashed #aaa;border-radius:6px;overflow:hidden">
     <div style="background:#e2e2e2;color:#333;font-weight:600;font-size:12.5px;padding:9px 12px;border-bottom:1px dashed #aaa">ERP GM Transport &middot; Mis Viajes — Configuración de operadores</div>
@@ -651,10 +651,14 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
     </div>
 
-    <div onclick="toggleAcc('acc1')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
-      <span>1. Interfaz y comportamiento</span><span id="acc1-chev" style="color:#999">▾</span>
+    <div style="display:flex;background:#ececec;border-bottom:1px dashed #aaa;overflow-x:auto">
+      <div id="tabbtn-acc1" onclick="showTab('acc1')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#333;white-space:nowrap;background:#f7f7f7;border-bottom:2px solid #555">1. Interfaz</div>
+      <div id="tabbtn-acc2" onclick="showTab('acc2')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">2. Vistas de viajes</div>
+      <div id="tabbtn-acc3" onclick="showTab('acc3')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">3. Formularios</div>
+      <div id="tabbtn-acc4" onclick="showTab('acc4')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">4. Salida / Llegada</div>
+      <div id="tabbtn-acc5" onclick="showTab('acc5')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">5. Derechos del operador</div>
     </div>
-    <div id="acc1" style="display:block;padding:11px 12px;border-bottom:1px dashed #ccc">
+    <div id="acc1" style="display:block;padding:16px 18px">
       <div style="display:flex;gap:10px;margin-bottom:8px">
         <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
           <i class="ti ti-hand-click" style="font-size:22px;color:#666" aria-hidden="true"></i>
@@ -673,10 +677,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </label>
     </div>
 
-    <div onclick="toggleAcc('acc2')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
-      <span>2. Vistas de viajes</span><span id="acc2-chev" style="color:#999">▸</span>
-    </div>
-    <div id="acc2" style="display:none;padding:11px 12px;border-bottom:1px dashed #ccc">
+    <div id="acc2" style="display:none;padding:16px 18px">
       <div style="display:flex;gap:10px;margin-bottom:8px">
         <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
           <i class="ti ti-list" style="font-size:20px;color:#999" aria-hidden="true"></i>
@@ -699,10 +700,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
     </div>
 
-    <div onclick="toggleAcc('acc3')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
-      <span>3. Formularios</span><span id="acc3-chev" style="color:#999">▸</span>
-    </div>
-    <div id="acc3" style="display:none;padding:11px 12px;border-bottom:1px dashed #ccc">
+    <div id="acc3" style="display:none;padding:16px 18px">
       <div style="display:flex;gap:10px">
         <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
           <i class="ti ti-forms" style="font-size:20px;color:#666" aria-hidden="true"></i>
@@ -717,10 +715,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
     </div>
 
-    <div onclick="toggleAcc('acc4')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
-      <span>4. Campos y valores por default — Salida/Llegada</span><span id="acc4-chev" style="color:#999">▸</span>
-    </div>
-    <div id="acc4" style="display:none;padding:11px 12px;border-bottom:1px dashed #ccc">
+    <div id="acc4" style="display:none;padding:16px 18px">
       <div style="font-size:9px;color:#888;margin-bottom:8px">Si el operador no captura un campo, la app usa el valor por default configurado aquí.</div>
       <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
       <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eee">
@@ -756,26 +751,23 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
     </div>
 
-    <div onclick="toggleAcc('acc5')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
-      <span>5. Derechos del operador (árbol en cascada)</span><span id="acc5-chev" style="color:#999">▸</span>
-    </div>
-    <div id="acc5" style="display:none;padding:11px 12px">
-      <div style="font-size:9px;color:#888;margin-bottom:8px">Toca una fila para ver sus sub-procesos. Desmarca el checkbox para quitarle ese derecho — se refleja en el celular de arriba.</div>
-      <div style="display:flex;gap:8px">
+    <div id="acc5" style="display:none;padding:16px 18px">
+      <div style="font-size:10px;color:#888;margin-bottom:10px">Toca una fila para ver sus sub-procesos. Desmarca el checkbox para quitarle ese derecho — se refleja en el celular de arriba.</div>
+      <div style="display:flex;gap:12px">
         <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
-          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
-          <div id="derechos-col1" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:10.5px;padding:6px 0;color:#555">Proceso</div>
+          <div id="derechos-col1" style="max-height:340px;overflow-y:auto;background:#fff"></div>
         </div>
         <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
-          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
-          <div id="derechos-col2" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:10.5px;padding:6px 0;color:#555">Proceso</div>
+          <div id="derechos-col2" style="max-height:340px;overflow-y:auto;background:#fff"></div>
         </div>
         <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
-          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
-          <div id="derechos-col3" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:10.5px;padding:6px 0;color:#555">Proceso</div>
+          <div id="derechos-col3" style="max-height:340px;overflow-y:auto;background:#fff"></div>
         </div>
       </div>
-      <div style="font-size:9px;color:#888;margin-top:8px;line-height:1.4">Si una rama no abre más columnas, es normal — ese permiso ya no tiene más sub-procesos.</div>
+      <div style="font-size:9.5px;color:#888;margin-top:10px;line-height:1.4">Si una rama no abre más columnas, es normal — ese permiso ya no tiene más sub-procesos.</div>
     </div>
 
     <div style="padding:10px 12px;border-top:1px dashed #aaa;background:#ececec;display:flex;justify-content:flex-end">
@@ -1021,12 +1013,14 @@ function formMode(m){
   document.getElementById('erp-form-todos').style.border = m==='todos'?'2px solid #666':'1px solid #ccc';
   document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #666':'1px solid #ccc';
 }
-function toggleAcc(id){
-  var body=document.getElementById(id);
-  var open=body.style.display==='block';
-  body.style.display=open?'none':'block';
-  var chev=document.getElementById(id+'-chev');
-  if(chev){ chev.textContent=open?'▸':'▾'; }
+function showTab(id){
+  ['acc1','acc2','acc3','acc4','acc5'].forEach(function(t){
+    document.getElementById(t).style.display = t===id?'block':'none';
+    var btn=document.getElementById('tabbtn-'+t);
+    btn.style.background = t===id?'#f7f7f7':'transparent';
+    btn.style.color = t===id?'#333':'#777';
+    btn.style.borderBottom = t===id?'2px solid #555':'2px solid transparent';
+  });
 }
 
 var OPERADORES=[

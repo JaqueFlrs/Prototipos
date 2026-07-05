@@ -624,162 +624,162 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
   </div>
 </div>
 
-<div style="max-width:700px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
-  <div style="background:#F5A623;border:1px solid #ccc;border-radius:6px;overflow:hidden">
-    <div style="background:#F2940E;color:#fff;font-weight:500;font-size:13px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
-      <span>ERP GM Transport — Configuración por Operador</span>
-      <button style="background:#fff;color:#F2940E;border:none;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:11px;font-weight:500" onclick="alert('Guardar configuración: Flores')">💾 Guardar</button>
-    </div>
-    <div style="padding:12px 14px;background:#F5A623;border-bottom:1px solid #ddd">
-      <div style="font-size:11px;font-weight:500;color:#333;margin-bottom:6px">Operador</div>
-      <div style="display:flex;gap:8px">
-        <input id="operador-search" type="text" placeholder="Buscar operador..." style="flex:1;border:1px solid #ccc;border-radius:4px;padding:8px;font-size:11px;background:#fff">
-        <button style="background:#fff;border:1px solid #ccc;padding:8px 14px;border-radius:4px;cursor:pointer;font-size:11px;color:#555" onclick="document.getElementById('modal-copiar').style.display='flex'">📋 Copiar a otros</button>
-      </div>
-      <div style="margin-top:8px;padding:8px;background:#fff;border-radius:4px;border:1px solid #ccc">
-        <div style="font-size:10px;color:#666">Seleccionado:</div>
-        <div style="font-size:12px;font-weight:500;color:#1a1a1a">👤 FLORES (FL) • Suc. Mexicali • Activo</div>
-      </div>
-    </div>
-    <div style="padding:12px 14px;background:#F5A623">
+<div style="max-width:600px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
+  <div style="text-align:center;font-size:9.5px;color:#999;letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase">Wireframe ERP — referencia funcional, no es el diseño visual final</div>
+  <div style="background:#f7f7f7;border:1px dashed #aaa;border-radius:6px;overflow:hidden">
+    <div style="background:#e2e2e2;color:#333;font-weight:600;font-size:12.5px;padding:9px 12px;border-bottom:1px dashed #aaa">ERP GM Transport &middot; Mis Viajes — Configuración de operadores</div>
 
-      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">⚙️ 1. INTERFAZ Y COMPORTAMIENTO</div>
+    <div style="padding:11px 12px;border-bottom:1px dashed #ccc">
+      <div style="font-size:10px;font-weight:600;color:#666;margin-bottom:6px;letter-spacing:.03em">CONFIGURAR PARA</div>
+      <div id="scope-btn" onclick="toggleScopePanel()" style="background:#fff;border:1px solid #bbb;border-radius:4px;padding:9px 10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+        <span id="scope-label" style="font-size:11.5px;color:#333;font-weight:500">👤 FLORES <span style="color:#999;font-weight:400">(1 operador)</span></span>
+        <span id="scope-chev" style="color:#888;font-size:10px">▾</span>
+      </div>
+      <div id="scope-panel" style="display:none;background:#fff;border:1px solid #bbb;border-top:none;border-radius:0 0 4px 4px;overflow:hidden">
+        <div style="padding:8px 10px;border-bottom:1px solid #eee">
+          <input id="scope-search" type="text" placeholder="Buscar operador..." style="width:100%;border:1px solid #ccc;border-radius:3px;padding:6px 8px;font-size:11px;box-sizing:border-box" oninput="filterScope(this.value)">
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;font-size:11px;border-bottom:1px solid #eee;background:#f5f5f5">
+          <input type="checkbox" id="scope-todos" style="accent-color:#555" onclick="scopeToggleTodos(this.checked)">
+          <strong style="color:#333">Todos los operadores (182)</strong>
+        </label>
+        <div id="scope-list" style="max-height:190px;overflow-y:auto"></div>
+        <div style="padding:8px 10px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;background:#fafafa">
+          <span id="scope-count" style="font-size:10px;color:#777">1 seleccionado</span>
+          <button onclick="closeScopePanel()" style="background:#555;color:#fff;border:none;padding:5px 14px;border-radius:3px;font-size:10.5px;cursor:pointer">Listo</button>
+        </div>
+      </div>
+    </div>
+
+    <div onclick="toggleAcc('acc1')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
+      <span>1. Interfaz y comportamiento</span><span id="acc1-chev" style="color:#999">▾</span>
+    </div>
+    <div id="acc1" style="display:block;padding:11px 12px;border-bottom:1px dashed #ccc">
       <div style="display:flex;gap:10px;margin-bottom:8px">
-        <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
-          <i class="ti ti-hand-click" style="font-size:22px;color:#D9601F" aria-hidden="true"></i>
+        <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
+          <i class="ti ti-hand-click" style="font-size:22px;color:#666" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo simple</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Lo secundario se reduce</div>
+          <div style="font-size:9px;color:#888;margin-top:2px">Lo secundario se reduce</div>
         </div>
         <div id="erp-completo" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('completo')">
-          <i class="ti ti-layout-grid" style="font-size:22px;color:#888" aria-hidden="true"></i>
+          <i class="ti ti-layout-grid" style="font-size:22px;color:#999" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo completo</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Todo visible igual</div>
+          <div style="font-size:9px;color:#888;margin-top:2px">Todo visible igual</div>
         </div>
       </div>
-      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 10px;cursor:pointer;margin-bottom:12px">
-        <input type="checkbox" id="erp-geo" style="accent-color:#F2940E;width:15px;height:15px" onclick="erpGeo(this.checked)">
-        <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#777">Salida y llegada automáticas al cruzar zona</div></div>
+      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 10px;cursor:pointer">
+        <input type="checkbox" id="erp-geo" style="accent-color:#555;width:15px;height:15px" onclick="erpGeo(this.checked)">
+        <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#888">Salida y llegada automáticas al cruzar zona</div></div>
       </label>
+    </div>
 
-      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🗺️ 2. VISTAS DE VIAJES</div>
+    <div onclick="toggleAcc('acc2')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
+      <span>2. Vistas de viajes</span><span id="acc2-chev" style="color:#999">▸</span>
+    </div>
+    <div id="acc2" style="display:none;padding:11px 12px;border-bottom:1px dashed #ccc">
       <div style="display:flex;gap:10px;margin-bottom:8px">
         <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
-          <i class="ti ti-list" style="font-size:20px;color:#888" aria-hidden="true"></i>
+          <i class="ti ti-list" style="font-size:20px;color:#999" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Info mínima</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Destino + estatus</div>
+          <div style="font-size:9px;color:#888;margin-top:2px">Destino + estatus</div>
         </div>
-        <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
-          <i class="ti ti-list-details" style="font-size:20px;color:#D9601F" aria-hidden="true"></i>
+        <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
+          <i class="ti ti-list-details" style="font-size:20px;color:#666" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Detalle completo</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Todas las columnas</div>
+          <div style="font-size:9px;color:#888;margin-top:2px">Todas las columnas</div>
         </div>
       </div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;margin-bottom:12px;font-size:10px">
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('descarga',this.checked)">Fecha descarga</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('viajenum',this.checked)">Viaje y unidad</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('descarga',this.checked)">Fecha descarga</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('viajenum',this.checked)">Viaje y unidad</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
       </div>
+    </div>
 
-      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">📝 3. FORMULARIOS</div>
-      <div style="display:flex;gap:10px;margin-bottom:12px">
-        <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
-          <i class="ti ti-forms" style="font-size:20px;color:#D9601F" aria-hidden="true"></i>
+    <div onclick="toggleAcc('acc3')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
+      <span>3. Formularios</span><span id="acc3-chev" style="color:#999">▸</span>
+    </div>
+    <div id="acc3" style="display:none;padding:11px 12px;border-bottom:1px dashed #ccc">
+      <div style="display:flex;gap:10px">
+        <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
+          <i class="ti ti-forms" style="font-size:20px;color:#666" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Todos los campos</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Obligatorios y opcionales</div>
+          <div style="font-size:9px;color:#888;margin-top:2px">Obligatorios y opcionales</div>
         </div>
         <div id="erp-form-oblig" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('oblig')">
-          <i class="ti ti-asterisk" style="font-size:20px;color:#888" aria-hidden="true"></i>
+          <i class="ti ti-asterisk" style="font-size:20px;color:#999" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Solo obligatorios</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Llenado más rápido</div>
+          <div style="font-size:9px;color:#888;margin-top:2px">Llenado más rápido</div>
         </div>
       </div>
+    </div>
 
-      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🚗 3.5 CAMPOS Y VALORES POR DEFAULT — SALIDA / LLEGADA</div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;margin-bottom:6px">
-        <div style="font-size:9px;color:#888;margin-bottom:8px">Si el operador NO captura un campo, la app usa automáticamente el valor por default configurado aquí.</div>
-        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
-        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eee">
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('sal-estatus',this.checked)">Estatus viaje (captura)</label>
-            <span id="sal-estatus-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>EN RUTA</option><option>CARGADO</option><option>VACÍO</option></select></span>
-          </div>
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('sal-fecha',this.checked)">Fecha y hora (captura)</label>
-            <span id="sal-fecha-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
-          </div>
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('sal-odometro',this.checked)">Odómetro (captura)</label>
-            <span id="sal-odometro-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
-          </div>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-gps',this.checked)">Info GPS</label>
+    <div onclick="toggleAcc('acc4')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
+      <span>4. Campos y valores por default — Salida/Llegada</span><span id="acc4-chev" style="color:#999">▸</span>
+    </div>
+    <div id="acc4" style="display:none;padding:11px 12px;border-bottom:1px dashed #ccc">
+      <div style="font-size:9px;color:#888;margin-bottom:8px">Si el operador no captura un campo, la app usa el valor por default configurado aquí.</div>
+      <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eee">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-estatus',this.checked)">Estatus viaje (captura)</label>
+          <span id="sal-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>EN RUTA</option><option>CARGADO</option><option>VACÍO</option></select></span>
         </div>
-        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Llegada</div>
-        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px">
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('lleg-estatus',this.checked)">Estatus viaje (captura)</label>
-            <span id="lleg-estatus-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>DESCARGADO</option><option>EN ESPERA</option></select></span>
-          </div>
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('lleg-fecha',this.checked)">Fecha y hora (captura)</label>
-            <span id="lleg-fecha-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
-          </div>
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#F2940E" onclick="campoDefault('lleg-odometro',this.checked)">Odómetro (captura)</label>
-            <span id="lleg-odometro-def" style="display:none;align-items:center;gap:4px;color:#8a6d1f;background:#FFF8E1;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ddd;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
-          </div>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad (Camión, Carga, Dolly)</label>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-fecha',this.checked)">Fecha y hora (captura)</label>
+          <span id="sal-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-odometro',this.checked)">Odómetro (captura)</label>
+          <span id="sal-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+        </div>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sal-gps',this.checked)">Info GPS</label>
+      </div>
+      <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Llegada</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-estatus',this.checked)">Estatus viaje (captura)</label>
+          <span id="lleg-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>DESCARGADO</option><option>EN ESPERA</option></select></span>
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-fecha',this.checked)">Fecha y hora (captura)</label>
+          <span id="lleg-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-odometro',this.checked)">Odómetro (captura)</label>
+          <span id="lleg-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+        </div>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad (Camión, Carga, Dolly)</label>
+      </div>
+    </div>
+
+    <div onclick="toggleAcc('acc5')" style="padding:9px 12px;background:#ececec;border-bottom:1px dashed #ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:#444">
+      <span>5. Derechos del operador (árbol en cascada)</span><span id="acc5-chev" style="color:#999">▸</span>
+    </div>
+    <div id="acc5" style="display:none;padding:11px 12px">
+      <div style="font-size:9px;color:#888;margin-bottom:8px">Toca una fila para ver sus sub-procesos. Desmarca el checkbox para quitarle ese derecho — se refleja en el celular de arriba.</div>
+      <div style="display:flex;gap:8px">
+        <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
+          <div id="derechos-col1" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+        </div>
+        <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
+          <div id="derechos-col2" style="max-height:190px;overflow-y:auto;background:#fff"></div>
+        </div>
+        <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
+          <div id="derechos-col3" style="max-height:190px;overflow-y:auto;background:#fff"></div>
         </div>
       </div>
+      <div style="font-size:9px;color:#888;margin-top:8px;line-height:1.4">Si una rama no abre más columnas, es normal — ese permiso ya no tiene más sub-procesos.</div>
+    </div>
 
-      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🔑 4. DERECHOS DEL OPERADOR — ÁRBOL EN CASCADA (como el ERP)</div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px 10px 8px;margin-bottom:6px">
-        <div style="font-size:9px;color:#888;margin-bottom:8px">Toca una fila para ver sus sub-procesos. Desmarca el checkbox para quitarle ese derecho al operador — se refleja en el celular de arriba.</div>
-        <div style="display:flex;gap:8px">
-          <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden;background:#fafafa">
-            <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
-            <div id="derechos-col1" style="max-height:190px;overflow-y:auto;background:#fff"></div>
-          </div>
-          <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden;background:#fafafa">
-            <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
-            <div id="derechos-col2" style="max-height:190px;overflow-y:auto;background:#fff"></div>
-          </div>
-          <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden;background:#fafafa">
-            <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:9.5px;padding:4px 0;color:#555">Proceso</div>
-            <div id="derechos-col3" style="max-height:190px;overflow-y:auto;background:#fff"></div>
-          </div>
-        </div>
-      </div>
-      <div style="font-size:9px;color:#5a4415;line-height:1.4">Si una rama no abre más columnas (ej. "Descargar documentos"), es normal — ese permiso ya no tiene más sub-procesos, no es un error.</div>
-    </div>
-  </div>
-</div>
-
-<div id="modal-copiar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;align-items:center;justify-content:center;font-family:Calibri,'Segoe UI',Arial,sans-serif">
-  <div style="background:#fff;border-radius:6px;width:430px;max-width:92vw;max-height:80vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.3)">
-    <div style="background:#e8e8e8;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ccc">
-      <span style="font-weight:600;font-size:12.5px;color:#333">Copiar configuración de FLORES a...</span>
-      <button onclick="document.getElementById('modal-copiar').style.display='none'" style="background:#F2940E;color:#fff;border:none;width:22px;height:22px;border-radius:3px;cursor:pointer;font-weight:700;font-size:14px">×</button>
-    </div>
-    <div style="padding:10px 14px;border-bottom:1px solid #eee">
-      <input placeholder="Buscar operador..." style="width:100%;border:1px solid #ccc;border-radius:4px;padding:7px 9px;font-size:11px;box-sizing:border-box">
-      <label style="display:flex;align-items:center;gap:7px;margin-top:8px;font-size:10.5px;color:#555;cursor:pointer"><input type="checkbox" id="copiar-todos" style="accent-color:#F2940E" onclick="document.querySelectorAll('.copiar-op').forEach(c=>c.checked=this.checked)">Seleccionar todos</label>
-    </div>
-    <div style="overflow-y:auto;flex:1;padding:4px 0">
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Gutiérrez Sánchez Ariel Eduardo</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Gómez Martínez Rigoberto</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">De Jesús Godínez Hugo Alejandro</span><span style="color:#999;font-size:9.5px">Patios Piedras Negras</span></label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Turrubiates García Pedro</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Martínez Castillo Mariano</span><span style="color:#999;font-size:9.5px">Nacional</span></label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Villanueva Mondragón Luis Rolando</span><span style="color:#999;font-size:9.5px">Matriz</span></label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Rodríguez Castillo Omar Américo</span><span style="color:#999;font-size:9.5px">Fast Transfer</span></label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:11px"><input type="checkbox" class="copiar-op" style="accent-color:#F2940E"><span style="flex:1;color:#1a1a1a">Mazorra Alvarado Jorge Luis</span><span style="color:#999;font-size:9.5px">Matriz</span></label>
-    </div>
-    <div style="padding:10px 14px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:8px;background:#f5f5f5">
-      <button onclick="document.getElementById('modal-copiar').style.display='none'" style="background:#888;color:#fff;border:none;padding:7px 16px;border-radius:3px;cursor:pointer;font-size:11px">Cancelar</button>
-      <button onclick="alert('Configuración de FLORES copiada a los operadores seleccionados.');document.getElementById('modal-copiar').style.display='none'" style="background:#F2940E;color:#fff;border:none;padding:7px 16px;border-radius:3px;cursor:pointer;font-size:11px;font-weight:500">Aplicar</button>
+    <div style="padding:10px 12px;border-top:1px dashed #aaa;background:#ececec;display:flex;justify-content:flex-end">
+      <button onclick="guardarConfig()" style="background:#444;color:#fff;border:none;padding:8px 18px;border-radius:4px;font-size:11.5px;cursor:pointer;font-weight:500">Guardar configuración</button>
     </div>
   </div>
 </div>
@@ -909,8 +909,8 @@ function inDone(){
 }
 function erpMode(m){
   document.getElementById('viewport').classList.toggle('modo-simple',m==='simple');
-  document.getElementById('erp-simple').style.border = m==='simple'?'2px solid #F2940E':'1px solid #ccc';
-  document.getElementById('erp-completo').style.border = m==='completo'?'2px solid #F2940E':'1px solid #ccc';
+  document.getElementById('erp-simple').style.border = m==='simple'?'2px solid #666':'1px solid #ccc';
+  document.getElementById('erp-completo').style.border = m==='completo'?'2px solid #666':'1px solid #ccc';
 }
 function erpGeo(on){
   geoOn=on;
@@ -984,9 +984,9 @@ function renderDerechosCol(containerId,items,level){
   if(!items||!items.length){ el.innerHTML=''; return; }
   el.innerHTML=items.map(function(it){
     var isSel=(level===1&&derechosSel.col1===it.id)||(level===2&&derechosSel.col2===it.id);
-    var style=isSel?'background:#F2940E;color:#fff;':'color:#1a1a1a;';
+    var style=isSel?'background:#666;color:#fff;':'color:#1a1a1a;';
     return '<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;cursor:pointer;font-size:10px;'+style+'" onclick="derechosSelect('+level+',\''+it.id+'\')">'
-      +'<input type="checkbox" '+(it.checked?'checked':'')+' style="accent-color:#F2940E;width:12px;height:12px;flex-shrink:0" onclick="event.stopPropagation();derechosCheck(\''+it.id+'\',this.checked,\''+(it.proc||'')+'\')">'
+      +'<input type="checkbox" '+(it.checked?'checked':'')+' style="accent-color:#555;width:12px;height:12px;flex-shrink:0" onclick="event.stopPropagation();derechosCheck(\''+it.id+'\',this.checked,\''+(it.proc||'')+'\')">'
       +'<span>'+it.label+'</span></div>';
   }).join('');
 }
@@ -1013,13 +1013,90 @@ function derechosCheck(id,on,proc){
 }
 function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
-  document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #F2940E':'1px solid #ccc';
-  document.getElementById('erp-lista-full').style.border = m==='full'?'2px solid #F2940E':'1px solid #ccc';
+  document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #666':'1px solid #ccc';
+  document.getElementById('erp-lista-full').style.border = m==='full'?'2px solid #666':'1px solid #ccc';
 }
 function formMode(m){
   document.getElementById('viewport').classList.toggle('solo-obligatorios',m==='oblig');
-  document.getElementById('erp-form-todos').style.border = m==='todos'?'2px solid #F2940E':'1px solid #ccc';
-  document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #F2940E':'1px solid #ccc';
+  document.getElementById('erp-form-todos').style.border = m==='todos'?'2px solid #666':'1px solid #ccc';
+  document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #666':'1px solid #ccc';
+}
+function toggleAcc(id){
+  var body=document.getElementById(id);
+  var open=body.style.display==='block';
+  body.style.display=open?'none':'block';
+  var chev=document.getElementById(id+'-chev');
+  if(chev){ chev.textContent=open?'▸':'▾'; }
+}
+
+var OPERADORES=[
+  {nombre:'Gutiérrez Sánchez Ariel Eduardo',suc:'Fast Transfer'},
+  {nombre:'Gómez Martínez Rigoberto',suc:'Fast Transfer'},
+  {nombre:'De Jesús Godínez Hugo Alejandro',suc:'Patios Piedras Negras'},
+  {nombre:'Turrubiates García Pedro',suc:'Fast Transfer'},
+  {nombre:'Martínez Castillo Mariano',suc:'Nacional'},
+  {nombre:'Peña Garza Juan Carlos',suc:'Internacional'},
+  {nombre:'Villanueva Mondragón Luis Rolando',suc:'Matriz'},
+  {nombre:'Rodríguez Castillo Omar Américo',suc:'Fast Transfer'},
+  {nombre:'Mazorra Alvarado Jorge Luis',suc:'Matriz'},
+  {nombre:'Rosales Moreno Efraín de Jesús',suc:'Estatal'}
+];
+var scopeSelected=['FLORES'];
+function renderScopeList(filter){
+  var el=document.getElementById('scope-list');
+  var f=(filter||'').toLowerCase();
+  var rows=[{nombre:'FLORES',suc:'Patios Piedras Negras'}].concat(OPERADORES);
+  el.innerHTML=rows.filter(function(o){ return o.nombre.toLowerCase().indexOf(f)>-1; }).map(function(o){
+    var checked=scopeSelected.indexOf(o.nombre)>-1;
+    return '<label style="display:flex;align-items:center;gap:8px;padding:6px 10px;cursor:pointer;font-size:11px;border-bottom:1px solid #f2f2f2">'
+      +'<input type="checkbox" '+(checked?'checked':'')+' style="accent-color:#555" onclick="scopeToggleOp(\''+o.nombre.replace(/'/g,"\\'")+'\',this.checked)">'
+      +'<span style="flex:1;color:#1a1a1a">'+o.nombre+'</span><span style="color:#999;font-size:9.5px">'+o.suc+'</span></label>';
+  }).join('');
+}
+function scopeToggleOp(nombre,on){
+  var i=scopeSelected.indexOf(nombre);
+  if(on&&i===-1){ scopeSelected.push(nombre); }
+  if(!on&&i>-1){ scopeSelected.splice(i,1); }
+  document.getElementById('scope-todos').checked=false;
+  updateScopeLabel();
+}
+function scopeToggleTodos(on){
+  scopeSelected = on ? ['__todos__'] : ['FLORES'];
+  renderScopeList(document.getElementById('scope-search').value);
+  updateScopeLabel();
+}
+function updateScopeLabel(){
+  var n=scopeSelected.length;
+  var lbl=document.getElementById('scope-label'), count=document.getElementById('scope-count');
+  var isTodos = scopeSelected[0]==='__todos__';
+  if(isTodos){
+    lbl.innerHTML='👥 Todos los operadores <span style="color:#999;font-weight:400">(182)</span>';
+    count.textContent='Todos (182)';
+  } else if(n===1){
+    lbl.innerHTML='👤 '+scopeSelected[0]+' <span style="color:#999;font-weight:400">(1 operador)</span>';
+    count.textContent='1 seleccionado';
+  } else {
+    lbl.innerHTML='👥 '+scopeSelected[0]+' + '+(n-1)+' más <span style="color:#999;font-weight:400">('+n+' operadores)</span>';
+    count.textContent=n+' seleccionados';
+  }
+}
+function toggleScopePanel(){
+  var p=document.getElementById('scope-panel');
+  var open=p.style.display==='block';
+  if(open){ closeScopePanel(); return; }
+  p.style.display='block';
+  document.getElementById('scope-chev').textContent='▴';
+  renderScopeList('');
+}
+function closeScopePanel(){
+  document.getElementById('scope-panel').style.display='none';
+  document.getElementById('scope-chev').textContent='▾';
+}
+function filterScope(v){ renderScopeList(v); }
+function guardarConfig(){
+  var isTodos=scopeSelected[0]==='__todos__';
+  var msg = isTodos ? 'Configuración guardada para los 182 operadores.' : 'Configuración guardada para: '+scopeSelected.join(', ');
+  alert(msg);
 }
 renderHome();
 renderDerechos();

@@ -85,13 +85,13 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           </div>
           <div style="position:relative;cursor:pointer;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid #f0f0f0;display:flex;align-items:center;justify-content:center" onclick="nav('page-notif')"><i class="ti ti-bell" style="font-size:26px;color:#FF7043" aria-hidden="true"></i><div style="position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#D32F2F;border:2px solid #fff"></div></div>
         </div>
-        <div class="rw" style="padding:0 18px 16px;gap:5px"><i class="ti ti-building" style="font-size:12px;color:#b5b5b5" aria-hidden="true"></i><span style="font-size:10.5px;color:#a5a5a5">Sucursal 11:56 &middot; Tu hora 18:56</span></div>
+        <div class="rw" style="padding:0 18px 16px;gap:6px"><i class="ti ti-route" style="font-size:14px;color:#E64A19" aria-hidden="true"></i><span style="font-size:12.5px;color:#555;font-weight:500">Viaje MA-000005103 &middot; Unidad T12</span></div>
 
         <div style="margin:0 16px 16px;background:#fff;border:1px solid #f0f0f0;border-radius:18px;padding:18px 16px;box-shadow:0 2px 10px rgba(20,20,20,.05)">
           <div class="rw" style="justify-content:space-between;margin-bottom:12px">
             <span id="hero-pill" class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Sin salida</span>
             <span id="geo-chip" class="pill" style="background:#E1F4FF;color:#0D47A1;display:none"><i class="ti ti-map-pin-check" style="font-size:12px" aria-hidden="true"></i> Geocerca</span>
-            <span style="font-size:10.5px;color:#b0b0b0">MA-000005103 &middot; T12</span>
+            <span id="sucursal-mini" style="font-size:10.5px;color:#999"><span style="color:#E64A19;font-weight:500">Suc 11:56</span> &middot; Tú 18:56</span>
           </div>
           <div style="position:relative;height:44px;margin:0 6px 4px">
             <div style="position:absolute;top:9px;left:8px;right:8px;height:4px;background:#F0F0F0;border-radius:3px"></div>
@@ -571,6 +571,10 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <input type="checkbox" id="erp-geo" style="accent-color:#F2940E;width:15px;height:15px" onclick="erpGeo(this.checked)">
         <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Trayecto con geocerca activada</div><div style="font-size:9px;color:#777">La salida y llegada se registran automáticamente al cruzar la zona — en el celular se bloquea el registro manual y aparece el chip "Geocerca"</div></div>
       </label>
+      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;cursor:pointer;margin-top:8px">
+        <input type="checkbox" checked style="accent-color:#F2940E;width:15px;height:15px" onclick="tgSucursal(this.checked)">
+        <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Mostrar hora de sucursal</div><div style="font-size:9px;color:#777">Muestra la comparación hora local vs sucursal en la tarjeta del viaje — útil para operadores en otra zona horaria</div></div>
+      </label>
       <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Listado de viajes en la app</div>
       <div style="display:flex;gap:10px">
         <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
@@ -731,6 +735,7 @@ var PROC={chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gast
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }
+function tgSucursal(on){ var e=document.getElementById('sucursal-mini'); if(e){ e.style.display=on?'':'none'; } }
 function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
   document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #F2940E':'1px solid #ccc';

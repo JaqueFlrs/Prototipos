@@ -167,6 +167,13 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           </div>
           <div style="font-size:10px;color:#999;margin:5px 0 10px">Sincronizado con el ERP &middot; se envía el mayor de los dos</div>
           <div style="background:#FFF8E1;border-radius:11px;padding:10px 11px;font-size:11px;color:#8a6d1f;margin-bottom:14px"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> Se capturará tu ubicación GPS &middot; <strong>Una vez registrada, la salida no podrá modificarse</strong></div>
+          <div style="font-size:12px;font-weight:500;color:#E64A19;margin-bottom:7px">Condiciones de salida</div>
+          <div class="lb">Camión T12 *</div>
+          <select><option>En buen estado</option><option>Con observaciones</option><option>Requiere mantenimiento</option></select>
+          <div class="lb">Carga 1 *</div>
+          <select><option>Cargada</option><option>Vacía</option></select>
+          <div class="campo-opcional"><div class="lb">Observaciones (opcional)</div>
+          <textarea placeholder="Condiciones iniciales del vehículo..." style="height:45px;margin-bottom:0"></textarea></div>
           <div class="rw" style="gap:9px">
             <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
             <div class="bp" role="button" tabindex="0" style="flex:1.4" onclick="doSalida()">Confirmar salida</div>

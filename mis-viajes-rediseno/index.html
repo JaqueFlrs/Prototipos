@@ -126,6 +126,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <div class="tile" id="tile-turno" onclick="nav('page-turno')"><div class="tic" style="background:#FFF8E1"><i class="ti ti-clock" style="font-size:21px;color:#B45309" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Mi turno</span></div>
           <div class="tile" id="tile-ayuda" onclick="nav('page-ayuda')"><div class="tic" style="background:#E1F4FF"><i class="ti ti-headset" style="font-size:21px;color:#1976D2" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Asistencia</span></div>
           <div class="tile" id="tile-falla" onclick="nav('page-falla')"><div class="tic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:21px;color:#C62828" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Reportar falla</span></div>
+          <div class="tile" id="tile-reportes" onclick="nav('page-reportes')"><div class="tic" style="background:#FDECEA"><i class="ti ti-chart-bar" style="font-size:21px;color:#C62828" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Reportes</span></div>
           <div class="tile" onclick="nav('page-perfil')"><div class="tic" style="background:#F1F1F1"><i class="ti ti-user" style="font-size:21px;color:#666" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Mi perfil</span></div>
         </div>
         <div style="margin:2px 16px 16px;border-top:1px solid #eee;padding-top:16px">
@@ -570,55 +571,49 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
   <div style="background:#F5A623;border:1px solid #ccc;border-radius:6px;overflow:hidden">
     <div style="background:#F2940E;color:#fff;font-weight:500;font-size:13px;padding:8px 12px">ERP GM Transport — Configuración de la app Mis Viajes (vinculado en vivo al celular)</div>
     <div style="padding:12px 14px;background:#F5A623">
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">Modo de interfaz</div>
-      <div style="display:flex;gap:10px;margin-bottom:12px">
+
+      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">1. INTERFAZ Y COMPORTAMIENTO</div>
+      <div style="display:flex;gap:10px;margin-bottom:8px">
         <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
           <i class="ti ti-hand-click" style="font-size:22px;color:#D9601F" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo simple</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Lo secundario se reduce — nada se oculta</div>
+          <div style="font-size:9px;color:#777;margin-top:2px">Lo secundario se reduce</div>
         </div>
         <div id="erp-completo" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('completo')">
           <i class="ti ti-layout-grid" style="font-size:22px;color:#888" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo completo</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Todo con el mismo peso visual</div>
+          <div style="font-size:9px;color:#777;margin-top:2px">Todo visible igual</div>
         </div>
       </div>
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">Geocercas del trayecto</div>
-      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;cursor:pointer">
+      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 10px;cursor:pointer;margin-bottom:12px">
         <input type="checkbox" id="erp-geo" style="accent-color:#F2940E;width:15px;height:15px" onclick="erpGeo(this.checked)">
-        <div><div style="font-size:11px;font-weight:500;color:#1a1a1a">Trayecto con geocerca activada</div><div style="font-size:9px;color:#777">La salida y llegada se registran automáticamente al cruzar la zona — en el celular se bloquea el registro manual y aparece el chip "Geocerca"</div></div>
+        <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#777">Salida y llegada automáticas al cruzar zona</div></div>
       </label>
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Listado de viajes en la app</div>
-      <div style="display:flex;gap:10px">
+
+      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">2. VISTAS DE VIAJES</div>
+      <div style="display:flex;gap:10px;margin-bottom:8px">
         <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
           <i class="ti ti-list" style="font-size:20px;color:#888" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Info mínima</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Solo destino, estatus y fecha</div>
+          <div style="font-size:9px;color:#777;margin-top:2px">Destino + estatus</div>
         </div>
         <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
           <i class="ti ti-list-details" style="font-size:20px;color:#D9601F" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Detalle completo</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Cliente, origen, fechas y distancia</div>
+          <div style="font-size:9px;color:#777;margin-top:2px">Todas las columnas</div>
         </div>
       </div>
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Procesos visibles para el operador</div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 10px">
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('evidencia',this.checked)">Evidencia</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('estatus',this.checked)">Estatus</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('chat',this.checked)">Chat</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('asistencia',this.checked)">Asistencia</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('solicitudes',this.checked)">Solicitudes</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('gastos',this.checked)">Gastos</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('liq',this.checked)">Liquidaciones</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('insp',this.checked)">Inspecciones</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('cartaporte',this.checked)">Carta porte</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('falla',this.checked)">Reportar falla</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('turno',this.checked)">Mi turno</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('notif',this.checked)">Notificaciones</label>
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;margin-bottom:12px;font-size:10px">
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('descarga',this.checked)">Fecha descarga</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('viajenum',this.checked)">Viaje y unidad</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
       </div>
-      <div style="font-size:10px;color:#5a4415;margin-top:8px">Desmarca un proceso y desaparece del celular de arriba — así el operador solo ve lo que su empresa usa.</div>
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Campos en formularios</div>
-      <div style="display:flex;gap:10px">
+
+      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">3. FORMULARIOS</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px">
         <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
           <i class="ti ti-forms" style="font-size:20px;color:#D9601F" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Todos los campos</div>
@@ -627,20 +622,26 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <div id="erp-form-oblig" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('oblig')">
           <i class="ti ti-asterisk" style="font-size:20px;color:#888" aria-hidden="true"></i>
           <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Solo obligatorios</div>
-          <div style="font-size:9px;color:#777;margin-top:2px">Oculta los campos opcionales</div>
+          <div style="font-size:9px;color:#777;margin-top:2px">Llenado más rápido</div>
         </div>
       </div>
-      <div style="font-size:10px;color:#5a4415;margin-top:8px">En "Solo obligatorios" los formularios del celular esconden los campos opcionales (observaciones, evidencia opcional, dolly, etc.) — llenado más rápido para el operador.</div>
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Tarjeta del viaje en el inicio</div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px 10px">
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('distancia',this.checked)">Distancia (km / mi)</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('descarga',this.checked)">Fecha de descarga</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('viajenum',this.checked)">Núm. de viaje y unidad</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sucursal',this.checked)">Hora de sucursal</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
+
+      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">4. MÓDULOS DISPONIBLES</div>
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 10px;font-size:11px">
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('evidencia',this.checked)">Evidencia</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('estatus',this.checked)">Estatus</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('chat',this.checked)">Chat</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('solicitudes',this.checked)">Solicitudes</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('gastos',this.checked)">Gastos</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('liq',this.checked)">Liquidaciones</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('insp',this.checked)">Inspecciones</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('cartaporte',this.checked)">Carta porte</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('falla',this.checked)">Reportar falla</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('turno',this.checked)">Mi turno</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('notif',this.checked)">Notificaciones</label>
+        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('reportes',this.checked)">Reportes</label>
       </div>
-      <div style="font-size:10px;color:#5a4415;margin-top:8px">Cada cliente arma su inicio: puede dejar solo el destino y el botón de salida, o mostrar toda la información del viaje. Lo esencial (destino y acción principal) nunca se oculta.</div>
+      <div style="font-size:9px;color:#5a4415;margin-top:8px;line-height:1.4">Desmarca un módulo y desaparece del celular — el operador solo ve lo que su empresa necesita usar.</div>
     </div>
   </div>
 </div>
@@ -779,7 +780,7 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }

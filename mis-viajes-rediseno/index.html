@@ -156,17 +156,17 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       <div class="pg" id="page-salida">
         <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FF7043"><i class="ti ti-player-play" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Registrar salida</div><div class="t2">MA-000005103 &middot; Mexicali &rarr; Puerto Peñasco &middot; T12</div></div></div></div>
         <div style="padding:0 16px 16px">
-          <div class="lb">Estatus del viaje *</div>
-          <select><option>EN RUTA (precargado del ERP)</option><option>CARGADO</option><option>VACÍO</option></select>
-          <div class="lb">Fecha y hora de salida *</div>
+          <div id="sal-estatus" style="display:contents"><div class="lb">Estatus del viaje *</div>
+          <select><option>EN RUTA (precargado del ERP)</option><option>CARGADO</option><option>VACÍO</option></select></div>
+          <div id="sal-fecha" style="display:contents"><div class="lb">Fecha y hora de salida *</div>
           <div class="lock"><span>Hoy, 18:36</span><i class="ti ti-calendar" style="font-size:16px;color:#999" aria-hidden="true"></i></div>
-          <div style="background:#E1F4FF;border-radius:11px;padding:9px 11px;font-size:11px;color:#0D47A1;margin-bottom:9px"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Se registrará con el horario de la sucursal (UTC-7)</div>
-          <div class="rw" style="gap:9px">
+          <div style="background:#E1F4FF;border-radius:11px;padding:9px 11px;font-size:11px;color:#0D47A1;margin-bottom:9px"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Se registrará con el horario de la sucursal (UTC-7)</div></div>
+          <div id="sal-odometro" style="display:contents"><div class="rw" style="gap:9px">
             <div style="flex:1"><div class="lb">Odómetro (km) *</div><input value="184,520" style="margin-bottom:0"></div>
             <div style="flex:1"><div class="lb">Odómetro (millas) *</div><input value="114,668" style="margin-bottom:0"></div>
           </div>
-          <div style="font-size:10px;color:#999;margin:5px 0 10px">Sincronizado con el ERP &middot; se envía el mayor de los dos</div>
-          <div style="background:#FFF8E1;border-radius:11px;padding:10px 11px;font-size:11px;color:#8a6d1f;margin-bottom:14px"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> Se capturará tu ubicación GPS &middot; <strong>Una vez registrada, la salida no podrá modificarse</strong></div>
+          <div style="font-size:10px;color:#999;margin:5px 0 10px">Sincronizado con el ERP &middot; se envía el mayor de los dos</div></div>
+          <div id="sal-gps" style="display:contents"><div style="background:#FFF8E1;border-radius:11px;padding:10px 11px;font-size:11px;color:#8a6d1f;margin-bottom:14px"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> Se capturará tu ubicación GPS &middot; <strong>Una vez registrada, la salida no podrá modificarse</strong></div></div>
           <div style="font-size:12px;font-weight:500;color:#E64A19;margin-bottom:7px">Condiciones de salida</div>
           <div class="lb">Camión T12 *</div>
           <select><option>En buen estado</option><option>Con observaciones</option><option>Requiere mantenimiento</option></select>
@@ -184,21 +184,21 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       <div class="pg" id="page-llegada">
         <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#388E3C"><i class="ti ti-flag" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Registrar llegada</div><div class="t2">MA-000005103 &middot; Puerto Peñasco &middot; T12</div></div></div></div>
         <div style="padding:0 16px 16px">
-          <div class="lb">Estatus del viaje *</div>
-          <select><option>DESCARGADO (precargado del ERP)</option><option>EN ESPERA</option></select>
-          <div class="lb">Fecha y hora de llegada *</div>
-          <div class="lock"><span>Hoy, 22:10</span><i class="ti ti-calendar" style="font-size:16px;color:#999" aria-hidden="true"></i></div>
-          <div class="rw" style="gap:9px;margin-bottom:9px">
+          <div id="lleg-estatus" style="display:contents"><div class="lb">Estatus del viaje *</div>
+          <select><option>DESCARGADO (precargado del ERP)</option><option>EN ESPERA</option></select></div>
+          <div id="lleg-fecha" style="display:contents"><div class="lb">Fecha y hora de llegada *</div>
+          <div class="lock"><span>Hoy, 22:10</span><i class="ti ti-calendar" style="font-size:16px;color:#999" aria-hidden="true"></i></div></div>
+          <div id="lleg-odometro" style="display:contents"><div class="rw" style="gap:9px;margin-bottom:9px">
             <div style="flex:1"><div class="lb">Odómetro (km) *</div><input value="184,817" style="margin-bottom:0"></div>
             <div style="flex:1"><div class="lb">Odómetro (millas) *</div><input value="114,852" style="margin-bottom:0"></div>
-          </div>
-          <div style="font-size:12px;font-weight:500;color:#1B5E20;margin-bottom:7px">Estatus por unidad</div>
+          </div></div>
+          <div id="lleg-unidad" style="display:contents"><div style="font-size:12px;font-weight:500;color:#1B5E20;margin-bottom:7px">Estatus por unidad</div>
           <div class="lb">Camión T12 *</div>
           <select><option>Disponible</option><option>En mantenimiento</option><option>Cargado</option></select>
           <div class="lb">Carga 1 *</div>
           <select><option>Vacía</option><option>Cargada</option></select>
           <div class="campo-opcional"><div class="lb">Dolly (opcional)</div>
-          <input placeholder="Observaciones del dolly..."></div>
+          <input placeholder="Observaciones del dolly..."></div></div>
           <div class="rw" style="gap:9px">
             <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
             <div class="bp" role="button" tabindex="0" style="flex:1.4;background:#388E3C" onclick="doLlegada()">Confirmar llegada</div>
@@ -683,6 +683,24 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
       </div>
 
+      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">3.5 CAMPOS EN SALIDA Y LLEGADA</div>
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;margin-bottom:12px">
+        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #eee">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-estatus',this.checked)">Estatus viaje</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-fecha',this.checked)">Fecha y hora</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-odometro',this.checked)">Odómetro</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sal-gps',this.checked)">Info GPS</label>
+        </div>
+        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Llegada</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-estatus',this.checked)">Estatus viaje</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-fecha',this.checked)">Fecha y hora</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-odometro',this.checked)">Odómetro</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad</label>
+        </div>
+      </div>
+
       <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">4. MÓDULOS DISPONIBLES</div>
       <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 10px;font-size:11px">
         <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('evidencia',this.checked)">Evidencia</label>
@@ -837,7 +855,7 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }

@@ -86,7 +86,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           </div>
           <div id="home-bell" style="position:relative;cursor:pointer;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid #f0f0f0;display:flex;align-items:center;justify-content:center" onclick="nav('page-notif')"><i class="ti ti-bell" style="font-size:26px;color:#FF7043" aria-hidden="true"></i><div style="position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#D32F2F;border:2px solid #fff"></div></div>
         </div>
-        <div class="rw" style="padding:0 18px 16px;gap:6px"><i class="ti ti-route" style="font-size:14px;color:#E64A19" aria-hidden="true"></i><span style="font-size:12.5px;color:#555;font-weight:500">Viaje MA-000005103 &middot; Unidad T12</span></div>
+        <div id="hero-viajenum" class="rw" style="padding:0 18px 16px;gap:6px"><i class="ti ti-route" style="font-size:14px;color:#E64A19" aria-hidden="true"></i><span style="font-size:12.5px;color:#555;font-weight:500">Viaje MA-000005103 &middot; Unidad T12</span></div>
 
         <div style="margin:0 16px 16px;background:#fff;border:1px solid #f0f0f0;border-radius:18px;padding:18px 16px;box-shadow:0 2px 10px rgba(20,20,20,.05)">
           <div class="rw" style="justify-content:space-between;margin-bottom:12px">
@@ -94,7 +94,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <span id="geo-chip" class="pill" style="background:#E1F4FF;color:#0D47A1;display:none"><i class="ti ti-map-pin-check" style="font-size:12px" aria-hidden="true"></i> Geocerca</span>
             <span id="sucursal-mini" style="font-size:10.5px;color:#999"><span style="color:#E64A19;font-weight:500">Suc 11:56</span> &middot; Tú 18:56</span>
           </div>
-          <div style="position:relative;height:44px;margin:0 6px 4px">
+          <div id="hero-graphic" style="position:relative;height:44px;margin:0 6px 4px">
             <div style="position:absolute;top:9px;left:8px;right:8px;height:4px;background:#F0F0F0;border-radius:3px"></div>
             <div id="hero-prog" style="position:absolute;top:9px;left:8px;width:0%;height:4px;background:#FF7043;border-radius:3px;transition:width .4s"></div>
             <div style="position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:#1976D2;border:3px solid #fff;box-shadow:0 0 0 1px #d5e5f5"></div>
@@ -104,7 +104,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <div style="position:absolute;bottom:0;right:0;font-size:10.5px;color:#888">Puerto Peñasco</div>
           </div>
           <div style="font-size:19px;font-weight:500;margin:6px 0 2px">Puerto Peñasco, Son.</div>
-          <div class="rw" style="gap:5px;margin-bottom:12px"><i class="ti ti-map-pin" style="font-size:12px;color:#999" aria-hidden="true"></i><span style="font-size:11px;color:#999">297 km &middot; Descarga 25/06 12:10</span><span id="vermapa-link" style="font-size:11px;color:#1976D2;cursor:pointer;font-weight:500" onclick="nav('page-mapa')">&nbsp;&middot; Ver mapa</span></div>
+          <div class="rw" style="gap:5px;margin-bottom:12px;flex-wrap:wrap"><i class="ti ti-map-pin" style="font-size:12px;color:#999" aria-hidden="true"></i><span id="hero-dist" style="font-size:11px;color:#999">297 km &middot; 184.6 mi</span><span id="hero-descarga" style="font-size:11px;color:#999">&nbsp;&middot; Descarga 25/06 12:10</span><span id="vermapa-link" style="font-size:11px;color:#1976D2;cursor:pointer;font-weight:500" onclick="nav('page-mapa')">&nbsp;&middot; Ver mapa</span></div>
           <div class="bp" id="pa-btn" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:9px;padding:16px;font-size:15.5px;box-shadow:0 4px 14px rgba(255,112,67,.28)">
             <i class="ti ti-player-play" id="pa-icon" style="font-size:24px;color:#fff" aria-hidden="true"></i>
             <span id="pa-label" style="color:#fff">Registrar salida</span>
@@ -615,8 +615,6 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('falla',this.checked)">Reportar falla</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('turno',this.checked)">Mi turno</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('notif',this.checked)">Notificaciones</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
       </div>
       <div style="font-size:10px;color:#5a4415;margin-top:8px">Desmarca un proceso y desaparece del celular de arriba — así el operador solo ve lo que su empresa usa.</div>
       <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Campos en formularios</div>
@@ -633,6 +631,16 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
       </div>
       <div style="font-size:10px;color:#5a4415;margin-top:8px">En "Solo obligatorios" los formularios del celular esconden los campos opcionales (observaciones, evidencia opcional, dolly, etc.) — llenado más rápido para el operador.</div>
+      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Tarjeta del viaje en el inicio</div>
+      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px 10px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('distancia',this.checked)">Distancia (km / mi)</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('descarga',this.checked)">Fecha de descarga</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('viajenum',this.checked)">Núm. de viaje y unidad</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('sucursal',this.checked)">Hora de sucursal</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
+      </div>
+      <div style="font-size:10px;color:#5a4415;margin-top:8px">Cada cliente arma su inicio: puede dejar solo el destino y el botón de salida, o mostrar toda la información del viaje. Lo esencial (destino y acción principal) nunca se oculta.</div>
     </div>
   </div>
 </div>
@@ -771,7 +779,7 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],sucursal:['sucursal-mini'],vermapa:['vermapa-link']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],falla:['tile-falla'],turno:['tile-turno'],notif:['home-bell'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }

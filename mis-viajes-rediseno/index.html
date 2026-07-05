@@ -721,7 +721,7 @@ function renderHome(){
   else if(tripStep===1){ prog.style.width='50%'; truck.style.left='44%'; pill.innerHTML='<i class="ti ti-truck" style="font-size:12px" aria-hidden="true"></i> En ruta'; pill.style.background='#E1F4FF'; pill.style.color='#0D47A1'; }
   else { prog.style.width='calc(100% - 16px)'; truck.style.left='86%'; pill.innerHTML='<i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i> Terminado'; pill.style.background='#E8F5E8'; pill.style.color='#1B5E20'; }
   if(tripStep>=2){
-    lbl.textContent='Viaje terminado'; ic.className='ti ti-check'; btn.style.background='#388E3C'; btn.style.boxShadow='none'; btn.onclick=function(){ nav('page-evidencias'); };
+    lbl.textContent='Viaje terminado'; ic.className='ti ti-check'; btn.style.background='#388E3C'; btn.style.boxShadow='none'; btn.style.padding='10px 4px'; btn.style.gap='5px'; btn.style.fontSize='11px'; ic.style.fontSize='20px'; lbl.style.fontSize='11px'; btn.onclick=function(){ nav('page-evidencias'); };
     return;
   }
   if(geoOn){

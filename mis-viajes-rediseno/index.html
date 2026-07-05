@@ -624,12 +624,26 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
   </div>
 </div>
 
-<div style="max-width:560px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
+<div style="max-width:700px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
   <div style="background:#F5A623;border:1px solid #ccc;border-radius:6px;overflow:hidden">
-    <div style="background:#F2940E;color:#fff;font-weight:500;font-size:13px;padding:8px 12px">ERP GM Transport — Configuración de la app Mis Viajes (vinculado en vivo al celular)</div>
+    <div style="background:#F2940E;color:#fff;font-weight:500;font-size:13px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+      <span>ERP GM Transport — Configuración por Operador</span>
+      <button style="background:#fff;color:#F2940E;border:none;padding:4px 10px;border-radius:3px;cursor:pointer;font-size:11px;font-weight:500" onclick="alert('Guardar configuración: Flores')">💾 Guardar</button>
+    </div>
+    <div style="padding:12px 14px;background:#F5A623;border-bottom:1px solid #ddd">
+      <div style="font-size:11px;font-weight:500;color:#333;margin-bottom:6px">Operador</div>
+      <div style="display:flex;gap:8px">
+        <input id="operador-search" type="text" placeholder="Buscar operador..." style="flex:1;border:1px solid #ccc;border-radius:4px;padding:8px;font-size:11px;background:#fff">
+        <button style="background:#fff;border:1px solid #ccc;padding:8px 14px;border-radius:4px;cursor:pointer;font-size:11px;color:#555" onclick="alert('Copiar configuración de Flores a otros operadores')">📋 Copiar a otros</button>
+      </div>
+      <div style="margin-top:8px;padding:8px;background:#fff;border-radius:4px;border:1px solid #ccc">
+        <div style="font-size:10px;color:#666">Seleccionado:</div>
+        <div style="font-size:12px;font-weight:500;color:#1a1a1a">👤 FLORES (FL) • Suc. Mexicali • Activo</div>
+      </div>
+    </div>
     <div style="padding:12px 14px;background:#F5A623">
 
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">1. INTERFAZ Y COMPORTAMIENTO</div>
+      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">⚙️ 1. INTERFAZ Y COMPORTAMIENTO</div>
       <div style="display:flex;gap:10px;margin-bottom:8px">
         <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
           <i class="ti ti-hand-click" style="font-size:22px;color:#D9601F" aria-hidden="true"></i>
@@ -647,7 +661,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#777">Salida y llegada automáticas al cruzar zona</div></div>
       </label>
 
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">2. VISTAS DE VIAJES</div>
+      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🗺️ 2. VISTAS DE VIAJES</div>
       <div style="display:flex;gap:10px;margin-bottom:8px">
         <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
           <i class="ti ti-list" style="font-size:20px;color:#888" aria-hidden="true"></i>
@@ -669,7 +683,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
       </div>
 
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">3. FORMULARIOS</div>
+      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">📝 3. FORMULARIOS</div>
       <div style="display:flex;gap:10px;margin-bottom:12px">
         <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
           <i class="ti ti-forms" style="font-size:20px;color:#D9601F" aria-hidden="true"></i>
@@ -683,7 +697,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
       </div>
 
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">3.5 CAMPOS EN SALIDA Y LLEGADA</div>
+      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">🚗 3.5 CAMPOS EN SALIDA Y LLEGADA</div>
       <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;margin-bottom:12px">
         <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #eee">
@@ -701,7 +715,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </div>
       </div>
 
-      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin-bottom:8px">4. MÓDULOS DISPONIBLES</div>
+      <div style="background:linear-gradient(90deg,#E8B347,#F2940E);text-align:center;font-weight:600;font-size:11px;padding:7px 0;border-radius:3px;margin-bottom:10px;color:#fff;letter-spacing:.05em">📦 4. MÓDULOS DISPONIBLES</div>
       <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 10px;font-size:11px">
         <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('evidencia',this.checked)">Evidencia</label>
         <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('estatus',this.checked)">Estatus</label>

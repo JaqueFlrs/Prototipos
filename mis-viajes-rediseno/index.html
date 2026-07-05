@@ -36,6 +36,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 #mvw .modo-simple .secf{font-size:9.5px!important;opacity:.5}
 #mvw .modo-simple .tilelbl{opacity:.55}
 #mvw .lista-minima #page-trips .secf{display:none}
+#mvw .solo-obligatorios .campo-opcional{display:none}
 #mvw .wiz{display:none}
 #mvw .wiz.on{display:block}
 #mvw .dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
@@ -188,8 +189,8 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <select><option>Disponible</option><option>En mantenimiento</option><option>Cargado</option></select>
           <div class="lb">Carga 1 *</div>
           <select><option>Vacía</option><option>Cargada</option></select>
-          <div class="lb">Dolly (opcional)</div>
-          <input placeholder="Observaciones del dolly...">
+          <div class="campo-opcional"><div class="lb">Dolly (opcional)</div>
+          <input placeholder="Observaciones del dolly..."></div>
           <div class="rw" style="gap:9px">
             <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
             <div class="bp" role="button" tabindex="0" style="flex:1.4;background:#388E3C" onclick="doLlegada()">Confirmar llegada</div>
@@ -220,10 +221,10 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <select><option>Seleccione un estatus</option><option>EN RUTA</option><option>CARGANDO</option><option>DESCARGANDO</option><option>RETRASO</option><option>EN ESPERA</option></select>
           <div class="lb">Fecha y hora del estatus</div>
           <div class="lock"><span>23/06/2026 &middot; 10:17</span><i class="ti ti-calendar" style="font-size:16px;color:#999" aria-hidden="true"></i></div>
-          <div class="lb">Observaciones (opcional)</div>
+          <div class="campo-opcional"><div class="lb">Observaciones (opcional)</div>
           <textarea placeholder="Agregue observaciones adicionales..." style="height:66px"></textarea>
-          <div style="text-align:right;font-size:10px;color:#bbb;margin:-6px 0 8px">0/500</div>
-          <label class="rw" style="background:#FFF2E8;border-radius:12px;padding:11px;margin-bottom:14px;cursor:pointer"><input type="checkbox" style="width:auto;margin:0;accent-color:#FF7043"><div><div style="font-size:12px;font-weight:500;color:#E64A19">¿Desea notificar al cliente?</div><div style="font-size:10px;color:#b07050">Recibirá una notificación del cambio de estatus</div></div></label>
+          <div style="text-align:right;font-size:10px;color:#bbb;margin:-6px 0 8px">0/500</div></div>
+          <label class="rw campo-opcional" style="background:#FFF2E8;border-radius:12px;padding:11px;margin-bottom:14px;cursor:pointer"><input type="checkbox" style="width:auto;margin:0;accent-color:#FF7043"><div><div style="font-size:12px;font-weight:500;color:#E64A19">¿Desea notificar al cliente?</div><div style="font-size:10px;color:#b07050">Recibirá una notificación del cambio de estatus</div></div></label>
           <div class="rw" style="gap:9px">
             <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
             <div class="bp" role="button" tabindex="0" style="flex:1.4" onclick="okThen('Estatus asignado','page-home')">Asignar estatus</div>
@@ -314,9 +315,10 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
               <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('ga',3)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#388E3C" onclick="wizShow('ga',5)">Siguiente</div></div>
             </div>
             <div class="wiz" id="ga-5">
-              <div class="lb">Evidencia (opcional) &middot; imagen o PDF</div>
+              <div class="campo-opcional"><div class="lb">Evidencia (opcional) &middot; imagen o PDF</div>
               <div class="rw" style="gap:8px;margin-bottom:9px"><div class="bs" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Foto</div><div class="bs" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-paperclip" style="font-size:16px" aria-hidden="true"></i>PDF</div></div>
-              <input placeholder="Descripción de la evidencia (10-50 caracteres)">
+              <input placeholder="Descripción de la evidencia (10-50 caracteres)"></div>
+              <div class="campo-opcional" style="font-size:10px;color:#999;text-align:center;margin-bottom:4px">Este paso es opcional</div>
               <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('ga',4)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#388E3C" onclick="gaDone()">Enviar solicitud</div></div>
             </div>
           </div>
@@ -343,7 +345,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <div class="wiz" id="in-2">
               <div style="font-size:12.5px;font-weight:500;color:#5E35B1;margin-bottom:7px">2 &middot; Unidad</div>
               <div class="lb">Unidad *</div><div class="lock"><span>T12</span><i class="ti ti-lock" style="font-size:14px;color:#999" aria-hidden="true"></i></div>
-              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">Placas nacionales</div><input placeholder="ABC-123-D" style="margin-bottom:0"></div><div style="flex:1"><div class="lb">Placas extranjeras</div><input placeholder="Opcional" style="margin-bottom:0"></div></div>
+              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">Placas nacionales</div><input placeholder="ABC-123-D" style="margin-bottom:0"></div><div class="campo-opcional" style="flex:1"><div class="lb">Placas extranjeras</div><input placeholder="Opcional" style="margin-bottom:0"></div></div>
               <div class="lb" style="margin-top:9px">Convoy (si aplica)</div>
               <select><option>Sin convoy</option><option>Remolque R-201</option><option>Remolque R-201 + Dolly</option></select>
               <div class="rw" style="gap:9px;margin-top:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('in',1)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#7E57C2" onclick="wizShow('in',3)">Siguiente</div></div>
@@ -438,8 +440,8 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <div class="tile" style="background:#fff;border:1px solid #eee;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-bulb" style="font-size:24px;color:#666" aria-hidden="true"></i><span style="font-size:10px;color:#666">Luces</span></div>
             <div class="tile" style="background:#fff;border:1px solid #eee;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-dots" style="font-size:24px;color:#666" aria-hidden="true"></i><span style="font-size:10px;color:#666">Otro</span></div>
           </div>
-          <div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:9px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Agregar foto (opcional)</div>
-          <textarea placeholder="Cuéntanos más (opcional)..." style="height:54px"></textarea>
+          <div class="campo-opcional"><div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:9px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Agregar foto (opcional)</div>
+          <textarea placeholder="Cuéntanos más (opcional)..." style="height:54px"></textarea></div>
           <div class="bp" role="button" tabindex="0" style="background:#D32F2F" onclick="okThen('Reporte enviado','page-reportes')">Enviar reporte</div>
         </div>
       </div>
@@ -518,7 +520,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
               <div class="lb">Recoger en *</div><input placeholder="Dirección o referencia...">
               <div class="lb">Fecha de descarga *</div><div class="lock"><span>26/06/2026 &middot; 14:00</span><i class="ti ti-calendar" style="font-size:15px;color:#999" aria-hidden="true"></i></div>
               <div class="lb">Entregar en *</div><input placeholder="Dirección o referencia...">
-              <div class="lb">Observaciones (opcional)</div><input placeholder="Máx. 150 caracteres">
+              <div class="campo-opcional"><div class="lb">Observaciones (opcional)</div><input placeholder="Máx. 150 caracteres"></div>
               <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('sv',1)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1" onclick="wizShow('sv',3)">Continuar</div></div>
             </div>
             <div class="wiz" id="sv-3">
@@ -617,6 +619,20 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#F2940E" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
       </div>
       <div style="font-size:10px;color:#5a4415;margin-top:8px">Desmarca un proceso y desaparece del celular de arriba — así el operador solo ve lo que su empresa usa.</div>
+      <div style="background:#ddd;text-align:center;font-weight:500;font-size:11px;padding:5px 0;border-radius:3px;margin:12px 0 8px">Campos en formularios</div>
+      <div style="display:flex;gap:10px">
+        <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #F2940E;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
+          <i class="ti ti-forms" style="font-size:20px;color:#D9601F" aria-hidden="true"></i>
+          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Todos los campos</div>
+          <div style="font-size:9px;color:#777;margin-top:2px">Obligatorios y opcionales</div>
+        </div>
+        <div id="erp-form-oblig" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('oblig')">
+          <i class="ti ti-asterisk" style="font-size:20px;color:#888" aria-hidden="true"></i>
+          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Solo obligatorios</div>
+          <div style="font-size:9px;color:#777;margin-top:2px">Oculta los campos opcionales</div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:#5a4415;margin-top:8px">En "Solo obligatorios" los formularios del celular esconden los campos opcionales (observaciones, evidencia opcional, dolly, etc.) — llenado más rápido para el operador.</div>
     </div>
   </div>
 </div>
@@ -763,6 +779,11 @@ function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
   document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #F2940E':'1px solid #ccc';
   document.getElementById('erp-lista-full').style.border = m==='full'?'2px solid #F2940E':'1px solid #ccc';
+}
+function formMode(m){
+  document.getElementById('viewport').classList.toggle('solo-obligatorios',m==='oblig');
+  document.getElementById('erp-form-todos').style.border = m==='todos'?'2px solid #F2940E':'1px solid #ccc';
+  document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #F2940E':'1px solid #ccc';
 }
 renderHome();
 </script>

@@ -432,15 +432,43 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#D32F2F"><i class="ti ti-alert-triangle" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Reportar falla</div><div class="t2">Registra incidentes y problemas técnicos</div></div></div></div>
         <div style="padding:0 16px 16px">
           <div class="rw" style="background:#fff;border:1px solid #f0f0f0;border-radius:12px;padding:10px 11px;margin-bottom:11px"><i class="ti ti-truck" style="font-size:16px;color:#999" aria-hidden="true"></i><span style="font-size:11px;color:#777">Unidad T12 &middot; Sucursal Mexicali &middot; hoy 10:18 &mdash; se llenan solos</span></div>
-          <div style="font-size:13px;color:#555;margin-bottom:8px">¿Qué falló? Toca una opción</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px">
-            <div class="tile" style="background:#D32F2F;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-engine" style="font-size:24px;color:#fff" aria-hidden="true"></i><span style="font-size:10px;font-weight:500;color:#fff">Motor</span></div>
-            <div class="tile" style="background:#fff;border:1px solid #eee;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-circle" style="font-size:24px;color:#666" aria-hidden="true"></i><span style="font-size:10px;color:#666">Llantas</span></div>
-            <div class="tile" style="background:#fff;border:1px solid #eee;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-disc" style="font-size:24px;color:#666" aria-hidden="true"></i><span style="font-size:10px;color:#666">Frenos</span></div>
-            <div class="tile" style="background:#fff;border:1px solid #eee;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-arrows-vertical" style="font-size:24px;color:#666" aria-hidden="true"></i><span style="font-size:10px;color:#666">Suspensión</span></div>
-            <div class="tile" style="background:#fff;border:1px solid #eee;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-bulb" style="font-size:24px;color:#666" aria-hidden="true"></i><span style="font-size:10px;color:#666">Luces</span></div>
-            <div class="tile" style="background:#fff;border:1px solid #eee;border-radius:14px;padding:12px 4px" onclick="fallaSel(this)"><i class="ti ti-dots" style="font-size:24px;color:#666" aria-hidden="true"></i><span style="font-size:10px;color:#666">Otro</span></div>
-          </div>
+          <div class="lb">Código de falla *</div>
+          <select style="margin-bottom:11px">
+            <option value="">Selecciona el código de falla...</option>
+            <optgroup label="Motor y combustible">
+              <option value="M001">M001 - Fuga de aceite</option>
+              <option value="M002">M002 - Bajo rendimiento del motor</option>
+              <option value="M003">M003 - Fuga de refrigerante</option>
+              <option value="M004">M004 - Problemas de combustión</option>
+            </optgroup>
+            <optgroup label="Sistema de frenos">
+              <option value="F001">F001 - Desgaste de pastillas</option>
+              <option value="F002">F002 - Fuga de líquido de frenos</option>
+              <option value="F003">F003 - Frenos esponjosos</option>
+              <option value="F004">F004 - Cilindro maestro defectuoso</option>
+            </optgroup>
+            <optgroup label="Llantas y ruedas">
+              <option value="L001">L001 - Llanta pinchada</option>
+              <option value="L002">L002 - Desgaste irregular</option>
+              <option value="L003">L003 - Llanta reventada</option>
+              <option value="L004">L004 - Alineación defectuosa</option>
+            </optgroup>
+            <optgroup label="Suspensión y dirección">
+              <option value="S001">S001 - Amortiguador defectuoso</option>
+              <option value="S002">S002 - Resorte roto</option>
+              <option value="S003">S003 - Problemas de alineación</option>
+              <option value="S004">S004 - Dirección defectuosa</option>
+            </optgroup>
+            <optgroup label="Sistema eléctrico">
+              <option value="E001">E001 - Batería muerta</option>
+              <option value="E002">E002 - Alternador defectuoso</option>
+              <option value="E003">E003 - Luces dañadas</option>
+              <option value="E004">E004 - Fusibles quemados</option>
+            </optgroup>
+            <optgroup label="Otro">
+              <option value="X001">X001 - Otro problema</option>
+            </optgroup>
+          </select>
           <div class="campo-opcional"><div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:9px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Agregar foto (opcional)</div>
           <textarea placeholder="Cuéntanos más (opcional)..." style="height:54px"></textarea></div>
           <div class="bp" role="button" tabindex="0" style="background:#D32F2F" onclick="okThen('Reporte enviado','page-reportes')">Enviar reporte</div>

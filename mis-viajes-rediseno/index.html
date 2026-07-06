@@ -74,8 +74,8 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <li>Campos de formularios configurables (todos vs. solo obligatorios)</li>
         <li>Listado de viajes configurable (info mínima vs. detalle completo)</li>
         <li>Valores por default en Salida/Llegada cuando el operador no captura un campo</li>
-        <li>Árbol de derechos igual al ERP real, sin duplicados ni huérfanos</li>
-        <li>Todo organizado en pestañas, sin scroll largo</li>
+        <li>Árbol de derechos igual al ERP real, sin duplicados ni huérfanos — <strong>lo que se desmarca ahí desaparece del celular del operador</strong></li>
+        <li>Solo 2 pestañas: Configuración (todo junto) y Derechos del operador</li>
         <li>Estilo wireframe (gris) para diferenciarlo del diseño final del ERP</li>
       </ul>
     </div>
@@ -682,107 +682,111 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       <span onclick="backToList()" style="font-size:10.5px;color:#666;cursor:pointer;text-decoration:underline">← Cambiar selección</span>
     </div>
 
-    <div style="display:flex;background:#ececec;border-bottom:1px dashed #aaa;overflow-x:auto">
-      <div id="tabbtn-acc1" onclick="showTab('acc1')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#333;white-space:nowrap;background:#f7f7f7;border-bottom:2px solid #555">1. Interfaz</div>
-      <div id="tabbtn-acc2" onclick="showTab('acc2')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">2. Vistas de viajes</div>
-      <div id="tabbtn-acc3" onclick="showTab('acc3')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">3. Formularios</div>
-      <div id="tabbtn-acc4" onclick="showTab('acc4')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">4. Salida / Llegada</div>
-      <div id="tabbtn-acc5" onclick="showTab('acc5')" style="padding:10px 16px;cursor:pointer;font-size:11px;font-weight:600;color:#777;white-space:nowrap;border-bottom:2px solid transparent">5. Derechos del operador</div>
-    </div>
-    <div id="acc1" style="display:block;padding:16px 18px">
-      <div style="display:flex;gap:10px;margin-bottom:8px">
-        <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
-          <i class="ti ti-hand-click" style="font-size:22px;color:#666" aria-hidden="true"></i>
-          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo simple</div>
-          <div style="font-size:9px;color:#888;margin-top:2px">Lo secundario se reduce</div>
-        </div>
-        <div id="erp-completo" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('completo')">
-          <i class="ti ti-layout-grid" style="font-size:22px;color:#999" aria-hidden="true"></i>
-          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo completo</div>
-          <div style="font-size:9px;color:#888;margin-top:2px">Todo visible igual</div>
-        </div>
-      </div>
-      <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 10px;cursor:pointer">
-        <input type="checkbox" id="erp-geo" style="accent-color:#555;width:15px;height:15px" onclick="erpGeo(this.checked)">
-        <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#888">Salida y llegada automáticas al cruzar zona</div></div>
-      </label>
+    <div style="display:flex;background:#ececec;border-bottom:1px dashed #aaa">
+      <div id="tabbtn-config" onclick="showMainTab('config')" style="flex:1;text-align:center;padding:11px 16px;cursor:pointer;font-size:11.5px;font-weight:600;color:#333;background:#f7f7f7;border-bottom:2px solid #555">Configuración</div>
+      <div id="tabbtn-derechos" onclick="showMainTab('derechos')" style="flex:1;text-align:center;padding:11px 16px;cursor:pointer;font-size:11.5px;font-weight:600;color:#777;border-bottom:2px solid transparent">Derechos del operador</div>
     </div>
 
-    <div id="acc2" style="display:none;padding:16px 18px">
-      <div style="display:flex;gap:10px;margin-bottom:8px">
-        <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
-          <i class="ti ti-list" style="font-size:20px;color:#999" aria-hidden="true"></i>
-          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Info mínima</div>
-          <div style="font-size:9px;color:#888;margin-top:2px">Destino + estatus</div>
+    <div id="tab-config" style="display:block">
+      <div style="padding:16px 18px 12px">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Interfaz y comportamiento</div>
+        <div style="display:flex;gap:10px;margin-bottom:8px">
+          <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
+            <i class="ti ti-hand-click" style="font-size:22px;color:#666" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo simple</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Lo secundario se reduce</div>
+          </div>
+          <div id="erp-completo" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('completo')">
+            <i class="ti ti-layout-grid" style="font-size:22px;color:#999" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo completo</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Todo visible igual</div>
+          </div>
         </div>
-        <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
-          <i class="ti ti-list-details" style="font-size:20px;color:#666" aria-hidden="true"></i>
-          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Detalle completo</div>
-          <div style="font-size:9px;color:#888;margin-top:2px">Todas las columnas</div>
+        <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 10px;cursor:pointer">
+          <input type="checkbox" id="erp-geo" style="accent-color:#555;width:15px;height:15px" onclick="erpGeo(this.checked)">
+          <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#888">Salida y llegada automáticas al cruzar zona</div></div>
+        </label>
+      </div>
+
+      <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Vistas de viajes</div>
+        <div style="display:flex;gap:10px;margin-bottom:8px">
+          <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
+            <i class="ti ti-list" style="font-size:20px;color:#999" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Info mínima</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Destino + estatus</div>
+          </div>
+          <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
+            <i class="ti ti-list-details" style="font-size:20px;color:#666" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Detalle completo</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Todas las columnas</div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('descarga',this.checked)">Fecha descarga</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('viajenum',this.checked)">Viaje y unidad</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
         </div>
       </div>
-      <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('descarga',this.checked)">Fecha descarga</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('viajenum',this.checked)">Viaje y unidad</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
+
+      <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Formularios</div>
+        <div style="display:flex;gap:10px">
+          <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
+            <i class="ti ti-forms" style="font-size:20px;color:#666" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Todos los campos</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Obligatorios y opcionales</div>
+          </div>
+          <div id="erp-form-oblig" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('oblig')">
+            <i class="ti ti-asterisk" style="font-size:20px;color:#999" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Solo obligatorios</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Llenado más rápido</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 18px 16px;border-top:1px dashed #ddd">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Campos y valores por default — Salida / Llegada</div>
+        <div style="font-size:9px;color:#888;margin-bottom:8px">Si el operador no captura un campo, la app usa el valor por default configurado aquí.</div>
+        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eee">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-estatus',this.checked)">Estatus viaje (captura)</label>
+            <span id="sal-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>EN RUTA</option><option>CARGADO</option><option>VACÍO</option></select></span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-fecha',this.checked)">Fecha y hora (captura)</label>
+            <span id="sal-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-odometro',this.checked)">Odómetro (captura)</label>
+            <span id="sal-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sal-gps',this.checked)">Info GPS</label>
+        </div>
+        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Llegada</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-estatus',this.checked)">Estatus viaje (captura)</label>
+            <span id="lleg-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>DESCARGADO</option><option>EN ESPERA</option></select></span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-fecha',this.checked)">Fecha y hora (captura)</label>
+            <span id="lleg-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-odometro',this.checked)">Odómetro (captura)</label>
+            <span id="lleg-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad (Camión, Carga, Dolly)</label>
+        </div>
       </div>
     </div>
 
-    <div id="acc3" style="display:none;padding:16px 18px">
-      <div style="display:flex;gap:10px">
-        <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
-          <i class="ti ti-forms" style="font-size:20px;color:#666" aria-hidden="true"></i>
-          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Todos los campos</div>
-          <div style="font-size:9px;color:#888;margin-top:2px">Obligatorios y opcionales</div>
-        </div>
-        <div id="erp-form-oblig" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('oblig')">
-          <i class="ti ti-asterisk" style="font-size:20px;color:#999" aria-hidden="true"></i>
-          <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Solo obligatorios</div>
-          <div style="font-size:9px;color:#888;margin-top:2px">Llenado más rápido</div>
-        </div>
-      </div>
-    </div>
-
-    <div id="acc4" style="display:none;padding:16px 18px">
-      <div style="font-size:9px;color:#888;margin-bottom:8px">Si el operador no captura un campo, la app usa el valor por default configurado aquí.</div>
-      <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
-      <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eee">
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-estatus',this.checked)">Estatus viaje (captura)</label>
-          <span id="sal-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>EN RUTA</option><option>CARGADO</option><option>VACÍO</option></select></span>
-        </div>
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-fecha',this.checked)">Fecha y hora (captura)</label>
-          <span id="sal-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
-        </div>
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-odometro',this.checked)">Odómetro (captura)</label>
-          <span id="sal-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
-        </div>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sal-gps',this.checked)">Info GPS</label>
-      </div>
-      <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Llegada</div>
-      <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px">
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-estatus',this.checked)">Estatus viaje (captura)</label>
-          <span id="lleg-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>DESCARGADO</option><option>EN ESPERA</option></select></span>
-        </div>
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-fecha',this.checked)">Fecha y hora (captura)</label>
-          <span id="lleg-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
-        </div>
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-odometro',this.checked)">Odómetro (captura)</label>
-          <span id="lleg-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
-        </div>
-        <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad (Camión, Carga, Dolly)</label>
-      </div>
-    </div>
-
-    <div id="acc5" style="display:none;padding:16px 18px">
+    <div id="tab-derechos" style="display:none;padding:16px 18px">
       <div style="font-size:10px;color:#888;margin-bottom:10px">Toca una fila para ver sus sub-procesos. Desmarca el checkbox para quitarle ese derecho — se refleja en el celular de arriba.</div>
       <div style="display:flex;gap:12px">
         <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
@@ -1050,9 +1054,9 @@ function formMode(m){
   document.getElementById('erp-form-todos').style.border = m==='todos'?'2px solid #666':'1px solid #ccc';
   document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #666':'1px solid #ccc';
 }
-function showTab(id){
-  ['acc1','acc2','acc3','acc4','acc5'].forEach(function(t){
-    document.getElementById(t).style.display = t===id?'block':'none';
+function showMainTab(id){
+  ['config','derechos'].forEach(function(t){
+    document.getElementById('tab-'+t).style.display = t===id?'block':'none';
     var btn=document.getElementById('tabbtn-'+t);
     btn.style.background = t===id?'#f7f7f7':'transparent';
     btn.style.color = t===id?'#333':'#777';

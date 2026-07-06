@@ -12,6 +12,36 @@ Prototipo interactivo de alta fidelidad para el rediseño de **Mis Viajes** (app
 
 El objetivo es mostrar cómo cada cliente/operador puede ajustar la app a sus necesidades sin perder funcionalidad, y validar el flujo antes de pasar a desarrollo real en Flutter.
 
+## Conocimiento del sistema real "Mis Viajes" (contexto de negocio, no del prototipo)
+
+Esto es lo que se investigó del sistema **real** (código fuente + capturas de pantalla de producción) antes de diseñar el prototipo. Sirve para no perder este contexto de negocio en sesiones futuras.
+
+### Qué es Mis Viajes
+App móvil para operadores de transporte de GM Transport. Gestiona el ciclo completo de un viaje:
+
+**Sin salida → En ruta → Terminado → Pendiente a liquidar**
+
+Incluye gastos CFDI (flujo de 5 pasos), liquidaciones en PDF, y registro de odómetro/GPS en cada salida y llegada.
+
+### Stack técnico
+- **App:** Flutter v15.0.0, Dart ^3.8.0, Android + iOS, patrón BLoC, Clean Architecture, offline-first, HERE Maps para mapas, 35 módulos de inyección de dependencias
+- **Backend:** Go, Air (hot reload), Redis (opcional), Make
+- **Multi-país:** México (usa RFC) y Guatemala (usa NIT) — el prototipo solo cubre el caso México
+- **Reglas de código del backend:** `Either<Failure,T>` en todos los repositorios y UseCases (nunca throws directos); Hive typeIds 0–80 ya ocupados, cualquier typeId nuevo debe ser > 120
+- **2 APIs distintas:** `API_URL` (todo el sistema) y `GM_DOBLE_CHECK_URL` (inspecciones C-TPAT + Azure Storage)
+- Repos: `gm-mis-viajes` (app), `gm-mis-viajes-backend` (Go), `gm-mis-viajes-db` (base de datos)
+
+### Pantallas/procesos reales inventariados (de capturas de producción)
+Splash, inicio, detalle de trayecto, balance de gastos, lista de trayectos, carta porte, inspecciones físico-mecánicas, solicitudes, reportes, perfil, historial de entradas/salidas, notificaciones, registro de entrada — todo esto se revisó a fondo (3 agentes en paralelo: uno en salida/llegada/geocercas, otro en solicitudes/gastos/liquidaciones/chat/inspecciones, otro en nombres de campos y jerarquía visual de las capturas) antes de rediseñar.
+
+### Hallazgos importantes del sistema real (afectan decisiones de diseño)
+- **Geocercas no muestran un anillo visual en la app real** — solo es una bandera/flag que, al activarse, registra automáticamente la salida y llegada sin que el operador tenga que hacerlo manualmente. El prototipo respeta esto: cuando la geocerca está activa, se bloquea el registro manual y aparece un chip "Geocerca" (no un mapa con círculo).
+- **El campo "Código de Falla" en el sistema real es de texto libre** y genera muchos errores de captura (typos, inconsistencia). Por eso en el prototipo se reemplazó por un catálogo estructurado (dropdown con categorías) — ver sección de decisiones de diseño abajo.
+- Liquidaciones: el sistema real permite ver Última, Penúltima y Todas — **sin usar tabs**, se muestran apiladas (así quedó también en el prototipo).
+- Solicitudes: al entrar a la pantalla ya deben verse las solicitudes propias y las de los compañeros en una sola lista, con la acción de crear una nueva integrada ahí mismo (no en una pantalla aparte) — el prototipo sigue este patrón.
+- Inspecciones físico-mecánicas: flujo real de 5 pasos (Movimiento / Unidad / Revisión / Seguridad / Firma) — replicado en el prototipo.
+- Gastos: flujo CFDI de 5 pasos.
+
 ## Estado actual (resumen "Se propone" — ya está en el HTML, arriba del celular)
 
 ### En la app

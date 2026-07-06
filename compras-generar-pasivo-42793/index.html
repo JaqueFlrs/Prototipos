@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generar Pasivo — Fecha Documento #42793</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#f0f0f0;padding:24px}
+.window{max-width:600px;margin:0 auto;border:1px solid #aaa;background:#F5A623}
+.win-title{background:#F2940E;color:#fff;font-weight:bold;font-size:13px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center}
+.win-close{background:#cc3300;color:#fff;border:none;width:18px;height:18px;font-size:11px;cursor:pointer;font-weight:bold;border-radius:2px}
+.sec{background:#ddd;text-align:center;font-weight:bold;font-size:12px;padding:3px 0;margin:6px 0 5px;border:1px solid #ccc}
+.inner{background:#fff;border:1px solid #ccc;padding:8px 12px;margin:0 4px 4px}
+.fr{display:flex;align-items:center;margin-bottom:5px;gap:4px}
+.fr label{min-width:170px;color:#444;font-size:12px;flex-shrink:0}
+.fr input,.fr select{flex:1;border:1px solid #ccc;padding:2px 4px;font-size:12px;font-family:Calibri,sans-serif;background:#fff;height:22px}
+.fr input[readonly]{background:#efefef;color:#555}
+.new-badge{background:#1a7f37;color:#fff;font-size:10px;font-weight:bold;padding:1px 5px;border-radius:2px;margin-left:4px;flex-shrink:0}
+.new-field{border:1.5px solid #1a7f37 !important;background:#f0fff4 !important}
+.btn-o{background:#F2940E;color:#fff;border:none;padding:3px 12px;font-size:12px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;height:22px}
+.btn-g{background:#888;color:#fff;border:none;padding:3px 12px;font-size:12px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;height:22px}
+.btn-row{display:flex;gap:4px;margin-bottom:6px}
+.radio-row{display:flex;align-items:center;gap:14px;margin-bottom:5px}
+.radio-row label{color:#444;font-size:12px;display:flex;align-items:center;gap:3px}
+.erp-table{width:100%;border-collapse:collapse;font-size:12px}
+.erp-table thead tr{background:#F2940E;color:#fff}
+.erp-table thead th{padding:3px 8px;text-align:left;border:1px solid #d07000}
+.erp-table tbody td{padding:3px 8px;border:1px solid #e0e0e0}
+.erp-table tbody tr.sel{background:#F2940E;color:#fff}
+.erp-table tbody tr:not(.sel):hover{background:#fde8c0;cursor:pointer}
+.bottom{padding:10px;border-top:1px solid #ccc;background:#f5f5f5;text-align:center}
+.confirm-q{font-size:12px;color:#333;margin-bottom:8px;font-weight:bold}
+.brow{display:flex;justify-content:center;gap:8px}
+.nota-campo{font-size:10px;color:#1a7f37;font-weight:bold;margin-top:1px;margin-left:174px;margin-bottom:4px}
+.pdf-row{display:flex;align-items:center;gap:6px;padding:4px 0}
+.file-name{font-size:11px;color:#888;font-style:italic}
+
+/* Banner */
+.banner{background:#fffdf9;border-left:4px solid #F2940E;border-radius:4px;padding:10px 14px;margin:0 auto 16px;max-width:600px}
+.banner-title{font-weight:700;font-size:12px;color:#1a1a1a;margin-bottom:4px}
+.banner-text{font-size:12px;color:#555;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="banner-title">💡 Prototipo #42793 — Inventarios &gt; Compras &gt; Generar Pasivo</div>
+  <div class="banner-text">
+    Se muestra el campo <strong>Fecha Documento</strong> (marcado en verde) que se agrega en la sección "Datos de pasivo".
+    Este campo permite registrar la fecha real de la factura del proveedor al generar el pasivo en Cuentas por Pagar.<br>
+    <strong>Representación visual — el diseño final puede variar durante el desarrollo.</strong>
+  </div>
+</div>
+
+<div class="window">
+  <div class="win-title">
+    Generar Pasivo
+    <button class="win-close">✕</button>
+  </div>
+
+  <div style="padding:4px">
+
+    <!-- Datos de compra -->
+    <div class="sec">Datos de compra</div>
+    <div class="inner">
+      <div class="fr">
+        <label>Folio</label>
+        <input readonly value="28153" style="max-width:80px">
+        <label style="min-width:50px;margin-left:10px">Fecha</label>
+        <input readonly value="11/06/2026" style="max-width:105px">
+      </div>
+      <div class="fr">
+        <label>Proveedor</label>
+        <input readonly value="000003" style="max-width:70px">
+        <input readonly value="NORMA ELIZABETH CANALES AGUILERA" style="flex:1;margin-left:4px">
+      </div>
+    </div>
+
+    <!-- Datos de pasivo -->
+    <div class="sec">Datos de pasivo</div>
+    <div class="inner">
+
+      <!-- CAMPO NUEVO -->
+      <div class="fr">
+        <label style="font-weight:bold;color:#1a7f37">Fecha Documento</label>
+        <input class="new-field" value="11/06/2026" style="max-width:115px">
+        <span class="new-badge">NUEVO</span>
+      </div>
+      <div class="nota-campo">↑ Fecha de la factura del proveedor (obligatorio, editable)</div>
+
+      <div class="fr">
+        <label>No. Documento</label>
+        <input value="A" style="max-width:50px">
+        <span style="padding:0 4px;color:#666">-</span>
+        <input value="4144" style="max-width:80px">
+      </div>
+      <div class="fr">
+        <label>Categoría</label>
+        <select style="max-width:220px"><option></option></select>
+        <button class="btn-o" style="padding:2px 8px;margin-left:2px">...</button>
+      </div>
+      <div class="fr">
+        <label>Método de pago</label>
+        <select style="max-width:120px"><option></option><option>PPD - Pago en Parcialidades</option><option>PUE - Pago en Una Exhibición</option></select>
+      </div>
+      <div class="fr">
+        <label>Folio Fiscal UUID</label>
+        <input style="flex:1">
+        <button class="btn-o" style="margin-left:6px;padding:2px 10px">Cargar XML</button>
+      </div>
+    </div>
+
+    <!-- Documento en PDF -->
+    <div class="sec">Documento en PDF</div>
+    <div class="inner">
+      <div class="pdf-row">
+        <button class="btn-g">Seleccionar archivo</button>
+        <span class="file-name">NINGÚN ARCHIVO SELECCIONADO</span>
+      </div>
+    </div>
+
+    <!-- Distribución de gastos -->
+    <div class="sec">Distribución de gastos</div>
+    <div class="inner">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <div>
+          <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Distribución</div>
+          <div class="radio-row">
+            <label><input type="radio" name="tdist" checked> Partida</label>
+            <label><input type="radio" name="tdist"> Unidad</label>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Cálculo</div>
+          <div class="radio-row">
+            <label><input type="radio" name="tcalc" checked> Porcentaje</label>
+            <label><input type="radio" name="tcalc"> Importe</label>
+          </div>
+        </div>
+      </div>
+      <div class="fr" style="margin-bottom:6px">
+        <label>Plantilla</label>
+        <input style="max-width:130px">
+        <button class="btn-o" style="padding:2px 8px;margin-left:3px">...</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn-o">Agregar</button>
+        <button class="btn-o">Modificar</button>
+        <button class="btn-o">Eliminar</button>
+      </div>
+      <table class="erp-table">
+        <thead>
+          <tr>
+            <th style="width:70px">Código</th>
+            <th>Descripción</th>
+            <th style="width:100px">Porcentaje</th>
+          </tr>
+        </thead>
+        <tbody id="tbl">
+          <tr class="sel"><td>0</td><td>001</td><td></td></tr>
+          <tr><td>0</td><td>002</td><td></td></tr>
+          <tr><td>0</td><td>003</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="bottom">
+    <div class="confirm-q">¿Está seguro de generar pasivo?</div>
+    <div class="brow">
+      <button class="btn-o" style="padding:4px 24px">Aceptar</button>
+      <button class="btn-g" style="padding:4px 24px">Regresar</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('#tbl tr').forEach(function(r){
+  r.addEventListener('click', function(){
+    document.querySelectorAll('#tbl tr').forEach(function(x){ x.classList.remove('sel'); });
+    r.classList.add('sel');
+  });
+});
+</script>
+</body>
+</html>

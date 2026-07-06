@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pantalla Aeropuerto — Prototipo Sprint 2026-5</title>
+  <style>
+    /* ===== RESET & VARIABLES ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-app:       #0d1117;
+      --bg-panel:     #161b22;
+      --bg-card:      #1c2230;
+      --bg-row-hover: #1f2d40;
+      --border:       #2a3347;
+      --border-light: #3d4f6b;
+
+      --text-primary:   #e6edf3;
+      --text-secondary: #8b9ab3;
+      --text-muted:     #4a5568;
+
+      --accent:       #2563eb;
+      --accent-hover: #1d4ed8;
+
+      /* Estatus */
+      --status-asignado:    #1d4ed8;
+      --status-enruta:      #16a34a;
+      --status-terminado:   #6b7280;
+      --status-retrasado:   #dc2626;
+      --status-documentado: #9333ea;
+      --status-sinSalida:   #ca8a04;
+
+      /* GPS */
+      --gps-signal:  #22c55e;
+      --gps-no:      #ef4444;
+      --gps-sos:     #f97316;
+
+      --radius-sm: 4px;
+      --radius:    8px;
+      --radius-lg: 12px;
+
+      --shadow: 0 4px 20px rgba(0,0,0,.4);
+    }
+
+    body {
+      background: var(--bg-app);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .topbar__brand .logo {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+    }
+    .topbar__brand h1 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: .3px;
+    }
+    .topbar__brand span {
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 8px;
+    }
+    .topbar__right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .clock {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 1px;
+      min-width: 90px;
+      text-align: right;
+    }
+    .clock-date {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-align: right;
+      margin-top: 1px;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--bg-row-hover); border-color: var(--border-light); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); }
+    .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn-ghost { background: transparent; border-color: transparent; color: var(--text-secondary); }
+    .btn-ghost:hover { background: var(--bg-card); color: var(--text-primary); }
+    .btn-sm { padding: 4px 10px; font-size: 11px; }
+    .btn-icon { padding: 6px 8px; }
+    .btn-danger { background: #7f1d1d; border-color: #991b1b; }
+    .btn-danger:hover { background: #991b1b; }
+
+    /* ===== TOOLBAR ===== */
+    .toolbar {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+    }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+      max-width: 400px;
+    }
+    .search-wrap .icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 7px 10px 7px 32px;
+      font-size: 12px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-input:focus { border-color: var(--accent); }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      border-color: var(--accent);
+      color: var(--text-primary);
+      background: rgba(37,99,235,.15);
+    }
+    .toolbar__right { margin-left: auto; display: flex; gap: 8px; }
+
+    /* ===== STATS BAR ===== */
+    .statsbar {
+      padding: 8px 20px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: var(--bg-app);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .stat-label { color: var(--text-secondary); font-size: 11px; }
+    .stat-value { font-weight: 600; font-size: 13px; }
+    .sep { width: 1px; height: 16px; background: var(--border); }
+
+    /* ===== TABLE ===== */
+    .table-wrap {
+      flex: 1;
+      overflow-x: auto;
+      padding: 16px 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+    }
+    thead tr {
+      background: var(--bg-panel);
+    }
+    th {
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      user-select: none;
+      cursor: pointer;
+    }
+    th:hover { color: var(--text-primary); }
+    th .sort-icon { opacity: .4; margin-left: 4px; font-size: 9px; }
+    th.sorted .sort-icon { opacity: 1; color: var(--accent); }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+    }
+    tbody tr:hover { background: var(--bg-row-hover); }
+    tbody tr.selected { background: rgba(37,99,235,.08); }
+
+    td {
+      padding: 10px 12px;
+      vertical-align: middle;
+    }
+
+    /* Cell types */
+    .cell-viaje { font-weight: 600; color: #60a5fa; font-size: 12px; }
+    .cell-muted  { color: var(--text-secondary); font-size: 12px; }
+    .cell-mono   { font-family: monospace; font-size: 11px; }
+
+    /* ===== STATUS BADGE ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .badge-asignado    { background: rgba(29,78,216,.2);  color: #60a5fa; }
+    .badge-enruta      { background: rgba(22,163,74,.2);  color: #4ade80; }
+    .badge-terminado   { background: rgba(107,114,128,.2);color: #9ca3af; }
+    .badge-retrasado   { background: rgba(220,38,38,.2);  color: #f87171; }
+    .badge-documentado { background: rgba(147,51,234,.2); color: #c084fc; }
+    .badge-sinSalida   { background: rgba(202,138,4,.2);  color: #fbbf24; }
+
+    /* ===== GPS INDICATOR ===== */
+    .gps-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .gps-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .gps-con    .gps-dot { background: var(--gps-signal); box-shadow: 0 0 6px var(--gps-signal); }
+    .gps-sin    .gps-dot { background: var(--gps-no); }
+    .gps-sos    .gps-dot { background: var(--gps-sos); box-shadow: 0 0 8px var(--gps-sos); animation: pulse-sos .8s ease-in-out infinite; }
+    .gps-con    { color: var(--gps-signal); }
+    .gps-sin    { color: var(--gps-no); }
+    .gps-sos    { color: var(--gps-sos); }
+    @keyframes pulse-sos { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+
+    /* ===== LOCATION LINK ===== */
+    .loc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #60a5fa;
+      text-decoration: none;
+      font-size: 11px;
+    }
+    .loc-link:hover { text-decoration: underline; }
+    .loc-empty { color: var(--text-muted); font-size: 11px; }
+
+    /* ===== DATETIME CELL ===== */
+    .dt-cell { font-size: 11px; }
+    .dt-cell .date { color: var(--text-secondary); }
+    .dt-cell .time { font-weight: 600; }
+    .dt-empty { color: var(--text-muted); font-size: 11px; }
+
+    /* ===== ACTION CELL ===== */
+    .actions {
+      display: flex;
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    /* ===== PAGINATION ===== */
+    .pagination {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+      background: var(--bg-panel);
+    }
+    .pagination__info { color: var(--text-secondary); font-size: 12px; }
+    .pagination__pages { display: flex; gap: 4px; }
+    .page-btn {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all .15s;
+    }
+    .page-btn:hover { border-color: var(--border-light); color: var(--text-primary); }
+    .page-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .page-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+    /* ===== MODALS ===== */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modal-in .2s ease;
+    }
+    @keyframes modal-in { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+
+    .modal-sm  { max-width: 420px; }
+    .modal-md  { max-width: 560px; }
+    .modal-lg  { max-width: 720px; }
+
+    .modal-header {
+      padding: 18px 20px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header h2 { font-size: 15px; font-weight: 600; }
+    .modal-header .subtitle { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    .modal-close {
+      background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 18px; line-height: 1; padding: 4px;
+    }
+    .modal-close:hover { color: var(--text-primary); }
+    .modal-body { padding: 20px; }
+    .modal-footer {
+      padding: 14px 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== FORM ELEMENTS ===== */
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 8px 10px;
+      font-size: 12px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--accent); }
+    .form-select option { background: var(--bg-card); }
+    .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .form-error { font-size: 11px; color: #f87171; margin-top: 4px; display: none; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-row .info { flex: 1; }
+    .toggle-row .info span { display: block; font-size: 12px; font-weight: 500; }
+    .toggle-row .info small { font-size: 11px; color: var(--text-secondary); }
+    .toggle {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border-radius: 50%;
+      bottom: 3px;
+      left: 3px;
+      transition: .2s;
+    }
+    .toggle input:checked + .toggle-slider { background: var(--accent); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ===== COMENTARIOS ===== */
+    .comment-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .comment-item:last-child { border-bottom: none; }
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .comment-meta { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+    .comment-meta strong { color: var(--text-primary); }
+    .comment-text { font-size: 12px; line-height: 1.5; }
+
+    /* ===== ESTATUS MODAL ===== */
+    .status-options {
+      display: grid;
+      gap: 8px;
+    }
+    .status-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .status-option:hover { border-color: var(--border-light); background: var(--bg-row-hover); }
+    .status-option.selected { border-color: var(--accent); background: rgba(37,99,235,.1); }
+    .status-option input { display: none; }
+    .status-option .info { flex: 1; }
+    .status-option .name { font-weight: 600; font-size: 13px; }
+    .status-option .desc { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    .status-indicator { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ===== ALERT ===== */
+    .alert {
+      display: flex;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
+    .alert-warning { background: rgba(202,138,4,.1); border: 1px solid rgba(202,138,4,.3); color: #fbbf24; }
+    .alert-info    { background: rgba(37,99,235,.1);  border: 1px solid rgba(37,99,235,.3);  color: #60a5fa; }
+    .alert-success { background: rgba(22,163,74,.1);  border: 1px solid rgba(22,163,74,.3);  color: #4ade80; }
+    .alert-error   { background: rgba(220,38,38,.1);  border: 1px solid rgba(220,38,38,.3);  color: #f87171; }
+
+    /* ===== TOAST ===== */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 9999;
+    }
+    .toast {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 280px;
+      box-shadow: var(--shadow);
+      animation: toast-in .25s ease;
+    }
+    @keyframes toast-in { from{opacity:0;transform:translateX(20px);} to{opacity:1;transform:translateX(0);} }
+    .toast-success { border-left: 3px solid var(--gps-signal); }
+    .toast-error   { border-left: 3px solid var(--gps-no); }
+    .toast-warning { border-left: 3px solid var(--gps-sos); }
+    .toast-icon { font-size: 16px; }
+    .toast-msg  { font-size: 12px; flex: 1; }
+
+    /* ===== LOADING SPINNER ===== */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== INFO CHIP ===== */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 14px; color: var(--text-secondary); margin-bottom: 6px; }
+    .empty-state p  { font-size: 12px; }
+
+    /* ===== TOOLTIP ===== */
+    [data-tip] { position: relative; }
+    [data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a2e;
+      color: var(--text-primary);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 10px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+      border: 1px solid var(--border);
+      z-index: 200;
+    }
+    [data-tip]:hover::after { opacity: 1; }
+
+    /* ===== ANNOTATION (prototipo) ===== */
+    .proto-badge {
+      position: fixed;
+      top: 4px;
+      right: 4px;
+      background: rgba(37,99,235,.9);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .row-highlight-new {
+      animation: row-flash 1.5s ease;
+    }
+    @keyframes row-flash {
+      0%  { background: rgba(37,99,235,.3); }
+      100%{ background: transparent; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Proto badge -->
+<div class="proto-badge">PROTOTIPO · Sprint 2026-5</div>
+
+<!-- ===== TOP BAR ===== -->
+<header class="topbar">
+  <div class="topbar__brand">
+    <div class="logo">✈</div>
+    <div>
+      <h1>Pantalla Aeropuerto</h1>
+    </div>
+    <span>Operaciones en tiempo real</span>
+  </div>
+  <div class="topbar__right">
+    <div>
+      <div class="clock" id="clock">--:--:--</div>
+      <div class="clock-date" id="clock-date">---</div>
+    </div>
+    <button class="btn btn-ghost btn-icon" id="btn-refresh" data-tip="Actualizar manualmente" onclick="handleRefresh()">
+      <span id="refresh-icon">⟳</span>
+    </button>
+    <button class="btn" onclick="openParams()" data-tip="Configuración de parámetros">
+      ⚙ Parámetros
+    </button>
+  </div>
+</header>
+
+<!-- ===== TOOLBAR ===== -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="icon">🔍</span>
+    <input type="text" class="search-input" id="search-input"
+      placeholder="Buscar por viaje, unidad, operador, cliente o ruta…"
+      oninput="handleSearch(this.value)" />
+  </div>
+  <div class="filter-group">
+    <span class="filter-chip active" onclick="filterStatus('todos', this)">Todos</span>
+    <span class="filter-chip" onclick="filterStatus('Asignado', this)">Asignado</span>
+    <span class="filter-chip" onclick="filterStatus('En Ruta', this)">En Ruta</span>
+    <span class="filter-chip" onclick="filterStatus('Retrasado', this)">Retrasado</span>
+    <span class="filter-chip" onclick="filterStatus('Documentado', this)">Documentado</span>
+    <span class="filter-chip" onclick="filterStatus('Sin Salida', this)">Sin Salida</span>
+    <span class="filter-chip" onclick="filterStatus('Terminado', this)">Terminado</span>
+  </div>
+  <div class="toolbar__right">
+    <span class="chip" id="total-label">18 registros</span>
+  </div>
+</div>
+
+<!-- ===== STATS BAR ===== -->
+<div class="statsbar">
+  <div class="stat-item">
+    <div class="stat-dot" style="background:#4ade80"></div>
+    <span class="stat-label">En Ruta</span>
+    <span class="stat-value" id="cnt-enruta">6</span>
+  </div>
+  <div class="sep"></div>
+  <div class="stat-item">
+    <div class="stat-dot" style="background:#f87171"></div>
+    <span class="stat-label">Retrasado</span>
+    <span class="stat-value" id="cnt-retrasado">3</span>
+  </div>
+  <div class="sep"></div>
+  <div class="stat-item">
+    <div class="stat-dot" style="background:#60a5fa"></div>
+    <span class="stat-label">Asignado</span>
+    <span class="stat-value" id="cnt-asignado">3</span>
+  </div>
+  <div class="sep"></div>
+  <div class="stat-item">
+    <div class="stat-dot" style="background:#c084fc"></div>
+    <span class="stat-label">Documentado</span>
+    <span class="stat-value" id="cnt-documentado">2</span>
+  </div>
+  <div class="sep"></div>
+  <div class="stat-item">
+    <div class="stat-dot" style="background:#fbbf24"></div>
+    <span class="stat-label">Sin Salida</span>
+    <span class="stat-value" id="cnt-sinSalida">2</span>
+  </div>
+  <div class="sep"></div>
+  <div class="stat-item">
+    <div class="stat-dot" style="background:#9ca3af"></div>
+    <span class="stat-label">Terminado</span>
+    <span class="stat-value" id="cnt-terminado">2</span>
+  </div>
+  <div class="sep"></div>
+  <div class="stat-item">
+    <div class="stat-dot" style="background:var(--gps-sos); box-shadow: 0 0 4px var(--gps-sos);"></div>
+    <span class="stat-label">SOS GPS</span>
+    <span class="stat-value" id="cnt-sos">1</span>
+  </div>
+</div>
+
+<!-- ===== TABLE ===== -->
+<div class="table-wrap">
+  <table id="main-table">
+    <thead>
+      <tr>
+        <th onclick="sortBy('viaje')">Viaje <span class="sort-icon">▼</span></th>
+        <th onclick="sortBy('estatus')">Estatus <span class="sort-icon">▼</span></th>
+        <th onclick="sortBy('cliente')">Cliente <span class="sort-icon">▼</span></th>
+        <th>Origen / Destino</th>
+        <th>Operador / Unidad</th>
+        <th>Remolques</th>
+        <th onclick="sortBy('gps')">GPS <span class="sort-icon">▼</span></th>
+        <th>Ubicación</th>
+        <th onclick="sortBy('salida')">Salida <span class="sort-icon">▼</span></th>
+        <th onclick="sortBy('llegada')">Llegada <span class="sort-icon">▼</span></th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+  <div id="empty-state" class="empty-state" style="display:none">
+    <div class="icon">🔍</div>
+    <h3>Sin resultados</h3>
+    <p>No se encontraron registros para tu búsqueda.</p>
+  </div>
+</div>
+
+<!-- ===== PAGINATION ===== -->
+<footer class="pagination" id="pagination">
+  <div class="pagination__info" id="pag-info">Mostrando 1–10 de 18</div>
+  <div class="pagination__pages" id="pag-pages"></div>
+</footer>
+
+<!-- =========================================================
+     MODALES
+     ========================================================= -->
+
+<!-- MODAL: REGISTRAR SALIDA -->
+<div class="overlay" id="modal-salida">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div>
+        <h2>Registrar Salida</h2>
+        <div class="subtitle" id="salida-subtitle">Viaje VJ-2026-001</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-salida')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-info">
+        ℹ Se registrará la salida con fecha y hora actuales del servidor.
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha y hora de salida</label>
+        <input type="datetime-local" class="form-input" id="salida-datetime" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Comentario (opcional)</label>
+        <input type="text" class="form-input" placeholder="Ej. Salida con retraso por carga…" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-salida')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmSalida()">✓ Confirmar Salida</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REGISTRAR LLEGADA -->
+<div class="overlay" id="modal-llegada">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div>
+        <h2>Registrar Llegada</h2>
+        <div class="subtitle" id="llegada-subtitle">Viaje VJ-2026-001</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-llegada')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-success">
+        ✓ Salida registrada. Puede registrar la llegada.
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha y hora de llegada</label>
+        <input type="datetime-local" class="form-input" id="llegada-datetime" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Comentario (opcional)</label>
+        <input type="text" class="form-input" placeholder="Ej. Llegada sin incidentes…" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-llegada')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmLlegada()">✓ Confirmar Llegada</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ERROR LLEGADA SIN SALIDA -->
+<div class="overlay" id="modal-llegada-error">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h2>No se puede registrar llegada</h2>
+      <button class="modal-close" onclick="closeModal('modal-llegada-error')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error">
+        ⚠ Este viaje no tiene salida registrada. Debe registrar la salida primero.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('modal-llegada-error')">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CAMBIO DE ESTATUS -->
+<div class="overlay" id="modal-estatus">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <div>
+        <h2>Cambiar Estatus</h2>
+        <div class="subtitle" id="estatus-subtitle">Viaje VJ-2026-001 · Estatus actual: Asignado</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-estatus')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="section-title">Selecciona el nuevo estatus</div>
+      <div class="status-options" id="status-options-list"></div>
+      <div style="margin-top:16px">
+        <label class="form-label">Comentario del cambio</label>
+        <input type="text" class="form-input" id="estatus-comentario" placeholder="Motivo del cambio de estatus…" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-estatus')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmEstatus()">Aplicar cambio</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: COMENTARIOS -->
+<div class="overlay" id="modal-comentarios">
+  <div class="modal modal-md">
+    <div class="modal-header">
+      <div>
+        <h2>Comentarios de estatus</h2>
+        <div class="subtitle" id="comentarios-subtitle">Viaje VJ-2026-001</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-comentarios')">✕</button>
+    </div>
+    <div class="modal-body" id="comentarios-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('modal-comentarios')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PARÁMETROS -->
+<div class="overlay" id="modal-params">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div>
+        <h2>⚙ Configuración de Parámetros</h2>
+        <div class="subtitle">Personaliza la visualización de la Pantalla Aeropuerto</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-params')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="section-title">Filtros de visualización</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Grupo de unidades</label>
+          <select class="form-select">
+            <option value="">Todos los grupos</option>
+            <option value="aeropuerto">Aeropuerto CDMX</option>
+            <option value="norte">Zona Norte</option>
+            <option value="sur">Zona Sur</option>
+            <option value="foraneo">Foráneo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ordenar por</label>
+          <select class="form-select">
+            <option value="recientes">Más recientes</option>
+            <option value="ultimo_estatus">Último cambio de estatus</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="info">
+          <span>Incluir unidades sin viaje</span>
+          <small>Muestra unidades disponibles sin asignación activa</small>
+        </div>
+        <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+      </div>
+
+      <div style="margin-top:20px" class="section-title">Paginación automática</div>
+      <div class="toggle-row">
+        <div class="info">
+          <span>Avance automático de página</span>
+          <small>Cambia de página automáticamente después del intervalo</small>
+        </div>
+        <label class="toggle"><input type="checkbox" checked id="toggle-autopag" onchange="toggleAutoPag(this)" /><span class="toggle-slider"></span></label>
+      </div>
+      <div class="form-group" id="autopag-interval" style="margin-top:10px;">
+        <label class="form-label">Intervalo de cambio de página (minutos)</label>
+        <input type="number" class="form-input" value="2" min="1" max="60"
+               placeholder="Ej. 2"
+               style="max-width:120px"
+               oninput="validateInterval(this)" />
+        <div class="form-error" id="interval-error">El valor no puede ser vacío, cero o texto</div>
+        <div class="form-hint">Valor entre 1 y 60 minutos</div>
+      </div>
+
+      <div style="margin-top:4px" class="section-title">Configuración GPS</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tiempo de reporte GPS (minutos)</label>
+          <input type="number" class="form-input" value="15" min="1"
+                 placeholder="Ej. 15"
+                 oninput="validateGPS(this)" />
+          <div class="form-hint">Tiempo sin reporte para marcar sin señal</div>
+          <div class="form-error" id="gps-error">Debe ser un número positivo</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Umbral de evaluación GPS (minutos)</label>
+          <input type="number" class="form-input" value="15" min="1" placeholder="Ej. 15" />
+          <div class="form-hint">Umbral para evaluar estado GPS</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-params')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveParams()">💾 Guardar parámetros</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOASTS ===== -->
+<div class="toast-container" id="toasts"></div>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+// =============================================
+// DATOS MOCK
+// =============================================
+const TRIPS = [
+  { id:1, viaje:'VJ-2026-001', estatus:'En Ruta',    cliente:'Aeroportuaria CDMX',  origen:'Monterrey, NL',  destino:'AICM Terminal 1', operador:'Carlos Herrera',  unidad:'T-017', remolques:'R-041 / R-042', gps:'Con señal',    lat:19.4362,  lng:-99.0721, salida:'2026-03-17 06:15', llegada:null },
+  { id:2, viaje:'VJ-2026-002', estatus:'Retrasado',  cliente:'LogiFast Express',    origen:'Guadalajara, Jal',destino:'AICM Terminal 2', operador:'Jorge Martínez',  unidad:'T-022', remolques:'R-055',         gps:'Sin señal',    lat:null,     lng:null,     salida:'2026-03-17 04:00', llegada:null },
+  { id:3, viaje:'VJ-2026-003', estatus:'Asignado',   cliente:'Electrónica Global',  origen:'Querétaro, Qro', destino:'NAICM Plataforma', operador:'Ana Rodríguez',   unidad:'T-031', remolques:'R-010',         gps:'Con señal',    lat:19.4284,  lng:-99.0788, salida:null,               llegada:null },
+  { id:4, viaje:'VJ-2026-004', estatus:'Terminado',  cliente:'Importaciones Norte', origen:'CDMX Norte',     destino:'Toluca, EDOMX',   operador:'Luis Pérez',       unidad:'T-008', remolques:'R-020 / R-021', gps:'Sin señal',    lat:null,     lng:null,     salida:'2026-03-16 22:00', llegada:'2026-03-17 03:45' },
+  { id:5, viaje:'VJ-2026-005', estatus:'Documentado',cliente:'AeroCargo SA',        origen:'Veracruz, Ver',  destino:'AICM Carga',      operador:'María Sánchez',   unidad:'T-044', remolques:'R-033',         gps:'Con señal',    lat:19.4319,  lng:-99.0691, salida:null,               llegada:null },
+  { id:6, viaje:'VJ-2026-006', estatus:'Sin Salida', cliente:'TechImport MX',       origen:'San Luis Potosí',destino:'AICM Terminal 1', operador:'Roberto Díaz',    unidad:'T-012', remolques:'R-060',         gps:'Sin señal',    lat:null,     lng:null,     salida:null,               llegada:null },
+  { id:7, viaje:'VJ-2026-007', estatus:'En Ruta',    cliente:'Aeroportuaria CDMX',  origen:'Puebla, Pue',   destino:'NAICM Plataforma', operador:'Sandra López',    unidad:'T-028', remolques:'R-014 / R-015', gps:'SOS',          lat:19.4441,  lng:-99.0852, salida:'2026-03-17 07:30', llegada:null },
+  { id:8, viaje:'VJ-2026-008', estatus:'En Ruta',    cliente:'FastDeliver',         origen:'León, Gto',      destino:'AICM Terminal 2', operador:'Miguel Torres',   unidad:'T-035', remolques:'R-070',         gps:'Con señal',    lat:19.4201,  lng:-99.0631, salida:'2026-03-17 05:00', llegada:null },
+  { id:9, viaje:'VJ-2026-009', estatus:'Retrasado',  cliente:'LogiFast Express',    origen:'Tijuana, BC',    destino:'AICM Carga',      operador:'Patricia Ruiz',   unidad:'T-019', remolques:'R-080 / R-081', gps:'Sin señal',    lat:null,     lng:null,     salida:'2026-03-16 18:00', llegada:null },
+  { id:10,viaje:'VJ-2026-010', estatus:'Asignado',   cliente:'Electrónica Global',  origen:'Hermosillo, Son',destino:'NAICM Plataforma', operador:'José González',  unidad:'T-047', remolques:'R-090',         gps:'Con señal',    lat:19.4501,  lng:-99.0801, salida:null,               llegada:null },
+  { id:11,viaje:'VJ-2026-011', estatus:'En Ruta',    cliente:'ImportMex',           origen:'Chihuahua, Chi', destino:'AICM Terminal 1', operador:'Carmen Flores',   unidad:'T-006', remolques:'R-025',         gps:'Con señal',    lat:19.4389,  lng:-99.0742, salida:'2026-03-17 08:00', llegada:null },
+  { id:12,viaje:'VJ-2026-012', estatus:'Documentado',cliente:'AeroCargo SA',        origen:'Mérida, Yuc',    destino:'AICM Terminal 2', operador:'David Ramírez',   unidad:'T-053', remolques:'R-035 / R-036', gps:'Con señal',    lat:19.4267,  lng:-99.0659, salida:null,               llegada:null },
+  { id:13,viaje:'VJ-2026-013', estatus:'Retrasado',  cliente:'NorteLogística',      origen:'Juárez, Chi',    destino:'AICM Carga',      operador:'Elena Vargas',    unidad:'T-039', remolques:'R-045',         gps:'Sin señal',    lat:null,     lng:null,     salida:'2026-03-17 02:00', llegada:null },
+  { id:14,viaje:'VJ-2026-014', estatus:'Asignado',   cliente:'ImportMex',           origen:'Monterrey, NL',  destino:'NAICM Plataforma', operador:'Francisco Mora', unidad:'T-062', remolques:'R-100',         gps:'Con señal',    lat:19.4344,  lng:-99.0715, salida:null,               llegada:null },
+  { id:15,viaje:'VJ-2026-015', estatus:'En Ruta',    cliente:'Aeroportuaria CDMX',  origen:'CDMX Sur',       destino:'AICM Terminal 1', operador:'Gloria Castillo', unidad:'T-014', remolques:'R-018',         gps:'Con señal',    lat:19.4422,  lng:-99.0834, salida:'2026-03-17 09:15', llegada:null },
+  { id:16,viaje:'VJ-2026-016', estatus:'Sin Salida', cliente:'FastDeliver',         origen:'Jalisco',        destino:'AICM Terminal 2', operador:'Héctor Silva',    unidad:'T-071', remolques:'R-111',         gps:'Sin señal',    lat:null,     lng:null,     salida:null,               llegada:null },
+  { id:17,viaje:'VJ-2026-017', estatus:'Terminado',  cliente:'LogiFast Express',    origen:'Querétaro, Qro', destino:'NAICM Plataforma', operador:'Irene Medina',   unidad:'T-003', remolques:'R-008 / R-009', gps:'Sin señal',    lat:null,     lng:null,     salida:'2026-03-16 14:00', llegada:'2026-03-16 20:30' },
+  { id:18,viaje:'VJ-2026-018', estatus:'En Ruta',    cliente:'Electrónica Global',  origen:'Saltillo, Coah', destino:'AICM Carga',      operador:'Jorge Martínez',  unidad:'T-025', remolques:'R-052',         gps:'Con señal',    lat:19.4310,  lng:-99.0780, salida:'2026-03-17 10:00', llegada:null },
+];
+
+const COMMENTS_MOCK = {
+  1: [{ usuario:'Carlos H.', fecha:'2026-03-17 06:10', estatus:'En Ruta',   texto:'Salida confirmada, sin novedades en caseta norte.' }],
+  2: [{ usuario:'Dispatcher', fecha:'2026-03-17 05:30', estatus:'Retrasado', texto:'Retraso por falla mecánica menor en freno. Se repara en camino.' },
+      { usuario:'Jorge M.',   fecha:'2026-03-17 04:05', estatus:'En Ruta',   texto:'Salida registrada con 5 min de retraso en carga.' }],
+  7: [{ usuario:'Sistema',    fecha:'2026-03-17 08:45', estatus:'SOS',       texto:'Alerta SOS activada. Se contactó al operador, reporta situación segura.' }],
+  9: [{ usuario:'Patricia R.',fecha:'2026-03-16 20:15', estatus:'Retrasado', texto:'Cruce frontal en Tijuana tomó más de lo esperado, salida retrasada.' }],
+};
+
+const STATUS_TRANSITIONS = {
+  'Asignado':   [{ value:'En Ruta', label:'En Ruta', color:'#4ade80', desc:'El viaje ha iniciado su trayecto' }],
+  'En Ruta':    [{ value:'Terminado', label:'Terminado', color:'#9ca3af', desc:'El viaje llegó a su destino' },
+                 { value:'Retrasado',  label:'Retrasado',  color:'#f87171', desc:'El viaje presenta retraso' }],
+  'Documentado':[{ value:'Retrasado', label:'Retrasado', color:'#f87171', desc:'Marcar como retrasado' },
+                 { value:'Asignado',  label:'Asignado',  color:'#60a5fa', desc:'Reasignar viaje' }],
+  'Retrasado':  [{ value:'Terminado', label:'Terminado', color:'#9ca3af', desc:'Marcar viaje como terminado' },
+                 { value:'En Ruta',   label:'En Ruta',   color:'#4ade80', desc:'Volver a estado En Ruta' }],
+  'Sin Salida': [{ value:'Asignado',  label:'Asignado',  color:'#60a5fa', desc:'Asignar al viaje' }],
+  'Terminado':  [],
+};
+
+// =============================================
+// STATE
+// =============================================
+let state = {
+  trips: [...TRIPS],
+  filtered: [...TRIPS],
+  page: 1,
+  perPage: 10,
+  search: '',
+  filterStatus: 'todos',
+  sortCol: 'viaje',
+  sortDir: 1,
+  activeTrip: null,
+};
+
+// =============================================
+// CLOCK
+// =============================================
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('es-MX', { hour12: false });
+  document.getElementById('clock-date').textContent = now.toLocaleDateString('es-MX', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// =============================================
+// RENDER TABLE
+// =============================================
+function statusClass(s) {
+  return { 'En Ruta':'badge-enruta','Asignado':'badge-asignado','Terminado':'badge-terminado',
+           'Retrasado':'badge-retrasado','Documentado':'badge-documentado','Sin Salida':'badge-sinSalida' }[s] || 'badge-asignado';
+}
+function gpsClass(g) {
+  return { 'Con señal':'gps-con','Sin señal':'gps-sin','SOS':'gps-sos' }[g] || 'gps-sin';
+}
+function gpsLabel(g) {
+  return { 'Con señal':'Con señal','Sin señal':'Sin señal','SOS':'SOS ⚠' }[g] || 'N/D';
+}
+function fmtDT(dt) {
+  if(!dt) return `<span class="dt-empty">— Sin registrar —</span>`;
+  const [d,t] = dt.split(' ');
+  return `<div class="dt-cell"><span class="date">${d}</span> <span class="time">${t}</span></div>`;
+}
+
+function renderTable() {
+  applyFilters();
+  const { filtered, page, perPage } = state;
+  const start = (page-1)*perPage;
+  const rows  = filtered.slice(start, start+perPage);
+  const tbody = document.getElementById('table-body');
+  const empty = document.getElementById('empty-state');
+
+  if(filtered.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('pagination').style.display = 'none';
+  } else {
+    empty.style.display = 'none';
+    document.getElementById('pagination').style.display = 'flex';
+    tbody.innerHTML = rows.map(t => `
+      <tr id="row-${t.id}">
+        <td class="cell-viaje">${t.viaje}</td>
+        <td><span class="badge ${statusClass(t.estatus)}">${t.estatus}</span></td>
+        <td class="cell-muted">${t.cliente}</td>
+        <td>
+          <div style="font-size:11px; font-weight:600;">${t.origen}</div>
+          <div style="font-size:11px; color:var(--text-secondary);">→ ${t.destino}</div>
+        </td>
+        <td>
+          <div style="font-size:12px; font-weight:500;">${t.operador}</div>
+          <div class="chip" style="margin-top:3px;">🚛 ${t.unidad}</div>
+        </td>
+        <td class="cell-muted" style="font-size:11px;">${t.remolques}</td>
+        <td>
+          <div class="gps-indicator ${gpsClass(t.gps)}">
+            <div class="gps-dot"></div>
+            ${gpsLabel(t.gps)}
+          </div>
+        </td>
+        <td>${renderLocation(t)}</td>
+        <td>${fmtDT(t.salida)}</td>
+        <td>${fmtDT(t.llegada)}</td>
+        <td>
+          <div class="actions">
+            ${t.salida ? '' : `<button class="btn btn-sm" data-tip="Registrar salida" onclick="openSalida(${t.id})">↑ Salida</button>`}
+            ${t.salida && !t.llegada ? `<button class="btn btn-sm" data-tip="Registrar llegada" onclick="openLlegada(${t.id})">↓ Llegada</button>` : ''}
+            ${!t.salida && t.estatus !== 'Terminado' ? `<button class="btn btn-sm btn-danger" data-tip="Registrar llegada sin salida" onclick="openLlegadaError()">↓</button>` : ''}
+            <button class="btn btn-sm" data-tip="Cambiar estatus" onclick="openEstatus(${t.id})">⇄</button>
+            <button class="btn btn-sm btn-ghost" data-tip="Ver comentarios" onclick="openComentarios(${t.id})">💬</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+    renderPagination();
+    renderStats();
+    document.getElementById('total-label').textContent = `${filtered.length} registros`;
+  }
+}
+
+function renderLocation(t) {
+  if(t.lat && t.lng)
+    return `<a class="loc-link" href="https://www.google.com/maps?q=${t.lat},${t.lng}" target="_blank">📍 Ver mapa</a>`;
+  if(t.destino)
+    return `<a class="loc-link" href="https://www.google.com/maps?q=${encodeURIComponent(t.destino)}" target="_blank">📍 ${t.destino.split(',')[0]}</a>`;
+  return `<span class="loc-empty">Sin ubicación</span>`;
+}
+
+// =============================================
+// PAGINATION
+// =============================================
+function renderPagination() {
+  const { filtered, page, perPage } = state;
+  const total = filtered.length;
+  const pages = Math.ceil(total / perPage);
+  const start = (page-1)*perPage + 1;
+  const end   = Math.min(page*perPage, total);
+
+  document.getElementById('pag-info').textContent = `Mostrando ${start}–${end} de ${total}`;
+
+  const container = document.getElementById('pag-pages');
+  let html = `<button class="page-btn" onclick="goPage(${page-1})" ${page<=1?'disabled':''}>‹</button>`;
+  for(let i=1; i<=pages; i++) {
+    if(pages > 7 && Math.abs(i-page) > 2 && i !== 1 && i !== pages) {
+      if(i === page-3 || i === page+3) html += `<span style="padding:0 4px;color:var(--text-muted)">…</span>`;
+      continue;
+    }
+    html += `<button class="page-btn ${i===page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn" onclick="goPage(${page+1})" ${page>=pages?'disabled':''}>›</button>`;
+  container.innerHTML = html;
+}
+
+function goPage(p) {
+  const pages = Math.ceil(state.filtered.length / state.perPage);
+  if(p < 1 || p > pages) return;
+  state.page = p;
+  renderTable();
+}
+
+// =============================================
+// FILTERS & SEARCH
+// =============================================
+function applyFilters() {
+  let data = [...state.trips];
+  const q = state.search.toLowerCase().trim();
+  if(q) {
+    data = data.filter(t =>
+      t.viaje.toLowerCase().includes(q)      ||
+      t.unidad.toLowerCase().includes(q)     ||
+      t.operador.toLowerCase().includes(q)   ||
+      t.cliente.toLowerCase().includes(q)    ||
+      t.origen.toLowerCase().includes(q)     ||
+      t.destino.toLowerCase().includes(q)
+    );
+  }
+  if(state.filterStatus !== 'todos')
+    data = data.filter(t => t.estatus === state.filterStatus);
+
+  // sort
+  data.sort((a,b) => {
+    const va = (a[state.sortCol] || '').toString().toLowerCase();
+    const vb = (b[state.sortCol] || '').toString().toLowerCase();
+    return va < vb ? -state.sortDir : va > vb ? state.sortDir : 0;
+  });
+
+  state.filtered = data;
+}
+
+function handleSearch(val) {
+  state.search = val;
+  state.page = 1;
+  renderTable();
+}
+
+function filterStatus(status, el) {
+  state.filterStatus = status;
+  state.page = 1;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+
+function sortBy(col) {
+  if(state.sortCol === col) state.sortDir *= -1;
+  else { state.sortCol = col; state.sortDir = 1; }
+  renderTable();
+}
+
+// =============================================
+// STATS
+// =============================================
+function renderStats() {
+  const all = state.trips;
+  const cnt = s => all.filter(t => t.estatus === s).length;
+  document.getElementById('cnt-enruta').textContent    = cnt('En Ruta');
+  document.getElementById('cnt-retrasado').textContent = cnt('Retrasado');
+  document.getElementById('cnt-asignado').textContent  = cnt('Asignado');
+  document.getElementById('cnt-documentado').textContent = cnt('Documentado');
+  document.getElementById('cnt-sinSalida').textContent = cnt('Sin Salida');
+  document.getElementById('cnt-terminado').textContent = cnt('Terminado');
+  document.getElementById('cnt-sos').textContent = all.filter(t => t.gps === 'SOS').length;
+}
+
+// =============================================
+// REFRESH
+// =============================================
+function handleRefresh() {
+  const icon = document.getElementById('refresh-icon');
+  icon.style.animation = 'spin .6s linear infinite';
+  icon.style.display = 'inline-block';
+  setTimeout(() => {
+    icon.style.animation = '';
+    showToast('success', '✓ Pantalla actualizada correctamente');
+  }, 900);
+}
+
+// =============================================
+// MODAL: SALIDA
+// =============================================
+function openSalida(id) {
+  state.activeTrip = id;
+  const trip = state.trips.find(t => t.id === id);
+  document.getElementById('salida-subtitle').textContent = trip.viaje + ' · ' + trip.operador;
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('salida-datetime').value = now.toISOString().slice(0,16);
+  document.getElementById('modal-salida').classList.add('open');
+}
+function confirmSalida() {
+  const trip = state.trips.find(t => t.id === state.activeTrip);
+  if(!trip) return;
+  const dt = document.getElementById('salida-datetime').value;
+  trip.salida = dt.replace('T',' ');
+  closeModal('modal-salida');
+  renderTable();
+  const row = document.getElementById('row-'+trip.id);
+  if(row) row.classList.add('row-highlight-new');
+  showToast('success', `✓ Salida registrada para ${trip.viaje}`);
+}
+
+// =============================================
+// MODAL: LLEGADA
+// =============================================
+function openLlegada(id) {
+  state.activeTrip = id;
+  const trip = state.trips.find(t => t.id === id);
+  document.getElementById('llegada-subtitle').textContent = trip.viaje + ' · ' + trip.operador;
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('llegada-datetime').value = now.toISOString().slice(0,16);
+  document.getElementById('modal-llegada').classList.add('open');
+}
+function confirmLlegada() {
+  const trip = state.trips.find(t => t.id === state.activeTrip);
+  if(!trip) return;
+  const dt = document.getElementById('llegada-datetime').value;
+  trip.llegada = dt.replace('T',' ');
+  trip.estatus = 'Terminado';
+  closeModal('modal-llegada');
+  renderTable();
+  showToast('success', `✓ Llegada registrada para ${trip.viaje}`);
+}
+function openLlegadaError() {
+  document.getElementById('modal-llegada-error').classList.add('open');
+}
+
+// =============================================
+// MODAL: ESTATUS
+// =============================================
+function openEstatus(id) {
+  state.activeTrip = id;
+  const trip = state.trips.find(t => t.id === id);
+  document.getElementById('estatus-subtitle').textContent =
+    trip.viaje + ' · Estatus actual: ' + trip.estatus;
+  const transitions = STATUS_TRANSITIONS[trip.estatus] || [];
+  const list = document.getElementById('status-options-list');
+  if(transitions.length === 0) {
+    list.innerHTML = `<div class="alert alert-warning">⚠ No hay transiciones disponibles para el estatus "${trip.estatus}".</div>`;
+  } else {
+    list.innerHTML = transitions.map((s,i) => `
+      <label class="status-option ${i===0?'selected':''}">
+        <input type="radio" name="new-status" value="${s.value}" ${i===0?'checked':''} onchange="selectStatus(this)"/>
+        <div class="status-indicator" style="background:${s.color}"></div>
+        <div class="info">
+          <div class="name">${s.label}</div>
+          <div class="desc">${s.desc}</div>
+        </div>
+      </label>
+    `).join('');
+  }
+  document.getElementById('estatus-comentario').value = '';
+  document.getElementById('modal-estatus').classList.add('open');
+}
+function selectStatus(radio) {
+  document.querySelectorAll('.status-option').forEach(el => el.classList.remove('selected'));
+  radio.closest('.status-option').classList.add('selected');
+}
+function confirmEstatus() {
+  const trip = state.trips.find(t => t.id === state.activeTrip);
+  if(!trip) return;
+  const selected = document.querySelector('input[name="new-status"]:checked');
+  if(!selected) { showToast('error','Selecciona un estatus'); return; }
+  const comment = document.getElementById('estatus-comentario').value.trim();
+  const oldStatus = trip.estatus;
+  trip.estatus = selected.value;
+  if(comment) {
+    if(!COMMENTS_MOCK[trip.id]) COMMENTS_MOCK[trip.id] = [];
+    COMMENTS_MOCK[trip.id].unshift({
+      usuario: 'Usuario Actual',
+      fecha: new Date().toLocaleString('es-MX'),
+      estatus: selected.value,
+      texto: comment,
+    });
+  }
+  closeModal('modal-estatus');
+  renderTable();
+  showToast('success', `Estatus actualizado: ${oldStatus} → ${trip.estatus}`);
+}
+
+// =============================================
+// MODAL: COMENTARIOS
+// =============================================
+function openComentarios(id) {
+  const trip = state.trips.find(t => t.id === id);
+  document.getElementById('comentarios-subtitle').textContent = trip.viaje + ' · ' + trip.cliente;
+  const comments = COMMENTS_MOCK[id];
+  const body = document.getElementById('comentarios-body');
+  if(!comments || comments.length === 0) {
+    body.innerHTML = `<div class="alert alert-warning">⚠ No hay comentarios registrados para este viaje.</div>`;
+  } else {
+    body.innerHTML = comments.map(c => `
+      <div class="comment-item">
+        <div class="comment-avatar">${c.usuario.charAt(0)}</div>
+        <div>
+          <div class="comment-meta"><strong>${c.usuario}</strong> · ${c.fecha} · <span class="badge ${statusClass(c.estatus)}" style="font-size:10px;padding:2px 7px;">${c.estatus}</span></div>
+          <div class="comment-text">${c.texto}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('modal-comentarios').classList.add('open');
+}
+
+// =============================================
+// MODAL: PARÁMETROS
+// =============================================
+function openParams() {
+  document.getElementById('modal-params').classList.add('open');
+}
+function saveParams() {
+  closeModal('modal-params');
+  showToast('success', '⚙ Parámetros guardados correctamente');
+}
+function toggleAutoPag(el) {
+  document.getElementById('autopag-interval').style.display = el.checked ? 'block' : 'none';
+}
+function validateInterval(el) {
+  const err = document.getElementById('interval-error');
+  const v = parseFloat(el.value);
+  const invalid = !el.value || isNaN(v) || v <= 0 || !Number.isInteger(v);
+  err.style.display = invalid ? 'block' : 'none';
+  el.style.borderColor = invalid ? '#f87171' : '';
+}
+function validateGPS(el) {
+  const err = document.getElementById('gps-error');
+  const v = parseFloat(el.value);
+  const invalid = !el.value || isNaN(v) || v <= 0;
+  err.style.display = invalid ? 'block' : 'none';
+  el.style.borderColor = invalid ? '#f87171' : '';
+}
+
+// =============================================
+// CLOSE MODAL
+// =============================================
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if(e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// =============================================
+// TOAST
+// =============================================
+function showToast(type, msg) {
+  const icons = { success:'✓', error:'✕', warning:'⚠', info:'ℹ' };
+  const container = document.getElementById('toasts');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<span class="toast-icon">${icons[type]||'ℹ'}</span><span class="toast-msg">${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity .3s'; setTimeout(()=>toast.remove(),300); }, 3000);
+}
+
+// =============================================
+// INIT
+// =============================================
+renderTable();
+</script>
+</body>
+</html>

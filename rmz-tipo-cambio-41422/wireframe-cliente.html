@@ -1,0 +1,140 @@
+<title>Wireframe — Tipo de Cambio Inicial (Cliente)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;font-size:13px;color:#2a2a2a;background:#f2efe9;padding:20px;max-width:820px;margin:0 auto;}
+.block{margin-bottom:36px;}
+.block-title{font-size:13px;font-weight:bold;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;}
+.wf-frame{border:1px solid #b0a898;background:#ece9e2;}
+.wf-topbar{background:#5a5550;color:#f0ede6;padding:6px 10px;font-weight:bold;font-size:13px;}
+.params-body{padding:14px 16px;background:#ede9e2;}
+.params-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;}
+.section-bar{background:#c8c4bc;text-align:center;font-weight:bold;font-size:11px;padding:4px;border:1px solid #b0a898;margin:10px 0 8px;}
+.field-row{display:flex;align-items:center;margin-bottom:6px;gap:6px;}
+.field-row label{width:130px;font-size:12px;flex-shrink:0;color:#3a3733;}
+.field-row input,.field-row select{border:1px solid #9a9088;padding:2px 5px;font-size:12px;background:#faf8f4;color:#2a2a2a;flex:1;max-width:200px;}
+.check-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:12px;}
+.check-row input[type=checkbox]{width:13px;height:13px;flex-shrink:0;}
+.btn{border:1px solid #9a9088;padding:4px 18px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;}
+.btn-p{background:#5a5550;color:#f0ede6;border-color:#44413e;}
+.btn-s{background:#dedad3;color:#3a3733;}
+.bottom-bar{display:flex;justify-content:center;gap:8px;padding:10px;border-top:1px solid #b0a898;background:#e4e0d8;}
+.wf-modal-bg{background:rgba(60,55,50,0.3);display:flex;align-items:center;justify-content:center;padding:30px;min-height:210px;}
+.wf-modal{background:#ece9e2;border:2px solid #9a9088;width:290px;}
+.wf-modal-header{background:#d0ccc4;padding:6px 10px;font-weight:bold;font-size:13px;border-bottom:1px solid #b0a898;text-align:center;}
+.wf-modal-body{padding:14px 18px;}
+.wf-modal-footer{display:flex;justify-content:center;gap:8px;padding:8px;border-top:1px solid #b0a898;background:#e4e0d8;}
+.modal-field{display:flex;align-items:center;margin-bottom:8px;gap:6px;}
+.modal-field label{width:130px;font-size:12px;}
+.modal-field input{border:1px solid #9a9088;padding:2px 5px;font-size:12px;background:#faf8f4;width:120px;}
+.hint{font-size:10px;color:#888;margin-top:-4px;margin-bottom:8px;margin-left:136px;}
+.divider{border:none;border-top:1px dashed #b0a898;margin:0 0 28px;}
+.screen-label{font-size:11px;color:#7a7570;font-style:italic;margin-bottom:5px;}
+</style>
+
+<!-- PANTALLA 1 — Configuraciones -->
+<div class="block">
+  <div class="block-title">Parámetros Generales — Seguridad y acceso</div>
+  <div class="wf-frame">
+    <div class="wf-topbar">ERP GM Transport — Configuración / Parámetros Generales</div>
+    <div class="params-body">
+      <div class="params-grid">
+        <div>
+          <div class="field-row"><label>RFC</label><input value="IIA040805DZ4" readonly style="filter:blur(3px);"></div>
+          <div class="field-row"><label>Nombre Fiscal</label><input value="INDUSTRIA ILUMINADORA..." readonly style="filter:blur(3px);"></div>
+          <div class="field-row"><label>Régimen Fiscal</label><select disabled style="filter:blur(3px);"><option>GENERAL DE LEY PERSONAS...</option></select></div>
+          <div class="field-row"><label>Retención IVA</label><select disabled style="filter:blur(3px);"><option>RETENCIÓN IVA 4%</option></select></div>
+        </div>
+        <div>
+          <div class="section-bar">Usuario Servicios de Timbrado / WEB</div>
+          <div class="field-row"><label>Usuario</label><input value="IIA040805DZ4" readonly style="filter:blur(3px);"></div>
+          <div class="field-row"><label>Contraseña</label><input type="password" value="••••••••" readonly style="filter:blur(3px);"></div>
+          <div class="check-row" style="opacity:.4;"><input type="checkbox" checked disabled><span>Timbrar de Pruebas</span></div>
+          <div class="field-row"><label>Api Key</label><input value="wsWB/7jvtla..." readonly style="filter:blur(3px);"></div>
+        </div>
+      </div>
+      <div class="params-grid" style="margin-top:4px;">
+        <div>
+          <div class="section-bar">Domicilio Fiscal</div>
+          <div class="field-row"><label>País</label><select disabled style="filter:blur(3px);"><option>MÉXICO</option></select></div>
+          <div class="field-row"><label>Código Postal</label><input value="62661" readonly style="filter:blur(3px);"></div>
+          <div class="field-row"><label>Estado / Municipio</label><input value="SONORA / HERMOSILLO" readonly style="filter:blur(3px);"></div>
+        </div>
+        <div>
+          <div class="section-bar">Logo Empresa</div>
+          <div style="border:1px solid #b0a898;height:60px;background:#dedad3;filter:blur(3px);"></div>
+          <div class="field-row" style="margin-top:6px;"><label>C. Encabezado</label><input value="F9B233" readonly style="filter:blur(3px);max-width:80px;"></div>
+        </div>
+      </div>
+      <div class="section-bar">Seguridad y acceso</div>
+      <div class="params-grid">
+        <div>
+          <div class="check-row" style="opacity:.4;"><input type="checkbox" disabled><span>Solicitar cambio de contraseña al usuario</span></div>
+          <div class="check-row" style="opacity:.4;"><input type="checkbox" disabled><span>Usuarios inactivos</span></div>
+          <div class="check-row" style="opacity:.4;"><input type="checkbox" checked disabled><span>Activar doble autenticación al usuario</span></div>
+          <div class="check-row" style="margin-top:6px;">
+            <input type="checkbox">
+            <span>Iniciar tipo de cambio en cero al agregar</span>
+          </div>
+        </div>
+        <div class="check-row" style="opacity:.4;"><input type="checkbox" disabled><span>Solicitar contraseña al Exportar QuickBooks</span></div>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <button class="btn btn-p">Grabar</button>
+      <button class="btn btn-s">Regresar</button>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- PANTALLA 2 — Popup con parámetro DESMARCADO -->
+<div class="block">
+  <div class="block-title">Popup al iniciar sesión — parámetro desmarcado</div>
+  <div class="wf-frame">
+    <div class="wf-topbar">ERP GM Transport — Iniciando sesión</div>
+    <div class="wf-modal-bg">
+      <div class="wf-modal">
+        <div class="wf-modal-header">Agregando tipo de cambio</div>
+        <div class="wf-modal-body">
+          <div class="modal-field"><label>Fecha</label><input value="01/07/2026" readonly></div>
+          <div class="modal-field">
+            <label>Tipo de cambio</label>
+            <input value="17.215500" style="color:#1a3a8a;font-weight:bold;">
+          </div>
+        </div>
+        <div class="wf-modal-footer">
+          <button class="btn btn-p">Aceptar</button>
+          <button class="btn btn-s">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- PANTALLA 3 — Popup con parámetro MARCADO -->
+<div class="block">
+  <div class="block-title">Popup al iniciar sesión — parámetro marcado</div>
+  <div class="wf-frame">
+    <div class="wf-topbar">ERP GM Transport — Iniciando sesión</div>
+    <div class="wf-modal-bg">
+      <div class="wf-modal">
+        <div class="wf-modal-header">Agregando tipo de cambio</div>
+        <div class="wf-modal-body">
+          <div class="modal-field"><label>Fecha</label><input value="01/07/2026" readonly></div>
+          <div class="modal-field">
+            <label>Tipo de cambio</label>
+            <input value="" placeholder="0.000000" style="color:#aaa;">
+          </div>
+          <div class="hint">Banxico hoy: 17.215500</div>
+        </div>
+        <div class="wf-modal-footer">
+          <button class="btn btn-p">Aceptar</button>
+          <button class="btn btn-s">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

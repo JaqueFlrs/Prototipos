@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -197,9 +197,8 @@
 <!-- Tabs externos -->
 <div class="proto-tabs-bar">
   <div class="proto-tab active" onclick="switchPT(0)">1 · Catálogo de Unidades</div>
-  <div class="proto-tab" onclick="switchPT(1)">2 · Descarga de Plantilla</div>
-  <div class="proto-tab" onclick="switchPT(2)">3 · Importar Archivo</div>
-  <div class="proto-tab" onclick="switchPT(3)">4 · Resultados</div>
+  <div class="proto-tab" onclick="switchPT(1)">2 · Importar Unidades</div>
+  <div class="proto-tab" onclick="switchPT(2)">3 · Resultados</div>
 </div>
 
 <!-- ══════════ TAB 1 — LISTADO ══════════ -->
@@ -377,41 +376,26 @@
             </div>
             <div class="modal-body">
               <div class="modal-tabs">
-                <div class="m-tab active">📥 Descargar Plantilla</div>
-                <div class="m-tab">📤 Importar Archivo</div>
+                <div class="m-tab active">📤 Importar Unidades</div>
                 <div class="m-tab off">📊 Resultados</div>
               </div>
 
               <ul class="instruc">
-                <li>1. Descargue el archivo con las especificaciones del diseño &nbsp;<a href="#" style="color:#F2940E;" onclick="return false;">Descargar archivo</a></li>
+                <li>1. Descargue el archivo con las especificaciones del diseño &nbsp;
+                  <select style="padding:3px 6px;font-size:11px;border:1px solid #ccc;border-radius:3px;font-family:inherit;margin-right:4px;">
+                    <option selected>Versión nueva v2 — 48 columnas</option>
+                    <option>Versión anterior — 36 columnas</option>
+                  </select>
+                  <a href="#" style="color:#F2940E;" onclick="return false;">Descargar archivo</a>
+                </li>
                 <li>2. Llene el archivo con las especificaciones, deje los encabezados</li>
                 <li>3. Cargue el archivo para importar las unidades</li>
               </ul>
-
-              <p style="font-size:12px;font-weight:bold;color:#333;margin-bottom:8px;">Selecciona la versión a descargar:</p>
-              <div class="ver-cards">
-                <div class="ver-card" id="vc1" onclick="selVer(1)">
-                  <div class="vc-name">Versión anterior — 36 columnas</div>
-                  <div class="vc-desc">Formato original. Compatible con importaciones previas.</div>
-                </div>
-                <div class="ver-card sel" id="vc2" onclick="selVer(2)">
-                  <div class="vc-name">✦ Versión nueva v2 — 48 columnas</div>
-                  <div class="vc-desc">Incluye campos Carta Porte SAT. Recomendada.</div>
-                </div>
+              <div class="file-row" style="margin-top:10px;">
+                <button class="file-sel-btn">Seleccionar archivo</button>
+                <input type="text" class="file-text" value="NINGÚN ARCHIVO SELECCIONADO" readonly>
+                <button class="cargar-btn" disabled>Cargar</button>
               </div>
-
-              <div class="ref-box" id="ref-box">
-                <p>Hojas incluidas en la plantilla v2:</p>
-                <ul>
-                  <li><strong>Datos</strong> — 48 columnas para capturar las unidades</li>
-                  <li><strong>Instrucciones</strong> — Descripción, tipo y obligatoriedad de cada campo</li>
-                  <li><strong>Tipos de Unidades</strong> / <strong>Grupos de Unidades</strong> — Catálogos del sistema</li>
-                  <li><strong>Clave SAT Permiso SCT</strong> / <strong>Clave SAT Tipo Remolque</strong> — Catálogos SAT</li>
-                </ul>
-              </div>
-
-              <button class="dl-btn" style="margin-top:12px;" onclick="document.getElementById('dl-ok2').classList.add('show')">⬇ Descargar plantilla</button>
-              <div id="dl-ok2" class="ok-msg">✔ Descarga iniciada: ImportarUnidades_v2.xls</div>
             </div>
           </div>
         </div>
@@ -421,79 +405,8 @@
   <p style="font-size:11px;color:#aaa;padding:5px 12px;">↑ El usuario elige la versión y descarga. La caja inferior muestra las hojas incluidas en la v2. Navega al <strong>Tab 3</strong> para el flujo de carga.</p>
 </div>
 
-<!-- ══════════ TAB 3 — IMPORTAR ARCHIVO ══════════ -->
+<!-- ══════════ TAB 3 — RESULTADOS ══════════ -->
 <div class="proto-tab-content" id="pt2">
-  <div class="erp-shell">
-    <div class="erp-topbar">
-      <div class="erp-logo">
-        <div class="erp-logo-circle">G</div>
-        <div class="erp-logo-text"><strong>gm transport</strong>software.</div>
-      </div>
-      <div class="erp-topbar-right">
-        <div class="erp-company-box"><strong>GRUPO GM TRANSPORT</strong>RFC: GMG040805XX1</div>
-      </div>
-    </div>
-    <div class="erp-body">
-      <div class="erp-sidebar">
-        <input class="erp-sidebar-search" placeholder="Buscar" disabled>
-        <div class="erp-sidebar-item active"><span class="si-icon">🚛</span> Tráfico <span class="si-arr">›</span></div>
-      </div>
-      <div class="erp-main">
-        <div style="opacity:.25;pointer-events:none;">
-          <div class="erp-toolbar"><button class="tb-btn">Agregar</button><button class="tb-btn">Importar ▾</button></div>
-          <div class="erp-list-title"><span>Catálogo de Unidades</span></div>
-          <table class="erp-grid" style="margin:0 12px;width:calc(100% - 24px)">
-            <thead><tr><th>Tipo Unidad</th><th>Codigo</th><th>Descripcion</th></tr></thead>
-            <tbody><tr class="sel"><td>TORTON</td><td>T1</td><td>TRACTO CALIDAD</td></tr></tbody>
-          </table>
-        </div>
-
-        <div style="position:absolute;top:56px;left:160px;right:0;bottom:0;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:10;">
-          <div class="modal-box">
-            <div class="modal-hdr">
-              <span class="modal-hdr-title">Importar catálogo de unidades</span>
-              <button class="modal-close">✕</button>
-            </div>
-            <div class="modal-body">
-              <div class="modal-tabs">
-                <div class="m-tab">📥 Descargar Plantilla</div>
-                <div class="m-tab active">📤 Importar Archivo</div>
-                <div class="m-tab off">📊 Resultados</div>
-              </div>
-
-              <ul class="instruc">
-                <li>1. Descargue por favor el archivo donde vienen las especificaciones del diseño &nbsp;<a href="#" style="color:#F2940E;" onclick="return false;">Descargar archivo</a></li>
-                <li>2. Llene el archivo con las especificaciones, deje los encabezados</li>
-                <li>3. Cargue el archivo para importar las unidades</li>
-              </ul>
-
-              <div class="file-row" style="margin-top:10px;">
-                <button class="file-sel-btn" onclick="simFileT3()">Seleccionar archivo</button>
-                <input type="text" class="file-text" id="ft3" value="NINGÚN ARCHIVO SELECCIONADO" readonly>
-                <button class="cargar-btn" id="btn-cargar-t3" onclick="simImportT3()" disabled>Cargar</button>
-              </div>
-              <div id="fok3" class="ok-msg">✔ ImportarUnidades_v2.xls — 21 filas detectadas</div>
-
-              <div class="loading" id="ld3">
-                <div class="spinner"></div>
-                <p>Procesando importación…</p>
-              </div>
-
-              <!-- Área resultado (vacía antes de importar) -->
-              <div class="result-box" id="res-area3" style="min-height:120px;margin-top:12px;color:#ccc;font-size:12px;text-align:center;padding-top:40px;">
-                El resultado de la importación aparecerá aquí.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <p style="font-size:11px;color:#aaa;padding:5px 12px;">↑ Selecciona el archivo y haz clic en <strong>Cargar</strong> para simular la importación. El sistema pasará al Tab 4 con los resultados.</p>
-</div>
-
-<!-- ══════════ TAB 4 — RESULTADOS ══════════ -->
-<div class="proto-tab-content" id="pt3">
   <div class="erp-shell">
     <div class="erp-topbar">
       <div class="erp-logo">
@@ -593,49 +506,24 @@
     </div>
     <div class="modal-body">
       <div class="modal-tabs">
-        <div class="m-tab active" id="mt0" onclick="switchMT(0)">📥 Descargar Plantilla</div>
-        <div class="m-tab" id="mt1" onclick="switchMT(1)">📤 Importar Archivo</div>
+        <div class="m-tab active" id="mt0" onclick="switchMT(0)">📤 Importar Unidades</div>
         <div class="m-tab off" id="mt2">📊 Resultados</div>
       </div>
 
-      <!-- Tab A: Descargar -->
+      <!-- Tab A: Importar (descarga + carga combinadas) -->
       <div class="m-tab-content active" id="mc0">
         <ul class="instruc">
-          <li>1. Descargue por favor el archivo donde vienen las especificaciones del diseño &nbsp;<a href="#" style="color:#F2940E;" onclick="return false;">Descargar archivo</a></li>
+          <li>1. Descargue el archivo con las especificaciones del diseño &nbsp;
+            <select id="ver-select-m" style="padding:3px 6px;font-size:11px;border:1px solid #ccc;border-radius:3px;font-family:inherit;margin-right:4px;">
+              <option value="v2" selected>Versión nueva v2 — 48 columnas</option>
+              <option value="v1">Versión anterior — 36 columnas</option>
+            </select>
+            <a href="#" style="color:#F2940E;" onclick="simDlM();return false;">Descargar archivo</a>
+          </li>
           <li>2. Llene el archivo con las especificaciones, deje los encabezados</li>
           <li>3. Cargue el archivo para importar las unidades</li>
         </ul>
-        <p style="font-size:12px;font-weight:bold;color:#333;margin-bottom:8px;">Selecciona la versión a descargar:</p>
-        <div class="ver-cards">
-          <div class="ver-card" id="vc1m" onclick="selVerM(1)">
-            <div class="vc-name">Versión anterior — 36 columnas</div>
-            <div class="vc-desc">Formato original. Compatible con importaciones previas.</div>
-          </div>
-          <div class="ver-card sel" id="vc2m" onclick="selVerM(2)">
-            <div class="vc-name">✦ Versión nueva v2 — 48 columnas</div>
-            <div class="vc-desc">Incluye campos Carta Porte SAT. Recomendada.</div>
-          </div>
-        </div>
-        <div class="ref-box" id="ref-box-m">
-          <p>Hojas incluidas en la plantilla v2:</p>
-          <ul>
-            <li><strong>Datos</strong> — 48 columnas para capturar las unidades</li>
-            <li><strong>Instrucciones</strong> — Descripción, tipo y obligatoriedad de cada campo</li>
-            <li><strong>Tipos de Unidades</strong> / <strong>Grupos de Unidades</strong> — Catálogos del sistema</li>
-            <li><strong>Clave SAT Permiso SCT</strong> / <strong>Clave SAT Tipo Remolque</strong> — Catálogos SAT</li>
-          </ul>
-        </div>
-        <button class="dl-btn" style="margin-top:12px;" onclick="document.getElementById('dl-ok-m').classList.add('show')">⬇ Descargar plantilla</button>
-        <div id="dl-ok-m" class="ok-msg">✔ Descarga iniciada: ImportarUnidades_v2.xls</div>
-      </div>
-
-      <!-- Tab B: Importar -->
-      <div class="m-tab-content" id="mc1">
-        <ul class="instruc">
-          <li>1. Descargue por favor el archivo donde vienen las especificaciones del diseño &nbsp;<a href="#" style="color:#F2940E;" onclick="return false;">Descargar archivo</a></li>
-          <li>2. Llene el archivo con las especificaciones, deje los encabezados</li>
-          <li>3. Cargue el archivo para importar las unidades</li>
-        </ul>
+        <div id="dl-ok-m" class="ok-msg" style="margin-top:4px;"></div>
         <div class="file-row" style="margin-top:10px;">
           <button class="file-sel-btn" onclick="simFileM()">Seleccionar archivo</button>
           <input type="text" class="file-text" id="fm-file" value="NINGÚN ARCHIVO SELECCIONADO" readonly>
@@ -645,9 +533,6 @@
         <div class="loading" id="ld-m">
           <div class="spinner"></div>
           <p>Procesando importación…</p>
-        </div>
-        <div id="res-area-m" style="min-height:100px;border:1px solid #e0e0e0;border-radius:3px;margin-top:12px;padding:10px;font-size:12px;color:#ccc;text-align:center;padding-top:32px;">
-          El resultado de la importación aparecerá aquí.
         </div>
       </div>
 
@@ -704,14 +589,15 @@
   function openModal() { document.getElementById('modal-main').classList.add('open'); }
   function closeModal() { document.getElementById('modal-main').classList.remove('open'); }
 
-  // Modal tabs
+  // Modal tabs (mt0/mc0=Importar, mt2/mc2=Resultados)
   function switchMT(n) {
-    ['mt0','mt1','mt2'].forEach((id,i) => {
-      var el = document.getElementById(id);
-      if (el.classList.contains('off')) return;
-      el.classList.toggle('active', i===n);
+    var map = [{tab:'mt0',con:'mc0',ci:0},{tab:'mt2',con:'mc2',ci:2}];
+    map.forEach(function(t) {
+      var tab = document.getElementById(t.tab);
+      var con = document.getElementById(t.con);
+      if (tab && !tab.classList.contains('off')) tab.classList.toggle('active', t.ci===n);
+      if (con) con.classList.toggle('active', t.ci===n);
     });
-    ['mc0','mc1','mc2'].forEach((id,i) => document.getElementById(id).classList.toggle('active', i===n));
   }
 
   // Versión selector (tab 2 estático)
@@ -721,10 +607,12 @@
     document.getElementById('ref-box').style.display = v===2 ? 'block' : 'none';
   }
   // Versión selector (modal)
-  function selVerM(v) {
-    document.getElementById('vc1m').classList.toggle('sel', v===1);
-    document.getElementById('vc2m').classList.toggle('sel', v===2);
-    document.getElementById('ref-box-m').style.display = v===2 ? 'block' : 'none';
+  function simDlM() {
+    var v = document.getElementById('ver-select-m').value;
+    var nombre = v === 'v2' ? 'ImportarUnidades_v2.xls' : 'ImportarUnidades.xls';
+    var el = document.getElementById('dl-ok-m');
+    el.textContent = '✔ Descarga iniciada: ' + nombre;
+    el.classList.add('show');
   }
 
   // Tab 3: selección archivo
@@ -759,12 +647,11 @@
     var btn = document.getElementById('btn-cargar-m');
     btn.disabled = true; btn.textContent = 'Procesando…';
     document.getElementById('ld-m').style.display = 'block';
-    document.getElementById('res-area-m').style.display = 'none';
-    setTimeout(() => {
+    setTimeout(function() {
       document.getElementById('ld-m').style.display = 'none';
       btn.textContent = 'Cargar';
-      // Habilitar tab resultados
       document.getElementById('mt2').classList.remove('off');
+      document.getElementById('mt2').onclick = function(){ switchMT(2); };
       switchMT(2);
     }, 2000);
   }

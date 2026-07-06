@@ -149,11 +149,20 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <div class="tile" id="qa-chat" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:14px;padding:10px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-chat')"><div class="tic" style="background:#E1F4FF;width:40px;height:40px;position:relative"><i class="ti ti-message-circle" style="font-size:21px;color:#1976D2" aria-hidden="true"></i><div style="position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#D32F2F"></div></div><span style="font-size:11px;font-weight:500;color:#444">Chat</span></div>
         </div>
 
-        <div style="padding:0 16px 10px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">MÁS HERRAMIENTAS</div>
-        <div id="procesos-principal" style="padding:0 16px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px;margin-bottom:12px"></div>
-        <div id="procesos-otros-section" style="display:none;padding:0 16px 22px">
-          <div style="padding:0 0 10px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">OTROS PROCESOS</div>
-          <div id="procesos-otros" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px"></div>
+        <div id="procesos-label" style="padding:0 16px 10px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">MÁS HERRAMIENTAS</div>
+        <div id="procesos-grid" style="padding:0 16px 12px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px"></div>
+        <div id="mas-btn-container" style="padding:0 16px 22px;display:none">
+          <div class="tile" id="mas-btn" onclick="showModal('procesos-modal')" style="background:#fff;border:1px solid #ddd"><div class="tic" style="background:#F5F5F5"><i class="ti ti-dots" style="font-size:21px;color:#666" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Más</span></div>
+        </div>
+
+        <div id="procesos-modal" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:99;align-items:flex-end;justify-content:center;flex-direction:column">
+          <div style="background:#fff;width:100%;border-radius:16px 16px 0 0;padding:20px;max-height:60%;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font-size:16px;font-weight:500">Más procesos</div>
+              <div class="bk" onclick="hideModal('procesos-modal')" style="width:34px;height:34px"><i class="ti ti-x" aria-hidden="true"></i></div>
+            </div>
+            <div id="procesos-modal-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 6px"></div>
+          </div>
         </div>
         <div id="sos-wrap" style="margin:2px 16px 16px;border-top:1px solid #eee;padding-top:16px">
           <div id="sos-idle">
@@ -704,31 +713,33 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
 
       <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
-        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Procesos visibles</div>
-        <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:8px;font-size:10px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="cp" style="accent-color:#555" onclick="toggleProc(this)">Carta porte en principal</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="gastos" style="accent-color:#555" onclick="toggleProc(this)">Gastos en principal</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="liq" style="accent-color:#555" onclick="toggleProc(this)">Liquidaciones en principal</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="insp" style="accent-color:#555" onclick="toggleProc(this)">Inspecciones en principal</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="turno" style="accent-color:#555" onclick="toggleProc(this)">Mi turno en principal</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="ayuda" style="accent-color:#555" onclick="toggleProc(this)">Asistencia en principal</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="reportes" style="accent-color:#555" onclick="toggleProc(this)">Fallas en principal</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="perfil" style="accent-color:#555" onclick="toggleProc(this)">Mi perfil en principal</label>
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Procesos visibles en pantalla principal</div>
+        <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="cp" style="accent-color:#555" onclick="procToggle(this)">Carta porte</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="gastos" style="accent-color:#555" onclick="procToggle(this)">Gastos</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="liq" style="accent-color:#555" onclick="procToggle(this)">Liquidaciones</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="insp" style="accent-color:#555" onclick="procToggle(this)">Inspecciones</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="turno" style="accent-color:#555" onclick="procToggle(this)">Mi turno</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="ayuda" style="accent-color:#555" onclick="procToggle(this)">Asistencia</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="reportes" style="accent-color:#555" onclick="procToggle(this)">Fallas</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="perfil" style="accent-color:#555" onclick="procToggle(this)">Mi perfil</label>
         </div>
       </div>
 
       <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
         <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Vistas de viajes</div>
-        <fieldset style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:12px;margin-bottom:8px;display:flex;gap:16px">
-          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
-            <input type="radio" name="lista-mode" value="min" style="accent-color:#555" onclick="listaMode('min')">
-            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Info mínima</div><div style="font-size:9px;color:#888">Destino + estatus</div></div>
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
-            <input type="radio" name="lista-mode" value="full" checked style="accent-color:#555" onclick="listaMode('full')">
-            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Detalle completo</div><div style="font-size:9px;color:#888">Todas las columnas</div></div>
-          </label>
-        </fieldset>
+        <div style="display:flex;gap:10px;margin-bottom:8px">
+          <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
+            <i class="ti ti-list" style="font-size:20px;color:#999" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Info mínima</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Destino + estatus</div>
+          </div>
+          <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
+            <i class="ti ti-list-details" style="font-size:20px;color:#666" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Detalle completo</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Todas las columnas</div>
+          </div>
+        </div>
         <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
@@ -1129,36 +1140,43 @@ function guardarConfig(){
   var msg = isTodos ? 'Configuración guardada para los 182 operadores.' : 'Configuración guardada para: '+opListSelected.join(', ');
   alert(msg);
 }
-var PROCESOS_CONFIG={cp:true,gastos:true,liq:true,insp:true,turno:false,ayuda:false,reportes:false,perfil:false};
+var PROCESOS_PRINCIPAL={cp:true,gastos:true,liq:true,insp:true,turno:false,ayuda:false,reportes:false,perfil:false};
 var PROCESOS_DEF=[
-  {id:'tile-cp',label:'Carta porte',icon:'ti-file-text',bg:'#FFF2E8',color:'#E64A19',proc:'cp',page:'page-cartaporte'},
-  {id:'tile-gastos',label:'Gastos',icon:'ti-wallet',bg:'#E8F5E8',color:'#2E7D32',proc:'gastos',page:'page-gastos'},
-  {id:'tile-liq',label:'Liquidaciones',icon:'ti-receipt',bg:'#FFF2E8',color:'#E64A19',proc:'liq',page:'page-liq'},
-  {id:'tile-insp',label:'Inspecciones',icon:'ti-clipboard-list',bg:'#EDE7F6',color:'#5E35B1',proc:'insp',page:'page-insp'},
-  {id:'tile-turno',label:'Mi turno',icon:'ti-clock',bg:'#FFF8E1',color:'#B45309',proc:'turno',page:'page-turno'},
-  {id:'tile-ayuda',label:'Asistencia',icon:'ti-headset',bg:'#E1F4FF',color:'#1976D2',proc:'ayuda',page:'page-ayuda'},
-  {id:'tile-reportes',label:'Fallas',icon:'ti-alert-triangle',bg:'#FDECEA',color:'#C62828',proc:'reportes',page:'page-reportes'},
-  {id:'tile-perfil',label:'Mi perfil',icon:'ti-user',bg:'#F1F1F1',color:'#666',proc:'perfil',page:'page-perfil'}
+  {id:'tile-cp',key:'cp',label:'Carta porte',icon:'ti-file-text',bg:'#FFF2E8',color:'#E64A19',page:'page-cartaporte'},
+  {id:'tile-gastos',key:'gastos',label:'Gastos',icon:'ti-wallet',bg:'#E8F5E8',color:'#2E7D32',page:'page-gastos'},
+  {id:'tile-liq',key:'liq',label:'Liquidaciones',icon:'ti-receipt',bg:'#FFF2E8',color:'#E64A19',page:'page-liq'},
+  {id:'tile-insp',key:'insp',label:'Inspecciones',icon:'ti-clipboard-list',bg:'#EDE7F6',color:'#5E35B1',page:'page-insp'},
+  {id:'tile-turno',key:'turno',label:'Mi turno',icon:'ti-clock',bg:'#FFF8E1',color:'#B45309',page:'page-turno'},
+  {id:'tile-ayuda',key:'ayuda',label:'Asistencia',icon:'ti-headset',bg:'#E1F4FF',color:'#1976D2',page:'page-ayuda'},
+  {id:'tile-reportes',key:'reportes',label:'Fallas',icon:'ti-alert-triangle',bg:'#FDECEA',color:'#C62828',page:'page-reportes'},
+  {id:'tile-perfil',key:'perfil',label:'Mi perfil',icon:'ti-user',bg:'#F1F1F1',color:'#666',page:'page-perfil'}
 ];
-function toggleProc(checkbox){
-  var proc=checkbox.getAttribute('data-proc');
-  PROCESOS_CONFIG[proc]=checkbox.checked;
+function procToggle(checkbox){
+  var key=checkbox.getAttribute('data-proc');
+  PROCESOS_PRINCIPAL[key]=checkbox.checked;
   renderProcesos();
 }
 function renderProcesos(){
   var principal=[],otros=[];
   PROCESOS_DEF.forEach(function(p){
-    var html='<div class="tile" id="'+p.id+'" onclick="nav(\''+p.page+'\')"><div class="tic" style="background:'+p.bg+'"><i class="ti '+p.icon+' " style="font-size:21px;color:'+p.color+'" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">'+p.label+'</span></div>';
-    if(PROCESOS_CONFIG[p.proc]){ principal.push(html); } else { otros.push(html); }
+    var html='<div class="tile" id="'+p.id+'" onclick="nav(\''+p.page+'\')"><div class="tic" style="background:'+p.bg+'"><i class="ti '+p.icon+'" style="font-size:21px;color:'+p.color+'" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">'+p.label+'</span></div>';
+    if(PROCESOS_PRINCIPAL[p.key]){ principal.push(html); } else { otros.push(html); }
   });
-  document.getElementById('procesos-principal').innerHTML=principal.join('');
-  var otrosSection=document.getElementById('procesos-otros-section');
-  if(otros.length){
-    otrosSection.style.display='block';
-    document.getElementById('procesos-otros').innerHTML=otros.join('');
-  } else {
-    otrosSection.style.display='none';
-  }
+  document.getElementById('procesos-grid').innerHTML=principal.join('');
+  document.getElementById('procesos-modal-grid').innerHTML=otros.map(function(h){
+    return h.replace('grid-template-columns:repeat(4,1fr)','').replace('grid-template-columns:repeat(3,1fr)','');
+  }).join('');
+  var masBtnContainer=document.getElementById('mas-btn-container');
+  masBtnContainer.style.display=otros.length>0?'block':'none';
+  document.getElementById('procesos-label').style.paddingBottom=otros.length>0?'0':'10px';
+}
+function showModal(id){
+  var el=document.getElementById(id);
+  if(el){ el.style.display='flex'; }
+}
+function hideModal(id){
+  var el=document.getElementById(id);
+  if(el){ el.style.display='none'; }
 }
 renderProcesos();
 renderHome();

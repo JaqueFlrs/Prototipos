@@ -50,68 +50,6 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 <div class="page-title">GM Mis Viajes — Rediseño de la app de operadores</div>
 <div class="page-sub">Prototipo interactivo: recorre los flujos tocando los botones del celular. El panel del ERP de abajo está vinculado en vivo.</div>
 
-<div style="max-width:900px;margin:0 auto 26px;background:#fff;border:1px solid #eee;border-radius:12px;padding:18px 22px;box-shadow:0 1px 8px rgba(20,20,20,.04);font-family:'Segoe UI',system-ui,Arial,sans-serif">
-  <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:14px">Para Dirección y Gerencia</div>
-  <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:20px;margin-bottom:18px">
-    <div style="grid-column:span 6;display:flex;gap:18px">
-      <div style="flex:1">
-        <div style="font-size:11px;font-weight:600;color:#E64A19;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em">En la app</div>
-        <ul style="margin:0;padding-left:14px;font-size:11px;color:#444;line-height:1.75">
-          <li>App rediseñada completa</li>
-          <li>Inicio configurable por operador</li>
-          <li>Fallas: reportar + consultar en 1 pantalla</li>
-          <li>Catálogo de fallas por categoría</li>
-          <li>SOS directo, se puede cancelar</li>
-          <li>Filtros por estatus (viajes/liquidaciones)</li>
-          <li>Tab "Otros": procesos según derecho</li>
-        </ul>
-      </div>
-      <div style="flex:1">
-        <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em">En el ERP</div>
-        <ul style="margin:0;padding-left:14px;font-size:11px;color:#444;line-height:1.75">
-          <li>Configura 1, varios o todos los operadores</li>
-          <li>Decide qué procesos van también al Inicio</li>
-          <li>Módulos y campos configurables por operador</li>
-          <li>Listado de viajes: mínimo o detalle completo</li>
-          <li>Valores default en Salida/Llegada</li>
-          <li>Mismo árbol de derechos del ERP real</li>
-          <li>Solo checks &mdash; sin botones grandes</li>
-        </ul>
-      </div>
-    </div>
-    <div style="grid-column:span 6">
-      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em">Ejemplo: así se conectan</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="flex:1;background:#f4f4f4;border:1px solid #ccc;border-radius:8px;padding:10px 12px">
-          <div style="font-size:10px;font-weight:700;color:#555;margin-bottom:7px">ERP &mdash; Derechos</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-square-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Carta porte</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-square-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Gastos</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#B71C1C"><i class="ti ti-square" style="font-size:14px;color:#B71C1C" aria-hidden="true"></i> <span style="text-decoration:line-through">Inspecciones</span> &mdash; desmarcado</div>
-        </div>
-        <i class="ti ti-arrow-right" style="font-size:22px;color:#999;flex-shrink:0" aria-hidden="true"></i>
-        <div style="flex:1;background:#FFF9F5;border:1px solid #f5d9c8;border-radius:8px;padding:10px 12px">
-          <div style="font-size:10px;font-weight:700;color:#E64A19;margin-bottom:7px">App del operador</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Ve Carta porte</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Ve Gastos</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#999"><i class="ti ti-x" style="font-size:14px;color:#B71C1C" aria-hidden="true"></i> Inspecciones no aparece</div>
-        </div>
-      </div>
-      <div style="font-size:9.5px;color:#888;margin-top:8px;text-align:center">Lo que desmarcas en el ERP desaparece del celular &mdash; en Inicio y en Otros</div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:20px">
-    <div style="grid-column:span 6;background:#FFF9F5;border:1px solid #f5d9c8;border-radius:8px;padding:14px;text-align:center">
-      <i class="ti ti-device-mobile" style="font-size:26px;color:#E8600F" aria-hidden="true"></i>
-      <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-top:6px">Celular (app operador)</div>
-      <div style="font-size:10px;color:#888;margin-top:4px">Inicio &middot; Viajes &middot; Solicitudes &middot; Reportes &middot; Otros</div>
-    </div>
-    <div style="grid-column:span 6;background:#f4f4f4;border:1px solid #ccc;border-radius:8px;padding:14px;text-align:center">
-      <i class="ti ti-list-check" style="font-size:26px;color:#666" aria-hidden="true"></i>
-      <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-top:6px">ERP (configuración)</div>
-      <div style="font-size:10px;color:#888;margin-top:4px">Solo checks &middot; sin botones grandes</div>
-    </div>
-  </div>
-</div>
 
 <div style="max-width:1180px;margin:0 auto;display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;justify-content:center">
 <div id="mvw" style="max-width:344px;flex:0 0 344px;position:relative">
@@ -720,18 +658,16 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
     <div id="tab-config" style="display:block">
       <div style="padding:16px 18px 12px">
         <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Interfaz y comportamiento</div>
-        <div style="display:flex;gap:10px;margin-bottom:8px">
-          <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
-            <i class="ti ti-hand-click" style="font-size:22px;color:#666" aria-hidden="true"></i>
-            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo simple</div>
-            <div style="font-size:9px;color:#888;margin-top:2px">Lo secundario se reduce</div>
-          </div>
-          <div id="erp-completo" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('completo')">
-            <i class="ti ti-layout-grid" style="font-size:22px;color:#999" aria-hidden="true"></i>
-            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo completo</div>
-            <div style="font-size:9px;color:#888;margin-top:2px">Todo visible igual</div>
-          </div>
-        </div>
+        <fieldset style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;margin-bottom:8px;display:flex;gap:16px">
+          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
+            <input type="radio" name="erp-modo" value="simple" checked style="accent-color:#555" onclick="erpMode('simple')">
+            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Modo simple</div><div style="font-size:9px;color:#888">Lo secundario se reduce</div></div>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
+            <input type="radio" name="erp-modo" value="completo" style="accent-color:#555" onclick="erpMode('completo')">
+            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Modo completo</div><div style="font-size:9px;color:#888">Todo visible igual</div></div>
+          </label>
+        </fieldset>
         <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 10px;cursor:pointer">
           <input type="checkbox" id="erp-geo" style="accent-color:#555;width:15px;height:15px" onclick="erpGeo(this.checked)">
           <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#888">Salida y llegada automáticas al cruzar zona</div></div>
@@ -755,18 +691,16 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 
       <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
         <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Vistas de viajes</div>
-        <div style="display:flex;gap:10px;margin-bottom:8px">
-          <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
-            <i class="ti ti-list" style="font-size:20px;color:#999" aria-hidden="true"></i>
-            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Info mínima</div>
-            <div style="font-size:9px;color:#888;margin-top:2px">Destino + estatus</div>
-          </div>
-          <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
-            <i class="ti ti-list-details" style="font-size:20px;color:#666" aria-hidden="true"></i>
-            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Detalle completo</div>
-            <div style="font-size:9px;color:#888;margin-top:2px">Todas las columnas</div>
-          </div>
-        </div>
+        <fieldset style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;margin-bottom:8px;display:flex;gap:16px">
+          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
+            <input type="radio" name="erp-lista" value="min" style="accent-color:#555" onclick="listaMode('min')">
+            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Info mínima</div><div style="font-size:9px;color:#888">Destino + estatus</div></div>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
+            <input type="radio" name="erp-lista" value="full" checked style="accent-color:#555" onclick="listaMode('full')">
+            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Detalle completo</div><div style="font-size:9px;color:#888">Todas las columnas</div></div>
+          </label>
+        </fieldset>
         <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
@@ -779,18 +713,16 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 
       <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
         <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Formularios</div>
-        <div style="display:flex;gap:10px">
-          <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
-            <i class="ti ti-forms" style="font-size:20px;color:#666" aria-hidden="true"></i>
-            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Todos los campos</div>
-            <div style="font-size:9px;color:#888;margin-top:2px">Obligatorios y opcionales</div>
-          </div>
-          <div id="erp-form-oblig" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('oblig')">
-            <i class="ti ti-asterisk" style="font-size:20px;color:#999" aria-hidden="true"></i>
-            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Solo obligatorios</div>
-            <div style="font-size:9px;color:#888;margin-top:2px">Llenado más rápido</div>
-          </div>
-        </div>
+        <fieldset style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:flex;gap:16px">
+          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
+            <input type="radio" name="erp-form" value="todos" checked style="accent-color:#555" onclick="formMode('todos')">
+            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Todos los campos</div><div style="font-size:9px;color:#888">Obligatorios y opcionales</div></div>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;color:#1a1a1a;cursor:pointer;flex:1">
+            <input type="radio" name="erp-form" value="oblig" style="accent-color:#555" onclick="formMode('oblig')">
+            <div><div style="font-weight:500;font-size:11px;color:#1a1a1a">Solo obligatorios</div><div style="font-size:9px;color:#888">Llenado más rápido</div></div>
+          </label>
+        </fieldset>
       </div>
 
       <div style="padding:14px 18px 16px;border-top:1px dashed #ddd">
@@ -992,8 +924,6 @@ function inDone(){
 }
 function erpMode(m){
   document.getElementById('viewport').classList.toggle('modo-simple',m==='simple');
-  document.getElementById('erp-simple').style.border = m==='simple'?'2px solid #666':'1px solid #ccc';
-  document.getElementById('erp-completo').style.border = m==='completo'?'2px solid #666':'1px solid #ccc';
 }
 function erpGeo(on){
   geoOn=on;
@@ -1093,13 +1023,9 @@ function derechosCheck(id,on,proc){
 }
 function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
-  document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #666':'1px solid #ccc';
-  document.getElementById('erp-lista-full').style.border = m==='full'?'2px solid #666':'1px solid #ccc';
 }
 function formMode(m){
   document.getElementById('viewport').classList.toggle('solo-obligatorios',m==='oblig');
-  document.getElementById('erp-form-todos').style.border = m==='todos'?'2px solid #666':'1px solid #ccc';
-  document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #666':'1px solid #ccc';
 }
 function showMainTab(id){
   ['config','derechos'].forEach(function(t){

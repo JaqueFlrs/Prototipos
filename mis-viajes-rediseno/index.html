@@ -79,19 +79,24 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         </ul>
       </div>
     </div>
-    <div style="grid-column:span 6;display:flex;align-items:center;justify-content:center">
-      <div style="text-align:center">
-        <svg viewBox="0 0 260 90" style="width:100%;max-width:250px">
-          <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#999"></path></marker></defs>
-          <rect x="6" y="24" width="92" height="42" rx="8" fill="#f4f4f4" stroke="#999"></rect>
-          <text x="52" y="40" font-size="11" font-weight="600" text-anchor="middle" fill="#333">ERP</text>
-          <text x="52" y="54" font-size="8.5" text-anchor="middle" fill="#777">Configuras aquí</text>
-          <line x1="100" y1="45" x2="158" y2="45" stroke="#999" stroke-width="2" marker-end="url(#arr)"></line>
-          <rect x="162" y="24" width="92" height="42" rx="8" fill="#FFF2E8" stroke="#E8600F"></rect>
-          <text x="208" y="40" font-size="11" font-weight="600" text-anchor="middle" fill="#E64A19">App</text>
-          <text x="208" y="54" font-size="8.5" text-anchor="middle" fill="#b07050">Se refleja aquí</text>
-        </svg>
+    <div style="grid-column:span 6">
+      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em">Ejemplo: así se conectan</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="flex:1;background:#f4f4f4;border:1px solid #ccc;border-radius:8px;padding:10px 12px">
+          <div style="font-size:10px;font-weight:700;color:#555;margin-bottom:7px">ERP &mdash; Derechos</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-square-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Carta porte</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-square-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Gastos</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#B71C1C"><i class="ti ti-square" style="font-size:14px;color:#B71C1C" aria-hidden="true"></i> <span style="text-decoration:line-through">Inspecciones</span> &mdash; desmarcado</div>
+        </div>
+        <i class="ti ti-arrow-right" style="font-size:22px;color:#999;flex-shrink:0" aria-hidden="true"></i>
+        <div style="flex:1;background:#FFF9F5;border:1px solid #f5d9c8;border-radius:8px;padding:10px 12px">
+          <div style="font-size:10px;font-weight:700;color:#E64A19;margin-bottom:7px">App del operador</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Ve Carta porte</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#333;margin-bottom:5px"><i class="ti ti-check" style="font-size:14px;color:#388E3C" aria-hidden="true"></i> Ve Gastos</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:#999"><i class="ti ti-x" style="font-size:14px;color:#B71C1C" aria-hidden="true"></i> Inspecciones no aparece</div>
+        </div>
       </div>
+      <div style="font-size:9.5px;color:#888;margin-top:8px;text-align:center">Lo que desmarcas en el ERP desaparece del celular &mdash; en Inicio y en Otros</div>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:20px">
@@ -108,7 +113,8 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
   </div>
 </div>
 
-<div id="mvw" style="max-width:344px;margin:0 auto;position:relative">
+<div style="max-width:1180px;margin:0 auto;display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;justify-content:center">
+<div id="mvw" style="max-width:344px;flex:0 0 344px;position:relative">
   <div style="border:9px solid #1d1d1f;border-radius:42px;background:#1d1d1f;box-shadow:0 10px 34px rgba(0,0,0,.2)">
     <div style="position:absolute;top:9px;left:50%;transform:translateX(-50%);width:86px;height:19px;background:#1d1d1f;border-radius:0 0 13px 13px;z-index:8"></div>
     <div id="viewport" style="position:relative;height:712px;background:#FAFAFA;border-radius:32px;overflow:hidden;color:#1c1c1c">
@@ -681,7 +687,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
   </div>
 </div>
 
-<div style="max-width:900px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
+<div style="flex:1;min-width:360px;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
   <div style="text-align:center;font-size:9.5px;color:#999;letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase">Wireframe ERP — referencia funcional, no es el diseño visual final</div>
   <div style="background:#f7f7f7;border:1px dashed #aaa;border-radius:6px;overflow:hidden">
     <div style="background:#e2e2e2;color:#333;font-weight:600;font-size:12.5px;padding:9px 12px;border-bottom:1px dashed #aaa">ERP GM Transport &middot; Mis Viajes — Configuración de operadores</div>
@@ -849,6 +855,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
     </div>
     </div>
   </div>
+</div>
 </div>
 
 <script>

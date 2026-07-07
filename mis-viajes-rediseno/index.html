@@ -33,9 +33,10 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 #mvw .seg{flex:1;text-align:center;padding:9px 2px;border:1.5px solid #e2e2e2;border-radius:7px;font-size:12px;color:#666;cursor:pointer}
 #mvw .seg.on{background:#E8F5E8;border-color:#388E3C;color:#1B5E20;font-weight:500}
 #mvw .secf{transition:all .15s}
-#mvw .modo-simple .secf{font-size:9.5px!important;opacity:.5}
+#mvw .modo-simple .secf{display:none!important}
 #mvw .modo-simple .tilelbl{opacity:.55}
 #mvw .lista-minima #page-trips .secf{display:none}
+#mvw .lista-minima #page-trips .origen-field{display:none}
 #mvw .solo-obligatorios .campo-opcional{display:none}
 #mvw .wiz{display:none}
 #mvw .wiz.on{display:block}
@@ -157,12 +158,12 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
             <span id="geo-chip" class="pill" style="background:#E1F4FF;color:#0D47A1;display:none"><i class="ti ti-map-pin-check" style="font-size:12px" aria-hidden="true"></i> Geocerca</span>
             <span id="sucursal-mini" style="font-size:10.5px;color:#999"><span style="color:#E64A19;font-weight:500">Suc 11:56</span> &middot; Tú 18:56</span>
           </div>
-          <div id="hero-graphic" style="position:relative;height:44px;margin:0 6px 4px">
-            <div style="position:absolute;top:9px;left:8px;right:8px;height:4px;background:#F0F0F0;border-radius:3px"></div>
-            <div id="hero-prog" style="position:absolute;top:9px;left:8px;width:0%;height:4px;background:#E8600F;border-radius:3px;transition:width .4s"></div>
-            <div style="position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:#1976D2;border:3px solid #fff;box-shadow:0 0 0 1px #d5e5f5"></div>
-            <div style="position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:#D32F2F;border:3px solid #fff;box-shadow:0 0 0 1px #f5d5d5"></div>
-            <div id="hero-truck" style="position:absolute;top:-8px;left:2%;transition:left .4s"><i class="ti ti-truck" style="font-size:24px;color:#E8600F" aria-hidden="true"></i></div>
+          <div id="hero-graphic" style="position:relative;height:52px;margin:4px 4px 4px">
+            <div style="position:absolute;top:24px;left:12px;right:12px;height:5px;background:#EDEDED;border-radius:3px"></div>
+            <div id="hero-prog" style="position:absolute;top:24px;left:12px;width:0%;height:5px;background:linear-gradient(90deg,#E8600F,#FF9552);border-radius:3px;transition:width .4s"></div>
+            <div style="position:absolute;top:19px;left:8px;width:15px;height:15px;border-radius:50%;background:#1976D2;border:3px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.18)"></div>
+            <div style="position:absolute;top:19px;right:8px;width:15px;height:15px;border-radius:50%;background:#D32F2F;border:3px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.18)"></div>
+            <div id="hero-truck" style="position:absolute;top:10px;left:2%;width:30px;height:30px;background:#fff;border:2px solid #E8600F;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .4s;transform:translateX(-50%)"><i class="ti ti-truck" style="font-size:15px;color:#E8600F" aria-hidden="true"></i></div>
             <div style="position:absolute;bottom:0;left:0;font-size:10.5px;color:#888">Mexicali</div>
             <div style="position:absolute;bottom:0;right:0;font-size:10.5px;color:#888">Puerto Peñasco</div>
           </div>
@@ -220,13 +221,6 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           </div>
           <div style="font-size:10px;color:#999;margin:5px 0 10px">Sincronizado con el ERP &middot; se envía el mayor de los dos</div></div>
           <div id="sal-gps" style="display:contents"><div style="background:#FFF8E1;border-radius:11px;padding:10px 11px;font-size:11px;color:#8a6d1f;margin-bottom:14px"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> Se capturará tu ubicación GPS &middot; <strong>Una vez registrada, la salida no podrá modificarse</strong></div></div>
-          <div style="font-size:12px;font-weight:500;color:#E64A19;margin-bottom:7px">Condiciones de salida</div>
-          <div class="lb">Camión T12 *</div>
-          <select><option>En buen estado</option><option>Con observaciones</option><option>Requiere mantenimiento</option></select>
-          <div class="lb">Carga 1 *</div>
-          <select><option>Cargada</option><option>Vacía</option></select>
-          <div class="campo-opcional"><div class="lb">Observaciones (opcional)</div>
-          <textarea placeholder="Condiciones iniciales del vehículo..." style="height:45px;margin-bottom:0"></textarea></div>
           <div class="rw" style="gap:9px">
             <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
             <div class="bp" role="button" tabindex="0" style="flex:1.4" onclick="doSalida()">Confirmar salida</div>
@@ -540,32 +534,61 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
           <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Pendientes</div>
         </div>
         <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
-          <div class="cd" style="cursor:pointer;border-left:5px solid #E8600F;border-radius:6px 16px 16px 6px" onclick="nav('page-home')">
-            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Puerto Peñasco</span><span class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+          <div class="cd" style="cursor:pointer;border-left:5px solid #E8600F;border-radius:6px 16px 16px 6px" onclick="verTrayectos()">
+            <div class="rw" style="justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div class="lb">Destino</div><span style="font-size:15.5px;font-weight:500">Puerto Peñasco</span></div><div style="text-align:right"><div class="lb">Estatus</div><span class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Carga 25/06 08:42</span><span>&middot;</span><span>Descarga 25/06 12:10</span><span>&middot;</span><span>297 km</span></div>
           </div>
           <div class="cd" style="border-left:5px solid #1976D2;border-radius:6px 16px 16px 6px">
-            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Los Mochis</span><span class="pill" style="background:#E1F4FF;color:#0D47A1"><i class="ti ti-navigation" style="font-size:11px" aria-hidden="true"></i> En ruta</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Transportes del Noroeste</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
+            <div class="rw" style="justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div class="lb">Destino</div><span style="font-size:15.5px;font-weight:500">Los Mochis</span></div><div style="text-align:right"><div class="lb">Estatus</div><span class="pill" style="background:#E1F4FF;color:#0D47A1"><i class="ti ti-navigation" style="font-size:11px" aria-hidden="true"></i> En ruta</span></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Transportes del Noroeste</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Salida 24/06 14:22</span><span>&middot;</span><span>Descarga 24/06 22:30</span><span>&middot;</span><span>156 km</span></div>
           </div>
           <div class="cd" style="border-left:5px solid #388E3C;border-radius:6px 16px 16px 6px">
-            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Hermosillo</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f"><i class="ti ti-alert-circle" style="font-size:11px" aria-hidden="true"></i> Pendiente liq</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Importador Express SA</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+            <div class="rw" style="justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div class="lb">Destino</div><span style="font-size:15.5px;font-weight:500">Hermosillo</span></div><div style="text-align:right"><div class="lb">Estatus</div><span class="pill" style="background:#FFF8E1;color:#8a6d1f"><i class="ti ti-alert-circle" style="font-size:11px" aria-hidden="true"></i> Pendiente liq</span></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Importador Express SA</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Llegada 23/06 09:45</span><span>&middot;</span><span>234 km</span></div>
           </div>
           <div class="cd" style="border-left:5px solid #B39DDB;border-radius:6px 16px 16px 6px">
-            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Culiacán</span><span class="pill" style="background:#F3E5F5;color:#512DA8"><i class="ti ti-calendar-plus" style="font-size:11px" aria-hidden="true"></i> Programado</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Logística Centro SA</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
+            <div class="rw" style="justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div class="lb">Destino</div><span style="font-size:15.5px;font-weight:500">Culiacán</span></div><div style="text-align:right"><div class="lb">Estatus</div><span class="pill" style="background:#F3E5F5;color:#512DA8"><i class="ti ti-calendar-plus" style="font-size:11px" aria-hidden="true"></i> Programado</span></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Logística Centro SA</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Carga 26/06 06:00</span><span>&middot;</span><span>Descarga 26/06 14:30</span><span>&middot;</span><span>280 km</span></div>
           </div>
         </div>
         <div style="height:62px;flex:0 0 auto"></div>
       </div>
 
+      <div class="pg" id="page-viaje-trayectos">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-trips')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-route" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Trayectos</div><div class="t2">Viaje MA-000005103 &middot; 2 trayectos</div></div></div></div>
+        <div id="vt-sin-permiso" style="display:none;padding:30px 16px;text-align:center;color:#999;font-size:12px"><i class="ti ti-lock" style="font-size:26px;color:#ccc;display:block;margin-bottom:8px" aria-hidden="true"></i>No tienes permiso para ver los trayectos de este viaje.</div>
+        <div id="vt-list" style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd" style="cursor:pointer;border-left:5px solid #E8600F;border-radius:6px 16px 16px 6px" onclick="abrirTrayecto()">
+            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:14px;font-weight:500">Trayecto 1 &middot; Mexicali &rarr; Puerto Peñasco</span><span class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div>
+            <div class="rw" style="justify-content:space-between"><span style="font-size:10.5px;color:#999">297 km &middot; Unidad T12</span><span onclick="event.stopPropagation();abrirTrayecto()" style="font-size:10.5px;color:#1976D2;font-weight:500;cursor:pointer">Ver detalle &rsaquo;</span></div>
+          </div>
+          <div class="cd" style="border-left:5px solid #ccc;border-radius:6px 16px 16px 6px;opacity:.6;cursor:pointer" onclick="alert('Primero debes completar el Trayecto 1 (Mexicali → Puerto Peñasco)')">
+            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:14px;font-weight:500">Trayecto 2 &middot; Puerto Peñasco &rarr; Mexicali</span><span class="pill" style="background:#f0f0f0;color:#888"><i class="ti ti-lock" style="font-size:11px" aria-hidden="true"></i> Bloqueado</span></div>
+            <div class="rw" style="justify-content:space-between"><span style="font-size:10.5px;color:#999">297 km (retorno) &middot; Unidad T12</span></div>
+          </div>
+        </div>
+        <div style="height:20px;flex:0 0 auto"></div>
+      </div>
+
+      <div class="pg" id="page-trayecto-detalle">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-viaje-trayectos')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-map-pin" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Detalle del trayecto</div><div class="t2">Trayecto 1 de 2</div></div></div></div>
+        <div id="td-sin-permiso" style="display:none;padding:30px 16px;text-align:center;color:#999;font-size:12px"><i class="ti ti-lock" style="font-size:26px;color:#ccc;display:block;margin-bottom:8px" aria-hidden="true"></i>No tienes permiso para ver el detalle de este trayecto.</div>
+        <div id="td-body" style="padding:0 16px 16px">
+          <div class="cd" style="margin-bottom:9px">
+            <div class="rw" style="justify-content:space-between;margin-bottom:9px"><span style="font-size:15.5px;font-weight:500">Puerto Peñasco</span><span id="td-pill" class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+            <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px;flex-wrap:wrap"><span>Carga 25/06 08:42</span><span>&middot;</span><span>Descarga 25/06 12:10</span><span>&middot;</span><span>297 km</span><span>&middot;</span><span>Unidad T12</span></div>
+          </div>
+          <div id="ctx-action"></div>
+        </div>
+      </div>
+
       <div class="pg" id="page-solicitudes">
-        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-clipboard-list" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Mis solicitudes</div><div class="t2">de viaje</div></div></div><div class="bk"><i class="ti ti-filter" aria-hidden="true"></i></div></div></div>
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-clipboard-list" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Mis solicitudes</div><div class="t2">de viaje</div></div></div></div>
         <div style="padding:0 16px 16px">
           <div class="bp" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px" onclick="wizShow('sv',1)"><i class="ti ti-plus" style="font-size:17px;color:#fff" aria-hidden="true"></i>Nueva solicitud</div>
           <div id="sv-wrap" style="display:none">
@@ -608,7 +631,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
 
       <div class="pg" id="page-reportes">
-        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:19px;color:#C62828" aria-hidden="true"></i></div><div><div class="t1">Reportes de falla</div><div class="t2">Reporta y consulta tus fallas</div></div></div></div></div>
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:19px;color:#C62828" aria-hidden="true"></i></div><div><div class="t1">Reportes de falla</div><div class="t2">Reporta y consulta tus fallas</div></div></div></div>
         <div style="padding:0 16px 16px">
           <div class="bp" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px;background:#D32F2F" onclick="fallaFormToggle()">
             <i class="ti ti-plus" id="falla-form-icon" style="font-size:17px;color:#fff" aria-hidden="true"></i><span id="falla-form-label">Reportar falla</span>
@@ -670,9 +693,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 
       <div id="tabbar" style="display:none;position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #eee;justify-content:space-around;padding:9px 4px 12px;z-index:6">
         <div class="tabitem" data-tab="page-home" style="cursor:pointer;color:#E8600F;text-align:center" onclick="nav('page-home')"><i class="ti ti-home" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px;font-weight:500">Inicio</div></div>
-        <div class="tabitem" data-tab="page-trips" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-trips')"><i class="ti ti-truck" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Viajes</div></div>
-        <div class="tabitem" id="tab-sv" data-tab="page-solicitudes" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-solicitudes')"><i class="ti ti-clipboard-list" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Solicitudes</div></div>
-        <div class="tabitem" data-tab="page-reportes" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-reportes')"><i class="ti ti-chart-bar" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Reportes</div></div>
+        <div class="tabitem" id="tab-trips" data-tab="page-trips" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-trips')"><i class="ti ti-truck" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Viajes</div></div>
         <div class="tabitem" data-tab="page-otros" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-otros')"><i class="ti ti-grid-dots" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Otros</div></div>
       </div>
 
@@ -739,10 +760,11 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Mostrar en pantalla principal (acceso rápido)</div>
         <div style="font-size:9px;color:#888;margin-bottom:8px">Solo se pueden marcar procesos a los que el operador ya tiene derecho (pestaña Derechos). Los que no se marquen aquí seguirán disponibles en la pestaña "Otros" del celular.</div>
         <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px">
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-principal="cp" style="accent-color:#555" onchange="renderProcesos()">Carta porte</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-principal="gastos" style="accent-color:#555" onchange="renderProcesos()">Gastos</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-principal="liq" style="accent-color:#555" onchange="renderProcesos()">Liquidaciones</label>
-          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-principal="insp" style="accent-color:#555" onchange="renderProcesos()">Inspecciones</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="solicitudes" style="accent-color:#555" onchange="renderProcesos()">Solicitudes</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="cp" style="accent-color:#555" onchange="renderProcesos()">Carta porte</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="gastos" style="accent-color:#555" onchange="renderProcesos()">Gastos</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="liq" style="accent-color:#555" onchange="renderProcesos()">Liquidaciones</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="insp" style="accent-color:#555" onchange="renderProcesos()">Inspecciones</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="turno" style="accent-color:#555" onchange="renderProcesos()">Mi turno</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="ayuda" style="accent-color:#555" onchange="renderProcesos()">Asistencia</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="reportes" style="accent-color:#555" onchange="renderProcesos()">Fallas</label>
@@ -855,7 +877,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 function nav(id){
   document.querySelectorAll('#mvw .pg').forEach(function(p){p.classList.remove('active');});
   var el=document.getElementById(id); if(el){el.classList.add('active');}
-  var roots=['page-home','page-trips','page-solicitudes','page-reportes','page-otros'];
+  var roots=['page-home','page-trips','page-otros'];
   document.getElementById('tabbar').style.display = roots.indexOf(id)>-1?'flex':'none';
   document.querySelectorAll('#mvw .tabitem').forEach(function(t){ t.style.color = t.getAttribute('data-tab')===id?'#E8600F':'#9a9a9a'; });
   document.getElementById('viewport').scrollTop=0;
@@ -890,8 +912,64 @@ function renderHome(){
     lbl.textContent='Registrar llegada'; ic.className='ti ti-flag'; btn.style.background='#388E3C'; btn.style.boxShadow='0 4px 14px rgba(56,142,60,.25)'; btn.onclick=function(){nav('page-llegada');};
   }
 }
-function doSalida(){ tripStep=1; renderHome(); okThen('Salida registrada','page-home'); }
-function doLlegada(){ tripStep=2; renderHome(); okThen('Llegada registrada','page-home'); }
+function doSalida(){ tripStep=1; renderHome(); renderCtxAction(); okThen('Salida registrada','page-home'); }
+function doLlegada(){ tripStep=2; renderHome(); renderCtxAction(); okThen('Llegada registrada','page-home'); }
+function verTrayectos(){
+  nav('page-viaje-trayectos');
+  var ok=tieneDerecho('vertrayectos');
+  document.getElementById('vt-sin-permiso').style.display=ok?'none':'block';
+  document.getElementById('vt-list').style.display=ok?'flex':'none';
+}
+function abrirTrayecto(){
+  nav('page-trayecto-detalle');
+  var ok=tieneDerecho('detalletrayecto');
+  document.getElementById('td-sin-permiso').style.display=ok?'none':'block';
+  document.getElementById('td-body').style.display=ok?'block':'none';
+  if(ok){ renderCtxAction(); }
+}
+function ctxBtn(label,onclick,secondary,bg){
+  var style=bg?' style="background:'+bg+'"':'';
+  return '<div class="'+(secondary?'bs':'bp')+'"'+style+' role="button" tabindex="0" onclick="'+onclick+'">'+label+'</div>';
+}
+function ctxInfo(text){
+  return '<div style="background:#E1F4FF;border-radius:11px;padding:10px 11px;font-size:11px;color:#0D47A1"><i class="ti ti-info-circle" style="font-size:12px" aria-hidden="true"></i> '+text+'</div>';
+}
+function solicitarSalidaLlegada(tipo){
+  showOk(tipo==='salida'?'Solicitud de salida enviada al centro de control':'Solicitud de llegada enviada al centro de control');
+}
+function renderCtxAction(){
+  var wrap=document.getElementById('ctx-action');
+  if(!wrap) return;
+  var pill=document.getElementById('td-pill');
+  var html='';
+  if(tripStep===0){
+    if(pill){ pill.innerHTML='<i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida'; pill.style.background='#FFF2E8'; pill.style.color='#E64A19'; }
+    if(geoOn){
+      if(tieneDerecho('sal-geocerca')&&tieneDerecho('sal-manual')){ html=ctxBtn('Registrar Salida (Geocerca)',"nav('page-salida')"); }
+      else if(tieneDerecho('sal-geocerca')){ html=ctxInfo('Geocerca activada — la salida se registrará automáticamente al cruzar la zona'); }
+      else { html=ctxInfo('No puedes dar salida manual — Geocerca activada para este trayecto'); }
+    } else {
+      if(tieneDerecho('sal-manual')){ html=ctxBtn('Registrar salida',"nav('page-salida')"); }
+      else if(tieneDerecho('sal-solicitud')){ html=ctxBtn('Solicitar salida',"solicitarSalidaLlegada('salida')",true); }
+      else { html=ctxInfo('No tienes permiso para registrar ni solicitar la salida de este trayecto'); }
+    }
+  } else if(tripStep===1){
+    if(pill){ pill.innerHTML='<i class="ti ti-truck" style="font-size:11px" aria-hidden="true"></i> En ruta'; pill.style.background='#E1F4FF'; pill.style.color='#0D47A1'; }
+    if(geoOn){
+      if(tieneDerecho('lleg-geocerca')&&tieneDerecho('lleg-manual')){ html=ctxBtn('Registrar Llegada (Geocerca)',"nav('page-llegada')",false,'#388E3C'); }
+      else if(tieneDerecho('lleg-geocerca')){ html=ctxInfo('Geocerca activada — la llegada se registrará automáticamente al cruzar la zona'); }
+      else { html=ctxInfo('No puedes dar llegada manual — Geocerca activada para este trayecto'); }
+    } else {
+      if(tieneDerecho('lleg-manual')){ html=ctxBtn('Registrar llegada',"nav('page-llegada')",false,'#388E3C'); }
+      else if(tieneDerecho('lleg-solicitud')){ html=ctxBtn('Solicitar llegada',"solicitarSalidaLlegada('llegada')",true); }
+      else { html=ctxInfo('No tienes permiso para registrar ni solicitar la llegada de este trayecto'); }
+    }
+  } else {
+    if(pill){ pill.innerHTML='<i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i> Terminado'; pill.style.background='#E8F5E8'; pill.style.color='#1B5E20'; }
+    html=ctxInfo('Trayecto completado');
+  }
+  wrap.innerHTML=html;
+}
 function sosShow(state){
   document.getElementById('sos-idle').style.display = state==='idle'?'block':'none';
   document.getElementById('sos-confirm').style.display = state==='confirm'?'block':'none';
@@ -992,7 +1070,7 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],notif:['home-bell'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap'],listado:['tab-trips']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }
@@ -1016,21 +1094,18 @@ var DERECHOS_TREE={
     {id:'d-notif',label:'Notificaciones',checked:true,proc:'notif'}
   ],
   'col2-viajes':[
-    {id:'v-listado',label:'Listado de viajes',checked:true},
-    {id:'v-trayectos',label:'Ver trayectos',checked:true},
-    {id:'v-detalle',label:'Detalle del trayecto',checked:true},
-    {id:'v-salman',label:'Dar salida (manual)',checked:true},
-    {id:'v-salsol',label:'Dar salida (solicitud)',checked:true},
-    {id:'v-salgeo',label:'Dar salida (geocerca)',checked:true},
-    {id:'v-llegman',label:'Dar llegada (manual)',checked:true},
-    {id:'v-llegsol',label:'Dar llegada (solicitud)',checked:true},
-    {id:'v-lleggeo',label:'Dar llegada (geocerca)',checked:true},
+    {id:'v-listado',label:'Listado de viajes',checked:true,proc:'listado'},
+    {id:'v-trayectos',label:'Ver trayectos',checked:true,proc:'vertrayectos'},
+    {id:'v-detalle',label:'Detalle del trayecto',checked:true,proc:'detalletrayecto'},
+    {id:'v-salman',label:'Dar salida (manual)',checked:true,proc:'sal-manual'},
+    {id:'v-salsol',label:'Dar salida (solicitud)',checked:true,proc:'sal-solicitud'},
+    {id:'v-salgeo',label:'Dar salida (geocerca)',checked:true,proc:'sal-geocerca'},
+    {id:'v-llegman',label:'Dar llegada (manual)',checked:true,proc:'lleg-manual'},
+    {id:'v-llegsol',label:'Dar llegada (solicitud)',checked:true,proc:'lleg-solicitud'},
+    {id:'v-lleggeo',label:'Dar llegada (geocerca)',checked:true,proc:'lleg-geocerca'},
     {id:'v-evid',label:'Evidencias',checked:true,proc:'evidencia',children:'col3-evid'},
     {id:'v-docs',label:'Documentos',checked:true,proc:'cartaporte',children:'col3-docs'},
-    {id:'v-gastos',label:'Gastos de Viaje',checked:true,proc:'gastos',children:'col3-gastos'},
-    {id:'v-estsal',label:'Estatus Salida',checked:true},
-    {id:'v-estlleg',label:'Estatus Llegada',checked:true,proc:'estatus'},
-    {id:'v-asigest',label:'Asignar Estatus',checked:true}
+    {id:'v-gastos',label:'Gastos de Viaje',checked:true,proc:'gastos',children:'col3-gastos'}
   ],
   'col3-docs':[
     {id:'d-verdoc',label:'Ver documentos',checked:true},
@@ -1081,6 +1156,7 @@ function derechosCheck(id,on,proc){
   if(proc){ (PROC[proc]||[]).forEach(function(elId){ var e=document.getElementById(elId); if(e){ e.style.display=on?'':'none'; } }); }
   renderDerechos();
   if(typeof renderProcesos==='function'){ renderProcesos(); }
+  if(typeof renderCtxAction==='function'){ renderCtxAction(); }
 }
 function listaMode(m){
   document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
@@ -1157,6 +1233,7 @@ function guardarConfig(){
   alert(msg);
 }
 var PROCESOS_DEF={
+  solicitudes:{label:'Solicitudes',icon:'ti-clipboard-list',bg:'#FFF2E8',color:'#E64A19',page:'page-solicitudes',derecho:'solicitudes'},
   cp:{label:'Carta porte',icon:'ti-file-text',bg:'#FFF2E8',color:'#E64A19',page:'page-cartaporte',derecho:'cartaporte'},
   gastos:{label:'Gastos',icon:'ti-wallet',bg:'#E8F5E8',color:'#2E7D32',page:'page-gastos',derecho:'gastos'},
   liq:{label:'Liquidaciones',icon:'ti-receipt',bg:'#FFF2E8',color:'#E64A19',page:'page-liq',derecho:'liq'},
@@ -1197,6 +1274,8 @@ renderProcesos();
 renderHome();
 renderDerechos();
 renderOpList('');
+erpMode('simple');
+listaMode('full');
 </script>
 </body>
 </html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>#42840 — Cancelación Masiva de Reportes de Falla</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e8;padding:20px 28px;}
+.page-title{font-size:14px;font-weight:bold;margin-bottom:2px;}
+.page-sub{font-size:11px;color:#666;margin-bottom:6px;}
+.back{font-size:11px;color:#1a6eb5;margin-bottom:14px;display:inline-block;}
+.disclaimer{background:#fffbe6;border:1px solid #ccc;padding:10px 14px;margin-bottom:24px;font-size:11px;line-height:1.6;color:#333;}
+.disclaimer strong{display:block;margin-bottom:3px;}
+.screen{margin-bottom:36px;}
+.screen-label{font-size:10px;font-weight:bold;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.screen-desc{font-size:11px;color:#333;background:#f0f0f0;border-left:3px solid #888;padding:7px 10px;margin-bottom:8px;line-height:1.5;}
+.screen-desc ul{padding-left:14px;margin-top:3px;}
+.screen-desc li{margin-bottom:2px;}
+.erp-frame{border:1px solid #aaa;background:#fff;}
+.erp-topbar{background:#4a4843;color:#fff;padding:5px 10px;font-weight:bold;font-size:13px;}
+.erp-body{display:flex;}
+.erp-sidebar{width:130px;background:#f0f0f0;border-right:1px solid #ccc;flex-shrink:0;}
+.erp-sidebar-item{padding:5px 8px;font-size:11px;color:#444;border-bottom:1px solid #ddd;}
+.erp-sidebar-item.active{background:#4a4843;color:#fff;font-weight:bold;}
+.erp-main{flex:1;display:flex;flex-direction:column;}
+.erp-content{flex:1;padding:8px 10px;background:#fff;}
+.erp-bottom{background:#f5f5f5;border-top:1px solid #ccc;padding:5px 10px;display:flex;gap:8px;justify-content:flex-end;}
+.sec-label{background:#e0e0e0;text-align:center;font-size:11px;font-weight:bold;padding:2px 6px;margin:6px 0 5px;border:1px solid #ccc;color:#333;}
+.filter-area{background:#fafafa;border:1px solid #ddd;padding:8px 12px;margin-bottom:8px;}
+.frow{display:flex;align-items:center;margin-bottom:5px;gap:6px;flex-wrap:wrap;}
+.frow label{width:110px;font-size:12px;text-align:right;flex-shrink:0;color:#333;}
+.frow input,.frow select{border:1px solid #aaa;padding:2px 5px;font-size:12px;background:#fff;color:#1a1a1a;font-family:Arial,sans-serif;}
+.frow input[type=date]{width:105px;}
+.frow select{width:140px;}
+.sep{font-size:12px;margin:0 3px;}
+.erp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.erp-table th{background:#4a4843;color:#fff;padding:4px 8px;text-align:left;border:1px solid #3a3833;}
+.erp-table td{padding:3px 8px;border:1px solid #ddd;background:#fff;}
+.erp-table tr:nth-child(even) td{background:#f5f5f5;}
+.erp-table tr.sel td{background:#f5e6c0;}
+.btn{border:1px solid #999;padding:3px 14px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;background:#e8e8e8;color:#1a1a1a;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.empty-msg{text-align:center;color:#999;font-size:12px;padding:20px 0;font-style:italic;}
+.modal-overlay{background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;min-height:180px;}
+.modal-box{background:#fff;border:1px solid #999;width:310px;}
+.modal-header{background:#e0e0e0;padding:5px 10px;font-weight:bold;font-size:13px;border-bottom:1px solid #ccc;}
+.modal-body{padding:14px 16px;font-size:12px;line-height:1.6;}
+.modal-footer{display:flex;justify-content:center;gap:8px;padding:8px;border-top:1px solid #ccc;background:#f5f5f5;}
+.util-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border:1px solid #ccc;}
+.util-grid a{display:block;padding:5px 8px;font-size:12px;color:#1a6eb5;border-right:1px solid #ddd;border-bottom:1px solid #ddd;background:#fff;text-decoration:underline;}
+.util-grid a.new{font-weight:bold;background:#fffbe6;}
+.section-divider{border:none;border-top:2px dashed #bbb;margin:28px 0;}
+</style>
+</head>
+<body>
+
+<div class="page-title">Utilería 1 — Cancelación Masiva de Reportes de Falla</div>
+<div class="page-sub">#42840 | Módulo: Mantenimiento | 2026-07-07</div>
+<a class="back" href="index.html">← Volver al índice</a>
+
+<div class="disclaimer">
+  <strong>Sobre este prototipo</strong>
+  Representación visual del flujo acordado. No es diseño final. Respetar la apariencia real del ERP (colores, tipografía, estructura de paneles). Si algo no encaja con la implementación, consultar antes de hacer cambios.
+</div>
+
+<!-- Pantalla 0 -->
+<div class="screen">
+  <div class="screen-label">Pantalla 0 — Listado de utilerías de Mantenimiento</div>
+  <div class="screen-desc">
+    Las dos nuevas utilerías se agregan al listado. Los números de opción (0X, 0Y) los asigna desarrollo según el consecutivo real del módulo.
+  </div>
+  <div class="erp-frame">
+    <div class="erp-topbar">Mantenimiento — Utilerías</div>
+    <div class="erp-body">
+      <div class="erp-sidebar">
+        <div class="erp-sidebar-item">Órd. de servicio</div>
+        <div class="erp-sidebar-item">Reportes de falla</div>
+        <div class="erp-sidebar-item active">Utilerías</div>
+        <div class="erp-sidebar-item">Serv. programados</div>
+      </div>
+      <div class="erp-main">
+        <div class="erp-content">
+          <div class="sec-label">Listado de utilerías de Mantenimiento</div>
+          <div class="util-grid">
+            <a href="#">01 - Utilería existente A</a>
+            <a href="#">02 - Utilería existente B</a>
+            <a href="#">03 - Utilería existente C</a>
+            <a href="#">04 - Utilería existente D</a>
+            <a href="#" class="new">0X - Cancelación Masiva de Reportes de Falla</a>
+            <a href="#" class="new">0Y - Terminación Masiva de Órdenes de Servicio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Pantalla 1A -->
+<div class="screen">
+  <div class="screen-label">Pantalla 1A — Filtros (estado inicial)</div>
+  <div class="screen-desc">
+    Estado al abrir la utilería. Listado vacío hasta hacer clic en <strong>Generar</strong>. Botón <strong>Cancelar</strong> deshabilitado hasta tener ≥1 registro seleccionado.
+    <ul>
+      <li><strong>Fecha inicio / Fecha fin:</strong> tipo fecha, ambos obligatorios. Si alguno está vacío → mensaje "El rango de fechas es obligatorio".</li>
+      <li><strong>Unidad:</strong> selección múltiple del catálogo de unidades, opcional. Sin selección = aplica a todas.</li>
+      <li><strong>Filtro silencioso al generar:</strong> excluye RF cancelados (CanceladoEl IS NOT NULL), RF con OS vinculada (IdOrdenServicio IS NOT NULL), RF con artículos de inventario afectados, RF con devolución registrada. No se muestra mensaje al usuario por los excluidos.</li>
+    </ul>
+  </div>
+  <div class="erp-frame">
+    <div class="erp-topbar">Mantenimiento — Cancelación Masiva de Reportes de Falla</div>
+    <div class="erp-body">
+      <div class="erp-sidebar">
+        <div class="erp-sidebar-item">Órd. de servicio</div>
+        <div class="erp-sidebar-item">Reportes de falla</div>
+        <div class="erp-sidebar-item active">Utilerías</div>
+        <div class="erp-sidebar-item">Serv. programados</div>
+      </div>
+      <div class="erp-main">
+        <div class="erp-content">
+          <div class="filter-area">
+            <div class="sec-label">Rango de Fechas</div>
+            <div class="frow">
+              <label>Desde</label>
+              <input type="date" value="2026-07-01">
+              <span class="sep">Hasta</span>
+              <input type="date" value="2026-07-07">
+            </div>
+            <div class="sec-label">Unidad</div>
+            <div class="frow">
+              <label>Unidad(es)</label>
+              <select><option>-- Todas --</option><option>UT-01 KENWORTH T800</option><option>UT-02 FREIGHTLINER</option></select>
+            </div>
+          </div>
+          <div class="empty-msg">Sin resultados. Aplique los filtros y haga clic en "Generar".</div>
+        </div>
+        <div class="erp-bottom">
+          <button class="btn">Generar</button>
+          <button class="btn" disabled>Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pantalla 1B -->
+<div class="screen">
+  <div class="screen-label">Pantalla 1B — Resultados cargados, registros seleccionados</div>
+  <div class="screen-desc">
+    Tras hacer clic en <strong>Generar</strong>. Solo aparecen RF elegibles (ver reglas de filtro en 1A). Orden: fecha ascendente.
+    <ul>
+      <li><strong>Columnas:</strong> Checkbox | Folio | Fecha | Unidad | Operador | Clasificación de servicio | Descripción de falla.</li>
+      <li>Checkbox en encabezado selecciona/deselecciona todos. Al marcar ≥1 → botón <strong>Cancelar</strong> se habilita.</li>
+      <li>Si no hay registros seleccionados y el usuario hace clic en <strong>Cancelar</strong> → mensaje "Debe seleccionar al menos un Reporte de Falla".</li>
+    </ul>
+  </div>
+  <div class="erp-frame">
+    <div class="erp-topbar">Mantenimiento — Cancelación Masiva de Reportes de Falla</div>
+    <div class="erp-body">
+      <div class="erp-sidebar">
+        <div class="erp-sidebar-item">Órd. de servicio</div>
+        <div class="erp-sidebar-item">Reportes de falla</div>
+        <div class="erp-sidebar-item active">Utilerías</div>
+        <div class="erp-sidebar-item">Serv. programados</div>
+      </div>
+      <div class="erp-main">
+        <div class="erp-content">
+          <div class="filter-area">
+            <div class="sec-label">Rango de Fechas</div>
+            <div class="frow">
+              <label>Desde</label><input type="date" value="2026-07-01">
+              <span class="sep">Hasta</span><input type="date" value="2026-07-07">
+            </div>
+            <div class="sec-label">Unidad</div>
+            <div class="frow"><label>Unidad(es)</label><select><option>-- Todas --</option></select></div>
+          </div>
+          <table class="erp-table">
+            <thead>
+              <tr>
+                <th style="width:28px"><input type="checkbox" checked></th>
+                <th>Folio</th><th>Fecha</th><th>Unidad</th><th>Operador</th><th>Clasificación de servicio</th><th>Descripción de falla</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="sel"><td><input type="checkbox" checked></td><td>RF-00412</td><td>01/07/2026</td><td>UT-01</td><td>JUAN PÉREZ LÓPEZ</td><td>Mecánica</td><td>Falla en frenos delanteros</td></tr>
+              <tr class="sel"><td><input type="checkbox" checked></td><td>RF-00415</td><td>02/07/2026</td><td>UT-03</td><td>CARLOS RUIZ MORA</td><td>Eléctrica</td><td>Tablero sin encender</td></tr>
+              <tr><td><input type="checkbox"></td><td>RF-00418</td><td>03/07/2026</td><td>UT-01</td><td>JUAN PÉREZ LÓPEZ</td><td>Mecánica</td><td>Ruido en caja de velocidades</td></tr>
+              <tr class="sel"><td><input type="checkbox" checked></td><td>RF-00421</td><td>05/07/2026</td><td>UT-02</td><td>PEDRO SÁNCHEZ GIL</td><td>Carrocería</td><td>Puerta de cabina dañada</td></tr>
+              <tr><td><input type="checkbox"></td><td>RF-00423</td><td>06/07/2026</td><td>UT-04</td><td>MARIO FLORES DÍAZ</td><td>Mecánica</td><td>Fuga de aceite motor</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="erp-bottom">
+          <button class="btn">Generar</button>
+          <button class="btn">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pantalla 1C -->
+<div class="screen">
+  <div class="screen-label">Pantalla 1C — Confirmación antes de cancelar</div>
+  <div class="screen-desc">
+    Al hacer clic en <strong>Cancelar</strong> con ≥1 seleccionado. N = cantidad de registros marcados en ese momento. <strong>Aceptar</strong> ejecuta la cancelación. <strong>No</strong> cierra el modal sin cambios y mantiene la selección.
+  </div>
+  <div class="erp-frame">
+    <div class="erp-topbar">Mantenimiento — Cancelación Masiva de Reportes de Falla</div>
+    <div class="erp-body">
+      <div class="erp-sidebar">
+        <div class="erp-sidebar-item">Órd. de servicio</div>
+        <div class="erp-sidebar-item">Reportes de falla</div>
+        <div class="erp-sidebar-item active">Utilerías</div>
+        <div class="erp-sidebar-item">Serv. programados</div>
+      </div>
+      <div class="erp-main">
+        <div class="erp-content" style="padding:0;">
+          <div class="modal-overlay">
+            <div class="modal-box">
+              <div class="modal-header">GM Transport ERP</div>
+              <div class="modal-body">Se cancelarán <strong>3</strong> Reportes de Falla. ¿Desea continuar?</div>
+              <div class="modal-footer">
+                <button class="btn">Aceptar</button>
+                <button class="btn">No</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pantalla 1D -->
+<div class="screen">
+  <div class="screen-label">Pantalla 1D — Proceso finalizado</div>
+  <div class="screen-desc">
+    Sin conteo de correctos/errores (Opción A — bloque único). Al hacer clic en <strong>Aceptar</strong>: el listado se refresca al volver a hacer clic en Generar con el mismo filtro — los RF cancelados ya no aparecen.
+    <ul>
+      <li>El motivo se guarda automáticamente como "Cancelación Masiva" en cada RF. El usuario no lo captura.</li>
+      <li>Se registra en bitácora: acción "Cancelación Masiva de Reportes de Falla", folios procesados, usuario, fecha y hora.</li>
+    </ul>
+  </div>
+  <div class="erp-frame">
+    <div class="erp-topbar">Mantenimiento — Cancelación Masiva de Reportes de Falla</div>
+    <div class="erp-body">
+      <div class="erp-sidebar">
+        <div class="erp-sidebar-item">Órd. de servicio</div>
+        <div class="erp-sidebar-item">Reportes de falla</div>
+        <div class="erp-sidebar-item active">Utilerías</div>
+        <div class="erp-sidebar-item">Serv. programados</div>
+      </div>
+      <div class="erp-main">
+        <div class="erp-content" style="padding:0;">
+          <div class="modal-overlay">
+            <div class="modal-box">
+              <div class="modal-header">GM Transport ERP</div>
+              <div class="modal-body"><span style="color:#1a6eb5;font-size:16px;margin-right:6px;vertical-align:middle;">ℹ</span>El proceso de cancelación masiva ha finalizado.</div>
+              <div class="modal-footer"><button class="btn">Aceptar</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

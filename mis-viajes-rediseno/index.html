@@ -33,9 +33,10 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 #mvw .seg{flex:1;text-align:center;padding:9px 2px;border:1.5px solid #e2e2e2;border-radius:7px;font-size:12px;color:#666;cursor:pointer}
 #mvw .seg.on{background:#E8F5E8;border-color:#388E3C;color:#1B5E20;font-weight:500}
 #mvw .secf{transition:all .15s}
-#mvw .modo-simple .secf{font-size:9.5px!important;opacity:.5}
+#mvw .modo-simple .secf{display:none!important}
 #mvw .modo-simple .tilelbl{opacity:.55}
 #mvw .lista-minima #page-trips .secf{display:none}
+#mvw .lista-minima #page-trips .origen-field{display:none}
 #mvw .solo-obligatorios .campo-opcional{display:none}
 #mvw .wiz{display:none}
 #mvw .wiz.on{display:block}
@@ -542,22 +543,22 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
           <div class="cd" style="cursor:pointer;border-left:5px solid #E8600F;border-radius:6px 16px 16px 6px" onclick="verTrayectos()">
             <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Puerto Peñasco</span><span class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Carga 25/06 08:42</span><span>&middot;</span><span>Descarga 25/06 12:10</span><span>&middot;</span><span>297 km</span></div>
           </div>
           <div class="cd" style="border-left:5px solid #1976D2;border-radius:6px 16px 16px 6px">
             <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Los Mochis</span><span class="pill" style="background:#E1F4FF;color:#0D47A1"><i class="ti ti-navigation" style="font-size:11px" aria-hidden="true"></i> En ruta</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Transportes del Noroeste</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Transportes del Noroeste</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Salida 24/06 14:22</span><span>&middot;</span><span>Descarga 24/06 22:30</span><span>&middot;</span><span>156 km</span></div>
           </div>
           <div class="cd" style="border-left:5px solid #388E3C;border-radius:6px 16px 16px 6px">
             <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Hermosillo</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f"><i class="ti ti-alert-circle" style="font-size:11px" aria-hidden="true"></i> Pendiente liq</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Importador Express SA</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Importador Express SA</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Llegada 23/06 09:45</span><span>&middot;</span><span>234 km</span></div>
           </div>
           <div class="cd" style="border-left:5px solid #B39DDB;border-radius:6px 16px 16px 6px">
             <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Culiacán</span><span class="pill" style="background:#F3E5F5;color:#512DA8"><i class="ti ti-calendar-plus" style="font-size:11px" aria-hidden="true"></i> Programado</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Logística Centro SA</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Logística Centro SA</div></div><div class="origen-field"><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Carga 26/06 06:00</span><span>&middot;</span><span>Descarga 26/06 14:30</span><span>&middot;</span><span>280 km</span></div>
           </div>
         </div>
@@ -586,7 +587,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <div id="td-body" style="padding:0 16px 16px">
           <div class="cd" style="margin-bottom:9px">
             <div class="rw" style="justify-content:space-between;margin-bottom:9px"><span style="font-size:15.5px;font-weight:500">Puerto Peñasco</span><span id="td-pill" class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div>
-            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+            <div class="rw" style="gap:16px;margin-bottom:7px"><div class="secf"><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
             <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px;flex-wrap:wrap"><span>Carga 25/06 08:42</span><span>&middot;</span><span>Descarga 25/06 12:10</span><span>&middot;</span><span>297 km</span><span>&middot;</span><span>Unidad T12</span></div>
           </div>
           <div id="ctx-action"></div>

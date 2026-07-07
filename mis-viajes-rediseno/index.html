@@ -588,7 +588,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       </div>
 
       <div class="pg" id="page-solicitudes">
-        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-clipboard-list" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Mis solicitudes</div><div class="t2">de viaje</div></div></div><div class="bk"><i class="ti ti-filter" aria-hidden="true"></i></div></div></div>
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-clipboard-list" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Mis solicitudes</div><div class="t2">de viaje</div></div></div></div>
         <div style="padding:0 16px 16px">
           <div class="bp" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px" onclick="wizShow('sv',1)"><i class="ti ti-plus" style="font-size:17px;color:#fff" aria-hidden="true"></i>Nueva solicitud</div>
           <div id="sv-wrap" style="display:none">
@@ -694,7 +694,6 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
       <div id="tabbar" style="display:none;position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #eee;justify-content:space-around;padding:9px 4px 12px;z-index:6">
         <div class="tabitem" data-tab="page-home" style="cursor:pointer;color:#E8600F;text-align:center" onclick="nav('page-home')"><i class="ti ti-home" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px;font-weight:500">Inicio</div></div>
         <div class="tabitem" id="tab-trips" data-tab="page-trips" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-trips')"><i class="ti ti-truck" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Viajes</div></div>
-        <div class="tabitem" id="tab-sv" data-tab="page-solicitudes" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-solicitudes')"><i class="ti ti-clipboard-list" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Solicitudes</div></div>
         <div class="tabitem" data-tab="page-otros" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-otros')"><i class="ti ti-grid-dots" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Otros</div></div>
       </div>
 
@@ -761,6 +760,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
         <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Mostrar en pantalla principal (acceso rápido)</div>
         <div style="font-size:9px;color:#888;margin-bottom:8px">Solo se pueden marcar procesos a los que el operador ya tiene derecho (pestaña Derechos). Los que no se marquen aquí seguirán disponibles en la pestaña "Otros" del celular.</div>
         <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="solicitudes" style="accent-color:#555" onchange="renderProcesos()">Solicitudes</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="cp" style="accent-color:#555" onchange="renderProcesos()">Carta porte</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="gastos" style="accent-color:#555" onchange="renderProcesos()">Gastos</label>
           <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-principal="liq" style="accent-color:#555" onchange="renderProcesos()">Liquidaciones</label>
@@ -877,7 +877,7 @@ body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:
 function nav(id){
   document.querySelectorAll('#mvw .pg').forEach(function(p){p.classList.remove('active');});
   var el=document.getElementById(id); if(el){el.classList.add('active');}
-  var roots=['page-home','page-trips','page-solicitudes','page-otros'];
+  var roots=['page-home','page-trips','page-otros'];
   document.getElementById('tabbar').style.display = roots.indexOf(id)>-1?'flex':'none';
   document.querySelectorAll('#mvw .tabitem').forEach(function(t){ t.style.color = t.getAttribute('data-tab')===id?'#E8600F':'#9a9a9a'; });
   document.getElementById('viewport').scrollTop=0;
@@ -1070,7 +1070,7 @@ function erpGeo(on){
   var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
   renderHome();
 }
-var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],solicitudes:['tab-sv'],notif:['home-bell'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap'],listado:['tab-trips']};
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],notif:['home-bell'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap'],listado:['tab-trips']};
 function procTg(k,on){
   (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
 }
@@ -1233,6 +1233,7 @@ function guardarConfig(){
   alert(msg);
 }
 var PROCESOS_DEF={
+  solicitudes:{label:'Solicitudes',icon:'ti-clipboard-list',bg:'#FFF2E8',color:'#E64A19',page:'page-solicitudes',derecho:'solicitudes'},
   cp:{label:'Carta porte',icon:'ti-file-text',bg:'#FFF2E8',color:'#E64A19',page:'page-cartaporte',derecho:'cartaporte'},
   gastos:{label:'Gastos',icon:'ti-wallet',bg:'#E8F5E8',color:'#2E7D32',page:'page-gastos',derecho:'gastos'},
   liq:{label:'Liquidaciones',icon:'ti-receipt',bg:'#FFF2E8',color:'#E64A19',page:'page-liq',derecho:'liq'},

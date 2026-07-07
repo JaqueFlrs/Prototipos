@@ -42,6 +42,28 @@ Splash, inicio, detalle de trayecto, balance de gastos, lista de trayectos, cart
 - Inspecciones físico-mecánicas: flujo real de 5 pasos (Movimiento / Unidad / Revisión / Seguridad / Firma) — replicado en el prototipo.
 - Gastos: flujo CFDI de 5 pasos.
 
+### Relación Viaje ↔ Trayecto y flujo real de "Dar salida" / "Dar llegada" (investigación profunda del código, sesión posterior)
+
+Esto se investigó a fondo (3 agentes en paralelo sobre `gm-mis-viajes-main`, `gm-mis-viajes-backend-main` y el schema/BD) porque no estaba claro si "Dar salida (manual/solicitud/geocerca)" eran 3 pantallas distintas. **Conclusión verificada en código:**
+
+- **Un viaje (`ViajeSimple`) tiene 1-a-N trayectos (`Trayecto`)**. Cada trayecto tiene `fechaSalida` y `fechaLlegada` (nullable) — el estatus se **calcula**, no se guarda:
+  - `Salida==null && Llegada==null` → **SIN SALIDA**
+  - `Salida!=null && Llegada==null` → **EN RUTA**
+  - `Salida!=null && Llegada!=null && TrayectoLiquidable==0` → **TERMINADO**
+  - `Salida!=null && Llegada!=null && IdLiquidacion==null && TrayectoLiquidable==1` → **PENDIENTE LIQUIDAR**
+- **Navegación real:** Lista de viajes → **Lista de trayectos del viaje** (`trayectos_page.dart`) → **Detalle del trayecto** (`trayecto_detalle_page.dart`) → desde ahí, un **botón contextual** (`contextual_action_button.dart`, HU41902) decide qué mostrar.
+- **"Manual" y "Geocerca" son LA MISMA PANTALLA** (`RegistrarSalidaPage` / `RegistrarLlegadaPage`), diferenciada solo por el campo `esGeocerca` (bool) del trayecto — el botón cambia de etiqueta ("Registrar Salida" vs "Registrar Salida (Geocerca)") pero abre el mismo formulario.
+- **"Solicitud" es realmente distinto**: NO abre ningún formulario de registro. Dispara `EnviarNotificacionClienteEvent` (BLoC `AsistenciaBloc`/`SolicitudLlegadaSalidaBloc`) que **envía una notificación al centro de control/despachador** (incluye ubicación GPS vía link de Google Maps) pidiendo que ellos autoricen/registren. No hay "aprobación" visible en la app del operador, solo el envío del aviso.
+- **Lógica de prioridad real del botón contextual** (replicada en el prototipo dentro de `page-trayecto-detalle` / función `renderCtxAction()`):
+  1. Si `esGeocerca=true`: solo importa el permiso **manual** — si lo tiene, botón "Registrar Salida/Llegada (Geocerca)" (mismo formulario); si no lo tiene, queda bloqueado esperando el disparo automático (el permiso de "solicitud" se ignora por completo cuando es geocerca).
+  2. Si NO es geocerca: prioridad = Registrar (manual, si hay permiso) → si no, Solicitar (si hay permiso de solicitud) → si no, sin acción disponible.
+- **Campos reales capturados:**
+  - Salida: odómetro (km y millas, sincronizado bilateralmente con el ERP — se toma el mayor entre lo capturado y lo que ya tiene el ERP), fecha/hora, estatus del viaje, coordenadas GPS (obligatorias, sin GPS el registro falla).
+  - Llegada: lo mismo + estatus de **4 unidades** (Camión, Carga1, Dolly, Carga2 — las que no aplican se envían como "sin cambios").
+  - Todo viaja a Go backend (`POST /trayecto/salida`, `POST /trayecto/llegada`) que reenvía por SOAP al ERP.
+
+**Cómo quedó reflejado en el prototipo:** se agregaron las pantallas `page-viaje-trayectos` (lista de N trayectos de un viaje) y `page-trayecto-detalle` (info + botón contextual). El botón contextual lee en vivo los permisos `sal-manual`/`sal-solicitud`/`sal-geocerca` (y sus equivalentes `lleg-*`) del árbol de derechos del ERP, más el toggle global "Geocerca activada" — igual que el sistema real.
+
 ## Estado actual (resumen "Se propone" — ya está en el HTML, arriba del celular)
 
 ### En la app
@@ -71,8 +93,11 @@ Splash, inicio, detalle de trayecto, balance de gastos, lista de trayectos, cart
 - Ese resumen debe reflejar **TODO lo trabajado en la sesión**, no solo el último cambio — si se agrega algo nuevo, actualizar el bullet correspondiente ahí también.
 - El diseño del celular se ajustó para que no se vea "de juguete": bordes menos redondeados (7-10px en vez de 12-20px), sombras más sutiles (sin "glow"), naranja menos saturado (`#E8600F` en vez de `#FF7043`). Si se pide seguir afinando esto, es sobre ese eje (seriedad visual, no cambiar la esencia).
 - Reportar falla usa **dropdown con optgroups por categoría**, no iconos — un catálogo de fallas puede tener cientos de códigos y no es viable representarlos como iconos.
-- El código de falla, campos de Salida/Llegada, procesos/módulos, tarjeta del inicio, etc. — todo se controla vía el objeto `PROC` (mapa `clave → [ids de elementos del celular]`) y la función `procTg(key, on)` / `campoDefault(key, on)`. Si se agrega un nuevo elemento configurable, seguir ese mismo patrón.
-- El árbol de derechos (`DERECHOS_TREE`) es un objeto JS con columnas en cascada (`col1`, `col2-viajes`, `col3-docs`, etc.) — cada item puede tener `proc:'clave'` para vincularse a un elemento real del celular, o no tener `proc` si es una acción granular sin toggle propio en el mockup (eso está bien, no todos necesitan estar wireados).
+- Campos de Salida/Llegada, tarjeta del inicio, tabs del menú inferior, etc. — se controlan vía el objeto `PROC` (mapa `clave → [ids de elementos del celular]`) y la función `procTg(key, on)` / `campoDefault(key, on)`. Si se agrega un nuevo elemento configurable de este tipo, seguir ese mismo patrón.
+- **Los tiles de "Más herramientas" / tab "Otros" del home YA NO usan `PROC`/`procTg`** — se renderizan dinámicamente con `PROCESOS_DEF` (diccionario de {label, icon, page, derecho}) + la función `tieneDerecho(procKey)` (lee directo del árbol de derechos) + `renderProcesos()`. Si un tile de herramienta no aparece, revisar `PROCESOS_DEF` y el checkbox `data-principal` correspondiente, no el mapa `PROC`.
+- **Por default, ninguna herramienta secundaria aparece en el home** ("Mostrar en pantalla principal") — los checkboxes `data-principal` de Carta porte/Gastos/Liquidaciones/Inspecciones/etc. arrancan **desmarcados**. El admin debe activarlas explícitamente por operador si quiere que aparezcan ahí; si no, solo viven en el tab "Otros". No revertir esto a "checked by default".
+- El árbol de derechos (`DERECHOS_TREE`) es un objeto JS con columnas en cascada (`col1`, `col2-viajes`, `col3-docs`, etc.) — cada item puede tener `proc:'clave'` para vincularse a un elemento real (vía `PROC`, vía `tieneDerecho()` en pantallas nuevas, o vía `PROCESOS_DEF.derecho`). **Ya se auditó dos veces para quitar permisos muertos/duplicados** (Registro de Entrada/Salidas, Asistencia Grúa, Alta+Listado Reporte de Fallas duplicados, Asignar Estatus, Estatus Salida/Llegada duplicados con la pestaña de valores por default). Si se agrega un nuevo item al árbol, **siempre** dale un `proc` real y conéctalo a algo visible — no dejar permisos "de adorno" que no hagan nada, porque eso es exactamente lo que se ha estado limpiando.
+- Los permisos "Dar salida/llegada (manual/solicitud/geocerca)" están conectados a `page-trayecto-detalle` vía `renderCtxAction()`, que lee `tieneDerecho('sal-manual')`, `tieneDerecho('sal-solicitud')`, `tieneDerecho('sal-geocerca')` (y sus equivalentes `lleg-*`) más la variable global `geoOn`. Ver la sección de arriba sobre el flujo real de Dar salida/llegada antes de tocar esta lógica — la prioridad geocerca > manual > solicitud es intencional y replica el código real (`contextual_action_button.dart`).
 
 ## Flujo de publicación (IMPORTANTE — ya resuelto, no perder tiempo en esto)
 

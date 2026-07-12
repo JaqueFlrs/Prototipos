@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 98%;
+    --foreground: 222 20% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 20% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 20% 12%;
+    --primary: 235 82% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 20% 95%;
+    --secondary-foreground: 222 20% 12%;
+    --muted: 220 20% 95%;
+    --muted-foreground: 220 10% 45%;
+    --accent: 235 82% 95%;
+    --accent-foreground: 235 60% 40%;
+    --destructive: 358 75% 59%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 145 63% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 32 81% 43%;
+    --warning-foreground: 0 0% 100%;
+    --border: 220 15% 90%;
+    --input: 220 15% 88%;
+    --ring: 235 82% 65%;
+    --radius: 0.6rem;
+
+    --ch: 32 81% 43%;
+    --ch-bg: 38 90% 92%;
+    --pb: 249 65% 68%;
+    --pb-bg: 250 90% 96%;
+  }
+
+  .dark {
+    --background: 222 22% 7%;
+    --foreground: 220 20% 92%;
+    --card: 222 18% 11%;
+    --card-foreground: 220 20% 92%;
+    --popover: 222 18% 11%;
+    --popover-foreground: 220 20% 92%;
+    --primary: 235 82% 68%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 15% 16%;
+    --secondary-foreground: 220 20% 92%;
+    --muted: 222 15% 16%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 235 40% 20%;
+    --accent-foreground: 235 90% 82%;
+    --destructive: 358 70% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 145 55% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 80% 55%;
+    --warning-foreground: 0 0% 100%;
+    --border: 222 15% 20%;
+    --input: 222 15% 20%;
+    --ring: 235 82% 68%;
+
+    --ch: 38 80% 55%;
+    --ch-bg: 35 40% 18%;
+    --pb: 249 75% 78%;
+    --pb-bg: 250 35% 20%;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .animate-blob {
+    animation: blob 16s infinite ease-in-out;
+  }
+  .animation-delay-2000 {
+    animation-delay: -5s;
+  }
+  .animation-delay-4000 {
+    animation-delay: -10s;
+  }
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(3%, -4%) scale(1.08); }
+  50% { transform: translate(-2%, 3%) scale(0.96); }
+  75% { transform: translate(-4%, -2%) scale(1.04); }
+}
+

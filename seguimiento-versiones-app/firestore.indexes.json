@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "tickets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "statusFamily", "order": "ASCENDING" },
+        { "fieldPath": "fechaPublicacion", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "hus",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "dev", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

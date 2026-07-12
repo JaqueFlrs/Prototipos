@@ -11,17 +11,23 @@ antes de tocar código.
 - **Frontend**: las 8 vistas están construidas y funcionando contra datos reales:
   Dashboard, Kanban por mes, Backlog Versiones, Cotizaciones, Liberaciones, Calendario,
   Mis Tickets (con bitácora), Administración, Configuración.
-- **Login**: Google Sign-In restringido a dominio `@gmtransporterp.com` (no correo/contraseña
-  — esa parte del README viejo quedó obsoleta). La autorización real de la app es tener un
-  doc en Firestore `usuarios/{email}` — sin eso, el login funciona pero la app no deja
-  entrar.
+- **Login**: correo + contraseña (Firebase Auth Email/Password) — `frontend/src/pages/Login.tsx`
+  usa `loginWithPassword`, no hay Google Sign-In implementado (una versión anterior de este
+  README decía lo contrario; era un plan que no se llevó a cabo). La autorización real de la
+  app es tener un doc en Firestore `usuarios/{email}` — sin eso, el login funciona pero la
+  app no deja entrar.
+- **Hosting**: desplegado en https://seguimientogm-a05df.web.app (desde este entorno, sin
+  Firebase CLI instalado globalmente — se usó `firebase-tools` como dependencia local del
+  proyecto + el service account para autenticar sin login interactivo). Para redeployar:
+  `cd frontend && npm run build && cd .. && GOOGLE_APPLICATION_CREDENTIALS="<ruta-a-la-llave>"
+  node_modules/.bin/firebase deploy --only hosting --project seguimientogm-a05df --non-interactive`.
 - **Datos**: cargados **manualmente** vía un pipeline propio (ver abajo) porque todavía no
   hay una app OAuth de Zoho registrada para que las Cloud Functions sincronicen solas.
   `functions/src/sync.ts` existe, compila, y tiene la misma lógica que el pipeline manual —
   pero **nunca se ha desplegado ni probado en vivo** contra la API real de Zoho.
-- **Firebase**: proyecto `seguimientogm-a05df`. Firestore y Auth están en uso real.
-  Hosting/Functions **no están desplegados** — la app se ha estado corriendo en local
-  (`npm run dev`) contra el Firestore real.
+- **Firebase**: proyecto `seguimientogm-a05df`. Firestore, Auth y **Hosting** están en uso
+  real (https://seguimientogm-a05df.web.app). **Functions no están desplegadas** todavía
+  (el sync sigue siendo manual).
 - **Git**: este proyecto vive dentro del repo `JaqueFlrs/Prototipos`
   (`C:\Users\jaqui\tmp-prototipos\`), pero **nunca se había comiteado hasta ahora** — todo
   el trabajo existía solo en el filesystem local hasta este commit.
@@ -122,12 +128,12 @@ publicarlas.
 
 ## Pendientes conocidos
 
-- Desplegar Hosting + Functions de verdad (nunca se ha hecho `firebase deploy`).
+- Desplegar Functions de verdad (Hosting y Firestore rules ya están desplegados).
 - Registrar la app OAuth de Zoho para que `syncZoho` deje de ser manual (ver pasos en la
   sección de Zoho más abajo).
 - Terminar la sección "Notion" (tableros propios + vista de datos alterna) — el hook ya
-  existe, falta la página y el ítem de navegación.
-- Confirmar que `firestore.rules` de este repo está realmente publicado en Firebase.
+  existe (`frontend/src/hooks/useNotion.ts`), falta la página y el ítem de navegación.
+  Quedó pausada a propósito, no continuar sin que la usuaria lo pida.
 
 ## Registrar UNA app de Zoho para el sync (no para el login)
 

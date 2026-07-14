@@ -50,9 +50,83 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .util-grid a{display:block;padding:5px 8px;font-size:12px;color:#1a6eb5;border-right:1px solid #ddd;border-bottom:1px solid #ddd;background:#fff;text-decoration:underline;}
 .util-grid a.new{font-weight:bold;background:#fffbe6;}
 .section-divider{border:none;border-top:2px dashed #bbb;margin:28px 0;}
+
+/* Catálogo popup */
+.cat-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;align-items:center;justify-content:center;}
+.cat-overlay.open{display:flex;}
+.cat-popup{background:#fff;border:1px solid #999;width:680px;max-width:95vw;box-shadow:3px 3px 10px rgba(0,0,0,.3);}
+.cat-popup-header{background:#4a4843;color:#fff;padding:6px 10px;font-weight:bold;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+.cat-popup-header button{background:none;border:none;color:#fff;font-size:15px;cursor:pointer;line-height:1;}
+.cat-toolbar{background:#e0e0e0;padding:5px 8px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #ccc;}
+.cat-search{border:1px solid #aaa;padding:2px 6px;font-size:12px;width:160px;}
+.cat-table{width:100%;border-collapse:collapse;font-size:12px;}
+.cat-table th{background:#4a4843;color:#fff;padding:4px 8px;text-align:left;border:1px solid #3a3833;cursor:pointer;}
+.cat-table td{padding:3px 8px;border:1px solid #ddd;}
+.cat-table tr:hover td{background:#e8f0fe;cursor:pointer;}
+.cat-table tr:nth-child(even) td{background:#f5f5f5;}
+.cat-table tr:nth-child(even):hover td{background:#e8f0fe;}
+.cat-footer{background:#f5f5f5;border-top:1px solid #ccc;padding:5px 10px;font-size:11px;color:#555;display:flex;justify-content:space-between;align-items:center;}
+.badge{display:inline-block;padding:1px 5px;font-size:10px;font-weight:bold;color:#fff;border-radius:2px;}
+.badge-ocupa{background:#f90;}
+.badge-asign{background:#00b;}
+.badge-dispo{background:#0a0;}
+.badge-manto{background:#fa0;}
 </style>
 </head>
 <body>
+
+<!-- Catálogo de Unidades popup -->
+<div class="cat-overlay" id="catOverlay">
+  <div class="cat-popup">
+    <div class="cat-popup-header">
+      <span>Catálogo de Unidades</span>
+      <button onclick="closeCat()">✕</button>
+    </div>
+    <div class="cat-toolbar">
+      <button class="btn" style="padding:2px 10px;">Seleccionar</button>
+      <button class="btn" style="padding:2px 10px;">Agregar</button>
+      <button class="btn" style="padding:2px 10px;">Consultar</button>
+      &nbsp;
+      <span style="font-size:11px;color:#555;">Buscar:</span>
+      <input class="cat-search" type="text" placeholder="">
+      <label style="font-size:11px;margin-left:8px;"><input type="checkbox" checked> No Visualizar Unidades Rentadas</label>
+      <label style="font-size:11px;margin-left:6px;"><input type="checkbox" checked> Únicamente activas</label>
+      <button class="btn" style="padding:2px 8px;">Aplicar 🔍</button>
+    </div>
+    <div style="overflow-x:auto;max-height:280px;overflow-y:auto;">
+      <table class="cat-table">
+        <thead><tr>
+          <th>Tipo Unidad</th><th>Código</th><th>Descripción</th><th>Nro Ope</th><th>Operador</th><th>Estatus</th><th>Placas</th>
+        </tr></thead>
+        <tbody>
+          <tr onclick="selectUnit('GV55','TRACTOCAMION GV55')"><td>TRACTOCAMION</td><td>GV55</td><td>GV55</td><td>000050</td><td>NAVARRO RIOS ANGEL</td><td><span class="badge badge-ocupa">OCUPA</span></td><td>73AC4G</td></tr>
+          <tr onclick="selectUnit('R1','PORTACONTENEDOR R1')"><td>PORTACONTENEDOR</td><td>R1</td><td>CAJA SECA R1</td><td>000000</td><td></td><td><span class="badge badge-asign">ASIGN</span></td><td>45UB6H</td></tr>
+          <tr onclick="selectUnit('D1','DOLLY D1')"><td>DOLLY</td><td>D1</td><td>DOLLY</td><td>000000</td><td></td><td><span class="badge badge-asign">ASIGN</span></td><td></td></tr>
+          <tr onclick="selectUnit('R2','CAJA SECA R2')"><td>CAJA SECA</td><td>R2</td><td>REMOLQUE 2</td><td>000000</td><td></td><td><span class="badge badge-ocupa">OCUPA</span></td><td>123AS2A</td></tr>
+          <tr onclick="selectUnit('TR1','TRACTOCAMION TR1')"><td>TRACTOCAMION</td><td>TR1</td><td>TRACTOCAMION</td><td>000002</td><td>OPERADOR PRUEBAS SI</td><td><span class="badge badge-ocupa">OCUPA</span></td><td>4G4J32</td></tr>
+          <tr onclick="selectUnit('CHEVY','PICKUP CHEVY')"><td>PICKUP</td><td>CHEVY</td><td>CHEVROLET 3500 4X4</td><td>000015</td><td>MONTOYA ELIZALDE LUI</td><td><span class="badge badge-asign">ASIGN</span></td><td>ASD582R</td></tr>
+          <tr onclick="selectUnit('S1','TORTON S1')"><td>TORTON</td><td>S1</td><td>TORTON S1</td><td>000049</td><td>STEPHANIA PERALTA</td><td><span class="badge badge-dispo">DISPO</span></td><td>704DY7</td></tr>
+          <tr onclick="selectUnit('CONT','CONTENEDOR 1')"><td>CONTENEDOR</td><td>CONT</td><td>CONTENEDOR 1</td><td>000000</td><td></td><td><span class="badge badge-manto">MANTO</span></td><td></td></tr>
+          <tr onclick="selectUnit('CONT2','CONTENEDOR 2')"><td>CONTENEDOR</td><td>CONT2</td><td>CONTENEDOR 2</td><td>000000</td><td></td><td><span class="badge badge-manto">MANTO</span></td><td></td></tr>
+          <tr onclick="selectUnit('S2PRUEBA','AUTOMOVIL S2PRUEBA')"><td>AUTOMOVIL</td><td>S2PRUEBA</td><td>AUTOMOVIL PRUEBAS COTIZ</td><td>000049</td><td>STEPHANIA PERALTA</td><td><span class="badge badge-manto">MANTO</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cat-footer">
+      <span>Mostrando registros del 1 al 10 de un total de 227 registros</span>
+      <span>Anterior &nbsp; <strong>1</strong> &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; ... &nbsp; 19 &nbsp; Siguiente</span>
+    </div>
+  </div>
+</div>
+<script>
+function openCat(targetId){window._catTarget=targetId;document.getElementById('catOverlay').classList.add('open');}
+function closeCat(){document.getElementById('catOverlay').classList.remove('open');}
+function selectUnit(code,desc){
+  var el=document.getElementById(window._catTarget);
+  if(el)el.value=code+' — '+desc;
+  closeCat();
+}
+</script>
 
 <div class="page-title">Utilería 2 — Terminación Masiva de Órdenes de Servicio</div>
 <div class="page-sub">#42840 | Módulo: Mantenimiento | 2026-07-07</div>
@@ -132,7 +206,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
             <div class="sec-label">Filtros adicionales</div>
             <div class="frow">
               <label>Unidad(es)</label>
-              <input type="text" style="width:170px;" placeholder=""> <button class="btn" style="padding:2px 6px;">...</button>
+              <input type="text" id="inputUnidad" style="width:170px;" placeholder="" readonly> <button class="btn" style="padding:2px 6px;" onclick="openCat('inputUnidad')">...</button>
             </div>
             <div class="frow">
               <label>Estatus</label>
@@ -184,7 +258,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
             </div>
             <div class="sec-label">Filtros adicionales</div>
             <div class="frow">
-              <label>Unidad(es)</label><input type="text" style="width:170px;" placeholder=""> <button class="btn" style="padding:2px 6px;">...</button>
+              <label>Unidad(es)</label><input type="text" id="inputUnidad" style="width:170px;" placeholder="" readonly> <button class="btn" style="padding:2px 6px;" onclick="openCat('inputUnidad')">...</button>
               &nbsp;&nbsp;<label style="width:auto">Estatus</label><select style="margin-left:6px"><option>Ambas</option></select>
               &nbsp;&nbsp;<label style="width:auto">Fecha de cierre</label><input type="date" value="2026-07-07" style="margin-left:6px">
             </div>

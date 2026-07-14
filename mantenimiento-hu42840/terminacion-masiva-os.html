@@ -104,7 +104,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
     Estado al abrir la utilería. Listado vacío hasta hacer clic en <strong>Generar</strong>. Botón <strong>Terminar</strong> deshabilitado hasta tener ≥1 registro seleccionado.
     <ul>
       <li><strong>Fecha inicio / Fecha fin:</strong> tipo fecha, ambos obligatorios. Si alguno está vacío → mensaje "El rango de fechas es obligatorio".</li>
-      <li><strong>Unidad:</strong> selección múltiple, opcional. Sin selección = todas las unidades.</li>
+      <li><strong>Unidad:</strong> campo de texto + botón "..." que abre el Catálogo de Unidades. Opcional — si se deja vacío aplica a todas las unidades.</li>
       <li><strong>Estatus:</strong> combo fijo con valores Abierta / Autorizada / Ambas. Default: Ambas. Opcional.</li>
       <li><strong>Fecha de cierre:</strong> tipo fecha, <strong>obligatoria</strong>. Default = fecha del día al abrir la utilería. El usuario puede modificarla. Si se borra y se intenta ejecutar → mensaje "La fecha de cierre es obligatoria". Se aplica igual a todos los registros procesados en esa ejecución.</li>
       <li><strong>Filtro silencioso al generar:</strong> excluye OS Terminadas, OS Canceladas, OS con artículos de inventario afectados, OS con devolución registrada. No se muestra mensaje por los excluidos.</li>
@@ -132,7 +132,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
             <div class="sec-label">Filtros adicionales</div>
             <div class="frow">
               <label>Unidad(es)</label>
-              <select><option>-- Todas --</option><option>UT-01 KENWORTH T800</option><option>UT-02 FREIGHTLINER</option></select>
+              <input type="text" style="width:170px;" placeholder=""> <button class="btn" style="padding:2px 6px;">...</button>
             </div>
             <div class="frow">
               <label>Estatus</label>
@@ -184,7 +184,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
             </div>
             <div class="sec-label">Filtros adicionales</div>
             <div class="frow">
-              <label>Unidad(es)</label><select><option>-- Todas --</option></select>
+              <label>Unidad(es)</label><input type="text" style="width:170px;" placeholder=""> <button class="btn" style="padding:2px 6px;">...</button>
               &nbsp;&nbsp;<label style="width:auto">Estatus</label><select style="margin-left:6px"><option>Ambas</option></select>
               &nbsp;&nbsp;<label style="width:auto">Fecha de cierre</label><input type="date" value="2026-07-07" style="margin-left:6px">
             </div>

@@ -1,492 +1,417 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Prototipo — Importar Unidades v2 | #37413</title>
+  <title>Prototipo #37413 — Importar Unidades v2</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; background: #fff; }
+    body { font-family: Arial, sans-serif; font-size: 13px; background: #e8e8e8; min-width: 960px; }
 
-    /* ── Disclaimer ── */
-    .proto-disclaimer { background: #fffdf9; border: 1px solid #f0d9b5; border-left: 5px solid #F2940E; margin: 12px 16px; border-radius: 4px; padding: 12px 16px; font-size: 12px; color: #444; line-height: 1.6; }
-    .proto-disclaimer .disc-title { font-weight: bold; font-size: 13px; color: #c06000; margin-bottom: 6px; }
-    .proto-disclaimer .disc-warn { font-weight: bold; color: #b35c00; margin-top: 8px; margin-bottom: 4px; }
-    .proto-disclaimer p { margin-bottom: 4px; }
-    .proto-disclaimer p:last-child { margin-bottom: 0; }
+    /* ── Leyenda global ── */
+    .proto-banner { background: #fffde7; border-bottom: 2px solid #c8a800; padding: 10px 16px; font-size: 12px; color: #444; line-height: 1.7; }
+    .proto-banner .b-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 3px; }
 
-    /* ── Proto meta (fuera del ERP) ── */
-    .proto-meta { background: #fff8f0; border-bottom: 3px solid #F2940E; padding: 8px 16px; font-size: 11px; color: #555; }
-    .proto-meta strong { color: #c06000; }
-    .proto-tabs-bar { display: flex; gap: 0; background: #f0f0f0; border-bottom: 1px solid #ddd; padding: 6px 16px 0; }
-    .proto-tab { padding: 6px 18px; cursor: pointer; background: #e0e0e0; color: #555; font-size: 12px; border: 1px solid #ccc; border-bottom: none; border-radius: 4px 4px 0 0; margin-right: 3px; user-select: none; }
-    .proto-tab:hover { background: #d4d4d4; }
-    .proto-tab.active { background: #fff; color: #222; font-weight: bold; border-top: 3px solid #F2940E; }
+    /* ── Barra proto ── */
+    .proto-meta { background: #fff; border-bottom: 2px solid #999; padding: 6px 14px; font-size: 11px; color: #555; }
+    .proto-meta strong { color: #333; }
+
+    /* ── Tabs de estado ── */
+    .proto-tabs-bar { display: flex; background: #ddd; border-bottom: 1px solid #bbb; padding: 5px 14px 0; flex-wrap: nowrap; overflow-x: auto; gap: 3px; }
+    .proto-tab { padding: 6px 16px; cursor: pointer; background: #ccc; color: #555; font-size: 12px; border: 1px solid #aaa; border-bottom: none; border-radius: 3px 3px 0 0; white-space: nowrap; flex-shrink: 0; user-select: none; }
+    .proto-tab:hover { background: #bbb; }
+    .proto-tab.active { background: #fff; color: #111; font-weight: bold; border-top: 2px solid #555; }
+
     .proto-tab-content { display: none; }
-    .proto-tab-content.active { display: block; }
+    .proto-tab-content.active { display: flex; flex-direction: column; height: calc(100vh - 166px); min-height: 580px; }
 
-    /* ══ ERP SHELL ══ */
-    .erp-shell { display: flex; flex-direction: column; height: calc(100vh - 70px); min-height: 600px; background: #fff; }
+    /* ── Leyenda de estado ── */
+    .state-label { background: #fffde7; border-bottom: 2px dashed #aaa; border-top: 1px solid #ddd; padding: 8px 16px; font-size: 12px; color: #444; flex-shrink: 0; line-height: 1.5; }
+    .state-label strong { color: #222; font-size: 13px; }
 
-    /* Top bar */
-    .erp-topbar { height: 56px; background: #fff; border-bottom: 1px solid #ddd; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; flex-shrink: 0; }
-    .erp-logo { display: flex; align-items: center; gap: 10px; }
-    .erp-logo-circle { width: 36px; height: 36px; border-radius: 50%; background: #F2940E; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 16px; }
-    .erp-logo-text { font-size: 13px; color: #666; line-height: 1.3; }
-    .erp-logo-text strong { color: #333; display: block; font-size: 14px; }
-    .erp-topbar-right { display: flex; align-items: center; gap: 14px; }
-    .erp-topbar-icons { display: flex; gap: 10px; color: #888; font-size: 16px; }
-    .erp-company-box { border: 1px solid #ddd; border-radius: 4px; padding: 4px 10px; text-align: right; font-size: 11px; color: #555; min-width: 150px; }
-    .erp-company-box strong { display: block; font-size: 12px; color: #333; }
+    /* ══ WIREFRAME SHELL ══ */
+    .wf-shell { flex: 1; display: flex; flex-direction: column; background: #fff; border: 1px solid #ccc; overflow: hidden; position: relative; }
 
-    /* Body: sidebar + content */
-    .erp-body { display: flex; flex: 1; overflow: hidden; }
+    /* Topbar */
+    .wf-topbar { height: 44px; background: #f0f0f0; border-bottom: 1px solid #ccc; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; flex-shrink: 0; }
+    .wf-logo { font-size: 13px; font-weight: bold; color: #444; border: 1px solid #bbb; padding: 4px 10px; background: #fff; }
+    .wf-company { font-size: 11px; color: #666; border: 1px solid #ccc; padding: 4px 10px; background: #fff; text-align: right; }
+
+    /* Body */
+    .wf-body { display: flex; flex: 1; overflow: hidden; }
 
     /* Sidebar */
-    .erp-sidebar { width: 160px; background: #5a5a5a; flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto; }
-    .erp-sidebar-search { margin: 8px; background: #6a6a6a; border: none; border-radius: 3px; padding: 5px 8px; color: #fff; font-size: 12px; width: calc(100% - 16px); font-family: inherit; outline: none; }
-    .erp-sidebar-search::placeholder { color: #bbb; }
-    .erp-sidebar-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #ddd; font-size: 12px; cursor: pointer; user-select: none; border-bottom: 1px solid #666; }
-    .erp-sidebar-item:hover { background: #6a6a6a; color: #fff; }
-    .erp-sidebar-item.active { background: #6a6a6a; color: #fff; }
-    .erp-sidebar-item .si-icon { font-size: 14px; opacity: 0.8; }
-    .erp-sidebar-item .si-arr { margin-left: auto; font-size: 10px; color: #aaa; }
+    .wf-sidebar { width: 140px; background: #ddd; border-right: 1px solid #bbb; flex-shrink: 0; display: flex; flex-direction: column; }
+    .wf-sidebar-search { margin: 6px; border: 1px solid #bbb; padding: 4px 6px; font-size: 11px; font-family: inherit; background: #f5f5f5; width: calc(100% - 12px); color: #888; }
+    .wf-sidebar-item { padding: 7px 10px; font-size: 12px; color: #555; border-bottom: 1px solid #ccc; }
+    .wf-sidebar-item.active { background: #bbb; color: #111; font-weight: bold; }
 
-    /* Main content */
-    .erp-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+    /* Main */
+    .wf-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
     /* Toolbar */
-    .erp-toolbar { padding: 8px 12px; background: #fff; border-bottom: 1px solid #e0e0e0; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; flex-shrink: 0; }
-    .tb-btn { background: #F2940E; color: #fff; border: none; padding: 5px 13px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; white-space: nowrap; }
-    .tb-btn:hover { background: #d07a0a; }
-    .tb-btn[disabled], .tb-btn:disabled { background: #d8d8d8 !important; color: #aaa !important; cursor: not-allowed !important; border: 1px solid #ccc !important; }
-    .tb-btn-dark { background: #5a5a5a; color: #fff; border: none; padding: 5px 13px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; white-space: nowrap; }
-    .tb-btn-dark:hover { background: #444; }
+    .wf-toolbar { padding: 7px 10px; background: #f5f5f5; border-bottom: 1px solid #ddd; display: flex; gap: 4px; align-items: center; flex-shrink: 0; flex-wrap: wrap; }
+    .wf-btn { background: #e0e0e0; color: #333; border: 1px solid #aaa; padding: 4px 12px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 2px; white-space: nowrap; }
+    .wf-btn.primary { background: #bbb; color: #111; font-weight: bold; }
+    .wf-btn:disabled, .wf-btn.dis { background: #ececec; color: #bbb; cursor: not-allowed; border-color: #ddd; }
 
     /* Dropdown */
     .dropdown { position: relative; display: inline-block; }
-    .dd-menu { display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ccc; min-width: 175px; z-index: 200; box-shadow: 2px 4px 10px rgba(0,0,0,.15); border-radius: 2px; }
+    .dd-menu { display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #aaa; min-width: 180px; z-index: 50; box-shadow: 2px 3px 6px rgba(0,0,0,.15); }
     .dd-menu.open { display: block; }
-    .dd-item { display: block; padding: 7px 14px; font-size: 12px; color: #333; cursor: pointer; white-space: nowrap; }
-    .dd-item:hover { background: #fff3e0; }
-    .dd-item.disabled { color: #ccc; cursor: not-allowed; }
+    .dd-item { display: block; padding: 6px 12px; font-size: 12px; color: #333; cursor: pointer; border-bottom: 1px solid #eee; }
+    .dd-item:hover { background: #f0f0f0; }
+    .dd-item.dis { color: #bbb; cursor: not-allowed; }
 
-    /* Filters row */
-    .erp-filters { padding: 6px 12px; background: #f7f7f7; border-bottom: 1px solid #e0e0e0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex-shrink: 0; font-size: 12px; }
-    .erp-filters label { color: #555; }
-    .erp-filters input[type="checkbox"] { cursor: pointer; }
-    .erp-filters .filter-apply { background: #F2940E; color: #fff; border: none; padding: 3px 12px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; display: flex; align-items: center; gap: 4px; }
+    /* Filtros */
+    .wf-filters { padding: 5px 10px; background: #fafafa; border-bottom: 1px solid #e8e8e8; display: flex; gap: 14px; align-items: center; font-size: 12px; color: #888; flex-shrink: 0; opacity: .5; pointer-events: none; }
 
-    /* List section title */
-    .erp-list-title { padding: 4px 12px 3px; background: #fff; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .erp-list-title span { font-size: 14px; font-weight: bold; color: #F2940E; }
-    .erp-list-title small { font-size: 11px; color: #999; margin-left: 8px; font-weight: normal; }
-    .erp-list-title-right { font-size: 11px; color: #aaa; display: flex; align-items: center; gap: 8px; }
-    .erp-buscar-label { font-size: 11px; color: #888; }
-    .erp-buscar-input { border: 1px solid #ddd; padding: 2px 6px; font-size: 11px; font-family: inherit; width: 130px; }
+    /* Título sección */
+    .wf-section-title { padding: 4px 10px; background: #eee; border-bottom: 1px solid #ddd; font-size: 13px; font-weight: bold; color: #444; flex-shrink: 0; }
 
     /* Grid */
-    .erp-grid-wrap { flex: 1; overflow: auto; }
-    .erp-grid { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .erp-grid thead tr { background: #f0f0f0; }
-    .erp-grid thead th { padding: 5px 10px; border-bottom: 1px solid #ddd; border-right: 1px solid #e8e8e8; font-weight: 600; color: #444; text-align: left; white-space: nowrap; font-size: 12px; }
-    .erp-grid thead th .sort { color: #F2940E; margin-left: 3px; font-size: 9px; }
-    .erp-grid tbody td { padding: 4px 10px; border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; color: #333; white-space: nowrap; }
-    .erp-grid tbody tr:hover { background: #fff8f0; cursor: pointer; }
-    .erp-grid tbody tr.sel td { background: #F2940E; color: #fff; }
+    .wf-grid-wrap { flex: 1; overflow: auto; }
+    .wf-grid { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .wf-grid thead tr { background: #e0e0e0; }
+    .wf-grid thead th { padding: 5px 10px; border: 1px solid #ccc; text-align: left; font-weight: bold; color: #444; white-space: nowrap; }
+    .wf-grid tbody td { padding: 4px 10px; border: 1px solid #eee; color: #333; white-space: nowrap; }
+    .wf-grid tbody tr.sel td { background: #ccc; color: #111; }
 
-    /* Bottom bar */
-    .erp-statusbar { height: 28px; background: #f5f5f5; border-top: 1px solid #ddd; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; flex-shrink: 0; font-size: 11px; color: #666; }
-    .erp-statusbar-btns { display: flex; gap: 3px; }
-    .pg-btn { background: #F2940E; color: #fff; border: none; padding: 2px 8px; font-size: 11px; font-family: inherit; cursor: pointer; border-radius: 2px; }
-    .pg-btn.current { background: #cc7700; font-weight: bold; }
+    /* Statusbar */
+    .wf-statusbar { height: 26px; background: #eee; border-top: 1px solid #ccc; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; color: #666; flex-shrink: 0; }
 
-    /* ══ MODAL ══ */
-    .modal-overlay { background: rgba(0,0,0,.25); position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 300; }
-    .modal-overlay.open { display: flex; }
-    .modal-box { background: #fff; width: 660px; max-height: 88vh; border: 1px solid #bbb; border-radius: 3px; box-shadow: 0 6px 28px rgba(0,0,0,.25); overflow: hidden; display: flex; flex-direction: column; }
-    .modal-hdr { background: #e0e0e0; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; border-bottom: 1px solid #ccc; }
-    .modal-hdr-title { font-size: 14px; color: #333; font-weight: normal; }
-    .modal-close { background: none; border: none; cursor: pointer; font-size: 22px; color: #F2940E; font-weight: bold; line-height: 1; padding: 0 2px; }
-    .modal-close:hover { color: #c06000; }
+    /* ── Modal ── */
+    .modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.2); display: flex; align-items: center; justify-content: center; z-index: 100; }
+    .modal-box { background: #fff; width: 620px; max-height: 88%; border: 1px solid #999; box-shadow: 0 4px 16px rgba(0,0,0,.2); overflow: hidden; display: flex; flex-direction: column; }
+    .modal-hdr { background: #e0e0e0; border-bottom: 1px solid #bbb; padding: 7px 12px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-hdr-title { font-size: 13px; color: #333; font-weight: bold; }
+    .modal-close { background: none; border: none; cursor: pointer; font-size: 18px; color: #666; font-weight: bold; line-height: 1; }
     .modal-body { flex: 1; overflow-y: auto; padding: 14px 16px; }
 
     /* Modal tabs */
-    .modal-tabs { display: flex; border-bottom: 2px solid #F2940E; margin-bottom: 14px; gap: 2px; }
-    .m-tab { padding: 5px 16px; cursor: pointer; font-size: 12px; color: #666; background: #f0f0f0; border: 1px solid #ddd; border-bottom: none; border-radius: 3px 3px 0 0; user-select: none; }
-    .m-tab:hover { background: #e8e8e8; }
-    .m-tab.active { background: #F2940E; color: #fff; font-weight: bold; border-color: #F2940E; }
-    .m-tab.off { color: #ccc; cursor: not-allowed; background: #f8f8f8; }
-    .m-tab-content { display: none; }
-    .m-tab-content.active { display: block; }
+    .modal-tabs { display: flex; border-bottom: 2px solid #888; margin-bottom: 14px; }
+    .m-tab { padding: 5px 16px; font-size: 12px; color: #666; background: #eee; border: 1px solid #ccc; border-bottom: none; border-radius: 2px 2px 0 0; margin-right: 2px; }
+    .m-tab.active { background: #888; color: #fff; font-weight: bold; border-color: #888; }
+    .m-tab.off { color: #bbb; background: #f5f5f5; border-color: #ddd; }
 
     /* Instrucciones */
-    .instruc { list-style: none; margin-bottom: 12px; }
-    .instruc li { font-size: 12px; color: #E07800; padding: 2px 0; }
+    .instruc { list-style: none; margin-bottom: 14px; }
+    .instruc li { font-size: 12px; color: #555; padding: 4px 0; line-height: 1.5; }
+    .instruc a { color: #555; text-decoration: underline; }
 
-    /* Version cards */
-    .ver-cards { display: flex; gap: 10px; margin-bottom: 12px; }
-    .ver-card { flex: 1; border: 2px solid #e0e0e0; border-radius: 4px; padding: 10px 12px; cursor: pointer; }
-    .ver-card:hover { border-color: #F2940E; }
-    .ver-card.sel { border-color: #F2940E; background: #fffaf5; }
-    .ver-card .vc-name { font-weight: bold; font-size: 12px; color: #333; margin-bottom: 3px; }
-    .ver-card.sel .vc-name { color: #c06000; }
-    .ver-card .vc-desc { font-size: 11px; color: #888; }
+    /* Selector versión */
+    .ver-select { padding: 2px 6px; font-size: 11px; border: 1px solid #bbb; font-family: inherit; margin: 0 4px; }
 
-    .dl-btn { background: #F2940E; color: #fff; border: none; padding: 5px 16px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; }
-    .dl-btn:hover { background: #d07a0a; }
-
-    /* Ref tabs info */
-    .ref-box { background: #f9f9f9; border: 1px solid #e8e8e8; border-radius: 3px; padding: 8px 12px; margin-top: 10px; font-size: 11px; color: #666; }
-    .ref-box p { font-weight: bold; color: #555; margin-bottom: 4px; }
-    .ref-box ul { padding-left: 14px; }
-    .ref-box li { margin-bottom: 2px; }
-
-    /* File selector */
+    /* File row */
     .file-row { display: flex; gap: 6px; align-items: center; margin: 10px 0; }
-    .file-text { border: 1px solid #ccc; padding: 4px 8px; font-size: 12px; font-family: inherit; flex: 1; background: #f8f8f8; color: #666; }
-    .file-sel-btn { background: #5a5a5a; color: #fff; border: none; padding: 4px 11px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; white-space: nowrap; }
-    .file-sel-btn:hover { background: #444; }
-    .cargar-btn { background: #5a5a5a; color: #fff; border: none; padding: 5px 20px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; }
-    .cargar-btn:hover { background: #444; }
-    .cargar-btn:disabled { background: #ccc; color: #aaa; cursor: not-allowed; }
+    .file-input { border: 1px solid #bbb; padding: 4px 8px; font-size: 12px; font-family: inherit; flex: 1; background: #f8f8f8; color: #999; }
+    .file-input.filled { color: #333; background: #fff; }
 
-    /* Results area */
-    .result-box { background: #fff; border: 1px solid #e0e0e0; min-height: 80px; padding: 10px 12px; border-radius: 3px; }
-    .result-ok { color: #28a745; font-size: 12px; font-weight: bold; margin-bottom: 4px; }
-    .result-err { color: #dc3545; font-size: 12px; font-weight: bold; }
+    /* Spinner */
+    .spinner-wrap { text-align: center; padding: 30px; }
+    .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #ddd; border-top-color: #888; border-radius: 50%; animation: sp .8s linear infinite; }
+    @keyframes sp { to { transform: rotate(360deg); } }
+    .spinner-wrap p { font-size: 12px; color: #888; margin-top: 10px; }
+
+    /* Resultado */
+    .result-box { background: #f9f9f9; border: 1px solid #ddd; padding: 10px 14px; border-radius: 2px; margin-bottom: 14px; }
+    .result-ok { font-size: 13px; font-weight: bold; color: #2a6a2a; margin-bottom: 3px; }
+    .result-err { font-size: 13px; font-weight: bold; color: #aa2200; margin-bottom: 3px; }
     .result-hint { font-size: 11px; color: #888; margin-top: 4px; }
 
-    /* Error table */
-    .err-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; }
-    .err-table thead tr { background: #5a5a5a; }
-    .err-table thead th { padding: 5px 8px; color: #fff; font-weight: 600; border-right: 1px solid #777; text-align: left; }
-    .err-table tbody td { padding: 4px 8px; border-bottom: 1px solid #eee; }
+    /* Tabla errores */
+    .err-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 12px; }
+    .err-table thead tr { background: #ddd; }
+    .err-table thead th { padding: 5px 8px; border: 1px solid #bbb; text-align: left; font-weight: bold; color: #333; }
+    .err-table tbody td { padding: 4px 8px; border: 1px solid #eee; }
     .err-table tbody tr:nth-child(even) { background: #fafafa; }
-    .err-table .td-fila { text-align: center; color: #999; width: 46px; }
-    .err-table .td-motivo { color: #cc3300; }
+    .td-fila { text-align: center; color: #888; width: 44px; }
+    .td-motivo { color: #aa2200; }
 
-    .rep-btn { background: #2a7a2a; color: #fff; border: none; padding: 5px 14px; font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; margin-top: 10px; }
-    .rep-btn:hover { background: #1e5c1e; }
+    .modal-footer { border-top: 1px solid #eee; padding-top: 10px; margin-top: 14px; text-align: right; }
 
-    /* Loading */
-    .loading { display: none; text-align: center; padding: 20px; }
-    .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid #eee; border-top-color: #F2940E; border-radius: 50%; animation: sp .7s linear infinite; }
-    @keyframes sp { to { transform: rotate(360deg); } }
-    .loading p { font-size: 12px; color: #888; margin-top: 8px; }
-
-    .ok-msg { font-size: 11px; color: #28a745; margin-top: 4px; display: none; }
-    .ok-msg.show { display: block; }
+    /* Ghost */
+    .wf-ghost { opacity: .15; pointer-events: none; flex: 1; overflow: hidden; display: flex; flex-direction: column; }
   </style>
 </head>
 <body>
 
-<!-- Meta del prototipo -->
-<div class="proto-meta">
-  <strong>Prototipo #37413</strong> — Importar Unidades v2 &nbsp;|&nbsp; Datos de ejemplo. Controles en gris = funcionalidad existente sin cambios.
-</div>
-
-<!-- Disclaimer -->
-<div class="proto-disclaimer">
-  <div class="disc-title">💡 Sobre este prototipo</div>
+<div class="proto-banner">
+  <div class="b-title">💡 Sobre este prototipo</div>
   <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
-  <div class="disc-warn">⚠️ El prototipo no debe copiarse tal cual.</div>
-  <p>Lo que sí debe respetarse siempre es la apariencia del sistema destino: para el ERP GM Transport, eso significa colores, tipografía, estructura de paneles y componentes propios del ERP. Para otros proyectos (apps, portales, etc.), se respetan los estilos y guías de cada sistema.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para el ERP GM Transport, eso significa colores, tipografía, estructura de paneles y componentes propios del ERP.</p>
   <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
 </div>
 
-<!-- Tabs externos -->
+<div class="proto-meta">
+  <strong>Prototipo #37413</strong> — Layout Importar Unidades v2 &nbsp;|&nbsp; Wireframe de flujo. Datos de ejemplo.
+</div>
+
 <div class="proto-tabs-bar">
-  <div class="proto-tab active" onclick="switchPT(0)">1 · Catálogo de Unidades</div>
-  <div class="proto-tab" onclick="switchPT(1)">2 · Importar Unidades</div>
-  <div class="proto-tab" onclick="switchPT(2)">3 · Resultados</div>
+  <div class="proto-tab active" onclick="pt(0)">1 · Catálogo — botón Importar</div>
+  <div class="proto-tab"       onclick="pt(1)">2 · Así se miraría al abrir el popup</div>
+  <div class="proto-tab"       onclick="pt(2)">3 · Así se miraría al cargar</div>
+  <div class="proto-tab"       onclick="pt(3)">4 · Así se miraría con errores</div>
+  <div class="proto-tab"       onclick="pt(4)">5 · Así se miraría si todo es correcto</div>
 </div>
 
-<!-- ══════════ TAB 1 — LISTADO ══════════ -->
+
+<!-- ══ TAB 1 — CATÁLOGO ══ -->
 <div class="proto-tab-content active" id="pt0">
-  <div class="erp-shell">
-    <div class="erp-topbar">
-      <div class="erp-logo">
-        <div class="erp-logo-circle">G</div>
-        <div class="erp-logo-text"><strong>gm transport</strong>software.</div>
-      </div>
-      <div class="erp-topbar-right">
-        <div class="erp-topbar-icons">☆ &nbsp; 🔔 &nbsp; ?</div>
-        <div class="erp-company-box">
-          <strong>GRUPO GM TRANSPORT</strong>
-          RFC: GMG040805XX1
-        </div>
-      </div>
+  <div class="state-label">
+    <strong>Estado inicial:</strong> el usuario está en el Catálogo de Unidades y hace clic en <em>Importar ▾</em>. Selecciona <em>Importar Unidades</em> para abrir el popup.
+  </div>
+  <div class="wf-shell">
+    <div class="wf-topbar">
+      <div class="wf-logo">GM Transport ERP</div>
+      <div class="wf-company">GRUPO GM TRANSPORT<br>RFC: GMG040805XX1</div>
     </div>
-
-    <div class="erp-body">
-      <div class="erp-sidebar">
-        <input class="erp-sidebar-search" placeholder="Buscar" disabled>
-        <div class="erp-sidebar-item"><span class="si-icon">📊</span> Indicadores</div>
-        <div class="erp-sidebar-item"><span class="si-icon">⚙</span> Configuración <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item"><span class="si-icon">🧾</span> Facturación <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item"><span class="si-icon">💰</span> Cobranza <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item active"><span class="si-icon">🚛</span> Tráfico <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item"><span class="si-icon">🏦</span> Banco <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item"><span class="si-icon">📦</span> Inventarios <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item"><span class="si-icon">🔧</span> Mantenimiento <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item"><span class="si-icon">📑</span> Nómina <span class="si-arr">›</span></div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <input class="wf-sidebar-search" value="Buscar" readonly>
+        <div class="wf-sidebar-item">Indicadores</div>
+        <div class="wf-sidebar-item">Configuración</div>
+        <div class="wf-sidebar-item">Facturación</div>
+        <div class="wf-sidebar-item active">Tráfico</div>
+        <div class="wf-sidebar-item">Banco</div>
+        <div class="wf-sidebar-item">Inventarios</div>
+        <div class="wf-sidebar-item">Mantenimiento</div>
       </div>
-
-      <div class="erp-main">
-        <div class="erp-toolbar">
-          <button class="tb-btn" disabled>Agregar</button>
-
-          <div class="dropdown" id="dd1">
-            <button class="tb-btn" onclick="toggleDD('dd1')">Importar ▾</button>
-            <div class="dd-menu" id="dd1-menu">
-              <div class="dd-item" onclick="openModal(); closeDD('dd1')">Importar Unidades</div>
-              <div class="dd-item disabled">Importar Proyecciones</div>
+      <div class="wf-main">
+        <div class="wf-toolbar">
+          <button class="wf-btn dis" disabled>Agregar</button>
+          <div class="dropdown" id="dd0">
+            <button class="wf-btn primary" onclick="toggleDD('dd0')">Importar ▾</button>
+            <div class="dd-menu open" id="dd0-menu">
+              <div class="dd-item" onclick="pt(1)">Importar Unidades</div>
+              <div class="dd-item dis">Importar Proyecciones</div>
             </div>
           </div>
-
-          <button class="tb-btn" disabled>Modificar</button>
-          <button class="tb-btn" disabled>Eliminar</button>
-          <button class="tb-btn" disabled>Consultar</button>
-          <button class="tb-btn" disabled>Modificar Código</button>
-          <button class="tb-btn" disabled>Imprimir Documentos</button>
-          <button class="tb-btn" disabled>Imprimir</button>
-          <button class="tb-btn" disabled>Asignar / Desasignar Llanta</button>
+          <button class="wf-btn dis" disabled>Modificar</button>
+          <button class="wf-btn dis" disabled>Eliminar</button>
+          <button class="wf-btn dis" disabled>Consultar</button>
+          <button class="wf-btn dis" disabled>Modificar Código</button>
+          <button class="wf-btn dis" disabled>Imprimir</button>
         </div>
-
-        <div class="erp-filters" style="opacity:.45;pointer-events:none;">
-          <input type="checkbox" checked id="f1" disabled><label for="f1"> Únicamente activas</label>
-          &nbsp;
-          <input type="checkbox" id="f2" disabled><label for="f2"> Filtrar Unidades con Identificador Satelital</label>
-          &nbsp;
-          <input type="checkbox" checked id="f3" disabled><label for="f3"> No Visualizar Unidades Rentadas</label>
-          &nbsp;
-          <button class="filter-apply" disabled>Aplicar 🔍</button>
+        <div class="wf-filters">
+          <label><input type="checkbox" checked disabled> Únicamente activas</label>
+          <label><input type="checkbox" disabled> Filtrar con ID Satelital</label>
+          <label><input type="checkbox" checked disabled> No Visualizar Rentadas</label>
         </div>
-
-        <div class="erp-list-title" style="opacity:.45;">
-          <div><span>Catálogo de Unidades</span></div>
-          <div class="erp-list-title-right">
-            <span class="erp-buscar-label">Buscar:</span>
-            <input type="text" class="erp-buscar-input">
-          </div>
-        </div>
-
-        <div class="erp-grid-wrap" style="opacity:.45;pointer-events:none;">
-          <table class="erp-grid">
-            <thead>
-              <tr>
-                <th>Tipo Unidad <span class="sort">⇅</span></th>
-                <th>Codigo <span class="sort">⇅</span></th>
-                <th>Nro Económico <span class="sort">⇅</span></th>
-                <th>Descripcion <span class="sort">⇅</span></th>
-                <th>ID Satelital <span class="sort">⇅</span></th>
-                <th>Nro Ope. <span class="sort">⇅</span></th>
-                <th>Operador <span class="sort">⇅</span></th>
-                <th>Placas <span class="sort">⇅</span></th>
-                <th>Vencimie... <span class="sort">⇅</span></th>
-              </tr>
-            </thead>
+        <div class="wf-section-title">Catálogo de Unidades</div>
+        <div class="wf-grid-wrap">
+          <table class="wf-grid">
+            <thead><tr>
+              <th>Tipo Unidad</th><th>Código</th><th>Nro Económico</th>
+              <th>Descripción</th><th>Operador</th><th>Placas</th><th>Vencimiento</th>
+            </tr></thead>
             <tbody>
-              <tr class="sel"><td>TORTON</td><td>T1</td><td></td><td>TRACTO CALIDAD</td><td></td><td>000001</td><td>GARCIATST MENDOZA MONICATST</td><td></td><td></td></tr>
-              <tr><td>TRACTOCAMION</td><td>GV55</td><td></td><td>GV55</td><td></td><td>000024</td><td>VILLA SEÑOR ARTURO</td><td>73AC4G</td><td>23/04/2025</td></tr>
-              <tr><td>PORTACONTENEDOR</td><td>R1</td><td>E4</td><td>CAJA SECA R1</td><td></td><td></td><td></td><td>45UB6H</td><td></td></tr>
-              <tr><td>DOLLY</td><td>D1</td><td></td><td>DOLLY</td><td></td><td></td><td></td><td></td><td></td></tr>
-              <tr><td>CAJA SECA</td><td>R2</td><td></td><td>REMOLQUE 2</td><td></td><td></td><td></td><td>123AS2A</td><td>30/11/2050</td></tr>
-              <tr><td>THERMOKING/CAJA REFRIGERADA</td><td>THERMOKING</td><td></td><td>THERMOKING</td><td></td><td></td><td></td><td>LET98567</td><td></td></tr>
-              <tr><td>DOLLY</td><td>TR1</td><td>1</td><td>TRACTOCAMION</td><td></td><td></td><td></td><td></td><td></td></tr>
-              <tr><td>PICKUP</td><td>CHEVY</td><td></td><td>CHEVROLET 3500 4X4</td><td></td><td>000015</td><td>MONTOYA ELIZALDE LUIS DAVID</td><td>ASD682R</td><td>01/01/2025</td></tr>
-              <tr><td>TORTON</td><td>S1</td><td></td><td>TORTON S1</td><td></td><td>000049</td><td>BUUU MIEDO HALLOWEEN</td><td>704DY7</td><td>30/06/2026</td></tr>
-              <tr><td>CONTENEDOR</td><td>CONT</td><td></td><td>CONTENEDOR 1</td><td></td><td></td><td></td><td></td><td></td></tr>
-              <tr><td>CONTENEDOR</td><td>CONT2</td><td></td><td>CONTENEDOR 2</td><td></td><td></td><td></td><td></td><td></td></tr>
-              <tr><td>TRACTOCAMION</td><td>S5</td><td></td><td>TRACTO CAMION PRUEBA DE LLANTAS 2</td><td></td><td>024541</td><td>HERALDEZ CARIÑO SAMUEL</td><td>DEF532</td><td></td></tr>
-              <tr><td>TRACTOCAMION</td><td>OP1</td><td></td><td>KENWORTH FR-350</td><td></td><td>024513</td><td>TREVIÑO RAMOS CARLOS IGNACIO</td><td>TRD4567</td><td>12/03/2025</td></tr>
-              <tr><td>TRACTOCAMION</td><td>S12</td><td></td><td>TRACTOCAMION PRUEBA DE DOCUMENTOS</td><td></td><td>000049</td><td>BUUU MIEDO HALLOWEEN</td><td>704DY7</td><td>31/12/2050</td></tr>
+              <tr class="sel"><td>TORTON</td><td>T1</td><td></td><td>TRACTO CALIDAD</td><td>GARCIA MENDOZA MONICA</td><td></td><td></td></tr>
+              <tr><td>TRACTOCAMION</td><td>GV55</td><td></td><td>GV55</td><td>VILLA SEÑOR ARTURO</td><td>73AC4G</td><td>23/04/2025</td></tr>
+              <tr><td>PORTACONTENEDOR</td><td>R1</td><td>E4</td><td>CAJA SECA R1</td><td></td><td>45UB6H</td><td></td></tr>
+              <tr><td>DOLLY</td><td>D1</td><td></td><td>DOLLY</td><td></td><td></td><td></td></tr>
+              <tr><td>CAJA SECA</td><td>R2</td><td></td><td>REMOLQUE 2</td><td></td><td>123AS2A</td><td>30/11/2050</td></tr>
+              <tr><td>TRACTOCAMION</td><td>OP1</td><td></td><td>KENWORTH FR-350</td><td>TREVIÑO RAMOS CARLOS</td><td>TRD4567</td><td>12/03/2025</td></tr>
             </tbody>
           </table>
         </div>
-
-        <div class="erp-statusbar" style="opacity:.45;pointer-events:none;">
-          <div>
-            <span style="color:#F2940E;cursor:pointer;margin-right:6px;">EXCEL</span>
-            <span style="color:#F2940E;cursor:pointer;">PDF</span>
-            &nbsp;&nbsp; Mostrando registros del 1 al 29 de un total de 246 registros
-          </div>
-          <div class="erp-statusbar-btns">
-            <button class="pg-btn">Primero</button>
-            <button class="pg-btn">Anterior</button>
-            <button class="pg-btn current">1</button>
-            <button class="pg-btn">2</button>
-            <button class="pg-btn">3</button>
-            <button class="pg-btn">4</button>
-            <button class="pg-btn">5</button>
-            <button class="pg-btn">...</button>
-            <button class="pg-btn">9</button>
-            <button class="pg-btn">Siguiente</button>
-            <button class="pg-btn">Último</button>
-          </div>
+        <div class="wf-statusbar">
+          <span>Mostrando 1 al 6 de 246 registros</span>
+          <span>[ 1 ] [ 2 ] [ 3 ] [ Siguiente ]</span>
         </div>
       </div>
     </div>
   </div>
-  <p style="font-size:11px;color:#aaa;padding:5px 12px;">→ Haz clic en <strong>Importar ▾ → Importar Unidades</strong> para abrir el popup, o navega a los tabs siguientes para ver cada estado.</p>
 </div>
 
-<!-- ══════════ TAB 2 — DESCARGAR PLANTILLA ══════════ -->
+
+<!-- ══ TAB 2 — POPUP ESTADO INICIAL ══ -->
 <div class="proto-tab-content" id="pt1">
-  <div class="erp-shell">
-    <div class="erp-topbar">
-      <div class="erp-logo">
-        <div class="erp-logo-circle">G</div>
-        <div class="erp-logo-text"><strong>gm transport</strong>software.</div>
-      </div>
-      <div class="erp-topbar-right">
-        <div class="erp-company-box"><strong>GRUPO GM TRANSPORT</strong>RFC: GMG040805XX1</div>
-      </div>
-    </div>
-    <div class="erp-body">
-      <div class="erp-sidebar">
-        <input class="erp-sidebar-search" placeholder="Buscar" disabled>
-        <div class="erp-sidebar-item active"><span class="si-icon">🚛</span> Tráfico <span class="si-arr">›</span></div>
-        <div class="erp-sidebar-item"><span class="si-icon">📦</span> Inventarios <span class="si-arr">›</span></div>
-      </div>
-      <div class="erp-main">
-        <!-- Listado atenuado -->
-        <div style="opacity:.25;pointer-events:none;">
-          <div class="erp-toolbar">
-            <button class="tb-btn">Agregar</button>
-            <button class="tb-btn">Importar ▾</button>
-            <button class="tb-btn">Modificar</button>
-          </div>
-          <div class="erp-list-title"><span>Catálogo de Unidades</span></div>
-          <table class="erp-grid" style="margin:0 12px;width:calc(100% - 24px)">
-            <thead><tr><th>Tipo Unidad</th><th>Codigo</th><th>Nro Económico</th><th>Descripcion</th></tr></thead>
-            <tbody>
-              <tr class="sel"><td>TORTON</td><td>T1</td><td></td><td>TRACTO CALIDAD</td></tr>
-              <tr><td>TRACTOCAMION</td><td>GV55</td><td></td><td>GV55</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Modal estático -->
-        <div style="position:absolute;top:56px;left:160px;right:0;bottom:0;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:10;">
-          <div class="modal-box" style="position:relative;">
-            <div class="modal-hdr">
-              <span class="modal-hdr-title">Importar catálogo de unidades</span>
-              <button class="modal-close" title="Cerrar">✕</button>
-            </div>
-            <div class="modal-body">
-              <div class="modal-tabs">
-                <div class="m-tab active">📤 Importar Unidades</div>
-                <div class="m-tab off">📊 Resultados</div>
-              </div>
-
-              <ul class="instruc">
-                <li>1. Descargue el archivo con las especificaciones del diseño &nbsp;
-                  <select style="padding:3px 6px;font-size:11px;border:1px solid #ccc;border-radius:3px;font-family:inherit;margin-right:4px;">
-                    <option selected>Versión nueva v2 — 48 columnas</option>
-                    <option>Versión anterior — 36 columnas</option>
-                  </select>
-                  <a href="#" style="color:#F2940E;" onclick="return false;">Descargar archivo</a>
-                </li>
-                <li>2. Llene el archivo con las especificaciones, deje los encabezados</li>
-                <li>3. Cargue el archivo para importar las unidades</li>
-              </ul>
-              <div class="file-row" style="margin-top:10px;">
-                <button class="file-sel-btn">Seleccionar archivo</button>
-                <input type="text" class="file-text" value="NINGÚN ARCHIVO SELECCIONADO" readonly>
-                <button class="cargar-btn" disabled>Cargar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="state-label">
+    <strong>Así se miraría al abrir el popup:</strong> el usuario aún no ha seleccionado archivo. El botón "Cargar" está deshabilitado. La pestaña Resultados no está disponible.
   </div>
-  <p style="font-size:11px;color:#aaa;padding:5px 12px;">↑ El usuario elige la versión y descarga. La caja inferior muestra las hojas incluidas en la v2. Navega al <strong>Tab 3</strong> para el flujo de carga.</p>
-</div>
-
-<!-- ══════════ TAB 3 — RESULTADOS ══════════ -->
-<div class="proto-tab-content" id="pt2">
-  <div class="erp-shell">
-    <div class="erp-topbar">
-      <div class="erp-logo">
-        <div class="erp-logo-circle">G</div>
-        <div class="erp-logo-text"><strong>gm transport</strong>software.</div>
-      </div>
-      <div class="erp-topbar-right">
-        <div class="erp-company-box"><strong>GRUPO GM TRANSPORT</strong>RFC: GMG040805XX1</div>
-      </div>
+  <div class="wf-shell">
+    <div class="wf-topbar">
+      <div class="wf-logo">GM Transport ERP</div>
+      <div class="wf-company">GRUPO GM TRANSPORT<br>RFC: GMG040805XX1</div>
     </div>
-    <div class="erp-body">
-      <div class="erp-sidebar">
-        <input class="erp-sidebar-search" placeholder="Buscar" disabled>
-        <div class="erp-sidebar-item active"><span class="si-icon">🚛</span> Tráfico <span class="si-arr">›</span></div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <input class="wf-sidebar-search" value="Buscar" readonly>
+        <div class="wf-sidebar-item active">Tráfico</div>
+        <div class="wf-sidebar-item">Banco</div>
+        <div class="wf-sidebar-item">Inventarios</div>
       </div>
-      <div class="erp-main">
-        <div style="opacity:.25;pointer-events:none;">
-          <div class="erp-toolbar"><button class="tb-btn">Agregar</button><button class="tb-btn">Importar ▾</button></div>
-          <div class="erp-list-title"><span>Catálogo de Unidades</span></div>
-          <table class="erp-grid" style="margin:0 12px;width:calc(100% - 24px)">
-            <thead><tr><th>Tipo Unidad</th><th>Codigo</th><th>Descripcion</th></tr></thead>
-            <tbody><tr class="sel"><td>TORTON</td><td>T1</td><td>TRACTO CALIDAD</td></tr></tbody>
-          </table>
+      <div style="flex:1;position:relative;">
+        <div class="wf-ghost">
+          <div class="wf-toolbar"><button class="wf-btn">Agregar</button><button class="wf-btn">Importar ▾</button><button class="wf-btn">Modificar</button></div>
+          <div class="wf-section-title">Catálogo de Unidades</div>
+          <table class="wf-grid"><thead><tr><th>Tipo Unidad</th><th>Código</th><th>Descripción</th><th>Operador</th></tr></thead>
+          <tbody>
+            <tr class="sel"><td>TORTON</td><td>T1</td><td>TRACTO CALIDAD</td><td>GARCIA MENDOZA MONICA</td></tr>
+            <tr><td>TRACTOCAMION</td><td>GV55</td><td>GV55</td><td>VILLA SEÑOR ARTURO</td></tr>
+          </tbody></table>
         </div>
-
-        <div style="position:absolute;top:56px;left:160px;right:0;bottom:0;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;z-index:10;">
+        <div class="modal-overlay" style="position:absolute;">
           <div class="modal-box">
             <div class="modal-hdr">
               <span class="modal-hdr-title">Importar catálogo de unidades</span>
-              <button class="modal-close" onclick="switchPT(0)">✕</button>
+              <button class="modal-close">✕</button>
             </div>
             <div class="modal-body">
               <div class="modal-tabs">
-                <div class="m-tab">📥 Descargar Plantilla</div>
-                <div class="m-tab">📤 Importar Archivo</div>
-                <div class="m-tab active">📊 Resultados</div>
+                <div class="m-tab active">Importar Unidades</div>
+                <div class="m-tab off">Resultados</div>
               </div>
+              <ul class="instruc">
+                <li>1. Descargue el archivo con las especificaciones del diseño &nbsp;
+                  <select class="ver-select"><option selected>Versión nueva v2 — 48 columnas</option><option>Versión anterior v1 — 36 columnas</option></select>
+                  <a href="#" onclick="return false;">Descargar archivo</a>
+                </li>
+                <li>2. Llene el archivo con los datos de las unidades, deje los encabezados sin modificar</li>
+                <li>3. Cargue el archivo para importar las unidades al catálogo</li>
+              </ul>
+              <div class="file-row">
+                <button class="wf-btn">Seleccionar archivo</button>
+                <input type="text" class="file-input" value="NINGÚN ARCHIVO SELECCIONADO" readonly>
+                <button class="wf-btn dis" disabled>Cargar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+
+<!-- ══ TAB 3 — AL CARGAR ══ -->
+<div class="proto-tab-content" id="pt2">
+  <div class="state-label">
+    <strong>Así se miraría al cargar:</strong> el usuario seleccionó el archivo y presionó "Cargar". El sistema muestra un indicador de procesamiento. Los controles se deshabilitan mientras dura la importación.
+  </div>
+  <div class="wf-shell">
+    <div class="wf-topbar">
+      <div class="wf-logo">GM Transport ERP</div>
+      <div class="wf-company">GRUPO GM TRANSPORT<br>RFC: GMG040805XX1</div>
+    </div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <input class="wf-sidebar-search" value="Buscar" readonly>
+        <div class="wf-sidebar-item active">Tráfico</div>
+        <div class="wf-sidebar-item">Banco</div>
+        <div class="wf-sidebar-item">Inventarios</div>
+      </div>
+      <div style="flex:1;position:relative;">
+        <div class="wf-ghost">
+          <div class="wf-toolbar"><button class="wf-btn">Agregar</button><button class="wf-btn">Importar ▾</button></div>
+          <div class="wf-section-title">Catálogo de Unidades</div>
+          <table class="wf-grid"><thead><tr><th>Tipo Unidad</th><th>Código</th><th>Descripción</th><th>Operador</th></tr></thead>
+          <tbody>
+            <tr class="sel"><td>TORTON</td><td>T1</td><td>TRACTO CALIDAD</td><td>GARCIA MENDOZA MONICA</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-overlay" style="position:absolute;">
+          <div class="modal-box">
+            <div class="modal-hdr">
+              <span class="modal-hdr-title">Importar catálogo de unidades</span>
+              <button class="modal-close" style="opacity:.4;cursor:not-allowed;">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-tabs">
+                <div class="m-tab active">Importar Unidades</div>
+                <div class="m-tab off">Resultados</div>
+              </div>
+              <div class="file-row" style="opacity:.4;">
+                <button class="wf-btn" disabled>Seleccionar archivo</button>
+                <input type="text" class="file-input filled" value="ImportarUnidades_v2.xls" readonly>
+                <button class="wf-btn" disabled>Procesando…</button>
+              </div>
+              <div class="spinner-wrap">
+                <div class="spinner"></div>
+                <p>Procesando importación, por favor espere…</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ TAB 4 — CON ERRORES ══ -->
+<div class="proto-tab-content" id="pt3">
+  <div class="state-label">
+    <strong>Así se miraría con errores:</strong> el proceso terminó. 18 unidades se importaron correctamente y 3 no pudieron importarse. Se muestra la tabla de errores y el botón para descargar el reporte.
+  </div>
+  <div class="wf-shell">
+    <div class="wf-topbar">
+      <div class="wf-logo">GM Transport ERP</div>
+      <div class="wf-company">GRUPO GM TRANSPORT<br>RFC: GMG040805XX1</div>
+    </div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <input class="wf-sidebar-search" value="Buscar" readonly>
+        <div class="wf-sidebar-item active">Tráfico</div>
+        <div class="wf-sidebar-item">Banco</div>
+        <div class="wf-sidebar-item">Inventarios</div>
+      </div>
+      <div style="flex:1;position:relative;">
+        <div class="wf-ghost">
+          <div class="wf-toolbar"><button class="wf-btn">Agregar</button><button class="wf-btn">Importar ▾</button></div>
+          <div class="wf-section-title">Catálogo de Unidades</div>
+          <table class="wf-grid"><thead><tr><th>Tipo Unidad</th><th>Código</th><th>Descripción</th><th>Operador</th></tr></thead>
+          <tbody>
+            <tr class="sel"><td>TORTON</td><td>T1</td><td>TRACTO CALIDAD</td><td>GARCIA MENDOZA MONICA</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-overlay" style="position:absolute;">
+          <div class="modal-box">
+            <div class="modal-hdr">
+              <span class="modal-hdr-title">Importar catálogo de unidades</span>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-tabs">
+                <div class="m-tab">Importar Unidades</div>
+                <div class="m-tab active">Resultados</div>
+              </div>
               <div class="result-box">
                 <div class="result-ok">✔ Se importaron 18 unidades correctamente.</div>
                 <div class="result-err">✖ 3 unidades no se pudieron importar.</div>
-                <div class="result-hint">Las unidades importadas ya están disponibles en el catálogo. Revisa los errores y corrige el archivo para volver a importarlos.</div>
+                <div class="result-hint">Las unidades importadas ya están disponibles en el catálogo. Revise los errores, corrija el archivo y vuelva a importar.</div>
               </div>
-
               <table class="err-table">
-                <thead>
-                  <tr>
-                    <th style="width:46px;text-align:center;">Fila</th>
-                    <th style="width:90px;">Código</th>
-                    <th style="width:180px;">Descripción</th>
-                    <th>Motivo del error</th>
-                  </tr>
-                </thead>
+                <thead><tr>
+                  <th style="width:44px;text-align:center;">Fila</th>
+                  <th style="width:85px;">Código</th>
+                  <th style="width:180px;">Descripción</th>
+                  <th>Motivo del error</th>
+                </tr></thead>
                 <tbody>
                   <tr>
                     <td class="td-fila">4</td>
                     <td>TRC-001</td>
                     <td>TRACTOCAMION KENWORTH 2019</td>
-                    <td class="td-motivo">El código ya existe en el sistema. No se permiten duplicados.</td>
+                    <td class="td-motivo">El código ya existe en el sistema.</td>
                   </tr>
                   <tr>
                     <td class="td-fila">9</td>
-                    <td style="color:#aaa;font-style:italic;">(vacío)</td>
+                    <td style="color:#bbb;font-style:italic;">(vacío)</td>
                     <td>CAJA SECA WABASH</td>
-                    <td class="td-motivo">El tipo de unidad es requerido (columna IdTipoUnidad).</td>
+                    <td class="td-motivo">El tipo de unidad es requerido (IdTipoUnidad).</td>
                   </tr>
                   <tr>
                     <td class="td-fila">15</td>
                     <td>S7</td>
                     <td>TRACTOCAMION FREIGHTLINER</td>
-                    <td class="td-motivo">TransporteRentadaOPrestada solo aplica para unidades rentadas.</td>
+                    <td class="td-motivo">La clave SAT de partes del transporte solo aplica para unidades rentadas.</td>
                   </tr>
                 </tbody>
               </table>
-
-              <button class="rep-btn" onclick="document.getElementById('rep-ok4').classList.add('show')">📥 Descargar reporte de errores (.xls)</button>
-              <div id="rep-ok4" class="ok-msg">✔ Descarga iniciada: ReporteErrores_ImportarUnidades.xls</div>
-
-              <div style="text-align:right;margin-top:14px;border-top:1px solid #eee;padding-top:10px;">
-                <button class="tb-btn-dark" onclick="switchPT(0)">Cerrar</button>
+              <button class="wf-btn primary">Descargar reporte de errores (.xls)</button>
+              <div class="modal-footer">
+                <button class="wf-btn">Cerrar</button>
               </div>
             </div>
           </div>
@@ -494,74 +419,55 @@
       </div>
     </div>
   </div>
-  <p style="font-size:11px;color:#aaa;padding:5px 12px;">↑ El sistema muestra cuántas se importaron y las que fallaron con el motivo exacto. El botón descarga un Excel para corregir y volver a importar.</p>
 </div>
 
-<!-- ══════════ MODAL INTERACTIVO (Tab 1) ══════════ -->
-<div class="modal-overlay" id="modal-main">
-  <div class="modal-box">
-    <div class="modal-hdr">
-      <span class="modal-hdr-title">Importar catálogo de unidades</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+
+<!-- ══ TAB 5 — TODO CORRECTO ══ -->
+<div class="proto-tab-content" id="pt4">
+  <div class="state-label">
+    <strong>Así se miraría si todo es correcto:</strong> todas las unidades se importaron sin errores. No aparece tabla de errores ni botón de reporte.
+  </div>
+  <div class="wf-shell">
+    <div class="wf-topbar">
+      <div class="wf-logo">GM Transport ERP</div>
+      <div class="wf-company">GRUPO GM TRANSPORT<br>RFC: GMG040805XX1</div>
     </div>
-    <div class="modal-body">
-      <div class="modal-tabs">
-        <div class="m-tab active" id="mt0" onclick="switchMT(0)">📤 Importar Unidades</div>
-        <div class="m-tab off" id="mt2">📊 Resultados</div>
+    <div class="wf-body">
+      <div class="wf-sidebar">
+        <input class="wf-sidebar-search" value="Buscar" readonly>
+        <div class="wf-sidebar-item active">Tráfico</div>
+        <div class="wf-sidebar-item">Banco</div>
+        <div class="wf-sidebar-item">Inventarios</div>
       </div>
-
-      <!-- Tab A: Importar (descarga + carga combinadas) -->
-      <div class="m-tab-content active" id="mc0">
-        <ul class="instruc">
-          <li>1. Descargue el archivo con las especificaciones del diseño &nbsp;
-            <select id="ver-select-m" style="padding:3px 6px;font-size:11px;border:1px solid #ccc;border-radius:3px;font-family:inherit;margin-right:4px;">
-              <option value="v2" selected>Versión nueva v2 — 48 columnas</option>
-              <option value="v1">Versión anterior — 36 columnas</option>
-            </select>
-            <a href="#" style="color:#F2940E;" onclick="simDlM();return false;">Descargar archivo</a>
-          </li>
-          <li>2. Llene el archivo con las especificaciones, deje los encabezados</li>
-          <li>3. Cargue el archivo para importar las unidades</li>
-        </ul>
-        <div id="dl-ok-m" class="ok-msg" style="margin-top:4px;"></div>
-        <div class="file-row" style="margin-top:10px;">
-          <button class="file-sel-btn" onclick="simFileM()">Seleccionar archivo</button>
-          <input type="text" class="file-text" id="fm-file" value="NINGÚN ARCHIVO SELECCIONADO" readonly>
-          <button class="cargar-btn" id="btn-cargar-m" onclick="simImportM()" disabled>Cargar</button>
-        </div>
-        <div id="fok-m" class="ok-msg">✔ ImportarUnidades_v2.xls — 21 filas detectadas</div>
-        <div class="loading" id="ld-m">
-          <div class="spinner"></div>
-          <p>Procesando importación…</p>
-        </div>
-      </div>
-
-      <!-- Tab C: Resultados -->
-      <div class="m-tab-content" id="mc2">
-        <div class="result-box">
-          <div class="result-ok">✔ Se importaron 18 unidades correctamente.</div>
-          <div class="result-err">✖ 3 unidades no se pudieron importar.</div>
-          <div class="result-hint">Las unidades importadas ya están disponibles en el catálogo.</div>
-        </div>
-        <table class="err-table">
-          <thead>
-            <tr>
-              <th style="width:46px;text-align:center;">Fila</th>
-              <th style="width:90px;">Código</th>
-              <th>Descripción</th>
-              <th>Motivo del error</th>
-            </tr>
-          </thead>
+      <div style="flex:1;position:relative;">
+        <div class="wf-ghost">
+          <div class="wf-toolbar"><button class="wf-btn">Agregar</button><button class="wf-btn">Importar ▾</button></div>
+          <div class="wf-section-title">Catálogo de Unidades</div>
+          <table class="wf-grid"><thead><tr><th>Tipo Unidad</th><th>Código</th><th>Descripción</th><th>Operador</th></tr></thead>
           <tbody>
-            <tr><td class="td-fila">4</td><td>TRC-001</td><td>TRACTOCAMION KENWORTH 2019</td><td class="td-motivo">El código ya existe en el sistema.</td></tr>
-            <tr><td class="td-fila">9</td><td style="color:#aaa;font-style:italic;">(vacío)</td><td>CAJA SECA WABASH</td><td class="td-motivo">El tipo de unidad es requerido.</td></tr>
-            <tr><td class="td-fila">15</td><td>S7</td><td>TRACTOCAMION FREIGHTLINER</td><td class="td-motivo">TransporteRentadaOPrestada solo aplica para unidades rentadas.</td></tr>
-          </tbody>
-        </table>
-        <button class="rep-btn" onclick="document.getElementById('rep-ok-m').classList.add('show')">📥 Descargar reporte de errores (.xls)</button>
-        <div id="rep-ok-m" class="ok-msg">✔ Descarga iniciada: ReporteErrores_ImportarUnidades.xls</div>
-        <div style="text-align:right;margin-top:12px;border-top:1px solid #eee;padding-top:10px;">
-          <button class="tb-btn-dark" onclick="closeModal()">Cerrar</button>
+            <tr class="sel"><td>TORTON</td><td>T1</td><td>TRACTO CALIDAD</td><td>GARCIA MENDOZA MONICA</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-overlay" style="position:absolute;">
+          <div class="modal-box">
+            <div class="modal-hdr">
+              <span class="modal-hdr-title">Importar catálogo de unidades</span>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-tabs">
+                <div class="m-tab">Importar Unidades</div>
+                <div class="m-tab active">Resultados</div>
+              </div>
+              <div class="result-box">
+                <div class="result-ok">✔ Se importaron 21 unidades correctamente.</div>
+                <div class="result-hint">Todas las unidades están disponibles en el catálogo.</div>
+              </div>
+              <div class="modal-footer">
+                <button class="wf-btn">Cerrar</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -569,92 +475,19 @@
 </div>
 
 <script>
-  // Proto tabs
-  function switchPT(n) {
+  function pt(n) {
     document.querySelectorAll('.proto-tab').forEach((t,i) => t.classList.toggle('active', i===n));
     document.querySelectorAll('.proto-tab-content').forEach((c,i) => c.classList.toggle('active', i===n));
   }
-
-  // Dropdown
   function toggleDD(id) {
     var m = document.getElementById(id+'-menu');
     var wasOpen = m.classList.contains('open');
     document.querySelectorAll('.dd-menu').forEach(x => x.classList.remove('open'));
     if (!wasOpen) m.classList.add('open');
   }
-  function closeDD(id) { document.getElementById(id+'-menu').classList.remove('open'); }
-  document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) document.querySelectorAll('.dd-menu').forEach(x => x.classList.remove('open')); });
-
-  // Modal main
-  function openModal() { document.getElementById('modal-main').classList.add('open'); }
-  function closeModal() { document.getElementById('modal-main').classList.remove('open'); }
-
-  // Modal tabs (mt0/mc0=Importar, mt2/mc2=Resultados)
-  function switchMT(n) {
-    var map = [{tab:'mt0',con:'mc0',ci:0},{tab:'mt2',con:'mc2',ci:2}];
-    map.forEach(function(t) {
-      var tab = document.getElementById(t.tab);
-      var con = document.getElementById(t.con);
-      if (tab && !tab.classList.contains('off')) tab.classList.toggle('active', t.ci===n);
-      if (con) con.classList.toggle('active', t.ci===n);
-    });
-  }
-
-  // Versión selector (tab 2 estático)
-  function selVer(v) {
-    document.getElementById('vc1').classList.toggle('sel', v===1);
-    document.getElementById('vc2').classList.toggle('sel', v===2);
-    document.getElementById('ref-box').style.display = v===2 ? 'block' : 'none';
-  }
-  // Versión selector (modal)
-  function simDlM() {
-    var v = document.getElementById('ver-select-m').value;
-    var nombre = v === 'v2' ? 'ImportarUnidades_v2.xls' : 'ImportarUnidades.xls';
-    var el = document.getElementById('dl-ok-m');
-    el.textContent = '✔ Descarga iniciada: ' + nombre;
-    el.classList.add('show');
-  }
-
-  // Tab 3: selección archivo
-  function simFileT3() {
-    var el = document.getElementById('ft3');
-    el.value = 'ImportarUnidades_v2.xls';
-    el.style.color = '#333';
-    document.getElementById('fok3').classList.add('show');
-    document.getElementById('btn-cargar-t3').disabled = false;
-  }
-  function simImportT3() {
-    var btn = document.getElementById('btn-cargar-t3');
-    btn.disabled = true; btn.textContent = 'Procesando…';
-    document.getElementById('ld3').style.display = 'block';
-    document.getElementById('res-area3').style.display = 'none';
-    setTimeout(() => {
-      document.getElementById('ld3').style.display = 'none';
-      btn.textContent = 'Cargar'; btn.disabled = false;
-      switchPT(3);
-    }, 2000);
-  }
-
-  // Modal: selección archivo
-  function simFileM() {
-    var el = document.getElementById('fm-file');
-    el.value = 'ImportarUnidades_v2.xls';
-    el.style.color = '#333';
-    document.getElementById('fok-m').classList.add('show');
-    document.getElementById('btn-cargar-m').disabled = false;
-  }
-  function simImportM() {
-    var btn = document.getElementById('btn-cargar-m');
-    btn.disabled = true; btn.textContent = 'Procesando…';
-    document.getElementById('ld-m').style.display = 'block';
-    setTimeout(function() {
-      document.getElementById('ld-m').style.display = 'none';
-      btn.textContent = 'Cargar';
-      document.getElementById('mt2').classList.remove('off');
-      document.getElementById('mt2').onclick = function(){ switchMT(2); };
-      switchMT(2);
-    }, 2000);
-  }
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.dropdown')) document.querySelectorAll('.dd-menu').forEach(x => x.classList.remove('open'));
+  });
 </script>
 </body>
 </html>

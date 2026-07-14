@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "-l", "5500", "."],
       "port": 5500
+    },
+    {
+      "name": "seguimiento-versiones-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "seguimiento-versiones-app/frontend", "run", "dev"],
+      "port": 5173
     }
   ]
 }

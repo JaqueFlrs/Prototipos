@@ -396,14 +396,14 @@
     <p class="rail-title">✿ Recorrido</p>
     <div class="route-line">
       <a href="#inicio">Qué es esto</a>
-      <a href="#mapa">Mapa general</a>
-      <a href="#catalogos" class="stage">① Catálogos</a>
-      <a href="#solicitudes" class="stage">② Solicitudes</a>
-      <a href="#planeador" class="stage">③ Planeador</a>
-      <a href="#listado-final" class="stage">④ Listado final de viajes</a>
-      <a href="#flujo">Flujo completo</a>
-      <a href="#cliente">Guión para el cliente</a>
-      <a href="#faq">Preguntas frecuentes</a>
+      <a href="#seccion-inicial" class="stage">🌷 Sección inicial</a>
+      <a href="#paso-a-paso" class="stage">📍 Paso a paso</a>
+      <a href="#catalogos" style="font-size:12.5px; padding-left:22px;">① Catálogos</a>
+      <a href="#solicitudes" style="font-size:12.5px; padding-left:22px;">② Solicitudes</a>
+      <a href="#planeador" style="font-size:12.5px; padding-left:22px;">③ Planeador</a>
+      <a href="#listado-final" style="font-size:12.5px; padding-left:22px;">④ Listado final</a>
+      <a href="#flujo" style="font-size:12.5px; padding-left:22px;">Recapitulando todo</a>
+      <a href="#faq" class="stage">❓ Preguntas frecuentes</a>
       <a href="#extra" class="stage">✦ Ideas extra para hablar</a>
       <a href="#glosario">Glosario rápido</a>
     </div>
@@ -429,21 +429,55 @@
       </ul>
     </div>
 
-    <section class="stage" id="mapa">
-      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">La idea en una frase</h2></div>
-      <div class="card" style="margin-left:0">
+    <section class="stage" id="seccion-inicial">
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">🌷 Sección inicial — el panorama completo</h2></div>
+      <p class="stage-tagline" style="margin-left:0;">Antes de tocar un solo botón, esto es lo que necesitas tener claro en la cabeza ✿</p>
+
+      <div class="card" style="margin-left:0;">
+        <h3>① ¿Qué hace el módulo?</h3>
         <ul class="bullets">
-          <li><strong>Hoy:</strong> alguien revisa a mano qué unidad y operador están libres, y captura cada solicitud una por una</li>
-          <li><strong>Con Planeaciones:</strong> la ruta recurrente se configura una vez y el sistema genera y asigna solo</li>
+          <li><b>Automatiza la creación de viajes que se repiten</b> — si una ruta se usa todas las semanas, deja de capturarse a mano cada vez</li>
+          <li><b>Centraliza todas las solicitudes de viaje en un solo lugar</b> — sin importar si nacieron de un Excel, de captura manual o de una recurrencia programada</li>
+          <li><b>Asigna sola la unidad y el operador</b> a cada viaje, en vez de que alguien lo decida revisando listas a mano</li>
+          <li>En resumen: reemplaza tres tareas manuales y repetitivas — capturar, revisar disponibilidad, asignar — por un proceso que el sistema hace por ti</li>
         </ul>
       </div>
-      <div class="flow" style="margin-left:0">
-        <div class="flow-step"><span class="n">① CATÁLOGOS</span><p>Configuras la ruta y su recurrencia</p></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step"><span class="n">② SOLICITUDES</span><p>Se generan, confirman y autorizan</p></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step"><span class="n">③ PLANEADOR</span><p>Asigna unidad + operador solo</p></div>
+
+      <div class="card" style="margin-left:0;">
+        <h3>② ¿Cómo lo hace? (el mecanismo, sin tecnicismos)</h3>
+        <ul class="bullets">
+          <li><b>Paso 1 — Configuración:</b> en el catálogo de rutas defines una "recurrencia": qué días, con qué frecuencia y con qué unidad debe repetirse un trayecto</li>
+          <li><b>Paso 2 — Generación automática:</b> llegado el día programado, el sistema crea la solicitud de viaje solo, sin que nadie la capture</li>
+          <li><b>Paso 3 — Control humano:</b> esa solicitud no se mueve sola — alguien tiene que Confirmarla y Autorizarla; es un candado para que nada pase sin supervisión</li>
+          <li><b>Paso 4 — Asignación automática:</b> una vez autorizada, el "Planeador" busca sola la unidad y el operador más cercanos y disponibles para ese trayecto</li>
+          <li><b>Paso 5 — Documento final:</b> con todo ya asignado, se genera la Carta Porte o el Viaje, y el ciclo se cierra cuando el viaje reporta que ya salió y llegó</li>
+        </ul>
+        <div class="flow" style="margin-left:0; margin-top:16px;">
+          <div class="flow-step"><span class="n">① CATÁLOGOS</span><p>Configuras la ruta y su recurrencia</p></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="n">② SOLICITUDES</span><p>Se generan, confirman y autorizan</p></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="n">③ PLANEADOR</span><p>Asigna unidad + operador solo</p></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="n">④ LISTADO FINAL</span><p>Se genera Carta Porte o Viaje</p></div>
+        </div>
       </div>
+
+      <div class="card" style="margin-left:0;">
+        <h3>③ ¿En qué te ayuda esto? (los beneficios)</h3>
+        <ul class="bullets">
+          <li><b>Ahorra tiempo</b> — nadie tiene que sentarse a capturar la misma ruta cada semana</li>
+          <li><b>Reduce errores</b> — la asignación de unidad/operador la hace el sistema con reglas fijas, no "al ojo" de quien esté de turno</li>
+          <li><b>Da trazabilidad</b> — queda registrado quién confirmó, quién rechazó y cuándo se asignó cada cosa</li>
+          <li><b>Escala sin esfuerzo extra</b> — configurar 1 ruta recurrente o 50 toma el mismo trabajo por ruta</li>
+          <li><b>No es un sistema aislado</b> — todo lo que pasa aquí alimenta directo a Carta Porte y al módulo de Tráfico</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="paso-a-paso">
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">📍 Paso a paso — cómo se usa, clic por clic</h2></div>
+      <p class="stage-tagline" style="margin-left:0;">Aquí va lo operativo: en qué pantalla entrar, qué botón tocar y qué deberías ver después de cada clic ✿</p>
     </section>
 
     <section class="stage" id="catalogos">
@@ -752,7 +786,8 @@
     </section>
 
     <section class="stage" id="flujo">
-      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">Flujo completo, de principio a fin</h2></div>
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">Recapitulando todo el paso a paso</h2></div>
+      <p class="stage-tagline" style="margin-left:0;">Si te perdiste en algún punto, esta lista junta las 4 etapas en una sola secuencia ✿</p>
       <div class="card" style="margin-left:0">
         <ul class="bullets">
           <li>Configuras la recurrencia en el catálogo de rutas</li>
@@ -761,19 +796,6 @@
           <li>El Planeador asigna unidad y operador solo</li>
           <li>Aceptas planeación → generas Carta Porte o Viaje</li>
           <li>El viaje corre su ciclo → queda <span class="chip lav" style="font-size:11px;">COMPLETADO</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="stage" id="cliente">
-      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">Guión de cierre para el cliente</h2></div>
-      <div class="to-client" style="margin-left:0;">
-        <span class="tag">✧ el único mensaje que debe quedarles claro</span>
-        <ul class="bullets">
-          <li>Las rutas que ya repiten cada semana dejan de capturarse a mano</li>
-          <li>El sistema genera el viaje y asigna unidad/operador solo</li>
-          <li>Nada se planea sin autorización — hay control en cada paso</li>
-          <li>Todo se puede ajustar o revertir a mano si algo no cuadra</li>
         </ul>
       </div>
     </section>
@@ -805,6 +827,16 @@
     <section class="stage" id="extra">
       <div class="stage-head"><h2 class="stage-title" style="margin-left:0">✦ Ideas extra para hablar</h2></div>
       <p class="stage-tagline" style="margin-left:0;">Frases sueltas para soltar en cualquier momento, no un guión fijo ✿</p>
+
+      <div class="to-client" style="margin-left:0;">
+        <span class="tag">✧ el único mensaje que debe quedarles claro (guión de cierre)</span>
+        <ul class="bullets">
+          <li>Las rutas que ya repiten cada semana dejan de capturarse a mano</li>
+          <li>El sistema genera el viaje y asigna unidad/operador solo</li>
+          <li>Nada se planea sin autorización — hay control en cada paso</li>
+          <li>Todo se puede ajustar o revertir a mano si algo no cuadra</li>
+        </ul>
+      </div>
 
       <div class="card" style="margin-left:0;">
         <h3>Para abrir (rompehielo)</h3>

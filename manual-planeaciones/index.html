@@ -417,6 +417,18 @@
       <p class="subtitle">Puros bullets, nada de rollo — para aprendértelo rápido y saber qué decir en cada pantalla.</p>
     </header>
 
+    <div class="card" style="margin-left:0; border-color: var(--gold-soft); background: var(--gold-soft);">
+      <h3 style="color: var(--gold);">🧭 Léeme primero — cómo usar este manual</h3>
+      <ul class="bullets" style="color: var(--ink);">
+        <li>Los <b>círculos dorados numerados</b> (1, 2, 3...) son clics literales, <b>en orden</b> — no te brinques ninguno</li>
+        <li>El texto en <em>cursiva</em> junto a un paso te dice <b>qué deberías ver</b> si vas bien</li>
+        <li>Si tu pantalla no se parece a lo que describo, probablemente diste un clic de más — regresa un paso y revisa</li>
+        <li>Las cajas <b>verdes</b> = ejemplos que puedes repetir tú misma para practicar</li>
+        <li>Las cajas <b>moradas</b> = frases listas para decirle al cliente</li>
+        <li>No necesitas memorizar nada de un jalón — ve sección por sección, con calma</li>
+      </ul>
+    </div>
+
     <section class="stage" id="mapa">
       <div class="stage-head"><h2 class="stage-title" style="margin-left:0">La idea en una frase</h2></div>
       <div class="card" style="margin-left:0">
@@ -437,6 +449,15 @@
     <section class="stage" id="catalogos">
       <div class="stage-head"><span class="stage-num">1</span><h2 class="stage-title">Catálogos</h2></div>
       <p class="stage-tagline">Aquí se configura, no se opera día a día ✿</p>
+
+      <div class="card">
+        <h3>¿Qué es esto, en español de todos los días?</h3>
+        <ul class="bullets">
+          <li>Es como la "libreta de direcciones" del sistema: aquí viven las rutas que la empresa maneja</li>
+          <li>Aquí NO se crean viajes reales — solo se configura la información que los viajes van a usar después</li>
+          <li>Piensa en esto como preparar el terreno antes de que empiece a suceder algo</li>
+        </ul>
+      </div>
 
       <div class="card">
         <span class="breadcrumb">Planeaciones <b>›</b> Catálogos <b>›</b> Rutas y Tarifas</span>
@@ -471,9 +492,10 @@
           <li>Da clic en el botón <b>Nueva Recurrencia</b> — aquí se abre el formulario con dos secciones:
             <span class="where"><b>Arriba</b> — Configuración Recurrencia (fecha inicial/final, hora, color, grupo unidad) · <b>Abajo</b> — Detalle Recurrencia (patrón Día/Semana, fecha y hora de carga/entrega, comentario)</span>
           </li>
-          <li>Llenas los campos y <b>aceptas el registro</b> — el trayecto queda marcado en el calendario</li>
+          <li>Llenas los campos y <b>aceptas el registro</b> — el trayecto queda marcado en el calendario <span class="where">✅ si vas bien, verás el día pintado del color que elegiste</span></li>
           <li>Para editar o borrar después: <b>clic derecho</b> sobre el evento en el calendario → Editar recurrencia / Eliminar recurrencia</li>
         </ol>
+        <p style="margin-top:12px; font-size:13px; color:var(--ink-soft);"><b>Si te trabas:</b> lo más común es no haber seleccionado antes un trayecto — sin trayecto elegido, el botón "Nueva Recurrencia" no tiene sobre qué guardar la información.</p>
       </div>
 
       <div class="example">
@@ -516,6 +538,15 @@
       <p class="stage-tagline">Aquí llegan los viajes por confirmar, sin importar de dónde vinieron ✿</p>
 
       <div class="card">
+        <h3>¿Qué es esto, en español de todos los días?</h3>
+        <ul class="bullets">
+          <li>Es la "bandeja de entrada" de viajes que todavía no son viajes de verdad</li>
+          <li>Todo viaje pasa por aquí primero — no importa si nació de un Excel, se capturó a mano o lo generó una recurrencia del catálogo</li>
+          <li>Aquí es donde alguien revisa y dice "sí, esto procede" antes de que se le asigne unidad y operador</li>
+        </ul>
+      </div>
+
+      <div class="card">
         <span class="breadcrumb">Planeaciones <b>›</b> Solicitudes <b>›</b> Listado de Solicitudes de Viaje</span>
         <h3>4 formas en que nace una solicitud</h3>
         <ul class="bullets">
@@ -534,6 +565,7 @@
           <li>Botón <b>Nueva Solicitud</b> — captura manual, abre un formulario con 3 bloques: <span class="where">Detalle de la Solicitud (folio, tipo de viaje, cliente, ruta, convoy) · Remitente y Destinatario (fechas/horas de carga y entrega) · Trayectos de la Solicitud (uno o varios, con sus fechas editables)</span></li>
           <li>Botón <b>Importar Solicitudes</b> — descarga un layout Excel con pestaña de instrucciones, lo llenas con los IDs de los catálogos y lo vuelves a subir</li>
         </ol>
+        <p style="margin-top:12px; font-size:13px; color:var(--ink-soft);"><b>Truco para no perderte:</b> si no ves la solicitud que buscas, revisa primero el filtro <b>Desde–Hasta</b> — casi siempre es porque el rango de fechas no cubre el viaje que buscas.</p>
       </div>
 
       <h3 style="margin-left:40px; font-size:15px; color:var(--rose);">El semáforo de estatus</h3>
@@ -579,6 +611,15 @@
     <section class="stage" id="planeador">
       <div class="stage-head"><span class="stage-num">3</span><h2 class="stage-title">Planeador</h2></div>
       <p class="stage-tagline">El corazón del módulo: asigna unidad y operador sola ✿</p>
+
+      <div class="card">
+        <h3>¿Qué es esto, en español de todos los días?</h3>
+        <ul class="bullets">
+          <li>Aquí ya no se pregunta "¿este viaje procede?" — eso ya se decidió antes, en Solicitudes</li>
+          <li>Aquí se resuelve algo distinto: "¿qué unidad y qué operador le toca a cada trayecto?"</li>
+          <li>Es una pantalla que se abre aparte (pestaña nueva), no un menú fijo al que entras directo</li>
+        </ul>
+      </div>
 
       <div class="card">
         <span class="breadcrumb">Autorizar con asignación &nbsp;|&nbsp; Planeación <b>›</b> Planear</span>
@@ -645,6 +686,14 @@
     <section class="stage" id="listado-final">
       <div class="stage-head"><span class="stage-num">4</span><h2 class="stage-title">Listado final de viajes</h2></div>
       <p class="stage-tagline">Donde vive la solicitud ya planeada, hasta que se convierte en viaje real ✿</p>
+
+      <div class="card">
+        <h3>¿Qué es esto, en español de todos los días?</h3>
+        <ul class="bullets">
+          <li>Ya se decidió el "sí procede" y el "quién lo hace" — aquí falta el último paso: convertirlo en documento real (Carta Porte o Viaje)</li>
+          <li>Es la última parada antes de que el viaje empiece a correr de verdad</li>
+        </ul>
+      </div>
 
       <div class="card">
         <span class="breadcrumb">Planeaciones <b>›</b> Planeación <b>›</b> Planeación de Solicitudes de Viaje</span>

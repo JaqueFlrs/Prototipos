@@ -329,6 +329,47 @@
   details.faq[open] summary::after { content: "✧"; }
   details.faq ul.bullets { margin-top: 9px; }
 
+  .nav-steps {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: navstep;
+    border-top: 1px dashed var(--line);
+    padding-top: 12px;
+  }
+  .nav-steps li {
+    counter-increment: navstep;
+    position: relative;
+    padding-left: 34px;
+    margin-bottom: 11px;
+    font-size: 14px;
+  }
+  .nav-steps li:last-child { margin-bottom: 0; }
+  .nav-steps li::before {
+    content: counter(navstep);
+    position: absolute;
+    left: 0; top: -1px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--gold-soft);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-steps li b { color: var(--ink); }
+  .nav-steps .where {
+    display: block;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    font-style: italic;
+  }
+  .nav-label {
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700;
+    color: var(--gold); margin-bottom: 2px; display: block;
+  }
+
   .glossary {
     margin-left: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px 22px;
   }
@@ -359,6 +400,7 @@
       <a href="#catalogos" class="stage">① Catálogos</a>
       <a href="#solicitudes" class="stage">② Solicitudes</a>
       <a href="#planeador" class="stage">③ Planeador</a>
+      <a href="#listado-final" class="stage">④ Listado final de viajes</a>
       <a href="#flujo">Flujo completo</a>
       <a href="#cliente">Guión para el cliente</a>
       <a href="#faq">Preguntas frecuentes</a>
@@ -416,16 +458,35 @@
           <li><strong>Grupo Unidad</strong> — filtra solo las unidades que aplican</li>
           <li><strong>Patrón:</strong> Día(s) = diario · Semana(s) = solo ciertos días</li>
         </ul>
+
+        <span class="nav-label">📍 dónde lo encuentras, clic por clic</span>
+        <ol class="nav-steps">
+          <li>Entra al módulo <b>Planeaciones</b> desde el menú principal del ERP</li>
+          <li>Ve a <b>Catálogos → Rutas y Tarifas</b></li>
+          <li>Busca la ruta que necesitas (usa Consultar si solo vas a ver, o Modificar si vas a editar)</li>
+          <li>Dentro de la ruta, da clic en el botón <b>Planeación</b> <span class="where">está disponible en Agregar, Modificar y Consultar</span></li>
+          <li>Se abre la ventana <b>Detalles de Recurrencia</b> — sale vacía si aún no has agregado ninguna</li>
+          <li>Da clic en <b>"+ Agregar"</b> para abrir el calendario <span class="where">el día de hoy aparece resaltado en amarillo</span></li>
+          <li>Arriba del calendario, primero elige el <b>trayecto</b> y escribe un <b>Nombre</b> para identificar esta recurrencia</li>
+          <li>Da clic en el botón <b>Nueva Recurrencia</b> — aquí se abre el formulario con dos secciones:
+            <span class="where"><b>Arriba</b> — Configuración Recurrencia (fecha inicial/final, hora, color, grupo unidad) · <b>Abajo</b> — Detalle Recurrencia (patrón Día/Semana, fecha y hora de carga/entrega, comentario)</span>
+          </li>
+          <li>Llenas los campos y <b>aceptas el registro</b> — el trayecto queda marcado en el calendario</li>
+          <li>Para editar o borrar después: <b>clic derecho</b> sobre el evento en el calendario → Editar recurrencia / Eliminar recurrencia</li>
+        </ol>
       </div>
 
       <div class="example">
-        <span class="tag">✿ ejemplo para practicar</span>
+        <span class="tag">✿ ejemplo para practicar, siguiendo los mismos pasos</span>
         <ul class="bullets">
           <li>Ruta CDMX → Monterrey, todos los martes y jueves, indefinida</li>
-          <li>Ruta → botón Planeación → "+ Agregar"</li>
-          <li>Fecha inicial: hoy · check "No Finaliza" · color azul</li>
-          <li>Patrón Semana(s) → marco martes y jueves → guardo</li>
-          <li>Resultado: la solicitud aparece sola cada martes y jueves</li>
+          <li>Selecciono la ruta → clic en <b>Planeación</b> → se abre el calendario</li>
+          <li>Clic en <b>"+ Agregar"</b> → asigno Nombre y elijo el trayecto</li>
+          <li>Clic en <b>Nueva</b> → Fecha inicial: hoy · check "No Finaliza" · color azul</li>
+          <li>Abajo, patrón <b>Semana(s)</b> → marco martes y jueves → acepto</li>
+          <li>El calendario muestra marcados los días que cumplen · si paso el cursor sobre una fecha, sale una tarjeta con el detalle</li>
+          <li>Puedo repetir el proceso para agregar otra recurrencia distinta, por ejemplo solo viernes/sábado/domingo</li>
+          <li>En <b>Listado de Detalles de Recurrencias</b> compruebo cuántas recurrencias quedaron configuradas en la ruta</li>
         </ul>
       </div>
 
@@ -464,6 +525,15 @@
           <li><strong>Recurrencia Específica</strong> — ya con fecha de carga/descarga</li>
           <li>Filtro por defecto: fecha de entrega, una semana hacia adelante</li>
         </ul>
+
+        <span class="nav-label">📍 dónde lo encuentras</span>
+        <ol class="nav-steps">
+          <li><b>Planeaciones → Solicitudes → Listado de Solicitudes de Viaje</b></li>
+          <li>Arriba están los filtros: <b>Filtrar por</b> (tipo de fecha) y el rango <b>Desde – Hasta</b></li>
+          <li>Por default el listado muestra las <b>pendientes de confirmación</b></li>
+          <li>Botón <b>Nueva Solicitud</b> — captura manual, abre un formulario con 3 bloques: <span class="where">Detalle de la Solicitud (folio, tipo de viaje, cliente, ruta, convoy) · Remitente y Destinatario (fechas/horas de carga y entrega) · Trayectos de la Solicitud (uno o varios, con sus fechas editables)</span></li>
+          <li>Botón <b>Importar Solicitudes</b> — descarga un layout Excel con pestaña de instrucciones, lo llenas con los IDs de los catálogos y lo vuelves a subir</li>
+        </ol>
       </div>
 
       <h3 style="margin-left:40px; font-size:15px; color:var(--rose);">El semáforo de estatus</h3>
@@ -519,6 +589,13 @@
           <li>Si no alcanza la flota: queda sin asignar, regresa como Confirmado</li>
           <li>No fuerza una asignación mala</li>
         </ul>
+
+        <span class="nav-label">📍 dos caminos para llegar aquí</span>
+        <ol class="nav-steps">
+          <li><b>Camino A:</b> desde el Listado de Solicitudes de Viaje, seleccionas una o varias y le das <b>Autorizar → con asignación</b></li>
+          <li><b>Camino B:</b> desde <b>Planeación de Solicitudes de Viaje</b>, seleccionas un viaje sin asignación y le das el botón <b>Planear</b></li>
+          <li>En ambos casos se abre una <b>pestaña nueva</b> con la información para asignar unidad y operador a cada trayecto</li>
+        </ol>
       </div>
 
       <div class="card">
@@ -546,6 +623,13 @@
           <li>Ya se puede generar Carta Porte o Viaje, con todo asignado</li>
           <li><strong>Liberar</strong> → regresa la solicitud a pendientes, sin perder nada</li>
         </ul>
+
+        <span class="nav-label">📍 dónde están estos botones</span>
+        <ol class="nav-steps">
+          <li>Botón <b>Gestionar planeación</b> — <span class="where">esquina inferior derecha de la ventana del planeador</span>, ahí ajustas unidad/operador/remolque/dolly</li>
+          <li>Botón <b>Aceptar planeación</b> — confirma que quedó lista y manda la solicitud al listado de Planeación de Solicitudes de Viaje</li>
+          <li>Botón <b>Liberar</b> — <span class="where">esquina superior derecha de la pantalla</span>, para revertir si algo no cuadra</li>
+        </ol>
       </div>
 
       <div class="to-client">
@@ -554,6 +638,66 @@
           <li>El sistema no adivina: asigna por cercanía y disponibilidad real</li>
           <li>Si no alcanza la flota, no fuerza nada raro</li>
           <li>Regresa la solicitud para que ustedes decidan, no falla en silencio</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="listado-final">
+      <div class="stage-head"><span class="stage-num">4</span><h2 class="stage-title">Listado final de viajes</h2></div>
+      <p class="stage-tagline">Donde vive la solicitud ya planeada, hasta que se convierte en viaje real ✿</p>
+
+      <div class="card">
+        <span class="breadcrumb">Planeaciones <b>›</b> Planeación <b>›</b> Planeación de Solicitudes de Viaje</span>
+        <h3>Filtros de este listado</h3>
+        <ul class="bullets">
+          <li><b>Filtrar por</b> — fecha de entrega (default) · carga · salida aproximada · solicitud</li>
+          <li><b>Desde – Hasta</b> — default una semana hacia adelante</li>
+          <li><b>Filtro Cliente</b> — todos por default, o eliges uno/varios</li>
+          <li><b>Filtro Ruta</b> — todas por default, o eliges una/varias</li>
+          <li><b>Filtro Avanzado</b> — busca por Unidad y Operador específicos</li>
+        </ul>
+      </div>
+
+      <h3 style="margin-left:40px; font-size:15px; color:var(--rose);">Estatus en este listado</h3>
+      <div class="status-grid">
+        <div class="status-card">
+          <span class="chip gold">● Pendiente Asignación</span>
+          <ul class="bullets"><li>Consultar · Planear · Modificar</li><li>No crea Carta Porte/Viaje aún</li></ul>
+        </div>
+        <div class="status-card">
+          <span class="chip mint">● Planeado-Asignado</span>
+          <ul class="bullets"><li>Ya se puede crear Carta Porte/Viaje</li><li>Se puede consultar</li></ul>
+        </div>
+        <div class="status-card">
+          <span class="chip lav">● Completado</span>
+          <ul class="bullets"><li>El viaje ya registró salida y llegada</li><li>Solo consulta, nada más</li></ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <h3>Botones de este listado</h3>
+        <ul class="bullets">
+          <li><b>Planear</b> — manda a asignar unidad/operador (si el estatus lo permite)</li>
+          <li><b>Modificar</b> — casi todo se bloquea, excepto 2 pestañas: <span class="where">Información del Viaje (asignar manual unidad/operador por trayecto) · Convoy (remolque y dolly, solo si aplica)</span></li>
+          <li><b>Asignar</b> — cambia el estatus a Planeado-Asignado</li>
+          <li><b>Carta Porte</b> / <b>Viaje</b> — genera el documento con la unidad/operador ya asignados <span class="where">si hay varias solicitudes seleccionadas, solo toma la resaltada en naranja</span></li>
+        </ul>
+
+        <span class="nav-label">📍 después de generar Carta Porte o Viaje</span>
+        <ol class="nav-steps">
+          <li>La solicitud se manda al <b>catálogo de tráfico en viajes</b></li>
+          <li>Ahí se ve con un <b>ícono de camión</b> — clic ahí muestra el número de solicitud asociado</li>
+          <li>Cuando el viaje registra salida y llegada en <b>todos</b> sus trayectos, el estatus pasa solo a <b>Completado</b></li>
+        </ol>
+      </div>
+
+      <div class="example">
+        <span class="tag">✿ columnas que vas a ver por trayecto</span>
+        <ul class="bullets">
+          <li>Num Oper · Operador · Unidad</li>
+          <li>Fecha Carga · Origen</li>
+          <li>Fecha Llegada · Destino</li>
+          <li>Vienen vacías hasta que la solicitud ya fue planeada</li>
         </ul>
       </div>
     </section>

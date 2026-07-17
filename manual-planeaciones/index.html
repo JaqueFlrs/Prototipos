@@ -1,0 +1,625 @@
+<title>Manual de Bolsillo — Módulo Planeaciones</title>
+<style>
+  :root {
+    --paper: #fff5f7;
+    --paper-raised: #ffffff;
+    --ink: #3a2233;
+    --ink-soft: #7a5d70;
+    --line: #f3d9e4;
+    --rose: #d8558a;
+    --rose-soft: #fbdfe9;
+    --lav: #8b76c9;
+    --lav-soft: #e9e2f9;
+    --mint: #3fa789;
+    --mint-soft: #dcf3ec;
+    --gold: #c9932f;
+    --gold-soft: #fbecd0;
+    --coral: #d9605a;
+    --coral-soft: #fbe1de;
+    --code-bg: #fbe9ef;
+    --shadow: 0 1px 2px rgba(180,60,110,0.08), 0 8px 24px rgba(180,60,110,0.08);
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #241220;
+    --paper-raised: #2f1a2a;
+    --ink: #f8e9f1;
+    --ink-soft: #cba7bf;
+    --line: #4a2b41;
+    --rose: #f07fac;
+    --rose-soft: #3d2233;
+    --lav: #b09ef0;
+    --lav-soft: #352a4d;
+    --mint: #6fd6b8;
+    --mint-soft: #1f3d34;
+    --gold: #edc06e;
+    --gold-soft: #3d3018;
+    --coral: #f0938c;
+    --coral-soft: #3f2420;
+    --code-bg: #3d2233;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #241220;
+      --paper-raised: #2f1a2a;
+      --ink: #f8e9f1;
+      --ink-soft: #cba7bf;
+      --line: #4a2b41;
+      --rose: #f07fac;
+      --rose-soft: #3d2233;
+      --lav: #b09ef0;
+      --lav-soft: #352a4d;
+      --mint: #6fd6b8;
+      --mint-soft: #1f3d34;
+      --gold: #edc06e;
+      --gold-soft: #3d3018;
+      --coral: #f0938c;
+      --coral-soft: #3f2420;
+      --code-bg: #3d2233;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.4);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  body {
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: Georgia, "Bodoni MT", "Didot", "Palatino Linotype", serif;
+    font-weight: 700;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  code, .mono {
+    font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  a { color: var(--rose); }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    min-height: 100vh;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Sidebar ---------- */
+
+  nav.rail {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 30px 18px 30px 26px;
+    border-right: 1px solid var(--line);
+  }
+
+  .rail-title {
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lav);
+    font-weight: 700;
+    margin: 0 0 18px;
+  }
+
+  .route-line {
+    position: relative;
+    padding-left: 20px;
+    border-left: 2px dashed var(--rose-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .route-line a {
+    position: relative;
+    display: block;
+    padding: 8px 10px;
+    margin-left: -1px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .route-line a::before {
+    content: "♡";
+    position: absolute;
+    left: -24px;
+    top: 7px;
+    font-size: 11px;
+    color: var(--rose-soft);
+  }
+
+  .route-line a.stage::before { content: "♥"; color: var(--rose); }
+
+  .route-line a:hover { background: var(--rose-soft); color: var(--ink); }
+
+  .rail-foot {
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Main ---------- */
+
+  main { padding: 52px 44px 110px; min-width: 0; }
+
+  header.hero { margin-bottom: 46px; }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  h1.title {
+    font-size: 38px;
+    margin: 0 0 12px;
+    line-height: 1.1;
+    background: linear-gradient(90deg, var(--rose), var(--lav));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitle { font-size: 17px; color: var(--ink-soft); max-width: 58ch; margin: 0; }
+
+  section.stage { margin-bottom: 52px; scroll-margin-top: 24px; }
+
+  .stage-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+
+  .stage-num {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--rose), var(--lav));
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+
+  h2.stage-title { font-size: 25px; margin: 0; }
+
+  .stage-tagline { color: var(--ink-soft); margin: 4px 0 18px 40px; max-width: 58ch; font-size: 15px; }
+
+  .card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 18px 22px;
+    margin: 0 0 14px 40px;
+  }
+
+  .card h3 { font-size: 15.5px; margin: 0 0 8px; font-family: -apple-system, "Segoe UI", sans-serif; font-weight: 700; color: var(--rose); }
+
+  .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    background: var(--code-bg);
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 10px;
+  }
+  .breadcrumb b { color: var(--rose); font-weight: 700; }
+
+  ul.bullets { margin: 0; padding-left: 0; list-style: none; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 7px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+  ul.bullets li::before {
+    content: "♥";
+    position: absolute;
+    left: 0;
+    color: var(--rose);
+    font-size: 11px;
+    top: 3px;
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li strong { color: var(--ink); }
+  ul.bullets.tight li { margin-bottom: 4px; }
+
+  .example {
+    margin: 0 0 14px 40px;
+    border-left: 3px solid var(--mint);
+    background: var(--mint-soft);
+    border-radius: 0 14px 14px 0;
+    padding: 14px 18px;
+  }
+  .example .tag {
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+    color: var(--mint); margin-bottom: 8px; display: block;
+  }
+
+  .to-client {
+    margin: 0 0 14px 40px;
+    border-radius: 14px;
+    padding: 16px 20px;
+    background: var(--lav-soft);
+  }
+  .to-client .tag {
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+    color: var(--lav); margin-bottom: 8px; display: block;
+  }
+  .to-client ul.bullets li::before { color: var(--lav); }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700;
+    padding: 4px 12px; border-radius: 999px; white-space: nowrap;
+  }
+  .chip.gold { background: var(--gold-soft); color: var(--gold); }
+  .chip.mint { background: var(--mint-soft); color: var(--mint); }
+  .chip.coral { background: var(--coral-soft); color: var(--coral); }
+  .chip.lav { background: var(--lav-soft); color: var(--lav); }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-left: 40px;
+  }
+  .status-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 13px 16px;
+    box-shadow: var(--shadow);
+  }
+  .status-card .chip { margin-bottom: 8px; }
+  .status-card ul.bullets li { font-size: 13px; }
+
+  .flow {
+    display: flex; align-items: stretch; gap: 0; margin: 20px 0 0 40px; flex-wrap: wrap;
+  }
+  .flow-step {
+    background: var(--paper-raised); border: 1px solid var(--line); border-radius: 14px;
+    padding: 13px 16px; min-width: 145px; flex: 1 1 145px; box-shadow: var(--shadow);
+  }
+  .flow-step .n { font-size: 11px; color: var(--rose); font-weight: 700; letter-spacing: 0.05em; }
+  .flow-step p { margin: 4px 0 0; font-size: 13px; color: var(--ink-soft); }
+  .flow-arrow { display: flex; align-items: center; justify-content: center; color: var(--lav); padding: 0 6px; font-size: 16px; flex: 0 0 auto; }
+
+  details.faq {
+    margin: 0 0 9px 40px; background: var(--paper-raised); border: 1px solid var(--line);
+    border-radius: 14px; padding: 13px 18px;
+  }
+  details.faq summary {
+    cursor: pointer; font-weight: 700; list-style: none; display: flex; align-items: center;
+    justify-content: space-between; gap: 12px; font-size: 14.5px;
+  }
+  details.faq summary::-webkit-details-marker { display: none; }
+  details.faq summary::after { content: "✦"; font-size: 13px; color: var(--rose); flex: none; }
+  details.faq[open] summary::after { content: "✧"; }
+  details.faq ul.bullets { margin-top: 9px; }
+
+  .glossary {
+    margin-left: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px 22px;
+  }
+  .glossary dt { font-weight: 700; font-family: Georgia, serif; color: var(--rose); font-size: 14.5px; }
+  .glossary dd { margin: 2px 0 0; color: var(--ink-soft); font-size: 13.5px; }
+
+  footer {
+    margin: 50px 0 0 40px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--ink-soft); font-size: 12.5px;
+  }
+
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    nav.rail { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+    main { padding: 30px 20px 80px; }
+    .stage-tagline, .card, .example, .to-client, .status-grid, .flow, details.faq, .glossary, footer { margin-left: 0; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+  }
+</style>
+
+<div class="shell">
+  <nav class="rail">
+    <p class="rail-title">✿ Recorrido</p>
+    <div class="route-line">
+      <a href="#inicio">Qué es esto</a>
+      <a href="#mapa">Mapa general</a>
+      <a href="#catalogos" class="stage">① Catálogos</a>
+      <a href="#solicitudes" class="stage">② Solicitudes</a>
+      <a href="#planeador" class="stage">③ Planeador</a>
+      <a href="#flujo">Flujo completo</a>
+      <a href="#cliente">Guión para el cliente</a>
+      <a href="#faq">Preguntas frecuentes</a>
+      <a href="#glosario">Glosario rápido</a>
+    </div>
+    <div class="rail-foot">Manual de práctica personal<br>Módulo Planeaciones · ERP GM Transport</div>
+  </nav>
+
+  <main>
+    <header class="hero" id="inicio">
+      <p class="eyebrow">✧ manual de bolsillo para presentar con confianza ✧</p>
+      <h1 class="title">Módulo Planeaciones</h1>
+      <p class="subtitle">Puros bullets, nada de rollo — para aprendértelo rápido y saber qué decir en cada pantalla.</p>
+    </header>
+
+    <section class="stage" id="mapa">
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">La idea en una frase</h2></div>
+      <div class="card" style="margin-left:0">
+        <ul class="bullets">
+          <li><strong>Hoy:</strong> alguien revisa a mano qué unidad y operador están libres, y captura cada solicitud una por una</li>
+          <li><strong>Con Planeaciones:</strong> la ruta recurrente se configura una vez y el sistema genera y asigna solo</li>
+        </ul>
+      </div>
+      <div class="flow" style="margin-left:0">
+        <div class="flow-step"><span class="n">① CATÁLOGOS</span><p>Configuras la ruta y su recurrencia</p></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><span class="n">② SOLICITUDES</span><p>Se generan, confirman y autorizan</p></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><span class="n">③ PLANEADOR</span><p>Asigna unidad + operador solo</p></div>
+      </div>
+    </section>
+
+    <section class="stage" id="catalogos">
+      <div class="stage-head"><span class="stage-num">1</span><h2 class="stage-title">Catálogos</h2></div>
+      <p class="stage-tagline">Aquí se configura, no se opera día a día ✿</p>
+
+      <div class="card">
+        <span class="breadcrumb">Planeaciones <b>›</b> Catálogos <b>›</b> Rutas y Tarifas</span>
+        <h3>Rutas y Tarifas</h3>
+        <ul class="bullets">
+          <li>El catálogo base: qué rutas existen y cuánto cuestan</li>
+          <li>Botones estándar: Agregar · Modificar · Eliminar · Consultar · Copiar · Imprimir</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="breadcrumb">Rutas y Tarifas <b>›</b> botón <b>Planeación</b></span>
+        <h3>Planeación de Recurrencias — el botón que vende</h3>
+        <ul class="bullets">
+          <li>Convierte una ruta fija en algo que se repite solo</li>
+          <li><strong>Fecha inicial / final</strong> — o "No Finaliza" si es indefinida</li>
+          <li><strong>Hora</strong> — independiente de la fecha de carga o descarga</li>
+          <li><strong>Color</strong> — para identificarla rápido en el calendario</li>
+          <li><strong>Grupo Unidad</strong> — filtra solo las unidades que aplican</li>
+          <li><strong>Patrón:</strong> Día(s) = diario · Semana(s) = solo ciertos días</li>
+        </ul>
+      </div>
+
+      <div class="example">
+        <span class="tag">✿ ejemplo para practicar</span>
+        <ul class="bullets">
+          <li>Ruta CDMX → Monterrey, todos los martes y jueves, indefinida</li>
+          <li>Ruta → botón Planeación → "+ Agregar"</li>
+          <li>Fecha inicial: hoy · check "No Finaliza" · color azul</li>
+          <li>Patrón Semana(s) → marco martes y jueves → guardo</li>
+          <li>Resultado: la solicitud aparece sola cada martes y jueves</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="breadcrumb">Catálogos <b>›</b> Parámetros de Configuración de Planeación</span>
+        <h3>Parámetros — los interruptores generales</h3>
+        <ul class="bullets tight">
+          <li>Si solo se aceptan viajes creados por planeación</li>
+          <li>Qué tipos de unidad puede usar el planeador</li>
+          <li>Qué documento genera la Carta Porte</li>
+          <li>Qué grupo de unidades es el predeterminado</li>
+        </ul>
+      </div>
+
+      <div class="to-client">
+        <span class="tag">✧ así se lo digo al cliente</span>
+        <ul class="bullets">
+          <li>La ruta que repiten cada semana se configura una sola vez</li>
+          <li>El sistema la genera solo, en el día y hora que definan</li>
+          <li>Ya no depende de que alguien se acuerde de capturarla</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="solicitudes">
+      <div class="stage-head"><span class="stage-num">2</span><h2 class="stage-title">Solicitudes</h2></div>
+      <p class="stage-tagline">Aquí llegan los viajes por confirmar, sin importar de dónde vinieron ✿</p>
+
+      <div class="card">
+        <span class="breadcrumb">Planeaciones <b>›</b> Solicitudes <b>›</b> Listado de Solicitudes de Viaje</span>
+        <h3>4 formas en que nace una solicitud</h3>
+        <ul class="bullets">
+          <li><strong>Manual</strong> — se captura desde el listado</li>
+          <li><strong>Importación</strong> — Excel masivo con layout</li>
+          <li><strong>Recurrencia Variable</strong> — sin fecha fija aún</li>
+          <li><strong>Recurrencia Específica</strong> — ya con fecha de carga/descarga</li>
+          <li>Filtro por defecto: fecha de entrega, una semana hacia adelante</li>
+        </ul>
+      </div>
+
+      <h3 style="margin-left:40px; font-size:15px; color:var(--rose);">El semáforo de estatus</h3>
+      <div class="status-grid">
+        <div class="status-card">
+          <span class="chip gold">● Pendiente Confirmación</span>
+          <ul class="bullets"><li>Confirmar · eliminar · rechazar · modificar</li><li>No autoriza</li></ul>
+        </div>
+        <div class="status-card">
+          <span class="chip mint">● Confirmada</span>
+          <ul class="bullets"><li>Confirmar · modificar · rechazar</li><li>No elimina ni autoriza</li></ul>
+        </div>
+        <div class="status-card">
+          <span class="chip lav">● Pendiente Asignación</span>
+          <ul class="bullets"><li>Solo consulta</li><li>Ya vive en Planeación</li></ul>
+        </div>
+        <div class="status-card">
+          <span class="chip coral">● Rechazada</span>
+          <ul class="bullets"><li>Consulta y elimina</li><li>No planea, modifica ni confirma</li></ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <h3>Botones de acción</h3>
+        <ul class="bullets">
+          <li><strong>Confirmar</strong> — Pendiente → Confirmada, con advertencia</li>
+          <li><strong>Rechazar</strong> — muestra quién y permite excluir alguna</li>
+          <li><strong>Autorizar con asignación</strong> — manda directo al planeador</li>
+          <li><strong>Autorizar sin asignación</strong> — manda a Planeación, sin asignar aún</li>
+        </ul>
+      </div>
+
+      <div class="to-client">
+        <span class="tag">✧ así se lo digo al cliente</span>
+        <ul class="bullets">
+          <li>No importa si llegó de Excel, manual o recurrencia</li>
+          <li>Todas pasan por el mismo control de confirmación</li>
+          <li>Nada se planea sin que alguien lo autorice</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="planeador">
+      <div class="stage-head"><span class="stage-num">3</span><h2 class="stage-title">Planeador</h2></div>
+      <p class="stage-tagline">El corazón del módulo: asigna unidad y operador sola ✿</p>
+
+      <div class="card">
+        <span class="breadcrumb">Autorizar con asignación &nbsp;|&nbsp; Planeación <b>›</b> Planear</span>
+        <h3>Cómo se entra</h3>
+        <ul class="bullets">
+          <li>Se abre en pestaña nueva</li>
+          <li>Busca la unidad y operador más cercanos disponibles, por trayecto</li>
+          <li>Si no alcanza la flota: queda sin asignar, regresa como Confirmado</li>
+          <li>No fuerza una asignación mala</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Las 4 pestañas</h3>
+        <ul class="bullets">
+          <li><strong>Solicitudes</strong> — ícono de camión muestra unidad/operador asignado</li>
+          <li><strong>Unidades y Cajas</strong> — Disponible · Ocupada · En mantenimiento · Asignada</li>
+          <li><strong>Operadores</strong> — Disponible · Asignado · No disponible</li>
+          <li><strong>Clientes</strong> — vista de clientes y sus viajes en planeación</li>
+        </ul>
+      </div>
+
+      <div class="example">
+        <span class="tag">✿ dato útil para preguntas incómodas</span>
+        <ul class="bullets">
+          <li>Con Convoy activo: ícono de la ruta principal abre remolque + dolly</li>
+          <li>Sin Convoy: solo funciona el ícono de cada trayecto individual</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Cerrar el ciclo</h3>
+        <ul class="bullets">
+          <li><strong>Aceptar planeación</strong> → pasa a <span class="chip mint" style="font-size:11px;">PLANEADO-ASIGNADO</span></li>
+          <li>Ya se puede generar Carta Porte o Viaje, con todo asignado</li>
+          <li><strong>Liberar</strong> → regresa la solicitud a pendientes, sin perder nada</li>
+        </ul>
+      </div>
+
+      <div class="to-client">
+        <span class="tag">✧ así se lo digo al cliente</span>
+        <ul class="bullets">
+          <li>El sistema no adivina: asigna por cercanía y disponibilidad real</li>
+          <li>Si no alcanza la flota, no fuerza nada raro</li>
+          <li>Regresa la solicitud para que ustedes decidan, no falla en silencio</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="flujo">
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">Flujo completo, de principio a fin</h2></div>
+      <div class="card" style="margin-left:0">
+        <ul class="bullets">
+          <li>Configuras la recurrencia en el catálogo de rutas</li>
+          <li>El sistema genera las solicitudes solo</li>
+          <li>Se confirman y autorizan → pasan al Planeador</li>
+          <li>El Planeador asigna unidad y operador solo</li>
+          <li>Aceptas planeación → generas Carta Porte o Viaje</li>
+          <li>El viaje corre su ciclo → queda <span class="chip lav" style="font-size:11px;">COMPLETADO</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="cliente">
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">Guión de cierre para el cliente</h2></div>
+      <div class="to-client" style="margin-left:0;">
+        <span class="tag">✧ el único mensaje que debe quedarles claro</span>
+        <ul class="bullets">
+          <li>Las rutas que ya repiten cada semana dejan de capturarse a mano</li>
+          <li>El sistema genera el viaje y asigna unidad/operador solo</li>
+          <li>Nada se planea sin autorización — hay control en cada paso</li>
+          <li>Todo se puede ajustar o revertir a mano si algo no cuadra</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="faq">
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">Preguntas que seguro te hacen</h2></div>
+      <details class="faq" style="margin-left:0;">
+        <summary>¿Y si no hay unidades u operadores suficientes?</summary>
+        <ul class="bullets"><li>Regresa al listado sin asignar, estatus Confirmado</li><li>No se pierde, se reintenta cuando haya disponibilidad</li></ul>
+      </details>
+      <details class="faq" style="margin-left:0;">
+        <summary>¿Se puede revertir una asignación automática?</summary>
+        <ul class="bullets"><li>Sí — botón <strong>Liberar</strong>, arriba a la derecha</li><li>Regresa a pendientes de planeación</li></ul>
+      </details>
+      <details class="faq" style="margin-left:0;">
+        <summary>¿Y si necesito ajustar manualmente?</summary>
+        <ul class="bullets"><li>Botón <strong>Gestionar planeación</strong></li><li>Modifica sin rehacer todo desde cero</li></ul>
+      </details>
+      <details class="faq" style="margin-left:0;">
+        <summary>¿Aplica para convoyes con remolque?</summary>
+        <ul class="bullets"><li>Sí, si el check Convoy está activo</li><li>Gestiona remolque y dolly como parte de la asignación</li></ul>
+      </details>
+      <details class="faq" style="margin-left:0;">
+        <summary>¿Si duplico una ruta, se copian sus recurrencias?</summary>
+        <ul class="bullets"><li>No — la duplicación no replica recurrencias</li><li>Cada una se configura individual en la ruta nueva</li></ul>
+      </details>
+    </section>
+
+    <section class="stage" id="glosario" style="margin-bottom:16px;">
+      <div class="stage-head"><h2 class="stage-title" style="margin-left:0">Glosario rápido</h2></div>
+      <dl class="glossary">
+        <div><dt>Trayecto</dt><dd>Cada tramo dentro de una ruta (origen → destino)</dd></div>
+        <div><dt>Recurrencia</dt><dd>Regla que repite un trayecto solo, en fechas/horas definidas</dd></div>
+        <div><dt>Convoy</dt><dd>Viaje que necesita uno o dos remolques extra</dd></div>
+        <div><dt>Carta Porte</dt><dd>Documento de transporte, ya con unidad y operador</dd></div>
+        <div><dt>Folio en ceros</dt><dd>Marca temporal de solicitud por recurrencia, hasta modificarse</dd></div>
+        <div><dt>Grupo Unidad</dt><dd>Filtro para que el planeador solo vea unidades que aplican</dd></div>
+      </dl>
+    </section>
+
+    <footer>✿ Manual de práctica personal · Módulo Planeaciones · ERP GM Transport · tú puedes 💗</footer>
+  </main>
+</div>

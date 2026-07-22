@@ -346,16 +346,18 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 </div>
 
 <div class="screen">
-  <div class="screen-title">④ Confirmar compra — pantalla de Google Play</div>
-  <ul class="bullets"><li>Esta pantalla la controla Google, no GM — usa el método de pago que el cliente ya tenga guardado en su cuenta de Google Play</li></ul>
+  <div class="screen-title">④ Elige método de pago</div>
+  <ul class="bullets"><li>Mercado Pago, tarjeta de crédito o tarjeta de débito — igual que en Amazon</li></ul>
   <div class="phone-wrap">
     <div class="rphone">
-      <div class="rphone-top"><span class="rphone-back">←</span>Google Play</div>
+      <div class="rphone-top"><span class="rphone-back">←</span>Método de Pago</div>
       <div class="rphone-body">
+        <div class="pay-row sel">🟢 Mercado Pago</div>
+        <div class="pay-row">💳 Tarjeta de crédito</div>
+        <div class="pay-row">💳 Tarjeta de débito</div>
         <div class="summary-card">Plan Básico · 5,000 tokens<br><b>Total: $50.00 USD</b></div>
-        <div class="pay-row sel">💳 Tarjeta terminación 4242 (guardada en Google Play)</div>
         <div style="flex:1"></div>
-        <button class="rbtn">Comprar</button>
+        <button class="rbtn">Pagar $50.00 USD</button>
       </div>
     </div>
   </div>
@@ -375,7 +377,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
           <div class="check">✓</div>
           <b>¡Compra exitosa!</b><br>
           <span style="font-size:11px;">+5,000 tokens agregados</span><br>
-          <span style="font-size:10px;color:#8a8f9a;">Folio: IAGM-00214 · Google Play</span>
+          <span style="font-size:10px;color:#8a8f9a;">Folio: IAGM-00214 · Mercado Pago</span>
         </div>
         <div style="flex:1"></div>
         <button class="rbtn-outline">Volver al chat</button>
@@ -617,7 +619,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <div class="tab-panel" id="panelCostos">
 
 <div class="hero-bar">
-  <div class="hero-stat"><div class="hero-value">~7.5 – 11 semanas</div><div class="hero-label">Para lanzar, con Mercado Pago en Portal IA y Google Play Billing en la app</div></div>
+  <div class="hero-stat"><div class="hero-value">~7 – 9.5 semanas</div><div class="hero-label">Para lanzar, cobrando directo con Mercado Pago en Portal IA y en la app IA GM</div></div>
   <div class="hero-stat"><div class="hero-value">93.5% – 96.5%</div><div class="hero-label">De cada venta se queda GM, cobrando directo</div></div>
 </div>
 
@@ -632,17 +634,13 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <div class="section-title">2. Cuánto se queda GM de cada venta</div>
 <div class="card-row">
   <div class="card">
-    <div class="card-label">Portal IA (computadora) — GM cobra directo, igual que Amazon</div>
+    <div class="card-label">GM cobra directo con Mercado Pago — igual que Amazon</div>
     <div class="card-value">~93.5% – 96.5%</div>
-    <div class="card-sub">Con Mercado Pago</div>
-  </div>
-  <div class="card accent">
-    <div class="card-label">App IA GM (celular) — cobra Google Play</div>
-    <div class="card-value">70% – 85%</div>
-    <div class="card-sub">Ya incluido en el plan y en el tiempo estimado — es su regla, no depende de GM</div>
+    <div class="card-sub">Así se cobra, tanto en Portal IA (web) como en la app IA GM</div>
   </div>
 </div>
-<div class="risk"><b>Apple App Store, solo si aplica</b><span>Si IA GM también se distribuye en iOS, Apple exigiría la misma regla que Google Play (70%–85% para GM, +24–40 hrs de desarrollo). Falta confirmar si existe esa versión — si no, este punto no aplica.</span></div>
+<div class="risk"><b>Plan A: cobro directo. Plan B: si Google o Apple lo rechazan</b><span>Se publica primero con cobro directo. Si Google Play o Apple detectan la compra dentro de la app y la rechazan, hay que agregar su sistema de cobro obligatorio — aplica a las dos tiendas, IA GM ya existe en Android y en iOS. Cuando eso pase, GM se queda con menos (70%–85% en vez de 93.5%–96.5%) y se agregan <b>+24 – 40 hrs</b> de desarrollo por cada tienda (ver sección 4).</span></div>
+<div class="risk"><b>Alternativa a evaluar: pagar desde el navegador</b><span>En vez de cobrar dentro de las pantallas de la app, el botón de "Contratar tokens" abriría el navegador del celular hacia Portal IA para pagar ahí. Como el cobro no ocurre dentro de la app, evita el problema con las tiendas — pero hay que confirmar con Legal/Compliance si la política vigente de Apple lo permite (Google es más flexible en esto).</span></div>
 <div class="sec-label">PROVEEDORES DE PAGO — VÁLIDOS PARA WEB Y APP</div>
 <table class="costos-table">
   <tr><th>PROVEEDOR</th><th>COMISIÓN APROX.</th></tr>
@@ -659,7 +657,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <div class="section-title">3. Decisiones que Dirección debe tomar</div>
 <div class="decision">
   <div class="decision-num">DECISIÓN 1</div>
-  <div class="decision-q">En Portal IA (computadora), ¿con cuál proveedor se procesan los pagos?</div>
+  <div class="decision-q">¿Con cuál proveedor se procesan los pagos?</div>
   <div class="opt-row">
     <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado</span><b>Mercado Pago</b><span>3.5% – 6.5% comisión</span></div>
     <div class="opt-card"><span class="opt-radio"></span><b>Stripe</b><span>~3.6% + $3 MXN</span></div>
@@ -667,7 +665,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
     <div class="opt-card"><span class="opt-radio"></span><b>Openpay</b><span>3.5% – 4%</span></div>
     <div class="opt-card"><span class="opt-radio"></span><b>PayPal</b><span>5% – 6%</span></div>
   </div>
-  <p style="font-size:12px;color:#3a3f4a;margin-top:6px;">El que se elija ya deja pagar con Mercado Pago, tarjeta de crédito y tarjeta de débito en una sola pantalla — igual que en Amazon. En la app IA GM se cobra distinto (con Google Play, ver sección 2). Con uno solo es suficiente para Portal IA, ya incluido en el total de la siguiente sección. Agregar un segundo proveedor: <b>+16 – 24 hrs</b>.</p>
+  <p style="font-size:12px;color:#3a3f4a;margin-top:6px;">El que se elija ya deja pagar con Mercado Pago, tarjeta de crédito y tarjeta de débito en una sola pantalla — igual que en Amazon, tanto en Portal IA como en la app IA GM. Con uno solo es suficiente, ya incluido en el total de la siguiente sección. Agregar un segundo proveedor: <b>+16 – 24 hrs</b>.</p>
 </div>
 
 <div class="decision">
@@ -706,14 +704,14 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
   <tr><td>Pantallas de compra dentro de la app</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
   <tr><td>Permiso de quién puede comprar tokens</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
   <tr><td>Envío de información de ventas a Contabilidad</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
-  <tr><td>Integración con Google Play Billing</td><td>24 – 40 hrs</td><td>0.8 – 1.3</td></tr>
   <tr><td>Pruebas antes de lanzar</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
-  <tr class="total"><td>Total (Mercado Pago + Cobranza + Google Play)</td><td>~228 – 328 hrs</td><td>~7.5 – 11 sem</td></tr>
-  <tr class="total"><td>+ Apple App Store, si también se distribuye en iOS</td><td>+24 – 40 hrs</td><td>+0.8 – 1.3 sem</td></tr>
+  <tr class="total"><td>Total — Plan A: cobro directo (Mercado Pago + Cobranza)</td><td>~204 – 288 hrs</td><td>~7 – 9.5 sem</td></tr>
+  <tr class="total"><td>Plan B: + Google Play, solo si lo exige</td><td>+24 – 40 hrs</td><td>+0.8 – 1.3 sem</td></tr>
+  <tr class="total"><td>Plan B: + Apple App Store, solo si lo exige</td><td>+24 – 40 hrs</td><td>+0.8 – 1.3 sem</td></tr>
 </table>
 <div class="hero-stat" style="max-width:960px;margin-bottom:10px;">
-  <div class="hero-value">~7.5 – 11 semanas</div>
-  <div class="hero-label">Con 1 desarrollador de tiempo completo (~2 – 2.5 meses). Si también se distribuye en iOS, Apple suma ~2 – 3 semanas más.</div>
+  <div class="hero-value">~7 – 9.5 semanas</div>
+  <div class="hero-label">Con 1 desarrollador de tiempo completo, cobrando directo (Plan A). Si Google o Apple exigen su propio cobro (Plan B), cada una suma ~1 – 1.5 semanas más.</div>
 </div>
 
 <div class="section-title">5. Pendientes antes de lanzar</div>

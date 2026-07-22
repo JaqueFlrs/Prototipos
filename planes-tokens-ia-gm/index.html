@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Planes de Tokens — IA GM</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f4f5f7;padding:28px 32px;color:#1f2430;}
+
+.page-title{font-size:20px;font-weight:700;margin-bottom:2px;}
+.page-sub{font-size:13px;color:#8a8f9a;margin-bottom:20px;}
+
+/* --- Tabs --- */
+.tab-bar{display:flex;gap:12px;margin-bottom:28px;max-width:960px;}
+.tab-btn{flex:1;background:#fff;border:2px solid #e4e6eb;border-radius:10px;padding:16px 20px;font-size:16px;font-weight:700;color:#8a8f9a;cursor:pointer;font-family:inherit;transition:.15s;}
+.tab-btn:hover{border-color:#ffd9cc;}
+.tab-btn.active{border-color:#ff5a3c;color:#ff5a3c;background:#fff8f6;box-shadow:0 2px 8px rgba(255,90,60,.12);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+.section-title{font-size:16px;font-weight:700;color:#ff5a3c;margin:36px 0 6px;padding-top:16px;border-top:2px solid #eee;}
+.section-title:first-child{margin-top:0;padding-top:0;border-top:none;}
+.section-sub{font-size:12px;color:#8a8f9a;margin-bottom:18px;}
+
+.screen{margin-bottom:32px;}
+.screen-title{font-size:13px;font-weight:700;color:#1f2430;margin-bottom:6px;}
+.bullets{list-style:none;margin-bottom:10px;}
+.bullets li{font-size:13px;color:#3a3f4a;padding:2px 0 2px 20px;position:relative;}
+.bullets li::before{content:"•";position:absolute;left:4px;color:#ff5a3c;font-weight:700;}
+
+/* --- Portal chrome --- */
+.portal{border:1px solid #e4e6eb;border-radius:6px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);max-width:960px;position:relative;}
+.portal-topline{height:4px;background:linear-gradient(90deg,#ff5a3c,#ff8a5c);}
+.portal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #eee;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-logo{width:32px;height:32px;border-radius:8px;background:#fff1ec;color:#ff5a3c;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;border:1px solid #ffd9cc;}
+.brand-name{font-size:14px;font-weight:700;}
+.brand-sub{font-size:10px;color:#9a9fa8;}
+.user-chip{display:flex;align-items:center;gap:8px;}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:#ffe3d9;}
+.user-txt{font-size:11px;line-height:1.3;text-align:right;color:#3a3f4a;}
+.user-txt b{display:block;font-size:12px;}
+
+.portal-body{display:flex;min-height:300px;}
+.sidebar{width:170px;background:#fff;border-right:1px solid #eee;padding:10px 0;font-size:12px;flex-shrink:0;}
+.sb-group{color:#b6bac2;font-size:10px;font-weight:700;letter-spacing:.4px;padding:10px 16px 4px;}
+.sb-item{padding:7px 16px;color:#5a6270;}
+.sb-item.active{background:#fff1ec;color:#ff5a3c;font-weight:600;border-right:3px solid #ff5a3c;}
+
+.main{flex:1;padding:16px 20px;}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.search-pill{border:1px solid #e4e6eb;border-radius:20px;padding:6px 16px;font-size:12px;width:220px;color:#9a9fa8;}
+
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{color:#9a9fa8;text-align:left;font-size:10px;font-weight:700;letter-spacing:.3px;padding:8px 10px;border-bottom:1px solid #eee;}
+td{padding:9px 10px;border-bottom:1px solid #f2f3f5;}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;}
+.pill-on{background:#e6f7ec;color:#1e9e4d;}
+.pill-off{background:#f0f1f3;color:#9a9fa8;}
+.link-a{color:#ff5a3c;font-size:11px;font-weight:600;}
+.btn-new{background:#ff5a3c;color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;}
+
+/* modal */
+.modal-overlay{position:absolute;inset:0;background:rgba(20,20,25,.35);display:flex;align-items:center;justify-content:center;z-index:5;}
+.modal-box{background:#fff;border-radius:8px;width:300px;box-shadow:0 6px 20px rgba(0,0,0,.2);overflow:hidden;}
+.modal-head{padding:12px 16px;font-weight:700;font-size:13px;border-bottom:1px solid #eee;}
+.modal-body2{padding:14px 16px;}
+.field{margin-bottom:10px;}
+.field label{display:block;font-size:11px;color:#8a8f9a;margin-bottom:3px;}
+.field input{width:100%;border:1px solid #e4e6eb;border-radius:6px;padding:6px 8px;font-size:12px;color:#1f2430;}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:10px 16px;background:#fafafa;border-top:1px solid #eee;}
+.btn-ghost{background:#fff;border:1px solid #e4e6eb;border-radius:6px;padding:6px 14px;font-size:12px;}
+
+/* phone */
+.phone-wrap{display:flex;justify-content:center;padding:10px 0;}
+.phone{width:250px;border:3px solid #1f2430;border-radius:22px;overflow:hidden;background:#fff;}
+.phone-top{background:#1f2430;color:#fff;text-align:center;padding:8px;font-size:11px;font-weight:600;}
+.phone-body{min-height:300px;padding:12px;display:flex;flex-direction:column;gap:10px;}
+.banner{background:#fff1ec;border:1px solid #ffd9cc;border-radius:8px;padding:10px;font-size:11px;color:#8a4530;text-align:center;}
+.btn-phone{background:#ff5a3c;color:#fff;border:none;border-radius:6px;padding:7px;font-size:11px;font-weight:600;width:100%;}
+.plan-pill{border:1px solid #e4e6eb;border-radius:8px;padding:8px 10px;font-size:11px;display:flex;justify-content:space-between;align-items:center;}
+.plan-pill.sel{border-color:#ff5a3c;background:#fff8f6;}
+.plan-tag{font-size:9px;color:#ff5a3c;font-weight:700;}
+.pay-row{display:flex;align-items:center;gap:8px;font-size:11px;padding:6px 8px;border-radius:6px;}
+.pay-row.sel{background:#fff1ec;}
+.summary-card{background:#f4f5f7;border-radius:8px;padding:12px;text-align:center;}
+.progress-bar{background:#eee;height:8px;border-radius:4px;overflow:hidden;margin-top:6px;}
+.progress-fill{background:#ff5a3c;height:100%;}
+.check{width:36px;height:36px;border-radius:50%;background:#e6f7ec;color:#1e9e4d;font-size:18px;line-height:36px;margin:0 auto 6px;}
+.token-bar{background:#f4f5f7;border-radius:8px;padding:8px 10px;font-size:10px;color:#8a8f9a;}
+.token-bar-row{font-size:12px;color:#1f2430;font-weight:700;margin:2px 0;}
+.chat-msgs{display:flex;flex-direction:column;gap:6px;}
+.bubble{max-width:78%;padding:6px 10px;font-size:11px;border-radius:8px;}
+.bubble-ia{background:#f0f1f3;color:#3a3f4a;align-self:flex-start;}
+.bubble-user{background:#1f2430;color:#fff;align-self:flex-end;}
+.dim{opacity:.45;}
+.input-row{display:flex;gap:6px;}
+.input-row input{flex:1;border:1px solid #e4e6eb;border-radius:6px;padding:6px 8px;font-size:11px;color:#9a9fa8;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.kpi-card{background:#f4f5f7;border-radius:8px;padding:10px 12px;}
+.kpi-label{font-size:10px;color:#8a8f9a;text-transform:uppercase;letter-spacing:.3px;}
+.kpi-value{font-size:15px;font-weight:700;color:#1f2430;margin-top:2px;}
+.kpi-sub{font-size:11px;color:#8a8f9a;margin-top:1px;}
+.sec-label{font-size:11px;font-weight:700;color:#8a8f9a;text-transform:uppercase;letter-spacing:.4px;margin:16px 0 6px;}
+.trend-chart{display:flex;gap:20px;align-items:flex-end;height:70px;margin-top:6px;}
+.trend-col{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:#8a8f9a;justify-content:flex-end;height:100%;}
+.trend-bar{width:26px;background:#ff5a3c;border-radius:4px 4px 0 0;}
+.pill-state{display:inline-flex;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;}
+.pill-vigente{background:#e6f7ec;color:#1e9e4d;}
+.pill-consumido{background:#f0f1f3;color:#9a9fa8;}
+
+.side-by-side{display:flex;gap:24px;flex-wrap:wrap;}
+.variant-label{font-size:10px;font-weight:700;color:#8a8f9a;text-transform:uppercase;margin-bottom:6px;}
+
+/* --- Real IA GM app style (matching actual screenshots) --- */
+.rphone{width:260px;border:8px solid #1a1a1a;border-radius:32px;overflow:hidden;background:#fff;}
+.rphone-status{display:flex;justify-content:space-between;padding:6px 14px 0;font-size:10px;color:#1a1a1a;font-weight:600;}
+.rphone-top{position:relative;padding:14px;text-align:center;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #f2f2f2;}
+.rphone-back{position:absolute;left:14px;top:14px;font-size:15px;color:#1a1a1a;}
+.rphone-body{min-height:420px;background:#fdfcfa;display:flex;flex-direction:column;padding:16px 14px;gap:10px;}
+
+.rlogo-row{display:flex;align-items:center;gap:8px;padding:2px 0 10px;}
+.rlogo-badge{width:30px;height:30px;border-radius:8px;background:#ff5a3c;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.rlogo-text{font-size:15px;font-weight:700;color:#1a1a1a;}
+.rnewchat{background:#fff1ec;color:#ff5a3c;font-weight:600;font-size:12px;border-radius:10px;padding:10px 12px;margin-bottom:10px;}
+.rlabel{font-size:10px;color:#9a9fa8;margin-bottom:4px;}
+.rchat-item{font-size:12px;color:#1a1a1a;padding:6px 0;}
+.rmenu-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#1a1a1a;padding:8px 0;}
+.rmenu-item.new{color:#ff5a3c;font-weight:700;}
+.rfooter{background:#f4f5f7;margin:10px -14px -16px;padding:12px 14px;}
+.rfooter-user{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.ravatar{width:30px;height:30px;border-radius:50%;background:#ff5a3c;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+.rfooter-name{font-size:12px;font-weight:700;color:#1a1a1a;}
+.rfooter-id{font-size:9px;color:#9a9fa8;}
+.rfooter-usage{display:flex;justify-content:space-between;font-size:10px;color:#9a9fa8;margin-bottom:3px;}
+.rfooter-usage b{color:#ff5a3c;}
+.rlogout{color:#e0432f;font-size:12px;font-weight:600;text-align:center;margin-top:8px;}
+.rversion{font-size:9px;color:#c0c4cc;text-align:center;margin-top:6px;}
+
+.rwelcome-avatar{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffe3d9,#fff);margin:20px auto 6px;}
+.rgreeting{font-size:19px;font-weight:700;color:#1a1a1a;text-align:center;}
+.rsub{font-size:12px;color:#9a9fa8;text-align:center;margin-bottom:6px;}
+.rpill{display:block;background:#fff1ec;color:#ff5a3c;font-size:11px;font-weight:600;border-radius:14px;padding:6px 12px;text-align:center;margin:0 auto 8px;width:fit-content;}
+.rinput-row{display:flex;align-items:center;background:#f4f5f7;border-radius:24px;padding:10px 6px 10px 16px;gap:8px;margin-top:auto;}
+.rinput-row span{flex:1;font-size:12px;color:#9a9fa8;}
+.rmic{width:34px;height:34px;border-radius:50%;background:#ff5a3c;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rwarn{font-size:10px;color:#e0432f;text-align:center;margin-top:6px;}
+
+.ricon-circle{width:44px;height:44px;border-radius:50%;background:#fff1ec;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 8px;}
+.rtitle{font-size:16px;font-weight:700;color:#1a1a1a;text-align:center;}
+.ring{width:130px;height:130px;border-radius:50%;margin:14px auto;display:flex;align-items:center;justify-content:center;}
+.ring-inner{width:100px;height:100px;border-radius:50%;background:#fdfcfa;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring-pct{font-size:22px;font-weight:700;color:#1a1a1a;}
+.ring-lbl{font-size:10px;color:#9a9fa8;}
+.ralert{background:#fff1ec;border-radius:10px;padding:10px 12px;font-size:11px;color:#8a4530;display:flex;gap:8px;align-items:flex-start;}
+.ralert b{display:block;color:#c0431f;font-size:12px;}
+.rinfo-card{background:#fff;border:1px solid #f0f0f0;border-radius:10px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.rinfo-card b{font-size:12px;color:#1a1a1a;display:block;margin-bottom:4px;}
+.rinfo-card span{font-size:11px;color:#6a6f78;line-height:1.5;}
+.rcaption{font-size:10px;color:#c0c4cc;text-align:center;}
+.rbtn{background:#ff5a3c;color:#fff;border:none;border-radius:24px;padding:11px;font-size:13px;font-weight:700;width:100%;}
+.rbtn-outline{background:#fff;color:#ff5a3c;border:1px solid #ffd9cc;border-radius:24px;padding:10px;font-size:12px;font-weight:600;width:100%;}
+
+/* --- Costos tab --- */
+.card-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;max-width:960px;}
+.card{background:#fff;border:1px solid #e4e6eb;border-radius:8px;padding:14px 16px;flex:1;min-width:200px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.card-label{font-size:10px;color:#8a8f9a;text-transform:uppercase;letter-spacing:.4px;}
+.card-value{font-size:20px;font-weight:700;color:#1f2430;margin:4px 0 2px;}
+.card-sub{font-size:11px;color:#8a8f9a;}
+.card.accent{border-color:#ffd9cc;background:#fff8f6;}
+.card.accent .card-value{color:#ff5a3c;}
+.costos-table{max-width:960px;background:#fff;margin-bottom:6px;}
+.costos-table th{background:#f4f5f7;}
+tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
+.note{font-size:11px;color:#8a8f9a;font-style:italic;margin-top:6px;max-width:960px;}
+.risk{background:#fff8ee;border:1px solid #e0c080;border-left:4px solid #e0a020;border-radius:6px;padding:10px 14px;margin-bottom:8px;max-width:960px;}
+.risk b{display:block;font-size:12px;color:#7a5a10;margin-bottom:2px;}
+.risk span{font-size:12px;color:#5a4416;}
+.tag{display:inline-block;background:#fff1ec;color:#ff5a3c;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;}
+.owner{display:inline-block;background:#eef1ff;color:#3a4ab0;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:6px;}
+.decision{background:#fff;border:1px solid #e4e6eb;border-radius:10px;padding:14px 16px;margin-bottom:14px;max-width:960px;}
+.decision-q{font-size:13px;font-weight:700;color:#1f2430;margin-bottom:10px;}
+.opt-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+.opt-card{flex:1;min-width:190px;background:#f9f9fb;border:1px solid #eee;border-radius:8px;padding:10px 12px;}
+.opt-card.rec{border-color:#ffd9cc;background:#fff8f6;}
+.opt-card b{display:block;font-size:12px;color:#1f2430;margin-bottom:3px;}
+.opt-card span{font-size:11px;color:#6a6f78;line-height:1.5;}
+.opt-tag{display:inline-block;font-size:9px;color:#ff5a3c;font-weight:700;text-transform:uppercase;margin-bottom:4px;}
+.decision-num{display:inline-block;background:#ff5a3c;color:#fff;font-size:10px;font-weight:700;letter-spacing:.4px;padding:2px 10px;border-radius:10px;margin-bottom:8px;}
+.opt-radio{display:inline-block;width:14px;height:14px;border:2px solid #c7cbd1;border-radius:50%;margin-right:6px;vertical-align:middle;}
+.opt-card.rec .opt-radio{border-color:#ff5a3c;background:#ff5a3c;box-shadow:inset 0 0 0 2px #fff;}
+.hero-bar{display:flex;gap:14px;margin-bottom:26px;max-width:960px;}
+.hero-stat{flex:1;background:linear-gradient(135deg,#fff8f6,#fff);border:1px solid #ffd9cc;border-radius:10px;padding:16px 18px;}
+.hero-value{font-size:24px;font-weight:800;color:#ff5a3c;}
+.hero-label{font-size:11px;color:#6a6f78;margin-top:2px;}
+.proto-banner{margin:0 0 20px 0;background:#fffde7;border-left:4px solid #c8a800;border-radius:4px;padding:10px 16px;max-width:960px;}
+.proto-banner p{font-size:12px;color:#444;line-height:1.6;margin:0 0 4px;}
+.proto-banner p:last-child{margin:0;}
+</style>
+</head>
+<body>
+
+<div class="proto-banner">
+  <p>💡 <strong>Sobre este prototipo:</strong> Es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para Portal IA y la app IA GM, eso significa colores, tipografía, estructura y componentes propios de cada sistema.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div class="page-title">Planes de Tokens — IA GM</div>
+<div class="page-sub">Presentación para Dirección</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" id="tabBtnProto" onclick="showTab('proto')">🖥️ Prototipo</button>
+  <button class="tab-btn" id="tabBtnCostos" onclick="showTab('costos')">💰 Costos y Tiempos</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 1: PROTOTIPO -->
+<!-- ============================================================ -->
+<div class="tab-panel active" id="panelProto">
+
+<div class="section-title">A. Administrador GM — crear y administrar planes</div>
+<div class="section-sub">GM define los planes que después se ofrecen al cliente para contratar.</div>
+
+<div class="screen">
+  <div class="screen-title">① Listado de planes</div>
+  <ul class="bullets">
+    <li>Cada plan tiene nombre, tokens, costo y cuántas empresas lo tienen activo</li>
+    <li>El estado (Activo/Inactivo) decide si el plan se ofrece o no al cliente</li>
+  </ul>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">GM Portal IA</div><div class="brand-sub">Planes de Tokens</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>GM Developer Access</b>TST010101000</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-item">Dashboard</div>
+        <div class="sb-group">USUARIOS</div>
+        <div class="sb-item">Todos</div>
+        <div class="sb-group">PLANES IA</div>
+        <div class="sb-item active">Planes de Tokens</div>
+      </div>
+      <div class="main">
+        <div class="toolbar"><div class="search-pill">Buscar plan...</div><button class="btn-new">+ Nuevo Plan</button></div>
+        <table>
+          <tr><th>NOMBRE</th><th>TOKENS</th><th>COSTO</th><th>CLIENTES ACTIVOS</th><th>ESTADO</th><th>ACCIONES</th></tr>
+          <tr><td>Plan Básico</td><td>5,000</td><td>$50.00 USD</td><td>42 empresas</td><td><span class="pill pill-on">✓ Activo</span></td><td><span class="link-a">Editar</span></td></tr>
+          <tr><td>Plan Estándar</td><td>20,000</td><td>$180.00 USD</td><td>18 empresas</td><td><span class="pill pill-on">✓ Activo</span></td><td><span class="link-a">Editar</span></td></tr>
+          <tr><td>Plan Empresarial</td><td>100,000</td><td>$750.00 USD</td><td>3 empresas</td><td><span class="pill pill-off">✕ Inactivo</span></td><td><span class="link-a">Editar</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">② Crear / Editar un plan</div>
+  <ul class="bullets">
+    <li>Nombre, cantidad de tokens y costo (USD) son obligatorios</li>
+    <li>El switch de Estado decide si queda Activo o Inactivo al guardar</li>
+  </ul>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">GM Portal IA</div><div class="brand-sub">Planes de Tokens</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>GM Developer Access</b>TST010101000</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <div class="modal-head">Nuevo Plan de Tokens</div>
+          <div class="modal-body2">
+            <div class="field"><label>Nombre del plan</label><input value="Plan Básico"></div>
+            <div class="field"><label>Cantidad de tokens</label><input value="5000"></div>
+            <div class="field"><label>Costo (USD)</label><input value="50.00"></div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn-ghost">Cancelar</button>
+            <button class="btn-new">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">B. App IA GM — el cliente compra tokens desde su celular</div>
+<div class="section-sub">Mismo look de la app real. Se agrega "Contratar Planes" al menú, que lleva a la pantalla real de Uso de IA, y ahí se puede comprar.</div>
+
+<div class="screen">
+  <div class="screen-title">① Menú lateral — nuevo botón "Contratar Planes"</div>
+  <ul class="bullets"><li>Se agrega arriba de Configuración, ya dentro del menú real de la app</li></ul>
+  <div class="phone-wrap">
+    <div class="rphone">
+      <div class="rphone-body">
+        <div class="rlogo-row"><div class="rlogo-badge">🏅</div><div class="rlogo-text">IA GM</div></div>
+        <div class="rnewchat">＋ Nuevo chat</div>
+        <div class="rlabel">Chats</div>
+        <div class="rchat-item">Que almacenes tengo activos?</div>
+        <div class="rchat-item">facturas jul 26</div>
+        <div style="flex:1"></div>
+        <div class="rmenu-item new">🪙 Contratar Planes</div>
+        <div class="rmenu-item">⚙️ Configuración</div>
+        <div class="rfooter">
+          <div class="rfooter-user"><div class="ravatar">J</div><div><div class="rfooter-name">JAQUELINE FLORES</div><div class="rfooter-id">IIA040805DZ4</div></div></div>
+          <div class="rfooter-usage"><span>Uso de IA</span><b>99%</b></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:99%"></div></div>
+          <div class="rlogout">⏻ Cerrar Sesión</div>
+          <div class="rversion">v9.0.18 (137)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">② Uso de IA — nuevo botón "Comprar más tokens"</div>
+  <ul class="bullets"><li>Es la pantalla real de consumo; solo se agrega el botón de compra abajo</li></ul>
+  <div class="phone-wrap">
+    <div class="rphone">
+      <div class="rphone-top"><span class="rphone-back">←</span>Uso de IA</div>
+      <div class="rphone-body">
+        <div class="rsub" style="margin-top:2px;">Visualiza tu uso actual del asistente de IA</div>
+        <div class="ricon-circle">🧠</div>
+        <div class="rtitle">Tu consumo de IA</div>
+        <div class="ring" style="background:conic-gradient(#ff5a3c 0% 99%, #eee 99% 100%);">
+          <div class="ring-inner"><div class="ring-pct">99%</div><div class="ring-lbl">usado</div></div>
+        </div>
+        <div class="ralert">ⓘ<span><b>Uso elevado</b>Estás cerca de alcanzar el límite de uso de IA.</span></div>
+        <button class="rbtn">Comprar más tokens</button>
+        <div class="rinfo-card"><b>¿Cómo funciona?</b><span>El uso de IA se calcula en base a las consultas que realizas al asistente. Cada interacción consume una parte del límite mensual de tu empresa.</span></div>
+        <div class="rcaption">Última actualización: Justo ahora</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">③ Elige un plan</div>
+  <ul class="bullets"><li>Solo se muestran los planes que GM marcó como Activos</li></ul>
+  <div class="phone-wrap">
+    <div class="rphone">
+      <div class="rphone-top"><span class="rphone-back">←</span>Contratar Plan</div>
+      <div class="rphone-body">
+        <div class="plan-pill sel"><div><div>Plan Básico</div><div class="plan-tag">Ideal para uso diario · 5,000 tokens</div></div><b>$50.00</b></div>
+        <div class="plan-pill"><div><div>Plan Estándar</div><div class="plan-tag">Uso intensivo · 20,000 tokens</div></div><b>$180.00</b></div>
+        <div style="flex:1"></div>
+        <button class="rbtn">Continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">④ Elige método de pago</div>
+  <ul class="bullets"><li>Mercado Pago, tarjeta de crédito o tarjeta de débito — igual que en Amazon</li></ul>
+  <div class="phone-wrap">
+    <div class="rphone">
+      <div class="rphone-top"><span class="rphone-back">←</span>Método de Pago</div>
+      <div class="rphone-body">
+        <div class="pay-row sel">🟢 Mercado Pago</div>
+        <div class="pay-row">💳 Tarjeta de crédito</div>
+        <div class="pay-row">💳 Tarjeta de débito</div>
+        <div class="summary-card">Plan Básico · 5,000 tokens<br><b>Total: $50.00 USD</b></div>
+        <div style="flex:1"></div>
+        <button class="rbtn">Pagar $50.00 USD</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">⑤ Compra confirmada</div>
+  <ul class="bullets"><li>Los tokens se agregan de inmediato y el anillo de consumo baja</li></ul>
+  <div class="phone-wrap">
+    <div class="rphone">
+      <div class="rphone-top"><span class="rphone-back">←</span>Uso de IA</div>
+      <div class="rphone-body">
+        <div class="ring" style="background:conic-gradient(#ff5a3c 0% 45%, #eee 45% 100%);margin-top:20px;">
+          <div class="ring-inner"><div class="ring-pct">45%</div><div class="ring-lbl">usado</div></div>
+        </div>
+        <div class="summary-card">
+          <div class="check">✓</div>
+          <b>¡Compra exitosa!</b><br>
+          <span style="font-size:11px;">+5,000 tokens agregados</span><br>
+          <span style="font-size:10px;color:#8a8f9a;">Folio: IAGM-00214 · Mercado Pago</span>
+        </div>
+        <div style="flex:1"></div>
+        <button class="rbtn-outline">Volver al chat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">⑥ Chat, con aviso de uso alto</div>
+  <ul class="bullets"><li>Pantalla real de bienvenida — el aviso naranja ya existe hoy, solo cambia el % según el consumo</li></ul>
+  <div class="phone-wrap">
+    <div class="rphone">
+      <div class="rphone-top">☰</div>
+      <div class="rphone-body">
+        <div class="rwelcome-avatar"></div>
+        <div class="rgreeting">¡Buenos días,<br>JAQUELINE!</div>
+        <div class="rsub">Iniciemos un análisis profundo de tus dudas.</div>
+        <div class="rpill">⚠ Uso de IA: 99%</div>
+        <div class="rpill">💡 Preguntas sugeridas ⌃</div>
+        <div class="rinput-row"><span>Escribe tu mensaje...</span><div class="rmic">🎙️</div></div>
+        <div class="rwarn">IA GM puede cometer errores, verifica la respuesta con tu ERP.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">C. Portal IA — el cliente también puede comprar tokens desde la computadora</div>
+<div class="section-sub">Mismo flujo de compra que en la app, pero disponible dentro de Portal IA.</div>
+
+<div class="screen">
+  <div class="screen-title">① Elige un plan</div>
+  <ul class="bullets"><li>Nueva sección "Comprar Tokens" visible solo si el usuario tiene el permiso</li></ul>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Portal IA</div><div class="brand-sub">Mi Empresa</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>Grupo Andrea S.A. de C.V.</b>RFC: GAN010101AB1</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-item">Mi Consumo</div>
+        <div class="sb-item">Planes Contratados</div>
+        <div class="sb-item">Usuarios de mi Empresa</div>
+        <div class="sb-group">TOKENS</div>
+        <div class="sb-item active">Comprar Tokens</div>
+      </div>
+      <div class="main">
+        <div style="font-size:12px;font-weight:700;margin-bottom:10px;">Elige un plan para contratar</div>
+        <table>
+          <tr><th></th><th>PLAN</th><th>TOKENS</th><th>COSTO</th></tr>
+          <tr><td>🔘</td><td>Plan Básico</td><td>5,000</td><td>$50.00 USD</td></tr>
+          <tr><td>⚪</td><td>Plan Estándar</td><td>20,000</td><td>$180.00 USD</td></tr>
+        </table>
+        <button class="btn-new" style="margin-top:12px;">Continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">② Elige método de pago</div>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Portal IA</div><div class="brand-sub">Mi Empresa</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>Grupo Andrea S.A. de C.V.</b>RFC: GAN010101AB1</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-item">Mi Consumo</div>
+        <div class="sb-item">Planes Contratados</div>
+        <div class="sb-item">Usuarios de mi Empresa</div>
+        <div class="sb-group">TOKENS</div>
+        <div class="sb-item active">Comprar Tokens</div>
+      </div>
+      <div class="main">
+        <div style="font-size:12px;font-weight:700;margin-bottom:10px;">Método de pago</div>
+        <table>
+          <tr><td>🔘 Mercado Pago</td></tr>
+          <tr><td>⚪ Tarjeta de crédito</td></tr>
+          <tr><td>⚪ Tarjeta de débito</td></tr>
+        </table>
+        <div class="summary-card" style="max-width:260px;margin-top:12px;text-align:left;">Plan Básico · 5,000 tokens<br><b>Total: $50.00 USD</b></div>
+        <button class="btn-new" style="margin-top:12px;">Pagar $50.00 USD</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">③ Compra confirmada</div>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Portal IA</div><div class="brand-sub">Mi Empresa</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>Grupo Andrea S.A. de C.V.</b>RFC: GAN010101AB1</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-item">Mi Consumo</div>
+        <div class="sb-item">Planes Contratados</div>
+        <div class="sb-item">Usuarios de mi Empresa</div>
+        <div class="sb-group">TOKENS</div>
+        <div class="sb-item active">Comprar Tokens</div>
+      </div>
+      <div class="main" style="display:flex;align-items:center;justify-content:center;">
+        <div class="summary-card" style="max-width:280px;">
+          <div class="check">✓</div>
+          <b>¡Compra exitosa!</b><br>
+          <span style="font-size:11px;">+5,000 tokens agregados a tu empresa</span><br>
+          <span style="font-size:10px;color:#8a8f9a;">Folio: IAGM-00215 · Mercado Pago</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">D. Portal IA — Administrador Cliente (consulta de consumo)</div>
+<div class="section-sub">El cliente entra con su propia cuenta a ver el detalle de su empresa.</div>
+
+<div class="screen">
+  <div class="screen-title">① Mi Consumo</div>
+  <ul class="bullets">
+    <li>Quién consume más, cuántos planes ha contratado y cuánto ha gastado</li>
+    <li>Tendencia de consumo de los últimos meses</li>
+  </ul>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Portal IA</div><div class="brand-sub">Mi Empresa</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>Grupo Andrea S.A. de C.V.</b>RFC: GAN010101AB1</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-item active">Mi Consumo</div>
+        <div class="sb-item">Planes Contratados</div>
+        <div class="sb-item">Usuarios de mi Empresa</div>
+        <div class="sb-group">TOKENS</div>
+        <div class="sb-item">Comprar Tokens</div>
+      </div>
+      <div class="main">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Usuario que más consume</div>
+            <div class="kpi-value">Abraham Madrigal</div>
+            <div class="kpi-sub">9,800 tokens · 53% del total</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Planes contratados</div>
+            <div class="kpi-value">3 planes</div>
+            <div class="kpi-sub">2026-05-08 a 2026-07-05</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Total invertido</div>
+            <div class="kpi-value">$280.00 USD</div>
+            <div class="kpi-sub">Histórico, todos los planes</div>
+          </div>
+        </div>
+        <div class="summary-card" style="text-align:left;">
+          Tokens disponibles: <b>25,000</b> · Usados: <b>18,400 (74%)</b>
+          <div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div>
+        </div>
+        <div class="sec-label">CONSUMO ÚLTIMOS 3 MESES</div>
+        <div class="trend-chart">
+          <div class="trend-col"><div class="trend-bar" style="height:38px;"></div>13,200<br>May</div>
+          <div class="trend-col"><div class="trend-bar" style="height:56px;"></div>19,600<br>Jun</div>
+          <div class="trend-col"><div class="trend-bar" style="height:51px;"></div>18,400<br>Jul</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">② Planes Contratados</div>
+  <ul class="bullets"><li>Historial de compras, con método de pago y si el plan sigue vigente</li></ul>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Portal IA</div><div class="brand-sub">Mi Empresa</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>Grupo Andrea S.A. de C.V.</b>RFC: GAN010101AB1</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-item">Mi Consumo</div>
+        <div class="sb-item active">Planes Contratados</div>
+        <div class="sb-item">Usuarios de mi Empresa</div>
+        <div class="sb-group">TOKENS</div>
+        <div class="sb-item">Comprar Tokens</div>
+      </div>
+      <div class="main">
+        <table>
+          <tr><th>FECHA</th><th>PLAN</th><th>TOKENS</th><th>COSTO</th><th>MÉTODO DE PAGO</th><th>ESTADO</th></tr>
+          <tr><td>2026-07-05</td><td>Plan Estándar</td><td>20,000</td><td>$180.00</td><td>Mercado Pago</td><td><span class="pill-state pill-vigente">Vigente</span></td></tr>
+          <tr><td>2026-06-12</td><td>Plan Básico</td><td>5,000</td><td>$50.00</td><td>Tarjeta</td><td><span class="pill-state pill-consumido">Consumido</span></td></tr>
+          <tr><td>2026-05-08</td><td>Plan Básico</td><td>5,000</td><td>$50.00</td><td>Tarjeta de débito</td><td><span class="pill-state pill-consumido">Consumido</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-title">③ Usuarios de mi Empresa</div>
+  <ul class="bullets"><li>El cliente decide aquí quién de su equipo puede contratar más tokens</li></ul>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Portal IA</div><div class="brand-sub">Mi Empresa</div></div></div>
+      <div class="user-chip"><div class="user-avatar"></div><div class="user-txt"><b>Grupo Andrea S.A. de C.V.</b>RFC: GAN010101AB1</div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-item">Mi Consumo</div>
+        <div class="sb-item">Planes Contratados</div>
+        <div class="sb-item active">Usuarios de mi Empresa</div>
+        <div class="sb-group">TOKENS</div>
+        <div class="sb-item">Comprar Tokens</div>
+      </div>
+      <div class="main">
+        <table>
+          <tr><th>USUARIO</th><th>CORREO</th><th>TOKENS USADOS</th><th>ÚLTIMO ACCESO</th><th>PUEDE CONTRATAR</th></tr>
+          <tr><td>Abraham Madrigal</td><td>abraham.m@grupoandrea.com</td><td>9,800</td><td>2026-07-20</td><td><span class="pill pill-on">✓ Sí</span></td></tr>
+          <tr><td>Adriana Flores</td><td>adriana.f@grupoandrea.com</td><td>5,600</td><td>2026-07-19</td><td><span class="pill pill-off">✕ No</span></td></tr>
+          <tr><td>Adiel Cruz</td><td>adiel.c@grupoandrea.com</td><td>3,000</td><td>2026-07-15</td><td><span class="pill pill-off">✕ No</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- end panelProto -->
+
+<!-- ============================================================ -->
+<!-- TAB 2: COSTOS Y TIEMPOS -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="panelCostos">
+
+<div class="hero-bar">
+  <div class="hero-stat"><div class="hero-value">6.5 – 9 semanas</div><div class="hero-label">Para lanzar, cobrando directo en web y app (sin tiendas)</div></div>
+  <div class="hero-stat"><div class="hero-value">93.5% – 96.5%</div><div class="hero-label">De cada venta se queda GM, cobrando directo</div></div>
+</div>
+
+<div class="section-title" style="margin-top:0;padding-top:0;border-top:none;">1. Qué se va a construir</div>
+<ul class="bullets">
+  <li>GM crea planes de tokens con costo</li>
+  <li>El cliente los contrata desde la app IA GM o desde Portal IA</li>
+  <li>Los tokens se comparten entre todos los usuarios de la misma empresa</li>
+  <li>El cliente ve su consumo y decide quién de su equipo puede comprar más</li>
+</ul>
+
+<div class="section-title">2. Cuánto se queda cada opción</div>
+<div class="card-row">
+  <div class="card accent">
+    <div class="card-label">Cobra Google Play</div>
+    <div class="card-value">15% – 30%</div>
+    <div class="card-sub">15% en el primer $1M USD/año por desarrollador, 30% después</div>
+  </div>
+  <div class="card accent">
+    <div class="card-label">Cobra Apple App Store</div>
+    <div class="card-value">15% – 30%</div>
+    <div class="card-sub">Misma lógica, solo si IA GM también vende en iOS</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Cobra GM directo (web o app)</div>
+    <div class="card-value">~3.5% – 6.5%</div>
+    <div class="card-sub">Comisión del proveedor de pago por transacción, sin comisión de tienda</div>
+  </div>
+</div>
+<div class="risk"><b>Solo aplica en el celular, no en Portal IA</b><span>Cuando se vende algo dentro de una app, Google o Apple pueden exigir ser ellos quienes cobren — no es algo que GM decida, es su regla. Cuando eso pase, la comisión sube al 15%–30% de esa tienda en vez del 3.5%–6.5% de cobrar directo, y además se agregan <b>+24 – 40 hrs</b> de desarrollo por cada tienda (ver sección 4).</span></div>
+<div class="sec-label">PROVEEDORES DE PAGO — VÁLIDOS PARA WEB Y APP</div>
+<table class="costos-table">
+  <tr><th>PROVEEDOR</th><th>COMISIÓN APROX.</th></tr>
+  <tr><td>Mercado Pago</td><td>3.5% – 6.5%</td></tr>
+  <tr><td>Stripe</td><td>~3.6% + $3 MXN</td></tr>
+  <tr><td>Conekta</td><td>3.5% – 4%</td></tr>
+  <tr><td>Openpay</td><td>3.5% – 4%</td></tr>
+  <tr><td>PayPal</td><td>5% – 6%</td></tr>
+</table>
+<ul class="bullets">
+  <li>Con cualquiera de estas se puede pagar con tarjeta — "Tarjeta" ya viene incluido, no es una alternativa aparte</li>
+</ul>
+
+<div class="section-title">3. Decisiones que Dirección debe tomar</div>
+<div class="decision">
+  <div class="decision-num">DECISIÓN 1</div>
+  <div class="decision-q">¿Con cuál proveedor se procesan los pagos?</div>
+  <div class="opt-row">
+    <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado</span><b>Mercado Pago</b><span>3.5% – 6.5% comisión</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Stripe</b><span>~3.6% + $3 MXN</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Conekta</b><span>3.5% – 4%</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Openpay</b><span>3.5% – 4%</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>PayPal</b><span>5% – 6%</span></div>
+  </div>
+  <p style="font-size:12px;color:#3a3f4a;margin-top:6px;">El que se elija ya deja pagar con Mercado Pago, tarjeta de crédito y tarjeta de débito en una sola pantalla — igual que en Amazon. Con uno solo es suficiente, ya incluido en el total de la siguiente sección. Agregar un segundo proveedor: <b>+16 – 24 hrs</b>.</p>
+</div>
+
+<div class="decision">
+  <div class="decision-num">DECISIÓN 2</div>
+  <div class="decision-q">Política de reembolsos</div>
+  <div class="opt-row">
+    <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado · ya incluido</span><b>Sin reembolsos</b><span>Toda compra es final. +0 hrs.</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Reembolso si no se ha usado nada</b><span>Dentro de las primeras 24-48 hrs de la compra, si el plan sigue intacto. +16 – 24 hrs.</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Reembolso proporcional</b><span>Por los tokens no usados, sin límite de tiempo. +40 – 56 hrs.</span></div>
+  </div>
+</div>
+
+<div class="decision">
+  <div class="decision-num">DECISIÓN 3</div>
+  <div class="decision-q">¿Cómo se contabilizan estos ingresos?</div>
+  <div class="opt-row">
+    <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado · ya incluido</span><b>Junto con Cobranza</b><span>Mismo proceso que ya usa GM para el resto de sus ingresos. +0 hrs.</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Aparte</b><span>Reporte independiente solo para tokens. +16 – 24 hrs.</span></div>
+  </div>
+</div>
+
+<div class="section-title">4. Tiempos estimados de desarrollo</div><ul class="bullets">
+  <li>Los tiempos ya consideran el apoyo de IA (Claude) para desarrollar más rápido</li>
+  <li>Semanas = 1 persona dedicada, con 2 personas en paralelo el tiempo baja aprox. a la mitad</li>
+</ul>
+<table class="costos-table">
+  <tr><th>QUÉ SE VA A DESARROLLAR</th><th>HORAS</th><th>SEMANAS</th></tr>
+  <tr><td>Pantalla para crear y editar los planes</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
+  <tr><td>Control del saldo de tokens de cada empresa</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
+  <tr><td>Conexión con el proveedor de pago</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
+  <tr><td>Formulario de pago en Portal IA (computadora)</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
+  <tr><td>Formulario de pago en la app IA GM</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
+  <tr><td>Pantalla de administración para GM</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
+  <tr><td>Pantalla de consumo para el cliente</td><td>32 – 48 hrs</td><td>1.1 – 1.6</td></tr>
+  <tr><td>Pantallas de compra dentro de la app</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
+  <tr><td>Permiso de quién puede comprar tokens</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
+  <tr><td>Pruebas antes de lanzar</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
+  <tr class="total"><td>Total sin tiendas (GM cobra directo en web y app)</td><td>~192 – 272 hrs</td><td>~6.5 – 9 sem</td></tr>
+  <tr class="total"><td>+ por cada tienda que se integre (Google Play, Apple, etc.)</td><td>+24 – 40 hrs</td><td>+0.8 – 1.3 sem</td></tr>
+</table>
+
+<div class="section-title">5. Pendientes antes de lanzar</div>
+<div class="risk"><b>Actualizar políticas de IA GM</b><span>Sí se va a cobrar. Hay que actualizar las políticas y términos de la app IA GM para reflejar que ahora tiene compras dentro de ella.</span><br><span class="owner">Desarrollo + Legal/Comercial</span></div>
+<div class="risk"><b>Factura fiscal de la venta de tokens</b><span>Definir con Fiscal/Contabilidad si cada compra debe generar CFDI.</span><br><span class="owner">Fiscal / Contabilidad</span></div>
+
+</div>
+<!-- end panelCostos -->
+
+<script>
+function showTab(name){
+  document.getElementById('panelProto').classList.toggle('active', name==='proto');
+  document.getElementById('panelCostos').classList.toggle('active', name==='costos');
+  document.getElementById('tabBtnProto').classList.toggle('active', name==='proto');
+  document.getElementById('tabBtnCostos').classList.toggle('active', name==='costos');
+}
+</script>
+</body>
+</html>

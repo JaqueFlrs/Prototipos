@@ -623,7 +623,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <div class="tab-panel" id="panelCostos">
 
 <div class="hero-bar">
-  <div class="hero-stat"><div class="hero-value">~8 – 11.5 semanas</div><div class="hero-label">Para lanzar, vendiendo en la app y en Portal IA</div></div>
+  <div class="hero-stat"><div class="hero-value">~5.5 – 11.5 semanas</div><div class="hero-label">Según dónde se venda: solo web, solo app, o ambos (Decisión 1)</div></div>
   <div class="hero-stat"><div class="hero-value">70% – 96.5%</div><div class="hero-label">Lo que se queda GM de cada venta, según dónde compre el cliente</div></div>
 </div>
 
@@ -654,17 +654,18 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
   <li>En el celular, la tienda obliga a usar su cobro — por eso se queda con más</li>
   <li>En la computadora no hay tienda de por medio, así que GM cobra directo y se queda con casi todo</li>
 </ul>
+<div class="risk"><b>¿Por qué Amazon sí puede tener Mercado Pago, tarjeta, PayPal... y nosotros no?</b><span>Google y Apple separan dos tipos de venta: productos físicos o servicios del mundo real (lo que vende Amazon, un viaje de Uber) — ahí no cobran comisión ni exigen su propio pago. Y bienes digitales que se usan dentro de la misma app (tokens de IA, monedas de un juego) — ahí sí exigen usar su cobro y sí cobran comisión. Los tokens son del segundo tipo. No es que no sepamos ponerlo — las tiendas lo prohíben para este tipo de producto.</span></div>
 
 <div class="section-title">3. Decisiones que Dirección debe tomar</div>
 
 <div class="decision">
   <div class="decision-num">DECISIÓN 1</div>
-  <div class="decision-q">En la app, ¿se usa el cobro de la tienda o el propio de GM?</div>
+  <div class="decision-q">¿Dónde se vende?</div>
   <div class="opt-row">
-    <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado · sin riesgo</span><b>Cobro de la tienda</b><span>Google Play / Apple cobran con su pantalla. GM se queda 70%–85%. Cumple las reglas, no hay riesgo de rechazo.</span></div>
-    <div class="opt-card"><span class="opt-radio"></span><span class="opt-tag">Más barato · con riesgo</span><b>Cobro propio en la app</b><span>Se pone el mismo proveedor que en web (Mercado Pago, etc.) dentro de la app. GM se queda 93.5%–96.5%, pero Google/Apple lo prohíben y pueden actuar (ver recuadro).</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Solo en la app</b><span>Cobra la tienda (70%–85% para GM).</span></div>
+    <div class="opt-card"><span class="opt-radio"></span><b>Solo en Portal IA (web)</b><span>GM cobra directo (93.5%–96.5%). El cliente no puede comprar desde el celular.</span></div>
+    <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado</span><b>En ambos</b><span>Compra desde donde le quede mejor al cliente.</span></div>
   </div>
-  <div class="risk"><b>Si se elige el cobro propio en la app — qué puede pasar</b><span>Va contra las reglas de las tiendas, así que el riesgo es real:<br>• <b>Rechazo en revisión:</b> no dejan publicar la app hasta quitarlo (retrasa el lanzamiento).<br>• <b>Baja de la app ya publicada:</b> si lo detectan después, la quitan de la tienda y los operadores se quedan sin acceso hasta corregir.<br>• <b>Riesgo a la cuenta de desarrollador de GM:</b> si es la misma cuenta que las demás apps de GM (Mis Viajes, Doble Check, etc.), una sanción podría afectarlas también.</span></div>
 </div>
 
 <div class="decision">
@@ -694,20 +695,26 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <ul class="bullets">
   <li>Los tiempos ya consideran el apoyo de IA (Claude) para desarrollar más rápido</li>
   <li>Semanas = 1 persona de tiempo completo dedicada al proyecto</li>
+  <li>El total depende de la Decisión 1 (dónde se vende) — abajo el desglose</li>
 </ul>
 <table class="costos-table">
   <tr><th>QUÉ SE VA A DESARROLLAR</th><th>HORAS</th><th>SEMANAS</th></tr>
+  <tr><td colspan="3" style="background:#f4f5f7;font-weight:700;">Base — siempre, sin importar dónde se venda</td></tr>
   <tr><td>Pantalla para crear y editar los planes</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
   <tr><td>Control del saldo de tokens de cada empresa</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
   <tr><td>Pantalla de administración para GM</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
   <tr><td>Pantalla de consumo para el cliente</td><td>32 – 48 hrs</td><td>1.1 – 1.6</td></tr>
   <tr><td>Permiso de quién puede comprar tokens</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
   <tr><td>Envío de información de ventas a Contabilidad</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
+  <tr><td>Pruebas antes de lanzar</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
+  <tr><td colspan="3" style="background:#f4f5f7;font-weight:700;">Si se vende en Portal IA (web)</td></tr>
   <tr><td>Conexión con el proveedor de pago + formulario de pago web</td><td>28 – 40 hrs</td><td>0.9 – 1.3</td></tr>
+  <tr><td colspan="3" style="background:#f4f5f7;font-weight:700;">Si se vende en la app (celular)</td></tr>
   <tr><td>Pantallas de compra + cobro con Google Play</td><td>48 – 72 hrs</td><td>1.6 – 2.4</td></tr>
   <tr><td>Cobro con Apple App Store</td><td>24 – 40 hrs</td><td>0.8 – 1.3</td></tr>
-  <tr><td>Pruebas antes de lanzar</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
-  <tr class="total"><td>Total — app y web juntos</td><td>~236 – 344 hrs</td><td>~8 – 11.5 sem</td></tr>
+  <tr class="total"><td>Total si solo web</td><td>~164 – 232 hrs</td><td>~5.5 – 7.5 sem</td></tr>
+  <tr class="total"><td>Total si solo app (Google + Apple)</td><td>~208 – 304 hrs</td><td>~7 – 10 sem</td></tr>
+  <tr class="total"><td>Total si ambos</td><td>~236 – 344 hrs</td><td>~8 – 11.5 sem</td></tr>
 </table>
 
 <div class="section-title">5. Pendientes antes de lanzar</div>

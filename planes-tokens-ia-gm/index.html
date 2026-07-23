@@ -623,7 +623,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <div class="tab-panel" id="panelCostos">
 
 <div class="hero-bar">
-  <div class="hero-stat"><div class="hero-value">~5.5 – 11.5 semanas</div><div class="hero-label">Según dónde se pueda comprar: solo web, solo app, o ambos (Decisión 1)</div></div>
+  <div class="hero-stat"><div class="hero-value">~8 – 11.5 semanas</div><div class="hero-label">Para lanzar, vendiendo en la app y en Portal IA</div></div>
   <div class="hero-stat"><div class="hero-value">70% – 96.5%</div><div class="hero-label">Lo que se queda GM de cada venta, según dónde compre el cliente</div></div>
 </div>
 
@@ -631,8 +631,9 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <ul class="bullets">
   <li>GM crea planes de tokens con costo</li>
   <li>El cliente los contrata desde la app IA GM (celular) o desde Portal IA (computadora)</li>
-  <li>Los tokens se comparten entre todos los usuarios de la misma empresa</li>
+  <li>Los tokens se comparten entre todos los usuarios de la misma empresa, y se acumulan (no caducan)</li>
   <li>El cliente ve su consumo y decide quién de su equipo puede comprar más</li>
+  <li>Toda compra es final — no hay reembolsos</li>
 </ul>
 
 <div class="section-title">2. Cuánto se queda GM — cambia según dónde compre el cliente</div>
@@ -657,17 +658,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 
 <div class="decision">
   <div class="decision-num">DECISIÓN 1</div>
-  <div class="decision-q">¿Dónde podrá comprar tokens el cliente?</div>
-  <div class="opt-row">
-    <div class="opt-card"><span class="opt-radio"></span><b>Solo en la app (celular)</b><span>Cobra la tienda (70%–85% para GM). Precios se administran en Google Play y App Store.</span></div>
-    <div class="opt-card"><span class="opt-radio"></span><b>Solo en Portal IA (computadora)</b><span>GM cobra directo (93.5%–96.5%). El cliente no puede comprar desde el celular.</span></div>
-    <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado</span><b>En ambos</b><span>Compra desde donde le quede mejor. Los precios se administran en las tiendas Y en el sistema de GM.</span></div>
-  </div>
-</div>
-
-<div class="decision">
-  <div class="decision-num">DECISIÓN 2</div>
-  <div class="decision-q">En la app, ¿se usa el cobro de la tienda o el propio de GM? <span style="font-weight:400;color:#8a8f9a;">(solo aplica si se vende en la app)</span></div>
+  <div class="decision-q">En la app, ¿se usa el cobro de la tienda o el propio de GM?</div>
   <div class="opt-row">
     <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado · sin riesgo</span><b>Cobro de la tienda</b><span>Google Play / Apple cobran con su pantalla. GM se queda 70%–85%. Cumple las reglas, no hay riesgo de rechazo.</span></div>
     <div class="opt-card"><span class="opt-radio"></span><span class="opt-tag">Más barato · con riesgo</span><b>Cobro propio en la app</b><span>Se pone el mismo proveedor que en web (Mercado Pago, etc.) dentro de la app. GM se queda 93.5%–96.5%, pero Google/Apple lo prohíben y pueden actuar (ver recuadro).</span></div>
@@ -676,8 +667,8 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 </div>
 
 <div class="decision">
-  <div class="decision-num">DECISIÓN 3</div>
-  <div class="decision-q">En Portal IA (web), ¿con cuál proveedor se procesan los pagos? <span style="font-weight:400;color:#8a8f9a;">(solo aplica si se vende en web)</span></div>
+  <div class="decision-num">DECISIÓN 2</div>
+  <div class="decision-q">En Portal IA (web), ¿con cuál proveedor se procesan los pagos?</div>
   <div class="opt-row">
     <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado</span><b>Mercado Pago</b><span>3.5% – 6.5%</span></div>
     <div class="opt-card"><span class="opt-radio"></span><b>Stripe</b><span>~3.6% + $3 MXN</span></div>
@@ -689,17 +680,7 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 </div>
 
 <div class="decision">
-  <div class="decision-num">DECISIÓN 4</div>
-  <div class="decision-q">Política de reembolsos</div>
-  <div class="opt-row">
-    <div class="opt-card rec"><span class="opt-radio"></span><span class="opt-tag">Recomendado · ya incluido</span><b>Sin reembolsos</b><span>Toda compra es final. +0 hrs.</span></div>
-    <div class="opt-card"><span class="opt-radio"></span><b>Reembolso si no se ha usado nada</b><span>Dentro de las primeras 24-48 hrs, si el plan sigue intacto. +16 – 24 hrs.</span></div>
-    <div class="opt-card"><span class="opt-radio"></span><b>Reembolso proporcional</b><span>Por los tokens no usados, sin límite de tiempo. +40 – 56 hrs.</span></div>
-  </div>
-</div>
-
-<div class="decision">
-  <div class="decision-num">DECISIÓN 5</div>
+  <div class="decision-num">DECISIÓN 3</div>
   <div class="decision-q">¿Cómo se contabilizan estos ingresos?</div>
   <p style="font-size:12px;color:#3a3f4a;margin:2px 0 10px;">En ambos casos hay que enviarle a Contabilidad el detalle de cada venta (quién pagó, cuánto, cuándo) — la diferencia es a dónde va esa información.</p>
   <div class="opt-row">
@@ -712,31 +693,24 @@ tr.total td{font-weight:700;background:#fff8f6;border-top:2px solid #ffd9cc;}
 <ul class="bullets">
   <li>Los tiempos ya consideran el apoyo de IA (Claude) para desarrollar más rápido</li>
   <li>Semanas = 1 persona de tiempo completo dedicada al proyecto</li>
-  <li>El total depende de la Decisión 1 (dónde se puede comprar) — abajo el desglose</li>
 </ul>
 <table class="costos-table">
   <tr><th>QUÉ SE VA A DESARROLLAR</th><th>HORAS</th><th>SEMANAS</th></tr>
-  <tr><td colspan="3" style="background:#f4f5f7;font-weight:700;">Base — siempre, sin importar dónde se compre</td></tr>
   <tr><td>Pantalla para crear y editar los planes</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
   <tr><td>Control del saldo de tokens de cada empresa</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
   <tr><td>Pantalla de administración para GM</td><td>16 – 24 hrs</td><td>0.5 – 0.8</td></tr>
   <tr><td>Pantalla de consumo para el cliente</td><td>32 – 48 hrs</td><td>1.1 – 1.6</td></tr>
   <tr><td>Permiso de quién puede comprar tokens</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
   <tr><td>Envío de información de ventas a Contabilidad</td><td>12 – 16 hrs</td><td>0.4 – 0.5</td></tr>
-  <tr><td>Pruebas antes de lanzar</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
-  <tr><td colspan="3" style="background:#f4f5f7;font-weight:700;">Si se vende en Portal IA (web)</td></tr>
   <tr><td>Conexión con el proveedor de pago + formulario de pago web</td><td>28 – 40 hrs</td><td>0.9 – 1.3</td></tr>
-  <tr><td colspan="3" style="background:#f4f5f7;font-weight:700;">Si se vende en la app (celular)</td></tr>
   <tr><td>Pantallas de compra + cobro con Google Play</td><td>48 – 72 hrs</td><td>1.6 – 2.4</td></tr>
   <tr><td>Cobro con Apple App Store</td><td>24 – 40 hrs</td><td>0.8 – 1.3</td></tr>
-  <tr class="total"><td>Total si solo web</td><td>~164 – 232 hrs</td><td>~5.5 – 7.5 sem</td></tr>
-  <tr class="total"><td>Total si solo app (Google + Apple)</td><td>~208 – 304 hrs</td><td>~7 – 10 sem</td></tr>
-  <tr class="total"><td>Total si ambos</td><td>~236 – 344 hrs</td><td>~8 – 11.5 sem</td></tr>
+  <tr><td>Pruebas antes de lanzar</td><td>24 – 32 hrs</td><td>0.8 – 1.1</td></tr>
+  <tr class="total"><td>Total — app y web juntos</td><td>~236 – 344 hrs</td><td>~8 – 11.5 sem</td></tr>
 </table>
 
 <div class="section-title">5. Pendientes antes de lanzar</div>
 <div class="risk"><b>Actualizar políticas de IA GM</b><span>Sí se va a cobrar. Hay que actualizar las políticas y términos de la app IA GM para reflejar que ahora tiene compras dentro de ella.</span><br><span class="owner">Desarrollo + Legal/Comercial</span></div>
-<div class="risk"><b>Factura fiscal de la venta de tokens</b><span>Definir con Fiscal/Contabilidad si cada compra debe generar CFDI.</span><br><span class="owner">Fiscal / Contabilidad</span></div>
 
 </div>
 <!-- end panelCostos -->

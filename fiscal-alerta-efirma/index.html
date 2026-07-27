@@ -15,57 +15,45 @@
   --warn-fg:#a15c07;
   --danger-bg:#fce8e6;
   --danger-fg:#c22a1f;
-  --ann:#2851d8;
-  --ann-bg:#eef2fd;
-  --desc-bg:#eef0f3;
-  --desc-border:#aab0bb;
   --disclaimer-bg:#fdf6e6;
   --disclaimer-border:#d9b34e;
   --disclaimer-fg:#5c4a1a;
-  --dbnote-bg:#f0eefc;
-  --dbnote-border:#8f7fd6;
-  --dbnote-fg:#4a3d99;
 }
 *{box-sizing:border-box;}
 body{
   font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  font-size:13px;color:var(--text);background:var(--bg);
-  padding:28px 32px 60px;line-height:1.5;
+  font-size:13.5px;color:var(--text);background:var(--bg);
+  padding:28px 32px 60px;line-height:1.6;max-width:720px;margin:0 auto;
 }
 .page-title{font-size:19px;font-weight:700;margin-bottom:2px;}
 .page-sub{font-size:12.5px;color:var(--text-muted);margin-bottom:18px;}
 
 .disclaimer{background:var(--disclaimer-bg);border:1px solid var(--disclaimer-border);color:var(--disclaimer-fg);
-  padding:12px 16px;margin-bottom:18px;font-size:12px;line-height:1.6;border-radius:8px;}
-.disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
+  padding:11px 15px;margin-bottom:28px;font-size:11.5px;line-height:1.55;border-radius:8px;}
+.disclaimer strong{display:block;margin-bottom:3px;font-size:12.5px;}
 
-.dbnote{background:var(--dbnote-bg);border:1px solid var(--dbnote-border);color:var(--dbnote-fg);
-  padding:12px 16px;margin-bottom:24px;font-size:12px;line-height:1.6;border-radius:8px;}
-.dbnote strong{display:block;margin-bottom:4px;font-size:13px;}
-.dbnote code{background:rgba(0,0,0,.08);padding:1px 5px;border-radius:4px;font-size:11.5px;}
+.paso{margin-bottom:34px;}
+.paso-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.paso-num{flex-shrink:0;width:28px;height:28px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.paso-titulo{font-size:15px;font-weight:700;}
+.paso-texto{font-size:13.5px;color:var(--text);margin:0 0 0 38px;}
+.paso-texto p{margin:0 0 8px;}
+.paso-texto p:last-child{margin-bottom:0;}
+.paso-texto ul{margin:6px 0 0;padding-left:20px;}
+.paso-texto li{margin-bottom:4px;}
+.paso-texto code{background:var(--surface-2);padding:0 4px;border-radius:4px;font-size:12px;}
+.paso-texto .nota{color:var(--text-muted);font-size:12.5px;}
 
-.stepnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;position:sticky;top:0;background:var(--bg);
-  padding:10px 0;z-index:5;border-bottom:1px solid var(--border);}
-.stepnav a{font-size:11.5px;color:var(--text);text-decoration:none;background:var(--surface-2);
-  border:1px solid var(--border);border-radius:999px;padding:5px 12px;white-space:nowrap;}
-.stepnav a:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+/* imagen embebida de pantalla real */
+.shot{margin:14px 0 0 38px;border:1px solid var(--border);border-radius:10px;background:var(--surface);
+  overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.shot-caption{font-size:11px;color:var(--text-faint);margin:6px 0 0 38px;}
 
-.screen{margin-bottom:48px;scroll-margin-top:56px;}
-.screen-label{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;
-  letter-spacing:.5px;margin-bottom:7px;display:flex;align-items:center;gap:8px;}
-.badge-state{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.3px;}
-.badge-nuevo{background:var(--success-bg);color:var(--success-fg);}
-.screen-desc{font-size:12.3px;color:var(--text);background:var(--desc-bg);border-left:3px solid var(--desc-border);
-  padding:9px 13px;margin-bottom:12px;border-radius:0 6px 6px 0;}
-
-/* ---- réplica del frame real de GM Fiscal ---- */
-.gmf-frame{border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,.04);}
 .gmf-topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;
   background:var(--bg);border-bottom:1px solid var(--border);}
 .gmf-title{font-size:14px;font-weight:700;}
-.gmf-tabs{display:flex;gap:6px;}
-.gmf-tab{font-size:12px;padding:6px 14px;border-radius:8px;color:var(--text-muted);font-weight:600;position:relative;}
+.gmf-tab{font-size:12px;padding:6px 14px;border-radius:8px;color:var(--text-muted);font-weight:600;}
 .gmf-tab.active{background:var(--accent-soft);color:var(--accent);}
 .gmf-tab .cnt{background:var(--danger-fg);color:#fff;font-size:10px;font-weight:700;border-radius:999px;
   padding:1px 6px;margin-left:5px;}
@@ -73,18 +61,13 @@ body{
   border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;}
 .gmf-bell .dot{position:absolute;top:-4px;right:-4px;background:var(--danger-fg);color:#fff;font-size:9px;
   font-weight:700;border-radius:999px;min-width:15px;height:15px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
-
 .gmf-body{padding:16px 18px;}
 
-/* notificaciones dropdown */
-.notif-wrap{display:flex;justify-content:flex-end;padding:14px 18px 0;}
-.notif-panel{width:360px;border:1px solid var(--border);border-radius:10px;background:var(--bg);
-  box-shadow:0 6px 18px rgba(0,0,0,.12);overflow:hidden;}
+.notif-panel{width:100%;border:1px solid var(--border);border-radius:10px;background:var(--bg);}
 .notif-head{padding:11px 16px;font-size:12.5px;font-weight:700;border-bottom:1px solid var(--border);}
 .notif-item{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;}
 .notif-item:last-child{border-bottom:none;}
-.notif-ic{width:26px;height:26px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;
-  justify-content:center;font-size:13px;}
+.notif-ic{width:26px;height:26px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;}
 .notif-ic.warn{background:var(--warn-bg);color:var(--warn-fg);}
 .notif-ic.danger{background:var(--danger-bg);color:var(--danger-fg);}
 .notif-body b{font-size:12px;}
@@ -93,8 +76,7 @@ body{
   border-radius:5px;padding:0 5px;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;}
 .notif-body .time{font-size:10.5px;color:var(--text-faint);margin-top:3px;}
 
-/* alta / renovación e.firma */
-.upload-card{padding:20px;max-width:480px;display:flex;flex-direction:column;gap:14px;}
+.upload-card{padding:20px;display:flex;flex-direction:column;gap:14px;}
 .upload-row{display:flex;flex-direction:column;gap:5px;}
 .upload-row label{font-size:12px;font-weight:600;}
 .upload-box{border:1px dashed var(--border);border-radius:8px;padding:10px 12px;font-size:12px;
@@ -103,115 +85,74 @@ body{
 .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:8px 18px;
   font-size:12.5px;font-weight:600;align-self:flex-start;}
 
-.ann-block{margin-top:12px;background:var(--ann-bg);border:1px dashed var(--ann);border-radius:8px;
-  padding:12px 15px;}
-.ann-block .ann-title{font-size:10.5px;font-weight:700;color:var(--ann);text-transform:uppercase;
-  letter-spacing:.4px;margin-bottom:7px;}
-.ann-block ul{margin:0;padding-left:18px;}
-.ann-block li{font-size:11.8px;color:var(--ann);margin-bottom:5px;line-height:1.5;}
-.ann-block li:last-child{margin-bottom:0;}
-.ann-block b{color:var(--ann);}
-.ann-block code{background:rgba(0,0,0,.06);padding:0 4px;border-radius:4px;}
-
-.leyenda{margin-top:9px;font-size:11px;color:var(--text-muted);}
+.leyenda{margin-top:36px;padding-top:14px;border-top:1px solid var(--border);font-size:11.5px;color:var(--text-muted);}
 .leyenda b{color:var(--text);}
-
-.plan-title{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;
-  letter-spacing:.5px;margin:26px 0 10px;}
-.plan{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px;}
-.paso{display:flex;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--bg);}
-.paso:last-child{border-bottom:none;}
-.paso:nth-child(even){background:var(--surface);}
-.paso-num{flex-shrink:0;width:26px;height:26px;border-radius:999px;background:var(--accent-soft);
-  color:var(--accent);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.paso-body b{font-size:12.5px;display:block;margin-bottom:2px;}
-.paso-body p{font-size:12px;color:var(--text-muted);margin:0;}
-.paso-body code{background:var(--surface-2);padding:0 4px;border-radius:4px;font-size:11.5px;color:var(--text);}
 </style>
 
-<div class="page-title">HU47568 · Alerta de proximidad de vencimiento de e.Firma — GM Fiscal</div>
-<div class="page-sub">Prototipo devs/QA · réplica del estilo real de GM Fiscal</div>
+<div class="page-title">HU47568 · Alerta de proximidad de vencimiento de e.Firma</div>
+<div class="page-sub">GM Fiscal · Análisis paso a paso para desarrollo</div>
 
 <div class="disclaimer">
   <strong>Sobre este prototipo</strong>
-  Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.<br><br>
-  ⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Fiscal, eso significa el estilo real de la app mostrado aquí.<br><br>
-  Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌
+  Representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Lo que sí debe respetarse es la apariencia real de GM Fiscal mostrada en las pantallas de abajo. Si algo no encaja, coméntalo antes de implementarlo. 🙌
 </div>
 
-<div class="dbnote">
-  <strong>Esto es solo base de datos, sin pantalla propia</strong>
-  GM Fiscal no tiene un catálogo navegable de empresas ni una pantalla de parámetros para esta alerta. Ambos datos viven directo en la base de datos de cada cliente (una BD por instancia de GM Fiscal, sin tenant compartido):<br><br>
-  · <code>días de anticipación</code> — valor de configuración en BD, ajustado directo ahí (sin UI).<br>
-  · <code>fecha de vigencia de la e.Firma</code> — se lee del certificado <code>.cer</code> (campo <code>NotAfter</code> del X.509) y se guarda en <code>cat_empresas</code>, sin pantalla que la liste.<br><br>
-  El <strong>único lugar visible</strong> para el usuario es la notificación (pantalla ①) — no hay listado ni catálogo que mostrar.
-</div>
-
-<div class="plan-title">Plan paso a paso</div>
-<div class="plan">
-  <div class="paso">
-    <div class="paso-num">1</div>
-    <div class="paso-body">
-      <b>Agregar dónde se guarda la fecha de vigencia</b>
-      <p>Nuevo campo en la tabla de empresas (<code>cat_empresas</code>) para guardar la fecha de vencimiento de la e.Firma. Hoy no existe.</p>
-    </div>
-  </div>
-  <div class="paso">
-    <div class="paso-num">2</div>
-    <div class="paso-body">
-      <b>Tomar el dato al registrar o renovar la e.Firma</b>
-      <p>Al subir el certificado (.cer) — alta nueva o renovación — se lee la fecha de vigencia que ya trae el archivo y se guarda en el campo del Paso 1. No se le pide nada nuevo al usuario.</p>
-    </div>
-  </div>
-  <div class="paso">
-    <div class="paso-num">3</div>
-    <div class="paso-body">
-      <b>Definir cuántos días antes se debe avisar</b>
-      <p>Valor de configuración en base de datos (días de anticipación), sin pantalla propia. Cada cliente tiene su propia BD de GM Fiscal, así que ya queda distinto por cliente sin trabajo extra.</p>
-    </div>
-  </div>
-  <div class="paso">
-    <div class="paso-num">4</div>
-    <div class="paso-body">
-      <b>Crear el proceso que revisa las vigencias</b>
-      <p>Proceso periódico (ej. una vez al día) que compara la fecha de vigencia de cada empresa contra la fecha de hoy y el valor del Paso 3, para determinar si está por vencer, vencida o normal.</p>
-    </div>
-  </div>
-  <div class="paso">
-    <div class="paso-num">5</div>
-    <div class="paso-body">
-      <b>Notificar al usuario</b>
-      <p>Usando el sistema de notificaciones que ya existe en GM Fiscal, visible para todos los usuarios. Por vencer: nombre de la empresa y en cuántos días vence. Vencida: aviso de que debe recargar el certificado — informativo, no bloquea nada.</p>
-    </div>
-  </div>
-  <div class="paso">
-    <div class="paso-num">6</div>
-    <div class="paso-body">
-      <b>La notificación se apaga sola al renovar</b>
-      <p>Al subir un nuevo certificado (Paso 2), la fecha se actualiza y en la siguiente corrida del proceso (Paso 4) la empresa deja de aparecer como por vencer o vencida — sin cerrar nada manualmente.</p>
-    </div>
-  </div>
-  <div class="paso">
-    <div class="paso-num">7</div>
-    <div class="paso-body">
-      <b>Empresas ya registradas antes de este cambio</b>
-      <p>Proceso de backfill que corre una sola vez: toma el certificado que cada empresa ya tiene guardado y le calcula la fecha de vigencia, sin pedirle a nadie que vuelva a subir nada.</p>
-    </div>
+<div class="paso">
+  <div class="paso-head"><div class="paso-num">1</div><div class="paso-titulo">Agregar dónde se guarda la fecha de vigencia</div></div>
+  <div class="paso-texto">
+    <p>Se agrega un nuevo campo en la tabla de empresas (<code>cat_empresas</code>) donde se guardará la fecha de vencimiento de la e.Firma de cada empresa. Hoy ese dato no se guarda en ningún lado — hay que crearlo.</p>
   </div>
 </div>
 
-<div class="stepnav">
-  <a href="#s1">① Notificaciones</a>
-  <a href="#s2">② Alta/Renovación e.Firma</a>
+<div class="paso">
+  <div class="paso-head"><div class="paso-num">2</div><div class="paso-titulo">Al registrar o actualizar la e.Firma, tomar el dato del certificado</div></div>
+  <div class="paso-texto">
+    <p>Cuando el usuario sube el certificado (<code>.cer</code>) — ya sea al registrar una empresa nueva o al renovar la e.Firma de una que ya existe — el sistema debe leer la fecha de vigencia que trae ese mismo archivo (todo certificado la trae incluida) y guardarla en el campo del Paso 1. No se le pide nada nuevo al usuario; es un dato que ya viene en el archivo que él sube.</p>
+    <p class="nota">Nota: si es una renovación (la empresa ya existía), la fecha nueva sobreescribe a la anterior.</p>
+  </div>
+  <div class="shot">
+    <div class="gmf-topbar"><div class="gmf-title">Registrar empresa — Bóveda Fiscal</div></div>
+    <div class="gmf-body">
+      <div class="upload-card">
+        <div class="upload-row">
+          <label>Certificado (.cer)</label>
+          <div class="upload-box"><span class="file">TAB010101AA1.cer</span><span>Cambiar</span></div>
+        </div>
+        <div class="upload-row">
+          <label>Llave privada (.key)</label>
+          <div class="upload-box"><span class="file">TAB010101AA1.key</span><span>Cambiar</span></div>
+        </div>
+        <button class="btn-primary">Iniciar registro</button>
+      </div>
+    </div>
+  </div>
+  <div class="shot-caption">Pantalla real de GM Fiscal donde ocurre esta captura — no cambia visualmente, solo lo que pasa por dentro.</div>
 </div>
 
-<!-- ① NOTIFICACIONES -->
-<div class="screen" id="s1">
-  <div class="screen-label">① Notificaciones <span class="badge-state badge-nuevo">NUEVO</span></div>
-  <div class="screen-desc">
-    Único lugar visible de esta funcionalidad. Un proceso periódico (una vez al día) compara la fecha de vigencia guardada de cada empresa contra la fecha actual y el valor de configuración en BD. Cuando una empresa entra en ese rango, o ya venció, se genera una notificación visible para todos los usuarios en el ícono ya existente en GM Fiscal.
+<div class="paso">
+  <div class="paso-head"><div class="paso-num">3</div><div class="paso-titulo">Definir cuántos días antes se debe avisar</div></div>
+  <div class="paso-texto">
+    <p>Se agrega un valor de configuración (número de días de anticipación) directamente en la base de datos — no es una pantalla que el usuario vea ni edite, es un dato que se ajusta ahí cuando se necesite cambiar. Como cada cliente tiene su propia base de datos de GM Fiscal, este valor ya queda distinto por cliente sin trabajo extra.</p>
   </div>
-  <div class="gmf-frame">
+</div>
+
+<div class="paso">
+  <div class="paso-head"><div class="paso-num">4</div><div class="paso-titulo">Crear el proceso que revisa las vigencias</div></div>
+  <div class="paso-texto">
+    <p>Se crea un proceso que corre solo, de forma periódica (ej. una vez al día), y compara la fecha de vigencia guardada de cada empresa (Paso 1) contra la fecha de hoy y el valor de días de anticipación (Paso 3). Con eso determina si una empresa está "por vencer", "vencida", o normal.</p>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-head"><div class="paso-num">5</div><div class="paso-titulo">Notificar al usuario</div></div>
+  <div class="paso-texto">
+    <p>Cuando el proceso del Paso 4 encuentra una empresa por vencer o ya vencida, genera una notificación usando el sistema de notificaciones que ya existe en GM Fiscal (el ícono de campana que ya está en la pantalla). Esta notificación es visible para todos los usuarios, no solo administradores.</p>
+    <ul>
+      <li><b>Si está por vencer:</b> mensaje indicando el nombre de la empresa y en cuántos días vence.</li>
+      <li><b>Si ya venció:</b> mensaje indicando que ya venció y que se debe volver a cargar el certificado. Es solo informativo — no bloquea ninguna operación.</li>
+    </ul>
+  </div>
+  <div class="shot">
     <div class="gmf-topbar">
       <div class="gmf-title">GM Fiscal</div>
       <div style="display:flex;align-items:center;gap:10px;">
@@ -220,7 +161,7 @@ body{
         <div class="gmf-bell">🔔<span class="dot">2</span></div>
       </div>
     </div>
-    <div class="notif-wrap">
+    <div class="gmf-body">
       <div class="notif-panel">
         <div class="notif-head">Notificaciones</div>
         <div class="notif-item">
@@ -242,58 +183,23 @@ body{
       </div>
     </div>
   </div>
-  <div class="ann-block">
-    <div class="ann-title">Anotaciones dev/QA</div>
-    <ul>
-      <li><b>Fecha que se muestra en el mensaje:</b> es exactamente la fecha guardada en <code>cat_empresas</code> (leída del certificado, ver pantalla ②) — formato <code>DD/MM/AAAA</code>, sin recalcular ni redondear.</li>
-      <li><b>"(en N días)":</b> N = diferencia en días entre la fecha de vigencia y la fecha en que corre el proceso ese día. Se recalcula en cada corrida del proceso periódico.</li>
-      <li><b>Contador del ícono 🔔:</b> total de empresas en estatus "por vencer" o "vencida" en ese momento.</li>
-      <li><b>Notificación "por vencer"</b> (ícono ámbar): se genera la primera vez que la empresa entra en el rango de días de anticipación configurado en BD. Mensaje: <b>"La e.Firma vence el [fecha] (en [N] días)"</b>.</li>
-      <li><b>Notificación "vencida"</b> (ícono rojo): se genera el día siguiente a la fecha de vigencia. Mensaje: <b>"La e.Firma venció el [fecha]. Vuelve a cargar el certificado."</b> — es informativa, no bloquea ninguna operación de conciliación ni consulta.</li>
-      <li><b>Persistencia:</b> la notificación no se descarta/pospone manualmente — permanece hasta que la empresa sube un nuevo certificado (pantalla ②) y la nueva fecha de vigencia queda fuera de rango.</li>
-      <li><b>Visibilidad:</b> visible para todos los usuarios de GM Fiscal, no solo administradores.</li>
-    </ul>
+  <div class="shot-caption">Así se ve la notificación en el ícono de campana que ya existe en GM Fiscal.</div>
+</div>
+
+<div class="paso">
+  <div class="paso-head"><div class="paso-num">6</div><div class="paso-titulo">La notificación se apaga sola al renovar</div></div>
+  <div class="paso-texto">
+    <p>Cuando la empresa sube un nuevo certificado (Paso 2), la fecha de vigencia se actualiza y, en la siguiente corrida del proceso (Paso 4), esa empresa deja de aparecer como "por vencer" o "vencida" — sin que nadie tenga que descartar o cerrar la notificación manualmente.</p>
   </div>
 </div>
 
-<!-- ② ALTA / RENOVACIÓN -->
-<div class="screen" id="s2">
-  <div class="screen-label">② Alta / Renovación de e.Firma <span class="badge-state badge-nuevo">NUEVO</span></div>
-  <div class="screen-desc">
-    Pantalla existente de registro de empresa en Bóveda Fiscal. Se agrega la lectura de la fecha de vigencia del certificado al momento de subir el archivo — sin cambio visible para el usuario en este paso.
-  </div>
-  <div class="gmf-frame">
-    <div class="gmf-topbar">
-      <div class="gmf-title">Registrar empresa — Bóveda Fiscal</div>
-    </div>
-    <div class="gmf-body">
-      <div class="upload-card">
-        <div class="upload-row">
-          <label>Certificado (.cer)</label>
-          <div class="upload-box"><span class="file">TAB010101AA1.cer</span><span>Cambiar</span></div>
-        </div>
-        <div class="upload-row">
-          <label>Llave privada (.key)</label>
-          <div class="upload-box"><span class="file">TAB010101AA1.key</span><span>Cambiar</span></div>
-        </div>
-        <button class="btn-primary">Iniciar registro</button>
-      </div>
-    </div>
-  </div>
-  <div class="ann-block">
-    <div class="ann-title">Anotaciones dev/QA</div>
-    <ul>
-      <li><b>Fuente del dato:</b> el archivo <code>.cer</code> es un certificado X.509 y trae la fecha de vigencia embebida en el campo estándar <code>NotAfter</code>. No se pide ningún dato adicional al usuario.</li>
-      <li><b>Dónde se lee:</b> en el mismo punto donde hoy ya se parsea el certificado para extraer el RFC (<code>certificate_validator.go</code> / <code>cert_validator_adapter.go</code>, función <code>ExtractRFCFromCertificate</code>) — se agrega la lectura de <code>NotAfter</code> ahí mismo.</li>
-      <li><b>Dónde se guarda:</b> en <code>cat_empresas</code>, junto a los demás datos de la empresa. No hay pantalla que la muestre; solo alimenta el proceso de la pantalla ①.</li>
-      <li><b>Renovación:</b> si la empresa ya existía y se sube un certificado nuevo, se sobrescribe la fecha de vigencia guardada con la del certificado nuevo — la notificación de la pantalla ① se apaga sola en la siguiente corrida del proceso.</li>
-      <li><b>Backfill único:</b> para empresas registradas antes de este cambio, correr una sola vez un proceso que descifre y lea el certificado ya guardado (<code>cer_cifrado</code>) de cada una para calcular su fecha de vigencia, sin pedir que nadie vuelva a subir nada.</li>
-    </ul>
+<div class="paso">
+  <div class="paso-head"><div class="paso-num">7</div><div class="paso-titulo">Empresas que ya están registradas antes de este cambio</div></div>
+  <div class="paso-texto">
+    <p>Como el campo del Paso 1 es nuevo, las empresas que ya están dadas de alta hoy no tienen ese dato. Se corre, una sola vez, un proceso que toma el certificado que cada empresa ya tiene guardado en el sistema y le calcula la fecha de vigencia — sin pedirle a nadie que vuelva a subir nada.</p>
   </div>
 </div>
 
 <div class="leyenda">
-  <b>Leyenda:</b> <span class="badge-state badge-nuevo">NUEVO</span> funcionalidad agregada &nbsp;·&nbsp;
-  <span style="color:var(--warn-fg)">⚠ ámbar</span> por vencer &nbsp;·&nbsp;
-  <span style="color:var(--danger-fg)">✕ rojo</span> vencida
+  <b>Leyenda:</b> ⚠ ámbar = por vencer &nbsp;·&nbsp; ✕ rojo = vencida
 </div>

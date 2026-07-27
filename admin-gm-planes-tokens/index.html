@@ -60,6 +60,10 @@ tr.rowlink:hover{background:#fff8f6;}
 .trend{display:flex;gap:18px;align-items:flex-end;height:60px;margin-top:6px;}
 .trend-col{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:#8a8f9a;justify-content:flex-end;height:100%;}
 .trend-bar{width:22px;background:#ff5a3c;border-radius:3px 3px 0 0;}
+.ms-logo{display:inline-grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:14px;height:14px;gap:1px;}
+.ms-logo span{display:block;}
+.user-logout{font-size:10px;color:#ff5a3c;cursor:default;margin-top:2px;}
+.back-link{font-size:11px;color:#ff5a3c;font-weight:600;margin-bottom:10px;display:inline-block;}
 .proto-banner{background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:-24px -30px 20px;}
 .proto-banner p{margin:0 0 4px;}
 .proto-banner p:last-child{margin:0;}
@@ -85,7 +89,7 @@ tr.rowlink:hover{background:#fff8f6;}
     <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Administrador GM</div>
     <div style="font-size:12px;color:#8a8f9a;margin-bottom:24px;">Planes de Tokens</div>
     <button style="width:100%;background:#fff;border:1px solid #e4e6eb;border-radius:6px;padding:10px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;color:#3a3f4a;">
-      <span style="color:#2563eb;">⊞</span> Iniciar sesión con Microsoft
+      <span class="ms-logo"><span style="background:#f25022;"></span><span style="background:#7fba00;"></span><span style="background:#00a4ef;"></span><span style="background:#ffb900;"></span></span> Iniciar sesión con Microsoft
     </button>
     <div style="font-size:10px;color:#8a8f9a;margin-top:10px;">Cuenta de GM Transport (Microsoft 365)</div>
   </div>
@@ -98,7 +102,7 @@ tr.rowlink:hover{background:#fff8f6;}
   <div class="portal-topline"></div>
   <div class="portal-header">
     <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Admin GM · Planes de Tokens</div><div class="brand-sub">Catálogo de Planes</div></div></div>
-    <div class="user-chip"><b>GM Developer Access</b>TST010101000</div>
+    <div class="user-chip"><b>Jaqueline Flores</b>jaqueline.flores@gmtransporterp.com<div class="user-logout">Cerrar sesión</div></div>
   </div>
   <div class="portal-body">
     <div class="sidebar">
@@ -134,7 +138,7 @@ tr.rowlink:hover{background:#fff8f6;}
   <div class="portal-topline"></div>
   <div class="portal-header">
     <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Admin GM · Planes de Tokens</div><div class="brand-sub">Panel de Clientes</div></div></div>
-    <div class="user-chip"><b>GM Developer Access</b>TST010101000</div>
+    <div class="user-chip"><b>Jaqueline Flores</b>jaqueline.flores@gmtransporterp.com<div class="user-logout">Cerrar sesión</div></div>
   </div>
   <div class="portal-body">
     <div class="sidebar">
@@ -171,7 +175,7 @@ tr.rowlink:hover{background:#fff8f6;}
   <div class="portal-topline"></div>
   <div class="portal-header">
     <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Admin GM · Planes de Tokens</div><div class="brand-sub">Detalle de Cliente</div></div></div>
-    <div class="user-chip"><b>GM Developer Access</b>TST010101000</div>
+    <div class="user-chip"><b>Jaqueline Flores</b>jaqueline.flores@gmtransporterp.com<div class="user-logout">Cerrar sesión</div></div>
   </div>
   <div class="portal-body">
     <div class="sidebar">
@@ -179,14 +183,10 @@ tr.rowlink:hover{background:#fff8f6;}
       <div class="sb-item active">Panel de Clientes</div>
     </div>
     <div class="main">
+      <a class="back-link">← Volver a Panel de Clientes</a>
       <div class="detail-banner">Detalle de empresa: <b>Grupo Andrea S.A. de C.V.</b> · RFC GAN010101AB1 · cliente desde mayo 2026</div>
 
-      <div class="toolbar" style="margin-bottom:12px;">
-        <div style="display:flex;gap:6px;align-items:center;font-size:11px;color:#8a8f9a;">
-          Rango: <input type="date" value="2026-07-01" style="border:1px solid #e4e6eb;border-radius:4px;padding:3px 6px;font-size:11px;"> a <input type="date" value="2026-07-27" style="border:1px solid #e4e6eb;border-radius:4px;padding:3px 6px;font-size:11px;">
-        </div>
-      </div>
-
+      <div class="sec-label">Resumen histórico</div>
       <div class="kpi-row">
         <div class="kpi"><div class="kpi-label">Cuota mensual</div><div class="kpi-value">$10.00 USD/mes</div><div class="kpi-sub">3 meses activo = $30.00</div></div>
         <div class="kpi"><div class="kpi-label">Tokens comprados</div><div class="kpi-value">25,000</div><div class="kpi-sub">3 compras</div></div>
@@ -194,7 +194,12 @@ tr.rowlink:hover{background:#fff8f6;}
         <div class="kpi"><div class="kpi-label">Total pagado</div><div class="kpi-value">$310.00 USD</div><div class="kpi-sub">$30 cuota + $280 en tokens</div></div>
       </div>
 
-      <div class="sec-label">Compras hechas</div>
+      <div class="toolbar" style="margin-bottom:8px;">
+        <div class="sec-label" style="margin:0;">Compras hechas</div>
+        <div style="display:flex;gap:6px;align-items:center;font-size:11px;color:#8a8f9a;">
+          Rango: <input type="date" value="2026-07-01" style="border:1px solid #e4e6eb;border-radius:4px;padding:3px 6px;font-size:11px;"> a <input type="date" value="2026-07-27" style="border:1px solid #e4e6eb;border-radius:4px;padding:3px 6px;font-size:11px;">
+        </div>
+      </div>
       <table>
         <tr><th>FECHA</th><th>PLAN</th><th>TOKENS</th><th>COSTO</th><th>MÉTODO DE PAGO</th></tr>
         <tr><td>2026-07-05</td><td>Plan Estándar</td><td>20,000</td><td>$180.00</td><td>Mercado Pago</td></tr>
@@ -214,7 +219,7 @@ tr.rowlink:hover{background:#fff8f6;}
   </div>
 </div>
 
-<div class="annotation">📝 Nota para desarrollo: el rango de fechas (arriba de "Compras hechas") filtra esa tabla y los KPIs de arriba (Cuota mensual, Tokens comprados, Tokens consumidos, Total pagado) — por default viene en el mes actual (del día 1 a hoy). "Consumo al momento" es siempre en tiempo real, no depende del rango seleccionado. Esto no es texto que aparezca en el sistema.</div>
+<div class="annotation">📝 Nota para desarrollo: los 4 KPIs de arriba (Cuota mensual, Tokens comprados, Tokens consumidos, Total pagado) son siempre el histórico completo de la empresa — nunca cambian con el rango. El rango de fechas (arriba de "Compras hechas") filtra ÚNICAMENTE esa tabla — por default viene en el mes actual (del día 1 a hoy). "Consumo al momento" es siempre en tiempo real, tampoco depende del rango. Esto no es texto que aparezca en el sistema.</div>
 
 </body>
 </html>

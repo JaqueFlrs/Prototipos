@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrador GM — Planes de Tokens</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f4f5f7;padding:24px 30px;color:#1f2430;}
+.page-title{font-size:19px;font-weight:700;margin-bottom:2px;}
+.page-sub{font-size:12px;color:#8a8f9a;margin-bottom:18px;}
+.note{font-size:11px;color:#8a8f9a;font-style:italic;margin:6px 0 14px;}
+.annotation{max-width:1040px;background:#fffde7;border:1px dashed #c8a800;border-radius:6px;padding:8px 14px;font-size:11px;color:#6a5a10;margin-bottom:14px;}
+
+.portal{border:1px solid #e4e6eb;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);max-width:1040px;margin-bottom:34px;}
+.portal-topline{height:4px;background:linear-gradient(90deg,#ff5a3c,#ff8a5c);}
+.portal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #eee;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-logo{width:32px;height:32px;border-radius:8px;background:#fff1ec;color:#ff5a3c;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;border:1px solid #ffd9cc;}
+.brand-name{font-size:14px;font-weight:700;}
+.brand-sub{font-size:10px;color:#9a9fa8;}
+.user-chip{font-size:11px;color:#3a3f4a;text-align:right;}
+.user-chip b{display:block;font-size:12px;}
+
+.portal-body{display:flex;min-height:300px;}
+.sidebar{width:180px;background:#fff;border-right:1px solid #eee;padding:10px 0;font-size:12px;flex-shrink:0;}
+.sb-item{padding:8px 18px;color:#5a6270;cursor:default;}
+.sb-item.active{background:#fff1ec;color:#ff5a3c;font-weight:600;border-right:3px solid #ff5a3c;}
+.main{flex:1;padding:16px 20px;}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.toolbar-title{font-size:13px;font-weight:700;}
+.search-pill{border:1px solid #e4e6eb;border-radius:20px;padding:6px 14px;font-size:11px;color:#9a9fa8;width:200px;}
+.btn-new{background:#ff5a3c;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:600;}
+
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:#f8f8f9;color:#5a6270;text-align:left;font-size:10px;font-weight:700;letter-spacing:.3px;padding:6px 8px;border-bottom:1px solid #eee;}
+.filter-row th{padding:4px 6px;border-bottom:1px solid #eee;background:#fff;}
+.filter-row input, .filter-row select{width:100%;border:1px solid #e4e6eb;border-radius:4px;padding:3px 6px;font-size:11px;color:#3a3f4a;font-family:inherit;}
+td{padding:7px 8px;border-bottom:1px solid #f2f3f5;}
+tr.rowlink{cursor:default;}
+tr.rowlink:hover{background:#fff8f6;}
+
+.pill{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;}
+.pill-on{background:#e6f7ec;color:#1e9e4d;}
+.pill-off{background:#f0f1f3;color:#9a9fa8;}
+.pill-warn{background:#fff1ec;color:#c0491f;}
+
+.pager{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:11px;color:#8a8f9a;}
+.pager-btns span{display:inline-block;padding:3px 9px;border:1px solid #e4e6eb;border-radius:4px;margin-left:4px;}
+.pager-btns span.cur{background:#ff5a3c;color:#fff;border-color:#ff5a3c;}
+
+.detail-banner{background:#fff1ec;border:1px solid #ffd9cc;border-radius:6px;padding:8px 14px;font-size:12px;color:#8a4530;margin-bottom:14px;}
+.kpi-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.kpi{flex:1;min-width:150px;background:#f8f8f9;border-radius:8px;padding:10px 14px;}
+.kpi-label{font-size:10px;color:#8a8f9a;text-transform:uppercase;letter-spacing:.3px;}
+.kpi-value{font-size:16px;font-weight:700;color:#1f2430;margin-top:2px;}
+.kpi-sub{font-size:10px;color:#8a8f9a;}
+.sec-label{font-size:11px;font-weight:700;color:#8a8f9a;text-transform:uppercase;letter-spacing:.4px;margin:16px 0 6px;}
+.trend{display:flex;gap:18px;align-items:flex-end;height:60px;margin-top:6px;}
+.trend-col{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:#8a8f9a;justify-content:flex-end;height:100%;}
+.trend-bar{width:22px;background:#ff5a3c;border-radius:3px 3px 0 0;}
+.proto-banner{background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:-24px -30px 20px;}
+.proto-banner p{margin:0 0 4px;}
+.proto-banner p:last-child{margin:0;}
+</style>
+</head>
+<body>
+
+<div class="proto-banner">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: colores, tipografía, estructura de paneles y componentes propios del sistema.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div class="page-title">Administrador GM — Planes de Tokens</div>
+<div class="page-sub">Portal nuevo, no es Portal IA</div>
+
+<!-- ============ PANTALLA 0: LOGIN ============ -->
+<div class="portal" style="max-width:380px;">
+  <div class="portal-topline"></div>
+  <div style="padding:36px 30px;text-align:center;">
+    <div class="brand-logo" style="width:44px;height:44px;font-size:20px;margin:0 auto 14px;">G</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Administrador GM</div>
+    <div style="font-size:12px;color:#8a8f9a;margin-bottom:24px;">Planes de Tokens</div>
+    <button style="width:100%;background:#fff;border:1px solid #e4e6eb;border-radius:6px;padding:10px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;color:#3a3f4a;">
+      <span style="color:#2563eb;">⊞</span> Iniciar sesión con Microsoft
+    </button>
+    <div style="font-size:10px;color:#8a8f9a;margin-top:10px;">Cuenta de GM Transport (Microsoft 365)</div>
+  </div>
+</div>
+
+<div class="annotation">📝 Nota para desarrollo: acceso vía SSO con la cuenta de Microsoft de GM Transport (Azure AD/M365) — no hay usuario/contraseña propio de este portal. Solo entra personal de GM con cuenta corporativa.</div>
+
+<!-- ============ PANTALLA 1: CATÁLOGO ============ -->
+<div class="portal">
+  <div class="portal-topline"></div>
+  <div class="portal-header">
+    <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Admin GM · Planes de Tokens</div><div class="brand-sub">Catálogo de Planes</div></div></div>
+    <div class="user-chip"><b>GM Developer Access</b>TST010101000</div>
+  </div>
+  <div class="portal-body">
+    <div class="sidebar">
+      <div class="sb-item active">Catálogo de Planes</div>
+      <div class="sb-item">Panel de Clientes</div>
+    </div>
+    <div class="main">
+      <div class="toolbar">
+        <div class="toolbar-title">Catálogo de Planes</div>
+        <button class="btn-new">+ Nuevo Plan</button>
+      </div>
+      <table>
+        <tr><th>NOMBRE</th><th>TOKENS</th><th>COSTO USD</th><th>ESTADO</th><th>CLIENTES ACTIVOS</th><th>ACCIÓN</th></tr>
+        <tr class="filter-row">
+          <th><input placeholder="Buscar..."></th><th></th><th></th>
+          <th><select><option>Todos</option><option>Activo</option><option>Inactivo</option></select></th>
+          <th></th><th></th>
+        </tr>
+        <tr><td>Plan Básico</td><td>5,000</td><td>$50.00</td><td><span class="pill pill-on">Activo</span></td><td>42</td><td><span style="color:#ff5a3c;">Editar</span></td></tr>
+        <tr><td>Plan Estándar</td><td>20,000</td><td>$180.00</td><td><span class="pill pill-on">Activo</span></td><td>18</td><td><span style="color:#ff5a3c;">Editar</span></td></tr>
+        <tr><td>Plan Empresarial</td><td>100,000</td><td>$750.00</td><td><span class="pill pill-off">Inactivo</span></td><td>3</td><td><span style="color:#ff5a3c;">Editar</span></td></tr>
+      </table>
+      <div class="pager">
+        <span>Mostrando 1–3 de 3</span>
+        <div class="pager-btns"><span>‹</span><span class="cur">1</span><span>›</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PANTALLA 2: PANEL DE CLIENTES ============ -->
+<div class="portal">
+  <div class="portal-topline"></div>
+  <div class="portal-header">
+    <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Admin GM · Planes de Tokens</div><div class="brand-sub">Panel de Clientes</div></div></div>
+    <div class="user-chip"><b>GM Developer Access</b>TST010101000</div>
+  </div>
+  <div class="portal-body">
+    <div class="sidebar">
+      <div class="sb-item">Catálogo de Planes</div>
+      <div class="sb-item active">Panel de Clientes</div>
+    </div>
+    <div class="main">
+      <div class="toolbar">
+        <div class="toolbar-title">Panel de Clientes</div>
+        <input class="search-pill" placeholder="Buscar empresa o RFC...">
+      </div>
+      <table>
+        <tr><th>EMPRESA (RFC)</th><th>PLAN ACTUAL</th><th>TOKENS COMPRADOS</th><th>TOKENS CONSUMIDOS</th><th>% CONSUMO</th><th>ÚLTIMA ACTIVIDAD</th><th>USA LA IA</th></tr>
+        <tr class="filter-row">
+          <th><input placeholder="Buscar..."></th>
+          <th><select><option>Todos</option><option>Básico</option><option>Estándar</option><option>Empresarial</option></select></th>
+          <th></th><th></th><th></th><th></th>
+          <th><select><option>Sí</option><option>No</option><option>Todos</option></select></th>
+        </tr>
+        <tr class="rowlink"><td>Grupo Andrea (GAN010101AB1)</td><td>Plan Estándar</td><td>45,000</td><td>38,200</td><td>85%</td><td>Hoy</td><td><span class="pill pill-on">Sí</span></td></tr>
+      </table>
+      <div class="pager">
+        <span>Mostrando solo "Usa la IA: Sí" — 1 de 39</span>
+        <div class="pager-btns"><span>‹</span><span class="cur">1</span><span>2</span><span>…</span><span>13</span><span>›</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="annotation">📝 Nota para desarrollo: "Usa la IA" es binario, solo Sí/No (sin estado intermedio "Baja"). Por default el filtro viene en "Sí" — solo se listan empresas que sí usan la IA. El usuario puede cambiar el filtro a "Todos" o "No" para ver el resto. Al hacer clic en una fila se abre la pantalla de detalle de esa empresa — abajo el ejemplo con "Grupo Andrea". Esto no es texto que aparezca en el sistema.</div>
+
+<!-- ============ PANTALLA 3: DETALLE DE CLIENTE ============ -->
+<div class="portal">
+  <div class="portal-topline"></div>
+  <div class="portal-header">
+    <div class="brand"><div class="brand-logo">G</div><div><div class="brand-name">Admin GM · Planes de Tokens</div><div class="brand-sub">Detalle de Cliente</div></div></div>
+    <div class="user-chip"><b>GM Developer Access</b>TST010101000</div>
+  </div>
+  <div class="portal-body">
+    <div class="sidebar">
+      <div class="sb-item">Catálogo de Planes</div>
+      <div class="sb-item active">Panel de Clientes</div>
+    </div>
+    <div class="main">
+      <div class="detail-banner">Detalle de empresa: <b>Grupo Andrea S.A. de C.V.</b> · RFC GAN010101AB1 · cliente desde mayo 2026</div>
+
+      <div class="toolbar" style="margin-bottom:12px;">
+        <div style="display:flex;gap:6px;align-items:center;font-size:11px;color:#8a8f9a;">
+          Rango: <input type="date" value="2026-07-01" style="border:1px solid #e4e6eb;border-radius:4px;padding:3px 6px;font-size:11px;"> a <input type="date" value="2026-07-27" style="border:1px solid #e4e6eb;border-radius:4px;padding:3px 6px;font-size:11px;">
+        </div>
+      </div>
+
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Cuota mensual</div><div class="kpi-value">$10.00 USD/mes</div><div class="kpi-sub">3 meses activo = $30.00</div></div>
+        <div class="kpi"><div class="kpi-label">Tokens comprados</div><div class="kpi-value">25,000</div><div class="kpi-sub">3 compras</div></div>
+        <div class="kpi"><div class="kpi-label">Tokens consumidos</div><div class="kpi-value">38,200 (85%)</div><div class="kpi-sub">incluye tokens gratis + comprados</div></div>
+        <div class="kpi"><div class="kpi-label">Total pagado</div><div class="kpi-value">$310.00 USD</div><div class="kpi-sub">$30 cuota + $280 en tokens</div></div>
+      </div>
+
+      <div class="sec-label">Compras hechas</div>
+      <table>
+        <tr><th>FECHA</th><th>PLAN</th><th>TOKENS</th><th>COSTO</th><th>MÉTODO DE PAGO</th></tr>
+        <tr><td>2026-07-05</td><td>Plan Estándar</td><td>20,000</td><td>$180.00</td><td>Mercado Pago</td></tr>
+      </table>
+      <div class="pager">
+        <span>Mostrando mes actual — 1 de 3 compras totales</span>
+        <div class="pager-btns"><span>‹</span><span class="cur">1</span><span>›</span></div>
+      </div>
+
+      <div class="sec-label">Consumo al momento</div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Tokens usados este mes (julio)</div><div class="kpi-value">5,400</div><div class="kpi-sub">de 20,000 disponibles este mes · 27%</div></div>
+        <div class="kpi"><div class="kpi-label">Ritmo de consumo</div><div class="kpi-value">~245 tokens/día</div><div class="kpi-sub">promedio de los últimos 22 días</div></div>
+        <div class="kpi"><div class="kpi-label">Se agotarían en</div><div class="kpi-value">~59 días</div><div class="kpi-sub">si sigue este ritmo</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="annotation">📝 Nota para desarrollo: el rango de fechas (arriba de "Compras hechas") filtra esa tabla y los KPIs de arriba (Cuota mensual, Tokens comprados, Tokens consumidos, Total pagado) — por default viene en el mes actual (del día 1 a hoy). "Consumo al momento" es siempre en tiempo real, no depende del rango seleccionado. Esto no es texto que aparezca en el sistema.</div>
+
+</body>
+</html>

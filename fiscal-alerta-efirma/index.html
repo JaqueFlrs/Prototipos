@@ -115,6 +115,18 @@ body{
 
 .leyenda{margin-top:9px;font-size:11px;color:var(--text-muted);}
 .leyenda b{color:var(--text);}
+
+.plan-title{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;
+  letter-spacing:.5px;margin:26px 0 10px;}
+.plan{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px;}
+.paso{display:flex;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--bg);}
+.paso:last-child{border-bottom:none;}
+.paso:nth-child(even){background:var(--surface);}
+.paso-num{flex-shrink:0;width:26px;height:26px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.paso-body b{font-size:12.5px;display:block;margin-bottom:2px;}
+.paso-body p{font-size:12px;color:var(--text-muted);margin:0;}
+.paso-body code{background:var(--surface-2);padding:0 4px;border-radius:4px;font-size:11.5px;color:var(--text);}
 </style>
 
 <div class="page-title">HU47568 · Alerta de proximidad de vencimiento de e.Firma — GM Fiscal</div>
@@ -133,6 +145,59 @@ body{
   · <code>días de anticipación</code> — valor de configuración en BD, ajustado directo ahí (sin UI).<br>
   · <code>fecha de vigencia de la e.Firma</code> — se lee del certificado <code>.cer</code> (campo <code>NotAfter</code> del X.509) y se guarda en <code>cat_empresas</code>, sin pantalla que la liste.<br><br>
   El <strong>único lugar visible</strong> para el usuario es la notificación (pantalla ①) — no hay listado ni catálogo que mostrar.
+</div>
+
+<div class="plan-title">Plan paso a paso</div>
+<div class="plan">
+  <div class="paso">
+    <div class="paso-num">1</div>
+    <div class="paso-body">
+      <b>Agregar dónde se guarda la fecha de vigencia</b>
+      <p>Nuevo campo en la tabla de empresas (<code>cat_empresas</code>) para guardar la fecha de vencimiento de la e.Firma. Hoy no existe.</p>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">2</div>
+    <div class="paso-body">
+      <b>Tomar el dato al registrar o renovar la e.Firma</b>
+      <p>Al subir el certificado (.cer) — alta nueva o renovación — se lee la fecha de vigencia que ya trae el archivo y se guarda en el campo del Paso 1. No se le pide nada nuevo al usuario.</p>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">3</div>
+    <div class="paso-body">
+      <b>Definir cuántos días antes se debe avisar</b>
+      <p>Valor de configuración en base de datos (días de anticipación), sin pantalla propia. Cada cliente tiene su propia BD de GM Fiscal, así que ya queda distinto por cliente sin trabajo extra.</p>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">4</div>
+    <div class="paso-body">
+      <b>Crear el proceso que revisa las vigencias</b>
+      <p>Proceso periódico (ej. una vez al día) que compara la fecha de vigencia de cada empresa contra la fecha de hoy y el valor del Paso 3, para determinar si está por vencer, vencida o normal.</p>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">5</div>
+    <div class="paso-body">
+      <b>Notificar al usuario</b>
+      <p>Usando el sistema de notificaciones que ya existe en GM Fiscal, visible para todos los usuarios. Por vencer: nombre de la empresa y en cuántos días vence. Vencida: aviso de que debe recargar el certificado — informativo, no bloquea nada.</p>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">6</div>
+    <div class="paso-body">
+      <b>La notificación se apaga sola al renovar</b>
+      <p>Al subir un nuevo certificado (Paso 2), la fecha se actualiza y en la siguiente corrida del proceso (Paso 4) la empresa deja de aparecer como por vencer o vencida — sin cerrar nada manualmente.</p>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">7</div>
+    <div class="paso-body">
+      <b>Empresas ya registradas antes de este cambio</b>
+      <p>Proceso de backfill que corre una sola vez: toma el certificado que cada empresa ya tiene guardado y le calcula la fecha de vigencia, sin pedirle a nadie que vuelva a subir nada.</p>
+    </div>
+  </div>
 </div>
 
 <div class="stepnav">

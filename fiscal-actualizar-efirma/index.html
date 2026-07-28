@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<title>Actualizar e.Firma — GM Fiscal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;color:#1f2430;background:#f4f5f7;padding:28px 32px;}
+.page-title{font-size:17px;font-weight:700;margin-bottom:2px;}
+.page-sub{font-size:12.5px;color:#6b7280;margin-bottom:18px;}
+.disclaimer{background:#fff8ee;border:1px solid #e0c080;padding:12px 16px;margin-bottom:32px;font-size:12.5px;line-height:1.6;color:#3a3020;border-radius:8px;}
+.disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
+
+.screen{margin-bottom:38px;}
+.screen-label{font-size:11px;font-weight:700;color:#7a7570;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.screen-desc{font-size:12.5px;color:#374151;background:#eef0f3;border-left:3px solid #9aa3b0;padding:10px 14px;margin-bottom:12px;line-height:1.55;border-radius:0 6px 6px 0;}
+.screen-desc b{color:#1f2430;}
+
+/* ---- Marco GM Fiscal real: fondo blanco, tema claro, tarjeta central ---- */
+.fiscal-frame{background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 1px 3px rgba(16,24,40,.06);padding:32px;max-width:460px;}
+.f-header{margin-bottom:20px;}
+.f-title{font-size:18px;font-weight:700;color:#111827;margin-bottom:4px;}
+.f-subtitle{font-size:12.5px;color:#6b7280;line-height:1.5;}
+
+.rfc-chip{display:inline-flex;align-items:center;gap:6px;background:#f1f2f4;border-radius:999px;padding:6px 14px;font-size:12.5px;color:#374151;margin-bottom:22px;}
+.rfc-chip b{color:#111827;}
+
+.f-field{margin-bottom:16px;}
+.f-label{font-size:12.5px;font-weight:600;color:#374151;margin-bottom:6px;display:block;}
+.f-dropzone{border:1.5px dashed #cbd2dd;border-radius:10px;padding:16px 14px;text-align:center;color:#6b7280;font-size:12.5px;background:#fafbfc;}
+.f-dropzone .fname{color:#111827;font-weight:600;}
+.f-input{width:100%;border:1px solid #d0d5dd;border-radius:8px;padding:9px 12px;font-size:13px;color:#111827;background:#fff;}
+
+.f-btn{width:100%;border:none;border-radius:999px;padding:11px 0;font-size:13.5px;font-weight:700;cursor:default;margin-top:6px;}
+.f-btn.enabled{background:#2563eb;color:#fff;}
+.f-btn.disabled{background:#e5e7eb;color:#9ca3af;}
+
+.msg-box{margin-top:14px;border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.5;}
+.msg-error{background:#fef2f2;border:1px solid #fecaca;color:#b42318;}
+.msg-success{background:#ecfdf3;border:1px solid #abefc6;color:#067647;}
+
+.legend{margin-top:10px;font-size:11.5px;color:#8a8f98;font-style:italic;}
+</style>
+</head>
+<body>
+
+<div class="page-title">HUPendiente — Actualizar e.Firma (GM Fiscal)</div>
+<div class="page-sub">Pantalla nueva · cliente externo autenticado</div>
+
+<div class="disclaimer">
+  <strong>Sobre este prototipo</strong>
+  Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.<br><br>
+  ⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Fiscal, eso significa tema claro, tarjetas redondeadas y botones pill — no el estilo del ERP clásico.<br><br>
+  Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌
+</div>
+
+<div class="screen">
+  <div class="screen-label">① Formulario — estado inicial</div>
+  <div class="screen-desc">
+    Así se miraría la pantalla al entrar. El chip con el RFC es solo lectura, viene de la sesión del cliente. Los 3 campos (.cer, .key, contraseña) son obligatorios. El botón <b>"Actualizar e.Firma"</b> permanece deshabilitado hasta que los 3 campos tengan valor — no hace ninguna validación de contenido todavía, solo verifica que no estén vacíos. Si el archivo subido en ".key" no tiene esa extensión, se muestra de inmediato "El archivo .key no tiene un formato válido" debajo del campo y el botón sigue deshabilitado.
+  </div>
+  <div class="fiscal-frame">
+    <div class="f-header">
+      <div class="f-title">Actualizar e.Firma</div>
+      <div class="f-subtitle">Reemplaza tu certificado y llave cuando renueves tu e.Firma ante el SAT.</div>
+    </div>
+    <div class="rfc-chip">RFC de tu empresa: <b>EAC010101AB1</b></div>
+    <div class="f-field">
+      <span class="f-label">Archivo .cer</span>
+      <div class="f-dropzone">Arrastra tu archivo aquí o <u>selecciónalo</u></div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Archivo .key</span>
+      <div class="f-dropzone">Arrastra tu archivo aquí o <u>selecciónalo</u></div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Contraseña de la e.Firma</span>
+      <input class="f-input" type="password" placeholder="••••••••" disabled />
+    </div>
+    <button class="f-btn disabled">Actualizar e.Firma</button>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-label">② Formulario — con error de validación</div>
+  <div class="screen-desc">
+    Así se miraría después de hacer clic en "Actualizar e.Firma" con datos inválidos. El mensaje aparece debajo del botón, en rojo, y los archivos anteriores del cliente NO se modifican. Mensajes posibles según el caso (texto exacto):<br>
+    · RFC no coincide → <b>"El RFC del certificado (OTR010101ZZ9) no coincide con el RFC de tu empresa (EAC010101AB1)"</b><br>
+    · Contraseña incorrecta → <b>"La contraseña no es válida para el archivo .key proporcionado"</b><br>
+    · Unikasoft no responde → <b>"No se pudo actualizar tu e.Firma en este momento. Intenta de nuevo más tarde"</b><br>
+    El cliente puede corregir los campos y volver a intentar sin ninguna restricción adicional.
+  </div>
+  <div class="fiscal-frame">
+    <div class="f-header">
+      <div class="f-title">Actualizar e.Firma</div>
+      <div class="f-subtitle">Reemplaza tu certificado y llave cuando renueves tu e.Firma ante el SAT.</div>
+    </div>
+    <div class="rfc-chip">RFC de tu empresa: <b>EAC010101AB1</b></div>
+    <div class="f-field">
+      <span class="f-label">Archivo .cer</span>
+      <div class="f-dropzone"><span class="fname">OTR010101ZZ9.cer</span> seleccionado</div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Archivo .key</span>
+      <div class="f-dropzone"><span class="fname">OTR010101ZZ9.key</span> seleccionado</div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Contraseña de la e.Firma</span>
+      <input class="f-input" type="password" value="●●●●●●●●" />
+    </div>
+    <button class="f-btn enabled">Actualizar e.Firma</button>
+    <div class="msg-box msg-error">El RFC del certificado (OTR010101ZZ9) no coincide con el RFC de tu empresa (EAC010101AB1)</div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-label">③ Formulario — actualización exitosa</div>
+  <div class="screen-desc">
+    Así se miraría al completar la actualización correctamente. El mensaje de éxito aparece en la misma pantalla, sin redirigir a otra página. La e.Firma anterior queda reemplazada de inmediato; no se conserva historial.
+  </div>
+  <div class="fiscal-frame">
+    <div class="f-header">
+      <div class="f-title">Actualizar e.Firma</div>
+      <div class="f-subtitle">Reemplaza tu certificado y llave cuando renueves tu e.Firma ante el SAT.</div>
+    </div>
+    <div class="rfc-chip">RFC de tu empresa: <b>EAC010101AB1</b></div>
+    <div class="f-field">
+      <span class="f-label">Archivo .cer</span>
+      <div class="f-dropzone"><span class="fname">EAC010101AB1.cer</span> seleccionado</div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Archivo .key</span>
+      <div class="f-dropzone"><span class="fname">EAC010101AB1.key</span> seleccionado</div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Contraseña de la e.Firma</span>
+      <input class="f-input" type="password" value="●●●●●●●●" />
+    </div>
+    <button class="f-btn enabled">Actualizar e.Firma</button>
+    <div class="msg-box msg-success">✓ Tu e.Firma se actualizó correctamente</div>
+  </div>
+</div>
+
+</body>
+</html>

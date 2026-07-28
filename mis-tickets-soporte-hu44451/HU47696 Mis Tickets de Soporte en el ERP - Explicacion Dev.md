@@ -1,4 +1,4 @@
-# Mis Tickets de Soporte en el ERP — Explicación para desarrollo (#HU44451)
+# Mis Tickets de Soporte en el ERP — Explicación para desarrollo (HU47696 / Zoho Desk #44451)
 
 ## Qué está pidiendo el cliente y por qué
 
@@ -62,4 +62,4 @@ Ahora mismo, si un cliente de GM Transport quiere saber cómo va un ticket de so
 
 ## Referencia
 
-Ver Gherkin: `HU44451 Mis Tickets de Soporte en el ERP.feature` — mismo alcance, ahí está en formato de criterios de aceptación para QA.
+Ver Gherkin: `HU47696 Mis Tickets de Soporte en el ERP.feature` — mismo alcance, ahí está en formato de criterios de aceptación para QA.

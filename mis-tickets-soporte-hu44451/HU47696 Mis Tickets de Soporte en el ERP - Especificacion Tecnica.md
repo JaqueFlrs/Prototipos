@@ -1,4 +1,4 @@
-# Especificación técnica — Mis Tickets de Soporte (Zoho Desk) — HU44451
+# Especificación técnica — Mis Tickets de Soporte (Zoho Desk) — HU47696 (Zoho Desk #44451)
 
 **Dónde vive:** dentro del propio ERP (WLanguage), no en GM Integra ni ningún servicio externo. Cada instalación del ERP llama directo a la API de Zoho Desk.
 
@@ -87,7 +87,7 @@ Conversación: `type` (`thread`/`comment`), `visibility` (`public`/otro), `autho
 ## Qué darle al desarrollador (paquete completo de entrega)
 
 1. Este documento (especificación técnica).
-2. `HU44451 Mis Tickets de Soporte en el ERP.feature` (Gherkin — criterios de aceptación para QA).
-3. `HU44451 Mis Tickets de Soporte en el ERP - Explicacion Dev.md` (explicación en lenguaje simple).
+2. `HU47696 Mis Tickets de Soporte en el ERP.feature` (Gherkin — criterios de aceptación para QA, incluye escenarios de la conexión con Zoho Desk).
+3. `HU47696 Mis Tickets de Soporte en el ERP - Explicacion Dev.md` (explicación en lenguaje simple).
 4. Las 3 credenciales de Zoho Desk (client_id, client_secret, refresh_token) — entregarlas en persona/chat cifrado, nunca en un documento que quede archivado en texto plano.
 5. Link del prototipo visual (referencia de diseño): el que ya tienes publicado.

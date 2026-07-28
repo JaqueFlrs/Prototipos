@@ -93,14 +93,36 @@ body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a2a2a;backgr
 
 .refresh-row{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:10px;font-size:12.5px;color:#888;}
 .btn-refresh{display:inline-flex;align-items:center;gap:6px;background:#f2f2f2;border:1px solid #ddd;border-radius:14px;padding:5px 14px;font-size:12.5px;font-weight:600;color:#555;}
+
+.intro{background:#fff;border:1px solid #e2e2e2;border-radius:6px;padding:20px 24px;margin-bottom:40px;}
+.intro h2{font-size:15px;color:#2a2a2a;margin-bottom:8px;}
+.intro p{font-size:14px;color:#444;line-height:1.6;}
+
+.detalle-box{background:#fff;border:1px solid #e2e2e2;border-left:4px solid #f9b233;border-radius:0 6px 6px 0;padding:16px 20px;margin-top:18px;}
+.detalle-box h3{font-size:13px;color:#2a2a2a;margin-bottom:10px;}
+.detalle-box ul{margin:0;padding-left:20px;}
+.detalle-box li{font-size:13.5px;color:#444;line-height:1.6;margin-bottom:6px;}
+.detalle-box li b{color:#2a2a2a;}
+
+.cierre{background:#fff;border:1px solid #e2e2e2;border-radius:6px;padding:20px 24px;margin-bottom:40px;}
+.cierre h2{font-size:15px;color:#2a2a2a;margin-bottom:10px;}
+.cierre ul{margin:0 0 18px;padding-left:20px;}
+.cierre ul:last-child{margin-bottom:0;}
+.cierre li{font-size:13.5px;color:#444;line-height:1.65;margin-bottom:7px;}
+.cierre .check{color:#2e8b3e;font-weight:700;margin-right:6px;}
 </style>
 
 <div class="wrap">
-  <div class="page-title">#44451 — Mis Tickets de Soporte en el ERP GM Transport</div>
+  <div class="page-title">HU47696 — Mis Tickets de Soporte en el ERP GM Transport (Zoho Desk #44451)</div>
 
   <div class="disclaimer">
     <strong>Sobre este prototipo</strong>
     Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador. El diseño final podrá variar durante el desarrollo.
+  </div>
+
+  <div class="intro">
+    <h2>Qué está pidiendo el cliente y por qué</h2>
+    <p>Ahora mismo, si un cliente de GM Transport quiere saber cómo va un ticket de soporte que levantó, tiene que salirse del ERP y entrar al portal de Zoho Desk. Eso es un paso extra que no debería existir. Lo que se pide es que, sin salir del ERP, el usuario pueda ver sus propios tickets de soporte, su estatus, y la conversación completa con soporte — como si tuviera el portal de Zoho Desk metido dentro del propio ERP. Esto aplica para <b>todas las empresas que usan el ERP</b>, no solo para una en particular.</p>
   </div>
 
   <!-- PASO 1 -->
@@ -144,6 +166,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a2a2a;backgr
           </div>
         </div>
       </div>
+    </div>
+    <div class="detalle-box">
+      <h3>Reglas de este paso</h3>
+      <ul>
+        <li>Cualquier usuario que tenga sesión abierta en el ERP puede dar clic ahí — <b>no hay que configurar ningún permiso especial.</b></li>
+        <li>El ícono va junto al de ayuda (el signo de interrogación), en un círculo naranja con forma de ticket.</li>
+      </ul>
     </div>
   </div>
 
@@ -200,6 +229,18 @@ body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a2a2a;backgr
           </div>
         </div>
       </div>
+    </div>
+    <div class="detalle-box">
+      <h3>Reglas de cada pestaña</h3>
+      <ul>
+        <li><b>Abiertos</b> (default): tickets "Nuevo" o "En proceso". Sin límite de fecha — se muestran todos, sin importar qué tan viejos sean.</li>
+        <li><b>En espera</b>: tickets donde soporte ya contestó y espera al cliente. Siempre se muestra el texto "Esperando tu respuesta", nunca el texto original de Zoho Desk.</li>
+        <li><b>Vencidos</b>: tickets abiertos cuya fecha compromiso ya pasó respecto a hoy — sin importar en qué otra categoría estarían.</li>
+        <li><b>Cerrados</b>: solo los de los <b>últimos 3 meses</b>. Los de hace más tiempo no se traen.</li>
+        <li><b>Todos</b>: junta las anteriores (con el mismo límite de 3 meses para los cerrados).</li>
+        <li>Los tickets que se muestran son solo los de la empresa con sesión abierta (por su RFC) — nunca se mezclan con los de otra empresa.</li>
+        <li>Si no hay tickets en la pestaña seleccionada, se muestra el mensaje "No tienes tickets de soporte registrados."</li>
+      </ul>
     </div>
   </div>
 
@@ -277,14 +318,41 @@ body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a2a2a;backgr
         </div>
       </div>
     </div>
+    <div class="detalle-box">
+      <h3>Reglas de este paso</h3>
+      <ul>
+        <li>Es <b>solo de consulta</b>: no hay ningún botón para responder, comentar ni cerrar un ticket desde el ERP. Si el cliente quiere responder algo, sigue usando el canal actual (correo o el portal de Zoho Desk).</li>
+        <li>Adjuntos: si es imagen, se muestra como miniatura; cualquier otro archivo (PDF, Excel, etc.) se muestra como elemento descargable con su nombre.</li>
+        <li><b>Las notas internas del equipo de soporte nunca se muestran al cliente</b>, bajo ninguna circunstancia — esto no depende del estatus del ticket, se filtra siempre.</li>
+        <li>El texto "Actualizado hace X min" y el botón "Actualizar" (visibles en el listado) reflejan cuándo fue la última consulta real a Zoho Desk. Además, un proceso automático refresca todo una vez al día en segundo plano, sin que el usuario haga nada.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cierre">
+    <h2>Casos que también se cubren (no son opcionales)</h2>
+    <ul>
+      <li><span class="check">✓</span> <b>Falla la conexión con Zoho Desk:</b> se muestra "No se pudo consultar el estatus de tus tickets en este momento, intenta más tarde." — nunca un código de error técnico.</li>
+      <li><span class="check">✓</span> <b>RFC mal escrito o con espacios:</b> se normaliza (sin espacios, mayúsculas) antes de comparar, para que un ticket no "desaparezca" por un error de captura.</li>
+      <li><span class="check">✓</span> <b>Empresa con más de una razón social (multiempresa):</b> se muestran los tickets de todos los RFC de esa instalación, no solo del principal.</li>
+      <li><span class="check">✓</span> <b>Doble clic o clics repetidos</b> en una fila o en "Actualizar": no debe disparar varias consultas al mismo tiempo.</li>
+    </ul>
+    <h2>Cómo saber que ya quedó bien</h2>
+    <ul>
+      <li><span class="check">✓</span> El ícono aparece en la topbar para cualquier usuario, sin configurar nada.</li>
+      <li><span class="check">✓</span> Las 5 pestañas filtran correctamente, y "Abiertos" abre por default.</li>
+      <li><span class="check">✓</span> El detalle trae todos los campos, la conversación completa y los adjuntos.</li>
+      <li><span class="check">✓</span> Ninguna nota privada aparece jamás, probándolo con un ticket que sí tenga una.</li>
+      <li><span class="check">✓</span> El botón "Actualizar" funciona y refresca el texto de "Actualizado hace X".</li>
+      <li><span class="check">✓</span> No existe ningún botón para responder o modificar un ticket desde esta pantalla.</li>
+    </ul>
   </div>
 
   <div class="paso">
     <div class="paso-label">Documentación relacionada</div>
     <div class="paso-desc">
-      <a href="HU44451 Mis Tickets de Soporte en el ERP.feature">Gherkin (criterios de aceptación)</a> ·
-      <a href="HU44451 Mis Tickets de Soporte en el ERP - Explicacion Dev.md">Explicación para desarrollo</a> ·
-      <a href="HU44451 Mis Tickets de Soporte en el ERP - Especificacion Tecnica.md">Especificación técnica</a>
+      <a href="HU47696 Mis Tickets de Soporte en el ERP - Explicacion Dev.md">Explicación para desarrollo</a> ·
+      <a href="HU47696 Mis Tickets de Soporte en el ERP - Especificacion Tecnica.md">Especificación técnica</a>
     </div>
   </div>
 

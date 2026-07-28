@@ -34,6 +34,7 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px
 .f-btn{width:100%;border:none;border-radius:999px;padding:11px 0;font-size:13.5px;font-weight:700;cursor:default;margin-top:6px;}
 .f-btn.enabled{background:#2563eb;color:#fff;}
 .f-btn.disabled{background:#e5e7eb;color:#9ca3af;}
+.f-btn.loading{background:#93b4f0;color:#fff;}
 
 .msg-box{margin-top:14px;border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.5;}
 .msg-error{background:#fef2f2;border:1px solid #fecaca;color:#b42318;}
@@ -44,7 +45,7 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px
 </head>
 <body>
 
-<div class="page-title">HUPendiente — Actualizar e.Firma (GM Fiscal)</div>
+<div class="page-title">HU47743 — Actualizar e.Firma (GM Fiscal)</div>
 <div class="page-sub">Pantalla nueva · cliente externo autenticado</div>
 
 <div class="disclaimer">
@@ -87,6 +88,7 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px
     Así se miraría después de hacer clic en "Actualizar e.Firma" con datos inválidos. El mensaje aparece debajo del botón, en rojo, y los archivos anteriores del cliente NO se modifican. Mensajes posibles según el caso (texto exacto):<br>
     · RFC no coincide → <b>"El RFC del certificado (OTR010101ZZ9) no coincide con el RFC de tu empresa (EAC010101AB1)"</b><br>
     · Contraseña incorrecta → <b>"La contraseña no es válida para el archivo .key proporcionado"</b><br>
+    · Certificado vencido → <b>"El certificado seleccionado ya venció el 15/03/2026. Sube un certificado vigente"</b><br>
     · Unikasoft no responde → <b>"No se pudo actualizar tu e.Firma en este momento. Intenta de nuevo más tarde"</b><br>
     El cliente puede corregir los campos y volver a intentar sin ninguna restricción adicional.
   </div>
@@ -114,7 +116,34 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px
 </div>
 
 <div class="screen">
-  <div class="screen-label">③ Formulario — actualización exitosa</div>
+  <div class="screen-label">③ Botón deshabilitado mientras se procesa</div>
+  <div class="screen-desc">
+    Así se miraría justo después del clic, mientras el sistema espera la respuesta de Unikasoft. El texto del botón cambia a <b>"Actualizando..."</b> y queda deshabilitado — un segundo clic durante este estado no genera una segunda solicitud. El botón vuelve a su estado normal (habilitado, texto original) solo cuando llega la respuesta, sea éxito o error.
+  </div>
+  <div class="fiscal-frame">
+    <div class="f-header">
+      <div class="f-title">Actualizar e.Firma</div>
+      <div class="f-subtitle">Reemplaza tu certificado y llave cuando renueves tu e.Firma ante el SAT.</div>
+    </div>
+    <div class="rfc-chip">RFC de tu empresa: <b>EAC010101AB1</b></div>
+    <div class="f-field">
+      <span class="f-label">Archivo .cer</span>
+      <div class="f-dropzone"><span class="fname">EAC010101AB1.cer</span> seleccionado</div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Archivo .key</span>
+      <div class="f-dropzone"><span class="fname">EAC010101AB1.key</span> seleccionado</div>
+    </div>
+    <div class="f-field">
+      <span class="f-label">Contraseña de la e.Firma</span>
+      <input class="f-input" type="password" value="●●●●●●●●" />
+    </div>
+    <button class="f-btn loading">Actualizando...</button>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-label">④ Formulario — actualización exitosa</div>
   <div class="screen-desc">
     Así se miraría al completar la actualización correctamente. El mensaje de éxito aparece en la misma pantalla, sin redirigir a otra página. La e.Firma anterior queda reemplazada de inmediato; no se conserva historial.
   </div>

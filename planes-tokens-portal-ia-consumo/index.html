@@ -13,11 +13,12 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
 .screen{margin-bottom:44px;}
 .screen-label{font-size:11px;font-weight:bold;color:#7a7570;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.screen-desc{font-size:12px;color:#3a3733;background:#e4e0d8;border-left:3px solid #9a9088;padding:8px 12px;margin-bottom:10px;line-height:1.5;}
+.screen-desc{font-size:12px;color:#3a3733;background:#e4e0d8;border-left:3px solid #9a9088;padding:10px 14px;margin-bottom:10px;line-height:1.6;}
+.screen-desc ul{margin:4px 0 0 18px;}
+.screen-desc li{margin-bottom:3px;}
 .badge{display:inline-block;font-size:10px;font-weight:bold;padding:1px 7px;border-radius:3px;margin-left:6px;vertical-align:middle;}
 .badge-actual{background:#ffe9a8;color:#7a5c00;}
 .badge-nuevo{background:#c8f0cf;color:#136326;}
-.ann{color:#1a56c4;font-size:10.5px;font-style:italic;line-height:1.4;}
 .legend{font-size:11px;color:#7a7570;margin-top:6px;}
 
 /* ---- Chrome de Portal IA real ---- */
@@ -33,7 +34,6 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .pia-item.active{background:#fdece2;color:#ef6c30;font-weight:bold;border-right:3px solid #ef6c30;}
 .pia-item .cnt{font-size:10.5px;color:#aaa;}
 .pia-item.active .cnt{color:#ef6c30;}
-.pia-item.disabled{color:#ccc;}
 .pia-bottom{border-top:1px solid #f0f0f0;padding:8px 14px;font-size:11px;color:#888;}
 
 .pia-main{flex:1;display:flex;flex-direction:column;min-width:0;}
@@ -42,6 +42,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .pia-user{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#555;}
 .pia-user-dot{width:24px;height:24px;border-radius:50%;background:#fdece2;color:#ef6c30;font-weight:bold;font-size:11px;display:flex;align-items:center;justify-content:center;}
 .pia-content{flex:1;overflow-y:auto;padding:16px 20px;background:#fafafa;}
+.pia-content.center{display:flex;align-items:center;justify-content:center;flex-direction:column;}
 
 .pia-kpis{display:flex;gap:12px;margin-bottom:14px;}
 .pia-kpi{flex:1;background:#fff;border:1px solid #eee;border-radius:6px;padding:10px 14px;}
@@ -57,10 +58,19 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .pia-plan .meta{font-size:11px;color:#888;margin-top:2px;}
 .pia-plan .price{font-size:14px;font-weight:bold;color:#ef6c30;}
 
-.pia-btn{border:none;border-radius:5px;padding:7px 16px;font-size:12px;font-weight:bold;cursor:default;font-family:Arial,sans-serif;}
+.pia-btn{border:none;border-radius:5px;padding:8px 18px;font-size:12.5px;font-weight:bold;cursor:default;font-family:Arial,sans-serif;}
 .pia-btn.primary{background:#ef6c30;color:#fff;}
 .pia-btn.primary.disabled{background:#f5c9ac;color:#fff;}
 .pia-btn.ghost{background:#fff;border:1px solid #ccc;color:#555;}
+.pia-btn.wide{width:100%;text-align:center;}
+
+.pia-field{margin-bottom:12px;}
+.pia-field label{display:block;font-size:11px;color:#777;margin-bottom:4px;}
+.pia-field input{width:100%;border:1px solid #ddd;border-radius:4px;padding:8px 10px;font-size:12.5px;color:#1a1a1a;font-family:Arial,sans-serif;}
+.pia-field-row{display:flex;gap:10px;}
+.pia-field-row .pia-field{flex:1;}
+.pia-mp-badge{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.pia-mp-mark{width:28px;height:28px;border-radius:6px;background:#00a4e4;color:#fff;font-weight:bold;font-size:11px;display:flex;align-items:center;justify-content:center;}
 
 .pia-filterbar{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #eee;border-radius:6px;padding:8px 12px;margin-bottom:12px;flex-wrap:wrap;}
 .pia-filterbar label{font-size:11px;color:#777;}
@@ -76,6 +86,13 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .pia-summary{display:flex;gap:12px;margin-bottom:14px;}
 .pia-crossed{position:relative;opacity:.55;}
 .pia-crossed::after{content:"";position:absolute;left:0;top:50%;width:100%;border-top:2px solid #c0392b;}
+
+.pia-spinner{width:38px;height:38px;border-radius:50%;border:4px solid #f0d9c8;border-top-color:#ef6c30;margin-bottom:16px;}
+.pia-check{width:56px;height:56px;border-radius:50%;background:#e3f6e8;color:#1f8a3d;font-size:30px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.pia-x{width:56px;height:56px;border-radius:50%;background:#fce7e3;color:#c0392b;font-size:30px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.pia-result-title{font-size:15px;font-weight:bold;margin-bottom:6px;}
+.pia-result-sub{font-size:12px;color:#666;margin-bottom:18px;text-align:center;max-width:300px;}
+.pia-folio{font-size:11px;color:#999;margin-bottom:18px;}
 </style>
 </head>
 <body>
@@ -94,7 +111,12 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 <div class="screen">
   <div class="screen-label">① Comprar Tokens — Catálogo <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
-    Entrada de menú "Comprar Tokens" visible solo si el usuario tiene el permiso "puede contratar tokens" — si no lo tiene, la opción no aparece en el sidebar (no se oculta con estilo, se omite del DOM). Catálogo muestra únicamente planes con estado "Activo" — "Plan Empresarial" está inactivo y no se lista. Al hacer clic en un plan se marca seleccionado (borde naranja) y se habilita "Continuar".
+    <ul>
+      <li>Entrada de menú "Comprar Tokens" visible solo si el usuario tiene el permiso "puede contratar tokens" — si no lo tiene, la opción no aparece (se omite del menú, no se muestra deshabilitada).</li>
+      <li>Solo se listan planes con estado "Activo". "Plan Empresarial" está inactivo y no aparece aquí.</li>
+      <li>Si no hay ningún plan activo, en vez de la lista se muestra el mensaje "No hay planes disponibles por el momento".</li>
+      <li>Al hacer clic en un plan queda marcado seleccionado (borde naranja) y se habilita "Continuar". "Continuar" está deshabilitado hasta que se elige un plan.</li>
+    </ul>
   </div>
   <div class="pia">
     <div class="pia-sidebar">
@@ -104,9 +126,9 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
         <div class="pia-item">Dashboard</div>
         <div class="pia-item active">Comprar Tokens</div>
         <div class="pia-section">USUARIOS</div>
-        <div class="pia-item">Todos <span class="cnt">0</span></div>
-        <div class="pia-item">Con IA <span class="cnt">0</span></div>
-        <div class="pia-item">Sin IA <span class="cnt">0</span></div>
+        <div class="pia-item">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
@@ -122,17 +144,20 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
           <div class="price">$180.00 USD</div>
         </div>
         <div style="text-align:right;margin-top:14px;"><button class="pia-btn primary">Continuar</button></div>
-        <div class="ann" style="margin-top:10px;">"Continuar" deshabilitado hasta seleccionar un plan. Si no hay ningún plan activo, la lista se reemplaza por el mensaje "No hay planes disponibles por el momento".</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ② METODO DE PAGO -->
+<!-- ② RESUMEN DE COMPRA -->
 <div class="screen">
-  <div class="screen-label">② Comprar Tokens — Método de Pago <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">② Comprar Tokens — Resumen y método de pago <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
-    Resumen del plan elegido, monto total y método de pago Mercado Pago. Botón "Pagar" se deshabilita en cuanto se hace clic (evita doble cobro) y vuelve a habilitarse solo si el pago es rechazado. "Atrás" regresa al catálogo sin cobrar ni crear registro en el historial.
+    <ul>
+      <li>Resumen del plan elegido, fijo y no editable desde aquí — para cambiar de plan hay que volver al catálogo con "Atrás".</li>
+      <li>"Atrás" regresa al catálogo sin cobrar ni crear registro en el historial "Planes Contratados".</li>
+      <li>"Continuar con Mercado Pago" avanza a la captura de tarjeta (pantalla ③).</li>
+    </ul>
   </div>
   <div class="pia">
     <div class="pia-sidebar">
@@ -145,31 +170,173 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
     <div class="pia-main">
-      <div class="pia-top"><h2>Método de pago</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-top"><h2>Resumen de compra</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
       <div class="pia-content">
         <div class="pia-card">
-          <div style="font-weight:bold;margin-bottom:6px;">Plan Básico · 5,000 tokens · Total: $50.00 USD</div>
-          <div class="ann">Resumen fijo, no editable desde esta pantalla — para cambiar el plan hay que volver al catálogo.</div>
+          <div style="font-size:11px;color:#999;margin-bottom:4px;">Plan seleccionado</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-weight:bold;font-size:14px;">Plan Básico</div>
+              <div style="font-size:11.5px;color:#888;">5,000 tokens</div>
+            </div>
+            <div style="font-size:16px;font-weight:bold;color:#ef6c30;">$50.00 USD</div>
+          </div>
         </div>
-        <div class="pia-card">
-          <div style="font-weight:bold;margin-bottom:8px;">Mercado Pago</div>
-          <div style="border:1px dashed #ddd;border-radius:5px;padding:16px;text-align:center;color:#999;font-size:11.5px;">Formulario de tarjeta (widget de Mercado Pago)</div>
+        <div class="pia-card" style="display:flex;justify-content:space-between;">
+          <div style="font-weight:bold;">Total a pagar</div>
+          <div style="font-weight:bold;">$50.00 USD</div>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:14px;">
           <button class="pia-btn ghost">Atrás</button>
-          <button class="pia-btn primary">Pagar $50.00 USD</button>
+          <button class="pia-btn primary">Continuar con Mercado Pago</button>
         </div>
-        <div class="ann" style="margin-top:10px;">Éxito → mensaje "Compra realizada. Se agregaron 5,000 tokens a tu saldo." + folio de transacción, suma tokens a la bolsa de la empresa. Rechazo → mensaje "No se pudo procesar el pago, intenta de nuevo", botón se reactiva. Sin respuesta del proveedor a tiempo → no suma tokens, historial queda en estatus "Cancelado".</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ③ CONSUMO POR USUARIO -->
+<!-- ③ CAPTURA DE TARJETA MERCADO PAGO -->
 <div class="screen">
-  <div class="screen-label">③ Consumo de IA por Usuario <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">③ Mercado Pago — Captura de tarjeta <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
-    Pantalla nueva, visible solo para usuarios tipo "Administrador" del ERP (un usuario tipo "Usuario" no ve esta opción en el sidebar). Rango de fechas por default = mes en curso, KPI "Total del periodo" arriba de la tabla, tabla ordenada de mayor a menor consumo. La columna "Tiene acceso actualmente" muestra "No" para usuarios sin permiso vigente o dados de baja, que igual conservan su consumo histórico. Buscador filtra por usuario; sin resultados muestra "No se encontraron usuarios con ese nombre o usuario".
+    <ul>
+      <li>Formulario estándar de Mercado Pago: número de tarjeta, nombre del titular, vencimiento (MM/AA) y CVV. Los 4 campos son obligatorios.</li>
+      <li>"Pagar $50.00 USD" se deshabilita en cuanto se hace clic — evita un doble cobro por doble clic. Solo se vuelve a habilitar si el pago termina rechazado (pantalla ⑥).</li>
+      <li>Al hacer clic en "Pagar", pasa a la pantalla de procesamiento (④) mientras se espera la respuesta de Mercado Pago.</li>
+    </ul>
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item active">Comprar Tokens</div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Pagar con tarjeta</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-content">
+        <div class="pia-mp-badge"><div class="pia-mp-mark">MP</div><div style="font-size:12px;color:#666;">Pago procesado por Mercado Pago · Plan Básico · $50.00 USD</div></div>
+        <div class="pia-field"><label>Número de tarjeta</label><input value="•••• •••• •••• 4242"></div>
+        <div class="pia-field"><label>Nombre del titular</label><input value="JUAN PEREZ"></div>
+        <div class="pia-field-row">
+          <div class="pia-field"><label>Vencimiento</label><input value="09/28"></div>
+          <div class="pia-field"><label>CVV</label><input value="•••"></div>
+        </div>
+        <button class="pia-btn primary wide" style="margin-top:6px;">Pagar $50.00 USD</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ PROCESANDO -->
+<div class="screen">
+  <div class="screen-label">④ Mercado Pago — Procesando pago <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    Pantalla intermedia mientras Mercado Pago confirma o rechaza el cobro. No tiene botones — el usuario espera. Según la respuesta, avanza automáticamente a ⑤ (éxito), ⑥ (rechazo), o si pasa el tiempo límite configurado sin respuesta, el historial "Planes Contratados" queda con estatus "Cancelado" y no se suman tokens.
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item active">Comprar Tokens</div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Pagar con tarjeta</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-content center">
+        <div class="pia-spinner"></div>
+        <div class="pia-result-title">Procesando tu pago...</div>
+        <div class="pia-result-sub">No cierres ni recargues esta ventana.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ EXITO -->
+<div class="screen">
+  <div class="screen-label">⑤ Compra realizada <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    <ul>
+      <li>Mensaje exacto: "Compra realizada. Se agregaron 5,000 tokens a tu saldo."</li>
+      <li>Se suman 5,000 tokens a la bolsa de la empresa (si tenía 3,000, queda en 8,000).</li>
+      <li>Se crea un registro en el historial "Planes Contratados" con fecha, plan, tokens, costo, método de pago y estado "Vigente".</li>
+      <li>"Volver a Comprar Tokens" regresa al catálogo (pantalla ①).</li>
+    </ul>
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item active">Comprar Tokens</div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Pagar con tarjeta</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-content center">
+        <div class="pia-check">✓</div>
+        <div class="pia-result-title">Compra realizada</div>
+        <div class="pia-result-sub">Se agregaron 5,000 tokens a tu saldo.</div>
+        <div class="pia-folio">Folio: MP-2026072800391</div>
+        <button class="pia-btn primary">Volver a Comprar Tokens</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ RECHAZO -->
+<div class="screen">
+  <div class="screen-label">⑥ Pago rechazado <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    <ul>
+      <li>Mensaje exacto: "No se pudo procesar el pago, intenta de nuevo".</li>
+      <li>No se suman tokens a la bolsa ni se crea registro en "Planes Contratados".</li>
+      <li>"Reintentar" regresa a la captura de tarjeta (pantalla ③) con los campos vacíos.</li>
+    </ul>
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item active">Comprar Tokens</div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Pagar con tarjeta</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-content center">
+        <div class="pia-x">✕</div>
+        <div class="pia-result-title">No se pudo procesar el pago, intenta de nuevo</div>
+        <div class="pia-result-sub">No se realizó ningún cargo a tu tarjeta.</div>
+        <button class="pia-btn primary">Reintentar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑦ CONSUMO POR USUARIO -->
+<div class="screen">
+  <div class="screen-label">⑦ Consumo de IA por Usuario <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    <ul>
+      <li>Solo visible para usuarios tipo "Administrador" del ERP — un usuario tipo "Usuario" no ve esta opción en el sidebar.</li>
+      <li>Rango de fechas por default: primer y último día del mes en curso.</li>
+      <li>KPI "Total del periodo" = suma de tokens consumidos por todos los usuarios dentro del rango.</li>
+      <li>Tabla ordenada de mayor a menor consumo. Columna "Tiene acceso actualmente" en "No" para usuarios sin permiso vigente o dados de baja — igual siguen apareciendo con su consumo histórico.</li>
+      <li>Buscador filtra por usuario. Sin coincidencias: mensaje "No se encontraron usuarios con ese nombre o usuario".</li>
+      <li>Fecha final anterior a la inicial: mensaje "La fecha final no puede ser anterior a la fecha inicial", no actualiza la tabla.</li>
+      <li>Rango sin consumo: mensaje "Sin consumo registrado en el rango seleccionado", KPI en 0.</li>
+    </ul>
   </div>
   <div class="pia">
     <div class="pia-sidebar">
@@ -194,28 +361,26 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
           <input value="01/07/2026"><span>—</span><input value="28/07/2026">
           <input class="pia-search" value="Buscar usuario...">
         </div>
-        <div class="ann" style="margin-bottom:8px;">Rango por default: primer y último día del mes en curso. Fecha final anterior a la inicial → mensaje "La fecha final no puede ser anterior a la fecha inicial", no actualiza la tabla.</div>
         <div class="pia-kpis" style="max-width:220px;">
-          <div class="pia-kpi"><div class="l">Total del periodo</div><div class="v orange">7,400 tokens</div></div>
+          <div class="pia-kpi"><div class="l">Total del periodo</div><div class="v orange">8,600 tokens</div></div>
         </div>
         <table class="pia-table">
           <tr><th>Usuario</th><th>Tokens consumidos</th><th>Tiene acceso actualmente</th></tr>
           <tr><td>aperez</td><td>4,500</td><td class="pia-tag-si">Sí</td></tr>
           <tr><td>lgomez</td><td>2,100</td><td class="pia-tag-si">Sí</td></tr>
-          <tr><td>mlopez</td><td>800</td><td class="pia-tag-si">Sí</td></tr>
           <tr><td>cruiz</td><td>1,200</td><td class="pia-tag-no">No</td></tr>
+          <tr><td>mlopez</td><td>800</td><td class="pia-tag-si">Sí</td></tr>
         </table>
-        <div class="ann" style="margin-top:8px;">Orden por default: tokens consumidos, de mayor a menor. Sin consumo en el rango → tabla vacía con mensaje "Sin consumo registrado en el rango seleccionado" y KPI en 0.</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ④ CONTROL DE PERMISOS ACTUAL -->
+<!-- ⑧ CONTROL DE PERMISOS ACTUAL -->
 <div class="screen">
-  <div class="screen-label">④ Control de Permisos — Actual <span class="badge badge-actual">ACTUAL</span></div>
+  <div class="screen-label">⑧ Control de Permisos — Actual <span class="badge badge-actual">ACTUAL</span></div>
   <div class="screen-desc">
-    Estado actual de la pantalla: las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas" repiten información que ya está en el menú lateral (secciones "Por Perfil" y "Usuarios"/"Otros"). Se muestra tachado lo que se elimina en el siguiente wireframe.
+    Estado actual: las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas" repiten información que ya está en el menú lateral. Se muestran tachadas para indicar lo que se elimina en el siguiente wireframe (⑨).
   </div>
   <div class="pia">
     <div class="pia-sidebar">
@@ -226,12 +391,12 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
         <div class="pia-item">Con IA <span class="cnt">6</span></div>
         <div class="pia-item">Sin IA <span class="cnt">4</span></div>
         <div class="pia-section">POR PERFIL</div>
-        <div class="pia-item">Gerencial <span class="cnt">0</span></div>
-        <div class="pia-item">Administrativo <span class="cnt">0</span></div>
-        <div class="pia-item">Operativo <span class="cnt">0</span></div>
+        <div class="pia-item">Gerencial <span class="cnt">2</span></div>
+        <div class="pia-item">Administrativo <span class="cnt">5</span></div>
+        <div class="pia-item">Operativo <span class="cnt">3</span></div>
         <div class="pia-section">OTROS</div>
         <div class="pia-item">Sin perfil <span class="cnt">0</span></div>
-        <div class="pia-item">Inactivos <span class="cnt">0</span></div>
+        <div class="pia-item">Inactivos <span class="cnt">1</span></div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
@@ -244,13 +409,13 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
           <div class="pia-kpi"><div class="l">Sin acceso IA</div><div class="v">4</div></div>
         </div>
         <div class="pia-summary pia-crossed">
-          <div class="pia-kpi"><div class="l">Gerencial</div><div class="v">0</div></div>
-          <div class="pia-kpi"><div class="l">Administrativo</div><div class="v">0</div></div>
-          <div class="pia-kpi"><div class="l">Operativo</div><div class="v">0</div></div>
+          <div class="pia-kpi"><div class="l">Gerencial</div><div class="v">2</div></div>
+          <div class="pia-kpi"><div class="l">Administrativo</div><div class="v">5</div></div>
+          <div class="pia-kpi"><div class="l">Operativo</div><div class="v">3</div></div>
         </div>
         <div class="pia-summary pia-crossed">
-          <div class="pia-kpi"><div class="l">Activos en ERP</div><div class="v">0</div></div>
-          <div class="pia-kpi"><div class="l">Inactivos en ERP</div><div class="v">0</div></div>
+          <div class="pia-kpi"><div class="l">Activos en ERP</div><div class="v">9</div></div>
+          <div class="pia-kpi"><div class="l">Inactivos en ERP</div><div class="v">1</div></div>
         </div>
         <div class="pia-summary pia-crossed">
           <div class="pia-kpi"><div class="l">Gestionar usuarios</div><div class="v" style="font-size:11px;">Ver, filtrar y editar</div></div>
@@ -260,14 +425,14 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
       </div>
     </div>
   </div>
-  <div class="legend">Tachado = tarjetas que se eliminan (sección "④ NUEVO" muestra el resultado final)</div>
+  <div class="legend">Tachado = tarjetas que se eliminan en ⑨</div>
 </div>
 
-<!-- ⑤ CONTROL DE PERMISOS NUEVO -->
+<!-- ⑨ CONTROL DE PERMISOS NUEVO -->
 <div class="screen">
-  <div class="screen-label">⑤ Control de Permisos — Limpio <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">⑨ Control de Permisos — Limpio <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
-    Se eliminan las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas". El menú lateral no cambia — sigue mostrando "Usuarios" (Todos/Con IA/Sin IA), "Por Perfil" (Gerencial/Administrativo/Operativo) y "Otros" (Sin perfil/Inactivos). Solo se conserva el resumen general de 3 tarjetas.
+    Se eliminan las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas". El menú lateral no cambia — sigue mostrando "Usuarios", "Por Perfil" y "Otros". Solo se conserva el resumen general de 3 tarjetas.
   </div>
   <div class="pia">
     <div class="pia-sidebar">
@@ -278,12 +443,12 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
         <div class="pia-item">Con IA <span class="cnt">6</span></div>
         <div class="pia-item">Sin IA <span class="cnt">4</span></div>
         <div class="pia-section">POR PERFIL</div>
-        <div class="pia-item">Gerencial <span class="cnt">0</span></div>
-        <div class="pia-item">Administrativo <span class="cnt">0</span></div>
-        <div class="pia-item">Operativo <span class="cnt">0</span></div>
+        <div class="pia-item">Gerencial <span class="cnt">2</span></div>
+        <div class="pia-item">Administrativo <span class="cnt">5</span></div>
+        <div class="pia-item">Operativo <span class="cnt">3</span></div>
         <div class="pia-section">OTROS</div>
         <div class="pia-item">Sin perfil <span class="cnt">0</span></div>
-        <div class="pia-item">Inactivos <span class="cnt">0</span></div>
+        <div class="pia-item">Inactivos <span class="cnt">1</span></div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>

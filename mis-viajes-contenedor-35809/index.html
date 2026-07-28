@@ -1,14 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Prototipo #35809 — Contenedor y Sello · Mis Viajes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#E8E8E8;padding:20px;display:flex;flex-direction:column;align-items:center;font-family:'Segoe UI',Roboto,Arial,sans-serif}
-h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-.header-label{font-size:12px;color:#666;margin-bottom:12px;letter-spacing:.3px;text-transform:uppercase;font-weight:600}
-.phone{width:340px;border-radius:40px;border:8px solid #1a1a1a;overflow:hidden;background:#F2F2F2;box-shadow:0 16px 48px rgba(0,0,0,.25)}
+body{background:#E0E0E0;padding:20px 16px;display:flex;flex-direction:column;align-items:center;font-family:'Segoe UI',Roboto,Arial,sans-serif;min-height:100vh}
+.leyenda{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:10px}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:14px;width:340px}
+.tab{flex:1;padding:8px;border-radius:10px;border:1px solid #D0D0D0;background:#fff;font-size:12px;font-weight:600;cursor:pointer;text-align:center;color:#666}
+.tab.on{background:#F2940E;color:#fff;border-color:#F2940E}
+
+/* PHONE WRAP */
+.phone-wrap{width:340px;border-radius:40px;border:8px solid #1a1a1a;overflow:hidden;position:relative;background:#F2F2F2;box-shadow:0 16px 48px rgba(0,0,0,.28)}
 .sb{background:#fff;padding:6px 20px 4px;display:flex;justify-content:space-between;align-items:center}
-.sb-t{font-size:12px;font-weight:700;color:#111}
-.appbar{background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #E8E8E8}
-.back{color:#E53935;font-size:22px;line-height:1;font-weight:300}
+.appbar{background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid #EBEBEB}
+.back{color:#E53935;font-size:22px;font-weight:300;line-height:1}
 .app-ico{width:36px;height:36px;background:#E53935;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0}
 .app-title{font-size:15px;font-weight:700;color:#111;line-height:1.1}
 .app-sub{font-size:11px;color:#888;margin-top:1px}
@@ -16,12 +27,12 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
 .map-bg{height:68px;background:#C8D8B0;position:relative;display:flex;align-items:center;padding:0 14px;gap:8px}
 .map-pin{width:10px;height:10px;background:#2E7D32;border-radius:50%;border:2px solid #fff;flex-shrink:0}
 .map-chip{background:rgba(0,0,0,.5);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
-.map-exp{position:absolute;right:10px;bottom:8px;width:26px;height:26px;background:rgba(0,0,0,.4);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px}
-.scroll{background:#F2F2F2;padding:10px;display:flex;flex-direction:column;gap:8px;max-height:580px;overflow-y:auto}
+.map-exp{position:absolute;right:10px;bottom:8px;width:26px;height:26px;background:rgba(0,0,0,.4);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff}
+.scroll{background:#F2F2F2;padding:10px;display:flex;flex-direction:column;gap:8px;height:560px;overflow-y:auto}
 .card{background:#fff;border-radius:16px;padding:14px;border:0.5px solid #E0E0E0}
 .card-title{font-size:14px;font-weight:700;color:#111;margin-bottom:10px}
 .prog-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.prog-ic{width:36px;height:36px;background:#F5F5F5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#888;font-size:18px}
+.prog-ic{width:36px;height:36px;background:#F5F5F5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#888}
 .steps{display:flex;align-items:center;justify-content:center;margin-bottom:14px}
 .step{display:flex;flex-direction:column;align-items:center;gap:4px}
 .sc{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px}
@@ -40,7 +51,7 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
 .new-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .new-title{font-size:14px;font-weight:700;color:#111}
 .badge{background:#F2940E;color:#fff;font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:.4px}
-.convoy-box{background:#F9F9F9;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:12px;border:0.5px solid #E8E8E8}
+.convoy-box{background:#F9F9F9;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:12px;border:0.5px solid #EBEBEB}
 .convoy-name{font-size:13px;font-weight:700;color:#111}
 .convoy-desc{font-size:10px;color:#888;margin-top:1px}
 .divider{height:0.5px;background:#F0F0F0;margin:4px 0 12px}
@@ -48,54 +59,107 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
 .f-lbl{font-size:11px;font-weight:700;color:#555;display:flex;align-items:center;gap:4px}
 .req{color:#E53935}
 .f-hint{font-size:10px;color:#BDBDBD;margin-top:2px}
-.catalog-row{display:flex;gap:6px;align-items:center}
-.catalog-inp{flex:1;border-radius:10px;border:1.5px solid #E0E0E0;padding:10px 12px;font-size:13px;background:#FAFAFA;color:#111;font-family:inherit}
-.catalog-inp::placeholder{color:#BDBDBD}
-.catalog-btn{width:38px;height:40px;background:#F5F5F5;border:1.5px solid #E0E0E0;border-radius:10px;font-size:13px;font-weight:700;color:#555;cursor:pointer;flex-shrink:0;font-family:inherit}
-.catalog-btn:hover{background:#EEEEEE}
+.cat-btn{width:100%;border-radius:10px;border:1.5px solid #E0E0E0;padding:10px 12px;font-size:13px;background:#FAFAFA;color:#BDBDBD;font-family:inherit;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color .15s}
+.cat-btn.filled{color:#111;border-color:#F2940E;background:#fff}
 .f-inp{width:100%;border-radius:10px;border:1.5px solid #E0E0E0;padding:10px 12px;font-size:13px;background:#FAFAFA;color:#111;font-family:inherit}
 .f-inp::placeholder{color:#BDBDBD}
+.f-inp:focus{outline:none;border-color:#F2940E;background:#fff}
 .warn-box{background:#FFF8E1;border-left:3px solid #F9A825;border-radius:0 8px 8px 0;padding:8px 10px;font-size:11px;color:#5D4037;display:flex;gap:7px;align-items:flex-start;margin-bottom:12px}
 .save-btn{width:100%;height:44px;background:#F2940E;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
 .fin-item{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:0.5px solid #F0F0F0}
 .fin-item:last-child{border-bottom:none}
 .fin-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
-.teal{background:#00897B}.blue{background:#1565C0}
+.teal{background:#00897B}.blue-fin{background:#1565C0}
 .fin-t{font-size:13px;font-weight:700;color:#111}
 .fin-s{font-size:11px;color:#888;margin-top:1px}
 .fin-arr{color:#BDBDBD;font-size:16px;margin-left:auto}
+
+/* BOTTOM SHEET */
+.overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:50}
+.overlay.open{display:block}
+.sheet{position:absolute;left:0;right:0;bottom:-100%;background:#fff;border-radius:20px 20px 0 0;z-index:51;transition:bottom .28s cubic-bezier(.32,.72,0,1)}
+.sheet.open{bottom:0}
+.sh-handle{width:40px;height:4px;background:#E0E0E0;border-radius:2px;margin:12px auto 0}
+.sh-head{padding:12px 16px 10px;border-bottom:0.5px solid #F0F0F0;display:flex;align-items:center;justify-content:space-between}
+.sh-title{font-size:15px;font-weight:700;color:#111}
+.sh-close{background:none;border:none;font-size:24px;color:#888;cursor:pointer;line-height:1;padding:0 2px}
+.sh-search{margin:10px 16px 4px;border-radius:10px;border:1.5px solid #E0E0E0;padding:9px 12px 9px 36px;font-size:13px;width:calc(100% - 32px);font-family:inherit;background:#F9F9F9}
+.sh-search:focus{outline:none;border-color:#F2940E}
+.sh-search-wrap{position:relative;margin:10px 16px 4px}
+.sh-search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#BDBDBD;font-size:15px;pointer-events:none}
+.sh-search-wrap input{width:100%;border-radius:10px;border:1.5px solid #E0E0E0;padding:9px 12px 9px 32px;font-size:13px;font-family:inherit;background:#F9F9F9}
+.sh-search-wrap input:focus{outline:none;border-color:#F2940E;background:#fff}
+.sh-list{max-height:240px;overflow-y:auto;padding:4px 0 8px}
+.sh-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer}
+.sh-item:active{background:#FFF8F0}
+.sh-item.sel{background:#FFF3E0}
+.sh-ico{width:36px;height:36px;background:#F5F5F5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#888;flex-shrink:0}
+.sh-item.sel .sh-ico{background:#FFE0B2;color:#F2940E}
+.sh-code{font-size:13px;font-weight:700;color:#111}
+.sh-desc{font-size:11px;color:#888;margin-top:1px}
+.sh-check{margin-left:auto;color:#F2940E;font-size:18px;opacity:0}
+.sh-item.sel .sh-check{opacity:1}
+
+/* ERP PANEL */
+.erp-panel{width:100%;max-width:660px;margin-top:0}
+.pnl{display:none}.pnl.on{display:block}
+.erp-win{background:#fff;border:1px solid #bbb;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;border-radius:4px;overflow:hidden}
+.erp-tb{background:#3C3C3C;color:#fff;padding:5px 12px;font-size:12px;font-weight:bold}
+.erp-hdr{background:#f7f7f7;border-bottom:1px solid #ccc;padding:6px 10px;display:flex;flex-wrap:wrap;gap:5px 12px}
+.hf{display:flex;flex-direction:column;gap:1px}
+.hf label{font-size:10px;color:#666}
+.hf input,.hf select{border:1px solid #aaa;padding:2px 5px;font-size:11px;font-family:Calibri,sans-serif}
+.etabs{display:flex;background:#d0d0d0;border-bottom:2px solid #F2940E;flex-wrap:wrap}
+.etab{padding:4px 8px;font-size:11px;cursor:pointer;border:1px solid #b0b0b0;border-bottom:none;color:#333;background:#d0d0d0;margin-right:1px;white-space:nowrap}
+.etab.on{background:#F2940E;color:#fff;font-weight:bold;border-color:#F2940E}
+.epanel{padding:8px 10px;background:#F5A623}
+.einner{background:#fff;border:1px solid #ccc;padding:8px 10px}
+.esec{background:#F2940E;color:#fff;font-weight:bold;font-size:11px;padding:3px 8px;margin:8px 0 5px}
+.ptable{width:100%;border-collapse:collapse;font-size:11px}
+.ptable th{background:#F2940E;color:#fff;padding:4px 8px;border:1px solid #d07000;text-align:left}
+.ptable td{padding:4px 8px;border:1px solid #e0e0e0;color:#333}
+.ptable tr.new td{background:#FFF8E1;font-weight:bold;color:#E65100}
+.nota{background:#E3F2FD;border:1px solid #90CAF9;border-radius:3px;padding:6px 8px;font-size:11px;color:#0D47A1;margin-top:8px;line-height:1.5}
+.ebtn{border:none;padding:3px 10px;font-size:11px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;margin-right:4px}
+.ebtn-o{background:#F2940E;color:#fff}
+.ebtn-g{background:#888;color:#fff}
+.ebar{display:flex;gap:6px;padding:8px 10px;border-top:1px solid #ccc;background:#f0f0f0}
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+<body>
 
-<h2 class="sr-only">Prototipo pantalla Detalle de Trayecto con sección Contenedor y Sello</h2>
-<div class="header-label">Así se miraría — Detalle de Trayecto</div>
+<div class="leyenda">Así se miraría — #35809</div>
 
-<div class="phone">
+<div class="tabs" style="width:100%;max-width:660px">
+  <button class="tab on" onclick="swTab('app',this)">📱 App Mis Viajes</button>
+  <button class="tab" onclick="swTab('erp',this)">🖥️ ERP — Permiso por operador</button>
+</div>
+
+<!-- APP -->
+<div id="p-app" class="pnl on">
+<div class="phone-wrap">
   <div class="sb">
-    <span class="sb-t">6:32</span>
-    <span style="font-size:11px;color:#111">▲ 5G  ▮▮▮</span>
+    <span style="font-size:12px;font-weight:700;color:#111">6:32</span>
+    <span style="font-size:11px;color:#111">▲ 5G ▮▮▮</span>
   </div>
-
   <div class="appbar">
     <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
       <span class="back">‹</span>
       <div class="app-ico"><i class="ti ti-route-2" aria-hidden="true"></i></div>
-      <div style="min-width:0">
+      <div>
         <div class="app-title">Detalle de Trayecto</div>
         <div class="app-sub">Viaje: MA-000005103</div>
       </div>
     </div>
     <button class="report-btn"><i class="ti ti-alert-triangle" style="font-size:11px" aria-hidden="true"></i> Reportar Falla</button>
   </div>
-
   <div class="map-bg">
     <div class="map-pin"></div>
     <span class="map-chip">MEXICALI, BAJA CALIFORNIA</span>
-    <div class="map-exp"><i class="ti ti-arrows-maximize" aria-hidden="true"></i></div>
+    <div class="map-exp"><i class="ti ti-arrows-maximize" style="font-size:12px" aria-hidden="true"></i></div>
   </div>
 
   <div class="scroll">
-
     <div class="card">
       <div class="prog-hd">
         <div class="prog-ic"><i class="ti ti-clock" aria-hidden="true"></i></div>
@@ -117,18 +181,9 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
     <div class="card">
       <div class="card-title">Información del viaje</div>
       <div class="info-row">
-        <div class="info-item">
-          <i class="ti ti-truck" style="font-size:17px;color:#888" aria-hidden="true"></i>
-          <div><div class="info-lbl">Unidad</div><div class="info-val">T12</div></div>
-        </div>
-        <div class="info-item">
-          <i class="ti ti-ruler" style="font-size:17px;color:#888" aria-hidden="true"></i>
-          <div><div class="info-lbl">Kilómetros</div><div class="info-val">7046.0 km</div></div>
-        </div>
-        <div class="info-item" style="width:100%;margin-top:4px">
-          <i class="ti ti-circle-dot" style="font-size:17px;color:#F2940E" aria-hidden="true"></i>
-          <div><div class="info-lbl">Estado</div><div class="info-val ora">Pendiente de Liquidar</div></div>
-        </div>
+        <div class="info-item"><i class="ti ti-truck" style="font-size:17px;color:#888" aria-hidden="true"></i><div><div class="info-lbl">Unidad</div><div class="info-val">T12</div></div></div>
+        <div class="info-item"><i class="ti ti-ruler" style="font-size:17px;color:#888" aria-hidden="true"></i><div><div class="info-lbl">Kilómetros</div><div class="info-val">7046.0 km</div></div></div>
+        <div class="info-item" style="width:100%;margin-top:4px"><i class="ti ti-circle-dot" style="font-size:17px;color:#F2940E" aria-hidden="true"></i><div><div class="info-lbl">Estado</div><div class="info-val ora">Pendiente de Liquidar</div></div></div>
       </div>
     </div>
 
@@ -137,7 +192,6 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
         <div class="new-title">Contenedor y sello</div>
         <span class="badge">NUEVO</span>
       </div>
-
       <div class="convoy-box">
         <i class="ti ti-trail-sign" style="font-size:20px;color:#BDBDBD;flex-shrink:0" aria-hidden="true"></i>
         <div>
@@ -146,21 +200,20 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
         </div>
         <i class="ti ti-lock" style="font-size:14px;color:#BDBDBD;margin-left:auto;flex-shrink:0" aria-hidden="true"></i>
       </div>
-
       <div class="divider"></div>
 
       <div class="f-group">
         <span class="f-lbl"><i class="ti ti-container" style="font-size:13px;color:#888" aria-hidden="true"></i> Contenedor <span class="req">*</span></span>
-        <div class="catalog-row">
-          <input class="catalog-inp" type="text" id="cont-inp" placeholder="Selecciona..." readonly />
-          <button class="catalog-btn" onclick="pickCont()" title="Abrir catálogo de contenedores">...</button>
-        </div>
-        <span class="f-hint">Abre el catálogo para seleccionar el contenedor del remolque</span>
+        <button class="cat-btn" id="cat-btn" onclick="openSheet()" type="button">
+          <span id="cat-display">Selecciona un contenedor...</span>
+          <i class="ti ti-chevron-down" style="font-size:14px;color:#BDBDBD" aria-hidden="true"></i>
+        </button>
+        <span class="f-hint">Toca para seleccionar el contenedor del remolque</span>
       </div>
 
       <div class="f-group">
         <span class="f-lbl"><i class="ti ti-lock" style="font-size:13px;color:#888" aria-hidden="true"></i> Candado oficial / sello</span>
-        <input class="f-inp" type="text" id="sello-inp" placeholder="Ej. ML-889234" />
+        <input class="f-inp" type="text" placeholder="Ej. ML-889234" />
         <span class="f-hint">Número de sello de seguridad (opcional)</span>
       </div>
 
@@ -168,42 +221,139 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
         <i class="ti ti-alert-triangle" style="font-size:14px;color:#F9A825;flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
         <span>Esta información no podrá modificarse una vez que la carta porte sea timbrada.</span>
       </div>
-
       <button class="save-btn" id="save-btn" onclick="guardar()">Guardar</button>
     </div>
 
     <div class="card">
       <div class="card-title">Finanzas</div>
-      <div class="fin-item">
-        <div class="fin-ico teal"><i class="ti ti-cash" aria-hidden="true"></i></div>
-        <div><div class="fin-t">Balance de Gastos</div><div class="fin-s">Ver anticipos y gastos autorizados</div></div>
-        <i class="ti ti-chevron-right fin-arr" aria-hidden="true"></i>
+      <div class="fin-item"><div class="fin-ico teal"><i class="ti ti-cash" aria-hidden="true"></i></div><div><div class="fin-t">Balance de Gastos</div><div class="fin-s">Ver anticipos y gastos autorizados</div></div><i class="ti ti-chevron-right fin-arr" aria-hidden="true"></i></div>
+      <div class="fin-item"><div class="fin-ico blue-fin"><i class="ti ti-file-invoice" aria-hidden="true"></i></div><div><div class="fin-t">Solicitudes de Gastos</div><div class="fin-s">Registrar gastos del trayecto</div></div><i class="ti ti-chevron-right fin-arr" aria-hidden="true"></i></div>
+    </div>
+  </div>
+
+  <!-- OVERLAY + SHEET dentro del phone-wrap -->
+  <div class="overlay" id="overlay" onclick="closeSheet()"></div>
+  <div class="sheet" id="sheet">
+    <div class="sh-handle"></div>
+    <div class="sh-head">
+      <span class="sh-title">Seleccionar contenedor</span>
+      <button class="sh-close" onclick="closeSheet()">×</button>
+    </div>
+    <div class="sh-search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input type="text" placeholder="Buscar contenedor..." id="sh-q" oninput="filterSheet()" />
+    </div>
+    <div class="sh-list" id="sh-list"></div>
+  </div>
+</div>
+</div>
+
+<!-- ERP -->
+<div id="p-erp" class="pnl erp-panel">
+<div class="erp-win">
+  <div class="erp-tb">Sistema — Procesos y Derechos de Acceso por Operador</div>
+  <div class="erp-hdr">
+    <div class="hf"><label>Módulo</label><select style="width:180px"><option>500000 — Tráfico</option></select></div>
+    <div class="hf"><label>Operador</label><input value="001 — LOPEZ GARCIA JUAN" style="width:200px"></div>
+    <button class="ebtn ebtn-o" style="align-self:flex-end">🔍 Buscar</button>
+  </div>
+  <div class="etabs">
+    <div class="etab on">Derechos por Operador</div>
+    <div class="etab">Grupos de Acceso</div>
+    <div class="etab">Histórico</div>
+  </div>
+  <div class="epanel">
+    <div class="einner">
+      <div class="esec">Módulo 500000 — Tráfico &nbsp;›&nbsp; Procesos App Mis Viajes</div>
+      <table class="ptable">
+        <thead>
+          <tr><th style="width:90px">IdProceso</th><th>Descripción</th><th style="width:70px;text-align:center">Permitido</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>502101</td><td>Capturar gastos desde app Mis Viajes</td><td style="text-align:center;color:#388E3C">✓</td></tr>
+          <tr><td>502102</td><td>Registrar llegada desde app Mis Viajes</td><td style="text-align:center;color:#388E3C">✓</td></tr>
+          <tr><td>502103</td><td>Registrar salida desde app Mis Viajes</td><td style="text-align:center;color:#388E3C">✓</td></tr>
+          <tr class="new"><td>502104 ★</td><td>Capturar contenedor y sello desde app Mis Viajes</td><td style="text-align:center"><input type="checkbox" checked /></td></tr>
+        </tbody>
+      </table>
+      <div class="nota">
+        ℹ️ El proceso <strong>502104</strong> es nuevo. Solo los operadores que tengan este permiso habilitado podrán ver y guardar la sección <em>Contenedor y sello</em> en la app. Sin el permiso, la sección no aparece en el trayecto.
       </div>
-      <div class="fin-item">
-        <div class="fin-ico blue"><i class="ti ti-file-invoice" aria-hidden="true"></i></div>
-        <div><div class="fin-t">Solicitudes de Gastos</div><div class="fin-s">Registrar gastos del trayecto</div></div>
-        <i class="ti ti-chevron-right fin-arr" aria-hidden="true"></i>
+      <div style="margin-top:10px">
+        <button class="ebtn ebtn-o">Guardar cambios</button>
+        <button class="ebtn ebtn-g">Cancelar</button>
       </div>
     </div>
-
   </div>
+  <div class="ebar"><button class="ebtn ebtn-g">Cerrar</button></div>
+</div>
 </div>
 
 <script>
-var opts=['CONT-0001','CONT-0002','CONT-0003','MSCU1234567','TCKU8901234'];
-var idx=0;
-function pickCont(){
-  document.getElementById('cont-inp').value=opts[idx%opts.length];
-  idx++;
+var CONTS=[
+  {code:'CONT-0001',desc:'Contenedor 20\' — Remolque R25'},
+  {code:'CONT-0002',desc:'Contenedor 40\' — Remolque R25'},
+  {code:'MSCU1234567',desc:'Contenedor 20\' HC — Remolque R12'},
+  {code:'TCKU8901234',desc:'Contenedor 40\' HC — Remolque R18'},
+  {code:'GESU5678901',desc:'Contenedor 20\' Reefer — Remolque R09'},
+];
+var sel=null;
+
+function renderSheet(items){
+  var l=document.getElementById('sh-list');
+  l.innerHTML='';
+  items.forEach(function(c){
+    var d=document.createElement('div');
+    d.className='sh-item'+(sel===c.code?' sel':'');
+    d.innerHTML='<div class="sh-ico"><i class="ti ti-container" aria-hidden="true"></i></div>'
+      +'<div><div class="sh-code">'+c.code+'</div><div class="sh-desc">'+c.desc+'</div></div>'
+      +'<i class="ti ti-check sh-check" aria-hidden="true"></i>';
+    d.onclick=function(){pick(c);};
+    l.appendChild(d);
+  });
 }
+
+function filterSheet(){
+  var q=document.getElementById('sh-q').value.toLowerCase();
+  renderSheet(CONTS.filter(function(c){return c.code.toLowerCase().includes(q)||c.desc.toLowerCase().includes(q);}));
+}
+
+function openSheet(){
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('sheet').classList.add('open');
+  document.getElementById('sh-q').value='';
+  renderSheet(CONTS);
+}
+
+function closeSheet(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('sheet').classList.remove('open');
+}
+
+function pick(c){
+  sel=c.code;
+  var b=document.getElementById('cat-btn');
+  document.getElementById('cat-display').textContent=c.code;
+  b.classList.add('filled');
+  closeSheet();
+}
+
 function guardar(){
   var btn=document.getElementById('save-btn');
-  if(!document.getElementById('cont-inp').value){
+  if(!sel){
     btn.style.background='#E53935';btn.textContent='Selecciona un contenedor';
-    setTimeout(function(){btn.style.background='#F2940E';btn.textContent='Guardar'},2000);
-    return;
+    setTimeout(function(){btn.style.background='#F2940E';btn.textContent='Guardar';},2000);return;
   }
   btn.style.background='#388E3C';btn.textContent='Guardado ✓';
-  setTimeout(function(){btn.style.background='#F2940E';btn.textContent='Guardar'},2500);
+  setTimeout(function(){btn.style.background='#F2940E';btn.textContent='Guardar';},2500);
+}
+
+function swTab(id,el){
+  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('p-'+id).classList.add('on');
+  el.classList.add('on');
 }
 </script>
+</body>
+</html>

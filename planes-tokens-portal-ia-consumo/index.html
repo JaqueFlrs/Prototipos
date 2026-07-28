@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portal IA — Compra de Tokens, Consumo por Usuario y Limpieza de Control de Permisos</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e8;padding:24px 32px;}
+.page-title{font-size:15px;font-weight:bold;margin-bottom:4px;}
+.page-sub{font-size:12px;color:#7a7570;margin-bottom:16px;}
+.disclaimer{background:#fff8ee;border:1px solid #e0c080;padding:12px 16px;margin-bottom:32px;font-size:12px;line-height:1.6;color:#3a3020;}
+.disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
+.screen{margin-bottom:44px;}
+.screen-label{font-size:11px;font-weight:bold;color:#7a7570;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.screen-desc{font-size:12px;color:#3a3733;background:#e4e0d8;border-left:3px solid #9a9088;padding:8px 12px;margin-bottom:10px;line-height:1.5;}
+.badge{display:inline-block;font-size:10px;font-weight:bold;padding:1px 7px;border-radius:3px;margin-left:6px;vertical-align:middle;}
+.badge-actual{background:#ffe9a8;color:#7a5c00;}
+.badge-nuevo{background:#c8f0cf;color:#136326;}
+.ann{color:#1a56c4;font-size:10.5px;font-style:italic;line-height:1.4;}
+.legend{font-size:11px;color:#7a7570;margin-top:6px;}
+
+/* ---- Chrome de Portal IA real ---- */
+.pia{border:1px solid #ccc;background:#fff;display:flex;height:560px;font-size:12.5px;}
+.pia-sidebar{width:180px;background:#fff;border-right:1px solid #e6e6e6;display:flex;flex-direction:column;flex-shrink:0;}
+.pia-logo{display:flex;align-items:center;gap:8px;padding:14px 14px 12px;border-bottom:1px solid #f0f0f0;}
+.pia-logo-mark{width:26px;height:26px;border-radius:6px;background:#ef6c30;color:#fff;font-weight:bold;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.pia-logo-text b{display:block;font-size:12px;color:#1a1a1a;}
+.pia-logo-text span{display:block;font-size:10px;color:#999;}
+.pia-nav{flex:1;overflow-y:auto;padding:8px 0;}
+.pia-section{font-size:9.5px;color:#aaa;font-weight:bold;letter-spacing:.4px;padding:10px 14px 4px;}
+.pia-item{display:flex;justify-content:space-between;align-items:center;padding:6px 14px;font-size:12px;color:#555;cursor:default;}
+.pia-item.active{background:#fdece2;color:#ef6c30;font-weight:bold;border-right:3px solid #ef6c30;}
+.pia-item .cnt{font-size:10.5px;color:#aaa;}
+.pia-item.active .cnt{color:#ef6c30;}
+.pia-item.disabled{color:#ccc;}
+.pia-bottom{border-top:1px solid #f0f0f0;padding:8px 14px;font-size:11px;color:#888;}
+
+.pia-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.pia-top{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #eee;}
+.pia-top h2{font-size:14px;color:#1a1a1a;}
+.pia-user{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#555;}
+.pia-user-dot{width:24px;height:24px;border-radius:50%;background:#fdece2;color:#ef6c30;font-weight:bold;font-size:11px;display:flex;align-items:center;justify-content:center;}
+.pia-content{flex:1;overflow-y:auto;padding:16px 20px;background:#fafafa;}
+
+.pia-kpis{display:flex;gap:12px;margin-bottom:14px;}
+.pia-kpi{flex:1;background:#fff;border:1px solid #eee;border-radius:6px;padding:10px 14px;}
+.pia-kpi .l{font-size:10.5px;color:#999;margin-bottom:3px;}
+.pia-kpi .v{font-size:17px;font-weight:bold;color:#1a1a1a;}
+.pia-kpi .v.orange{color:#ef6c30;}
+.pia-kpi .v.green{color:#1f8a3d;}
+
+.pia-card{background:#fff;border:1px solid #eee;border-radius:6px;padding:14px 16px;margin-bottom:12px;}
+.pia-plan{display:flex;justify-content:space-between;align-items:center;border:1px solid #eee;border-radius:6px;padding:12px 14px;margin-bottom:10px;}
+.pia-plan.sel{border-color:#ef6c30;background:#fff8f4;}
+.pia-plan .name{font-weight:bold;font-size:13px;}
+.pia-plan .meta{font-size:11px;color:#888;margin-top:2px;}
+.pia-plan .price{font-size:14px;font-weight:bold;color:#ef6c30;}
+
+.pia-btn{border:none;border-radius:5px;padding:7px 16px;font-size:12px;font-weight:bold;cursor:default;font-family:Arial,sans-serif;}
+.pia-btn.primary{background:#ef6c30;color:#fff;}
+.pia-btn.primary.disabled{background:#f5c9ac;color:#fff;}
+.pia-btn.ghost{background:#fff;border:1px solid #ccc;color:#555;}
+
+.pia-filterbar{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #eee;border-radius:6px;padding:8px 12px;margin-bottom:12px;flex-wrap:wrap;}
+.pia-filterbar label{font-size:11px;color:#777;}
+.pia-filterbar input{border:1px solid #ddd;border-radius:4px;padding:3px 7px;font-size:11.5px;width:100px;}
+.pia-search{border:1px solid #ddd;border-radius:4px;padding:4px 9px;font-size:11.5px;flex:1;min-width:140px;color:#999;}
+
+.pia-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:6px;overflow:hidden;font-size:12px;}
+.pia-table th{background:#fafafa;color:#888;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;text-align:left;padding:8px 12px;border-bottom:1px solid #eee;}
+.pia-table td{padding:9px 12px;border-bottom:1px solid #f2f2f2;}
+.pia-tag-si{color:#1f8a3d;font-weight:bold;font-size:11px;}
+.pia-tag-no{color:#b3391f;font-weight:bold;font-size:11px;}
+
+.pia-summary{display:flex;gap:12px;margin-bottom:14px;}
+.pia-crossed{position:relative;opacity:.55;}
+.pia-crossed::after{content:"";position:absolute;left:0;top:50%;width:100%;border-top:2px solid #c0392b;}
+</style>
+</head>
+<body>
+
+<div class="page-title">Portal IA — Compra de Tokens · Consumo por Usuario · Control de Permisos</div>
+<div class="page-sub">Wireframe devs — HUPendiente (4 tickets) · módulo ia-gm</div>
+
+<div class="disclaimer">
+  <strong>Sobre este prototipo</strong>
+  Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.<br><br>
+  ⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para Portal IA, eso significa el sidebar, el acento naranja, la tipografía y los componentes ya usados en el portal real.<br><br>
+  Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌
+</div>
+
+<!-- ① CATALOGO -->
+<div class="screen">
+  <div class="screen-label">① Comprar Tokens — Catálogo <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    Entrada de menú "Comprar Tokens" visible solo si el usuario tiene el permiso "puede contratar tokens" — si no lo tiene, la opción no aparece en el sidebar (no se oculta con estilo, se omite del DOM). Catálogo muestra únicamente planes con estado "Activo" — "Plan Empresarial" está inactivo y no se lista. Al hacer clic en un plan se marca seleccionado (borde naranja) y se habilita "Continuar".
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item active">Comprar Tokens</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Todos <span class="cnt">0</span></div>
+        <div class="pia-item">Con IA <span class="cnt">0</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">0</span></div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Comprar Tokens</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-content">
+        <div class="pia-plan sel">
+          <div><div class="name">Plan Básico</div><div class="meta">5,000 tokens</div></div>
+          <div class="price">$50.00 USD</div>
+        </div>
+        <div class="pia-plan">
+          <div><div class="name">Plan Estándar</div><div class="meta">20,000 tokens</div></div>
+          <div class="price">$180.00 USD</div>
+        </div>
+        <div style="text-align:right;margin-top:14px;"><button class="pia-btn primary">Continuar</button></div>
+        <div class="ann" style="margin-top:10px;">"Continuar" deshabilitado hasta seleccionar un plan. Si no hay ningún plan activo, la lista se reemplaza por el mensaje "No hay planes disponibles por el momento".</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ② METODO DE PAGO -->
+<div class="screen">
+  <div class="screen-label">② Comprar Tokens — Método de Pago <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    Resumen del plan elegido, monto total y método de pago Mercado Pago. Botón "Pagar" se deshabilita en cuanto se hace clic (evita doble cobro) y vuelve a habilitarse solo si el pago es rechazado. "Atrás" regresa al catálogo sin cobrar ni crear registro en el historial.
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item active">Comprar Tokens</div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Método de pago</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-content">
+        <div class="pia-card">
+          <div style="font-weight:bold;margin-bottom:6px;">Plan Básico · 5,000 tokens · Total: $50.00 USD</div>
+          <div class="ann">Resumen fijo, no editable desde esta pantalla — para cambiar el plan hay que volver al catálogo.</div>
+        </div>
+        <div class="pia-card">
+          <div style="font-weight:bold;margin-bottom:8px;">Mercado Pago</div>
+          <div style="border:1px dashed #ddd;border-radius:5px;padding:16px;text-align:center;color:#999;font-size:11.5px;">Formulario de tarjeta (widget de Mercado Pago)</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:14px;">
+          <button class="pia-btn ghost">Atrás</button>
+          <button class="pia-btn primary">Pagar $50.00 USD</button>
+        </div>
+        <div class="ann" style="margin-top:10px;">Éxito → mensaje "Compra realizada. Se agregaron 5,000 tokens a tu saldo." + folio de transacción, suma tokens a la bolsa de la empresa. Rechazo → mensaje "No se pudo procesar el pago, intenta de nuevo", botón se reactiva. Sin respuesta del proveedor a tiempo → no suma tokens, historial queda en estatus "Cancelado".</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ CONSUMO POR USUARIO -->
+<div class="screen">
+  <div class="screen-label">③ Consumo de IA por Usuario <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    Pantalla nueva, visible solo para usuarios tipo "Administrador" del ERP (un usuario tipo "Usuario" no ve esta opción en el sidebar). Rango de fechas por default = mes en curso, KPI "Total del periodo" arriba de la tabla, tabla ordenada de mayor a menor consumo. La columna "Tiene acceso actualmente" muestra "No" para usuarios sin permiso vigente o dados de baja, que igual conservan su consumo histórico. Buscador filtra por usuario; sin resultados muestra "No se encontraron usuarios con ese nombre o usuario".
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item">Comprar Tokens</div>
+        <div class="pia-item active">Consumo de IA por Usuario</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Consumo de IA por Usuario</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-content">
+        <div class="pia-filterbar">
+          <label>Rango:</label>
+          <input value="01/07/2026"><span>—</span><input value="28/07/2026">
+          <input class="pia-search" value="Buscar usuario...">
+        </div>
+        <div class="ann" style="margin-bottom:8px;">Rango por default: primer y último día del mes en curso. Fecha final anterior a la inicial → mensaje "La fecha final no puede ser anterior a la fecha inicial", no actualiza la tabla.</div>
+        <div class="pia-kpis" style="max-width:220px;">
+          <div class="pia-kpi"><div class="l">Total del periodo</div><div class="v orange">7,400 tokens</div></div>
+        </div>
+        <table class="pia-table">
+          <tr><th>Usuario</th><th>Tokens consumidos</th><th>Tiene acceso actualmente</th></tr>
+          <tr><td>aperez</td><td>4,500</td><td class="pia-tag-si">Sí</td></tr>
+          <tr><td>lgomez</td><td>2,100</td><td class="pia-tag-si">Sí</td></tr>
+          <tr><td>mlopez</td><td>800</td><td class="pia-tag-si">Sí</td></tr>
+          <tr><td>cruiz</td><td>1,200</td><td class="pia-tag-no">No</td></tr>
+        </table>
+        <div class="ann" style="margin-top:8px;">Orden por default: tokens consumidos, de mayor a menor. Sin consumo en el rango → tabla vacía con mensaje "Sin consumo registrado en el rango seleccionado" y KPI en 0.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ CONTROL DE PERMISOS ACTUAL -->
+<div class="screen">
+  <div class="screen-label">④ Control de Permisos — Actual <span class="badge badge-actual">ACTUAL</span></div>
+  <div class="screen-desc">
+    Estado actual de la pantalla: las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas" repiten información que ya está en el menú lateral (secciones "Por Perfil" y "Usuarios"/"Otros"). Se muestra tachado lo que se elimina en el siguiente wireframe.
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item active">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">POR PERFIL</div>
+        <div class="pia-item">Gerencial <span class="cnt">0</span></div>
+        <div class="pia-item">Administrativo <span class="cnt">0</span></div>
+        <div class="pia-item">Operativo <span class="cnt">0</span></div>
+        <div class="pia-section">OTROS</div>
+        <div class="pia-item">Sin perfil <span class="cnt">0</span></div>
+        <div class="pia-item">Inactivos <span class="cnt">0</span></div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Control de Permisos</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-content">
+        <div class="pia-summary">
+          <div class="pia-kpi"><div class="l">Total usuarios</div><div class="v">10</div></div>
+          <div class="pia-kpi"><div class="l">Con acceso IA</div><div class="v green">6</div></div>
+          <div class="pia-kpi"><div class="l">Sin acceso IA</div><div class="v">4</div></div>
+        </div>
+        <div class="pia-summary pia-crossed">
+          <div class="pia-kpi"><div class="l">Gerencial</div><div class="v">0</div></div>
+          <div class="pia-kpi"><div class="l">Administrativo</div><div class="v">0</div></div>
+          <div class="pia-kpi"><div class="l">Operativo</div><div class="v">0</div></div>
+        </div>
+        <div class="pia-summary pia-crossed">
+          <div class="pia-kpi"><div class="l">Activos en ERP</div><div class="v">0</div></div>
+          <div class="pia-kpi"><div class="l">Inactivos en ERP</div><div class="v">0</div></div>
+        </div>
+        <div class="pia-summary pia-crossed">
+          <div class="pia-kpi"><div class="l">Gestionar usuarios</div><div class="v" style="font-size:11px;">Ver, filtrar y editar</div></div>
+          <div class="pia-kpi"><div class="l">Con acceso IA</div><div class="v" style="font-size:11px;">Usuarios con permiso</div></div>
+          <div class="pia-kpi"><div class="l">Sin asignar</div><div class="v" style="font-size:11px;">Pendientes de config.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">Tachado = tarjetas que se eliminan (sección "④ NUEVO" muestra el resultado final)</div>
+</div>
+
+<!-- ⑤ CONTROL DE PERMISOS NUEVO -->
+<div class="screen">
+  <div class="screen-label">⑤ Control de Permisos — Limpio <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    Se eliminan las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas". El menú lateral no cambia — sigue mostrando "Usuarios" (Todos/Con IA/Sin IA), "Por Perfil" (Gerencial/Administrativo/Operativo) y "Otros" (Sin perfil/Inactivos). Solo se conserva el resumen general de 3 tarjetas.
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item active">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">POR PERFIL</div>
+        <div class="pia-item">Gerencial <span class="cnt">0</span></div>
+        <div class="pia-item">Administrativo <span class="cnt">0</span></div>
+        <div class="pia-item">Operativo <span class="cnt">0</span></div>
+        <div class="pia-section">OTROS</div>
+        <div class="pia-item">Sin perfil <span class="cnt">0</span></div>
+        <div class="pia-item">Inactivos <span class="cnt">0</span></div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Control de Permisos</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-content">
+        <div class="pia-summary">
+          <div class="pia-kpi"><div class="l">Total usuarios</div><div class="v">10</div></div>
+          <div class="pia-kpi"><div class="l">Con acceso IA</div><div class="v green">6</div></div>
+          <div class="pia-kpi"><div class="l">Sin acceso IA</div><div class="v">4</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

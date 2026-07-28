@@ -464,5 +464,57 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
     </div>
   </div>
 </div>
+
+<!-- ⑩ COMPRAS REALIZADAS -->
+<div class="screen">
+  <div class="screen-label">⑩ Compras Realizadas <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-desc">
+    <ul>
+      <li>Solo visible para usuarios tipo "Administrador" del ERP — mismo permiso que "Consumo de IA por Usuario".</li>
+      <li>Reutiliza el historial "Planes Contratados" que ya existe, agrupado a nivel de toda la empresa. Por ahora solo existe el canal web (Portal IA).</li>
+      <li>Rango de fechas por default: primer y último día del mes en curso. KPIs "Total de compras" (conteo) y "Total pagado" (USD) arriba de la tabla.</li>
+      <li>Tabla ordenada de la compra más reciente a la más antigua. Columnas: Fecha, Usuario, Plan, Tokens, Monto Pagado, Estatus.</li>
+      <li>Una compra "Cancelada" (sin confirmación de pago) también aparece en el listado y se cuenta en "Total de compras", pero su monto NO se suma en "Total pagado".</li>
+      <li>Fecha final anterior a la inicial: mensaje "La fecha final no puede ser anterior a la fecha inicial", no actualiza la tabla.</li>
+      <li>Rango sin compras: mensaje "Sin compras registradas en el rango seleccionado", ambos KPIs en 0.</li>
+    </ul>
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item">Comprar Tokens</div>
+        <div class="pia-item">Consumo de IA por Usuario</div>
+        <div class="pia-item active">Compras Realizadas</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Compras Realizadas</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-content">
+        <div class="pia-filterbar">
+          <label>Rango:</label>
+          <input value="01/07/2026"><span>—</span><input value="28/07/2026">
+        </div>
+        <div class="pia-kpis" style="max-width:340px;">
+          <div class="pia-kpi"><div class="l">Total de compras</div><div class="v orange">3</div></div>
+          <div class="pia-kpi"><div class="l">Total pagado</div><div class="v orange">$230.00 USD</div></div>
+        </div>
+        <table class="pia-table">
+          <tr><th>Fecha</th><th>Usuario</th><th>Plan</th><th>Tokens</th><th>Monto Pagado</th><th>Estatus</th></tr>
+          <tr><td>12/07/2026</td><td>lgomez</td><td>Plan Estándar</td><td>20,000</td><td>$180.00 USD</td><td class="pia-tag-si">Vigente</td></tr>
+          <tr><td>08/07/2026</td><td>cruiz</td><td>Plan Básico</td><td>5,000</td><td>—</td><td class="pia-tag-no">Cancelado</td></tr>
+          <tr><td>05/07/2026</td><td>aperez</td><td>Plan Básico</td><td>5,000</td><td>$50.00 USD</td><td class="pia-tag-si">Vigente</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

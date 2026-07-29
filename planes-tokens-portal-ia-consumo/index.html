@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Portal IA — Compra de Tokens, Consumo por Usuario y Limpieza de Control de Permisos</title>
+<title>Portal IA — Adquirir Tokens, Consumo, Compras Realizadas y Permisos</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e8;padding:24px 32px;}
@@ -21,7 +21,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .badge-nuevo{background:#c8f0cf;color:#136326;}
 .legend{font-size:11px;color:#7a7570;margin-top:6px;}
 
-/* ---- Chrome de Portal IA real ---- */
+/* ---- Chrome de Portal IA real (idéntico en todas las pantallas) ---- */
 .pia{border:1px solid #ccc;background:#fff;display:flex;height:560px;font-size:12.5px;}
 .pia-sidebar{width:180px;background:#fff;border-right:1px solid #e6e6e6;display:flex;flex-direction:column;flex-shrink:0;}
 .pia-logo{display:flex;align-items:center;gap:8px;padding:14px 14px 12px;border-bottom:1px solid #f0f0f0;}
@@ -75,7 +75,9 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .pia-filterbar{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #eee;border-radius:6px;padding:8px 12px;margin-bottom:12px;flex-wrap:wrap;}
 .pia-filterbar label{font-size:11px;color:#777;}
 .pia-filterbar input{border:1px solid #ddd;border-radius:4px;padding:3px 7px;font-size:11.5px;width:100px;}
-.pia-search{border:1px solid #ddd;border-radius:4px;padding:4px 9px;font-size:11.5px;flex:1;min-width:140px;color:#999;}
+.pia-search{border:1px solid #ddd;border-radius:4px;padding:5px 9px;font-size:11.5px;flex:1;min-width:160px;color:#999;}
+.pia-dd{border:1px solid #ddd;border-radius:4px;padding:5px 9px;font-size:11.5px;color:#555;background:#fff;}
+.pia-link{color:#ef6c30;font-size:11.5px;font-weight:bold;}
 
 .pia-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:6px;overflow:hidden;font-size:12px;}
 .pia-table th{background:#fafafa;color:#888;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;text-align:left;padding:8px 12px;border-bottom:1px solid #eee;}
@@ -93,12 +95,15 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 .pia-result-title{font-size:15px;font-weight:bold;margin-bottom:6px;}
 .pia-result-sub{font-size:12px;color:#666;margin-bottom:18px;text-align:center;max-width:300px;}
 .pia-folio{font-size:11px;color:#999;margin-bottom:18px;}
+.pia-empty{text-align:center;padding:60px 20px;color:#999;}
+.pia-empty .ico{width:56px;height:56px;border-radius:50%;background:#fde8e8;color:#c0392b;font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
 </style>
 </head>
 <body>
 
-<div class="page-title">Portal IA — Compra de Tokens · Consumo por Usuario · Control de Permisos</div>
-<div class="page-sub">Wireframe devs — HUPendiente (4 tickets) · módulo ia-gm</div>
+<div class="page-title">Portal IA — Adquirir Tokens · Consumo · Compras Realizadas · Permisos</div>
+<div class="page-sub">Wireframe devs — HU47728, HU47732, HU47733, HU47734, HU47745 · módulo ia-gm</div>
+<div class="page-sub" style="margin-top:-12px;">Menú lateral consistente en las 11 pantallas — mismo orden y mismos nombres en todas.</div>
 
 <div class="disclaimer">
   <strong>Sobre este prototipo</strong>
@@ -109,10 +114,10 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 
 <!-- ① CATALOGO -->
 <div class="screen">
-  <div class="screen-label">① Comprar Tokens — Catálogo <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">① Adquirir Tokens — Catálogo <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
     <ul>
-      <li>Entrada de menú "Comprar Tokens" visible solo si el usuario tiene el permiso "puede contratar tokens" — si no lo tiene, la opción no aparece (se omite del menú, no se muestra deshabilitada).</li>
+      <li>Entrada de menú "Adquirir Tokens" visible solo si el usuario tiene el permiso "puede contratar tokens" — si no lo tiene, la opción no aparece (se omite del menú, no se muestra deshabilitada).</li>
       <li>Solo se listan planes con estado "Activo". "Plan Empresarial" está inactivo y no aparece aquí.</li>
       <li>Si no hay ningún plan activo, en vez de la lista se muestra el mensaje "No hay planes disponibles por el momento".</li>
       <li>Al hacer clic en un plan queda marcado seleccionado (borde naranja) y se habilita "Continuar". "Continuar" está deshabilitado hasta que se elige un plan.</li>
@@ -120,20 +125,24 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
   <div class="pia">
     <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Adquirir Tokens</span></div></div>
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item active">Comprar Tokens</div>
+        <div class="pia-item active">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
         <div class="pia-section">USUARIOS</div>
-        <div class="pia-item">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
         <div class="pia-item">Con IA <span class="cnt">6</span></div>
         <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
     <div class="pia-main">
-      <div class="pia-top"><h2>Comprar Tokens</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
+      <div class="pia-top"><h2>Adquirir Tokens</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez</div></div>
       <div class="pia-content">
         <div class="pia-plan sel">
           <div><div class="name">Plan Básico</div><div class="meta">5,000 tokens</div></div>
@@ -151,7 +160,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 
 <!-- ② RESUMEN DE COMPRA -->
 <div class="screen">
-  <div class="screen-label">② Comprar Tokens — Resumen y método de pago <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">② Adquirir Tokens — Resumen y método de pago <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
     <ul>
       <li>Resumen del plan elegido, fijo y no editable desde aquí — para cambiar de plan hay que volver al catálogo con "Atrás".</li>
@@ -161,11 +170,19 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
   <div class="pia">
     <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Adquirir Tokens</span></div></div>
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item active">Comprar Tokens</div>
+        <div class="pia-item active">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
@@ -207,11 +224,19 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
   <div class="pia">
     <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Adquirir Tokens</span></div></div>
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item active">Comprar Tokens</div>
+        <div class="pia-item active">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
@@ -239,11 +264,19 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
   <div class="pia">
     <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Adquirir Tokens</span></div></div>
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item active">Comprar Tokens</div>
+        <div class="pia-item active">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
@@ -265,17 +298,25 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
     <ul>
       <li>Mensaje exacto: "Compra realizada. Se agregaron 5,000 tokens a tu saldo."</li>
       <li>Se suman 5,000 tokens a la bolsa de la empresa (si tenía 3,000, queda en 8,000).</li>
-      <li>Se crea un registro en el historial "Planes Contratados" con fecha, plan, tokens, costo, método de pago y estado "Vigente".</li>
-      <li>"Volver a Comprar Tokens" regresa al catálogo (pantalla ①).</li>
+      <li>Se crea un registro en el historial "Planes Contratados" con fecha, usuario que compró, plan, tokens, costo, método de pago y estado "Vigente".</li>
+      <li>"Volver a Adquirir Tokens" regresa al catálogo (pantalla ①).</li>
     </ul>
   </div>
   <div class="pia">
     <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Adquirir Tokens</span></div></div>
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item active">Comprar Tokens</div>
+        <div class="pia-item active">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
@@ -286,7 +327,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
         <div class="pia-result-title">Compra realizada</div>
         <div class="pia-result-sub">Se agregaron 5,000 tokens a tu saldo.</div>
         <div class="pia-folio">Folio: MP-2026072800391</div>
-        <button class="pia-btn primary">Volver a Comprar Tokens</button>
+        <button class="pia-btn primary">Volver a Adquirir Tokens</button>
       </div>
     </div>
   </div>
@@ -304,11 +345,19 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
   <div class="pia">
     <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Comprar Tokens</span></div></div>
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Adquirir Tokens</span></div></div>
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item active">Comprar Tokens</div>
+        <div class="pia-item active">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
@@ -324,9 +373,9 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
 </div>
 
-<!-- ⑦ CONSUMO POR USUARIO -->
+<!-- ⑦ CONSUMO -->
 <div class="screen">
-  <div class="screen-label">⑦ Consumo de IA por Usuario <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">⑦ Consumo <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
     <ul>
       <li>Solo visible para usuarios tipo "Administrador" del ERP — un usuario tipo "Usuario" no ve esta opción en el sidebar.</li>
@@ -340,21 +389,24 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
   <div class="pia">
     <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Consumo</span></div></div>
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item">Comprar Tokens</div>
-        <div class="pia-item active">Consumo de IA por Usuario</div>
+        <div class="pia-item">Adquirir Tokens</div>
+        <div class="pia-item active">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
         <div class="pia-section">USUARIOS</div>
-        <div class="pia-item">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
         <div class="pia-item">Con IA <span class="cnt">6</span></div>
         <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
     <div class="pia-main">
-      <div class="pia-top"><h2>Consumo de IA por Usuario</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-top"><h2>Consumo</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
       <div class="pia-content">
         <div class="pia-filterbar">
           <label>Rango:</label>
@@ -376,18 +428,74 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
 </div>
 
-<!-- ⑧ CONTROL DE PERMISOS ACTUAL -->
+<!-- ⑧ COMPRAS REALIZADAS -->
 <div class="screen">
-  <div class="screen-label">⑧ Control de Permisos — Actual <span class="badge badge-actual">ACTUAL</span></div>
+  <div class="screen-label">⑧ Compras Realizadas <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
-    Estado actual: las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas" repiten información que ya está en el menú lateral. Se muestran tachadas para indicar lo que se elimina en el siguiente wireframe (⑨).
+    <ul>
+      <li>Solo visible para usuarios tipo "Administrador" del ERP — mismo permiso que "Consumo".</li>
+      <li>Reutiliza el historial "Planes Contratados" que ya existe, agrupado a nivel de toda la empresa. Por ahora solo existe el canal web (Portal IA).</li>
+      <li>Rango de fechas por default: primer y último día del mes en curso. KPIs "Total de compras" (conteo) y "Total pagado" (USD) arriba de la tabla.</li>
+      <li>Tabla ordenada de la compra más reciente a la más antigua. Columnas: Fecha, Usuario, Plan, Tokens, Monto Pagado, Estatus.</li>
+      <li>Una compra "Cancelada" (sin confirmación de pago) también aparece en el listado y se cuenta en "Total de compras", pero su monto NO se suma en "Total pagado".</li>
+      <li>Fecha final anterior a la inicial: mensaje "La fecha final no puede ser anterior a la fecha inicial", no actualiza la tabla.</li>
+      <li>Rango sin compras: mensaje "Sin compras registradas en el rango seleccionado", ambos KPIs en 0.</li>
+    </ul>
+  </div>
+  <div class="pia">
+    <div class="pia-sidebar">
+      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Compras Realizadas</span></div></div>
+      <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item">Dashboard</div>
+        <div class="pia-item">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item active">Compras Realizadas</div>
+        <div class="pia-section">USUARIOS</div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
+        <div class="pia-item">Con IA <span class="cnt">6</span></div>
+        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
+      </div>
+      <div class="pia-bottom">Cerrar sesión</div>
+    </div>
+    <div class="pia-main">
+      <div class="pia-top"><h2>Compras Realizadas</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-content">
+        <div class="pia-filterbar">
+          <label>Rango:</label>
+          <input value="01/07/2026"><span>—</span><input value="28/07/2026">
+        </div>
+        <div class="pia-kpis" style="max-width:340px;">
+          <div class="pia-kpi"><div class="l">Total de compras</div><div class="v orange">3</div></div>
+          <div class="pia-kpi"><div class="l">Total pagado</div><div class="v orange">$230.00 USD</div></div>
+        </div>
+        <table class="pia-table">
+          <tr><th>Fecha</th><th>Usuario</th><th>Plan</th><th>Tokens</th><th>Monto Pagado</th><th>Estatus</th></tr>
+          <tr><td>12/07/2026</td><td>lgomez</td><td>Plan Estándar</td><td>20,000</td><td>$180.00 USD</td><td class="pia-tag-si">Vigente</td></tr>
+          <tr><td>08/07/2026</td><td>cruiz</td><td>Plan Básico</td><td>5,000</td><td>—</td><td class="pia-tag-no">Cancelado</td></tr>
+          <tr><td>05/07/2026</td><td>aperez</td><td>Plan Básico</td><td>5,000</td><td>$50.00 USD</td><td class="pia-tag-si">Vigente</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑨ DASHBOARD ACTUAL -->
+<div class="screen">
+  <div class="screen-label">⑨ Dashboard — Actual <span class="badge badge-actual">ACTUAL</span></div>
+  <div class="screen-desc">
+    Estado actual: las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas" repiten información que ya está en el menú lateral (secciones "Por Perfil" y "Otros", que también desaparecen — ver ⑪ Permisos). Se muestran tachadas para indicar lo que se elimina en el siguiente wireframe (⑩).
   </div>
   <div class="pia">
     <div class="pia-sidebar">
       <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
       <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item active">Dashboard</div>
         <div class="pia-section">USUARIOS</div>
-        <div class="pia-item active">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Todos <span class="cnt">10</span></div>
         <div class="pia-item">Con IA <span class="cnt">6</span></div>
         <div class="pia-item">Sin IA <span class="cnt">4</span></div>
         <div class="pia-section">POR PERFIL</div>
@@ -401,7 +509,7 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
     <div class="pia-main">
-      <div class="pia-top"><h2>Control de Permisos</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-top"><h2>Dashboard</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
       <div class="pia-content">
         <div class="pia-summary">
           <div class="pia-kpi"><div class="l">Total usuarios</div><div class="v">10</div></div>
@@ -425,35 +533,35 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
       </div>
     </div>
   </div>
-  <div class="legend">Tachado = tarjetas que se eliminan en ⑨</div>
+  <div class="legend">Tachado = tarjetas y secciones del menú que se eliminan en ⑩ y ⑪</div>
 </div>
 
-<!-- ⑨ CONTROL DE PERMISOS NUEVO -->
+<!-- ⑩ DASHBOARD NUEVO -->
 <div class="screen">
-  <div class="screen-label">⑨ Control de Permisos — Limpio <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">⑩ Dashboard — Limpio <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
-    Se eliminan las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas". El menú lateral no cambia — sigue mostrando "Usuarios", "Por Perfil" y "Otros". Solo se conserva el resumen general de 3 tarjetas.
+    Se eliminan las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas". Solo se conserva el resumen general de 3 tarjetas. El menú lateral ya no muestra "Por Perfil" ni "Otros" — nota que "Todos" ahora se llama "Permisos" (ver pantalla ⑪).
   </div>
   <div class="pia">
     <div class="pia-sidebar">
       <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
       <div class="pia-nav">
+        <div class="pia-section">GENERAL</div>
+        <div class="pia-item active">Dashboard</div>
+        <div class="pia-item">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
         <div class="pia-section">USUARIOS</div>
-        <div class="pia-item active">Todos <span class="cnt">10</span></div>
+        <div class="pia-item">Permisos <span class="cnt">10</span></div>
         <div class="pia-item">Con IA <span class="cnt">6</span></div>
         <div class="pia-item">Sin IA <span class="cnt">4</span></div>
-        <div class="pia-section">POR PERFIL</div>
-        <div class="pia-item">Gerencial <span class="cnt">2</span></div>
-        <div class="pia-item">Administrativo <span class="cnt">5</span></div>
-        <div class="pia-item">Operativo <span class="cnt">3</span></div>
-        <div class="pia-section">OTROS</div>
-        <div class="pia-item">Sin perfil <span class="cnt">0</span></div>
-        <div class="pia-item">Inactivos <span class="cnt">1</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
     <div class="pia-main">
-      <div class="pia-top"><h2>Control de Permisos</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-top"><h2>Dashboard</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
       <div class="pia-content">
         <div class="pia-summary">
           <div class="pia-kpi"><div class="l">Total usuarios</div><div class="v">10</div></div>
@@ -465,18 +573,15 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
   </div>
 </div>
 
-<!-- ⑩ COMPRAS REALIZADAS -->
+<!-- ⑪ PERMISOS -->
 <div class="screen">
-  <div class="screen-label">⑩ Compras Realizadas <span class="badge badge-nuevo">NUEVO</span></div>
+  <div class="screen-label">⑪ Permisos (antes "Todos") <span class="badge badge-nuevo">NUEVO</span></div>
   <div class="screen-desc">
     <ul>
-      <li>Solo visible para usuarios tipo "Administrador" del ERP — mismo permiso que "Consumo de IA por Usuario".</li>
-      <li>Reutiliza el historial "Planes Contratados" que ya existe, agrupado a nivel de toda la empresa. Por ahora solo existe el canal web (Portal IA).</li>
-      <li>Rango de fechas por default: primer y último día del mes en curso. KPIs "Total de compras" (conteo) y "Total pagado" (USD) arriba de la tabla.</li>
-      <li>Tabla ordenada de la compra más reciente a la más antigua. Columnas: Fecha, Usuario, Plan, Tokens, Monto Pagado, Estatus.</li>
-      <li>Una compra "Cancelada" (sin confirmación de pago) también aparece en el listado y se cuenta en "Total de compras", pero su monto NO se suma en "Total pagado".</li>
-      <li>Fecha final anterior a la inicial: mensaje "La fecha final no puede ser anterior a la fecha inicial", no actualiza la tabla.</li>
-      <li>Rango sin compras: mensaje "Sin compras registradas en el rango seleccionado", ambos KPIs en 0.</li>
+      <li>La opción de menú "Todos" se renombra a "Permisos" — mismo lugar en el sidebar, mismo listado de usuarios.</li>
+      <li>El filtro por perfil (Gerencial/Administrativo/Operativo) que antes vivía como secciones separadas del menú ("Por Perfil" y "Otros") ahora es un filtro dentro de esta pantalla, junto a los filtros de Estado y Acceso IA.</li>
+      <li>Buscador por nombre, usuario o correo. Filtros: "Todos los estados", "Perfil (todos)", "Acceso IA (todos)". Botón "Actualizar" refresca el listado.</li>
+      <li>"Con IA" y "Sin IA" en el menú lateral no cambian — siguen siendo accesos directos, sin cambios respecto a como funcionan hoy.</li>
     </ul>
   </div>
   <div class="pia">
@@ -485,33 +590,33 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
       <div class="pia-nav">
         <div class="pia-section">GENERAL</div>
         <div class="pia-item">Dashboard</div>
-        <div class="pia-item">Comprar Tokens</div>
-        <div class="pia-item">Consumo de IA por Usuario</div>
-        <div class="pia-item active">Compras Realizadas</div>
+        <div class="pia-item">Adquirir Tokens</div>
+        <div class="pia-item">Consumo</div>
+        <div class="pia-item">Compras Realizadas</div>
         <div class="pia-section">USUARIOS</div>
-        <div class="pia-item">Todos <span class="cnt">10</span></div>
+        <div class="pia-item active">Permisos <span class="cnt">10</span></div>
         <div class="pia-item">Con IA <span class="cnt">6</span></div>
         <div class="pia-item">Sin IA <span class="cnt">4</span></div>
+        <div class="pia-section">AYUDA</div>
+        <div class="pia-item">Centro de ayuda</div>
       </div>
       <div class="pia-bottom">Cerrar sesión</div>
     </div>
     <div class="pia-main">
-      <div class="pia-top"><h2>Compras Realizadas</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
+      <div class="pia-top"><h2>Permisos</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
       <div class="pia-content">
         <div class="pia-filterbar">
-          <label>Rango:</label>
-          <input value="01/07/2026"><span>—</span><input value="28/07/2026">
+          <input class="pia-search" value="Buscar por nombre, usuario o email...">
+          <select class="pia-dd"><option>Todos los estados</option></select>
+          <select class="pia-dd"><option>Perfil (todos)</option></select>
+          <select class="pia-dd"><option>Acceso IA (todos)</option></select>
+          <span class="pia-link">↻ Actualizar</span>
         </div>
-        <div class="pia-kpis" style="max-width:340px;">
-          <div class="pia-kpi"><div class="l">Total de compras</div><div class="v orange">3</div></div>
-          <div class="pia-kpi"><div class="l">Total pagado</div><div class="v orange">$230.00 USD</div></div>
+        <div class="pia-empty">
+          <div class="ico">!</div>
+          <div style="font-weight:bold;font-size:14px;margin-bottom:6px;">No se pudo cargar</div>
+          <div style="font-size:12px;color:#888;">No se pudo cargar la información. Verifica tu conexión e intenta de nuevo.</div>
         </div>
-        <table class="pia-table">
-          <tr><th>Fecha</th><th>Usuario</th><th>Plan</th><th>Tokens</th><th>Monto Pagado</th><th>Estatus</th></tr>
-          <tr><td>12/07/2026</td><td>lgomez</td><td>Plan Estándar</td><td>20,000</td><td>$180.00 USD</td><td class="pia-tag-si">Vigente</td></tr>
-          <tr><td>08/07/2026</td><td>cruiz</td><td>Plan Básico</td><td>5,000</td><td>—</td><td class="pia-tag-no">Cancelado</td></tr>
-          <tr><td>05/07/2026</td><td>aperez</td><td>Plan Básico</td><td>5,000</td><td>$50.00 USD</td><td class="pia-tag-si">Vigente</td></tr>
-        </table>
       </div>
     </div>
   </div>

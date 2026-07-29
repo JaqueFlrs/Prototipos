@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Portal IA — Adquirir Tokens, Consumo, Compras Realizadas y Permisos</title>
+<title>Portal IA — Adquirir Tokens, Consumo y Compras Realizadas</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e8;padding:24px 32px;}
@@ -101,9 +101,9 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
 </head>
 <body>
 
-<div class="page-title">Portal IA — Adquirir Tokens · Consumo · Compras Realizadas · Permisos</div>
-<div class="page-sub">Wireframe devs — HU47728, HU47732, HU47733, HU47734, HU47745 · módulo ia-gm</div>
-<div class="page-sub" style="margin-top:-12px;">Menú lateral consistente en las 11 pantallas — mismo orden y mismos nombres en todas.</div>
+<div class="page-title">Portal IA — Adquirir Tokens · Consumo · Compras Realizadas</div>
+<div class="page-sub">Wireframe devs — HU47728, HU47732, HU47733, HU47745 · módulo ia-gm</div>
+<div class="page-sub" style="margin-top:-12px;">Menú lateral consistente en las 8 pantallas — mismo orden y mismos nombres en todas. La limpieza de "Control de Permisos" (HU47734) tiene su propio prototipo aparte.</div>
 
 <div class="disclaimer">
   <strong>Sobre este prototipo</strong>
@@ -477,146 +477,6 @@ body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#e8e8e
           <tr><td>08/07/2026</td><td>cruiz</td><td>Plan Básico</td><td>5,000</td><td>—</td><td class="pia-tag-no">Cancelado</td></tr>
           <tr><td>05/07/2026</td><td>aperez</td><td>Plan Básico</td><td>5,000</td><td>$50.00 USD</td><td class="pia-tag-si">Vigente</td></tr>
         </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ⑨ DASHBOARD ACTUAL -->
-<div class="screen">
-  <div class="screen-label">⑨ Dashboard — Actual <span class="badge badge-actual">ACTUAL</span></div>
-  <div class="screen-desc">
-    Estado actual: las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas" repiten información que ya está en el menú lateral (secciones "Por Perfil" y "Otros", que también desaparecen — ver ⑪ Permisos). Se muestran tachadas para indicar lo que se elimina en el siguiente wireframe (⑩).
-  </div>
-  <div class="pia">
-    <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
-      <div class="pia-nav">
-        <div class="pia-section">GENERAL</div>
-        <div class="pia-item active">Dashboard</div>
-        <div class="pia-section">USUARIOS</div>
-        <div class="pia-item">Todos <span class="cnt">10</span></div>
-        <div class="pia-item">Con IA <span class="cnt">6</span></div>
-        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
-        <div class="pia-section">POR PERFIL</div>
-        <div class="pia-item">Gerencial <span class="cnt">2</span></div>
-        <div class="pia-item">Administrativo <span class="cnt">5</span></div>
-        <div class="pia-item">Operativo <span class="cnt">3</span></div>
-        <div class="pia-section">OTROS</div>
-        <div class="pia-item">Sin perfil <span class="cnt">0</span></div>
-        <div class="pia-item">Inactivos <span class="cnt">1</span></div>
-      </div>
-      <div class="pia-bottom">Cerrar sesión</div>
-    </div>
-    <div class="pia-main">
-      <div class="pia-top"><h2>Dashboard</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
-      <div class="pia-content">
-        <div class="pia-summary">
-          <div class="pia-kpi"><div class="l">Total usuarios</div><div class="v">10</div></div>
-          <div class="pia-kpi"><div class="l">Con acceso IA</div><div class="v green">6</div></div>
-          <div class="pia-kpi"><div class="l">Sin acceso IA</div><div class="v">4</div></div>
-        </div>
-        <div class="pia-summary pia-crossed">
-          <div class="pia-kpi"><div class="l">Gerencial</div><div class="v">2</div></div>
-          <div class="pia-kpi"><div class="l">Administrativo</div><div class="v">5</div></div>
-          <div class="pia-kpi"><div class="l">Operativo</div><div class="v">3</div></div>
-        </div>
-        <div class="pia-summary pia-crossed">
-          <div class="pia-kpi"><div class="l">Activos en ERP</div><div class="v">9</div></div>
-          <div class="pia-kpi"><div class="l">Inactivos en ERP</div><div class="v">1</div></div>
-        </div>
-        <div class="pia-summary pia-crossed">
-          <div class="pia-kpi"><div class="l">Gestionar usuarios</div><div class="v" style="font-size:11px;">Ver, filtrar y editar</div></div>
-          <div class="pia-kpi"><div class="l">Con acceso IA</div><div class="v" style="font-size:11px;">Usuarios con permiso</div></div>
-          <div class="pia-kpi"><div class="l">Sin asignar</div><div class="v" style="font-size:11px;">Pendientes de config.</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="legend">Tachado = tarjetas y secciones del menú que se eliminan en ⑩ y ⑪</div>
-</div>
-
-<!-- ⑩ DASHBOARD NUEVO -->
-<div class="screen">
-  <div class="screen-label">⑩ Dashboard — Limpio <span class="badge badge-nuevo">NUEVO</span></div>
-  <div class="screen-desc">
-    Se eliminan las tarjetas "Por Perfil", "Estado" y "Acciones Rápidas". Solo se conserva el resumen general de 3 tarjetas. El menú lateral ya no muestra "Por Perfil" ni "Otros" — nota que "Todos" ahora se llama "Permisos" (ver pantalla ⑪).
-  </div>
-  <div class="pia">
-    <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
-      <div class="pia-nav">
-        <div class="pia-section">GENERAL</div>
-        <div class="pia-item active">Dashboard</div>
-        <div class="pia-item">Adquirir Tokens</div>
-        <div class="pia-item">Consumo</div>
-        <div class="pia-item">Compras Realizadas</div>
-        <div class="pia-section">USUARIOS</div>
-        <div class="pia-item">Permisos <span class="cnt">10</span></div>
-        <div class="pia-item">Con IA <span class="cnt">6</span></div>
-        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
-        <div class="pia-section">AYUDA</div>
-        <div class="pia-item">Centro de ayuda</div>
-      </div>
-      <div class="pia-bottom">Cerrar sesión</div>
-    </div>
-    <div class="pia-main">
-      <div class="pia-top"><h2>Dashboard</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
-      <div class="pia-content">
-        <div class="pia-summary">
-          <div class="pia-kpi"><div class="l">Total usuarios</div><div class="v">10</div></div>
-          <div class="pia-kpi"><div class="l">Con acceso IA</div><div class="v green">6</div></div>
-          <div class="pia-kpi"><div class="l">Sin acceso IA</div><div class="v">4</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ⑪ PERMISOS -->
-<div class="screen">
-  <div class="screen-label">⑪ Permisos (antes "Todos") <span class="badge badge-nuevo">NUEVO</span></div>
-  <div class="screen-desc">
-    <ul>
-      <li>La opción de menú "Todos" se renombra a "Permisos" — mismo lugar en el sidebar, mismo listado de usuarios.</li>
-      <li>El filtro por perfil (Gerencial/Administrativo/Operativo) que antes vivía como secciones separadas del menú ("Por Perfil" y "Otros") ahora es un filtro dentro de esta pantalla, junto a los filtros de Estado y Acceso IA.</li>
-      <li>Buscador por nombre, usuario o correo. Filtros: "Todos los estados", "Perfil (todos)", "Acceso IA (todos)". Botón "Actualizar" refresca el listado.</li>
-      <li>"Con IA" y "Sin IA" en el menú lateral no cambian — siguen siendo accesos directos, sin cambios respecto a como funcionan hoy.</li>
-    </ul>
-  </div>
-  <div class="pia">
-    <div class="pia-sidebar">
-      <div class="pia-logo"><div class="pia-logo-mark">G</div><div class="pia-logo-text"><b>GM Portal IA</b><span>Control de Permisos</span></div></div>
-      <div class="pia-nav">
-        <div class="pia-section">GENERAL</div>
-        <div class="pia-item">Dashboard</div>
-        <div class="pia-item">Adquirir Tokens</div>
-        <div class="pia-item">Consumo</div>
-        <div class="pia-item">Compras Realizadas</div>
-        <div class="pia-section">USUARIOS</div>
-        <div class="pia-item active">Permisos <span class="cnt">10</span></div>
-        <div class="pia-item">Con IA <span class="cnt">6</span></div>
-        <div class="pia-item">Sin IA <span class="cnt">4</span></div>
-        <div class="pia-section">AYUDA</div>
-        <div class="pia-item">Centro de ayuda</div>
-      </div>
-      <div class="pia-bottom">Cerrar sesión</div>
-    </div>
-    <div class="pia-main">
-      <div class="pia-top"><h2>Permisos</h2><div class="pia-user"><div class="pia-user-dot">J</div>jperez (Administrador)</div></div>
-      <div class="pia-content">
-        <div class="pia-filterbar">
-          <input class="pia-search" value="Buscar por nombre, usuario o email...">
-          <select class="pia-dd"><option>Todos los estados</option></select>
-          <select class="pia-dd"><option>Perfil (todos)</option></select>
-          <select class="pia-dd"><option>Acceso IA (todos)</option></select>
-          <span class="pia-link">↻ Actualizar</span>
-        </div>
-        <div class="pia-empty">
-          <div class="ico">!</div>
-          <div style="font-weight:bold;font-size:14px;margin-bottom:6px;">No se pudo cargar</div>
-          <div style="font-size:12px;color:#888;">No se pudo cargar la información. Verifica tu conexión e intenta de nuevo.</div>
-        </div>
       </div>
     </div>
   </div>

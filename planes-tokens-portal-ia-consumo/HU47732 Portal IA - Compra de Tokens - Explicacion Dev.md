@@ -1,4 +1,4 @@
-# Compra de Tokens desde Portal IA — Explicación para desarrollo (HUPendiente)
+# Compra de Tokens desde Portal IA — Explicación para desarrollo (HU47732)
 
 ## Qué está pidiendo el cliente y por qué
 
@@ -46,6 +46,6 @@ Las empresas clientes van a poder comprar planes de tokens de IA directamente de
 
 ## Referencia
 
-Ver Gherkin: `HUPendiente Portal IA - Compra de Tokens.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
+Ver Gherkin: `HU47732 Portal IA - Compra de Tokens.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
 
 Prototipo visual: https://claude.ai/code/artifact/30a4a33f-ab8c-4130-a842-5817b401df78 (pantallas ① y ②)

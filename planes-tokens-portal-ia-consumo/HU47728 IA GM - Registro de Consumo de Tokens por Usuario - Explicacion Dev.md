@@ -1,4 +1,4 @@
-# Registro de Consumo de Tokens por Usuario — Explicación para desarrollo (HUPendiente, IA GM)
+# Registro de Consumo de Tokens por Usuario — Explicación para desarrollo (HU47728, IA GM)
 
 ## Qué está pidiendo el cliente y por qué
 
@@ -34,6 +34,6 @@ Hoy el sistema solo calcula, de forma aproximada, cuántos tokens gasta una empr
 
 ## Referencia
 
-Ver Gherkin: `HUPendiente IA GM - Registro de Consumo de Tokens por Usuario.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
+Ver Gherkin: `HU47728 IA GM - Registro de Consumo de Tokens por Usuario.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
 
 Esta funcionalidad no tiene pantalla propia — es la base de datos que consume la pantalla "Consumo de IA por Usuario" de Portal IA (ver explicación de ese ticket).

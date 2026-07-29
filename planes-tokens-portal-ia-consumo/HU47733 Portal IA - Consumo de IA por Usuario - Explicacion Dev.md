@@ -1,4 +1,4 @@
-# Consumo de IA por Usuario — Explicación para desarrollo (HUPendiente)
+# Consumo de IA por Usuario — Explicación para desarrollo (HU47733)
 
 ## Qué está pidiendo el cliente y por qué
 
@@ -42,6 +42,6 @@ El administrador de una empresa cliente (el usuario tipo "Administrador" en el E
 
 ## Referencia
 
-Ver Gherkin: `HUPendiente Portal IA - Consumo de IA por Usuario.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
+Ver Gherkin: `HU47733 Portal IA - Consumo de IA por Usuario.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
 
-Prototipo visual: https://claude.ai/code/artifact/30a4a33f-ab8c-4130-a842-5817b401df78 (pantalla ③)
+Prototipo visual: https://claude.ai/code/artifact/30a4a33f-ab8c-4130-a842-5817b401df78 (pantalla ⑦)

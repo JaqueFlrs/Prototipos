@@ -1,4 +1,4 @@
-# Compras Realizadas — Explicación para desarrollo (HUPendiente)
+# Compras Realizadas — Explicación para desarrollo (HU47745)
 
 ## Qué está pidiendo el cliente y por qué
 
@@ -33,6 +33,6 @@ El administrador de la empresa cliente quiere ver todas las compras de tokens qu
 
 ## Referencia
 
-Ver Gherkin: `HUPendiente Portal IA - Compras Realizadas.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
+Ver Gherkin: `HU47745 Portal IA - Compras Realizadas.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
 
-Prototipo visual: https://claude.ai/code/artifact/30a4a33f-ab8c-4130-a842-5817b401df78 (pantalla ⑩)
+Prototipo visual: https://claude.ai/code/artifact/30a4a33f-ab8c-4130-a842-5817b401df78 (pantalla ⑧)

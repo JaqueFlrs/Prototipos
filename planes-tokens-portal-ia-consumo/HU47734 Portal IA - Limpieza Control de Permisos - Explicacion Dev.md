@@ -31,6 +31,6 @@ La pantalla "Control de Permisos" de Portal IA muestra hoy varias tarjetas de re
 
 ## Referencia
 
-Ver Gherkin: `HUPendiente Portal IA - Limpieza Control de Permisos.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
+Ver Gherkin: `HU47734 Portal IA - Limpieza Control de Permisos.feature` — mismo alcance, ahí está en formato de criterios de aceptación.
 
-Prototipo visual: https://claude.ai/code/artifact/30a4a33f-ab8c-4130-a842-5817b401df78 (pantallas ④ Actual y ⑤ Nuevo)
+Prototipo visual: pendiente de publicar por separado (este ticket ya no vive en el mismo archivo que Adquirir Tokens/Consumo/Compras Realizadas).

@@ -1,66 +1,39 @@
-<title>CFDI Emitidos y Recibidos — GM Fiscal</title>
+<title>CFDI Emitidos y Recibidos — GM Fiscal (prototipo funcional)</title>
 <style>
 :root{
-  --page-bg:#eceef1;
-  --ink:#26292c;
-  --sub:#8a8f94;
-  --border:#edeef0;
-  --wine:#6d1f49;
-  --orange:#ee7d1e;
-  --orange-bg:#fdece0;
-  --green:#1f9254;
-  --green-bg:#e2f8ec;
-  --red:#d64545;
-  --red-bg:#fdeaea;
-  --purple:#7c4fd1;
-  --purple-bg:#efe6fb;
-  --pink:#c23b83;
-  --pink-bg:#fbe6f0;
-  --blue:#3b5fc2;
-  --blue-bg:#e6ecfb;
-  --teal:#159a9c;
-  --teal-bg:#e3f7f7;
-  --ann:#1e5fbf;
+  --page-bg:#eceef1; --ink:#26292c; --sub:#8a8f94; --border:#edeef0;
+  --wine:#6d1f49; --orange:#ee7d1e; --orange-bg:#fdece0;
+  --green:#1f9254; --green-bg:#e2f8ec; --red:#d64545; --red-bg:#fdeaea;
 }
 *{box-sizing:border-box;}
-body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);background:var(--page-bg);margin:0;padding:24px 32px 60px;}
+body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);background:var(--page-bg);margin:0;padding:0 0 60px;}
+.page-wrap{padding:20px 32px 0;}
 .page-title{font-size:16px;font-weight:700;margin-bottom:4px;}
 .page-sub{font-size:12px;color:var(--sub);margin-bottom:16px;}
-.disclaimer{background:#fff8ee;border:1px solid #e0c080;padding:12px 16px;margin-bottom:32px;font-size:12px;line-height:1.6;color:#3a3020;}
-.disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
 
-.screen{margin-bottom:44px;}
-.screen-label{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.screen-desc{font-size:12px;color:#3a3733;background:#e4e0d8;border-left:3px solid #9a9088;padding:8px 12px;margin-bottom:10px;line-height:1.55;}
-.screen-desc b{color:var(--ann);}
-.legend-note{font-size:11px;color:var(--sub);margin-top:6px;font-style:italic;}
+/* Banner obligatorio */
+.proto-banner{background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;}
+.proto-banner div.tt{font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;}
+.proto-banner p{margin:0 0 4px;}
 
-/* ===== Shell real de GM Fiscal (tomado de captura real: Dashboard/Descargas) ===== */
-.fiscal-frame{border:1px solid #dfe1e5;border-radius:6px;background:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.howto{background:#eef4ff;border:1px solid #bcd3f7;border-radius:8px;padding:12px 16px;margin:16px 32px;font-size:12px;line-height:1.6;color:#1e3a5f;}
+.howto b{color:var(--wine);}
+
+/* ===== Shell real de GM Fiscal ===== */
+.fiscal-frame{border:1px solid #dfe1e5;border-radius:6px;background:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);margin:0 32px 24px;}
 .wine-strip{height:6px;background:var(--wine);}
-.fiscal-body{display:flex;min-height:560px;}
+.fiscal-body{display:flex;min-height:620px;}
 
-/* Sidebar */
 .fiscal-sidebar{width:220px;background:#fff;border-right:1px solid var(--border);flex-shrink:0;padding:14px 0;display:flex;flex-direction:column;}
 .sb-brand{padding:0 16px 12px;font-size:12px;font-weight:700;color:#3a3d40;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border);margin-bottom:10px;padding-bottom:12px;}
 .sb-brand small{color:var(--sub);font-weight:400;font-size:10px;}
-.sb-user{margin:0 12px 14px;background:#fafafb;border-radius:8px;padding:8px 10px;display:flex;gap:8px;align-items:center;}
-.sb-avatar{width:30px;height:30px;border-radius:50%;background:var(--orange);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sb-user-info{line-height:1.3;overflow:hidden;}
-.sb-user-info .n{font-size:11px;font-weight:700;color:#26292c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sb-user-info .c{font-size:10px;color:var(--sub);}
-.sb-user-info .r{font-size:9px;color:#c3c6ca;}
 .sb-section-label{font-size:10px;color:#b7bbbe;font-weight:700;letter-spacing:.5px;padding:6px 16px;text-transform:uppercase;}
-.sb-item{padding:8px 16px;font-size:12px;color:#565a5f;display:flex;align-items:center;gap:9px;cursor:default;}
+.sb-item{padding:8px 16px;font-size:12px;color:#565a5f;display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;}
 .sb-item .ic{width:16px;text-align:center;font-size:12px;}
 .sb-item.active{background:var(--orange-bg);color:var(--orange);font-weight:700;border-right:3px solid var(--orange);}
-.sb-sub{padding:7px 16px 7px 41px;font-size:11.5px;color:#6b6f74;display:flex;align-items:center;gap:8px;}
+.sb-sub{padding:7px 16px 7px 41px;font-size:11.5px;color:#6b6f74;cursor:pointer;user-select:none;}
 .sb-sub.active{background:var(--orange-bg);color:var(--orange);font-weight:700;border-right:3px solid var(--orange);}
-.sb-badge{margin-left:auto;background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 6px;}
-.sb-bottom{margin-top:auto;padding:10px 16px 0;border-top:1px solid var(--border);}
-.sb-logout{color:var(--red);font-size:12px;display:flex;align-items:center;gap:8px;padding:8px 0 0;}
 
-/* Header superior del contenido */
 .fiscal-main{flex:1;display:flex;flex-direction:column;min-width:0;}
 .content-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);}
 .ch-left{display:flex;align-items:center;gap:12px;}
@@ -68,356 +41,521 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 .ch-title{font-size:13px;font-weight:700;color:#26292c;}
 .ch-personalizar{color:var(--wine);font-size:11.5px;display:flex;align-items:center;gap:5px;}
 
-.content-body{padding:16px 20px;overflow-x:auto;}
-
-/* Page title block dentro del contenido */
+.content-body{padding:16px 20px;overflow-x:auto;position:relative;}
 .inner-title{font-size:16px;font-weight:700;margin-bottom:2px;}
 .inner-sub{font-size:12px;color:var(--sub);margin-bottom:14px;}
 
 .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .period-pill{background:#f3f4f6;color:#40454b;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:20px;}
-.btn-group{display:flex;gap:8px;}
+.btn-group{display:flex;gap:8px;position:relative;}
 .seg{display:flex;border:1px solid #d6d9de;border-radius:6px;overflow:hidden;}
-.seg span{padding:6px 12px;font-size:12px;color:#565a5f;background:#fff;}
+.seg span{padding:6px 12px;font-size:12px;color:#565a5f;background:#fff;cursor:pointer;}
 .seg span.on{background:#3a3d40;color:#fff;font-weight:600;}
-.tbtn{border:1px solid #d6d9de;background:#fff;color:#3a3f45;font-size:12px;padding:6px 13px;border-radius:6px;cursor:default;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.tbtn{border:1px solid #d6d9de;background:#fff;color:#3a3f45;font-size:12px;padding:6px 13px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;position:relative;}
+.tbtn.active-toggle{border-color:var(--orange);color:var(--orange);background:var(--orange-bg);}
+.tbtn .cnt-badge{background:var(--orange);color:#fff;font-size:9px;font-weight:700;border-radius:9px;padding:1px 5px;margin-left:2px;}
+
+/* Filtros inline arriba de la tabla */
+.filters-inline{background:#fbfbfc;border:1px solid var(--border);border-radius:8px;padding:16px 18px;margin-bottom:14px;display:none;}
+.filters-inline.open{display:block;}
+.filters-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;margin-bottom:14px;}
+.f-field label{display:block;font-size:11px;color:var(--sub);margin-bottom:4px;}
+.f-field input,.f-field select{width:100%;border:1px solid #d6d9de;border-radius:6px;padding:6px 9px;font-size:12.5px;font-family:inherit;color:var(--ink);background:#fff;}
+.filters-actions{display:flex;justify-content:flex-end;gap:10px;}
+.btn-solid{background:var(--orange);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn-ghost{background:#fff;border:1px solid #d6d9de;border-radius:6px;padding:7px 16px;font-size:12.5px;color:#3a3f45;cursor:pointer;}
+
+/* Columnas dropdown */
+.columns-dropdown{position:absolute;top:36px;right:0;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:10px 6px;z-index:60;display:none;min-width:230px;max-height:280px;overflow-y:auto;}
+.columns-dropdown.open{display:block;}
+.col-check-row{display:flex;align-items:center;gap:8px;padding:5px 10px;font-size:12px;border-radius:5px;cursor:pointer;}
+.col-check-row:hover{background:#f5f6f7;}
 
 .table-scroll{overflow-x:auto;border:1px solid var(--border);border-radius:6px;}
-table.fiscal-table{border-collapse:collapse;width:100%;min-width:1560px;font-size:12px;}
+table.fiscal-table{border-collapse:collapse;width:100%;min-width:1200px;font-size:12px;}
 table.fiscal-table th{background:#fafbfc;color:#9199a1;text-transform:uppercase;font-size:10px;letter-spacing:.4px;font-weight:700;padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
-table.fiscal-table th .sort{color:#c7cbcf;margin-left:3px;}
 table.fiscal-table td{padding:9px 10px;border-bottom:1px solid #f4f5f6;white-space:nowrap;font-variant-numeric:tabular-nums;}
 table.fiscal-table tr:hover td{background:#fafbfc;}
+.empty-row td{text-align:center;color:#9a9ea3;font-style:italic;padding:22px;}
 
-.chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;cursor:pointer;}
 .chip.ok{background:var(--green-bg);color:var(--green);}
 .chip.warn{background:#fdf3e3;color:#b9791f;}
-.chip.bad{background:var(--red-bg);color:var(--red);}
 .status-chips{display:flex;gap:4px;}
-
-.pill-status{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.pill-status{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;}
 .pill-status.ok{background:var(--green-bg);color:var(--green);}
 .pill-status.bad{background:var(--red-bg);color:var(--red);}
 
 .pagination{display:flex;align-items:center;justify-content:space-between;padding:10px 4px 0;font-size:11.5px;color:var(--sub);}
-.pagination select{border:1px solid #d6d9de;border-radius:5px;padding:3px 6px;font-size:11.5px;}
-.pg-arrows{display:flex;gap:10px;color:#b7bbbe;}
 
-/* Panel de filtros */
-.filter-panel{border:1px solid var(--border);border-radius:8px;background:#fbfbfc;padding:14px 18px;margin-bottom:12px;}
-.filter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 16px;}
-.f-field label{display:block;font-size:11px;color:var(--sub);margin-bottom:3px;}
-.f-field input,.f-field select{width:100%;border:1px solid #d6d9de;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;color:var(--ink);background:#fff;}
-.filter-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
-.btn-solid{background:var(--orange);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12.5px;font-weight:600;}
-.btn-ghost{background:#fff;border:1px solid #d6d9de;border-radius:6px;padding:7px 16px;font-size:12.5px;color:#3a3f45;}
-
-/* Modal */
-.modal-overlay{background:rgba(20,22,24,.45);display:flex;align-items:center;justify-content:center;min-height:320px;border-radius:6px;}
+/* Modales */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,22,24,.45);display:none;align-items:center;justify-content:center;z-index:800;}
+.modal-overlay.open{display:flex;}
 .modal-box{background:#fff;border-radius:10px;width:400px;box-shadow:0 8px 28px rgba(0,0,0,.22);overflow:hidden;}
 .modal-header{padding:14px 18px;font-weight:700;font-size:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;color:var(--wine);}
 .modal-body{padding:16px 18px;font-size:12.5px;line-height:1.6;color:#3a3f45;}
 .modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid var(--border);background:#fafbfc;}
 .opt-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f2f4;}
 .opt-row:last-child{border-bottom:none;}
-.opt-row .opt-label{font-size:12.5px;color:#26292c;}
-.toggle-select{border:1px solid #d6d9de;border-radius:16px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--orange);background:var(--orange-bg);}
+.toggle-select{border:1px solid #d6d9de;border-radius:16px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--orange);background:var(--orange-bg);cursor:pointer;}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#26292c;color:#fff;padding:11px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;z-index:2000;max-width:320px;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* Tour */
+.tour-overlay{position:fixed;inset:0;background:rgba(20,22,24,.5);z-index:900;display:none;}
+.tour-overlay.active{display:block;}
+.tour-highlight{position:relative;z-index:901;box-shadow:0 0 0 4px var(--orange),0 0 26px rgba(0,0,0,.35);border-radius:8px;background:#fff;}
+.tour-tip{position:fixed;z-index:902;background:#fff;border-radius:10px;width:300px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:16px 18px;display:none;}
+.tour-tip.active{display:block;}
+.tour-tip h4{font-size:13px;margin:0 0 6px;color:var(--wine);}
+.tour-tip p{font-size:12px;line-height:1.5;color:#3a3f45;margin:0 0 12px;}
+.tour-footer-row{display:flex;justify-content:space-between;align-items:center;}
+.tour-step-count{font-size:11px;color:var(--sub);}
+.tour-btns{display:flex;gap:8px;}
+.tour-btn{border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.tour-btn.primary{background:var(--orange);color:#fff;font-weight:600;}
+.tour-btn.ghost{background:#f0f1f3;color:#3a3f45;}
+.tour-skip{font-size:11px;color:var(--sub);text-decoration:underline;cursor:pointer;}
+
+.start-tour-fab{position:fixed;bottom:24px;left:24px;background:var(--wine);color:#fff;border:none;border-radius:24px;padding:11px 18px;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.2);z-index:500;display:flex;align-items:center;gap:6px;}
 </style>
 
-<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;">
-  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+<div class="proto-banner">
+  <div class="tt">💡 Sobre este prototipo</div>
   <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
-  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Fiscal, eso significa el shell real de la app (franja vino, sidebar con acento naranja, tablas y badges) tomado de capturas reales compartidas.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Fiscal, eso significa el shell real de la app (franja vino, sidebar con acento naranja, filtros arriba de la tabla como en Conciliación).</p>
   <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
 </div>
 
-<div class="page-title">CFDI Emitidos / CFDI Recibidos — GM Fiscal</div>
-<div class="page-sub">HU pendientes de número (dos historias separadas) — basado en fiscal/backlog/HUPendiente CFDI Emitidos.feature y HUPendiente CFDI Recibidos.feature</div>
-
-<div class="disclaimer">
-  <strong>Sobre este prototipo</strong>
-  Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.<br><br>
-  ⚠️ Esta versión toma como base directa las capturas reales de GM Fiscal compartidas (Dashboard y Descargas): franja superior vino, sidebar blanco con tarjeta de usuario y navegación con acento naranja, header con "Personalizar", botones de acción tipo Normal/Cuadrícula + Filtros + Columnas + Actualizar, tablas con encabezados grises uppercase y badges de color, paginación inferior.<br><br>
-  Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌
+<div class="page-wrap">
+  <div class="page-title">CFDI Emitidos / CFDI Recibidos — GM Fiscal</div>
+  <div class="page-sub">Prototipo funcional (dos HU independientes, pendientes de número) — basado en fiscal/backlog/HUPendiente CFDI Emitidos.feature y HUPendiente CFDI Recibidos.feature</div>
 </div>
 
-<!-- ============ SCREEN 1: EMITIDOS ============ -->
-<div class="screen">
-  <div class="screen-label">① Así se miraría "CFDI &gt; Emitidos"</div>
-  <div class="screen-desc">
-    Se llega desde el ítem de menú <b>"CFDI"</b> en el sidebar, que se expande mostrando el submenú <b>"Emitidos"</b> (activo aquí) / <b>"Recibidos"</b>. Carga <b>por default el mes en curso</b> (Agosto 2026). Grid de <b>solo lectura</b>: los chips de Estado y el pill de Pagado SAT son informativos, sin acción de edición. HU independiente de "CFDI Recibidos".
-  </div>
-  <div class="fiscal-frame">
-    <div class="wine-strip"></div>
-    <div class="fiscal-body">
-      <div class="fiscal-sidebar">
-        <div class="sb-brand">◆ oftware <small>v13.2.2</small></div>
-        <div class="sb-user">
-          <div class="sb-avatar">K</div>
-          <div class="sb-user-info"><div class="n">KAREN LIZETH LEAL B...</div><div class="c">MQ LOGISTICS</div><div class="r">MQE130725L97</div></div>
-        </div>
-        <div class="sb-section-label">Navegación</div>
-        <div class="sb-item"><span class="ic">▦</span> Dashboard</div>
-        <div class="sb-item"><span class="ic">📄</span> Solicitudes</div>
-        <div class="sb-item"><span class="ic">✓</span> Conciliaciones</div>
-        <div class="sb-item active"><span class="ic">🧾</span> CFDI</div>
-        <div class="sb-sub active">Emitidos</div>
-        <div class="sb-sub">Recibidos</div>
-        <div class="sb-item"><span class="ic">📊</span> Reportes</div>
-        <div class="sb-item"><span class="ic">⬇</span> Descargas</div>
-        <div class="sb-item"><span class="ic">🛡</span> Consulta EFOS</div>
-        <div class="sb-item"><span class="ic">🔔</span> Notificaciones <span class="sb-badge">32</span></div>
-        <div class="sb-bottom">
-          <div class="sb-item" style="padding-left:0;"><span class="ic">❓</span> Ayuda</div>
-          <div class="sb-item" style="padding-left:0;"><span class="ic">⚙</span> Configuración</div>
-          <div class="sb-item" style="padding-left:0;"><span class="ic">⚠</span> Reportar falla</div>
-          <div class="sb-logout">⏻ Cerrar sesión</div>
-        </div>
+<div class="howto">
+  <b>Este prototipo es funcional:</b> cambia entre "Emitidos"/"Recibidos" en el sidebar, abre Filtros y Columnas, aplica un filtro por RFC, y exporta a Excel (descarga un archivo real). Usa el botón 🎓 <b>"Iniciar recorrido"</b> (esquina inferior izquierda) para un recorrido guiado paso a paso.
+</div>
+
+<div class="fiscal-frame">
+  <div class="wine-strip"></div>
+  <div class="fiscal-body">
+    <div class="fiscal-sidebar">
+      <div class="sb-brand">◆ oftware <small>v13.2.2</small></div>
+      <div class="sb-section-label">Navegación</div>
+      <div class="sb-item"><span class="ic">▦</span> Dashboard</div>
+      <div class="sb-item"><span class="ic">📄</span> Solicitudes</div>
+      <div class="sb-item"><span class="ic">✓</span> Conciliaciones</div>
+      <div class="sb-item active" id="nav-cfdi" onclick="toggleSubmenu()"><span class="ic">🧾</span> CFDI</div>
+      <div id="submenu-block">
+        <div class="sb-sub" id="sub-emitidos" onclick="setTab('emitidos')">Emitidos</div>
+        <div class="sb-sub active" id="sub-recibidos" onclick="setTab('recibidos')">Recibidos</div>
       </div>
-      <div class="fiscal-main">
-        <div class="content-header">
-          <div class="ch-left"><span class="ic">←</span><span class="ic">≡</span><div class="ch-title">CFDI Emitidos</div></div>
-          <div class="ch-personalizar">✎ Personalizar</div>
-        </div>
-        <div class="content-body">
-          <div class="inner-title">CFDI Emitidos</div>
-          <div class="inner-sub">Comprobantes emitidos con estado de validación y montos por período</div>
-          <div class="toolbar">
-            <div class="period-pill">Período: Agosto 2026 (mes en curso)</div>
-            <div class="btn-group">
-              <div class="seg"><span class="on">Normal</span><span>Cuadrícula</span></div>
-              <div class="tbtn">▤ Filtros</div>
-              <div class="tbtn">⋮ Columnas</div>
-              <div class="tbtn">⟳ Actualizar</div>
-              <div class="tbtn">⬇ Exportar a Excel</div>
+      <div class="sb-item"><span class="ic">📊</span> Reportes</div>
+      <div class="sb-item"><span class="ic">⬇</span> Descargas</div>
+      <div class="sb-item"><span class="ic">🛡</span> Consulta EFOS</div>
+    </div>
+    <div class="fiscal-main">
+      <div class="content-header">
+        <div class="ch-left"><span class="ic">←</span><span class="ic">≡</span><div class="ch-title" id="ch-title">CFDI Recibidos</div></div>
+        <div class="ch-personalizar">✎ Personalizar</div>
+      </div>
+      <div class="content-body">
+        <div class="inner-title" id="inner-title">CFDI Recibidos</div>
+        <div class="inner-sub" id="inner-sub">Comprobantes recibidos con estado de validación y montos por período</div>
+
+        <div class="toolbar">
+          <div class="period-pill" id="toolbar-period">Período: Agosto 2026 (mes en curso)</div>
+          <div class="btn-group">
+            <div class="seg"><span class="on">Normal</span><span>Cuadrícula</span></div>
+            <div class="tbtn" id="btn-filtros" onclick="toggleFiltros()">▤ Filtros</div>
+            <div class="tbtn" id="btn-columnas" onclick="toggleColumnas(event)">⋮ Columnas <span class="cnt-badge" id="col-hidden-count" style="display:none;"></span>
+              <div class="columns-dropdown" id="columns-dropdown"></div>
             </div>
-          </div>
-          <div class="table-scroll">
-            <table class="fiscal-table">
-              <thead>
-                <tr>
-                  <th>Receptor<span class="sort">↕</span></th><th>Tipo<span class="sort">↕</span></th><th>UUID<span class="sort">↕</span></th><th>Estado</th><th>Pagado SAT</th>
-                  <th>Sub total Agosto 2026</th><th>Descuento Agosto 2026</th><th>Importe ISH Agosto 2026</th>
-                  <th>Importe ret. IVA Agosto 2026</th><th>Importe ret. ISR Agosto 2026</th><th>Importe IEPS Agosto 2026</th>
-                  <th>Importe IVA Agosto 2026</th><th>Total Agosto 2026</th><th>Cantidad Agosto 2026</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Cliente Demo SA de CV</td><td>I</td><td>013FB4C7-E46B-44AA-A63E-1AD29C35AFCC</td>
-                  <td><div class="status-chips"><span class="chip ok">✓ Est.</span><span class="chip ok">✓ Sellos</span><span class="chip ok">✓ SAT</span></div></td>
-                  <td><span class="pill-status ok">Pagado</span></td>
-                  <td>$557.18</td><td>$0.00</td><td>$0.00</td><td>$22.29</td><td>$0.00</td><td>$0.00</td><td>$89.15</td><td>$624.04</td><td>1</td>
-                </tr>
-                <tr>
-                  <td>Transportes del Bajío SA</td><td>I</td><td>4C21A9F0-9B12-4E3A-8E77-2F0A6B8C1234</td>
-                  <td><div class="status-chips"><span class="chip ok">✓ Est.</span><span class="chip warn">! Sellos</span><span class="chip ok">✓ SAT</span></div></td>
-                  <td><span class="pill-status ok">Pagado</span></td>
-                  <td>$12,340.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$1,974.40</td><td>$14,314.40</td><td>1</td>
-                </tr>
-                <tr>
-                  <td>Distribuidora Alba SA de CV</td><td>E</td><td>9A7B1C22-5D44-4F1B-B0A0-7E3D2C9F5678</td>
-                  <td><div class="status-chips"><span class="chip ok">✓ Est.</span><span class="chip ok">✓ Sellos</span><span class="chip ok">✓ SAT</span></div></td>
-                  <td><span class="pill-status bad">No pagado</span></td>
-                  <td>$3,200.00</td><td>$160.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$486.40</td><td>$3,526.40</td><td>1</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="pagination">
-            <div>Filas por página: <select><option>10</option></select></div>
-            <div>1-3/12</div>
-            <div class="pg-arrows">« ‹ › »</div>
+            <div class="tbtn" onclick="showToast('Listado actualizado')">⟳ Actualizar</div>
+            <div class="tbtn" id="btn-exportar" onclick="openAviso()">⬇ Exportar a Excel</div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="legend-note">Chips de Estado: verde = Ok, ámbar = alerta (fila 2, Sellos). Pill Pagado SAT: verde "Pagado" / rojo "No pagado" (fila 3).</div>
-</div>
 
-<!-- ============ SCREEN 2: RECIBIDOS ============ -->
-<div class="screen">
-  <div class="screen-label">② Así se miraría "CFDI &gt; Recibidos"</div>
-  <div class="screen-desc">
-    Misma pantalla y comportamiento que "CFDI Emitidos", pero la primera columna es <b>"Emisor"</b> en lugar de "Receptor" y los datos corresponden a comprobantes recibidos. HU independiente de "CFDI Emitidos" — se navega a través del mismo submenú del sidebar.
-  </div>
-  <div class="fiscal-frame">
-    <div class="wine-strip"></div>
-    <div class="fiscal-body">
-      <div class="fiscal-sidebar">
-        <div class="sb-brand">◆ oftware <small>v13.2.2</small></div>
-        <div class="sb-user">
-          <div class="sb-avatar">K</div>
-          <div class="sb-user-info"><div class="n">KAREN LIZETH LEAL B...</div><div class="c">MQ LOGISTICS</div><div class="r">MQE130725L97</div></div>
-        </div>
-        <div class="sb-section-label">Navegación</div>
-        <div class="sb-item"><span class="ic">▦</span> Dashboard</div>
-        <div class="sb-item"><span class="ic">📄</span> Solicitudes</div>
-        <div class="sb-item"><span class="ic">✓</span> Conciliaciones</div>
-        <div class="sb-item active"><span class="ic">🧾</span> CFDI</div>
-        <div class="sb-sub">Emitidos</div>
-        <div class="sb-sub active">Recibidos</div>
-        <div class="sb-item"><span class="ic">📊</span> Reportes</div>
-        <div class="sb-item"><span class="ic">⬇</span> Descargas</div>
-        <div class="sb-item"><span class="ic">🛡</span> Consulta EFOS</div>
-        <div class="sb-item"><span class="ic">🔔</span> Notificaciones <span class="sb-badge">32</span></div>
-        <div class="sb-bottom">
-          <div class="sb-item" style="padding-left:0;"><span class="ic">❓</span> Ayuda</div>
-          <div class="sb-item" style="padding-left:0;"><span class="ic">⚙</span> Configuración</div>
-          <div class="sb-item" style="padding-left:0;"><span class="ic">⚠</span> Reportar falla</div>
-          <div class="sb-logout">⏻ Cerrar sesión</div>
-        </div>
-      </div>
-      <div class="fiscal-main">
-        <div class="content-header">
-          <div class="ch-left"><span class="ic">←</span><span class="ic">≡</span><div class="ch-title">CFDI Recibidos</div></div>
-          <div class="ch-personalizar">✎ Personalizar</div>
-        </div>
-        <div class="content-body">
-          <div class="inner-title">CFDI Recibidos</div>
-          <div class="inner-sub">Comprobantes recibidos con estado de validación y montos por período</div>
-          <div class="toolbar">
-            <div class="period-pill">Período: Agosto 2026 (mes en curso)</div>
-            <div class="btn-group">
-              <div class="seg"><span class="on">Normal</span><span>Cuadrícula</span></div>
-              <div class="tbtn">▤ Filtros</div>
-              <div class="tbtn">⋮ Columnas</div>
-              <div class="tbtn">⟳ Actualizar</div>
-              <div class="tbtn">⬇ Exportar a Excel</div>
-            </div>
+        <div class="filters-inline" id="filtros-panel">
+          <div class="filters-grid">
+            <div class="f-field"><label>Fecha desde</label><input id="f-desde" type="text" placeholder="dd/mm/aaaa"></div>
+            <div class="f-field"><label>Fecha hasta</label><input id="f-hasta" type="text" placeholder="dd/mm/aaaa"></div>
+            <div class="f-field"><label>RFC</label><input id="f-rfc" type="text" placeholder="AAA010101AAA"></div>
+            <div class="f-field"><label>Contabilizado</label><select><option>Todos</option><option>Sí</option><option>No</option></select></div>
+            <div class="f-field"><label>Información EFO</label><select><option>Todos</option><option>Con información EFO</option><option>Sin información EFO</option></select></div>
+            <div class="f-field"><label>Estado EFO</label><select><option>Todos</option><option>Presunto</option><option>Definitivo</option><option>Desvirtuado</option></select></div>
+            <div class="f-field"><label>PAC</label><input type="text" placeholder="Nombre del PAC"></div>
+            <div class="f-field"><label id="f-party-label">Emisor</label><input type="text" placeholder="Nombre o RFC"></div>
+            <div class="f-field"><label>C.P. Sucursal</label><input type="text" placeholder="Código postal"></div>
+            <div class="f-field"><label>Alias emisor</label><input type="text" placeholder="Alias"></div>
+            <div class="f-field"><label>Asignado a</label><select><option>Todos</option><option>Sin asignar</option></select></div>
           </div>
-          <div class="table-scroll">
-            <table class="fiscal-table">
-              <thead>
-                <tr>
-                  <th>Emisor<span class="sort">↕</span></th><th>Tipo<span class="sort">↕</span></th><th>UUID<span class="sort">↕</span></th><th>Estado</th><th>Pagado SAT</th>
-                  <th>Sub total Agosto 2026</th><th>Descuento Agosto 2026</th><th>Importe ISH Agosto 2026</th>
-                  <th>Importe ret. IVA Agosto 2026</th><th>Importe ret. ISR Agosto 2026</th><th>Importe IEPS Agosto 2026</th>
-                  <th>Importe IVA Agosto 2026</th><th>Total Agosto 2026</th><th>Cantidad Agosto 2026</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Proveedor Demo SA de CV</td><td>I</td><td>013FB4C7-E46B-44AA-A63E-1AD29C35AFCC</td>
-                  <td><div class="status-chips"><span class="chip ok">✓ Est.</span><span class="chip ok">✓ Sellos</span><span class="chip ok">✓ SAT</span></div></td>
-                  <td><span class="pill-status ok">Pagado</span></td>
-                  <td>$557.18</td><td>$0.00</td><td>$0.00</td><td>$22.29</td><td>$0.00</td><td>$0.00</td><td>$89.15</td><td>$624.04</td><td>1</td>
-                </tr>
-                <tr>
-                  <td>Combustibles del Norte SA</td><td>I</td><td>4C21A9F0-9B12-4E3A-8E77-2F0A6B8C1234</td>
-                  <td><div class="status-chips"><span class="chip ok">✓ Est.</span><span class="chip warn">! Sellos</span><span class="chip ok">✓ SAT</span></div></td>
-                  <td><span class="pill-status ok">Pagado</span></td>
-                  <td>$12,340.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$1,974.40</td><td>$14,314.40</td><td>1</td>
-                </tr>
-                <tr>
-                  <td>Refacciones GM SA de CV</td><td>I</td><td>9A7B1C22-5D44-4F1B-B0A0-7E3D2C9F5678</td>
-                  <td><div class="status-chips"><span class="chip ok">✓ Est.</span><span class="chip ok">✓ Sellos</span><span class="chip ok">✓ SAT</span></div></td>
-                  <td><span class="pill-status bad">No pagado</span></td>
-                  <td>$3,200.00</td><td>$160.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$0.00</td><td>$486.40</td><td>$3,526.40</td><td>1</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="pagination">
-            <div>Filas por página: <select><option>10</option></select></div>
-            <div>1-3/9</div>
-            <div class="pg-arrows">« ‹ › »</div>
+          <div class="filters-actions">
+            <div class="btn-ghost" onclick="limpiarFiltros()">Limpiar</div>
+            <div class="btn-solid" onclick="aplicarFiltros()">Aplicar filtros</div>
           </div>
         </div>
+
+        <div class="table-scroll">
+          <table class="fiscal-table" id="tabla-cfdi">
+            <thead id="thead-cfdi"></thead>
+            <tbody id="tbody-cfdi"></tbody>
+          </table>
+        </div>
+        <div class="pagination"><div id="pg-count"></div><div>« ‹ 1 › »</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============ SCREEN 3: FILTROS ============ -->
-<div class="screen">
-  <div class="screen-label">③ Así se miraría el panel de Filtros (aplica a Emitidos y Recibidos)</div>
-  <div class="screen-desc">
-    Se abre al hacer clic en el botón <b>"Filtros"</b> de cualquiera de las dos pantallas. Campos: rango de fechas (para ampliar más allá del mes en curso), Contabilizado, Información EFO, Estado EFO, RFC, PAC, Emisor/Receptor, C.P. Sucursal, Alias emisor, Asignado a. <b>Si el rango cruza más de un mes calendario</b>, las columnas de monto cambian su leyenda a "[Fecha inicio] - [Fecha fin]" y muestran el acumulado del rango completo. "Aplicar filtros" ejecuta la consulta; "Limpiar" regresa al default (mes en curso).
-  </div>
-  <div class="fiscal-frame">
-    <div class="wine-strip"></div>
-    <div class="fiscal-body">
-      <div class="fiscal-sidebar">
-        <div class="sb-brand">◆ oftware <small>v13.2.2</small></div>
-        <div class="sb-section-label">Navegación</div>
-        <div class="sb-item"><span class="ic">▦</span> Dashboard</div>
-        <div class="sb-item active"><span class="ic">🧾</span> CFDI</div>
-        <div class="sb-sub active">Recibidos</div>
-      </div>
-      <div class="fiscal-main">
-        <div class="content-header">
-          <div class="ch-left"><span class="ic">←</span><span class="ic">≡</span><div class="ch-title">CFDI Recibidos</div></div>
-          <div class="ch-personalizar">✎ Personalizar</div>
-        </div>
-        <div class="content-body">
-          <div class="filter-panel">
-            <div class="filter-grid">
-              <div class="f-field"><label>Fecha desde</label><input value="01/08/2026"></div>
-              <div class="f-field"><label>Fecha hasta</label><input value="31/08/2026"></div>
-              <div class="f-field"><label>RFC</label><input placeholder="AAA010101AAA"></div>
-              <div class="f-field"><label>Contabilizado</label><select><option>Todos</option><option>Sí</option><option>No</option></select></div>
-              <div class="f-field"><label>Información EFO</label><select><option>Todos</option><option>Con información EFO</option><option>Sin información EFO</option></select></div>
-              <div class="f-field"><label>Estado EFO</label><select><option>Todos</option><option>Presunto</option><option>Definitivo</option><option>Desvirtuado</option></select></div>
-              <div class="f-field"><label>PAC</label><input placeholder="Nombre del PAC"></div>
-              <div class="f-field"><label>Emisor</label><input placeholder="Nombre o RFC del emisor"></div>
-              <div class="f-field"><label>C.P. Sucursal</label><input placeholder="Código postal"></div>
-              <div class="f-field"><label>Alias emisor</label><input placeholder="Alias"></div>
-              <div class="f-field"><label>Asignado a</label><select><option>Todos</option><option>Sin asignar</option></select></div>
-            </div>
-            <div class="filter-actions">
-              <div class="btn-ghost">Limpiar</div>
-              <div class="btn-solid">Aplicar filtros</div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!-- Modal aviso legal -->
+<div class="modal-overlay" id="modal-aviso">
+  <div class="modal-box">
+    <div class="modal-header">⚠ Aviso</div>
+    <div class="modal-body">
+      Es responsabilidad del usuario el resguardo de toda la información que sea impresa. <b>Importante:</b> Los archivos impresos podrían almacenarse en la memoria caché de la computadora. Asegúrese de borrar todos los archivos temporales de internet después de finalizar sesión.
+    </div>
+    <div class="modal-footer">
+      <div class="btn-ghost" onclick="closeModal('modal-aviso')">Cancelar</div>
+      <div class="btn-solid" onclick="acceptAviso()">Aceptar</div>
     </div>
   </div>
 </div>
 
-<!-- ============ SCREEN 4: AVISO LEGAL ============ -->
-<div class="screen">
-  <div class="screen-label">④ Así se miraría el Aviso legal al exportar</div>
-  <div class="screen-desc">
-    Aparece <b>de inmediato</b> al hacer clic en "Exportar a Excel". Texto fijo, no editable. <b>"Cancelar"</b> cierra sin generar archivo. <b>"Aceptar"</b> avanza al modal de opciones (pantalla ⑤).
-  </div>
-  <div class="fiscal-frame">
-    <div class="modal-overlay">
-      <div class="modal-box">
-        <div class="modal-header">⚠ Aviso</div>
-        <div class="modal-body">
-          Es responsabilidad del usuario el resguardo de toda la información que sea impresa. <b>Importante:</b> Los archivos impresos podrían almacenarse en la memoria caché de la computadora. Asegúrese de borrar todos los archivos temporales de internet después de finalizar sesión.
-        </div>
-        <div class="modal-footer">
-          <div class="btn-ghost">Cancelar</div>
-          <div class="btn-solid">Aceptar</div>
-        </div>
-      </div>
+<!-- Modal opciones de exportación -->
+<div class="modal-overlay" id="modal-export">
+  <div class="modal-box">
+    <div class="modal-header">Exportar a formato Excel</div>
+    <div class="modal-body">
+      <div class="opt-row"><span>Combinar celdas</span><span class="toggle-select" id="opt-combinar" onclick="toggleOpt('opt-combinar')">Sí ▾</span></div>
+      <div class="opt-row"><span>Incluir filtros utilizados</span><span class="toggle-select" id="opt-incluir" onclick="toggleOpt('opt-incluir')">Sí ▾</span></div>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-ghost" onclick="closeModal('modal-export')">Cancelar</div>
+      <div class="btn-solid" onclick="confirmExport()">Exportar</div>
     </div>
   </div>
 </div>
 
-<!-- ============ SCREEN 5: EXPORTAR EXCEL ============ -->
-<div class="screen">
-  <div class="screen-label">⑤ Así se miraría el modal de opciones de exportación</div>
-  <div class="screen-desc">
-    Se abre al presionar "Aceptar" en el aviso legal. Dos opciones Sí/No, <b>ambas con default "Sí"</b>: "Combinar celdas" y "Incluir filtros utilizados" (agrega al archivo el detalle de los filtros aplicados). "Exportar" genera y descarga el archivo; "Cancelar" cierra sin generar nada.
-  </div>
-  <div class="fiscal-frame">
-    <div class="modal-overlay">
-      <div class="modal-box">
-        <div class="modal-header">Exportar a formato Excel</div>
-        <div class="modal-body">
-          <div class="opt-row"><span class="opt-label">Combinar celdas</span><span class="toggle-select">Sí ▾</span></div>
-          <div class="opt-row"><span class="opt-label">Incluir filtros utilizados</span><span class="toggle-select">Sí ▾</span></div>
-        </div>
-        <div class="modal-footer">
-          <div class="btn-ghost">Cancelar</div>
-          <div class="btn-solid">Exportar</div>
-        </div>
-      </div>
+<div class="toast" id="toast"></div>
+<button class="start-tour-fab" onclick="startTour()">🎓 Iniciar recorrido</button>
+
+<div class="tour-overlay" id="tour-overlay"></div>
+<div class="tour-tip" id="tour-tip">
+  <div class="tour-step-count" id="tour-count">1/9</div>
+  <h4 id="tour-title"></h4>
+  <p id="tour-desc"></p>
+  <div class="tour-footer-row">
+    <span class="tour-skip" onclick="endTour()">Saltar recorrido</span>
+    <div class="tour-btns">
+      <button class="tour-btn ghost" id="tour-prev" onclick="tourPrev()">Anterior</button>
+      <button class="tour-btn primary" id="tour-next" onclick="tourNext()">Siguiente</button>
     </div>
   </div>
 </div>
+
+<script>
+var COLS = [
+  {key:'party', label:null, money:false},
+  {key:'tipo', label:'Tipo', money:false},
+  {key:'uuid', label:'UUID', money:false},
+  {key:'estado', label:'Estado', money:false},
+  {key:'pagado', label:'Pagado SAT', money:false},
+  {key:'subtotal', label:'Sub total', money:true},
+  {key:'descuento', label:'Descuento', money:true},
+  {key:'ish', label:'Importe ISH', money:true},
+  {key:'retIva', label:'Importe ret. IVA', money:true},
+  {key:'retIsr', label:'Importe ret. ISR', money:true},
+  {key:'ieps', label:'Importe IEPS', money:true},
+  {key:'iva', label:'Importe IVA', money:true},
+  {key:'total', label:'Total', money:true},
+  {key:'cantidad', label:'Cantidad', money:true, count:true}
+];
+
+var DATA = {
+  emitidos: [
+    {party:'Cliente Demo SA de CV', rfc:'AAA010101AAA', fecha:'2026-08-05', tipo:'I', estructura:'ok', sellos:'ok', sat:'ok', pagado:true, subtotal:557.18, descuento:0, ish:0, retIva:22.29, retIsr:0, ieps:0, iva:89.15, total:624.04, cantidad:1, uuid:'013FB4C7-E46B-44AA-A63E-1AD29C35AFCC'},
+    {party:'Transportes del Bajío SA', rfc:'TBA050202BBB', fecha:'2026-08-12', tipo:'I', estructura:'ok', sellos:'warn', sat:'ok', pagado:true, subtotal:12340.00, descuento:0, ish:0, retIva:0, retIsr:0, ieps:0, iva:1974.40, total:14314.40, cantidad:1, uuid:'4C21A9F0-9B12-4E3A-8E77-2F0A6B8C1234'},
+    {party:'Distribuidora Alba SA de CV', rfc:'DAL070808CCC', fecha:'2026-08-18', tipo:'E', estructura:'ok', sellos:'ok', sat:'ok', pagado:false, subtotal:3200.00, descuento:160, ish:0, retIva:0, retIsr:0, ieps:0, iva:486.40, total:3526.40, cantidad:1, uuid:'9A7B1C22-5D44-4F1B-B0A0-7E3D2C9F5678'}
+  ],
+  recibidos: [
+    {party:'Proveedor Demo SA de CV', rfc:'AAA010101AAA', fecha:'2026-08-05', tipo:'I', estructura:'ok', sellos:'ok', sat:'ok', pagado:true, subtotal:557.18, descuento:0, ish:0, retIva:22.29, retIsr:0, ieps:0, iva:89.15, total:624.04, cantidad:1, uuid:'013FB4C7-E46B-44AA-A63E-1AD29C35AFCC'},
+    {party:'Combustibles del Norte SA', rfc:'CNO060505DDD', fecha:'2026-08-14', tipo:'I', estructura:'ok', sellos:'warn', sat:'ok', pagado:true, subtotal:12340.00, descuento:0, ish:0, retIva:0, retIsr:0, ieps:0, iva:1974.40, total:14314.40, cantidad:1, uuid:'4C21A9F0-9B12-4E3A-8E77-2F0A6B8C1234'},
+    {party:'Refacciones GM SA de CV', rfc:'RGM090909EEE', fecha:'2026-08-20', tipo:'I', estructura:'ok', sellos:'ok', sat:'ok', pagado:false, subtotal:3200.00, descuento:160, ish:0, retIva:0, retIsr:0, ieps:0, iva:486.40, total:3526.40, cantidad:1, uuid:'9A7B1C22-5D44-4F1B-B0A0-7E3D2C9F5678'}
+  ]
+};
+
+var state = { tab:'recibidos', filters:{desde:'',hasta:'',rfc:''}, hiddenCols:{}, periodLabel:'Agosto 2026' };
+
+function money(n){ return '$'+n.toLocaleString('es-MX',{minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+function partyLabel(){ return state.tab==='emitidos' ? 'Receptor' : 'Emisor'; }
+
+function setTab(tab){
+  state.tab = tab;
+  document.getElementById('sub-emitidos').classList.toggle('active', tab==='emitidos');
+  document.getElementById('sub-recibidos').classList.toggle('active', tab==='recibidos');
+  var titleTxt = tab==='emitidos' ? 'CFDI Emitidos' : 'CFDI Recibidos';
+  document.getElementById('ch-title').textContent = titleTxt;
+  document.getElementById('inner-title').textContent = titleTxt;
+  document.getElementById('inner-sub').textContent = 'Comprobantes '+(tab==='emitidos'?'emitidos':'recibidos')+' con estado de validación y montos por período';
+  document.getElementById('f-party-label').textContent = partyLabel();
+  render();
+}
+
+function toggleSubmenu(){
+  var b = document.getElementById('submenu-block');
+  b.style.display = (b.style.display==='none') ? '' : 'none';
+}
+
+function toggleFiltros(force){
+  var p = document.getElementById('filtros-panel');
+  var open = (force===true) ? true : (force===false ? false : !p.classList.contains('open'));
+  p.classList.toggle('open', open);
+  document.getElementById('btn-filtros').classList.toggle('active-toggle', open);
+}
+
+function aplicarFiltros(){
+  state.filters.desde = document.getElementById('f-desde').value.trim();
+  state.filters.hasta = document.getElementById('f-hasta').value.trim();
+  state.filters.rfc = document.getElementById('f-rfc').value.trim().toUpperCase();
+  if(state.filters.desde && state.filters.hasta){
+    var mDesde = state.filters.desde.split('/')[1], mHasta = state.filters.hasta.split('/')[1];
+    state.periodLabel = (mDesde && mHasta && mDesde!==mHasta) ? (state.filters.desde+' - '+state.filters.hasta) : 'Agosto 2026';
+  } else {
+    state.periodLabel = 'Agosto 2026';
+  }
+  document.getElementById('toolbar-period').textContent = 'Período: '+state.periodLabel+(state.filters.desde?'':' (mes en curso)');
+  render();
+  showToast('Filtros aplicados');
+}
+
+function limpiarFiltros(){
+  document.getElementById('f-desde').value='';
+  document.getElementById('f-hasta').value='';
+  document.getElementById('f-rfc').value='';
+  state.filters = {desde:'',hasta:'',rfc:''};
+  state.periodLabel = 'Agosto 2026';
+  document.getElementById('toolbar-period').textContent = 'Período: Agosto 2026 (mes en curso)';
+  render();
+  showToast('Filtros eliminados');
+}
+
+function toggleColumnas(e){
+  e.stopPropagation();
+  var dd = document.getElementById('columns-dropdown');
+  var open = !dd.classList.contains('open');
+  if(open){
+    dd.innerHTML = COLS.filter(function(c){return c.key!=='party';}).map(function(c){
+      var lbl = c.label;
+      var checked = !state.hiddenCols[c.key] ? 'checked' : '';
+      return '<div class="col-check-row" onclick="event.stopPropagation()"><input type="checkbox" '+checked+' onchange="toggleColVisible(\''+c.key+'\', this.checked)"> '+lbl+'</div>';
+    }).join('');
+  }
+  dd.classList.toggle('open', open);
+}
+document.addEventListener('click', function(){ document.getElementById('columns-dropdown').classList.remove('open'); });
+
+function toggleColVisible(key, visible){
+  state.hiddenCols[key] = !visible;
+  var n = Object.keys(state.hiddenCols).filter(function(k){return state.hiddenCols[k];}).length;
+  var badge = document.getElementById('col-hidden-count');
+  if(n>0){ badge.style.display='inline'; badge.textContent = n; } else { badge.style.display='none'; }
+  render();
+}
+
+function chipsHtml(row){
+  function chip(ok, label, short){
+    return '<span class="chip '+(ok==='ok'?'ok':'warn')+'" title="'+label+'" onclick="event.stopPropagation();readOnlyToast()">'+(ok==='ok'?'✓':'!')+' '+short+'</span>';
+  }
+  return '<div class="status-chips">'+chip(row.estructura,'Estructura Ok','Est.')+chip(row.sellos,'Sellos Ok','Sellos')+chip(row.sat,'Estatus SAT Vigente','SAT')+'</div>';
+}
+
+function readOnlyToast(){ showToast('Este campo es de solo lectura, no se puede modificar aquí.'); }
+
+function render(){
+  var rows = DATA[state.tab].filter(function(r){
+    if(state.filters.rfc && r.rfc.indexOf(state.filters.rfc) === -1) return false;
+    return true;
+  });
+
+  var thead = '<tr>';
+  COLS.forEach(function(c){
+    if(state.hiddenCols[c.key]) return;
+    var lbl = c.key==='party' ? partyLabel() : (c.money ? c.label+' '+state.periodLabel : c.label);
+    thead += '<th>'+lbl+(c.key==='party'||c.key==='tipo'||c.key==='uuid' ? ' <span style="color:#c7cbcf;">↕</span>' : '')+'</th>';
+  });
+  thead += '</tr>';
+  document.getElementById('thead-cfdi').innerHTML = thead;
+
+  var tbody = '';
+  if(rows.length===0){
+    var colCount = COLS.filter(function(c){return !state.hiddenCols[c.key];}).length;
+    tbody = '<tr class="empty-row"><td colspan="'+colCount+'">No se encontraron comprobantes con los filtros aplicados.</td></tr>';
+  } else {
+    rows.forEach(function(r){
+      tbody += '<tr>';
+      COLS.forEach(function(c){
+        if(state.hiddenCols[c.key]) return;
+        var cell;
+        if(c.key==='party') cell = r.party;
+        else if(c.key==='tipo') cell = r.tipo;
+        else if(c.key==='uuid') cell = r.uuid;
+        else if(c.key==='estado') cell = chipsHtml(r);
+        else if(c.key==='pagado') cell = '<span class="pill-status '+(r.pagado?'ok':'bad')+'" onclick="readOnlyToast()">'+(r.pagado?'Pagado':'No pagado')+'</span>';
+        else if(c.count) cell = String(r[c.key]);
+        else cell = money(r[c.key]);
+        tbody += '<td>'+cell+'</td>';
+      });
+      tbody += '</tr>';
+    });
+  }
+  document.getElementById('tbody-cfdi').innerHTML = tbody;
+  document.getElementById('pg-count').textContent = rows.length+' de '+DATA[state.tab].length+' comprobantes';
+}
+
+/* Modales */
+function openAviso(){ document.getElementById('modal-aviso').classList.add('open'); }
+function acceptAviso(){ closeModal('modal-aviso'); document.getElementById('modal-export').classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function toggleOpt(id){
+  var el = document.getElementById(id);
+  var isYes = el.textContent.indexOf('Sí')!==-1;
+  el.textContent = isYes ? 'No ▾' : 'Sí ▾';
+}
+
+function confirmExport(){
+  var combinar = document.getElementById('opt-combinar').textContent.indexOf('Sí')!==-1;
+  var incluirFiltros = document.getElementById('opt-incluir').textContent.indexOf('Sí')!==-1;
+  var visibleCols = COLS.filter(function(c){return !state.hiddenCols[c.key];});
+  var rows = DATA[state.tab].filter(function(r){ return !state.filters.rfc || r.rfc.indexOf(state.filters.rfc)!==-1; });
+
+  var lines = [];
+  if(incluirFiltros){
+    lines.push('Filtros aplicados:');
+    if(state.filters.rfc) lines.push('RFC = '+state.filters.rfc);
+    if(state.filters.desde) lines.push('Fecha desde = '+state.filters.desde);
+    if(state.filters.hasta) lines.push('Fecha hasta = '+state.filters.hasta);
+    if(!state.filters.rfc && !state.filters.desde && !state.filters.hasta) lines.push('(ninguno, mes en curso)');
+    lines.push('');
+  }
+  var header = visibleCols.map(function(c){ return c.key==='party'?partyLabel():(c.money?c.label+' '+state.periodLabel:c.label); });
+  lines.push(header.join(','));
+
+  var prevRow = null;
+  rows.forEach(function(r){
+    var vals = visibleCols.map(function(c){
+      if(c.key==='party') return r.party;
+      if(c.key==='tipo') return r.tipo;
+      if(c.key==='uuid') return r.uuid;
+      if(c.key==='estado') return r.estructura+'/'+r.sellos+'/'+r.sat;
+      if(c.key==='pagado') return r.pagado?'Pagado':'No pagado';
+      if(c.count) return String(r[c.key]);
+      return r[c.key].toFixed(2);
+    });
+    if(combinar && prevRow){
+      vals = vals.map(function(v,i){ return v===prevRow[i] ? '' : v; });
+    }
+    prevRow = visibleCols.map(function(c){
+      if(c.key==='party') return r.party;
+      if(c.key==='tipo') return r.tipo;
+      if(c.key==='uuid') return r.uuid;
+      if(c.key==='estado') return r.estructura+'/'+r.sellos+'/'+r.sat;
+      if(c.key==='pagado') return r.pagado?'Pagado':'No pagado';
+      if(c.count) return String(r[c.key]);
+      return r[c.key].toFixed(2);
+    });
+    lines.push(vals.join(','));
+  });
+
+  var csv = lines.join('\n');
+  var blob = new Blob(["﻿"+csv], {type:'text/csv;charset=utf-8;'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'CFDI_'+state.tab+'_'+state.periodLabel.replace(/[^0-9A-Za-z]/g,'_')+'.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  closeModal('modal-export');
+  showToast('Archivo generado y descargado.');
+}
+
+/* Toast */
+var toastTimer;
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+
+/* ===== Tour guiado ===== */
+var TOUR = [
+  {title:'Bienvenida', desc:'Este es un recorrido guiado del prototipo de CFDI Emitidos y Recibidos en GM Fiscal. Usa "Siguiente" para continuar o "Saltar recorrido" para explorar libremente.', sel:null},
+  {title:'Menú CFDI', desc:'Desde el sidebar se accede a "CFDI", que despliega un submenú con "Emitidos" y "Recibidos" — son dos historias (HU) independientes.', sel:'#nav-cfdi'},
+  {title:'Cambiar entre Emitidos y Recibidos', desc:'Haz clic en cualquiera de las dos opciones para cambiar el listado completo (columnas, filtros y datos). Pruébalo al terminar el recorrido.', sel:'#submenu-block'},
+  {title:'Período por default', desc:'Al entrar, el listado siempre carga el mes en curso (Agosto 2026). Se amplía desde el panel de Filtros.', sel:'#toolbar-period'},
+  {title:'Filtros arriba de la tabla', desc:'Al hacer clic en "Filtros" se despliega un panel arriba de la tabla — igual que en la pantalla de Conciliación — con los campos para ampliar la consulta.', sel:'#btn-filtros', before:function(){ toggleFiltros(true); }},
+  {title:'Campos del filtro', desc:'Fecha desde/hasta, RFC, Contabilizado, Información EFO, Estado EFO, PAC, Emisor/Receptor, C.P. Sucursal, Alias emisor y Asignado a. Prueba filtrar por el RFC "AAA010101AAA".', sel:'#filtros-panel'},
+  {title:'Columnas del listado', desc:'Receptor/Emisor, Tipo, UUID, Estado, Pagado SAT y 9 columnas de montos por período. El botón "Columnas" permite ocultar o mostrar cualquiera.', sel:'#tabla-cfdi', before:function(){ toggleFiltros(false); }},
+  {title:'Estado y Pagado SAT son de solo lectura', desc:'Ningún ícono de estas columnas se puede editar desde aquí — haz clic en alguno y verás un aviso confirmándolo.', sel:'#tabla-cfdi thead'},
+  {title:'Exportar a Excel', desc:'Primero muestra un aviso legal y después las opciones de exportación (Combinar celdas / Incluir filtros utilizados). Genera y descarga un archivo real — pruébalo al terminar.', sel:'#btn-exportar'},
+  {title:'Fin del recorrido', desc:'Ya puedes explorar libremente: cambia de pestaña, aplica filtros, oculta columnas y exporta a Excel.', sel:null}
+];
+var tourIdx = 0;
+var tourPrevHighlight = null;
+
+function startTour(){ tourIdx = 0; document.getElementById('tour-overlay').classList.add('active'); showTourStep(); }
+function endTour(){
+  document.getElementById('tour-overlay').classList.remove('active');
+  document.getElementById('tour-tip').classList.remove('active');
+  if(tourPrevHighlight) tourPrevHighlight.classList.remove('tour-highlight');
+}
+function tourNext(){ if(tourIdx < TOUR.length-1){ tourIdx++; showTourStep(); } else { endTour(); } }
+function tourPrev(){ if(tourIdx > 0){ tourIdx--; showTourStep(); } }
+
+function showTourStep(){
+  var step = TOUR[tourIdx];
+  if(tourPrevHighlight){ tourPrevHighlight.classList.remove('tour-highlight'); tourPrevHighlight = null; }
+  if(step.before) step.before();
+
+  document.getElementById('tour-count').textContent = (tourIdx+1)+'/'+TOUR.length;
+  document.getElementById('tour-title').textContent = step.title;
+  document.getElementById('tour-desc').textContent = step.desc;
+  document.getElementById('tour-prev').style.visibility = tourIdx===0 ? 'hidden' : 'visible';
+  document.getElementById('tour-next').textContent = tourIdx===TOUR.length-1 ? 'Finalizar' : 'Siguiente';
+
+  var tip = document.getElementById('tour-tip');
+  tip.classList.add('active');
+
+  var el = step.sel ? document.querySelector(step.sel) : null;
+  if(el){
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(function(){
+      el.classList.add('tour-highlight');
+      tourPrevHighlight = el;
+      var r = el.getBoundingClientRect();
+      var top = r.bottom + 12;
+      var left = r.left;
+      if(top + 180 > window.innerHeight) top = Math.max(12, r.top - 190);
+      if(left + 300 > window.innerWidth) left = window.innerWidth - 316;
+      tip.style.top = top+'px';
+      tip.style.left = left+'px';
+    }, 250);
+  } else {
+    tip.style.top = '40%';
+    tip.style.left = '50%';
+    tip.style.transform = 'translate(-50%,-50%)';
+  }
+  if(el){ tip.style.transform = 'none'; }
+}
+
+/* init */
+setTab('recibidos');
+</script>

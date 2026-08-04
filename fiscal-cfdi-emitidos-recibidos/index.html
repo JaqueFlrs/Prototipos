@@ -31,6 +31,10 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 .sb-item{padding:8px 16px;font-size:12px;color:#565a5f;display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;}
 .sb-item .ic{width:16px;text-align:center;font-size:12px;}
 .sb-item.active{background:var(--orange-bg);color:var(--orange);font-weight:700;border-right:3px solid var(--orange);}
+.ui-disabled, .ui-disabled *{color:#c7cbcf !important;cursor:not-allowed !important;background-image:none !important;}
+.ui-disabled{background:#fff !important;border-color:#e8e9eb !important;}
+.ui-disabled .ic{opacity:.6;}
+.seg.ui-disabled span.on{background:#e8e9eb !important;}
 .sb-sub{padding:7px 16px 7px 41px;font-size:11.5px;color:#6b6f74;cursor:pointer;user-select:none;}
 .sb-sub.active{background:var(--orange-bg);color:var(--orange);font-weight:700;border-right:3px solid var(--orange);}
 
@@ -146,7 +150,7 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
 </div>
 
 <div class="howto">
-  <b>Este prototipo es funcional:</b> cambia entre "Emitidos"/"Recibidos" en el sidebar, abre Filtros y Columnas, aplica un filtro por RFC, y exporta a Excel (descarga un archivo real). Usa el botón 🎓 <b>"Iniciar recorrido"</b> (esquina inferior izquierda) para un recorrido guiado paso a paso.
+  <b>Este prototipo es funcional:</b> cambia entre "Emitidos"/"Recibidos" en el sidebar, abre Filtros y Columnas, aplica un filtro por RFC, y exporta a Excel (descarga un archivo real). Usa el botón 👀 <b>"Iniciar recorrido"</b> (esquina inferior izquierda) para un recorrido guiado paso a paso. Todo lo que aparece en gris no es parte de este prototipo — es solo el resto del shell real de la app.
 </div>
 
 <div class="fiscal-frame">
@@ -155,22 +159,22 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
     <div class="fiscal-sidebar">
       <div class="sb-brand">◆ oftware <small>v13.2.2</small></div>
       <div class="sb-section-label">Navegación</div>
-      <div class="sb-item"><span class="ic">▦</span> Dashboard</div>
-      <div class="sb-item"><span class="ic">📄</span> Solicitudes</div>
-      <div class="sb-item"><span class="ic">✓</span> Conciliaciones</div>
+      <div class="sb-item ui-disabled"><span class="ic">▦</span> Dashboard</div>
+      <div class="sb-item ui-disabled"><span class="ic">📄</span> Solicitudes</div>
+      <div class="sb-item ui-disabled"><span class="ic">✓</span> Conciliaciones</div>
       <div class="sb-item active" id="nav-cfdi" onclick="toggleSubmenu()"><span class="ic">🧾</span> CFDI</div>
       <div id="submenu-block">
         <div class="sb-sub" id="sub-emitidos" onclick="setTab('emitidos')">Emitidos</div>
         <div class="sb-sub active" id="sub-recibidos" onclick="setTab('recibidos')">Recibidos</div>
       </div>
-      <div class="sb-item"><span class="ic">📊</span> Reportes</div>
-      <div class="sb-item"><span class="ic">⬇</span> Descargas</div>
-      <div class="sb-item"><span class="ic">🛡</span> Consulta EFOS</div>
+      <div class="sb-item ui-disabled"><span class="ic">📊</span> Reportes</div>
+      <div class="sb-item ui-disabled"><span class="ic">⬇</span> Descargas</div>
+      <div class="sb-item ui-disabled"><span class="ic">🛡</span> Consulta EFOS</div>
     </div>
     <div class="fiscal-main">
       <div class="content-header">
-        <div class="ch-left"><span class="ic">←</span><span class="ic">≡</span><div class="ch-title" id="ch-title">CFDI Recibidos</div></div>
-        <div class="ch-personalizar">✎ Personalizar</div>
+        <div class="ch-left"><span class="ic ui-disabled">←</span><span class="ic ui-disabled">≡</span><div class="ch-title" id="ch-title">CFDI Recibidos</div></div>
+        <div class="ch-personalizar ui-disabled">✎ Personalizar</div>
       </div>
       <div class="content-body">
         <div class="inner-title" id="inner-title">CFDI Recibidos</div>
@@ -179,12 +183,12 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
         <div class="toolbar">
           <div class="period-pill" id="toolbar-period">Período: Agosto 2026 (mes en curso)</div>
           <div class="btn-group">
-            <div class="seg"><span class="on">Normal</span><span>Cuadrícula</span></div>
+            <div class="seg ui-disabled"><span class="on">Normal</span><span>Cuadrícula</span></div>
             <div class="tbtn" id="btn-filtros" onclick="toggleFiltros()">▤ Filtros</div>
             <div class="tbtn" id="btn-columnas" onclick="toggleColumnas(event)">⋮ Columnas <span class="cnt-badge" id="col-hidden-count" style="display:none;"></span>
               <div class="columns-dropdown" id="columns-dropdown"></div>
             </div>
-            <div class="tbtn" onclick="showToast('Listado actualizado')">⟳ Actualizar</div>
+            <div class="tbtn ui-disabled">⟳ Actualizar</div>
             <div class="tbtn" id="btn-exportar" onclick="openAviso()">⬇ Exportar a Excel</div>
           </div>
         </div>

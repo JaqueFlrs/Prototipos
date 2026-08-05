@@ -11,7 +11,7 @@
   --blue:#1a56db; --blue-bg:#eaf1ff;
 }
 *{box-sizing:border-box;}
-body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);background:var(--page-bg);margin:0;padding:24px 32px 60px;}
+body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);background:var(--page-bg);margin:0;padding:24px 32px 100px;}
 
 .page-title{font-size:16px;font-weight:800;margin-bottom:4px;}
 .page-sub{font-size:12px;color:var(--sub);margin-bottom:16px;}
@@ -25,7 +25,7 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 /* Frame GM Fiscal */
 .fiscal-frame{border:1px solid #dfe1e5;border-radius:6px;background:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);}
 .wine-strip{height:6px;background:var(--wine);}
-.fiscal-body{display:flex;min-height:460px;position:relative;}
+.fiscal-body{display:flex;min-height:460px;}
 
 .fiscal-sidebar{width:210px;background:#fff;border-right:1px solid var(--border);flex-shrink:0;padding:14px 0;}
 .sb-brand{padding:0 16px 12px;font-size:12px;font-weight:700;color:#3a3d40;border-bottom:1px solid var(--border);margin-bottom:10px;}
@@ -51,9 +51,10 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 .f-field input,.f-field select{border:1px solid #d6d9de;border-radius:6px;padding:6px 9px;font-size:12.5px;font-family:inherit;color:var(--ink);background:#fff;}
 .f-field input[type=datetime-local]{width:190px;}
 .f-field select{width:170px;}
+.fechas-group{display:flex;gap:14px;border-radius:8px;}
 .btn-solid{background:var(--orange);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;height:34px;}
 .btn-solid:disabled{background:#e7c9a6;cursor:not-allowed;}
-.helper-limit{font-size:11px;color:var(--sub);margin-left:auto;align-self:center;}
+.helper-limit{font-size:11px;color:var(--sub);margin-left:auto;align-self:center;border-radius:14px;padding:4px 4px;}
 .table-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .table-toolbar .tt-title{font-size:12.5px;font-weight:700;color:#26292c;}
 .tbtn{border:1px solid #d6d9de;background:#fff;color:#3a3f45;font-size:12px;padding:6px 13px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;}
@@ -80,15 +81,34 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
 
 .toast{position:relative;max-width:520px;background:#fff;border:1px solid #f3c98a;border-left:4px solid var(--orange);border-radius:6px;padding:10px 14px;font-size:12px;color:#3a3f45;margin-top:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
 
-.modal-overlay{position:absolute;inset:0;background:rgba(20,22,24,.45);display:flex;align-items:center;justify-content:center;z-index:5;}
-.modal-box{background:#fff;border-radius:10px;width:420px;box-shadow:0 8px 28px rgba(0,0,0,.22);overflow:hidden;}
-.modal-header{padding:16px 20px 0;font-weight:800;font-size:15px;color:var(--wine);}
-.modal-body{padding:10px 20px 4px;font-size:12.5px;line-height:1.65;color:#3a3f45;}
-.modal-body ul{margin:8px 0 4px 18px;padding:0;}
-.modal-body li{margin-bottom:4px;}
-.modal-sla{background:var(--orange-bg);color:#a85a12;border-radius:6px;padding:8px 10px;font-size:11.5px;font-weight:600;margin-top:10px;}
-.modal-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 20px 18px;}
-.modal-check{font-size:11.5px;color:var(--sub);display:flex;align-items:center;gap:6px;}
+/* ===== Recorrido guiado (onboarding) — mismo patrón del prototipo de referencia ===== */
+.tour-overlay{position:fixed;inset:0;background:rgba(20,22,24,.5);z-index:900;display:none;}
+.tour-overlay.active{display:block;}
+.tour-highlight{position:relative;z-index:901;box-shadow:0 0 0 4px var(--orange),0 0 26px rgba(0,0,0,.35);border-radius:8px;background:#fff;}
+.tour-tip{position:fixed;z-index:902;background:#fff;border-radius:10px;width:300px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:16px 18px;display:none;}
+.tour-tip.active{display:block;}
+.tour-tip h4{font-size:13px;margin:0 0 6px;color:var(--wine);}
+.tour-tip p{font-size:12px;line-height:1.5;color:#3a3f45;margin:0 0 12px;}
+.tour-footer-row{display:flex;justify-content:space-between;align-items:center;}
+.tour-step-count{font-size:11px;color:var(--sub);}
+.tour-btns{display:flex;gap:8px;}
+.tour-btn{border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.tour-btn.primary{background:var(--orange);color:#fff;font-weight:600;}
+.tour-btn.ghost{background:#f0f1f3;color:#3a3f45;}
+.tour-skip{font-size:11px;color:var(--sub);text-decoration:underline;cursor:pointer;display:block;text-align:right;margin-top:8px;}
+
+.tour-fab-group{position:fixed;bottom:26px;left:26px;display:flex;z-index:500;box-shadow:0 8px 22px rgba(0,0,0,.28);border-radius:30px;}
+.tour-fab-main{background:var(--orange);color:#fff;border:none;border-right:1px solid rgba(255,255,255,.35);border-radius:30px 0 0 30px;padding:14px 22px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.tour-fab-main:hover{background:#d96f14;}
+.tour-fab-arrow{background:var(--orange);color:#fff;border:none;border-radius:0 30px 30px 0;padding:14px 16px;font-size:14px;cursor:pointer;display:flex;align-items:center;}
+.tour-fab-arrow:hover{background:#d96f14;}
+.tour-menu{position:fixed;bottom:80px;left:26px;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:8px;min-width:280px;display:none;z-index:501;}
+.tour-menu.open{display:block;}
+.tour-menu-title{font-size:10.5px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;padding:6px 10px 8px;}
+.tour-menu-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;font-size:12.5px;color:#26292c;cursor:pointer;}
+.tour-menu-item:hover{background:var(--orange-bg);color:var(--orange);}
+.tour-menu-item .tmi-num{width:20px;height:20px;border-radius:50%;background:#f0f1f3;color:#6b6f74;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tour-menu-item:hover .tmi-num{background:var(--orange);color:#fff;}
 </style>
 </head>
 <body>
@@ -100,6 +120,7 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
   <strong>Sobre este prototipo</strong>
   Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.<br><br>
   ⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Fiscal, eso significa colores, tipografía, estructura de paneles y componentes propios de ese sistema (franja vino, sidebar blanco con acento naranja, tablas con chips de estado).<br><br>
+  Este prototipo es funcional: usa el botón 👀 <b>"Iniciar recorrido"</b> (esquina inferior izquierda) para un recorrido guiado paso a paso por la pantalla nueva. Todo lo que aparece en gris no es parte de esta HU — es solo el resto del shell real de la app.<br><br>
   Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌
 </div>
 
@@ -136,27 +157,29 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
           <div class="inner-sub">La descarga se procesa en segundo plano y puede tardar hasta 7 días, según el tiempo de respuesta del SAT.</div>
 
           <div class="filters-inline">
-            <div class="f-field">
+            <div class="f-field" id="tt-tipo">
               <label><span class="num">1</span>Tipo</label>
               <select><option>Recibidos</option><option>Emitidos</option><option>Recibidos Cancelados</option><option>Emitidos Cancelados</option></select>
             </div>
-            <div class="f-field">
-              <label><span class="num">2</span>Desde</label>
-              <input type="datetime-local" value="2026-06-01T00:00">
+            <div class="fechas-group" id="tt-fechas">
+              <div class="f-field">
+                <label><span class="num">2</span>Desde</label>
+                <input type="datetime-local" value="2026-06-01T00:00">
+              </div>
+              <div class="f-field">
+                <label><span class="num">2</span>Hasta</label>
+                <input type="datetime-local" value="2026-06-30T23:59">
+              </div>
             </div>
-            <div class="f-field">
-              <label><span class="num">2</span>Hasta</label>
-              <input type="datetime-local" value="2026-06-30T23:59">
-            </div>
-            <button class="btn-solid"><span class="num" style="background:#fff;color:var(--orange)">3</span>Solicitar descarga</button>
-            <div class="helper-limit"><span class="num">4</span>2 de 5 solicitudes usadas hoy</div>
+            <button class="btn-solid" id="tt-solicitar"><span class="num" style="background:#fff;color:var(--orange)">3</span>Solicitar descarga</button>
+            <div class="helper-limit" id="tt-limite"><span class="num">4</span>2 de 5 solicitudes usadas hoy</div>
           </div>
 
           <div class="table-toolbar">
             <div class="tt-title">Peticiones realizadas</div>
-            <button class="tbtn">⟳ Actualizar</button>
+            <button class="tbtn" id="tt-actualizar">⟳ Actualizar</button>
           </div>
-          <div class="table-scroll">
+          <div class="table-scroll" id="tt-tabla">
             <table class="fiscal-table">
               <thead>
                 <tr><th><span class="num">5</span>Id solicitud</th><th>Fecha creación</th><th>Tipo</th><th>Desde</th><th>Hasta</th><th><span class="num">6</span>Estatus</th></tr>
@@ -195,7 +218,6 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
   <div class="legend">
     <div class="legend-title">Leyenda de comportamiento</div>
     <ol class="legend">
-      <li><b>Ver también ②</b> — modal de bienvenida que se muestra la primera vez que el usuario entra a esta pantalla.</li>
       <li><b>① Tipo</b> — combo obligatorio, 4 valores fijos: Recibidos, Emitidos, Recibidos Cancelados, Emitidos Cancelados. Sin default preseleccionado.</li>
       <li><b>② Desde / Hasta</b> — fecha y hora obligatorias. Validaciones: Desde ≤ Hasta; Hasta no puede ser fecha futura; (Hasta − Desde) no puede ser mayor a 1 mes. Cualquier validación fallida muestra el mensaje específico (ver ⑦) y mantiene el botón "Solicitar descarga" deshabilitado.</li>
       <li><b>③ Botón "Solicitar descarga"</b> — habilitado solo si Tipo, Desde y Hasta son válidos y no existe ya una solicitud con el mismo Tipo + mismo rango exacto en estatus distinto de "Finalizada" o "Error". Al hacer clic, se deshabilita de inmediato (evita doble clic) hasta que el sistema confirma la creación de la solicitud o el rechazo. Si ya existe una solicitud igual, no crea una nueva: muestra la existente y el mensaje "Ya existe una solicitud en proceso para este periodo y tipo, no es necesario volver a solicitarla".</li>
@@ -214,73 +236,97 @@ table.fiscal-table tr:hover td{background:#fafbfc;}
       <li><b>⑦ Mensajes de validación de rango</b> — 3 mensajes posibles según el caso: "El rango de fechas no puede ser mayor a 1 mes", "La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'", "No se pueden solicitar descargas con fechas futuras". Se muestran junto a los campos, no como modal.</li>
       <li>Al finalizar una solicitud (pasar a "Finalizada"), el sistema genera una notificación in-app para el usuario (no correo, por ahora) con el mismo detalle textual que se ve en la tabla.</li>
       <li>Para los tipos "Recibidos Cancelados" y "Emitidos Cancelados" no se ofrece botón de descarga de XML individuales en el detalle de la solicitud — el SAT no permite descargar el XML de un comprobante cancelado, solo su metadato.</li>
+      <li><b>Onboarding (recorrido guiado)</b> — se ofrece mediante el botón flotante "👀 Iniciar recorrido"; no es un modal único de bienvenida, sino un recorrido de varios pasos que resalta cada elemento de la pantalla en orden. El cliente puede iniciarlo cuantas veces quiera desde ese botón — no se dispara solo ni se marca como "visto".</li>
     </ol>
   </div>
 </div>
 
-<div class="screen">
-  <div class="screen-label">② Modal de bienvenida — primera vez que el usuario entra a la pantalla</div>
-  <div class="screen-desc">
-    Modal que se muestra automáticamente la primera vez que el RFC del cliente visita "Descargar del SAT". No vuelve a aparecer en visitas posteriores salvo que el usuario marque explícitamente que quiere volver a verlo. No bloquea funcionalidad: es solo informativo.
-  </div>
-
-  <div class="fiscal-frame">
-    <div class="wine-strip"></div>
-    <div class="fiscal-body">
-      <div class="fiscal-sidebar">
-        <div class="sb-brand">GM FISCAL<small>Empresa Demo SA de CV</small></div>
-        <div class="sb-item ui-disabled"><span class="ic">▤</span> Dashboard</div>
-        <div class="sb-item ui-disabled"><span class="ic">🗂</span> Solicitudes</div>
-        <div class="sb-item ui-disabled"><span class="ic">⚖</span> Conciliaciones</div>
-        <div class="sb-item ui-disabled"><span class="ic">🧾</span> CFDI</div>
-        <div class="sb-sub ui-disabled">Emitidos</div>
-        <div class="sb-sub ui-disabled">Recibidos</div>
-        <div class="sb-item ui-disabled"><span class="ic">📊</span> Reportes</div>
-        <div class="sb-item"><span class="ic">⬇</span> Descargas</div>
-        <div class="sb-sub active">Descargar del SAT</div>
-        <div class="sb-item ui-disabled"><span class="ic">🔎</span> Consulta EFOS</div>
-      </div>
-
-      <div class="fiscal-main" style="filter:blur(1.5px);opacity:.6;">
-        <div class="content-header">
-          <div class="ch-left"><span class="ic">⬇</span><span class="ch-title">Descargar del SAT</span></div>
-        </div>
-        <div class="content-body">
-          <div class="inner-title">Solicitar descarga de comprobantes</div>
-          <div class="inner-sub">La descarga se procesa en segundo plano y puede tardar hasta 7 días, según el tiempo de respuesta del SAT.</div>
-        </div>
-      </div>
-
-      <div class="modal-overlay">
-        <div class="modal-box">
-          <div class="modal-header"><span class="num">8</span>Descarga de CFDI directo del SAT</div>
-          <div class="modal-body">
-            Desde aquí puedes solicitar la descarga de tus comprobantes directamente del SAT, sin esperar al proceso automático diario.
-            <ul>
-              <li><b>Recibidos</b> y <b>Emitidos</b> — comprobantes vigentes del periodo.</li>
-              <li><b>Recibidos Cancelados</b> y <b>Emitidos Cancelados</b> — lista de comprobantes cancelados (el SAT no permite descargar su XML, solo su metadato).</li>
-            </ul>
-            El rango de fechas máximo por solicitud es de <b>1 mes</b>, y puedes hacer hasta <b>5 solicitudes nuevas por día</b>.
-            <div class="modal-sla">⏱ El SAT puede tardar hasta 7 días en resolver una solicitud. Puedes cerrar esta pantalla — te avisamos aquí mismo cuando esté lista.</div>
-          </div>
-          <div class="modal-footer">
-            <label class="modal-check"><input type="checkbox"><span class="num" style="background:#8a8f94">9</span>No volver a mostrar</label>
-            <button class="btn-solid">Entendido</button>
-          </div>
-        </div>
-      </div>
+<!-- ===== Recorrido guiado ===== -->
+<div class="tour-overlay" id="tourOverlay"></div>
+<div class="tour-tip" id="tourTip">
+  <h4 id="tourTitle"></h4>
+  <p id="tourText"></p>
+  <div class="tour-footer-row">
+    <span class="tour-step-count" id="tourCount"></span>
+    <div class="tour-btns">
+      <button class="tour-btn ghost" id="tourPrev">Anterior</button>
+      <button class="tour-btn primary" id="tourNext">Siguiente</button>
     </div>
   </div>
-
-  <div class="legend">
-    <div class="legend-title">Leyenda de comportamiento</div>
-    <ol class="legend">
-      <li><b>⑧ Modal de bienvenida</b> — se dispara automáticamente en el primer ingreso de cada RFC a esta pantalla (no depende de sesión/navegador, sino de un flag guardado por RFC en backend, para que no reaparezca si el cliente entra desde otro equipo). El contenido de fondo queda visible pero deshabilitado mientras el modal está abierto.</li>
-      <li><b>⑨ Checkbox "No volver a mostrar"</b> — desmarcado por defecto. Si el usuario cierra el modal (botón "Entendido") sin marcarlo, el modal reaparece en su siguiente visita a la pantalla. Si lo marca antes de cerrar, el modal no vuelve a aparecer para ese RFC.</li>
-      <li>El botón "Entendido" es la única forma de cerrar el modal — no tiene ícono de "X" ni se cierra haciendo clic fuera, para asegurar que el usuario lea el contenido al menos la primera vez.</li>
-    </ol>
-  </div>
+  <span class="tour-skip" id="tourSkip">Saltar recorrido</span>
 </div>
 
+<div class="tour-fab-group">
+  <button class="tour-fab-main" id="tourStart">👀 Iniciar recorrido</button>
+  <button class="tour-fab-arrow" id="tourArrow">▾</button>
+</div>
+<div class="tour-menu" id="tourMenu">
+  <div class="tour-menu-title">Ir directo a...</div>
+</div>
+
+<script>
+const steps = [
+  { sel:"#tt-tipo", title:"1. Elige el tipo de comprobante", text:"Recibidos, Emitidos, Recibidos Cancelados o Emitidos Cancelados. Los cancelados se obtienen vía metadatos, porque el SAT no permite descargar el XML de un comprobante cancelado." },
+  { sel:"#tt-fechas", title:"2. Define el rango de fechas", text:"Máximo 1 mes por solicitud. No se permiten fechas futuras ni que 'Desde' sea posterior a 'Hasta'." },
+  { sel:"#tt-solicitar", title:"3. Solicita la descarga", text:"Al hacer clic se crea la solicitud y se envía a la bóveda fiscal. Si ya existe una solicitud igual (mismo tipo y rango), se reutiliza en vez de crear una nueva." },
+  { sel:"#tt-limite", title:"4. Límite diario de solicitudes", text:"Puedes hacer hasta 5 solicitudes nuevas por día (valor parametrizable). Las consultas de avance de solicitudes ya creadas no cuentan contra este límite." },
+  { sel:"#tt-tabla", title:"5. Da seguimiento a tus solicitudes", text:"Aquí ves el historial con su estatus: Solicitud creada, Descarga completa, Finalizada, Sin comprobantes en el periodo o Error. El proceso avanza solo, en segundo plano — no necesitas hacer nada más." },
+  { sel:"#tt-actualizar", title:"6. Actualiza el estatus", text:"El SAT puede tardar hasta 7 días en resolver una solicitud. Usa este botón para refrescar la tabla sin recargar la página. También recibes una notificación cuando tu descarga termina." }
+];
+let current = -1;
+const overlay = document.getElementById("tourOverlay");
+const tip = document.getElementById("tourTip");
+const menu = document.getElementById("tourMenu");
+
+function clearHighlight(){
+  document.querySelectorAll(".tour-highlight").forEach(e=>e.classList.remove("tour-highlight"));
+}
+function positionTip(el){
+  const r = el.getBoundingClientRect();
+  const tipW = 300, tipH = tip.offsetHeight || 160;
+  let top = r.bottom + 14;
+  if (top + tipH > window.innerHeight) top = Math.max(14, r.top - tipH - 14);
+  let left = Math.min(Math.max(14, r.left), window.innerWidth - tipW - 14);
+  tip.style.top = top + "px";
+  tip.style.left = left + "px";
+}
+function showStep(i){
+  clearHighlight();
+  current = i;
+  const s = steps[i];
+  const el = document.querySelector(s.sel);
+  el.classList.add("tour-highlight");
+  el.scrollIntoView({ block:"center", behavior:"smooth" });
+  document.getElementById("tourTitle").textContent = s.title;
+  document.getElementById("tourText").textContent = s.text;
+  document.getElementById("tourCount").textContent = (i+1) + "/" + steps.length;
+  document.getElementById("tourPrev").style.visibility = i===0 ? "hidden" : "visible";
+  document.getElementById("tourNext").textContent = i===steps.length-1 ? "Finalizar" : "Siguiente";
+  overlay.classList.add("active");
+  tip.classList.add("active");
+  menu.classList.remove("open");
+  setTimeout(()=>positionTip(el), 220);
+}
+function endTour(){
+  clearHighlight();
+  overlay.classList.remove("active");
+  tip.classList.remove("active");
+}
+document.getElementById("tourStart").onclick = ()=>showStep(0);
+document.getElementById("tourNext").onclick = ()=>{
+  if (current >= steps.length-1) endTour(); else showStep(current+1);
+};
+document.getElementById("tourPrev").onclick = ()=>{ if (current>0) showStep(current-1); };
+document.getElementById("tourSkip").onclick = endTour;
+document.getElementById("tourArrow").onclick = ()=>menu.classList.toggle("open");
+
+steps.forEach((s,i)=>{
+  const row = document.createElement("div");
+  row.className = "tour-menu-item";
+  row.innerHTML = '<span class="tmi-num">'+(i+1)+'</span><span>'+s.title.replace(/^\d+\.\s*/,"")+"</span>";
+  row.onclick = ()=>showStep(i);
+  menu.appendChild(row);
+});
+</script>
 </body>
 </html>

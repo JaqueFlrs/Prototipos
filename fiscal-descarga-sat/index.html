@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<title>HU0000 — Descarga manual de CFDI del SAT (GM Fiscal)</title>
+<style>
+:root{
+  --page-bg:#eceef1; --ink:#26292c; --sub:#8a8f94; --border:#edeef0;
+  --wine:#6d1f49; --orange:#ee7d1e; --orange-bg:#fdece0;
+  --green:#1f9254; --green-bg:#e2f8ec; --red:#d64545; --red-bg:#fdeaea;
+  --blue:#1a56db; --blue-bg:#eaf1ff;
+}
+*{box-sizing:border-box;}
+body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);background:var(--page-bg);margin:0;padding:24px 32px 60px;}
+
+.page-title{font-size:16px;font-weight:800;margin-bottom:4px;}
+.page-sub{font-size:12px;color:var(--sub);margin-bottom:16px;}
+.disclaimer{background:#fff8ee;border:1px solid #e0c080;padding:12px 16px;margin-bottom:28px;font-size:12px;line-height:1.6;color:#3a3020;border-radius:6px;}
+.disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
+
+.screen{margin-bottom:36px;}
+.screen-label{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.screen-desc{font-size:12px;color:#3a3f45;background:#fff;border-left:3px solid var(--wine);padding:10px 14px;margin-bottom:12px;line-height:1.55;border-radius:0 6px 6px 0;}
+
+/* Frame GM Fiscal */
+.fiscal-frame{border:1px solid #dfe1e5;border-radius:6px;background:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.wine-strip{height:6px;background:var(--wine);}
+.fiscal-body{display:flex;min-height:460px;position:relative;}
+
+.fiscal-sidebar{width:210px;background:#fff;border-right:1px solid var(--border);flex-shrink:0;padding:14px 0;}
+.sb-brand{padding:0 16px 12px;font-size:12px;font-weight:700;color:#3a3d40;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.sb-brand small{color:var(--sub);font-weight:400;font-size:10px;display:block;}
+.sb-item{padding:8px 16px;font-size:12px;color:#565a5f;display:flex;align-items:center;gap:9px;}
+.sb-item .ic{width:16px;text-align:center;font-size:12px;}
+.ui-disabled, .ui-disabled *{color:#c7cbcf !important;}
+.ui-disabled .ic{opacity:.6;}
+.sb-sub{padding:7px 16px 7px 41px;font-size:11.5px;color:#6b6f74;}
+.sb-sub.active{background:var(--orange-bg);color:var(--orange);font-weight:700;border-right:3px solid var(--orange);}
+
+.fiscal-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.content-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);}
+.ch-left{display:flex;align-items:center;gap:12px;}
+.ch-left .ic{color:var(--wine);font-size:14px;}
+.ch-title{font-size:13px;font-weight:700;color:#26292c;}
+.content-body{padding:16px 20px;overflow-x:auto;}
+.inner-title{font-size:16px;font-weight:700;margin-bottom:2px;}
+.inner-sub{font-size:12px;color:var(--sub);margin-bottom:14px;}
+
+.filters-inline{background:#fbfbfc;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:end;gap:14px;flex-wrap:wrap;}
+.f-field label{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub);margin-bottom:4px;}
+.f-field input,.f-field select{border:1px solid #d6d9de;border-radius:6px;padding:6px 9px;font-size:12.5px;font-family:inherit;color:var(--ink);background:#fff;}
+.f-field input[type=datetime-local]{width:190px;}
+.f-field select{width:170px;}
+.btn-solid{background:var(--orange);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;height:34px;}
+.btn-solid:disabled{background:#e7c9a6;cursor:not-allowed;}
+.helper-limit{font-size:11px;color:var(--sub);margin-left:auto;align-self:center;}
+.table-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.table-toolbar .tt-title{font-size:12.5px;font-weight:700;color:#26292c;}
+.tbtn{border:1px solid #d6d9de;background:#fff;color:#3a3f45;font-size:12px;padding:6px 13px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+
+.table-scroll{overflow-x:auto;border:1px solid var(--border);border-radius:6px;}
+table.fiscal-table{border-collapse:collapse;width:100%;min-width:820px;font-size:12px;}
+table.fiscal-table th{background:#fafbfc;color:#9199a1;text-transform:uppercase;font-size:10px;letter-spacing:.4px;font-weight:700;padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+table.fiscal-table td{padding:9px 10px;border-bottom:1px solid #f4f5f6;white-space:nowrap;font-variant-numeric:tabular-nums;}
+table.fiscal-table tr:hover td{background:#fafbfc;}
+
+.pill-status{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.pill-status.gray{background:#eef0f2;color:#5b5f63;}
+.pill-status.blue{background:var(--blue-bg);color:var(--blue);}
+.pill-status.green{background:var(--green-bg);color:var(--green);}
+.pill-status.red{background:var(--red-bg);color:var(--red);}
+.pill-status.amber{background:#fdf3e3;color:#b9791f;}
+
+.num{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--blue);color:#fff;font-size:9.5px;font-weight:800;margin-right:4px;flex-shrink:0;}
+
+.legend{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-top:12px;font-size:12px;line-height:1.7;}
+.legend-title{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--wine);margin-bottom:8px;}
+.legend li{margin-bottom:7px;}
+.legend b{color:#26292c;}
+
+.toast{position:relative;max-width:520px;background:#fff;border:1px solid #f3c98a;border-left:4px solid var(--orange);border-radius:6px;padding:10px 14px;font-size:12px;color:#3a3f45;margin-top:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+
+.modal-overlay{position:absolute;inset:0;background:rgba(20,22,24,.45);display:flex;align-items:center;justify-content:center;z-index:5;}
+.modal-box{background:#fff;border-radius:10px;width:420px;box-shadow:0 8px 28px rgba(0,0,0,.22);overflow:hidden;}
+.modal-header{padding:16px 20px 0;font-weight:800;font-size:15px;color:var(--wine);}
+.modal-body{padding:10px 20px 4px;font-size:12.5px;line-height:1.65;color:#3a3f45;}
+.modal-body ul{margin:8px 0 4px 18px;padding:0;}
+.modal-body li{margin-bottom:4px;}
+.modal-sla{background:var(--orange-bg);color:#a85a12;border-radius:6px;padding:8px 10px;font-size:11.5px;font-weight:600;margin-top:10px;}
+.modal-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 20px 18px;}
+.modal-check{font-size:11.5px;color:var(--sub);display:flex;align-items:center;gap:6px;}
+</style>
+</head>
+<body>
+
+<div class="page-title">HU0000 — Descarga manual de CFDI del SAT</div>
+<div class="page-sub">GM Fiscal · Pantalla nueva "Descargar del SAT" · Complemento manual al flujo automático vía Hades</div>
+
+<div class="disclaimer">
+  <strong>Sobre este prototipo</strong>
+  Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.<br><br>
+  ⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Fiscal, eso significa colores, tipografía, estructura de paneles y componentes propios de ese sistema (franja vino, sidebar blanco con acento naranja, tablas con chips de estado).<br><br>
+  Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌
+</div>
+
+<div class="screen">
+  <div class="screen-label">① Descargar del SAT — pantalla nueva</div>
+  <div class="screen-desc">
+    Pantalla nueva dentro de GM Fiscal, visible para el cliente autenticado. Permite solicitar manualmente la descarga de CFDI (Recibidos, Emitidos, Recibidos Cancelados, Emitidos Cancelados) directamente del SAT vía la bóveda fiscal, como complemento al proceso automático de Hades. Los números azules remiten a la leyenda de comportamiento debajo del wireframe.
+  </div>
+
+  <div class="fiscal-frame">
+    <div class="wine-strip"></div>
+    <div class="fiscal-body">
+      <div class="fiscal-sidebar">
+        <div class="sb-brand">GM FISCAL<small>Empresa Demo SA de CV</small></div>
+        <div class="sb-item ui-disabled"><span class="ic">▤</span> Dashboard</div>
+        <div class="sb-item ui-disabled"><span class="ic">🗂</span> Solicitudes</div>
+        <div class="sb-item ui-disabled"><span class="ic">⚖</span> Conciliaciones</div>
+        <div class="sb-item ui-disabled"><span class="ic">🧾</span> CFDI</div>
+        <div class="sb-sub ui-disabled">Emitidos</div>
+        <div class="sb-sub ui-disabled">Recibidos</div>
+        <div class="sb-item ui-disabled"><span class="ic">📊</span> Reportes</div>
+        <div class="sb-item"><span class="ic">⬇</span> Descargas</div>
+        <div class="sb-sub active">Descargar del SAT</div>
+        <div class="sb-item ui-disabled"><span class="ic">🔎</span> Consulta EFOS</div>
+      </div>
+
+      <div class="fiscal-main">
+        <div class="content-header">
+          <div class="ch-left"><span class="ic">⬇</span><span class="ch-title">Descargar del SAT</span></div>
+        </div>
+
+        <div class="content-body">
+          <div class="inner-title">Solicitar descarga de comprobantes</div>
+          <div class="inner-sub">La descarga se procesa en segundo plano y puede tardar hasta 7 días, según el tiempo de respuesta del SAT.</div>
+
+          <div class="filters-inline">
+            <div class="f-field">
+              <label><span class="num">1</span>Tipo</label>
+              <select><option>Recibidos</option><option>Emitidos</option><option>Recibidos Cancelados</option><option>Emitidos Cancelados</option></select>
+            </div>
+            <div class="f-field">
+              <label><span class="num">2</span>Desde</label>
+              <input type="datetime-local" value="2026-06-01T00:00">
+            </div>
+            <div class="f-field">
+              <label><span class="num">2</span>Hasta</label>
+              <input type="datetime-local" value="2026-06-30T23:59">
+            </div>
+            <button class="btn-solid"><span class="num" style="background:#fff;color:var(--orange)">3</span>Solicitar descarga</button>
+            <div class="helper-limit"><span class="num">4</span>2 de 5 solicitudes usadas hoy</div>
+          </div>
+
+          <div class="table-toolbar">
+            <div class="tt-title">Peticiones realizadas</div>
+            <button class="tbtn">⟳ Actualizar</button>
+          </div>
+          <div class="table-scroll">
+            <table class="fiscal-table">
+              <thead>
+                <tr><th><span class="num">5</span>Id solicitud</th><th>Fecha creación</th><th>Tipo</th><th>Desde</th><th>Hasta</th><th><span class="num">6</span>Estatus</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>9723d17d-…-4b8a</td><td>05/08/2026 09:12</td><td>Recibidos</td><td>01/06/2026</td><td>30/06/2026</td>
+                  <td><span class="pill-status gray">Solicitud creada</span></td>
+                </tr>
+                <tr>
+                  <td>e171b91e-…-8bf1</td><td>04/08/2026 16:40</td><td>Recibidos Cancelados</td><td>01/01/2026</td><td>31/01/2026</td>
+                  <td><span class="pill-status blue">Descarga completa, pendiente de procesar</span></td>
+                </tr>
+                <tr>
+                  <td>b766e0dc-…-236f</td><td>02/08/2026 11:05</td><td>Emitidos</td><td>01/06/2026</td><td>30/06/2026</td>
+                  <td><span class="pill-status green">Finalizada — 11 XML procesados, 2 nuevos</span></td>
+                </tr>
+                <tr>
+                  <td>a551c551-…-284f</td><td>29/07/2026 08:50</td><td>Recibidos</td><td>01/03/2026</td><td>31/03/2026</td>
+                  <td><span class="pill-status amber">Sin comprobantes en el periodo</span></td>
+                </tr>
+                <tr>
+                  <td>07bf57d2-…-3e195</td><td>28/07/2026 14:22</td><td>Emitidos Cancelados</td><td>01/02/2026</td><td>28/02/2026</td>
+                  <td><span class="pill-status red">Error</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="toast"><span class="num" style="background:var(--orange)">7</span><b>"El rango de fechas no puede ser mayor a 1 mes"</b> — mensaje cuando Hasta − Desde &gt; 1 mes. El botón "Solicitar descarga" permanece deshabilitado hasta corregir el rango.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-title">Leyenda de comportamiento</div>
+    <ol class="legend">
+      <li><b>Ver también ②</b> — modal de bienvenida que se muestra la primera vez que el usuario entra a esta pantalla.</li>
+      <li><b>① Tipo</b> — combo obligatorio, 4 valores fijos: Recibidos, Emitidos, Recibidos Cancelados, Emitidos Cancelados. Sin default preseleccionado.</li>
+      <li><b>② Desde / Hasta</b> — fecha y hora obligatorias. Validaciones: Desde ≤ Hasta; Hasta no puede ser fecha futura; (Hasta − Desde) no puede ser mayor a 1 mes. Cualquier validación fallida muestra el mensaje específico (ver ⑦) y mantiene el botón "Solicitar descarga" deshabilitado.</li>
+      <li><b>③ Botón "Solicitar descarga"</b> — habilitado solo si Tipo, Desde y Hasta son válidos y no existe ya una solicitud con el mismo Tipo + mismo rango exacto en estatus distinto de "Finalizada" o "Error". Al hacer clic, se deshabilita de inmediato (evita doble clic) hasta que el sistema confirma la creación de la solicitud o el rechazo. Si ya existe una solicitud igual, no crea una nueva: muestra la existente y el mensaje "Ya existe una solicitud en proceso para este periodo y tipo, no es necesario volver a solicitarla".</li>
+      <li><b>④ Contador de uso diario</b> — texto informativo "X de 5 solicitudes usadas hoy". El 5 es el límite diario configurado por RFC (parametrizable en backend, no fijo en código). Al llegar a 5/5, el botón "Solicitar descarga" se deshabilita y se muestra "Alcanzaste el límite de solicitudes de descarga permitidas por hoy. Intenta de nuevo mañana". Las consultas automáticas de avance de solicitudes ya creadas no consumen este contador.</li>
+      <li><b>⑤ Id solicitud</b> — UUID devuelto por la bóveda fiscal (36 caracteres), truncado visualmente en la tabla con "…", texto completo visible en tooltip al pasar el mouse.</li>
+      <li><b>Botón "⟳ Actualizar"</b> — refresca la tabla de "Peticiones realizadas" contra el estado actual en BD (no dispara ninguna llamada a la bóveda fiscal directamente; el que consulta al SAT es siempre el proceso automático en background). Útil porque el cliente puede dejar la pantalla abierta esperando que una solicitud avance.</li>
+      <li>Los ítems de sidebar en gris (Dashboard, Solicitudes, Conciliaciones, CFDI, Reportes, Consulta EFOS) son el resto del shell real de GM Fiscal — no forman parte de esta HU, se muestran solo para ubicar la pantalla nueva dentro de la navegación real.</li>
+      <li><b>⑥ Estatus</b> — 6 valores posibles, cada uno con su color fijo:
+        <br>• <span class="pill-status gray" style="margin:2px 0;">Solicitud creada</span> gris — recién creada, esperando que el proceso automático consulte el avance.
+        <br>• <span class="pill-status blue" style="margin:2px 0;">Descarga completa, pendiente de procesar</span> azul — el SAT ya entregó el paquete, el proceso automático va a descomprimir/leer los XML sin que el usuario haga nada.
+        <br>• <span class="pill-status green" style="margin:2px 0;">Finalizada</span> verde — muestra además el detalle textual devuelto por la bóveda ("11 XML procesados, 2 nuevos" o, si es tipo Cancelados, "X comprobantes cancelados encontrados").
+        <br>• <span class="pill-status amber" style="margin:2px 0;">Sin comprobantes en el periodo</span> ámbar — el SAT no encontró CFDI en el rango solicitado; no es un error.
+        <br>• <span class="pill-status red" style="margin:2px 0;">Error</span> rojo — falla real de la integración (ej. certificado no disponible); el detalle técnico NO se muestra al cliente, solo queda en la alerta interna de soporte.
+        <br>Mientras el estatus está en "Solicitud creada" y la bóveda responde "aún no hay paquete listo", el estatus se mantiene igual (no cambia a Error) y el sistema reintenta automáticamente más tarde.
+      </li>
+      <li><b>⑦ Mensajes de validación de rango</b> — 3 mensajes posibles según el caso: "El rango de fechas no puede ser mayor a 1 mes", "La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'", "No se pueden solicitar descargas con fechas futuras". Se muestran junto a los campos, no como modal.</li>
+      <li>Al finalizar una solicitud (pasar a "Finalizada"), el sistema genera una notificación in-app para el usuario (no correo, por ahora) con el mismo detalle textual que se ve en la tabla.</li>
+      <li>Para los tipos "Recibidos Cancelados" y "Emitidos Cancelados" no se ofrece botón de descarga de XML individuales en el detalle de la solicitud — el SAT no permite descargar el XML de un comprobante cancelado, solo su metadato.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-label">② Modal de bienvenida — primera vez que el usuario entra a la pantalla</div>
+  <div class="screen-desc">
+    Modal que se muestra automáticamente la primera vez que el RFC del cliente visita "Descargar del SAT". No vuelve a aparecer en visitas posteriores salvo que el usuario marque explícitamente que quiere volver a verlo. No bloquea funcionalidad: es solo informativo.
+  </div>
+
+  <div class="fiscal-frame">
+    <div class="wine-strip"></div>
+    <div class="fiscal-body">
+      <div class="fiscal-sidebar">
+        <div class="sb-brand">GM FISCAL<small>Empresa Demo SA de CV</small></div>
+        <div class="sb-item ui-disabled"><span class="ic">▤</span> Dashboard</div>
+        <div class="sb-item ui-disabled"><span class="ic">🗂</span> Solicitudes</div>
+        <div class="sb-item ui-disabled"><span class="ic">⚖</span> Conciliaciones</div>
+        <div class="sb-item ui-disabled"><span class="ic">🧾</span> CFDI</div>
+        <div class="sb-sub ui-disabled">Emitidos</div>
+        <div class="sb-sub ui-disabled">Recibidos</div>
+        <div class="sb-item ui-disabled"><span class="ic">📊</span> Reportes</div>
+        <div class="sb-item"><span class="ic">⬇</span> Descargas</div>
+        <div class="sb-sub active">Descargar del SAT</div>
+        <div class="sb-item ui-disabled"><span class="ic">🔎</span> Consulta EFOS</div>
+      </div>
+
+      <div class="fiscal-main" style="filter:blur(1.5px);opacity:.6;">
+        <div class="content-header">
+          <div class="ch-left"><span class="ic">⬇</span><span class="ch-title">Descargar del SAT</span></div>
+        </div>
+        <div class="content-body">
+          <div class="inner-title">Solicitar descarga de comprobantes</div>
+          <div class="inner-sub">La descarga se procesa en segundo plano y puede tardar hasta 7 días, según el tiempo de respuesta del SAT.</div>
+        </div>
+      </div>
+
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <div class="modal-header"><span class="num">8</span>Descarga de CFDI directo del SAT</div>
+          <div class="modal-body">
+            Desde aquí puedes solicitar la descarga de tus comprobantes directamente del SAT, sin esperar al proceso automático diario.
+            <ul>
+              <li><b>Recibidos</b> y <b>Emitidos</b> — comprobantes vigentes del periodo.</li>
+              <li><b>Recibidos Cancelados</b> y <b>Emitidos Cancelados</b> — lista de comprobantes cancelados (el SAT no permite descargar su XML, solo su metadato).</li>
+            </ul>
+            El rango de fechas máximo por solicitud es de <b>1 mes</b>, y puedes hacer hasta <b>5 solicitudes nuevas por día</b>.
+            <div class="modal-sla">⏱ El SAT puede tardar hasta 7 días en resolver una solicitud. Puedes cerrar esta pantalla — te avisamos aquí mismo cuando esté lista.</div>
+          </div>
+          <div class="modal-footer">
+            <label class="modal-check"><input type="checkbox"><span class="num" style="background:#8a8f94">9</span>No volver a mostrar</label>
+            <button class="btn-solid">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-title">Leyenda de comportamiento</div>
+    <ol class="legend">
+      <li><b>⑧ Modal de bienvenida</b> — se dispara automáticamente en el primer ingreso de cada RFC a esta pantalla (no depende de sesión/navegador, sino de un flag guardado por RFC en backend, para que no reaparezca si el cliente entra desde otro equipo). El contenido de fondo queda visible pero deshabilitado mientras el modal está abierto.</li>
+      <li><b>⑨ Checkbox "No volver a mostrar"</b> — desmarcado por defecto. Si el usuario cierra el modal (botón "Entendido") sin marcarlo, el modal reaparece en su siguiente visita a la pantalla. Si lo marca antes de cerrar, el modal no vuelve a aparecer para ese RFC.</li>
+      <li>El botón "Entendido" es la única forma de cerrar el modal — no tiene ícono de "X" ni se cierra haciendo clic fuera, para asegurar que el usuario lea el contenido al menos la primera vez.</li>
+    </ol>
+  </div>
+</div>
+
+</body>
+</html>

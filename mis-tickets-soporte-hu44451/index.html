@@ -110,6 +110,24 @@ body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a2a2a;backgr
 .cierre ul:last-child{margin-bottom:0;}
 .cierre li{font-size:13.5px;color:#444;line-height:1.65;margin-bottom:7px;}
 .cierre .check{color:#2e8b3e;font-weight:700;margin-right:6px;}
+
+.main-tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:2px solid #ddd;}
+.main-tab{padding:11px 22px;font-size:14px;font-weight:700;color:#888;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;}
+.main-tab.active{color:#f9682a;border-bottom:3px solid #f9682a;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+.dev{background:#fff;border:1px solid #e2e2e2;border-radius:6px;padding:24px 28px;margin-bottom:26px;}
+.dev h2{font-size:16px;color:#2a2a2a;margin:0 0 12px;}
+.dev h3{font-size:13.5px;color:#f9682a;text-transform:uppercase;letter-spacing:.3px;margin:20px 0 8px;}
+.dev p{font-size:14px;color:#444;line-height:1.6;margin-bottom:10px;}
+.dev ol,.dev ul{margin:0 0 10px;padding-left:22px;}
+.dev li{font-size:13.5px;color:#444;line-height:1.65;margin-bottom:7px;}
+.dev li ul{margin-top:6px;}
+.dev code{background:#f2f2f2;border:1px solid #e0e0e0;border-radius:3px;padding:1px 5px;font-size:12.5px;font-family:Consolas,monospace;}
+.dev pre{background:#2a2a2a;color:#eee;border-radius:4px;padding:12px 16px;font-size:12.5px;font-family:Consolas,monospace;overflow-x:auto;margin-bottom:10px;line-height:1.5;}
+.dev hr{border:none;border-top:1px solid #e6e6e6;margin:22px 0;}
+.dev .parte-label{display:inline-block;background:#fdefd0;color:#4a3400;font-size:12px;font-weight:700;padding:3px 10px;border-radius:10px;margin-bottom:10px;}
 </style>
 
 <div class="wrap">
@@ -119,6 +137,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a2a2a;backgr
     <strong>Sobre este prototipo</strong>
     Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador. El diseño final podrá variar durante el desarrollo.
   </div>
+
+  <div class="main-tabs">
+    <div class="main-tab active" data-tab="visual">Vista visual</div>
+    <div class="main-tab" data-tab="devsteps">Paso a paso (dev)</div>
+  </div>
+
+  <div id="tab-visual" class="tab-panel active">
 
   <div class="intro">
     <h2>Qué está pidiendo el cliente y por qué</h2>
@@ -363,4 +388,154 @@ body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#2a2a2a;backgr
     </ul>
   </div>
 
+  </div>
+
+  <div id="tab-devsteps" class="tab-panel">
+    <div class="dev">
+      <h2>Qué está pidiendo el cliente y por qué</h2>
+      <p>Ahora mismo, si un cliente de GM Transport quiere saber cómo va un ticket de soporte que levantó, tiene que salirse del ERP y entrar al portal de Zoho Desk. Eso es un paso extra que no debería existir. Lo que se pide es que, sin salir del ERP, el usuario pueda ver sus propios tickets de soporte, su estatus, y la conversación completa con soporte — como si tuviera el portal de Zoho Desk metido dentro del propio ERP. Esto aplica para <b>todas las empresas que usan el ERP</b>, no solo para una en particular.</p>
+    </div>
+
+    <div class="dev">
+      <span class="parte-label">Parte 1 — se construye primero</span>
+      <h2>Servicio central de tickets de soporte</h2>
+      <p>Servicio nuevo (backend), independiente del ERP y de GM Integra, que hace de intermediario entre las instalaciones del ERP y Zoho Desk.</p>
+
+      <h3>Cómo conectarte a Zoho Desk</h3>
+      <p>OAuth2, flujo <b>Self Client</b>:</p>
+      <ol>
+        <li><a href="https://api-console.zoho.com" target="_blank">api-console.zoho.com</a> → crear cliente tipo <b>Self Client</b>.</li>
+        <li>"Generate Code" con scope <code>Desk.tickets.READ</code>. Dura 10 min, canjéalo de inmediato.</li>
+        <li>Canjear código:
+<pre>POST https://accounts.zoho.com/oauth/v2/token
+grant_type=authorization_code&client_id=...&client_secret=...&code=...</pre>
+        Regresa <code>access_token</code> (1 hora) y <code>refresh_token</code> (no expira, guardar cifrado — nunca en texto plano ni en el código).</li>
+        <li>Renovar <code>access_token</code> cuando expire:
+<pre>POST https://accounts.zoho.com/oauth/v2/token
+grant_type=refresh_token&client_id=...&client_secret=...&refresh_token=...</pre>
+        </li>
+        <li>Llamadas: header <code>Authorization: Zoho-oauthtoken {access_token}</code>, base <code>https://desk.zoho.com/api/v1/</code>.</li>
+      </ol>
+      <p>Si luego hace falta otro scope (<code>Desk.contacts.READ</code>, etc.), no se puede ampliar el refresh_token — repetir desde el paso 2.</p>
+
+      <h3>Qué hace el servicio con esa conexión, en operación normal</h3>
+      <ol>
+        <li>Guarda sus propias credenciales de Zoho Desk (client_id, client_secret, refresh_token) en su configuración — nunca en el ERP.</li>
+        <li>Cuando necesita consultar tickets y no tiene un token vigente, pide uno nuevo usando el refresh_token. El access_token dura 1 hora.
+          <ul><li>Si el refresh_token ya no es válido, el servicio responde al ERP con una falla genérica — nunca expone el error técnico real de Zoho.</li></ul>
+        </li>
+        <li>Filtra <b>siempre</b> por <code>departmentId = 890726000000006907</code> (departamento "GMTransportErp"), fijo en el código. La cuenta es compartida con Franquicias y Rastreo Satelital — esos nunca deben mezclarse, aunque el RFC coincida.</li>
+        <li>Trae los tickets de una empresa usando el campo <code>cf.cf_rfc</code>. Se captura a mano por un agente, así que hay que <b>normalizarlo (quitar espacios, mayúsculas)</b> antes de comparar — si no, un ticket puede "desaparecer" por un espacio de más.</li>
+        <li>Traduce el estatus real de Zoho Desk a un estatus fijo:
+          <ul>
+            <li>"Documentándose" (y similares en curso) → "En proceso"</li>
+            <li>"Resuelto - Pendiente del cliente" / "Pendiente por el cliente" → "Esperando tu respuesta"</li>
+            <li>"Finalizado" / "Cerrado" → "Cerrado"</li>
+            <li>Para lo demás, usar <code>statusType</code> (<code>Open</code>/<code>Closed</code>) como base, no el texto exacto.</li>
+          </ul>
+        </li>
+        <li>Trae los tickets en <b>lotes por departamento</b> (consulta paginada general), nunca una consulta por cada empresa — y los reparte internamente por RFC. Esto evita que el costo crezca aunque haya miles de clientes.</li>
+        <li>Caché con vigencia distinta por vista:
+          <ul>
+            <li>"Abiertos" / "En espera" / "Vencidos": 5 minutos.</li>
+            <li>"Cerrados" / "Todos": 30 minutos.</li>
+          </ul>
+        </li>
+        <li>Antes de mostrar el detalle de un ticket, valida que el RFC coincida con el de la instalación que lo pide. Si no, responde <b>como si el folio no existiera</b>.</li>
+        <li>Filtra las notas internas (<code>type: "comment"</code> / <code>isPublic: false</code>) y solo entrega mensajes públicos (<code>type: "thread"</code>, <code>visibility: "public"</code>) — siempre, sin excepción.</li>
+        <li>Los adjuntos se exponen por una URL propia del servicio (proxy) — nunca la URL directa de Zoho Desk.</li>
+        <li>Corre una sincronización en segundo plano una vez al día para que el dato nunca esté completamente frío.</li>
+      </ol>
+    </div>
+
+    <div class="dev">
+      <span class="parte-label">Parte 2 — se construye después</span>
+      <h2>Pantalla "Mis Tickets de Soporte" en el ERP</h2>
+      <p>El ERP <b>nunca</b> guarda ni usa un token de Zoho Desk — solo llama por HTTP al servicio central, enviando el/los RFC de la instalación.</p>
+      <ol>
+        <li>En la barra superior del ERP, junto al ícono de ayuda, se agrega un ícono nuevo con forma de ticket.</li>
+        <li>Cualquier usuario con sesión abierta puede dar clic ahí. Sin permiso especial.</li>
+        <li>Al dar clic, se abre "Mis Tickets de Soporte", que llama al servicio central (no a Zoho Desk).</li>
+        <li>5 pestañas: <b>Abiertos</b> (default), <b>En espera</b>, <b>Vencidos</b>, <b>Cerrados</b>, <b>Todos</b>.</li>
+        <li>Tabla con 3 columnas: <b>Folio</b>, <b>Asunto</b>, <b>Estatus</b>. Lo demás va en el detalle (paso 8).</li>
+        <li>Solo tickets de la empresa con sesión abierta — ya filtrado por el servicio central.
+          <ul><li>Con multiempresa: se envían todos los RFC de la instalación y se muestran juntos.</li></ul>
+        </li>
+        <li>Reglas por pestaña:
+          <ul>
+            <li><b>Abiertos</b>: sin límite de fecha.</li>
+            <li><b>En espera</b>: el servicio ya entrega "Esperando tu respuesta" — nunca el texto original.</li>
+            <li><b>Vencidos</b>: fecha compromiso ya pasada, sin importar otra categoría.</li>
+            <li><b>Cerrados</b>: solo últimos 3 meses.</li>
+            <li><b>Todos</b>: junta las anteriores (mismo límite de 3 meses para cerrados).</li>
+          </ul>
+        </li>
+        <li>Detalle al dar clic en una fila: folio, asunto, estatus, prioridad, canal, fecha de creación, última actualización, fecha compromiso, quién atiende, y debajo la conversación completa (más viejo arriba).</li>
+        <li>Adjuntos: imagen → miniatura; otro archivo → descargable con nombre. Siempre vía servicio central, nunca URL directa de Zoho.</li>
+        <li>"En espera" muestra también el aviso "Esperando tu respuesta" junto al estatus en el detalle.</li>
+        <li>Texto "Actualizado hace X min" + botón "Actualizar" arriba de la tabla. Al dar clic, vuelve a consultar el servicio central.</li>
+        <li>Además del botón manual, el proceso diario del servicio central mantiene el dato con máximo un día de retraso.</li>
+        <li>Solo lectura: ningún botón para responder, comentar ni cerrar desde el ERP.</li>
+      </ol>
+    </div>
+
+    <div class="dev">
+      <h2>Casos que también debes cubrir (no son opcionales)</h2>
+      <ul>
+        <li><b>Listado vacío</b>: mensaje "No tienes tickets de soporte registrados." — nunca tabla vacía sin explicación.</li>
+        <li><b>Falla del servicio central</b> (caído, no responde, o no logra autenticarse): mensaje "No se pudo consultar el estatus de tus tickets en este momento, intenta más tarde." Nunca error técnico. La pantalla no se queda cargando indefinidamente.</li>
+        <li><b>Notas privadas</b>: nunca llegan al ERP ni al cliente — se filtran siempre en el servicio central, el ERP ni las recibe.</li>
+        <li><b>Doble clic o clics repetidos</b>: no debe disparar varias consultas al mismo tiempo.</li>
+        <li><b>RFC mal escrito o con espacios</b>: el servicio central normaliza antes de comparar contra <code>cf_rfc</code>.</li>
+        <li><b>Folio de otra empresa adivinado</b>: el servicio responde como si no existiera — nunca confirma que existe en otra empresa.</li>
+      </ul>
+
+      <h2>Qué NO te puedes brincar</h2>
+      <ul>
+        <li>"¿Y si el ticket no tiene fecha compromiso?" → No aparece en "Vencidos", pero sí en las demás pestañas que le correspondan.</li>
+        <li>"¿Esto aplica solo a un cliente en específico?" → No, todas las empresas, sin activar nada por cliente.</li>
+        <li>"¿Puedo mostrar la nota privada si el ticket ya está cerrado?" → No. Nunca, sin excepción.</li>
+        <li>"¿Qué hago si el servicio central o Zoho Desk tardan mucho?" → Se trata igual que una falla: mensaje genérico, nunca pantalla cargando indefinidamente.</li>
+        <li>"¿El usuario puede responder desde aquí si le urge?" → No, es solo consulta.</li>
+        <li>"Pensé que 'Todos' era el historial completo sin límite" → No, también respeta los 3 meses para cerrados.</li>
+        <li>"Pensé que el ERP podía guardar el token de Zoho Desk para ir más rápido" → No, bajo ninguna circunstancia. Siempre pasa por el servicio central.</li>
+      </ul>
+
+      <h2>Cómo saber que ya quedó bien</h2>
+      <p><b>Servicio central:</b></p>
+      <ul>
+        <li>Obtiene y renueva el token solo, sin intervención manual.</li>
+        <li>Solo trae tickets de "GMTransportErp", nunca de Franquicias ni Rastreo Satelital.</li>
+        <li>El estatus que entrega ya viene traducido, nunca el texto original de Zoho.</li>
+        <li>Responde desde caché si está vigente, y vuelve a consultar Zoho cuando expiró.</li>
+        <li>Nunca entrega una nota privada, probándolo con un ticket que sí tenga una.</li>
+        <li>Si el folio no pertenece a la instalación, responde como si no existiera.</li>
+      </ul>
+      <p><b>Pantalla del ERP:</b></p>
+      <ul>
+        <li>El ícono aparece en la topbar para cualquier usuario, sin configurar nada.</li>
+        <li>Las 5 pestañas filtran correctamente, "Abiertos" abre por default.</li>
+        <li>La tabla solo tiene Folio, Asunto y Estatus.</li>
+        <li>El detalle trae todos los campos, la conversación y los adjuntos.</li>
+        <li>El botón "Actualizar" funciona y actualiza el texto "Actualizado hace X".</li>
+        <li>Si falla el servicio central, se ve el mensaje genérico, no un error técnico.</li>
+        <li>No existe ningún botón para responder o modificar un ticket.</li>
+      </ul>
+
+      <h2>Referencia</h2>
+      <p>Gherkins: <code>HU47696-1 Servicio Central de Tickets de Soporte.feature</code> (construir primero) y <code>HU47696 Mis Tickets de Soporte en el ERP.feature</code> (construir después).</p>
+    </div>
+  </div>
+
 </div>
+
+<script>
+document.querySelectorAll('.main-tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    document.querySelectorAll('.main-tab').forEach(function(t){ t.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+</script>

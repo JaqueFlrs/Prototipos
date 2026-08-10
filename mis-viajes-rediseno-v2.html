@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GM Mis Viajes — Rediseño App Operadores</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#eef0f3;color:#1c1c1c;padding:28px 16px 60px}
+.page-title{max-width:960px;margin:0 auto 6px;font-size:22px;font-weight:600;color:#1a1a1a;text-align:center}
+.page-sub{max-width:960px;margin:0 auto 18px;font-size:13px;color:#777;text-align:center}
+#mvw .pg{display:none;flex-direction:column;height:100%;overflow-y:auto;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#FAFAFA;color:#1c1c1c;padding-top:26px}
+#mvw .pg.active{display:flex}
+#mvw .cd{background:#fff;border:1px solid #ececec;border-radius:9px;padding:13px;box-shadow:0 1px 2px rgba(20,20,20,.04)}
+#mvw .rw{display:flex;align-items:center;gap:8px}
+#mvw .lb{font-size:10.5px;color:#8a8a8a;margin-bottom:2px}
+#mvw .vl{font-size:13px;color:#1c1c1c;font-weight:500}
+#mvw .pill{font-size:10.5px;font-weight:500;padding:4px 10px;border-radius:5px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+#mvw .bp{background:#E8600F;color:#fff;text-align:center;border-radius:8px;padding:13px;font-size:13.5px;font-weight:500;width:100%;cursor:pointer;display:block}
+#mvw .bs{background:#F1F1F1;color:#555;text-align:center;border-radius:8px;padding:12px;font-size:12.5px;width:100%;cursor:pointer;display:block}
+#mvw input,#mvw select,#mvw textarea{border:1.5px solid #e0e0e0;border-radius:7px;padding:11px;font-size:12.5px;width:100%;font-family:inherit;margin-bottom:9px;color:#1c1c1c;background:#fff}
+#mvw .hd{padding:8px 16px 12px;flex:0 0 auto}
+#mvw .hdt{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;min-height:26px}
+#mvw .hdm{display:flex;align-items:center;gap:11px}
+#mvw .ic{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#mvw .t1{font-size:16.5px;font-weight:500;color:#1c1c1c}
+#mvw .t2{font-size:11px;color:#999}
+#mvw .bk{width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:17px;color:#1c1c1c;cursor:pointer}
+#mvw .lock{background:#F4F4F4;border:1.5px solid #e8e8e8;border-radius:7px;padding:10px 11px;font-size:12.5px;color:#666;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+#mvw .tile{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;cursor:pointer}
+#mvw .tic{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+#mvw .seg{flex:1;text-align:center;padding:9px 2px;border:1.5px solid #e2e2e2;border-radius:7px;font-size:12px;color:#666;cursor:pointer}
+#mvw .seg.on{background:#E8F5E8;border-color:#388E3C;color:#1B5E20;font-weight:500}
+#mvw .secf{transition:all .15s}
+#mvw .modo-simple .secf{font-size:9.5px!important;opacity:.5}
+#mvw .modo-simple .tilelbl{opacity:.55}
+#mvw .lista-minima #page-trips .secf{display:none}
+#mvw .solo-obligatorios .campo-opcional{display:none}
+#mvw .wiz{display:none}
+#mvw .wiz.on{display:block}
+#mvw .dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+#mvw .dot{width:24px;height:24px;border-radius:50%;background:#eee;color:#999;font-size:11.5px;font-weight:500;display:flex;align-items:center;justify-content:center}
+#mvw .dot.on{background:#E8600F;color:#fff}
+#mvw .dot.done{background:#FFF2E8;color:#E64A19}
+</style>
+</head>
+<body>
+
+<div class="page-title">GM Mis Viajes — Rediseño de la app de operadores</div>
+<div class="page-sub">Prototipo interactivo: recorre los flujos tocando los botones del celular. El panel del ERP de abajo está vinculado en vivo.</div>
+
+<div style="max-width:900px;margin:0 auto 26px;background:#fff;border:1px solid #eee;border-radius:12px;padding:18px 22px;box-shadow:0 1px 8px rgba(20,20,20,.04);font-family:'Segoe UI',system-ui,Arial,sans-serif">
+  <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:12px">Se propone:</div>
+  <div style="display:flex;gap:26px;flex-wrap:wrap">
+    <div style="flex:1;min-width:260px">
+      <div style="font-size:11px;font-weight:600;color:#E64A19;margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em">En la app</div>
+      <ul style="margin:0;padding-left:18px;font-size:12px;color:#444;line-height:1.7">
+        <li>Rediseño completo de la interfaz (login, inicio, salida/llegada, evidencias, chat, carta porte, liquidaciones, gastos, inspecciones, turno, asistencia, perfil)</li>
+        <li>Inicio configurable: ocultar/mostrar gráfico de ruta, distancia, fecha de descarga, número de viaje, hora de sucursal, ver mapa</li>
+        <li>Manejar 1 sola pantalla para reportar y consultar fallas (antes eran 2)</li>
+        <li>Catálogo de códigos de falla por categoría (en vez de iconos fijos)</li>
+        <li>SOS se activa directo y se puede cancelar</li>
+        <li>Filtros por estatus en Mis Viajes y en Liquidaciones</li>
+        <li>Listado de viajes con más variedad de estatus (en ruta, pendiente liquidar, programado)</li>
+        <li>Botones e interfaz más simples y menos saturados</li>
+      </ul>
+    </div>
+    <div style="flex:1;min-width:260px">
+      <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em">En el ERP</div>
+      <ul style="margin:0;padding-left:18px;font-size:12px;color:#444;line-height:1.7">
+        <li>Configurar todo por operador: uno, varios o todos a la vez</li>
+        <li>Módulos visibles/ocultos por operador (chat, asistencia, solicitudes, gastos, liquidaciones, inspecciones, etc.)</li>
+        <li>Campos de formularios configurables (todos vs. solo obligatorios)</li>
+        <li>Listado de viajes configurable (info mínima vs. detalle completo)</li>
+        <li>Valores por default en Salida/Llegada cuando el operador no captura un campo</li>
+        <li>Árbol de derechos igual al ERP real, sin duplicados ni huérfanos — <strong>lo que se desmarca ahí desaparece del celular del operador</strong></li>
+        <li>Solo 2 pestañas: Configuración (todo junto) y Derechos del operador</li>
+        <li>Estilo wireframe (gris) para diferenciarlo del diseño final del ERP</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="mvw" style="max-width:344px;margin:0 auto;position:relative">
+  <div style="border:9px solid #1d1d1f;border-radius:42px;background:#1d1d1f;box-shadow:0 10px 34px rgba(0,0,0,.2)">
+    <div style="position:absolute;top:9px;left:50%;transform:translateX(-50%);width:86px;height:19px;background:#1d1d1f;border-radius:0 0 13px 13px;z-index:8"></div>
+    <div id="viewport" style="position:relative;height:712px;background:#FAFAFA;border-radius:32px;overflow:hidden;color:#1c1c1c">
+      <div style="position:absolute;top:0;left:0;right:0;height:26px;display:flex;justify-content:space-between;align-items:center;padding:0 20px;z-index:7;pointer-events:none">
+        <span style="font-size:11.5px;font-weight:600;color:#1c1c1c">9:41</span>
+        <div class="rw" style="gap:4px">
+          <div style="display:flex;align-items:flex-end;gap:1px;height:9px"><div style="width:2px;height:3px;background:#1c1c1c"></div><div style="width:2px;height:5px;background:#1c1c1c"></div><div style="width:2px;height:7px;background:#1c1c1c"></div><div style="width:2px;height:9px;background:#1c1c1c"></div></div>
+          <i class="ti ti-wifi" style="font-size:11px;color:#1c1c1c" aria-hidden="true"></i>
+          <div style="width:19px;height:9px;border:1px solid #1c1c1c;border-radius:2.5px;padding:1px;display:flex"><div style="width:70%;height:100%;background:#1c1c1c;border-radius:1px"></div></div>
+        </div>
+      </div>
+
+      <div id="ok-ov" style="display:none;position:absolute;inset:0;background:rgba(250,250,250,.95);z-index:9;align-items:center;justify-content:center;flex-direction:column;gap:12px">
+        <div style="width:80px;height:80px;border-radius:50%;background:#E8F5E8;display:flex;align-items:center;justify-content:center"><i class="ti ti-check" style="font-size:42px;color:#2E7D32" aria-hidden="true"></i></div>
+        <div id="ok-txt" style="font-size:16px;font-weight:500;color:#1B5E20"></div>
+      </div>
+
+      <div class="pg active" id="page-login" style="align-items:center;justify-content:center;padding:26px;background:#fff">
+        <div style="width:72px;height:72px;border-radius:12px;background:#E8600F;display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 2px 6px rgba(0,0,0,.12)"><i class="ti ti-route" style="font-size:36px;color:#fff" aria-hidden="true"></i></div>
+        <div style="font-size:20px;font-weight:500;margin-bottom:3px">GM Mis Viajes</div>
+        <div style="font-size:12px;color:#999;margin-bottom:22px">Tu compañero de transporte</div>
+        <input placeholder="RFC">
+        <input placeholder="Usuario">
+        <input placeholder="Contraseña" type="password">
+        <div class="bp" role="button" tabindex="0" style="padding:15px;font-size:14.5px" onclick="nav('page-home')">Iniciar sesión</div>
+      </div>
+
+      <div class="pg" id="page-home">
+        <div class="rw" style="padding:18px 18px 6px;justify-content:space-between">
+          <div class="rw" style="gap:9px;cursor:pointer" onclick="nav('page-perfil')">
+            <div style="width:38px;height:38px;border-radius:50%;background:#FFF2E8;color:#E64A19;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">FL</div>
+            <div><div style="font-size:10.5px;color:#999">Buenas noches</div><div style="font-size:13px;font-weight:500">Flores</div></div>
+          </div>
+          <div id="home-bell" style="position:relative;cursor:pointer;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid #f0f0f0;display:flex;align-items:center;justify-content:center" onclick="nav('page-notif')"><i class="ti ti-bell" style="font-size:26px;color:#E8600F" aria-hidden="true"></i><div style="position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#D32F2F;border:2px solid #fff"></div></div>
+        </div>
+        <div id="hero-viajenum" class="rw" style="padding:0 18px 16px;gap:6px"><i class="ti ti-route" style="font-size:14px;color:#E64A19" aria-hidden="true"></i><span style="font-size:12.5px;color:#555;font-weight:500">Viaje MA-000005103 &middot; Unidad T12</span></div>
+
+        <div style="margin:0 16px 16px;background:#fff;border:1px solid #ececec;border-radius:10px;padding:18px 16px;box-shadow:0 1px 3px rgba(20,20,20,.05)">
+          <div class="rw" style="justify-content:space-between;margin-bottom:12px">
+            <span id="hero-pill" class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Sin salida</span>
+            <span id="geo-chip" class="pill" style="background:#E1F4FF;color:#0D47A1;display:none"><i class="ti ti-map-pin-check" style="font-size:12px" aria-hidden="true"></i> Geocerca</span>
+            <span id="sucursal-mini" style="font-size:10.5px;color:#999"><span style="color:#E64A19;font-weight:500">Suc 11:56</span> &middot; Tú 18:56</span>
+          </div>
+          <div id="hero-graphic" style="position:relative;height:44px;margin:0 6px 4px">
+            <div style="position:absolute;top:9px;left:8px;right:8px;height:4px;background:#F0F0F0;border-radius:3px"></div>
+            <div id="hero-prog" style="position:absolute;top:9px;left:8px;width:0%;height:4px;background:#E8600F;border-radius:3px;transition:width .4s"></div>
+            <div style="position:absolute;top:4px;left:4px;width:14px;height:14px;border-radius:50%;background:#1976D2;border:3px solid #fff;box-shadow:0 0 0 1px #d5e5f5"></div>
+            <div style="position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:#D32F2F;border:3px solid #fff;box-shadow:0 0 0 1px #f5d5d5"></div>
+            <div id="hero-truck" style="position:absolute;top:-8px;left:2%;transition:left .4s"><i class="ti ti-truck" style="font-size:24px;color:#E8600F" aria-hidden="true"></i></div>
+            <div style="position:absolute;bottom:0;left:0;font-size:10.5px;color:#888">Mexicali</div>
+            <div style="position:absolute;bottom:0;right:0;font-size:10.5px;color:#888">Puerto Peñasco</div>
+          </div>
+          <div style="font-size:19px;font-weight:500;margin:6px 0 2px">Puerto Peñasco, Son.</div>
+          <div class="rw" style="gap:5px;margin-bottom:12px;flex-wrap:wrap"><i class="ti ti-map-pin" style="font-size:12px;color:#999" aria-hidden="true"></i><span id="hero-dist" style="font-size:11px;color:#999">297 km &middot; 184.6 mi</span><span id="hero-descarga" style="font-size:11px;color:#999">&nbsp;&middot; Descarga 25/06 12:10</span><span id="vermapa-link" style="font-size:11px;color:#1976D2;cursor:pointer;font-weight:500" onclick="nav('page-mapa')">&nbsp;&middot; Ver mapa</span></div>
+          <div class="bp" id="pa-btn" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:9px;padding:16px;font-size:15.5px;box-shadow:0 1px 4px rgba(0,0,0,.15)">
+            <i class="ti ti-player-play" id="pa-icon" style="font-size:24px;color:#fff" aria-hidden="true"></i>
+            <span id="pa-label" style="color:#fff">Registrar salida</span>
+          </div>
+        </div>
+
+        <div class="rw" style="padding:0 16px 16px;gap:10px">
+          <div class="tile" id="qa-evidencia" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:14px;padding:10px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-evidencias')"><div class="tic" style="background:#FFF2E8;width:40px;height:40px"><i class="ti ti-camera" style="font-size:21px;color:#E64A19" aria-hidden="true"></i></div><span style="font-size:11px;font-weight:500;color:#444">Evidencia</span></div>
+          <div class="tile" id="qa-estatus" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:14px;padding:10px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-estatus')"><div class="tic" style="background:#FFF8E1;width:40px;height:40px"><i class="ti ti-clipboard-check" style="font-size:21px;color:#B45309" aria-hidden="true"></i></div><span style="font-size:11px;font-weight:500;color:#444">Estatus</span></div>
+          <div class="tile" id="qa-chat" style="background:#fff;border:1px solid #f0f0f0;flex:1;border-radius:14px;padding:10px 4px;box-shadow:0 1px 6px rgba(20,20,20,.04)" onclick="nav('page-chat')"><div class="tic" style="background:#E1F4FF;width:40px;height:40px;position:relative"><i class="ti ti-message-circle" style="font-size:21px;color:#1976D2" aria-hidden="true"></i><div style="position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#D32F2F"></div></div><span style="font-size:11px;font-weight:500;color:#444">Chat</span></div>
+        </div>
+
+        <div id="procesos-label" style="padding:0 16px 10px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">MÁS HERRAMIENTAS</div>
+        <div id="procesos-grid" style="padding:0 16px 12px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px"></div>
+        <div id="mas-btn-container" style="padding:0 16px 22px;display:none">
+          <div class="tile" id="mas-btn" onclick="showModal('procesos-modal')" style="background:#fff;border:1px solid #ddd"><div class="tic" style="background:#F5F5F5"><i class="ti ti-dots" style="font-size:21px;color:#666" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">Más</span></div>
+        </div>
+
+        <div id="procesos-modal" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:99;align-items:flex-end;justify-content:center;flex-direction:column">
+          <div style="background:#fff;width:100%;border-radius:16px 16px 0 0;padding:20px;max-height:60%;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font-size:16px;font-weight:500">Más procesos</div>
+              <div class="bk" onclick="hideModal('procesos-modal')" style="width:34px;height:34px"><i class="ti ti-x" aria-hidden="true"></i></div>
+            </div>
+            <div id="procesos-modal-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 6px"></div>
+          </div>
+        </div>
+        <div id="sos-wrap" style="margin:2px 16px 16px;border-top:1px solid #eee;padding-top:16px">
+          <div id="sos-idle">
+            <div id="sos-btn" role="button" tabindex="0" style="background:#fff;border:2px solid #D32F2F;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;cursor:pointer" onclick="sosActivate()">
+              <i class="ti ti-alert-triangle" style="font-size:18px;color:#D32F2F" aria-hidden="true"></i><span style="font-size:13.5px;font-weight:500;color:#D32F2F">SOS &mdash; Emergencia</span>
+            </div>
+            <div style="text-align:center;font-size:9.5px;color:#aaa;margin-top:6px">Solo para emergencias reales &middot; podrás cancelarlo si fue por error</div>
+          </div>
+          <div id="sos-confirm" style="display:none;background:#FDECEA;border:1px solid #f2c2bc;border-radius:14px;padding:14px;text-align:center">
+            <div style="font-size:13.5px;font-weight:500;color:#B71C1C;margin-bottom:3px">¿Estás en una emergencia?</div>
+            <div style="font-size:10.5px;color:#a5564f;margin-bottom:12px">Se enviará tu ubicación GPS a la central</div>
+            <div class="rw" style="gap:9px">
+              <div class="bs" role="button" tabindex="0" style="flex:1" onclick="sosCancel()">No, cancelar</div>
+              <div class="bp" role="button" tabindex="0" style="flex:1;background:#D32F2F" onclick="sosActivate()">Sí, activar SOS</div>
+            </div>
+          </div>
+          <div id="sos-active" style="display:none;background:#D32F2F;border-radius:14px;padding:15px;text-align:center">
+            <div style="font-size:14.5px;font-weight:500;color:#fff;margin-bottom:2px"><i class="ti ti-alert-triangle" style="font-size:16px" aria-hidden="true"></i> SOS activado</div>
+            <div style="font-size:10.5px;color:#ffd6d0;margin-bottom:12px">Te estamos ubicando &middot; mantén la calma</div>
+            <div class="bs" role="button" tabindex="0" style="background:#fff;color:#B71C1C;font-weight:500" onclick="sosStop()">Cancelar SOS</div>
+          </div>
+        </div>
+        <div style="height:62px;flex:0 0 auto"></div>
+      </div>
+
+      <div class="pg" id="page-salida">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#E8600F"><i class="ti ti-player-play" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Registrar salida</div><div class="t2">MA-000005103 &middot; Mexicali &rarr; Puerto Peñasco &middot; T12</div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div id="sal-estatus" style="display:contents"><div class="lb">Estatus del viaje *</div>
+          <select><option>EN RUTA (precargado del ERP)</option><option>CARGADO</option><option>VACÍO</option></select></div>
+          <div id="sal-fecha" style="display:contents"><div class="lb">Fecha y hora de salida *</div>
+          <div class="lock"><span>Hoy, 18:36</span><i class="ti ti-calendar" style="font-size:16px;color:#999" aria-hidden="true"></i></div>
+          <div style="background:#E1F4FF;border-radius:11px;padding:9px 11px;font-size:11px;color:#0D47A1;margin-bottom:9px"><i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Se registrará con el horario de la sucursal (UTC-7)</div></div>
+          <div id="sal-odometro" style="display:contents"><div class="rw" style="gap:9px">
+            <div style="flex:1"><div class="lb">Odómetro (km) *</div><input value="184,520" style="margin-bottom:0"></div>
+            <div style="flex:1"><div class="lb">Odómetro (millas) *</div><input value="114,668" style="margin-bottom:0"></div>
+          </div>
+          <div style="font-size:10px;color:#999;margin:5px 0 10px">Sincronizado con el ERP &middot; se envía el mayor de los dos</div></div>
+          <div id="sal-gps" style="display:contents"><div style="background:#FFF8E1;border-radius:11px;padding:10px 11px;font-size:11px;color:#8a6d1f;margin-bottom:14px"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> Se capturará tu ubicación GPS &middot; <strong>Una vez registrada, la salida no podrá modificarse</strong></div></div>
+          <div style="font-size:12px;font-weight:500;color:#E64A19;margin-bottom:7px">Condiciones de salida</div>
+          <div class="lb">Camión T12 *</div>
+          <select><option>En buen estado</option><option>Con observaciones</option><option>Requiere mantenimiento</option></select>
+          <div class="lb">Carga 1 *</div>
+          <select><option>Cargada</option><option>Vacía</option></select>
+          <div class="campo-opcional"><div class="lb">Observaciones (opcional)</div>
+          <textarea placeholder="Condiciones iniciales del vehículo..." style="height:45px;margin-bottom:0"></textarea></div>
+          <div class="rw" style="gap:9px">
+            <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
+            <div class="bp" role="button" tabindex="0" style="flex:1.4" onclick="doSalida()">Confirmar salida</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-llegada">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#388E3C"><i class="ti ti-flag" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Registrar llegada</div><div class="t2">MA-000005103 &middot; Puerto Peñasco &middot; T12</div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div id="lleg-estatus" style="display:contents"><div class="lb">Estatus del viaje *</div>
+          <select><option>DESCARGADO (precargado del ERP)</option><option>EN ESPERA</option></select></div>
+          <div id="lleg-fecha" style="display:contents"><div class="lb">Fecha y hora de llegada *</div>
+          <div class="lock"><span>Hoy, 22:10</span><i class="ti ti-calendar" style="font-size:16px;color:#999" aria-hidden="true"></i></div></div>
+          <div id="lleg-odometro" style="display:contents"><div class="rw" style="gap:9px;margin-bottom:9px">
+            <div style="flex:1"><div class="lb">Odómetro (km) *</div><input value="184,817" style="margin-bottom:0"></div>
+            <div style="flex:1"><div class="lb">Odómetro (millas) *</div><input value="114,852" style="margin-bottom:0"></div>
+          </div></div>
+          <div id="lleg-unidad" style="display:contents"><div style="font-size:12px;font-weight:500;color:#1B5E20;margin-bottom:7px">Estatus por unidad</div>
+          <div class="lb">Camión T12 *</div>
+          <select><option>Disponible</option><option>En mantenimiento</option><option>Cargado</option></select>
+          <div class="lb">Carga 1 *</div>
+          <select><option>Vacía</option><option>Cargada</option></select>
+          <div class="campo-opcional"><div class="lb">Dolly (opcional)</div>
+          <input placeholder="Observaciones del dolly..."></div></div>
+          <div class="rw" style="gap:9px">
+            <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
+            <div class="bp" role="button" tabindex="0" style="flex:1.4;background:#388E3C" onclick="doLlegada()">Confirmar llegada</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-mapa">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#E8600F"><i class="ti ti-map-2" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Mapa del trayecto</div><div class="t2">Mexicali &rarr; Puerto Peñasco &middot; 297 km</div></div></div></div>
+        <div style="padding:0 16px">
+          <div style="height:256px;border-radius:16px;background:linear-gradient(135deg,#EAF0EA,#F4F8F4);border:1px solid #e2e8e2;position:relative">
+            <div style="position:absolute;top:36px;left:36px;width:14px;height:14px;border-radius:50%;background:#1976D2;border:3px solid #fff"></div>
+            <div style="position:absolute;top:42px;left:54px;width:55%;height:0;border-top:3px dashed #b8c4b8"></div>
+            <div style="position:absolute;bottom:38px;right:40px;width:16px;height:16px;border-radius:50% 50% 0 50%;transform:rotate(45deg);background:#D32F2F;border:3px solid #fff"></div>
+            <div id="geo-ring" style="display:none;position:absolute;bottom:22px;right:24px;width:50px;height:50px;border-radius:50%;border:2.5px dashed #1976D2;opacity:.7"></div>
+          </div>
+          <div class="cd" style="margin-top:10px">
+            <div class="rw" style="justify-content:space-between"><span style="font-size:13px;color:#1976D2;font-weight:500">Mexicali, BC</span><i class="ti ti-arrow-right" style="font-size:15px;color:#bbb" aria-hidden="true"></i><span style="font-size:13px;color:#D32F2F;font-weight:500">Puerto Peñasco, Son.</span></div>
+            <div style="font-size:11px;color:#999;margin-top:5px">297 km &middot; 184.6 mi &middot; Carga 25/06 08:42 &middot; Descarga 25/06 12:10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-estatus">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#B45309"><i class="ti ti-clipboard-check" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Asignar estatus</div><div class="t2">Actualizar estado del trayecto</div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div class="lb">Estatus del trayecto *</div>
+          <select><option>Seleccione un estatus</option><option>EN RUTA</option><option>CARGANDO</option><option>DESCARGANDO</option><option>RETRASO</option><option>EN ESPERA</option></select>
+          <div class="lb">Fecha y hora del estatus</div>
+          <div class="lock"><span>23/06/2026 &middot; 10:17</span><i class="ti ti-calendar" style="font-size:16px;color:#999" aria-hidden="true"></i></div>
+          <div class="campo-opcional"><div class="lb">Observaciones (opcional)</div>
+          <textarea placeholder="Agregue observaciones adicionales..." style="height:66px"></textarea>
+          <div style="text-align:right;font-size:10px;color:#bbb;margin:-6px 0 8px">0/500</div></div>
+          <label class="rw campo-opcional" style="background:#FFF2E8;border-radius:12px;padding:11px;margin-bottom:14px;cursor:pointer"><input type="checkbox" style="width:auto;margin:0;accent-color:#E8600F"><div><div style="font-size:12px;font-weight:500;color:#E64A19">¿Desea notificar al cliente?</div><div style="font-size:10px;color:#b07050">Recibirá una notificación del cambio de estatus</div></div></label>
+          <div class="rw" style="gap:9px">
+            <div class="bs" role="button" tabindex="0" style="flex:1" onclick="nav('page-home')">Cancelar</div>
+            <div class="bp" role="button" tabindex="0" style="flex:1.4" onclick="okThen('Estatus asignado','page-home')">Asignar estatus</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-evidencias">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#E8600F"><i class="ti ti-photo" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Evidencias</div><div class="t2">MA-000005103 &middot; Camión T12</div></div></div></div>
+        <div class="rw" style="margin:0 16px 10px;justify-content:space-between;background:#fff;border:1px solid #f0f0f0;border-radius:14px;padding:11px 13px"><div><div style="font-size:12px;font-weight:500">Convertir a PDF</div><div style="font-size:10px;color:#999">Las imágenes se convertirán automáticamente</div></div><div id="pdf-t" style="width:42px;height:23px;background:#ccc;border-radius:12px;position:relative;cursor:pointer" onclick="tgPdf()"><div id="pdf-k" style="width:19px;height:19px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .15s"></div></div></div>
+        <div style="padding:0 16px 6px;font-size:11.5px;font-weight:500;color:#555">Evidencias requeridas (2)</div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd" id="ev1"><div style="font-size:13px;font-weight:500;margin-bottom:8px">INE</div><div class="rw" style="gap:8px"><div class="bp" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px" onclick="attachEv('ev1')"><i class="ti ti-camera" style="font-size:16px;color:#fff" aria-hidden="true"></i>Tomar foto</div><div class="bs" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px" onclick="attachEv('ev1')"><i class="ti ti-paperclip" style="font-size:16px;color:#555" aria-hidden="true"></i>Seleccionar</div></div></div>
+          <div class="cd" id="ev2"><div style="font-size:13px;font-weight:500;margin-bottom:8px">Firma entregado</div><div class="rw" style="gap:8px"><div class="bp" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px" onclick="attachEv('ev2')"><i class="ti ti-camera" style="font-size:16px;color:#fff" aria-hidden="true"></i>Tomar foto</div><div class="bs" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px" onclick="attachEv('ev2')"><i class="ti ti-paperclip" style="font-size:16px;color:#555" aria-hidden="true"></i>Seleccionar</div></div></div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-chat" style="background:#F5F5F5">
+        <div class="hd" style="background:#fff;border-bottom:1px solid #f0f0f0"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#1976D2"><i class="ti ti-message-circle" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Chat del trayecto</div><div class="t2">MA-000005103 &middot; Tráfico y monitoreo &middot; En línea</div></div></div></div>
+        <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:11px" id="chat-list">
+          <div style="align-self:flex-start;max-width:82%"><div style="font-size:10px;color:#999;margin-bottom:3px">CARLOS RAMÍREZ &middot; Tráfico MXL</div><div style="background:#fff;border-radius:14px 14px 14px 4px;padding:11px 13px;font-size:13px;color:#333;box-shadow:0 1px 3px rgba(0,0,0,.06)">Buen día, confirma cuando salgas de Mexicali</div></div>
+          <div style="align-self:flex-end;background:#E8600F;color:#fff;border-radius:14px 14px 4px 14px;padding:11px 13px;font-size:13px;max-width:82%">Enterado, salgo en 10 minutos</div>
+          <div style="align-self:flex-start;max-width:86%"><div style="font-size:10px;color:#999;margin-bottom:3px">MENSAJE AUTOMÁTICO</div><div style="background:#E1F4FF;border-radius:14px 14px 14px 4px;padding:11px 13px;font-size:12px;color:#0D47A1"><i class="ti ti-map-pin" style="font-size:13px" aria-hidden="true"></i> Estatus EN RUTA registrado &middot; <span style="text-decoration:underline">Ver ubicación</span></div></div>
+        </div>
+        <div style="padding:11px 13px;display:flex;gap:8px;border-top:1px solid #eee;background:#fff;flex:0 0 auto">
+          <input id="chat-in" placeholder="Escribe un mensaje..." style="flex:1;margin-bottom:0;font-size:13px;border-radius:22px;padding:11px 15px"><div role="button" tabindex="0" style="width:44px;height:44px;border-radius:50%;background:#E8600F;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0" onclick="sendChat()"><i class="ti ti-send" style="font-size:18px;color:#fff" aria-hidden="true"></i></div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-cartaporte">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div><span class="pill" style="background:#E8600F;color:#fff;cursor:pointer"><i class="ti ti-refresh" style="font-size:12px" aria-hidden="true"></i> Actualizar</span></div><div class="hdm"><div class="ic" style="background:#E8600F"><i class="ti ti-file-text" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Carta porte</div><div class="t2">Documentos del viaje MA-000005103</div></div></div></div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd rw" style="justify-content:space-between;cursor:pointer"><div class="rw" style="gap:10px"><div class="tic" style="background:#FFF2E8;width:40px;height:40px"><i class="ti ti-file-text" style="font-size:20px;color:#E64A19" aria-hidden="true"></i></div><div><div style="font-size:13px;font-weight:500">Carta Porte 001.pdf</div><div style="font-size:10px;color:#999">Se descarga automáticamente</div></div></div><i class="ti ti-download" style="font-size:20px;color:#E8600F" aria-hidden="true"></i></div>
+          <div class="cd rw" style="justify-content:space-between;cursor:pointer"><div class="rw" style="gap:10px"><div class="tic" style="background:#FFF2E8;width:40px;height:40px"><i class="ti ti-file-text" style="font-size:20px;color:#E64A19" aria-hidden="true"></i></div><div><div style="font-size:13px;font-weight:500">Manifiesto.pdf</div><div style="font-size:10px;color:#999">Se descarga automáticamente</div></div></div><i class="ti ti-download" style="font-size:20px;color:#E8600F" aria-hidden="true"></i></div>
+          <div class="cd" style="background:#E1F4FF;border:none"><div style="font-size:11px;color:#1565C0;line-height:1.6"><i class="ti ti-info-circle" style="font-size:12px" aria-hidden="true"></i> Los documentos se guardan en tu carpeta de documentos. El proceso puede tardar unos segundos.</div></div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-liq">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#E8600F"><i class="ti ti-receipt" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Liquidaciones</div><div class="t2">Consulta y descarga tus pagos</div></div></div></div>
+        <div style="padding:8px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid #eee">
+          <div class="seg on" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Todas</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Pagadas</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Pendientes</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Rechazadas</div>
+        </div>
+        <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd" style="border-left:5px solid #E8600F;border-radius:6px 16px 16px 6px">
+            <div class="rw" style="justify-content:space-between;margin-bottom:3px"><span style="font-size:13.5px;font-weight:500">Última liquidación</span><span class="pill" style="background:#E8F5E8;color:#1B5E20">Pagada</span></div>
+            <div style="font-size:11.5px;color:#888;margin-bottom:9px">Folio 118 &middot; 16&ndash;30 jun &middot; <strong style="color:#1B5E20;font-size:13px">$12,450.00 MXN</strong></div>
+            <div class="bp" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:11px"><i class="ti ti-download" style="font-size:16px;color:#fff" aria-hidden="true"></i>Descargar PDF</div>
+          </div>
+          <div class="cd" style="border-left:5px solid #1976D2;border-radius:6px 16px 16px 6px">
+            <div class="rw" style="justify-content:space-between;margin-bottom:3px"><span style="font-size:13.5px;font-weight:500">Penúltima liquidación</span><span class="pill" style="background:#E8F5E8;color:#1B5E20">Pagada</span></div>
+            <div style="font-size:11.5px;color:#888;margin-bottom:9px">Folio 117 &middot; 1&ndash;15 jun &middot; <strong style="color:#1B5E20;font-size:13px">$11,980.00 MXN</strong></div>
+            <div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;background:#E1F4FF;color:#0D47A1"><i class="ti ti-download" style="font-size:16px" aria-hidden="true"></i>Descargar PDF</div>
+          </div>
+          <input placeholder="Buscar por folio..." style="margin-bottom:9px;border-radius:22px;padding:11px 16px">
+          <div class="cd rw" style="justify-content:space-between"><div><div style="font-size:12.5px;font-weight:500">Folio 116 &middot; 16&ndash;31 may</div><div style="font-size:10.5px;color:#888">$12,105.00 MXN &middot; Pagada 05/06</div></div><span class="pill" style="background:#E8F5E8;color:#1B5E20">Cerrada</span></div>
+          <div class="cd rw" style="justify-content:space-between"><div><div style="font-size:12.5px;font-weight:500">Folio 115 &middot; 1&ndash;15 may</div><div style="font-size:10.5px;color:#888">$10,870.00 MXN &middot; Pagada 20/05</div></div><span class="pill" style="background:#E8F5E8;color:#1B5E20">Cerrada</span></div>
+          <div class="cd rw" style="justify-content:space-between"><div><div style="font-size:12.5px;font-weight:500">Folio 114 &middot; 16&ndash;30 abr</div><div style="font-size:10.5px;color:#888">$11,240.00 MXN &middot; Sin pagar</div></div><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Abierta</span></div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-gastos">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#388E3C"><i class="ti ti-wallet" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Gastos del viaje</div><div class="t2">Balance, anticipos y solicitudes</div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div class="cd" style="background:linear-gradient(135deg,#E8F5E8,#F2FAF2);border:1px solid #d0e8d0;text-align:center;margin-bottom:10px"><div style="font-size:11.5px;color:#2E7D32">Balance total</div><div style="font-size:27px;font-weight:500;color:#1B5E20">+$0.00 <span style="font-size:13px">M.N.</span></div></div>
+          <div class="bp" role="button" tabindex="0" style="background:#388E3C;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px" onclick="wizShow('ga',1)"><i class="ti ti-plus" style="font-size:17px;color:#fff" aria-hidden="true"></i>Nuevo gasto</div>
+          <div id="ga-wrap" style="display:none">
+            <div class="dots" id="ga-dots"></div>
+            <div class="wiz" id="ga-1">
+              <div class="cd" style="background:#E8F5E8;border:1.5px dashed #388E3C;text-align:center;margin-bottom:9px"><i class="ti ti-file-code" style="font-size:24px;color:#2E7D32" aria-hidden="true"></i><div style="font-size:11.5px;color:#1B5E20;margin:5px 0 7px">Carga una factura CFDI (XML) y los campos se llenan solos</div><div class="bs" role="button" tabindex="0" style="background:#388E3C;color:#fff;width:auto;display:inline-block;padding:9px 18px">Seleccionar archivo XML</div></div>
+              <div class="lb">Número de comprobante *</div><input placeholder="Ingresa el número...">
+              <div class="lb">Fecha del gasto</div><div class="lock"><span>23/06/2026 &middot; 10:16</span><i class="ti ti-calendar" style="font-size:15px;color:#999" aria-hidden="true"></i></div>
+              <div class="lb">Folio fiscal UUID</div><input placeholder="Ingresa el folio fiscal">
+              <div class="bp" role="button" tabindex="0" style="background:#388E3C" onclick="wizShow('ga',2)">Siguiente</div>
+            </div>
+            <div class="wiz" id="ga-2">
+              <div class="lb">Concepto de gasto *</div><select><option>Diésel</option><option>Casetas</option><option>Alimentos</option><option>Hospedaje</option></select>
+              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">Litros</div><input placeholder="0.00" style="margin-bottom:0"></div><div style="flex:1"><div class="lb">Galones</div><input placeholder="0.00" style="margin-bottom:0"></div></div>
+              <div class="rw" style="gap:9px;margin-top:9px"><div style="flex:1"><div class="lb">Odómetro</div><input placeholder="km" style="margin-bottom:0"></div><div style="flex:1"><div class="lb">Odómetro millas</div><input placeholder="mi" style="margin-bottom:0"></div></div>
+              <div class="rw" style="gap:9px;margin-top:13px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('ga',1)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#388E3C" onclick="wizShow('ga',3)">Siguiente</div></div>
+            </div>
+            <div class="wiz" id="ga-3">
+              <div class="lb">Proveedor *</div><select><option>Gasolinera Pemex 5580</option><option>Capufe</option><option>Otro</option></select>
+              <div class="rw" style="gap:9px;margin-top:13px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('ga',2)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#388E3C" onclick="wizShow('ga',4)">Siguiente</div></div>
+            </div>
+            <div class="wiz" id="ga-4">
+              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">Impuesto *</div><select style="margin-bottom:0"><option>IVA 16%</option></select></div><div style="flex:1"><div class="lb">Moneda *</div><select style="margin-bottom:0"><option>MXN</option><option>USD</option></select></div></div>
+              <div class="lb" style="margin-top:9px">Subtotal *</div><input value="1,000.00">
+              <div class="cd" style="background:#E8F5E8;border:none;margin-bottom:9px"><div class="rw" style="justify-content:space-between"><span style="font-size:11.5px;color:#2E7D32">Impuesto</span><span style="font-size:11.5px;color:#1B5E20">$160.00</span></div><div class="rw" style="justify-content:space-between;margin-top:4px"><span style="font-size:12.5px;font-weight:500;color:#2E7D32">Total</span><span style="font-size:15px;font-weight:500;color:#1B5E20">$1,160.00 MXN</span></div></div>
+              <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('ga',3)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#388E3C" onclick="wizShow('ga',5)">Siguiente</div></div>
+            </div>
+            <div class="wiz" id="ga-5">
+              <div class="campo-opcional"><div class="lb">Evidencia (opcional) &middot; imagen o PDF</div>
+              <div class="rw" style="gap:8px;margin-bottom:9px"><div class="bs" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Foto</div><div class="bs" role="button" tabindex="0" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-paperclip" style="font-size:16px" aria-hidden="true"></i>PDF</div></div>
+              <input placeholder="Descripción de la evidencia (10-50 caracteres)"></div>
+              <div class="campo-opcional" style="font-size:10px;color:#999;text-align:center;margin-bottom:4px">Este paso es opcional</div>
+              <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('ga',4)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#388E3C" onclick="gaDone()">Enviar solicitud</div></div>
+            </div>
+          </div>
+          <div style="font-size:11.5px;font-weight:500;color:#555;margin:4px 0 6px">Solicitudes de gastos</div>
+          <div id="ga-list"><div style="font-size:11.5px;color:#aaa;text-align:center;padding:10px">Sin solicitudes todavía</div></div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-insp">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div><span class="pill" style="background:#7E57C2;color:#fff;cursor:pointer" onclick="wizShow('in',1)">+ Nueva inspección</span></div><div class="hdm"><div class="ic" style="background:#5E35B1"><i class="ti ti-clipboard-list" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Inspecciones físico-mecánicas</div><div class="t2">Historial de inspecciones realizadas</div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div id="in-wrap" style="display:none">
+            <div class="dots" id="in-dots"></div>
+            <div class="wiz" id="in-1">
+              <div style="font-size:12.5px;font-weight:500;color:#5E35B1;margin-bottom:7px">1 &middot; Movimiento</div>
+              <div style="background:#E1F4FF;border-radius:11px;padding:9px 11px;font-size:11px;color:#0D47A1;margin-bottom:9px"><i class="ti ti-info-circle" style="font-size:12px" aria-hidden="true"></i> Los campos se auto-rellenaron desde el viaje y están bloqueados</div>
+              <div class="lb">Viaje *</div><div class="lock"><span>MA-000005103</span><i class="ti ti-lock" style="font-size:14px;color:#999" aria-hidden="true"></i></div>
+              <div class="lb">Candado oficial *</div><div class="lock"><span>Sin registro</span><i class="ti ti-lock" style="font-size:14px;color:#999" aria-hidden="true"></i></div>
+              <div class="lb">Operador *</div><div class="lock"><span>Flores</span><i class="ti ti-lock" style="font-size:14px;color:#999" aria-hidden="true"></i></div>
+              <div class="lb">Licencia</div><div class="lock"><span>345345TGF</span><i class="ti ti-lock" style="font-size:14px;color:#999" aria-hidden="true"></i></div>
+              <div class="cd" style="background:#EDE7F6;border:none;text-align:center;margin-bottom:10px"><div style="font-size:11.5px;color:#5E35B1;margin-bottom:7px">Evidencias de imagen &middot; 0/4</div><div class="bs" role="button" tabindex="0" style="background:#7E57C2;color:#fff;width:auto;display:inline-flex;align-items:center;gap:6px;padding:9px 18px"><i class="ti ti-camera" style="font-size:15px;color:#fff" aria-hidden="true"></i>Tomar foto</div></div>
+              <div class="bp" role="button" tabindex="0" style="background:#7E57C2" onclick="wizShow('in',2)">Siguiente</div>
+            </div>
+            <div class="wiz" id="in-2">
+              <div style="font-size:12.5px;font-weight:500;color:#5E35B1;margin-bottom:7px">2 &middot; Unidad</div>
+              <div class="lb">Unidad *</div><div class="lock"><span>T12</span><i class="ti ti-lock" style="font-size:14px;color:#999" aria-hidden="true"></i></div>
+              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">Placas nacionales</div><input placeholder="ABC-123-D" style="margin-bottom:0"></div><div class="campo-opcional" style="flex:1"><div class="lb">Placas extranjeras</div><input placeholder="Opcional" style="margin-bottom:0"></div></div>
+              <div class="lb" style="margin-top:9px">Convoy (si aplica)</div>
+              <select><option>Sin convoy</option><option>Remolque R-201</option><option>Remolque R-201 + Dolly</option></select>
+              <div class="rw" style="gap:9px;margin-top:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('in',1)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#7E57C2" onclick="wizShow('in',3)">Siguiente</div></div>
+            </div>
+            <div class="wiz" id="in-3">
+              <div style="font-size:12.5px;font-weight:500;color:#5E35B1;margin-bottom:9px">3 &middot; Revisión</div>
+              <div style="font-size:13px;margin-bottom:6px">Frenos</div>
+              <div class="rw" style="gap:7px;margin-bottom:11px"><div class="seg on" onclick="segOn(this)">Bien</div><div class="seg" onclick="segOn(this)">Mal</div><div class="seg" onclick="segOn(this)">No aplica</div></div>
+              <div style="font-size:13px;margin-bottom:6px">Llantas</div>
+              <div class="rw" style="gap:7px;margin-bottom:11px"><div class="seg on" onclick="segOn(this)">Bien</div><div class="seg" onclick="segOn(this)">Mal</div><div class="seg" onclick="segOn(this)">No aplica</div></div>
+              <div style="font-size:13px;margin-bottom:6px">Luces</div>
+              <div class="rw" style="gap:7px;margin-bottom:11px"><div class="seg on" onclick="segOn(this)">Bien</div><div class="seg" onclick="segOn(this)">Mal</div><div class="seg" onclick="segOn(this)">No aplica</div></div>
+              <div style="font-size:10px;color:#999;margin-bottom:9px">Si respondes "Mal" se puede generar un reporte de falla automáticamente</div>
+              <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('in',2)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#7E57C2" onclick="wizShow('in',4)">Siguiente</div></div>
+            </div>
+            <div class="wiz" id="in-4">
+              <div style="font-size:12.5px;font-weight:500;color:#5E35B1;margin-bottom:7px">4 &middot; Seguridad</div>
+              <div class="lb">Referencia o guía</div><input placeholder="Referencia...">
+              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">SCAC code</div><input placeholder="XXXX" style="margin-bottom:0"></div><div style="flex:1"><div class="lb">ALPHA code</div><input placeholder="XXXX" style="margin-bottom:0"></div></div>
+              <div class="lb" style="margin-top:9px">FAST ID</div><input placeholder="ID...">
+              <div class="lb">Sellos (mínimo 1)</div>
+              <div class="rw" style="gap:8px"><input placeholder="Número de sello" style="margin-bottom:0;flex:1"><div class="bs" role="button" tabindex="0" style="width:auto;padding:10px 13px">+ Agregar</div></div>
+              <div class="rw" style="gap:9px;margin-top:13px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('in',3)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#7E57C2" onclick="wizShow('in',5)">Siguiente</div></div>
+            </div>
+            <div class="wiz" id="in-5">
+              <div style="font-size:12.5px;font-weight:500;color:#5E35B1;margin-bottom:7px">5 &middot; Firma digital</div>
+              <div style="height:116px;border:2.5px dashed #b39ddb;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#9575cd;font-size:12.5px;margin-bottom:11px;background:#fff">Firma aquí con tu dedo</div>
+              <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('in',4)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1;background:#388E3C" onclick="inDone()">Guardar inspección</div></div>
+            </div>
+          </div>
+          <div id="in-list">
+            <div id="in-empty" style="text-align:center;padding:22px 10px"><i class="ti ti-clipboard-check" style="font-size:38px;color:#c9bce8" aria-hidden="true"></i><div style="font-size:13px;font-weight:500;margin:9px 0 3px">No hay inspecciones registradas</div><div style="font-size:11px;color:#999">Toca "+ Nueva inspección" para crear la primera</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-turno">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#B45309"><i class="ti ti-clock" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Registro de operador</div><div class="t2">Controla tu horario laboral</div></div></div></div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px">
+          <div class="cd"><div class="rw" style="justify-content:space-between"><span style="font-size:13.5px;font-weight:500">Registro de horario</span><span class="pill" id="turno-pill" style="background:#FDECEA;color:#B71C1C">Fuera de turno</span></div><div id="turno-sub" style="font-size:11px;color:#999;margin:5px 0 11px">Sin turno activo</div><div class="bp" id="turno-btn" role="button" tabindex="0" style="background:#388E3C" onclick="tgTurno()">Registrar entrada</div></div>
+          <div class="cd"><div class="rw" style="justify-content:space-between"><span style="font-size:13.5px;font-weight:500">Horas productivas</span><span class="pill" id="horas-pill" style="background:#F0F0F0;color:#777">Sin actividad</span></div><div style="font-size:11px;color:#999;margin:5px 0 11px">Independiente del turno</div><div class="bp" id="horas-btn" role="button" tabindex="0" style="background:#9e9e9e" onclick="tgHoras()">Iniciar</div></div>
+          <div class="bs" role="button" tabindex="0" onclick="nav('page-hist')">Ver historial de registros</div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-hist">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-turno')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#E1F4FF"><i class="ti ti-history" style="font-size:19px;color:#1976D2" aria-hidden="true"></i></div><div><div class="t1">Historial de registros</div><div class="t2">Detalles de tus registros</div></div></div></div>
+        <div class="rw" style="padding:0 16px 10px;gap:18px;border-bottom:1px solid #eee">
+          <span id="th-es" style="font-size:13px;font-weight:500;color:#E8600F;border-bottom:3px solid #E8600F;padding-bottom:8px;cursor:pointer" onclick="histTab('es')">Entradas y salidas</span>
+          <span id="th-hp" style="font-size:13px;color:#999;padding-bottom:8px;cursor:pointer" onclick="histTab('hp')">Horas productivas</span>
+        </div>
+        <div id="hist-es" style="padding:12px 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd"><div class="rw" style="justify-content:space-between"><div class="rw"><div class="tic" style="background:#E8F5E8;width:38px;height:38px"><i class="ti ti-login-2" style="font-size:19px;color:#2E7D32" aria-hidden="true"></i></div><span style="font-size:13px;font-weight:500">Entrada</span></div><span class="pill" style="border:1.5px solid #E8600F;color:#E64A19;background:#fff">22:45</span></div><div style="font-size:10.5px;color:#2E7D32;margin-top:6px">Entrada registrada exitosamente &middot; 30/06/2026</div></div>
+          <div class="cd"><div class="rw" style="justify-content:space-between"><div class="rw"><div class="tic" style="background:#FDECEA;width:38px;height:38px"><i class="ti ti-logout-2" style="font-size:19px;color:#C62828" aria-hidden="true"></i></div><span style="font-size:13px;font-weight:500">Salida</span></div><span class="pill" style="border:1.5px solid #E8600F;color:#E64A19;background:#fff">06:50</span></div><div style="font-size:10.5px;color:#2E7D32;margin-top:6px">Salida registrada exitosamente &middot; 30/06/2026</div></div>
+        </div>
+        <div id="hist-hp" style="display:none;padding:26px 16px;text-align:center"><i class="ti ti-briefcase" style="font-size:32px;color:#ddd" aria-hidden="true"></i><div style="font-size:12.5px;font-weight:500;margin-top:9px">Sin registros</div><div style="font-size:11px;color:#999">No hay horas productivas registradas</div></div>
+      </div>
+
+      <div class="pg" id="page-ayuda">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#1976D2"><i class="ti ti-headset" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Solicitudes de asistencia</div><div class="t2">Tuyas y de tus compañeros</div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div class="bp" role="button" tabindex="0" style="background:#1976D2;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:9px" onclick="tgAsis()"><i class="ti ti-plus" style="font-size:17px;color:#fff" aria-hidden="true"></i>Solicitar asistencia</div>
+          <div id="asis-form" style="display:none;margin-bottom:10px">
+            <div class="cd" style="background:#E1F4FF;border:none">
+              <div class="lb" style="color:#0D47A1">Comentarios * (máx. 150)</div>
+              <textarea placeholder="Describe tu situación o el tipo de asistencia que necesitas..." style="height:66px"></textarea>
+              <div style="font-size:10.5px;color:#1565C0;margin-bottom:9px"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> Tu ubicación será incluida automáticamente</div>
+              <div class="bp" role="button" tabindex="0" style="background:#1976D2" onclick="asisSend()">Enviar solicitud</div>
+            </div>
+          </div>
+          <div style="font-size:11.5px;font-weight:500;color:#555;margin-bottom:6px">Mis solicitudes</div>
+          <div id="asis-mias"><div style="font-size:11.5px;color:#aaa;text-align:center;padding:10px">No tienes solicitudes de asistencia</div></div>
+          <div style="font-size:11.5px;font-weight:500;color:#555;margin:11px 0 6px">Mis compañeros</div>
+          <div class="cd">
+            <div class="rw" style="justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">García Mendoza Mónica</span><span class="pill" style="background:#E8F5E8;color:#1B5E20">Atendido</span></div>
+            <div style="font-size:11px;color:#888">Mensaje: PRUEBA &middot; Tel. 686 111 1111 &middot; Unidad T1</div>
+            <div style="background:#E8F5E8;border-radius:10px;padding:8px 10px;font-size:10.5px;color:#1B5E20;margin-top:7px"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i> Asistencia completada &middot; Atendido de forma general</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-perfil">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#E8600F"><i class="ti ti-user" style="font-size:19px;color:#fff" aria-hidden="true"></i></div><div><div class="t1">Mi perfil</div><div class="t2">Consulta tu información</div></div></div></div>
+        <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#E8600F,#FF8A65);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:500">FL</div>
+            <div style="font-size:15px;font-weight:500;text-align:center">Flores</div>
+            <span class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-id-badge-2" style="font-size:12px" aria-hidden="true"></i> Op. 24550</span>
+          </div>
+          <div class="cd rw" style="cursor:pointer;justify-content:space-between" onclick="nav('page-hist')"><div class="rw"><div class="tic" style="background:#E1F4FF;width:38px;height:38px"><i class="ti ti-history" style="font-size:18px;color:#1976D2" aria-hidden="true"></i></div><span style="font-size:12.5px;font-weight:500">Historial de registros</span></div><i class="ti ti-chevron-right" style="font-size:16px;color:#bbb" aria-hidden="true"></i></div>
+          <div class="cd"><div style="font-size:11.5px;font-weight:500;color:#E64A19;margin-bottom:9px">Información personal</div>
+            <div class="rw" style="justify-content:space-between;margin-bottom:8px"><div><div class="lb">Nombre</div><div class="vl">Flores</div></div><i class="ti ti-copy" style="font-size:16px;color:#E8600F;cursor:pointer" aria-hidden="true"></i></div>
+            <div class="rw" style="justify-content:space-between"><div><div class="lb">RFC</div><div class="vl">PAMV800101AB1</div></div><i class="ti ti-copy" style="font-size:16px;color:#E8600F;cursor:pointer" aria-hidden="true"></i></div>
+          </div>
+          <div class="cd"><div style="font-size:11.5px;font-weight:500;color:#1976D2;margin-bottom:9px">Contacto</div>
+            <div class="rw" style="justify-content:space-between;margin-bottom:8px"><div><div class="lb">Teléfono</div><div class="vl">686 111 1111</div></div><i class="ti ti-copy" style="font-size:16px;color:#1976D2;cursor:pointer" aria-hidden="true"></i></div>
+            <div class="rw" style="justify-content:space-between"><div><div class="lb">Correo</div><div class="vl">operador@gmtransport.com</div></div><i class="ti ti-copy" style="font-size:16px;color:#1976D2;cursor:pointer" aria-hidden="true"></i></div>
+          </div>
+          <div class="cd"><div style="font-size:11.5px;font-weight:500;color:#2E7D32;margin-bottom:9px">Vehículo</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+              <div><div class="lb">Código unidad</div><div class="vl">T12</div></div>
+              <div><div class="lb">Tipo</div><div class="vl">Tortón</div></div>
+              <div><div class="lb">Modelo</div><div class="vl">Tracto calidad</div></div>
+              <div><div class="lb">Color</div><div class="vl">Blanco</div></div>
+            </div>
+          </div>
+          <div class="cd rw" style="justify-content:space-between;cursor:pointer"><div class="rw"><div class="tic" style="background:#FDECEA;width:38px;height:38px"><i class="ti ti-bug" style="font-size:18px;color:#C62828" aria-hidden="true"></i></div><span style="font-size:12.5px">Reportar problema de la app</span></div><i class="ti ti-chevron-down" style="font-size:16px;color:#bbb" aria-hidden="true"></i></div>
+          <div class="bp" role="button" tabindex="0" style="background:#D32F2F" onclick="nav('page-login')">Cerrar sesión</div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-notif">
+        <div class="hd"><div class="hdt"><div class="bk" onclick="nav('page-home')"><i class="ti ti-arrow-left" aria-hidden="true"></i></div></div><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-bell" style="font-size:19px;color:#E8600F" aria-hidden="true"></i></div><div><div class="t1">Notificaciones</div><div class="t2">Mantente al día con tus alertas</div></div></div></div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd rw" style="gap:11px"><div class="tic" style="background:#FFF2E8;width:40px;height:40px"><i class="ti ti-truck" style="font-size:20px;color:#E64A19" aria-hidden="true"></i></div><div><div style="font-size:12.5px;font-weight:500">Nuevo viaje asignado</div><div style="font-size:10.5px;color:#999">MA-000005103 &middot; hace 2 h</div></div></div>
+          <div class="cd rw" style="gap:11px"><div class="tic" style="background:#E8F5E8;width:40px;height:40px"><i class="ti ti-receipt" style="font-size:20px;color:#2E7D32" aria-hidden="true"></i></div><div><div style="font-size:12.5px;font-weight:500">Liquidación disponible</div><div style="font-size:10.5px;color:#999">Folio 118 &middot; ayer</div></div></div>
+        </div>
+      </div>
+
+      <div class="pg" id="page-trips">
+        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-truck" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Mis viajes</div><div class="t2">Gestiona y rastrea tus rutas</div></div></div><div class="bk"><i class="ti ti-filter" aria-hidden="true"></i></div></div></div>
+        <div style="padding:8px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid #eee">
+          <div class="seg on" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Todos</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">En ruta</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Terminados</div>
+          <div class="seg" style="flex-shrink:0" onclick="this.parentElement.querySelectorAll('.seg').forEach(e=>e.classList.remove('on'));this.classList.add('on')">Pendientes</div>
+        </div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd" style="cursor:pointer;border-left:5px solid #E8600F;border-radius:6px 16px 16px 6px" onclick="nav('page-home')">
+            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Puerto Peñasco</span><span class="pill" style="background:#FFF2E8;color:#E64A19"><i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i> Sin salida</span></div>
+            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Adolfo Núñez Gallardo</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+            <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Carga 25/06 08:42</span><span>&middot;</span><span>Descarga 25/06 12:10</span><span>&middot;</span><span>297 km</span></div>
+          </div>
+          <div class="cd" style="border-left:5px solid #1976D2;border-radius:6px 16px 16px 6px">
+            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Los Mochis</span><span class="pill" style="background:#E1F4FF;color:#0D47A1"><i class="ti ti-navigation" style="font-size:11px" aria-hidden="true"></i> En ruta</span></div>
+            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Transportes del Noroeste</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
+            <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Salida 24/06 14:22</span><span>&middot;</span><span>Descarga 24/06 22:30</span><span>&middot;</span><span>156 km</span></div>
+          </div>
+          <div class="cd" style="border-left:5px solid #388E3C;border-radius:6px 16px 16px 6px">
+            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Hermosillo</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f"><i class="ti ti-alert-circle" style="font-size:11px" aria-hidden="true"></i> Pendiente liq</span></div>
+            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Importador Express SA</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Mexicali, BC</div></div></div>
+            <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Llegada 23/06 09:45</span><span>&middot;</span><span>234 km</span></div>
+          </div>
+          <div class="cd" style="border-left:5px solid #B39DDB;border-radius:6px 16px 16px 6px">
+            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span style="font-size:15.5px;font-weight:500">Culiacán</span><span class="pill" style="background:#F3E5F5;color:#512DA8"><i class="ti ti-calendar-plus" style="font-size:11px" aria-hidden="true"></i> Programado</span></div>
+            <div class="rw secf" style="gap:16px;margin-bottom:7px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Logística Centro SA</div></div><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">Hermosillo, Son</div></div></div>
+            <div class="rw secf" style="gap:12px;font-size:10px;color:#999;border-top:1px solid #f4f4f4;padding-top:7px"><span>Carga 26/06 06:00</span><span>&middot;</span><span>Descarga 26/06 14:30</span><span>&middot;</span><span>280 km</span></div>
+          </div>
+        </div>
+        <div style="height:62px;flex:0 0 auto"></div>
+      </div>
+
+      <div class="pg" id="page-solicitudes">
+        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FFF2E8"><i class="ti ti-clipboard-list" style="font-size:19px;color:#E64A19" aria-hidden="true"></i></div><div><div class="t1">Mis solicitudes</div><div class="t2">de viaje</div></div></div><div class="bk"><i class="ti ti-filter" aria-hidden="true"></i></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div class="bp" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px" onclick="wizShow('sv',1)"><i class="ti ti-plus" style="font-size:17px;color:#fff" aria-hidden="true"></i>Nueva solicitud</div>
+          <div id="sv-wrap" style="display:none">
+            <div class="dots" id="sv-dots"></div>
+            <div class="wiz" id="sv-1">
+              <div style="font-size:12.5px;font-weight:500;color:#E64A19;margin-bottom:7px">1 &middot; Información general</div>
+              <div class="lb">Cliente *</div><select><option>Seleccionar cliente...</option><option>Cliente Importado Extranjero</option><option>Adolfo Núñez Gallardo</option></select>
+              <div class="lb">Load number * (máx. 30)</div><input placeholder="Ejemplo: LOAD1234">
+              <div class="bp" role="button" tabindex="0" onclick="wizShow('sv',2)">Continuar</div>
+            </div>
+            <div class="wiz" id="sv-2">
+              <div style="font-size:12.5px;font-weight:500;color:#E64A19;margin-bottom:7px">2 &middot; Información de viaje</div>
+              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">Origen *</div><select style="margin-bottom:0"><option>Yarda TJ</option><option>Mexicali</option></select></div><div style="flex:1"><div class="lb">Destino *</div><select style="margin-bottom:0"><option>Yarda cliente</option><option>Puerto Peñasco</option></select></div></div>
+              <div class="rw" style="gap:9px;margin-top:9px"><div style="flex:1"><div class="lb">Peso *</div><input placeholder="0.0000" style="margin-bottom:0"></div><div style="flex:1"><div class="lb">Unidad de medida *</div><select style="margin-bottom:0"><option>Toneladas</option><option>Kilogramos</option></select></div></div>
+              <div class="lb" style="margin-top:9px">Fecha de carga *</div><div class="lock"><span>26/06/2026 &middot; 08:00</span><i class="ti ti-calendar" style="font-size:15px;color:#999" aria-hidden="true"></i></div>
+              <div class="lb">Recoger en *</div><input placeholder="Dirección o referencia...">
+              <div class="lb">Fecha de descarga *</div><div class="lock"><span>26/06/2026 &middot; 14:00</span><i class="ti ti-calendar" style="font-size:15px;color:#999" aria-hidden="true"></i></div>
+              <div class="lb">Entregar en *</div><input placeholder="Dirección o referencia...">
+              <div class="campo-opcional"><div class="lb">Observaciones (opcional)</div><input placeholder="Máx. 150 caracteres"></div>
+              <div class="rw" style="gap:9px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('sv',1)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1" onclick="wizShow('sv',3)">Continuar</div></div>
+            </div>
+            <div class="wiz" id="sv-3">
+              <div style="font-size:12.5px;font-weight:500;color:#E64A19;margin-bottom:7px">3 &middot; Unidades (opcional)</div>
+              <div class="lb">Unidad</div><select><option>Sin especificar</option><option>T12</option></select>
+              <div class="lb">Remolque 1</div><select><option>Sin especificar</option><option>R-201</option></select>
+              <div class="rw" style="gap:9px"><div style="flex:1"><div class="lb">Dolly</div><select style="margin-bottom:0"><option>Sin especificar</option></select></div><div style="flex:1"><div class="lb">Remolque 2</div><select style="margin-bottom:0"><option>Sin especificar</option></select></div></div>
+              <div class="rw" style="gap:9px;margin-top:13px"><div class="bs" role="button" tabindex="0" style="flex:1" onclick="wizShow('sv',2)">Atrás</div><div class="bp" role="button" tabindex="0" style="flex:1" onclick="svDone()">Enviar solicitud</div></div>
+            </div>
+          </div>
+          <div id="sv-list" style="display:flex;flex-direction:column;gap:9px">
+            <div class="cd">
+              <div class="rw" style="justify-content:space-between;margin-bottom:5px"><span style="font-size:13px;font-weight:500">Solicitud #67 &middot; Folio 12</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Pendiente</span></div>
+              <div class="rw secf" style="gap:14px;margin-bottom:5px"><div><div class="lb">Cliente</div><div style="font-size:11px;color:#333">Cliente Importado Extranjero</div></div></div>
+              <div class="rw secf" style="gap:14px"><div><div class="lb">Origen</div><div style="font-size:11px;color:#333">(2) Yarda TJ</div></div><div><div class="lb">Destino</div><div style="font-size:11px;color:#333">(8) Botando yarda cliente</div></div></div>
+              <div style="font-size:10px;color:#999;margin-top:6px;border-top:1px solid #f4f4f4;padding-top:6px">Solicitado 24/06/2026 &middot; 17:27</div>
+            </div>
+          </div>
+        </div>
+        <div style="height:62px;flex:0 0 auto"></div>
+      </div>
+
+      <div class="pg" id="page-reportes">
+        <div class="hd"><div class="hdt"><div class="hdm"><div class="ic" style="background:#FDECEA"><i class="ti ti-alert-triangle" style="font-size:19px;color:#C62828" aria-hidden="true"></i></div><div><div class="t1">Reportes de falla</div><div class="t2">Reporta y consulta tus fallas</div></div></div></div></div>
+        <div style="padding:0 16px 16px">
+          <div class="bp" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px;background:#D32F2F" onclick="fallaFormToggle()">
+            <i class="ti ti-plus" id="falla-form-icon" style="font-size:17px;color:#fff" aria-hidden="true"></i><span id="falla-form-label">Reportar falla</span>
+          </div>
+          <div id="falla-form-wrap" style="display:none">
+            <div class="rw" style="background:#fff;border:1px solid #f0f0f0;border-radius:12px;padding:10px 11px;margin-bottom:11px"><i class="ti ti-truck" style="font-size:16px;color:#999" aria-hidden="true"></i><span style="font-size:11px;color:#777">Unidad T12 &middot; Sucursal Mexicali &middot; hoy 10:18 &mdash; se llenan solos</span></div>
+            <div class="lb">Código de falla *</div>
+            <select style="margin-bottom:11px">
+              <option value="">Selecciona el código de falla...</option>
+              <optgroup label="Motor y combustible">
+                <option value="M001">M001 - Fuga de aceite</option>
+                <option value="M002">M002 - Bajo rendimiento del motor</option>
+                <option value="M003">M003 - Fuga de refrigerante</option>
+                <option value="M004">M004 - Problemas de combustión</option>
+              </optgroup>
+              <optgroup label="Sistema de frenos">
+                <option value="F001">F001 - Desgaste de pastillas</option>
+                <option value="F002">F002 - Fuga de líquido de frenos</option>
+                <option value="F003">F003 - Frenos esponjosos</option>
+                <option value="F004">F004 - Cilindro maestro defectuoso</option>
+              </optgroup>
+              <optgroup label="Llantas y ruedas">
+                <option value="L001">L001 - Llanta pinchada</option>
+                <option value="L002">L002 - Desgaste irregular</option>
+                <option value="L003">L003 - Llanta reventada</option>
+                <option value="L004">L004 - Alineación defectuosa</option>
+              </optgroup>
+              <optgroup label="Suspensión y dirección">
+                <option value="S001">S001 - Amortiguador defectuoso</option>
+                <option value="S002">S002 - Resorte roto</option>
+                <option value="S003">S003 - Problemas de alineación</option>
+                <option value="S004">S004 - Dirección defectuosa</option>
+              </optgroup>
+              <optgroup label="Sistema eléctrico">
+                <option value="E001">E001 - Batería muerta</option>
+                <option value="E002">E002 - Alternador defectuoso</option>
+                <option value="E003">E003 - Luces dañadas</option>
+                <option value="E004">E004 - Fusibles quemados</option>
+              </optgroup>
+              <optgroup label="Otro">
+                <option value="X001">X001 - Otro problema</option>
+              </optgroup>
+            </select>
+            <div class="campo-opcional"><div class="bs" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:9px"><i class="ti ti-camera" style="font-size:16px" aria-hidden="true"></i>Agregar foto (opcional)</div>
+            <textarea placeholder="Cuéntanos más (opcional)..." style="height:54px"></textarea></div>
+            <div class="bp" role="button" tabindex="0" style="background:#D32F2F" onclick="submitFalla()">Enviar reporte</div>
+          </div>
+        </div>
+        <div style="padding:0 16px 6px;font-size:10.5px;color:#b5b5b5;font-weight:500;letter-spacing:.03em">MIS REPORTES</div>
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px">
+          <div class="cd">
+            <div class="rw" style="justify-content:space-between;margin-bottom:7px"><span class="pill" style="background:#FFF2E8;color:#E64A19"># Folio 41</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Pendiente</span></div>
+            <div style="background:#FDECEA;border-radius:11px;padding:9px 11px;margin-bottom:7px"><div class="lb" style="color:#C62828">Falla</div><div style="font-size:13px;color:#B71C1C;font-weight:500"><i class="ti ti-engine" style="font-size:14px" aria-hidden="true"></i> Motor</div></div>
+            <div class="rw secf" style="gap:12px;font-size:10px;color:#999"><span>Unidad T12</span><span>&middot;</span><span>25/06/2026 18:37</span><span>&middot;</span><span>Clasificación: Suspensión</span></div>
+          </div>
+        </div>
+        <div style="height:62px;flex:0 0 auto"></div>
+      </div>
+
+      <div id="tabbar" style="display:none;position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #eee;justify-content:space-around;padding:9px 4px 12px;z-index:6">
+        <div class="tabitem" data-tab="page-home" style="cursor:pointer;color:#E8600F;text-align:center" onclick="nav('page-home')"><i class="ti ti-home" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px;font-weight:500">Inicio</div></div>
+        <div class="tabitem" data-tab="page-trips" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-trips')"><i class="ti ti-truck" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Viajes</div></div>
+        <div class="tabitem" id="tab-sv" data-tab="page-solicitudes" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-solicitudes')"><i class="ti ti-clipboard-list" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Solicitudes</div></div>
+        <div class="tabitem" data-tab="page-reportes" style="cursor:pointer;color:#9a9a9a;text-align:center" onclick="nav('page-reportes')"><i class="ti ti-chart-bar" style="font-size:22px" aria-hidden="true"></i><div style="font-size:9px">Reportes</div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div style="max-width:900px;margin:26px auto 0;font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px">
+  <div style="text-align:center;font-size:9.5px;color:#999;letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase">Wireframe ERP — referencia funcional, no es el diseño visual final</div>
+  <div style="background:#f7f7f7;border:1px dashed #aaa;border-radius:6px;overflow:hidden">
+    <div style="background:#e2e2e2;color:#333;font-weight:600;font-size:12.5px;padding:9px 12px;border-bottom:1px dashed #aaa">ERP GM Transport &middot; Mis Viajes — Configuración de operadores</div>
+
+    <div id="step-list" style="padding:16px">
+      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:10px;letter-spacing:.03em">PASO 1 — SELECCIONA A QUIÉN CONFIGURAR</div>
+      <input id="list-search" type="text" placeholder="Buscar operador..." oninput="renderOpList(this.value)" style="width:100%;border:1px solid #ccc;border-radius:4px;padding:9px 10px;font-size:11.5px;box-sizing:border-box;margin-bottom:8px">
+      <label style="display:flex;align-items:center;gap:9px;padding:9px 10px;background:#f0f0f0;border:1px solid #ddd;border-radius:5px;cursor:pointer;margin-bottom:6px">
+        <input type="checkbox" id="list-todos" style="accent-color:#555;width:15px;height:15px" onclick="listToggleTodos(this.checked)">
+        <strong style="font-size:11.5px;color:#333">Seleccionar todos los operadores (182)</strong>
+      </label>
+      <div id="op-list" style="border:1px solid #ddd;border-radius:5px;max-height:280px;overflow-y:auto;background:#fff"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <span id="list-count" style="font-size:10.5px;color:#777">1 operador seleccionado</span>
+        <button onclick="goToConfig()" style="background:#444;color:#fff;border:none;padding:9px 20px;border-radius:5px;font-size:11.5px;cursor:pointer;font-weight:500">Configurar →</button>
+      </div>
+    </div>
+
+    <div id="step-config" style="display:none">
+    <div style="padding:10px 16px;border-bottom:1px dashed #ccc;background:#f0f0f0;display:flex;justify-content:space-between;align-items:center">
+      <span id="config-target-label" style="font-size:11.5px;font-weight:600;color:#333"></span>
+      <span onclick="backToList()" style="font-size:10.5px;color:#666;cursor:pointer;text-decoration:underline">← Cambiar selección</span>
+    </div>
+
+    <div style="display:flex;background:#ececec;border-bottom:1px dashed #aaa">
+      <div id="tabbtn-config" onclick="showMainTab('config')" style="flex:1;text-align:center;padding:11px 16px;cursor:pointer;font-size:11.5px;font-weight:600;color:#333;background:#f7f7f7;border-bottom:2px solid #555">Configuración</div>
+      <div id="tabbtn-derechos" onclick="showMainTab('derechos')" style="flex:1;text-align:center;padding:11px 16px;cursor:pointer;font-size:11.5px;font-weight:600;color:#777;border-bottom:2px solid transparent">Derechos del operador</div>
+    </div>
+
+    <div id="tab-config" style="display:block">
+      <div style="padding:16px 18px 12px">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Interfaz y comportamiento</div>
+        <div style="display:flex;gap:10px;margin-bottom:8px">
+          <div id="erp-simple" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('simple')">
+            <i class="ti ti-hand-click" style="font-size:22px;color:#666" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo simple</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Lo secundario se reduce</div>
+          </div>
+          <div id="erp-completo" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="erpMode('completo')">
+            <i class="ti ti-layout-grid" style="font-size:22px;color:#999" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Modo completo</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Todo visible igual</div>
+          </div>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ccc;border-radius:6px;padding:9px 10px;cursor:pointer">
+          <input type="checkbox" id="erp-geo" style="accent-color:#555;width:15px;height:15px" onclick="erpGeo(this.checked)">
+          <div><div style="font-size:10px;font-weight:500;color:#1a1a1a">Geocerca activada en trayecto</div><div style="font-size:8px;color:#888">Salida y llegada automáticas al cruzar zona</div></div>
+        </label>
+      </div>
+
+      <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Procesos visibles en pantalla principal</div>
+        <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="cp" style="accent-color:#555" onclick="procToggle(this)">Carta porte</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="gastos" style="accent-color:#555" onclick="procToggle(this)">Gastos</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="liq" style="accent-color:#555" onclick="procToggle(this)">Liquidaciones</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked data-proc="insp" style="accent-color:#555" onclick="procToggle(this)">Inspecciones</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="turno" style="accent-color:#555" onclick="procToggle(this)">Mi turno</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="ayuda" style="accent-color:#555" onclick="procToggle(this)">Asistencia</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="reportes" style="accent-color:#555" onclick="procToggle(this)">Fallas</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" data-proc="perfil" style="accent-color:#555" onclick="procToggle(this)">Mi perfil</label>
+        </div>
+      </div>
+
+      <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Vistas de viajes</div>
+        <div style="display:flex;gap:10px;margin-bottom:8px">
+          <div id="erp-lista-min" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('min')">
+            <i class="ti ti-list" style="font-size:20px;color:#999" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Info mínima</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Destino + estatus</div>
+          </div>
+          <div id="erp-lista-full" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="listaMode('full')">
+            <i class="ti ti-list-details" style="font-size:20px;color:#666" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Detalle completo</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Todas las columnas</div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;font-size:10px">
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('grafico',this.checked)">Gráfico de ruta</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('distancia',this.checked)">Distancia (km/mi)</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('descarga',this.checked)">Fecha descarga</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('viajenum',this.checked)">Viaje y unidad</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sucursal',this.checked)">Hora sucursal</label>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('vermapa',this.checked)">Ver mapa</label>
+        </div>
+      </div>
+
+      <div style="padding:14px 18px 12px;border-top:1px dashed #ddd">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Formularios</div>
+        <div style="display:flex;gap:10px">
+          <div id="erp-form-todos" style="flex:1;background:#fff;border:2px solid #666;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('todos')">
+            <i class="ti ti-forms" style="font-size:20px;color:#666" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Todos los campos</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Obligatorios y opcionales</div>
+          </div>
+          <div id="erp-form-oblig" style="flex:1;background:#fff;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center;cursor:pointer" onclick="formMode('oblig')">
+            <i class="ti ti-asterisk" style="font-size:20px;color:#999" aria-hidden="true"></i>
+            <div style="font-weight:500;font-size:11px;margin-top:4px;color:#1a1a1a">Solo obligatorios</div>
+            <div style="font-size:9px;color:#888;margin-top:2px">Llenado más rápido</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 18px 16px;border-top:1px dashed #ddd">
+        <div style="font-size:10.5px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px">Campos y valores por default — Salida / Llegada</div>
+        <div style="font-size:9px;color:#888;margin-bottom:8px">Si el operador no captura un campo, la app usa el valor por default configurado aquí.</div>
+        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Salida</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eee">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-estatus',this.checked)">Estatus viaje (captura)</label>
+            <span id="sal-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>EN RUTA</option><option>CARGADO</option><option>VACÍO</option></select></span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-fecha',this.checked)">Fecha y hora (captura)</label>
+            <span id="sal-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('sal-odometro',this.checked)">Odómetro (captura)</label>
+            <span id="sal-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('sal-gps',this.checked)">Info GPS</label>
+        </div>
+        <div style="font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:8px">Registrar Llegada</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-estatus',this.checked)">Estatus viaje (captura)</label>
+            <span id="lleg-estatus-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>DESCARGADO</option><option>EN ESPERA</option></select></span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-fecha',this.checked)">Fecha y hora (captura)</label>
+            <span id="lleg-fecha-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Se usa la hora actual del dispositivo</span>
+          </div>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer;min-width:170px"><input type="checkbox" checked style="accent-color:#555" onclick="campoDefault('lleg-odometro',this.checked)">Odómetro (captura)</label>
+            <span id="lleg-odometro-def" style="display:none;align-items:center;gap:4px;color:#555;background:#eee;padding:2px 8px;border-radius:10px;font-size:9.5px"><i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i> Valor fijo: <select style="font-size:9.5px;padding:1px 3px;border:1px solid #ccc;border-radius:3px"><option>Último odómetro registrado</option><option>0 (no aplica)</option></select></span>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;color:#1a1a1a;cursor:pointer"><input type="checkbox" checked style="accent-color:#555" onclick="procTg('lleg-unidad',this.checked)">Estatus unidad (Camión, Carga, Dolly)</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-derechos" style="display:none;padding:16px 18px">
+      <div style="font-size:10px;color:#888;margin-bottom:10px">Toca una fila para ver sus sub-procesos. Desmarca el checkbox para quitarle ese derecho — se refleja en el celular de arriba.</div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:10.5px;padding:6px 0;color:#555">Proceso</div>
+          <div id="derechos-col1" style="max-height:340px;overflow-y:auto;background:#fff"></div>
+        </div>
+        <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:10.5px;padding:6px 0;color:#555">Proceso</div>
+          <div id="derechos-col2" style="max-height:340px;overflow-y:auto;background:#fff"></div>
+        </div>
+        <div style="flex:1;min-width:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
+          <div style="background:#e4e4e4;text-align:center;font-weight:600;font-size:10.5px;padding:6px 0;color:#555">Proceso</div>
+          <div id="derechos-col3" style="max-height:340px;overflow-y:auto;background:#fff"></div>
+        </div>
+      </div>
+      <div style="font-size:9.5px;color:#888;margin-top:10px;line-height:1.4">Si una rama no abre más columnas, es normal — ese permiso ya no tiene más sub-procesos.</div>
+    </div>
+
+    <div style="padding:10px 12px;border-top:1px dashed #aaa;background:#ececec;display:flex;justify-content:flex-end">
+      <button onclick="guardarConfig()" style="background:#444;color:#fff;border:none;padding:8px 18px;border-radius:4px;font-size:11.5px;cursor:pointer;font-weight:500">Guardar configuración</button>
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function nav(id){
+  document.querySelectorAll('#mvw .pg').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById(id); if(el){el.classList.add('active');}
+  var roots=['page-home','page-trips','page-solicitudes','page-reportes'];
+  document.getElementById('tabbar').style.display = roots.indexOf(id)>-1?'flex':'none';
+  document.querySelectorAll('#mvw .tabitem').forEach(function(t){ t.style.color = t.getAttribute('data-tab')===id?'#E8600F':'#9a9a9a'; });
+  document.getElementById('viewport').scrollTop=0;
+}
+function showOk(txt,cb){
+  var o=document.getElementById('ok-ov');
+  document.getElementById('ok-txt').textContent=txt;
+  o.style.display='flex';
+  setTimeout(function(){ o.style.display='none'; if(cb)cb(); },950);
+}
+function okThen(txt,page){ showOk(txt,function(){ nav(page); }); }
+var tripStep=0, geoOn=false;
+function renderHome(){
+  var pill=document.getElementById('hero-pill');
+  var btn=document.getElementById('pa-btn'), lbl=document.getElementById('pa-label'), ic=document.getElementById('pa-icon');
+  var prog=document.getElementById('hero-prog'), truck=document.getElementById('hero-truck');
+  if(tripStep===0){ prog.style.width='0%'; truck.style.left='2%'; pill.innerHTML='<i class="ti ti-clock" style="font-size:12px" aria-hidden="true"></i> Sin salida'; pill.style.background='#FFF2E8'; pill.style.color='#E64A19'; }
+  else if(tripStep===1){ prog.style.width='50%'; truck.style.left='44%'; pill.innerHTML='<i class="ti ti-truck" style="font-size:12px" aria-hidden="true"></i> En ruta'; pill.style.background='#E1F4FF'; pill.style.color='#0D47A1'; }
+  else { prog.style.width='calc(100% - 16px)'; truck.style.left='86%'; pill.innerHTML='<i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i> Terminado'; pill.style.background='#E8F5E8'; pill.style.color='#1B5E20'; }
+  if(tripStep>=2){
+    lbl.textContent='Viaje terminado'; ic.className='ti ti-check'; btn.style.background='#388E3C'; btn.style.boxShadow='none'; btn.style.padding='10px 4px'; btn.style.gap='5px'; btn.style.fontSize='11px'; ic.style.fontSize='20px'; lbl.style.fontSize='11px'; btn.onclick=function(){ nav('page-evidencias'); };
+    return;
+  }
+  if(geoOn){
+    lbl.textContent = tripStep===0?'Salida automática por geocerca':'Llegada automática por geocerca';
+    ic.className='ti ti-lock'; btn.style.background='#b7c4d8'; btn.style.boxShadow='none'; btn.onclick=null;
+    return;
+  }
+  if(tripStep===0){
+    lbl.textContent='Registrar salida'; ic.className='ti ti-player-play'; btn.style.background='#E8600F'; btn.style.boxShadow='0 4px 14px rgba(255,112,67,.28)'; btn.onclick=function(){nav('page-salida');};
+  } else {
+    lbl.textContent='Registrar llegada'; ic.className='ti ti-flag'; btn.style.background='#388E3C'; btn.style.boxShadow='0 4px 14px rgba(56,142,60,.25)'; btn.onclick=function(){nav('page-llegada');};
+  }
+}
+function doSalida(){ tripStep=1; renderHome(); okThen('Salida registrada','page-home'); }
+function doLlegada(){ tripStep=2; renderHome(); okThen('Llegada registrada','page-home'); }
+function sosShow(state){
+  document.getElementById('sos-idle').style.display = state==='idle'?'block':'none';
+  document.getElementById('sos-confirm').style.display = state==='confirm'?'block':'none';
+  document.getElementById('sos-active').style.display = state==='active'?'block':'none';
+}
+function sosAsk(){ sosShow('confirm'); }
+function sosCancel(){ sosShow('idle'); }
+function sosActivate(){ sosShow('active'); }
+function sosStop(){ sosShow('idle'); showOk('SOS cancelado'); }
+function attachEv(id){ var c=document.getElementById(id); c.querySelector('.rw').innerHTML='<div style="flex:1;background:#E8F5E8;border-radius:11px;padding:11px;text-align:center;font-size:12px;color:#1B5E20;font-weight:500"><i class="ti ti-check" style="font-size:14px" aria-hidden="true"></i> Evidencia adjuntada</div>'; }
+var pdfOn=false;
+function tgPdf(){ pdfOn=!pdfOn; document.getElementById('pdf-t').style.background=pdfOn?'#E8600F':'#ccc'; document.getElementById('pdf-k').style.left=pdfOn?'21px':'2px'; }
+function sendChat(){
+  var inp=document.getElementById('chat-in'); var t=inp.value.trim(); if(!t)return;
+  var d=document.createElement('div'); d.style.cssText='align-self:flex-end;background:#E8600F;color:#fff;border-radius:14px 14px 4px 14px;padding:11px 13px;font-size:13px;max-width:82%';
+  d.textContent=t; document.getElementById('chat-list').appendChild(d); inp.value='';
+}
+function tgTurno(){
+  window.tOn=!window.tOn;
+  var p=document.getElementById('turno-pill');
+  p.textContent=window.tOn?'En turno':'Fuera de turno';
+  p.style.background=window.tOn?'#E8F5E8':'#FDECEA'; p.style.color=window.tOn?'#1B5E20':'#B71C1C';
+  document.getElementById('turno-sub').textContent=window.tOn?'Turno iniciado hoy 9:41':'Sin turno activo';
+  var b=document.getElementById('turno-btn'); b.textContent=window.tOn?'Registrar salida':'Registrar entrada'; b.style.background=window.tOn?'#D32F2F':'#388E3C';
+  showOk(window.tOn?'Entrada registrada':'Salida registrada');
+}
+function tgHoras(){
+  window.hOn=!window.hOn;
+  var p=document.getElementById('horas-pill');
+  p.textContent=window.hOn?'Activo':'Sin actividad';
+  p.style.background=window.hOn?'#E8F5E8':'#F0F0F0'; p.style.color=window.hOn?'#1B5E20':'#777';
+  var b=document.getElementById('horas-btn'); b.textContent=window.hOn?'Detener':'Iniciar'; b.style.background=window.hOn?'#E8600F':'#9e9e9e';
+}
+function histTab(t){
+  document.getElementById('hist-es').style.display=t==='es'?'flex':'none';
+  document.getElementById('hist-hp').style.display=t==='hp'?'block':'none';
+  var a=document.getElementById('th-es'), b=document.getElementById('th-hp');
+  a.style.cssText='font-size:13px;padding-bottom:8px;cursor:pointer;'+(t==='es'?'font-weight:500;color:#E8600F;border-bottom:3px solid #E8600F':'color:#999');
+  b.style.cssText='font-size:13px;padding-bottom:8px;cursor:pointer;'+(t==='hp'?'font-weight:500;color:#E8600F;border-bottom:3px solid #E8600F':'color:#999');
+}
+function tgAsis(){ var f=document.getElementById('asis-form'); f.style.display=f.style.display==='block'?'none':'block'; }
+function asisSend(){
+  document.getElementById('asis-form').style.display='none';
+  document.getElementById('asis-mias').innerHTML='<div class="cd"><div class="rw" style="justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">Mi solicitud</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Pendiente</span></div><div style="font-size:11px;color:#888">Enviada hoy 9:41 &middot; con tu ubicación GPS</div></div>';
+  showOk('Solicitud enviada');
+}
+function fallaFormToggle(){
+  var w=document.getElementById('falla-form-wrap');
+  var open=w.style.display==='block';
+  w.style.display=open?'none':'block';
+  document.getElementById('falla-form-label').textContent=open?'Reportar falla':'Cancelar';
+  document.getElementById('falla-form-icon').className=open?'ti ti-plus':'ti ti-x';
+}
+function submitFalla(){
+  document.getElementById('falla-form-wrap').style.display='none';
+  document.getElementById('falla-form-label').textContent='Reportar falla';
+  document.getElementById('falla-form-icon').className='ti ti-plus';
+  showOk('Reporte enviado');
+}
+function segOn(el){ el.parentNode.querySelectorAll('.seg').forEach(function(s){s.classList.remove('on');}); el.classList.add('on'); }
+var wizTotal={sv:3,ga:5,in:5};
+function wizShow(p,step){
+  document.getElementById(p+'-wrap').style.display='block';
+  if(p==='in'){document.getElementById('in-list').style.display='none';}
+  for(var i=1;i<=wizTotal[p];i++){ var w=document.getElementById(p+'-'+i); if(w){w.classList.toggle('on',i===step);} }
+  var d=''; for(var j=1;j<=wizTotal[p];j++){ d+='<div class="dot '+(j===step?'on':(j<step?'done':''))+'">'+j+'</div>'; }
+  document.getElementById(p+'-dots').innerHTML=d;
+  document.getElementById('viewport').scrollTop=0;
+}
+function wizHide(p){ document.getElementById(p+'-wrap').style.display='none'; }
+function svDone(){
+  wizHide('sv');
+  var c=document.createElement('div'); c.className='cd';
+  c.innerHTML='<div class="rw" style="justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">Solicitud #68 &middot; Folio 13</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Pendiente</span></div><div style="font-size:10.5px;color:#2E7D32">Enviada correctamente hace un momento</div>';
+  var l=document.getElementById('sv-list'); l.insertBefore(c,l.firstChild);
+  showOk('Solicitud enviada');
+}
+function gaDone(){
+  wizHide('ga');
+  document.getElementById('ga-list').innerHTML='<div class="cd"><div class="rw" style="justify-content:space-between"><span style="font-size:12.5px;font-weight:500">Diésel &middot; $1,160.00 MXN</span><span class="pill" style="background:#FFF8E1;color:#8a6d1f">Pendiente</span></div><div style="font-size:10.5px;color:#888;margin-top:3px">Comprobante 88412 &middot; hoy</div></div>';
+  showOk('Gasto enviado');
+}
+function inDone(){
+  wizHide('in');
+  var lv=document.getElementById('in-list'); lv.style.display='block';
+  var e=document.getElementById('in-empty'); if(e){e.remove();}
+  var c=document.createElement('div'); c.className='cd';
+  c.innerHTML='<div class="rw" style="justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">Inspección &middot; MA-000005103</span><span class="pill" style="background:#E8F5E8;color:#1B5E20">Completada</span></div><div style="font-size:10.5px;color:#888">Unidad T12 &middot; hoy 9:41 &middot; Frenos, llantas y luces en buen estado</div>';
+  lv.appendChild(c);
+  showOk('Inspección guardada');
+}
+function erpMode(m){
+  document.getElementById('viewport').classList.toggle('modo-simple',m==='simple');
+  document.getElementById('erp-simple').style.border = m==='simple'?'2px solid #666':'1px solid #ccc';
+  document.getElementById('erp-completo').style.border = m==='completo'?'2px solid #666':'1px solid #ccc';
+}
+function erpGeo(on){
+  geoOn=on;
+  document.getElementById('geo-chip').style.display=on?'inline-flex':'none';
+  var r=document.getElementById('geo-ring'); if(r){r.style.display=on?'block':'none';}
+  renderHome();
+}
+var PROC={evidencia:['qa-evidencia'],estatus:['qa-estatus'],chat:['qa-chat'],asistencia:['tile-ayuda'],solicitudes:['tab-sv'],gastos:['tile-gastos'],liq:['tile-liq'],insp:['tile-insp'],cartaporte:['tile-cp'],turno:['tile-turno'],notif:['home-bell'],reportes:['tile-reportes'],sucursal:['sucursal-mini'],vermapa:['vermapa-link'],viajenum:['hero-viajenum'],grafico:['hero-graphic'],distancia:['hero-dist'],descarga:['hero-descarga'],'sal-estatus':['sal-estatus'],'sal-fecha':['sal-fecha'],'sal-odometro':['sal-odometro'],'sal-gps':['sal-gps'],'lleg-estatus':['lleg-estatus'],'lleg-fecha':['lleg-fecha'],'lleg-odometro':['lleg-odometro'],'lleg-unidad':['lleg-unidad'],sos:['sos-wrap']};
+function procTg(k,on){
+  (PROC[k]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
+}
+function campoDefault(key,on){
+  (PROC[key]||[]).forEach(function(id){ var e=document.getElementById(id); if(e){ e.style.display=on?'':'none'; } });
+  var def=document.getElementById(key+'-def');
+  if(def){ def.style.display=on?'none':'inline-flex'; }
+}
+
+var DERECHOS_TREE={
+  col1:[
+    {id:'d-solicitudes',label:'Alta Solicitudes Viaje',checked:true,proc:'solicitudes'},
+    {id:'d-viajes',label:'Mis Viajes',checked:true,children:'col2-viajes'},
+    {id:'d-asistencia',label:'Mis Solicitudes de Asistencia',checked:true,proc:'asistencia'},
+    {id:'d-fallas',label:'Reporte de Fallas',checked:true,proc:'reportes'},
+    {id:'d-liq',label:'Imprimir Liquidación',checked:true,proc:'liq'},
+    {id:'d-sos',label:'SOS Emergencia',checked:true,proc:'sos'},
+    {id:'d-chat',label:'Chat',checked:true,proc:'chat'},
+    {id:'d-insp',label:'Inspecciones',checked:true,proc:'insp'},
+    {id:'d-turno',label:'Mi Turno',checked:true,proc:'turno'},
+    {id:'d-notif',label:'Notificaciones',checked:true,proc:'notif'}
+  ],
+  'col2-viajes':[
+    {id:'v-listado',label:'Listado de viajes',checked:true},
+    {id:'v-trayectos',label:'Ver trayectos',checked:true},
+    {id:'v-detalle',label:'Detalle del trayecto',checked:true},
+    {id:'v-salman',label:'Dar salida (manual)',checked:true},
+    {id:'v-salsol',label:'Dar salida (solicitud)',checked:true},
+    {id:'v-salgeo',label:'Dar salida (geocerca)',checked:true},
+    {id:'v-llegman',label:'Dar llegada (manual)',checked:true},
+    {id:'v-llegsol',label:'Dar llegada (solicitud)',checked:true},
+    {id:'v-lleggeo',label:'Dar llegada (geocerca)',checked:true},
+    {id:'v-evid',label:'Evidencias',checked:true,proc:'evidencia',children:'col3-evid'},
+    {id:'v-docs',label:'Documentos',checked:true,proc:'cartaporte',children:'col3-docs'},
+    {id:'v-gastos',label:'Gastos de Viaje',checked:true,proc:'gastos',children:'col3-gastos'},
+    {id:'v-estsal',label:'Estatus Salida',checked:true},
+    {id:'v-estlleg',label:'Estatus Llegada',checked:true,proc:'estatus'},
+    {id:'v-asigest',label:'Asignar Estatus',checked:true}
+  ],
+  'col3-docs':[
+    {id:'d-verdoc',label:'Ver documentos',checked:true},
+    {id:'d-descdoc',label:'Descargar documentos',checked:true},
+    {id:'d-firmadoc',label:'Firmar documentos PDF',checked:true}
+  ],
+  'col3-evid':[
+    {id:'e-foto',label:'Evidencia fotográfica',checked:true},
+    {id:'e-docs',label:'Evidencia Documentos',checked:true},
+    {id:'e-firma',label:'Firma del cliente',checked:true}
+  ],
+  'col3-gastos':[
+    {id:'g-sol',label:'Solicitar gastos',checked:true},
+    {id:'g-bal',label:'Ver balance gastos/anticipo',checked:true}
+  ]
+};
+var derechosSel={col1:'d-viajes',col2:'v-docs'};
+function findItem(list,id){ return (list||[]).find(function(x){return x.id===id;}); }
+function renderDerechosCol(containerId,items,level){
+  var el=document.getElementById(containerId);
+  if(!items||!items.length){ el.innerHTML=''; return; }
+  el.innerHTML=items.map(function(it){
+    var isSel=(level===1&&derechosSel.col1===it.id)||(level===2&&derechosSel.col2===it.id);
+    var style=isSel?'background:#666;color:#fff;':'color:#1a1a1a;';
+    return '<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;cursor:pointer;font-size:10px;'+style+'" onclick="derechosSelect('+level+',\''+it.id+'\')">'
+      +'<input type="checkbox" '+(it.checked?'checked':'')+' style="accent-color:#555;width:12px;height:12px;flex-shrink:0" onclick="event.stopPropagation();derechosCheck(\''+it.id+'\',this.checked,\''+(it.proc||'')+'\')">'
+      +'<span>'+it.label+'</span></div>';
+  }).join('');
+}
+function renderDerechos(){
+  renderDerechosCol('derechos-col1',DERECHOS_TREE.col1,1);
+  var c1=findItem(DERECHOS_TREE.col1,derechosSel.col1);
+  var col2data=c1&&c1.children?DERECHOS_TREE[c1.children]:[];
+  renderDerechosCol('derechos-col2',col2data,2);
+  var c2=findItem(col2data,derechosSel.col2);
+  var col3data=c2&&c2.children?DERECHOS_TREE[c2.children]:[];
+  renderDerechosCol('derechos-col3',col3data,3);
+}
+function derechosSelect(level,id){
+  if(level===1){ derechosSel.col1=id; derechosSel.col2=null; }
+  if(level===2){ derechosSel.col2=id; }
+  renderDerechos();
+}
+function derechosCheck(id,on,proc){
+  [DERECHOS_TREE.col1,DERECHOS_TREE['col2-viajes'],DERECHOS_TREE['col3-docs'],DERECHOS_TREE['col3-evid'],DERECHOS_TREE['col3-gastos']].forEach(function(list){
+    var it=findItem(list,id); if(it){ it.checked=on; }
+  });
+  if(proc){ (PROC[proc]||[]).forEach(function(elId){ var e=document.getElementById(elId); if(e){ e.style.display=on?'':'none'; } }); }
+  renderDerechos();
+}
+function listaMode(m){
+  document.getElementById('viewport').classList.toggle('lista-minima',m==='min');
+  document.getElementById('erp-lista-min').style.border = m==='min'?'2px solid #666':'1px solid #ccc';
+  document.getElementById('erp-lista-full').style.border = m==='full'?'2px solid #666':'1px solid #ccc';
+}
+function formMode(m){
+  document.getElementById('viewport').classList.toggle('solo-obligatorios',m==='oblig');
+  document.getElementById('erp-form-todos').style.border = m==='todos'?'2px solid #666':'1px solid #ccc';
+  document.getElementById('erp-form-oblig').style.border = m==='oblig'?'2px solid #666':'1px solid #ccc';
+}
+function showMainTab(id){
+  ['config','derechos'].forEach(function(t){
+    document.getElementById('tab-'+t).style.display = t===id?'block':'none';
+    var btn=document.getElementById('tabbtn-'+t);
+    btn.style.background = t===id?'#f7f7f7':'transparent';
+    btn.style.color = t===id?'#333':'#777';
+    btn.style.borderBottom = t===id?'2px solid #555':'2px solid transparent';
+  });
+}
+
+var OPERADORES=[
+  {nombre:'Gutiérrez Sánchez Ariel Eduardo',suc:'Fast Transfer'},
+  {nombre:'Gómez Martínez Rigoberto',suc:'Fast Transfer'},
+  {nombre:'De Jesús Godínez Hugo Alejandro',suc:'Patios Piedras Negras'},
+  {nombre:'Turrubiates García Pedro',suc:'Fast Transfer'},
+  {nombre:'Martínez Castillo Mariano',suc:'Nacional'},
+  {nombre:'Peña Garza Juan Carlos',suc:'Internacional'},
+  {nombre:'Villanueva Mondragón Luis Rolando',suc:'Matriz'},
+  {nombre:'Rodríguez Castillo Omar Américo',suc:'Fast Transfer'},
+  {nombre:'Mazorra Alvarado Jorge Luis',suc:'Matriz'},
+  {nombre:'Rosales Moreno Efraín de Jesús',suc:'Estatal'}
+];
+var ALL_OPERADORES=[{nombre:'FLORES',suc:'Patios Piedras Negras'}].concat(OPERADORES);
+var opListSelected=['FLORES'];
+function renderOpList(filter){
+  var f=(filter||'').toLowerCase();
+  var el=document.getElementById('op-list');
+  el.innerHTML=ALL_OPERADORES.filter(function(o){ return o.nombre.toLowerCase().indexOf(f)>-1; }).map(function(o){
+    var checked=opListSelected.indexOf(o.nombre)>-1;
+    return '<label style="display:flex;align-items:center;gap:9px;padding:9px 10px;border-bottom:1px solid #f2f2f2;cursor:pointer;font-size:11.5px">'
+      +'<input type="checkbox" '+(checked?'checked':'')+' style="accent-color:#555;width:15px;height:15px" onclick="toggleOpList(\''+o.nombre.replace(/'/g,"\\'")+'\',this.checked)">'
+      +'<span style="flex:1;color:#1a1a1a">'+o.nombre+'</span><span style="color:#999;font-size:9.5px">'+o.suc+'</span></label>';
+  }).join('');
+  updateListCount();
+}
+function toggleOpList(nombre,on){
+  var i=opListSelected.indexOf(nombre);
+  if(on&&i===-1){ opListSelected.push(nombre); }
+  if(!on&&i>-1){ opListSelected.splice(i,1); }
+  document.getElementById('list-todos').checked=false;
+  updateListCount();
+}
+function listToggleTodos(on){
+  opListSelected = on ? ['__todos__'] : [];
+  renderOpList(document.getElementById('list-search').value);
+}
+function updateListCount(){
+  var n=opListSelected.length;
+  var isTodos=opListSelected[0]==='__todos__';
+  var txt = isTodos ? 'Todos los operadores (182)' : (n===0 ? 'Ningún operador seleccionado' : n+(n===1?' operador seleccionado':' operadores seleccionados'));
+  document.getElementById('list-count').textContent=txt;
+}
+function goToConfig(){
+  if(!opListSelected.length){ alert('Selecciona al menos un operador para continuar.'); return; }
+  document.getElementById('step-list').style.display='none';
+  document.getElementById('step-config').style.display='block';
+  var isTodos=opListSelected[0]==='__todos__';
+  document.getElementById('config-target-label').textContent = isTodos ? 'Configurando: Todos los operadores (182)' : 'Configurando: '+opListSelected.join(', ');
+}
+function backToList(){
+  document.getElementById('step-config').style.display='none';
+  document.getElementById('step-list').style.display='block';
+}
+function guardarConfig(){
+  var isTodos=opListSelected[0]==='__todos__';
+  var msg = isTodos ? 'Configuración guardada para los 182 operadores.' : 'Configuración guardada para: '+opListSelected.join(', ');
+  alert(msg);
+}
+var PROCESOS_PRINCIPAL={cp:true,gastos:true,liq:true,insp:true,turno:false,ayuda:false,reportes:false,perfil:false};
+var PROCESOS_DEF=[
+  {id:'tile-cp',key:'cp',label:'Carta porte',icon:'ti-file-text',bg:'#FFF2E8',color:'#E64A19',page:'page-cartaporte'},
+  {id:'tile-gastos',key:'gastos',label:'Gastos',icon:'ti-wallet',bg:'#E8F5E8',color:'#2E7D32',page:'page-gastos'},
+  {id:'tile-liq',key:'liq',label:'Liquidaciones',icon:'ti-receipt',bg:'#FFF2E8',color:'#E64A19',page:'page-liq'},
+  {id:'tile-insp',key:'insp',label:'Inspecciones',icon:'ti-clipboard-list',bg:'#EDE7F6',color:'#5E35B1',page:'page-insp'},
+  {id:'tile-turno',key:'turno',label:'Mi turno',icon:'ti-clock',bg:'#FFF8E1',color:'#B45309',page:'page-turno'},
+  {id:'tile-ayuda',key:'ayuda',label:'Asistencia',icon:'ti-headset',bg:'#E1F4FF',color:'#1976D2',page:'page-ayuda'},
+  {id:'tile-reportes',key:'reportes',label:'Fallas',icon:'ti-alert-triangle',bg:'#FDECEA',color:'#C62828',page:'page-reportes'},
+  {id:'tile-perfil',key:'perfil',label:'Mi perfil',icon:'ti-user',bg:'#F1F1F1',color:'#666',page:'page-perfil'}
+];
+function procToggle(checkbox){
+  var key=checkbox.getAttribute('data-proc');
+  PROCESOS_PRINCIPAL[key]=checkbox.checked;
+  renderProcesos();
+}
+function renderProcesos(){
+  var principal=[],otros=[];
+  PROCESOS_DEF.forEach(function(p){
+    var html='<div class="tile" id="'+p.id+'" onclick="nav(\''+p.page+'\')"><div class="tic" style="background:'+p.bg+'"><i class="ti '+p.icon+'" style="font-size:21px;color:'+p.color+'" aria-hidden="true"></i></div><span class="tilelbl" style="font-size:9.5px;color:#777">'+p.label+'</span></div>';
+    if(PROCESOS_PRINCIPAL[p.key]){ principal.push(html); } else { otros.push(html); }
+  });
+  document.getElementById('procesos-grid').innerHTML=principal.join('');
+  document.getElementById('procesos-modal-grid').innerHTML=otros.map(function(h){
+    return h.replace('grid-template-columns:repeat(4,1fr)','').replace('grid-template-columns:repeat(3,1fr)','');
+  }).join('');
+  var masBtnContainer=document.getElementById('mas-btn-container');
+  masBtnContainer.style.display=otros.length>0?'block':'none';
+  document.getElementById('procesos-label').style.paddingBottom=otros.length>0?'0':'10px';
+}
+function showModal(id){
+  var el=document.getElementById(id);
+  if(el){ el.style.display='flex'; }
+}
+function hideModal(id){
+  var el=document.getElementById(id);
+  if(el){ el.style.display='none'; }
+}
+renderProcesos();
+renderHome();
+renderDerechos();
+renderOpList('');
+</script>
+</body>
+</html>

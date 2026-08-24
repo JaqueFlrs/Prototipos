@@ -236,9 +236,9 @@ td{padding:7px 8px;border-bottom:1px solid #f2f3f5;}
       <div class="sec-label" style="font-size:11px;font-weight:700;color:#8a8f9a;text-transform:uppercase;letter-spacing:.4px;margin:0 0 6px;">Términos y Condiciones de Compra</div>
       <table>
         <tr><th>Permitir compra sin aceptar Términos y Condiciones</th><th></th><th>Último cambio</th></tr>
-        <tr><td><span class="pill pill-off">Inactivo</span></td><td><button class="btn-ghost">Activar</button></td><td>—</td></tr>
+        <tr><td><span class="pill pill-on">Activo</span></td><td><button class="btn-ghost">Desactivar</button></td><td>Activado por mgarcia — 24/08/2026 10:05</td></tr>
       </table>
-      <div class="ann">Toggle por empresa (no global). Al activarlo/desactivarlo, se registra quién lo hizo y cuándo en la columna "Último cambio" (ej. "Activado por mgarcia — 24/08/2026 10:05"). Mientras esté activo, las compras de esta empresa no muestran el paso de aceptación y quedan marcadas como "Sin aceptación de Términos y Condiciones - parámetro activo".</div>
+      <div class="ann">Toggle por empresa (no global). El botón alterna entre "Activar" y "Desactivar" según el estado actual. Cada cambio (en cualquier dirección) registra quién lo hizo y cuándo en la columna "Último cambio". Mientras esté activo, las compras de esta empresa no muestran el modal de aceptación y quedan marcadas como "Sin aceptación de Términos y Condiciones - parámetro activo".</div>
 
       <div class="sec-label" style="font-size:11px;font-weight:700;color:#8a8f9a;text-transform:uppercase;letter-spacing:.4px;margin:18px 0 6px;">Aceptaciones registradas</div>
       <table>
@@ -319,4 +319,31 @@ td{padding:7px 8px;border-bottom:1px solid #f2f3f5;}
     </div>
   </div>
   <div class="ann">Al hacer clic en "Aceptar y Pagar" y confirmarse el cobro, el sistema registra la aceptación: usuario, nombre firmado, empresa, versión aceptada y fecha/hora — nunca se edita ni se elimina. Si el pago es rechazado, la aceptación permanece válida; un reintento (clic de nuevo en "Pagar" sin salir de la pantalla) vuelve a mostrar este modal con el checkbox ya marcado, sin obligar a desmarcarlo. Si la versión vigente cambió mientras el modal estaba abierto, al hacer clic en "Aceptar y Pagar" el modal se actualiza con el texto nuevo y vuelve a pedir marcar el checkbox.</div>
+</div>
+
+<!-- ⑧ Portal IA - sin version publicada y sin parametro -->
+<div class="screen">
+  <div class="screen-label">⑧ Portal IA — Comprar Tokens bloqueado sin Términos y Condiciones publicados<span class="badge badge-new">NUEVO</span></div>
+  <div class="screen-desc">
+    Se aplica al entrar a la sección "Comprar Tokens" (HU47732), antes de llegar al catálogo de planes: si no existe ninguna versión publicada de los Términos y Condiciones y la empresa activa no tiene activo el parámetro de excepción, no se deja continuar.
+  </div>
+  <div class="portal" style="max-width:640px;">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">IA</div><div><div class="brand-name">Portal IA — GM Transport</div><div class="brand-sub">Comprar Tokens</div></div></div>
+      <div class="user-chip"><b>Juan Pérez</b>Empresa A</div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-group">TOKENS</div>
+        <div class="sb-item active">Comprar Tokens</div>
+        <div class="sb-item">Planes Contratados</div>
+        <div class="sb-item">Uso de IA</div>
+      </div>
+      <div class="main">
+        <div class="banner" style="background:#fff1ec;border:1px solid #ffd9cc;border-radius:8px;padding:14px 16px;font-size:12px;color:#8a4530;text-align:center;">No es posible completar la compra en este momento</div>
+      </div>
+    </div>
+  </div>
+  <div class="ann">Se muestra en vez del catálogo de planes — el usuario no puede avanzar a seleccionar un plan ni llegar a "Método de pago". Aplica solo cuando no hay ninguna versión publicada de los Términos y Condiciones Y la empresa activa no tiene activo el parámetro de excepción (pantalla ⑤); si cualquiera de las dos condiciones se cumple, la compra procede normalmente.</div>
 </div>

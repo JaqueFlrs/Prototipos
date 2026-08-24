@@ -1,0 +1,322 @@
+<title>HU49126 — Terminos y Condiciones de Compra</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f4f5f7;padding:24px 30px;color:#1f2430;}
+.page-title{font-size:19px;font-weight:700;margin-bottom:2px;}
+.page-sub{font-size:12px;color:#8a8f9a;margin-bottom:18px;}
+.disclaimer{background:#fffde7;border:1px solid #e0c080;padding:12px 16px;margin-bottom:30px;font-size:12px;line-height:1.6;color:#3a3020;border-radius:6px;max-width:1040px;}
+.disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
+.screen{margin-bottom:40px;}
+.screen-label{font-size:11px;font-weight:bold;color:#8a8f9a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.screen-desc{font-size:12px;color:#3a3733;background:#eceef1;border-left:3px solid #9a9088;padding:8px 12px;margin-bottom:10px;line-height:1.5;max-width:1040px;}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle;}
+.badge-new{background:#e6f7ec;color:#1e9e4d;}
+
+/* Portal chrome real (extraido de prototipos publicados) */
+.portal{border:1px solid #e4e6eb;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);max-width:1040px;position:relative;}
+.portal-topline{height:4px;background:linear-gradient(90deg,#ff5a3c,#ff8a5c);}
+.portal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #eee;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-logo{width:32px;height:32px;border-radius:8px;background:#fff1ec;color:#ff5a3c;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;border:1px solid #ffd9cc;}
+.brand-name{font-size:14px;font-weight:700;}
+.brand-sub{font-size:10px;color:#9a9fa8;}
+.user-chip{font-size:11px;color:#3a3f4a;text-align:right;}
+.user-chip b{display:block;font-size:12px;}
+.portal-body{display:flex;min-height:280px;}
+.sidebar{width:180px;background:#fff;border-right:1px solid #eee;padding:10px 0;font-size:12px;flex-shrink:0;}
+.sb-group{color:#b6bac2;font-size:10px;font-weight:700;letter-spacing:.4px;padding:10px 16px 4px;}
+.sb-item{padding:8px 18px;color:#5a6270;}
+.sb-item.active{background:#fff1ec;color:#ff5a3c;font-weight:600;border-right:3px solid #ff5a3c;}
+.main{flex:1;padding:16px 20px;}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.toolbar-title{font-size:13px;font-weight:700;}
+.btn-new{background:#ff5a3c;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-ghost{background:#fff;border:1px solid #e4e6eb;border-radius:6px;padding:7px 14px;font-size:12px;color:#3a3f4a;cursor:pointer;}
+.btn-ghost:disabled,.btn-new:disabled{opacity:.4;cursor:not-allowed;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:#f8f8f9;color:#5a6270;text-align:left;font-size:10px;font-weight:700;letter-spacing:.3px;padding:6px 8px;border-bottom:1px solid #eee;}
+td{padding:7px 8px;border-bottom:1px solid #f2f3f5;}
+.pill{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;}
+.pill-on{background:#e6f7ec;color:#1e9e4d;}
+.pill-off{background:#f0f1f3;color:#9a9fa8;}
+.link-a{color:#ff5a3c;font-size:11px;font-weight:600;cursor:pointer;}
+.texto-vigente{background:#fafafa;border:1px solid #eee;border-radius:8px;padding:16px 18px;font-size:12px;line-height:1.7;color:#3a3f4a;max-height:170px;overflow-y:auto;}
+.meta-row{font-size:11px;color:#8a8f9a;margin-top:10px;}
+.editor{border:1px solid #e4e6eb;border-radius:8px;overflow:hidden;}
+.editor-toolbar{background:#f8f8f9;border-bottom:1px solid #eee;padding:6px 10px;display:flex;gap:10px;font-size:12px;color:#5a6270;}
+.editor-toolbar span{cursor:default;padding:2px 6px;border-radius:4px;}
+.editor-body{padding:14px 16px;font-size:12px;line-height:1.7;color:#3a3f4a;min-height:130px;}
+.field label{display:block;font-size:11px;color:#8a8f9a;margin-bottom:3px;}
+.field input{width:100%;border:1px solid #e4e6eb;border-radius:6px;padding:7px 9px;font-size:12px;color:#1f2430;background:#f4f5f7;}
+
+/* Modal */
+.modal-overlay{position:absolute;inset:0;background:rgba(20,20,25,.35);display:flex;align-items:center;justify-content:center;z-index:5;}
+.modal-box{background:#fff;border-radius:8px;width:340px;box-shadow:0 6px 20px rgba(0,0,0,.2);overflow:hidden;}
+.modal-head{padding:12px 16px;font-weight:700;font-size:13px;border-bottom:1px solid #eee;}
+.modal-body2{padding:14px 16px;font-size:12px;color:#3a3f4a;line-height:1.6;}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:10px 16px;background:#fafafa;border-top:1px solid #eee;}
+
+/* T&C block (Portal IA) */
+.tyc-block{border:1px solid #e4e6eb;border-radius:8px;padding:14px 16px;margin-top:14px;background:#fafafa;}
+.tyc-text{font-size:11.5px;color:#5a6270;line-height:1.6;max-height:90px;overflow-y:auto;padding-right:4px;margin-bottom:12px;}
+.tyc-accept-row{display:flex;align-items:flex-start;gap:8px;}
+.tyc-accept-row input[type=checkbox]{margin-top:2px;}
+.tyc-accept-row label{font-size:12px;color:#1f2430;}
+.firma-name{display:inline-flex;align-items:center;gap:6px;background:#f0f1f3;border-radius:6px;padding:3px 10px;font-size:11.5px;font-weight:600;color:#5a6270;margin-left:4px;}
+.plan-summary{background:#f4f5f7;border-radius:8px;padding:12px 14px;font-size:12px;color:#1f2430;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.pay-total{font-weight:700;color:#ff5a3c;}
+
+/* Anotaciones dev */
+.ann{color:#1a56db;font-size:11px;margin-top:5px;line-height:1.5;padding-left:10px;border-left:2px solid #93b4f0;}
+</style>
+
+<div class="page-title">HU49126 — Términos y Condiciones de compra de tokens</div>
+<div class="page-sub">Portal Administrador GM (gestión y versionado) + Portal IA (aceptación al pagar)</div>
+
+<div class="disclaimer">
+  <strong>Sobre este prototipo</strong>
+  Representación visual del flujo solicitado, no un diseño final pixel a pixel. El propósito es comunicar el flujo, los elementos y el comportamiento — no reemplazar el criterio del desarrollador ni del diseñador.<br><br>
+  ⚠️ Respetar siempre la apariencia real de Portal Administrador GM y Portal IA (colores, tipografía, estructura de paneles) tomada de los prototipos ya publicados de este proyecto.<br><br>
+  Si algo no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌
+</div>
+
+<!-- ① Admin GM - vista principal -->
+<div class="screen">
+  <div class="screen-label">① Portal Administrador GM — Términos y Condiciones de Compra (HU49126-1)<span class="badge badge-new">NUEVO</span></div>
+  <div class="screen-desc">
+    Sección nueva del menú de Portal Administrador GM. Muestra la versión vigente (texto completo, de solo lectura) y permite crear un borrador nuevo o corregir la vigente.
+  </div>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand">
+        <div class="brand-logo">GM</div>
+        <div><div class="brand-name">Administrador GM</div><div class="brand-sub">Planes de Tokens</div></div>
+      </div>
+      <div class="user-chip"><b>María García</b>Administrador GM</div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-group">GESTIÓN</div>
+        <div class="sb-item">Catálogo de Planes</div>
+        <div class="sb-item">Panel de Clientes</div>
+        <div class="sb-item active">Términos y Condiciones</div>
+      </div>
+      <div class="main">
+        <div class="toolbar">
+          <div class="toolbar-title">Términos y Condiciones de Compra</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-ghost">Ver historial de versiones</button>
+            <button class="btn-new">Crear borrador</button>
+          </div>
+        </div>
+        <div class="meta-row">Versión vigente: <b>v3</b> · Publicada el 20/08/2026 09:14 por <b>mgarcia</b></div>
+        <div class="texto-vigente" style="margin-top:10px;">
+          <b>Términos y Condiciones de Compra de Tokens — GM Transport</b><br><br>
+          1. El presente documento regula la compra de planes de tokens para el uso del asistente de inteligencia artificial GM IA...<br>
+          2. Los tokens adquiridos no caducan y no son reembolsables una vez confirmado el pago...<br>
+          3. El saldo de cortesía mensual caduca al cierre de cada mes y se consume antes que el saldo adquirido...
+        </div>
+        <div style="margin-top:12px;"><button class="btn-ghost">Corregir esta versión</button></div>
+        <div class="ann">Botón "Crear borrador": deshabilitado si ya existe un borrador abierto sin publicar — en ese caso, abre ese mismo borrador en vez de crear uno nuevo. Botón "Corregir": crea un borrador nuevo precargado con el texto de la versión vigente; la vigente no se modifica hasta publicar el nuevo borrador.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ② Admin GM - editor de borrador -->
+<div class="screen">
+  <div class="screen-label">② Portal Administrador GM — Editor de borrador<span class="badge badge-new">NUEVO</span></div>
+  <div class="screen-desc">
+    Se abre al hacer clic en "Crear borrador" o "Corregir esta versión". Editor de texto con formato (negritas, numeración). El botón "Firmar y Publicar" está deshabilitado si el texto está vacío.
+  </div>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">GM</div><div><div class="brand-name">Administrador GM</div><div class="brand-sub">Planes de Tokens</div></div></div>
+      <div class="user-chip"><b>María García</b>Administrador GM</div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-group">GESTIÓN</div>
+        <div class="sb-item">Catálogo de Planes</div>
+        <div class="sb-item">Panel de Clientes</div>
+        <div class="sb-item active">Términos y Condiciones</div>
+      </div>
+      <div class="main">
+        <div class="toolbar">
+          <div class="toolbar-title">Editar borrador — Términos y Condiciones</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-ghost">Guardar borrador</button>
+            <button class="btn-new">Firmar y Publicar</button>
+          </div>
+        </div>
+        <div class="editor">
+          <div class="editor-toolbar"><span><b>B</b></span><span><i>I</i></span><span>1. Lista</span><span>¶ Párrafo</span></div>
+          <div class="editor-body">
+            <b>Términos y Condiciones de Compra de Tokens — GM Transport</b><br><br>
+            1. El presente documento regula la compra de planes de tokens...<br>
+            2. Los tokens adquiridos no caducan y no son reembolsables...<br>
+            3. El saldo de cortesía mensual caduca al cierre de cada mes...<br>
+            <span style="color:#c0c4cc;">[el administrador continúa capturando el texto aquí]</span>
+          </div>
+        </div>
+        <div class="ann">Editor de texto con formato (negritas, cursiva, numeración de cláusulas) — sin límite práctico de longitud. "Guardar borrador" guarda sin publicar. "Firmar y Publicar": deshabilitado si el editor está vacío; si se hace clic con el editor vacío, muestra el mensaje "Captura el texto de los Términos y Condiciones antes de publicar" y no crea versión. Con texto capturado, abre el modal de confirmación (③). Si otro administrador ya guardó cambios sobre este mismo borrador desde que se abrió, al guardar se muestra el mensaje "Este borrador cambió desde que lo abriste, revisa el contenido actual antes de guardar" — sin sobrescribir en silencio.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ Admin GM - modal confirmar publicación -->
+<div class="screen">
+  <div class="screen-label">③ Portal Administrador GM — Confirmar publicación<span class="badge badge-new">NUEVO</span></div>
+  <div class="screen-desc">
+    Modal que aparece al hacer clic en "Firmar y Publicar" con texto capturado. "Confirmar" publica la nueva versión y pasa la anterior al histórico (inmutable). "Cancelar" cierra el modal sin publicar, el borrador sigue igual.
+  </div>
+  <div class="portal" style="min-height:260px;">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">GM</div><div><div class="brand-name">Administrador GM</div><div class="brand-sub">Planes de Tokens</div></div></div>
+    </div>
+    <div class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-head">Publicar nueva versión</div>
+        <div class="modal-body2">¿Confirmas publicar esta versión? Los clientes deberán aceptarla en su próxima compra.</div>
+        <div class="modal-foot">
+          <button class="btn-ghost">Cancelar</button>
+          <button class="btn-new">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ann">Al confirmar: el borrador se convierte en la versión vigente (nueva versión numerada, fecha, hora y usuario que publicó); la versión que era vigente pasa al historial y queda inmutable. Al cancelar: no se crea ninguna versión, el borrador permanece exactamente igual.</div>
+</div>
+
+<!-- ④ Admin GM - historial de versiones -->
+<div class="screen">
+  <div class="screen-label">④ Portal Administrador GM — Historial de versiones<span class="badge badge-new">NUEVO</span></div>
+  <div class="screen-desc">
+    Listado de todas las versiones publicadas. Cada versión es de solo lectura al abrirse — nunca editable.
+  </div>
+  <div class="portal">
+    <div class="portal-topline"></div>
+    <div class="portal-header">
+      <div class="brand"><div class="brand-logo">GM</div><div><div class="brand-name">Administrador GM</div><div class="brand-sub">Planes de Tokens</div></div></div>
+    </div>
+    <div class="portal-body">
+      <div class="sidebar">
+        <div class="sb-group">GESTIÓN</div>
+        <div class="sb-item">Catálogo de Planes</div>
+        <div class="sb-item">Panel de Clientes</div>
+        <div class="sb-item active">Términos y Condiciones</div>
+      </div>
+      <div class="main">
+        <div class="toolbar"><div class="toolbar-title">Historial de versiones</div></div>
+        <table>
+          <tr><th>Versión</th><th>Publicada por</th><th>Fecha y hora</th><th></th></tr>
+          <tr><td><b>v3</b> (vigente)</td><td>mgarcia</td><td>20/08/2026 09:14</td><td><span class="link-a">Ver texto</span></td></tr>
+          <tr><td>v2</td><td>jlopez</td><td>10/08/2026 16:02</td><td><span class="link-a">Ver texto</span></td></tr>
+          <tr><td>v1</td><td>mgarcia</td><td>22/07/2026 11:30</td><td><span class="link-a">Ver texto</span></td></tr>
+        </table>
+        <div class="ann">"Ver texto" abre el contenido completo de esa versión en modo solo lectura, sin opción de editar. Las versiones históricas nunca se modifican ni se eliminan — son evidencia legal.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ Admin GM - Detalle de Cliente: parametro bypass -->
+<div class="screen">
+  <div class="screen-label">⑤ Portal Administrador GM — Detalle de Cliente: parámetro por empresa<span class="badge badge-new">NUEVO</span></div>
+  <div class="screen-desc">
+    Bloque nuevo — se inserta dentro de la pantalla existente Detalle de Cliente (HU47575), no es pantalla aparte. Solo se muestra el fragmento agregado.
+  </div>
+  <div class="portal" style="max-width:640px;">
+    <div class="portal-topline"></div>
+    <div style="padding:16px 20px;">
+      <div class="sec-label" style="font-size:11px;font-weight:700;color:#8a8f9a;text-transform:uppercase;letter-spacing:.4px;margin:0 0 6px;">Términos y Condiciones de Compra</div>
+      <table>
+        <tr><th>Permitir compra sin aceptar Términos y Condiciones</th><th></th><th>Último cambio</th></tr>
+        <tr><td><span class="pill pill-off">Inactivo</span></td><td><button class="btn-ghost">Activar</button></td><td>—</td></tr>
+      </table>
+      <div class="ann">Toggle por empresa (no global). Al activarlo/desactivarlo, se registra quién lo hizo y cuándo en la columna "Último cambio" (ej. "Activado por mgarcia — 24/08/2026 10:05"). Mientras esté activo, las compras de esta empresa no muestran el paso de aceptación y quedan marcadas como "Sin aceptación de Términos y Condiciones - parámetro activo".</div>
+
+      <div class="sec-label" style="font-size:11px;font-weight:700;color:#8a8f9a;text-transform:uppercase;letter-spacing:.4px;margin:18px 0 6px;">Aceptaciones registradas</div>
+      <table>
+        <tr><th>Usuario</th><th>Nombre firmado</th><th>Versión</th><th>Fecha y hora</th></tr>
+        <tr><td>jperez</td><td>Juan Pérez</td><td>v3</td><td>22/08/2026 14:20</td></tr>
+        <tr><td>jperez</td><td>Juan Pérez</td><td>v2</td><td>05/08/2026 09:41</td></tr>
+      </table>
+      <div class="ann">Listado de solo lectura — no se puede editar ni eliminar ningún registro. Una fila por cada compra en la que el usuario aceptó (no una por versión: si acepta la misma versión dos veces, en dos compras distintas, aparecen dos filas).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ Portal IA - clic en Pagar abre el modal -->
+<div class="screen">
+  <div class="screen-label">⑥ Portal IA — Clic en "Pagar" abre el modal de Términos y Condiciones (HU49126-2)<span class="badge badge-new">NUEVO</span></div>
+  <div class="screen-desc">
+    En la pantalla existente "Método de pago" (HU47732), el botón "Pagar" ya no cambia de comportamiento — sigue habilitado igual que hoy. Al hacer clic, en vez de procesar el pago directo, se abre este modal nuevo antes de continuar. El checkbox aquí adentro no está marcado, por eso "Aceptar y Pagar" está deshabilitado.
+  </div>
+  <div class="portal" style="max-width:640px;min-height:300px;">
+    <div class="portal-topline"></div>
+    <div style="padding:16px 20px;">
+      <div class="plan-summary" style="opacity:.5;"><span>Plan Básico · 5,000 tokens</span><span class="pay-total">Total: $50.00 USD</span></div>
+    </div>
+    <div class="modal-overlay">
+      <div class="modal-box" style="width:380px;">
+        <div class="modal-head">Términos y Condiciones de Compra</div>
+        <div class="modal-body2">
+          <div class="tyc-text" style="max-height:110px;">
+            1. El presente documento regula la compra de planes de tokens...<br>
+            2. Los tokens adquiridos no caducan y no son reembolsables...<br>
+            3. El saldo de cortesía mensual caduca al cierre de cada mes...
+          </div>
+          <div class="tyc-accept-row">
+            <input type="checkbox">
+            <label>Acepto los Términos y Condiciones de compra <span class="firma-name">Juan Pérez</span></label>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn-ghost">Cancelar</button>
+          <button class="btn-new" disabled>Aceptar y Pagar $50.00 USD</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ann">Texto tomado de la versión vigente publicada en Administrador GM. El nombre junto al checkbox se precarga con el nombre registrado de la cuenta — no editable. "Aceptar y Pagar" permanece deshabilitado hasta marcar el checkbox. "Cancelar" cierra el modal sin procesar ningún pago; el usuario permanece en "Método de pago" con el plan seleccionado. Si la empresa tiene activo el parámetro de excepción (pantalla ⑤), este modal no aparece — el clic en "Pagar" procesa el cobro directo.</div>
+</div>
+
+<!-- ⑦ Portal IA - modal con checkbox marcado -->
+<div class="screen">
+  <div class="screen-label">⑦ Portal IA — Modal con Términos y Condiciones aceptados</div>
+  <div class="screen-desc">
+    Mismo modal que ⑥, después de marcar el checkbox. "Aceptar y Pagar" se habilita; al hacer clic ahí es cuando se procesa el cobro.
+  </div>
+  <div class="portal" style="max-width:640px;min-height:300px;">
+    <div class="portal-topline"></div>
+    <div style="padding:16px 20px;">
+      <div class="plan-summary" style="opacity:.5;"><span>Plan Básico · 5,000 tokens</span><span class="pay-total">Total: $50.00 USD</span></div>
+    </div>
+    <div class="modal-overlay">
+      <div class="modal-box" style="width:380px;">
+        <div class="modal-head">Términos y Condiciones de Compra</div>
+        <div class="modal-body2">
+          <div class="tyc-text" style="max-height:110px;">
+            1. El presente documento regula la compra de planes de tokens...<br>
+            2. Los tokens adquiridos no caducan y no son reembolsables...<br>
+            3. El saldo de cortesía mensual caduca al cierre de cada mes...
+          </div>
+          <div class="tyc-accept-row">
+            <input type="checkbox" checked>
+            <label>Acepto los Términos y Condiciones de compra <span class="firma-name">Juan Pérez</span></label>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn-ghost">Cancelar</button>
+          <button class="btn-new">Aceptar y Pagar $50.00 USD</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ann">Al hacer clic en "Aceptar y Pagar" y confirmarse el cobro, el sistema registra la aceptación: usuario, nombre firmado, empresa, versión aceptada y fecha/hora — nunca se edita ni se elimina. Si el pago es rechazado, la aceptación permanece válida; un reintento (clic de nuevo en "Pagar" sin salir de la pantalla) vuelve a mostrar este modal con el checkbox ya marcado, sin obligar a desmarcarlo. Si la versión vigente cambió mientras el modal estaba abierto, al hacer clic en "Aceptar y Pagar" el modal se actualiza con el texto nuevo y vuelve a pedir marcar el checkbox.</div>
+</div>

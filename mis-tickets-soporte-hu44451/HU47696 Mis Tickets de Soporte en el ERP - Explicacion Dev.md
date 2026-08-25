@@ -31,6 +31,20 @@ OAuth2, flujo **Self Client**:
 
 Si luego hace falta otro scope (`Desk.contacts.READ`, etc.), no se puede ampliar el refresh_token — repetir desde el paso 2.
 
+### Cómo paginar el listado de tickets
+
+`GET /tickets` regresa máximo 100 por llamada (usar `limit=99` para ir seguro). Para traer más, subir `from` de página en página:
+
+```
+GET /tickets?departmentId=890726000000006907&sortBy=-createdTime&limit=99&from=0    → registros 1–99
+GET /tickets?departmentId=890726000000006907&sortBy=-createdTime&limit=99&from=99   → registros 100–198
+GET /tickets?departmentId=890726000000006907&sortBy=-createdTime&limit=99&from=198  → registros 199–297
+```
+
+Siguiente `from` = `from` anterior + `limit`. Parar cuando `data` regrese menos de 99 elementos (o `[]`) — ya no hay más páginas.
+
+Este listado **nunca trae `cf` ni el RFC**, sin importar qué parámetros se le manden — solo trae los campos estándar (folio, asunto, estatus, fechas, etc.). El RFC se obtiene aparte, ver siguiente punto.
+
 ### Qué hace el servicio con esa conexión, en operación normal
 
 1. Guarda sus propias credenciales de Zoho Desk (client_id, client_secret, refresh_token) en su configuración — nunca en el ERP.

@@ -196,8 +196,34 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
   <div class="exp-step">
     <div class="exp-step-num">5</div>
     <div class="exp-step-body">
-      <div class="exp-step-title">Si carga un XML, el campo se actualiza automáticamente</div>
-      <div class="exp-step-text">Al cargar una factura electrónica (XML), el sistema lee la fecha de emisión y la pone en "Fecha Documento". Si carga otro XML distinto, el campo se vuelve a actualizar. El usuario puede editar el campo después si necesita corregirlo.</div>
+      <div class="exp-step-title">Si carga un XML y la fecha del XML es diferente a la capturada, el sistema pregunta qué hacer</div>
+      <div class="exp-step-text">Al cargar una factura electrónica (XML), el sistema lee la fecha de emisión. <strong>Si esa fecha es distinta a lo que ya tiene el campo "Fecha Documento"</strong>, aparece un mensaje de confirmación antes de cambiar nada:</div>
+      <div class="exp-step-screen" style="margin-top:10px">
+        <!-- Mini modal de confirmación -->
+        <div style="background:#f0f0f0;padding:12px;display:flex;justify-content:center">
+          <div style="background:#fff;border:1px solid #aaa;width:360px;font-family:Calibri,sans-serif;font-size:12px;box-shadow:2px 2px 6px rgba(0,0,0,.15)">
+            <div style="background:#e8e8e8;color:#333;font-weight:bold;font-size:12px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ccc">
+              <span>Actualizar Fecha Documento</span>
+              <button style="background:#F2940E;color:#fff;border:none;width:18px;height:18px;border-radius:2px;cursor:pointer;font-weight:bold;font-size:12px">✕</button>
+            </div>
+            <div style="padding:14px 16px 10px">
+              <p style="margin-bottom:10px;line-height:1.6;color:#333">La fecha de la factura electrónica es <strong>12/08/2026</strong>.<br>El campo <strong>"Fecha Documento"</strong> tiene actualmente <strong>20/08/2026</strong>.</p>
+              <p style="color:#555;margin-bottom:14px">¿Deseas reemplazar la Fecha Documento con la fecha de la factura?</p>
+              <div style="display:flex;justify-content:flex-end;gap:8px;border-top:1px solid #ddd;padding-top:10px">
+                <button style="background:#F2940E;color:#fff;border:none;padding:4px 16px;font-size:12px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px">Sí, actualizar</button>
+                <button style="background:#888;color:#fff;border:none;padding:4px 16px;font-size:12px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px">No, conservar la fecha actual</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="exp-step-text" style="margin-top:10px">
+        <ul class="exp-ul">
+          <li><strong>Si el usuario hace clic en "Sí, actualizar"</strong> → el campo "Fecha Documento" cambia a la fecha del XML y el mensaje se cierra.</li>
+          <li><strong>Si hace clic en "No, conservar la fecha actual"</strong> → el campo se queda como estaba, el XML sigue cargado pero la fecha no cambia.</li>
+          <li><strong>Si la fecha del XML es igual a la que ya está capturada</strong> → no aparece ningún mensaje, el campo no cambia.</li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -249,7 +275,10 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
   <ul class="exp-checklist">
     <li>Al abrir "Generar Pasivo" desde una compra con Fecha "11/06/2026", el campo "Fecha Documento" muestra "11/06/2026" automáticamente.</li>
     <li>Si el usuario cambia "Fecha Documento" a "05/06/2026" y genera, el pasivo en Cuentas por Pagar muestra fecha "05/06/2026".</li>
-    <li>Si carga un XML con fecha de emisión "03/06/2026", el campo "Fecha Documento" cambia a "03/06/2026" sin que el usuario lo escriba.</li>
+    <li>Si carga un XML con fecha de emisión "12/08/2026" y el campo muestra "20/08/2026", aparece el mensaje de confirmación con las dos opciones — sin cambiar el campo todavía.</li>
+    <li>Si el usuario elige "Sí, actualizar", el campo cambia a "12/08/2026" y el mensaje desaparece.</li>
+    <li>Si el usuario elige "No, conservar la fecha actual", el campo se queda en "20/08/2026" y el mensaje desaparece.</li>
+    <li>Si la fecha del XML es igual a la que ya está en el campo, no aparece ningún mensaje.</li>
     <li>Si captura una fecha futura, aparece el mensaje exacto y la ventana no se cierra.</li>
     <li>Si el periodo está cerrado, aparece el mensaje exacto y la ventana no se cierra.</li>
     <li>La póliza contable generada muestra la misma fecha que "Fecha Documento".</li>

@@ -9,10 +9,10 @@
 body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#f0f0f0;padding:24px}
 
 /* Proto tabs externos */
-.proto-tabs{display:flex;gap:0;max-width:700px;margin:0 auto 0;border-bottom:none}
+.proto-tabs{display:flex;max-width:820px;margin:0 auto 0}
 .proto-tab{padding:7px 20px;cursor:pointer;font-size:12px;font-family:Calibri,sans-serif;background:#e8e8e8;color:#555;border:1px solid #ccc;border-bottom:none;margin-right:3px;border-radius:3px 3px 0 0;user-select:none}
 .proto-tab.active{background:#fff;color:#222;font-weight:bold;border-top:3px solid #F2940E;border-bottom:1px solid #fff;margin-bottom:-1px;z-index:1}
-.proto-pane{display:none;border:1px solid #ccc;background:#fff;padding:20px;max-width:700px;margin:0 auto;border-radius:0 3px 3px 3px}
+.proto-pane{display:none;border:1px solid #ccc;background:#fff;padding:20px;max-width:820px;margin:0 auto;border-radius:0 3px 3px 3px}
 .proto-pane.active{display:block}
 
 /* Ventana ERP */
@@ -50,20 +50,26 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
 .banner-title{font-weight:700;font-size:12px;color:#1a1a1a;margin-bottom:4px}
 .banner-text{font-size:12px;color:#555;line-height:1.5}
 
-/* Estilos pestaña Explicaciones */
-.exp-h1{font-size:16px;font-weight:bold;color:#1a1a1a;border-bottom:2px solid #F2940E;padding-bottom:8px;margin-bottom:16px}
-.exp-h2{font-size:13px;font-weight:bold;color:#F2940E;margin:20px 0 8px}
-.exp-p{font-size:12px;color:#333;line-height:1.7;margin-bottom:8px}
-.exp-ol{padding-left:18px;margin-bottom:8px}
-.exp-ol li{font-size:12px;color:#333;line-height:1.7;margin-bottom:4px}
-.exp-ul{padding-left:18px;margin-bottom:8px;list-style:disc}
-.exp-ul li{font-size:12px;color:#333;line-height:1.7;margin-bottom:4px}
+/* Explicación dev — tutorial paso a paso */
+.exp-h1{font-size:16px;font-weight:bold;color:#1a1a1a;border-bottom:2px solid #F2940E;padding-bottom:8px;margin-bottom:20px}
+.exp-h2{font-size:13px;font-weight:bold;color:#1a1a1a;margin:28px 0 10px}
+.exp-step{display:flex;gap:14px;margin-bottom:28px}
+.exp-step-num{background:#F2940E;color:#fff;font-weight:bold;font-size:13px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.exp-step-body{flex:1}
+.exp-step-title{font-size:13px;font-weight:bold;color:#1a1a1a;margin-bottom:4px}
+.exp-step-text{font-size:12px;color:#444;line-height:1.7;margin-bottom:8px}
+.exp-step-screen{margin-top:12px;border:1px solid #ddd;border-radius:4px;overflow:hidden}
+.exp-ul{padding-left:16px;list-style:disc;margin-top:4px}
+.exp-ul li{font-size:12px;color:#444;line-height:1.7;margin-bottom:3px}
+.exp-divider{border:none;border-top:1px solid #e8e8e8;margin:8px 0 20px}
+.exp-section-title{font-size:14px;font-weight:bold;color:#F2940E;margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid #f0d090}
+.exp-alerta{background:#fff8e1;border-left:3px solid #F2940E;padding:8px 12px;border-radius:3px;margin:10px 0;font-size:12px;color:#555;line-height:1.6}
 .exp-checklist{list-style:none;padding-left:0;margin-bottom:8px}
 .exp-checklist li{font-size:12px;color:#333;line-height:1.7;margin-bottom:4px;padding-left:22px;position:relative}
 .exp-checklist li::before{content:"☐";position:absolute;left:0;color:#F2940E;font-size:13px}
-.exp-alerta{background:#fff8e1;border-left:3px solid #F2940E;padding:8px 12px;border-radius:3px;margin:10px 0;font-size:12px;color:#555;line-height:1.6}
-.exp-pendiente{background:#fff0f0;border-left:3px solid #cc3300;padding:8px 12px;border-radius:3px;margin:10px 0;font-size:12px;color:#555;line-height:1.6}
 .exp-code{background:#f5f5f5;border:1px solid #ddd;border-radius:3px;padding:2px 6px;font-family:monospace;font-size:11px;color:#333}
+.exp-excusa{background:#f8f8f8;border:1px solid #e0e0e0;border-radius:4px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:#444;line-height:1.6}
+.exp-excusa strong{color:#1a1a1a}
 </style>
 </head>
 <body>
@@ -75,7 +81,6 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
 
 <!-- PESTAÑA PROTOTIPO -->
 <div class="proto-pane active" id="pane-proto">
-
   <div class="banner">
     <div class="banner-title">💡 Prototipo #42793 — Inventarios &gt; Compras &gt; Generar Pasivo</div>
     <div class="banner-text">
@@ -86,127 +91,47 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
   </div>
 
   <div class="window">
-    <div class="win-title">
-      Generar Pasivo
-      <button class="win-close">✕</button>
-    </div>
-
+    <div class="win-title">Generar Pasivo<button class="win-close">✕</button></div>
     <div style="padding:4px">
-
-      <!-- Datos de compra -->
       <div class="sec">Datos de compra</div>
       <div class="inner">
         <div class="fr">
-          <label>Folio</label>
-          <input readonly value="28153" style="max-width:80px">
-          <label style="min-width:50px;margin-left:10px">Fecha</label>
-          <input readonly value="11/06/2026" style="max-width:105px">
+          <label>Folio</label><input readonly value="28153" style="max-width:80px">
+          <label style="min-width:50px;margin-left:10px">Fecha</label><input readonly value="11/06/2026" style="max-width:105px">
         </div>
         <div class="fr">
-          <label>Proveedor</label>
-          <input readonly value="000003" style="max-width:70px">
+          <label>Proveedor</label><input readonly value="000003" style="max-width:70px">
           <input readonly value="NORMA ELIZABETH CANALES AGUILERA" style="flex:1;margin-left:4px">
         </div>
       </div>
-
-      <!-- Datos de pasivo -->
       <div class="sec">Datos de pasivo</div>
       <div class="inner">
-
-        <!-- CAMPO NUEVO -->
         <div class="fr">
           <label style="font-weight:bold;color:#1a7f37">Fecha Documento</label>
           <input class="new-field" value="11/06/2026" style="max-width:115px">
           <span class="new-badge">NUEVO</span>
         </div>
         <div class="nota-campo">↑ Fecha de la factura del proveedor (obligatorio, editable)</div>
-
-        <div class="fr">
-          <label>No. Documento</label>
-          <input value="A" style="max-width:50px">
-          <span style="padding:0 4px;color:#666">-</span>
-          <input value="4144" style="max-width:80px">
-        </div>
-        <div class="fr">
-          <label>Categoría</label>
-          <select style="max-width:220px"><option></option></select>
-          <button class="btn-o" style="padding:2px 8px;margin-left:2px">...</button>
-        </div>
-        <div class="fr">
-          <label>Método de pago</label>
-          <select style="max-width:120px"><option></option><option>PPD - Pago en Parcialidades</option><option>PUE - Pago en Una Exhibición</option></select>
-        </div>
-        <div class="fr">
-          <label>Folio Fiscal UUID</label>
-          <input style="flex:1">
-          <button class="btn-o" style="margin-left:6px;padding:2px 10px">Cargar XML</button>
-        </div>
+        <div class="fr"><label>No. Documento</label><input value="A" style="max-width:50px"><span style="padding:0 4px;color:#666">-</span><input value="4144" style="max-width:80px"></div>
+        <div class="fr"><label>Categoría</label><select style="max-width:220px"><option></option></select><button class="btn-o" style="padding:2px 8px;margin-left:2px">...</button></div>
+        <div class="fr"><label>Método de pago</label><select style="max-width:120px"><option></option><option>PPD</option><option>PUE</option></select></div>
+        <div class="fr"><label>Folio Fiscal UUID</label><input style="flex:1"><button class="btn-o" style="margin-left:6px;padding:2px 10px">Cargar XML</button></div>
       </div>
-
-      <!-- Documento en PDF -->
       <div class="sec">Documento en PDF</div>
-      <div class="inner">
-        <div class="pdf-row">
-          <button class="btn-g">Seleccionar archivo</button>
-          <span class="file-name">NINGÚN ARCHIVO SELECCIONADO</span>
-        </div>
-      </div>
-
-      <!-- Distribución de gastos -->
+      <div class="inner"><div class="pdf-row"><button class="btn-g">Seleccionar archivo</button><span class="file-name">NINGÚN ARCHIVO SELECCIONADO</span></div></div>
       <div class="sec">Distribución de gastos</div>
       <div class="inner">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div>
-            <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Distribución</div>
-            <div class="radio-row">
-              <label><input type="radio" name="tdist" checked> Partida</label>
-              <label><input type="radio" name="tdist"> Unidad</label>
-            </div>
-          </div>
-          <div>
-            <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Cálculo</div>
-            <div class="radio-row">
-              <label><input type="radio" name="tcalc" checked> Porcentaje</label>
-              <label><input type="radio" name="tcalc"> Importe</label>
-            </div>
-          </div>
+          <div><div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Distribución</div><div class="radio-row"><label><input type="radio" name="tdist" checked> Partida</label><label><input type="radio" name="tdist"> Unidad</label></div></div>
+          <div><div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Cálculo</div><div class="radio-row"><label><input type="radio" name="tcalc" checked> Porcentaje</label><label><input type="radio" name="tcalc"> Importe</label></div></div>
         </div>
-        <div class="fr" style="margin-bottom:6px">
-          <label>Plantilla</label>
-          <input style="max-width:130px">
-          <button class="btn-o" style="padding:2px 8px;margin-left:3px">...</button>
-        </div>
-        <div class="btn-row">
-          <button class="btn-o">Agregar</button>
-          <button class="btn-o">Modificar</button>
-          <button class="btn-o">Eliminar</button>
-        </div>
-        <table class="erp-table">
-          <thead>
-            <tr>
-              <th style="width:70px">Código</th>
-              <th>Descripción</th>
-              <th style="width:100px">Porcentaje</th>
-            </tr>
-          </thead>
-          <tbody id="tbl">
-            <tr class="sel"><td>0</td><td>001</td><td></td></tr>
-            <tr><td>0</td><td>002</td><td></td></tr>
-            <tr><td>0</td><td>003</td><td></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-
-    <div class="bottom">
-      <div class="confirm-q">¿Está seguro de generar pasivo?</div>
-      <div class="brow">
-        <button class="btn-o" style="padding:4px 24px">Aceptar</button>
-        <button class="btn-g" style="padding:4px 24px">Regresar</button>
+        <div class="fr" style="margin-bottom:6px"><label>Plantilla</label><input style="max-width:130px"><button class="btn-o" style="padding:2px 8px;margin-left:3px">...</button></div>
+        <div class="btn-row"><button class="btn-o">Agregar</button><button class="btn-o">Modificar</button><button class="btn-o">Eliminar</button></div>
+        <table class="erp-table"><thead><tr><th style="width:70px">Código</th><th>Descripción</th><th style="width:100px">Porcentaje</th></tr></thead>
+        <tbody id="tbl"><tr class="sel"><td>0</td><td>001</td><td></td></tr><tr><td>0</td><td>002</td><td></td></tr><tr><td>0</td><td>003</td><td></td></tr></tbody></table>
       </div>
     </div>
-
+    <div class="bottom"><div class="confirm-q">¿Está seguro de generar pasivo?</div><div class="brow"><button class="btn-o" style="padding:4px 24px">Aceptar</button><button class="btn-g" style="padding:4px 24px">Regresar</button></div></div>
   </div>
 </div>
 
@@ -215,70 +140,128 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
 
   <div class="exp-h1">Fecha Documento al generar el pasivo de una compra — Explicación para desarrollo (#42793)</div>
 
-  <div class="exp-h2">Qué está pidiendo el cliente y por qué</div>
-  <div class="exp-p">Cuando el usuario genera el pasivo de una compra, el sistema actualmente registra como fecha del pasivo la misma fecha en que se capturó la compra (el campo "Fecha" de la compra). El problema es que esa fecha no siempre coincide con la fecha real de la factura del proveedor. El proveedor puede haber emitido la factura el 15 de junio, pero la compra se capturó en el sistema hasta el 20 de junio — y el pasivo queda con el 20.</div>
-  <div class="exp-p">El cliente quiere poder capturar la fecha real del documento del proveedor ("Fecha Documento") al momento de generar el pasivo. Esa fecha es la que debe quedar grabada en el pasivo y en su póliza contable.</div>
-
-  <div class="exp-h2">Paso a paso de lo que debe pasar</div>
-  <ol class="exp-ol">
-    <li>El usuario va a <strong>Inventarios &gt; Compras</strong> y registra una compra con el botón <strong>"Agregar"</strong>. En esa pantalla captura, entre otras cosas, el campo <strong>"Fecha"</strong> (la fecha de la compra) y el campo <strong>"Fecha Recibido"</strong>. Esas fechas no cambian con esta HU.</li>
-    <li>Una vez registrada la compra, el usuario regresa al listado de compras, selecciona esa compra y hace clic en el botón <strong>"Generar Pasivo"</strong> de la barra superior.</li>
-    <li>Se abre la ventana <strong>"Generar Pasivo"</strong>. En la sección <strong>"Datos de pasivo"</strong> de esa ventana se agrega un campo nuevo llamado <strong>"Fecha Documento"</strong>.
-      <ul class="exp-ul" style="margin-top:4px">
-        <li>Al abrir la ventana, ese campo viene <strong>prellenado automáticamente con la misma fecha que tiene el campo "Fecha" de la compra</strong> — no "Fecha Recibido", no la fecha de hoy.</li>
-        <li>El campo es <strong>editable</strong> — el usuario puede cambiar la fecha manualmente.</li>
-      </ul>
-    </li>
-    <li><strong>Si el usuario no toca el campo "Fecha Documento"</strong> y genera el pasivo: el pasivo queda con la misma fecha que tenía la compra en el campo "Fecha". El comportamiento final es idéntico al actual.</li>
-    <li><strong>Si el usuario cambia el campo "Fecha Documento" manualmente</strong> (por ejemplo, escribe "15/06/2026") y genera el pasivo:
-      <ul class="exp-ul" style="margin-top:4px">
-        <li>El pasivo se registra con la fecha "15/06/2026".</li>
-        <li>La póliza contable que se genera para ese pasivo también queda con la fecha "15/06/2026".</li>
-      </ul>
-    </li>
-    <li><strong>Si el usuario carga una factura electrónica (XML)</strong> en la ventana:
-      <ul class="exp-ul" style="margin-top:4px">
-        <li>El sistema lee la fecha de emisión del XML y actualiza el campo "Fecha Documento" automáticamente.</li>
-        <li>Si después carga otro XML distinto, el campo se vuelve a actualizar con la nueva fecha.</li>
-        <li>El usuario puede editar el campo después de cargar el XML si necesita corregirlo.</li>
-      </ul>
-    </li>
-  </ol>
-
-  <div class="exp-h2">Casos que también debes cubrir (no son opcionales)</div>
-  <ul class="exp-ul">
-    <li><strong>Periodo contable cerrado:</strong> Si la fecha en "Fecha Documento" cae en un periodo contable cerrado, el sistema <strong>no genera el pasivo</strong>. Mensaje exacto: <span class="exp-code">"No es posible registrar el pasivo en un periodo contable cerrado"</span>. La ventana queda abierta con los datos capturados — no limpiar, no cerrar.</li>
-    <li><strong>Fecha futura:</strong> Si la fecha es posterior al día de hoy, el sistema <strong>no genera el pasivo</strong>. Mensaje exacto: <span class="exp-code">"La fecha del documento no puede ser posterior a la fecha actual"</span>. La ventana queda abierta con los datos capturados.</li>
-    <li><strong>Corrección después de error:</strong> Tras cualquiera de los errores anteriores, el usuario puede corregir "Fecha Documento" en la misma ventana sin cerrarla y volver a intentar. El sistema debe permitirlo.</li>
-    <li><strong>Validación independiente:</strong> La regla de "no fecha futura" de "Fecha Documento" es una validación nueva y separada — no reutilizar la misma lógica ni los mensajes del campo "Fecha" de la compra o de "Fecha Recibido".</li>
-  </ul>
-
-  <div class="exp-h2">Impacto en reportes — validar obligatoriamente</div>
-  <div class="exp-alerta">
-    La fecha del pasivo afecta en qué periodo cae ese registro en dos reportes:<br><br>
-    <strong>DIOT:</strong> El pasivo debe aparecer en el periodo de "Fecha Documento", no en el de la compra. Validar que el reporte lee la fecha nueva.<br><br>
-    <strong>Antigüedad de Saldos por Proveedor:</strong> El cálculo de días debe partir de "Fecha Documento". Validar que refleja la fecha capturada.<br><br>
-    Este efecto es intencional — el cliente está consciente de que el pasivo puede caer en un periodo distinto al de la compra.
+  <div style="font-size:12px;color:#555;line-height:1.7;margin-bottom:20px;background:#fffdf9;border-left:4px solid #F2940E;padding:10px 14px;border-radius:3px">
+    Cuando el usuario genera el pasivo de una compra, el sistema actualmente registra como fecha del pasivo la fecha en que se capturó la compra. El cliente necesita poder registrar la fecha real de la factura del proveedor, ya que a veces la mercancía llega antes y la factura viene después con una fecha distinta.
   </div>
 
-  <div class="exp-h2">Qué NO te puedes brincar</div>
-  <ul class="exp-ul">
-    <li><strong>"¿Qué fecha cargo al pasivo si el usuario no modifica 'Fecha Documento'?"</strong> → La que viene prellenada: la misma que tiene el campo "Fecha" de la compra.</li>
-    <li><strong>"¿Puedo usar 'Fecha Recibido' como default?"</strong> → No. Solo el campo "Fecha" (sin apellido) de la compra.</li>
-    <li><strong>"¿El campo acepta fechas muy antiguas?"</strong> → No hay límite hacia atrás definido, solo que el periodo contable no esté cerrado.</li>
-    <li><strong>"¿Aplica también a pasivos desde Órdenes de Servicio o altas manuales?"</strong> → No. Solo desde Inventarios &gt; Compras.</li>
-    <li><strong>"¿La póliza contable también debe llevar 'Fecha Documento'?"</strong> → Sí. Cuando el usuario cambia la fecha, la póliza también queda con esa fecha.</li>
-    <li><strong>"¿Qué pasa con los pasivos ya generados antes de este cambio?"</strong> → Nada. No hay migración de históricos.</li>
-  </ul>
+  <div class="exp-section-title">Paso a paso</div>
 
-  <div class="exp-h2">Cómo saber que ya quedó bien</div>
+  <div class="exp-step">
+    <div class="exp-step-num">1</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">El usuario registra la compra en Inventarios &gt; Compras &gt; Agregar</div>
+      <div class="exp-step-text">Aquí captura el campo <strong>"Fecha"</strong> (fecha de la compra) y <strong>"Fecha Recibido"</strong>. Estos campos no cambian con esta HU.</div>
+    </div>
+  </div>
+
+  <div class="exp-step">
+    <div class="exp-step-num">2</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">Desde el listado de compras hace clic en "Generar Pasivo"</div>
+      <div class="exp-step-text">El usuario selecciona una compra sin pasivo generado y hace clic en el botón <strong>"Generar Pasivo"</strong> de la barra superior.</div>
+    </div>
+  </div>
+
+  <div class="exp-step">
+    <div class="exp-step-num">3</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">Se abre la ventana "Generar Pasivo" — aquí aparece el campo nuevo</div>
+      <div class="exp-step-text">En la sección <strong>"Datos de pasivo"</strong> se agrega el campo <strong>"Fecha Documento"</strong>. Al abrir la ventana, ese campo viene prellenado con la misma fecha del campo <strong>"Fecha"</strong> de la compra (no "Fecha Recibido", no la fecha de hoy). El campo es editable.</div>
+      <div class="exp-step-screen">
+        <!-- Ventana inline -->
+        <div style="background:#F5A623;border:none">
+          <div style="background:#F2940E;color:#fff;font-weight:bold;font-size:12px;padding:5px 10px">Generar Pasivo</div>
+          <div style="padding:4px">
+            <div style="background:#ddd;text-align:center;font-weight:bold;font-size:11px;padding:2px 0;margin:4px 0 3px;border:1px solid #ccc">Datos de compra</div>
+            <div style="background:#fff;border:1px solid #ccc;padding:6px 10px;margin:0 3px 3px;font-size:11px">
+              <div style="display:flex;gap:6px;margin-bottom:3px"><span style="min-width:120px;color:#666">Folio</span><span style="background:#efefef;padding:1px 6px;border:1px solid #ccc">28153</span><span style="min-width:40px;color:#666;margin-left:8px">Fecha</span><span style="background:#efefef;padding:1px 6px;border:1px solid #ccc">11/06/2026</span></div>
+              <div style="display:flex;gap:6px"><span style="min-width:120px;color:#666">Proveedor</span><span style="background:#efefef;padding:1px 6px;border:1px solid #ccc">000003 — NORMA ELIZABETH CANALES AGUILERA</span></div>
+            </div>
+            <div style="background:#ddd;text-align:center;font-weight:bold;font-size:11px;padding:2px 0;margin:4px 3px 3px;border:1px solid #ccc">Datos de pasivo</div>
+            <div style="background:#fff;border:1px solid #ccc;padding:6px 10px;margin:0 3px 3px;font-size:11px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                <span style="min-width:120px;font-weight:bold;color:#1a7f37">Fecha Documento</span>
+                <input value="11/06/2026" style="border:1.5px solid #1a7f37;background:#f0fff4;padding:2px 6px;font-size:11px;width:100px;font-family:Calibri,sans-serif">
+                <span style="background:#1a7f37;color:#fff;font-size:9px;font-weight:bold;padding:1px 5px;border-radius:2px">NUEVO</span>
+              </div>
+              <div style="font-size:10px;color:#1a7f37;font-weight:bold;margin-bottom:6px;margin-left:126px">↑ Se prellenar con la Fecha de la compra — editable</div>
+              <div style="display:flex;gap:6px;margin-bottom:3px"><span style="min-width:120px;color:#666">No. Documento</span><input value="A" style="border:1px solid #ccc;padding:1px 4px;font-size:11px;width:30px;font-family:Calibri,sans-serif"> <span style="color:#888">-</span> <input value="4144" style="border:1px solid #ccc;padding:1px 4px;font-size:11px;width:55px;font-family:Calibri,sans-serif"></div>
+              <div style="display:flex;gap:6px"><span style="min-width:120px;color:#666">Folio Fiscal UUID</span><input style="border:1px solid #ccc;padding:1px 4px;font-size:11px;width:140px;font-family:Calibri,sans-serif"><button style="background:#F2940E;color:#fff;border:none;padding:1px 8px;font-size:10px;font-family:Calibri,sans-serif;cursor:pointer;border-radius:2px;margin-left:4px">Cargar XML</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exp-step">
+    <div class="exp-step-num">4</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">El usuario puede dejar la fecha como está o cambiarla</div>
+      <div class="exp-step-text">Si no la toca y genera el pasivo, el pasivo queda con la misma fecha de la compra — igual que antes de este cambio. Si la cambia (por ejemplo a "15/06/2026"), el pasivo y su póliza contable quedan con esa fecha.</div>
+    </div>
+  </div>
+
+  <div class="exp-step">
+    <div class="exp-step-num">5</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">Si carga un XML, el campo se actualiza automáticamente</div>
+      <div class="exp-step-text">Al cargar una factura electrónica (XML), el sistema lee la fecha de emisión y la pone en "Fecha Documento". Si carga otro XML distinto, el campo se vuelve a actualizar. El usuario puede editar el campo después si necesita corregirlo.</div>
+    </div>
+  </div>
+
+  <div class="exp-step">
+    <div class="exp-step-num">6</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">Al generar el pasivo, ese pasivo hereda "Fecha Documento"</div>
+      <div class="exp-step-text">El pasivo que se crea en Cuentas por Pagar queda con la fecha capturada en "Fecha Documento". La póliza contable generada también queda con esa fecha.</div>
+    </div>
+  </div>
+
+  <div class="exp-section-title">Validaciones del campo Fecha Documento</div>
+
+  <div class="exp-step">
+    <div class="exp-step-num" style="background:#cc3300">!</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">No puede ser fecha futura</div>
+      <div class="exp-step-text">Si el usuario captura una fecha posterior al día de hoy, el sistema no genera el pasivo y muestra:<br><span class="exp-code">"La fecha del documento no puede ser posterior a la fecha actual"</span><br>La ventana queda abierta con los datos capturados.</div>
+    </div>
+  </div>
+
+  <div class="exp-step">
+    <div class="exp-step-num" style="background:#cc3300">!</div>
+    <div class="exp-step-body">
+      <div class="exp-step-title">El periodo contable debe estar abierto</div>
+      <div class="exp-step-text">Si la fecha cae en un periodo cerrado (ver <strong>Contabilidad &gt; Ejercicios / Periodos</strong>), el sistema no genera el pasivo y muestra:<br><span class="exp-code">"No es posible registrar el pasivo en un periodo contable cerrado"</span><br>La ventana queda abierta. El usuario puede corregir la fecha y volver a intentar sin cerrar la ventana.</div>
+    </div>
+  </div>
+
+  <div class="exp-alerta" style="margin-bottom:20px">
+    <strong>Sin restricción de rango contra la Fecha de la compra.</strong> La fecha del documento del proveedor puede ser anterior o posterior a la Fecha de la compra — ese es exactamente el caso de uso. No agregar validación de rango entre estos dos campos.
+  </div>
+
+  <div class="exp-section-title">Impacto en reportes</div>
+  <div class="exp-alerta">
+    La fecha que quede en el pasivo afecta en qué periodo aparece ese registro en:<br><br>
+    <strong>DIOT</strong> — debe reflejar "Fecha Documento", no la Fecha de la compra.<br>
+    <strong>Antigüedad de Saldos por Proveedor</strong> — el cálculo de días parte de "Fecha Documento".<br><br>
+    Este efecto es intencional. Validar ambos reportes antes de cerrar el desarrollo.
+  </div>
+
+  <div class="exp-section-title">Qué NO te puedes brincar</div>
+  <div class="exp-excusa"><strong>"¿Qué fecha cargo si el usuario no modifica 'Fecha Documento'?"</strong><br>La que viene prellenada: la misma que tiene el campo "Fecha" de la compra. No "Fecha Recibido", no la fecha de hoy.</div>
+  <div class="exp-excusa"><strong>"¿Aplica también a pasivos desde Órdenes de Servicio o altas manuales?"</strong><br>No. Solo desde Inventarios &gt; Compras. Otros flujos no se tocan en esta HU.</div>
+  <div class="exp-excusa"><strong>"¿La póliza contable también debe llevar 'Fecha Documento'?"</strong><br>Sí. Cuando el usuario cambia la fecha, la póliza también queda con esa fecha.</div>
+  <div class="exp-excusa"><strong>"¿Qué pasa con los pasivos ya generados antes de este cambio?"</strong><br>Nada. No hay migración de históricos.</div>
+
+  <div class="exp-section-title">Cómo saber que ya quedó bien</div>
   <ul class="exp-checklist">
     <li>Al abrir "Generar Pasivo" desde una compra con Fecha "11/06/2026", el campo "Fecha Documento" muestra "11/06/2026" automáticamente.</li>
-    <li>Si el usuario cambia "Fecha Documento" a "05/06/2026" y genera, el pasivo en Cuentas por Pagar muestra fecha "05/06/2026" — no "11/06/2026".</li>
+    <li>Si el usuario cambia "Fecha Documento" a "05/06/2026" y genera, el pasivo en Cuentas por Pagar muestra fecha "05/06/2026".</li>
     <li>Si carga un XML con fecha de emisión "03/06/2026", el campo "Fecha Documento" cambia a "03/06/2026" sin que el usuario lo escriba.</li>
-    <li>Si el usuario intenta generar con una fecha de junio y el periodo de junio está cerrado, aparece el mensaje exacto y la ventana no se cierra.</li>
-    <li>Si el usuario escribe una fecha de mañana, aparece el mensaje exacto y la ventana no se cierra.</li>
-    <li>La póliza contable generada muestra la misma fecha que "Fecha Documento", no la fecha de la compra.</li>
+    <li>Si captura una fecha futura, aparece el mensaje exacto y la ventana no se cierra.</li>
+    <li>Si el periodo está cerrado, aparece el mensaje exacto y la ventana no se cierra.</li>
+    <li>La póliza contable generada muestra la misma fecha que "Fecha Documento".</li>
   </ul>
 
   <div style="margin-top:24px;padding-top:12px;border-top:1px solid #e0e0e0;font-size:11px;color:#888">
@@ -288,17 +271,16 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
 </div>
 
 <script>
-function showTab(name) {
-  document.querySelectorAll('.proto-tab').forEach(function(t){ t.classList.remove('active'); });
-  document.querySelectorAll('.proto-pane').forEach(function(p){ p.classList.remove('active'); });
-  document.getElementById('pane-' + name).classList.add('active');
-  var tabs = document.querySelectorAll('.proto-tab');
-  if (name === 'proto') tabs[0].classList.add('active');
-  else tabs[1].classList.add('active');
+function showTab(name){
+  document.querySelectorAll('.proto-tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.proto-pane').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('pane-'+name).classList.add('active');
+  var tabs=document.querySelectorAll('.proto-tab');
+  if(name==='proto') tabs[0].classList.add('active'); else tabs[1].classList.add('active');
 }
 document.querySelectorAll('#tbl tr').forEach(function(r){
-  r.addEventListener('click', function(){
-    document.querySelectorAll('#tbl tr').forEach(function(x){ x.classList.remove('sel'); });
+  r.addEventListener('click',function(){
+    document.querySelectorAll('#tbl tr').forEach(function(x){x.classList.remove('sel')});
     r.classList.add('sel');
   });
 });

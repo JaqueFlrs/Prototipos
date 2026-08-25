@@ -7,6 +7,15 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#f0f0f0;padding:24px}
+
+/* Proto tabs externos */
+.proto-tabs{display:flex;gap:0;max-width:700px;margin:0 auto 0;border-bottom:none}
+.proto-tab{padding:7px 20px;cursor:pointer;font-size:12px;font-family:Calibri,sans-serif;background:#e8e8e8;color:#555;border:1px solid #ccc;border-bottom:none;margin-right:3px;border-radius:3px 3px 0 0;user-select:none}
+.proto-tab.active{background:#fff;color:#222;font-weight:bold;border-top:3px solid #F2940E;border-bottom:1px solid #fff;margin-bottom:-1px;z-index:1}
+.proto-pane{display:none;border:1px solid #ccc;background:#fff;padding:20px;max-width:700px;margin:0 auto;border-radius:0 3px 3px 3px}
+.proto-pane.active{display:block}
+
+/* Ventana ERP */
 .window{max-width:600px;margin:0 auto;border:1px solid #aaa;background:#F5A623}
 .win-title{background:#F2940E;color:#fff;font-weight:bold;font-size:13px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center}
 .win-close{background:#cc3300;color:#fff;border:none;width:18px;height:18px;font-size:11px;cursor:pointer;font-weight:bold;border-radius:2px}
@@ -36,148 +45,261 @@ body{font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:12px;background:#
 .pdf-row{display:flex;align-items:center;gap:6px;padding:4px 0}
 .file-name{font-size:11px;color:#888;font-style:italic}
 
-/* Banner */
-.banner{background:#fffdf9;border-left:4px solid #F2940E;border-radius:4px;padding:10px 14px;margin:0 auto 16px;max-width:600px}
+/* Banner proto */
+.banner{background:#fffdf9;border-left:4px solid #F2940E;border-radius:4px;padding:10px 14px;margin-bottom:16px}
 .banner-title{font-weight:700;font-size:12px;color:#1a1a1a;margin-bottom:4px}
 .banner-text{font-size:12px;color:#555;line-height:1.5}
+
+/* Estilos pestaña Explicaciones */
+.exp-h1{font-size:16px;font-weight:bold;color:#1a1a1a;border-bottom:2px solid #F2940E;padding-bottom:8px;margin-bottom:16px}
+.exp-h2{font-size:13px;font-weight:bold;color:#F2940E;margin:20px 0 8px}
+.exp-p{font-size:12px;color:#333;line-height:1.7;margin-bottom:8px}
+.exp-ol{padding-left:18px;margin-bottom:8px}
+.exp-ol li{font-size:12px;color:#333;line-height:1.7;margin-bottom:4px}
+.exp-ul{padding-left:18px;margin-bottom:8px;list-style:disc}
+.exp-ul li{font-size:12px;color:#333;line-height:1.7;margin-bottom:4px}
+.exp-checklist{list-style:none;padding-left:0;margin-bottom:8px}
+.exp-checklist li{font-size:12px;color:#333;line-height:1.7;margin-bottom:4px;padding-left:22px;position:relative}
+.exp-checklist li::before{content:"☐";position:absolute;left:0;color:#F2940E;font-size:13px}
+.exp-alerta{background:#fff8e1;border-left:3px solid #F2940E;padding:8px 12px;border-radius:3px;margin:10px 0;font-size:12px;color:#555;line-height:1.6}
+.exp-pendiente{background:#fff0f0;border-left:3px solid #cc3300;padding:8px 12px;border-radius:3px;margin:10px 0;font-size:12px;color:#555;line-height:1.6}
+.exp-code{background:#f5f5f5;border:1px solid #ddd;border-radius:3px;padding:2px 6px;font-family:monospace;font-size:11px;color:#333}
 </style>
 </head>
 <body>
 
-<div class="banner">
-  <div class="banner-title">💡 Prototipo #42793 — Inventarios &gt; Compras &gt; Generar Pasivo</div>
-  <div class="banner-text">
-    Se muestra el campo <strong>Fecha Documento</strong> (marcado en verde) que se agrega en la sección "Datos de pasivo".
-    Este campo permite registrar la fecha real de la factura del proveedor al generar el pasivo en Cuentas por Pagar.<br>
-    <strong>Representación visual — el diseño final puede variar durante el desarrollo.</strong>
+<div class="proto-tabs">
+  <div class="proto-tab active" onclick="showTab('proto')">🖥 Prototipo</div>
+  <div class="proto-tab" onclick="showTab('exp')">📄 Explicación Dev</div>
+</div>
+
+<!-- PESTAÑA PROTOTIPO -->
+<div class="proto-pane active" id="pane-proto">
+
+  <div class="banner">
+    <div class="banner-title">💡 Prototipo #42793 — Inventarios &gt; Compras &gt; Generar Pasivo</div>
+    <div class="banner-text">
+      Se muestra el campo <strong>Fecha Documento</strong> (marcado en verde) que se agrega en la sección "Datos de pasivo".
+      Este campo permite registrar la fecha real de la factura del proveedor al generar el pasivo en Cuentas por Pagar.<br>
+      <strong>Representación visual — el diseño final puede variar durante el desarrollo.</strong>
+    </div>
+  </div>
+
+  <div class="window">
+    <div class="win-title">
+      Generar Pasivo
+      <button class="win-close">✕</button>
+    </div>
+
+    <div style="padding:4px">
+
+      <!-- Datos de compra -->
+      <div class="sec">Datos de compra</div>
+      <div class="inner">
+        <div class="fr">
+          <label>Folio</label>
+          <input readonly value="28153" style="max-width:80px">
+          <label style="min-width:50px;margin-left:10px">Fecha</label>
+          <input readonly value="11/06/2026" style="max-width:105px">
+        </div>
+        <div class="fr">
+          <label>Proveedor</label>
+          <input readonly value="000003" style="max-width:70px">
+          <input readonly value="NORMA ELIZABETH CANALES AGUILERA" style="flex:1;margin-left:4px">
+        </div>
+      </div>
+
+      <!-- Datos de pasivo -->
+      <div class="sec">Datos de pasivo</div>
+      <div class="inner">
+
+        <!-- CAMPO NUEVO -->
+        <div class="fr">
+          <label style="font-weight:bold;color:#1a7f37">Fecha Documento</label>
+          <input class="new-field" value="11/06/2026" style="max-width:115px">
+          <span class="new-badge">NUEVO</span>
+        </div>
+        <div class="nota-campo">↑ Fecha de la factura del proveedor (obligatorio, editable)</div>
+
+        <div class="fr">
+          <label>No. Documento</label>
+          <input value="A" style="max-width:50px">
+          <span style="padding:0 4px;color:#666">-</span>
+          <input value="4144" style="max-width:80px">
+        </div>
+        <div class="fr">
+          <label>Categoría</label>
+          <select style="max-width:220px"><option></option></select>
+          <button class="btn-o" style="padding:2px 8px;margin-left:2px">...</button>
+        </div>
+        <div class="fr">
+          <label>Método de pago</label>
+          <select style="max-width:120px"><option></option><option>PPD - Pago en Parcialidades</option><option>PUE - Pago en Una Exhibición</option></select>
+        </div>
+        <div class="fr">
+          <label>Folio Fiscal UUID</label>
+          <input style="flex:1">
+          <button class="btn-o" style="margin-left:6px;padding:2px 10px">Cargar XML</button>
+        </div>
+      </div>
+
+      <!-- Documento en PDF -->
+      <div class="sec">Documento en PDF</div>
+      <div class="inner">
+        <div class="pdf-row">
+          <button class="btn-g">Seleccionar archivo</button>
+          <span class="file-name">NINGÚN ARCHIVO SELECCIONADO</span>
+        </div>
+      </div>
+
+      <!-- Distribución de gastos -->
+      <div class="sec">Distribución de gastos</div>
+      <div class="inner">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div>
+            <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Distribución</div>
+            <div class="radio-row">
+              <label><input type="radio" name="tdist" checked> Partida</label>
+              <label><input type="radio" name="tdist"> Unidad</label>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Cálculo</div>
+            <div class="radio-row">
+              <label><input type="radio" name="tcalc" checked> Porcentaje</label>
+              <label><input type="radio" name="tcalc"> Importe</label>
+            </div>
+          </div>
+        </div>
+        <div class="fr" style="margin-bottom:6px">
+          <label>Plantilla</label>
+          <input style="max-width:130px">
+          <button class="btn-o" style="padding:2px 8px;margin-left:3px">...</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn-o">Agregar</button>
+          <button class="btn-o">Modificar</button>
+          <button class="btn-o">Eliminar</button>
+        </div>
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th style="width:70px">Código</th>
+              <th>Descripción</th>
+              <th style="width:100px">Porcentaje</th>
+            </tr>
+          </thead>
+          <tbody id="tbl">
+            <tr class="sel"><td>0</td><td>001</td><td></td></tr>
+            <tr><td>0</td><td>002</td><td></td></tr>
+            <tr><td>0</td><td>003</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="bottom">
+      <div class="confirm-q">¿Está seguro de generar pasivo?</div>
+      <div class="brow">
+        <button class="btn-o" style="padding:4px 24px">Aceptar</button>
+        <button class="btn-g" style="padding:4px 24px">Regresar</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<div class="window">
-  <div class="win-title">
-    Generar Pasivo
-    <button class="win-close">✕</button>
+<!-- PESTAÑA EXPLICACIÓN DEV -->
+<div class="proto-pane" id="pane-exp">
+
+  <div class="exp-h1">Fecha Documento al generar el pasivo de una compra — Explicación para desarrollo (#42793)</div>
+
+  <div class="exp-h2">Qué está pidiendo el cliente y por qué</div>
+  <div class="exp-p">Cuando el usuario genera el pasivo de una compra, el sistema actualmente registra como fecha del pasivo la misma fecha en que se capturó la compra (el campo "Fecha" de la compra). El problema es que esa fecha no siempre coincide con la fecha real de la factura del proveedor. El proveedor puede haber emitido la factura el 15 de junio, pero la compra se capturó en el sistema hasta el 20 de junio — y el pasivo queda con el 20.</div>
+  <div class="exp-p">El cliente quiere poder capturar la fecha real del documento del proveedor ("Fecha Documento") al momento de generar el pasivo. Esa fecha es la que debe quedar grabada en el pasivo y en su póliza contable.</div>
+
+  <div class="exp-h2">Paso a paso de lo que debe pasar</div>
+  <ol class="exp-ol">
+    <li>El usuario está en <strong>Inventarios &gt; Compras</strong>, en el listado de compras. Selecciona una compra que no tiene pasivo generado todavía.</li>
+    <li>El usuario hace clic en el botón <strong>"Generar Pasivo"</strong>. Se abre la ventana "Generar Pasivo".</li>
+    <li>En la sección <strong>"Datos de pasivo"</strong> de esa ventana, <strong>agregar un campo nuevo llamado "Fecha Documento"</strong>.
+      <ul class="exp-ul" style="margin-top:4px">
+        <li>Al abrir la ventana, ese campo debe venir <strong>prellenado automáticamente con la misma fecha que tiene el campo "Fecha" de la compra</strong> — no "Fecha Recibido", no la fecha de hoy.</li>
+        <li>El campo es <strong>editable</strong> — el usuario puede cambiar la fecha manualmente.</li>
+      </ul>
+    </li>
+    <li><strong>Si el usuario no toca el campo "Fecha Documento"</strong> y genera el pasivo: el pasivo queda con la misma fecha que tenía la compra en el campo "Fecha". El comportamiento final es idéntico al actual.</li>
+    <li><strong>Si el usuario cambia el campo "Fecha Documento" manualmente</strong> (por ejemplo, escribe "15/06/2026") y genera el pasivo:
+      <ul class="exp-ul" style="margin-top:4px">
+        <li>El pasivo se registra con la fecha "15/06/2026".</li>
+        <li>La póliza contable que se genera para ese pasivo también queda con la fecha "15/06/2026".</li>
+      </ul>
+    </li>
+    <li><strong>Si el usuario carga una factura electrónica (XML)</strong> en la ventana:
+      <ul class="exp-ul" style="margin-top:4px">
+        <li>El sistema lee la fecha de emisión del XML y actualiza el campo "Fecha Documento" automáticamente.</li>
+        <li>Si después carga otro XML distinto, el campo se vuelve a actualizar con la nueva fecha.</li>
+        <li>El usuario puede editar el campo después de cargar el XML si necesita corregirlo.</li>
+      </ul>
+    </li>
+  </ol>
+
+  <div class="exp-h2">Casos que también debes cubrir (no son opcionales)</div>
+  <ul class="exp-ul">
+    <li><strong>Periodo contable cerrado:</strong> Si la fecha en "Fecha Documento" cae en un periodo contable cerrado, el sistema <strong>no genera el pasivo</strong>. Mensaje exacto: <span class="exp-code">"No es posible registrar el pasivo en un periodo contable cerrado"</span>. La ventana queda abierta con los datos capturados — no limpiar, no cerrar.</li>
+    <li><strong>Fecha futura:</strong> Si la fecha es posterior al día de hoy, el sistema <strong>no genera el pasivo</strong>. Mensaje exacto: <span class="exp-code">"La fecha del documento no puede ser posterior a la fecha actual"</span>. La ventana queda abierta con los datos capturados.</li>
+    <li><strong>Corrección después de error:</strong> Tras cualquiera de los errores anteriores, el usuario puede corregir "Fecha Documento" en la misma ventana sin cerrarla y volver a intentar. El sistema debe permitirlo.</li>
+    <li><strong>Validación independiente:</strong> La regla de "no fecha futura" de "Fecha Documento" es una validación nueva y separada — no reutilizar la misma lógica ni los mensajes del campo "Fecha" de la compra o de "Fecha Recibido".</li>
+  </ul>
+
+  <div class="exp-h2">Impacto en reportes — validar obligatoriamente</div>
+  <div class="exp-alerta">
+    La fecha del pasivo afecta en qué periodo cae ese registro en dos reportes:<br><br>
+    <strong>DIOT:</strong> El pasivo debe aparecer en el periodo de "Fecha Documento", no en el de la compra. Validar que el reporte lee la fecha nueva.<br><br>
+    <strong>Antigüedad de Saldos por Proveedor:</strong> El cálculo de días debe partir de "Fecha Documento". Validar que refleja la fecha capturada.<br><br>
+    Este efecto es intencional — el cliente está consciente de que el pasivo puede caer en un periodo distinto al de la compra.
   </div>
 
-  <div style="padding:4px">
+  <div class="exp-h2">Qué NO te puedes brincar</div>
+  <ul class="exp-ul">
+    <li><strong>"¿Qué fecha cargo al pasivo si el usuario no modifica 'Fecha Documento'?"</strong> → La que viene prellenada: la misma que tiene el campo "Fecha" de la compra.</li>
+    <li><strong>"¿Puedo usar 'Fecha Recibido' como default?"</strong> → No. Solo el campo "Fecha" (sin apellido) de la compra.</li>
+    <li><strong>"¿El campo acepta fechas muy antiguas?"</strong> → No hay límite hacia atrás definido, solo que el periodo contable no esté cerrado.</li>
+    <li><strong>"¿Aplica también a pasivos desde Órdenes de Servicio o altas manuales?"</strong> → No. Solo desde Inventarios &gt; Compras.</li>
+    <li><strong>"¿La póliza contable también debe llevar 'Fecha Documento'?"</strong> → Sí. Cuando el usuario cambia la fecha, la póliza también queda con esa fecha.</li>
+    <li><strong>"¿Qué pasa con los pasivos ya generados antes de este cambio?"</strong> → Nada. No hay migración de históricos.</li>
+  </ul>
 
-    <!-- Datos de compra -->
-    <div class="sec">Datos de compra</div>
-    <div class="inner">
-      <div class="fr">
-        <label>Folio</label>
-        <input readonly value="28153" style="max-width:80px">
-        <label style="min-width:50px;margin-left:10px">Fecha</label>
-        <input readonly value="11/06/2026" style="max-width:105px">
-      </div>
-      <div class="fr">
-        <label>Proveedor</label>
-        <input readonly value="000003" style="max-width:70px">
-        <input readonly value="NORMA ELIZABETH CANALES AGUILERA" style="flex:1;margin-left:4px">
-      </div>
-    </div>
-
-    <!-- Datos de pasivo -->
-    <div class="sec">Datos de pasivo</div>
-    <div class="inner">
-
-      <!-- CAMPO NUEVO -->
-      <div class="fr">
-        <label style="font-weight:bold;color:#1a7f37">Fecha Documento</label>
-        <input class="new-field" value="11/06/2026" style="max-width:115px">
-        <span class="new-badge">NUEVO</span>
-      </div>
-      <div class="nota-campo">↑ Fecha de la factura del proveedor (obligatorio, editable)</div>
-
-      <div class="fr">
-        <label>No. Documento</label>
-        <input value="A" style="max-width:50px">
-        <span style="padding:0 4px;color:#666">-</span>
-        <input value="4144" style="max-width:80px">
-      </div>
-      <div class="fr">
-        <label>Categoría</label>
-        <select style="max-width:220px"><option></option></select>
-        <button class="btn-o" style="padding:2px 8px;margin-left:2px">...</button>
-      </div>
-      <div class="fr">
-        <label>Método de pago</label>
-        <select style="max-width:120px"><option></option><option>PPD - Pago en Parcialidades</option><option>PUE - Pago en Una Exhibición</option></select>
-      </div>
-      <div class="fr">
-        <label>Folio Fiscal UUID</label>
-        <input style="flex:1">
-        <button class="btn-o" style="margin-left:6px;padding:2px 10px">Cargar XML</button>
-      </div>
-    </div>
-
-    <!-- Documento en PDF -->
-    <div class="sec">Documento en PDF</div>
-    <div class="inner">
-      <div class="pdf-row">
-        <button class="btn-g">Seleccionar archivo</button>
-        <span class="file-name">NINGÚN ARCHIVO SELECCIONADO</span>
-      </div>
-    </div>
-
-    <!-- Distribución de gastos -->
-    <div class="sec">Distribución de gastos</div>
-    <div class="inner">
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-        <div>
-          <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Distribución</div>
-          <div class="radio-row">
-            <label><input type="radio" name="tdist" checked> Partida</label>
-            <label><input type="radio" name="tdist"> Unidad</label>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:bold;color:#555;text-align:center;margin-bottom:3px">Tipo de Cálculo</div>
-          <div class="radio-row">
-            <label><input type="radio" name="tcalc" checked> Porcentaje</label>
-            <label><input type="radio" name="tcalc"> Importe</label>
-          </div>
-        </div>
-      </div>
-      <div class="fr" style="margin-bottom:6px">
-        <label>Plantilla</label>
-        <input style="max-width:130px">
-        <button class="btn-o" style="padding:2px 8px;margin-left:3px">...</button>
-      </div>
-      <div class="btn-row">
-        <button class="btn-o">Agregar</button>
-        <button class="btn-o">Modificar</button>
-        <button class="btn-o">Eliminar</button>
-      </div>
-      <table class="erp-table">
-        <thead>
-          <tr>
-            <th style="width:70px">Código</th>
-            <th>Descripción</th>
-            <th style="width:100px">Porcentaje</th>
-          </tr>
-        </thead>
-        <tbody id="tbl">
-          <tr class="sel"><td>0</td><td>001</td><td></td></tr>
-          <tr><td>0</td><td>002</td><td></td></tr>
-          <tr><td>0</td><td>003</td><td></td></tr>
-        </tbody>
-      </table>
-    </div>
-
+  <div class="exp-pendiente">
+    ⚠️ <strong>Pendiente de confirmar:</strong> El escenario de "nota informativa en Cuentas por Pagar" (que aparezca un aviso al consultar el pasivo indicando que la fecha viene del documento del proveedor) <strong>no fue parte del análisis original</strong>. No implementar hasta que se confirme si es parte de este ticket y qué tipo de elemento UI debe ser.
   </div>
 
-  <div class="bottom">
-    <div class="confirm-q">¿Está seguro de generar pasivo?</div>
-    <div class="brow">
-      <button class="btn-o" style="padding:4px 24px">Aceptar</button>
-      <button class="btn-g" style="padding:4px 24px">Regresar</button>
-    </div>
+  <div class="exp-h2">Cómo saber que ya quedó bien</div>
+  <ul class="exp-checklist">
+    <li>Al abrir "Generar Pasivo" desde una compra con Fecha "11/06/2026", el campo "Fecha Documento" muestra "11/06/2026" automáticamente.</li>
+    <li>Si el usuario cambia "Fecha Documento" a "05/06/2026" y genera, el pasivo en Cuentas por Pagar muestra fecha "05/06/2026" — no "11/06/2026".</li>
+    <li>Si carga un XML con fecha de emisión "03/06/2026", el campo "Fecha Documento" cambia a "03/06/2026" sin que el usuario lo escriba.</li>
+    <li>Si el usuario intenta generar con una fecha de junio y el periodo de junio está cerrado, aparece el mensaje exacto y la ventana no se cierra.</li>
+    <li>Si el usuario escribe una fecha de mañana, aparece el mensaje exacto y la ventana no se cierra.</li>
+    <li>La póliza contable generada muestra la misma fecha que "Fecha Documento", no la fecha de la compra.</li>
+  </ul>
+
+  <div style="margin-top:24px;padding-top:12px;border-top:1px solid #e0e0e0;font-size:11px;color:#888">
+    Ver Gherkin: <span class="exp-code">erp-mexico\inventarios\backlog\HU42793 Fecha Documento Generar Pasivo.feature</span>
   </div>
 
 </div>
 
 <script>
+function showTab(name) {
+  document.querySelectorAll('.proto-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.proto-pane').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('pane-' + name).classList.add('active');
+  var tabs = document.querySelectorAll('.proto-tab');
+  if (name === 'proto') tabs[0].classList.add('active');
+  else tabs[1].classList.add('active');
+}
 document.querySelectorAll('#tbl tr').forEach(function(r){
   r.addEventListener('click', function(){
     document.querySelectorAll('#tbl tr').forEach(function(x){ x.classList.remove('sel'); });

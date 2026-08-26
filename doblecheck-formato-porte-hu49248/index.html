@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<title>Diseñador de Plantilla de Porte — Doble Check</title>
+<title>Diseñador de Formato de Porte — Doble Check</title>
 <style>
 :root{
   --page-bg:#f2f3f5; --card-bg:#ffffff; --ink:#2b2b2b; --sub:#8a8f94;
@@ -193,7 +193,7 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 </div>
 
 <div style="padding-top:20px;">
-<div class="page-title">Diseñador de Plantilla de Porte — Doble Check</div>
+<div class="page-title">Diseñador de Formato de Porte — Doble Check</div>
 <div class="page-sub">Prototipo funcional — tú decides dónde va cada elemento, incluidas las firmas. Sin hoja fija para firmas.</div>
 </div>
 
@@ -212,11 +212,11 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
     <div class="dc-tab">Preguntas Formulario</div>
     <div class="dc-tab">Usuarios</div>
     <div class="dc-tab">Configuración</div>
-    <div class="dc-tab active" id="tabPlantilla">Plantilla de Porte</div>
+    <div class="dc-tab active" id="tabPlantilla">Formato de Porte</div>
   </div>
 
   <div class="alert-nuevo show" id="alertNuevo">
-    ⚠️ <span><b>Se agregó 1 campo nuevo</b> al formulario desde la última edición de esta plantilla — no se imprime hasta que lo ubiques.</span>
+    ⚠️ <span><b>Se agregó 1 campo nuevo</b> al formulario desde la última edición de este formato — no se imprime hasta que lo ubiques.</span>
     <span class="lnk" id="lnkUbicar">Ubicarlo</span>
   </div>
 
@@ -226,7 +226,7 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
     </div>
     <div class="tb-right">
       <button class="btn-ghost" id="btnCancelar">Cancelar</button>
-      <button class="btn-solid" id="btnGuardar">Guardar plantilla</button>
+      <button class="btn-solid" id="btnGuardar">Guardar formato</button>
     </div>
   </div>
 
@@ -281,21 +281,21 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
   </div>
 </div>
 <div class="legend">
-  <b>▤</b> elemento único · <b>📝</b> texto fijo (se puede agregar varias veces, tú escribes el contenido) · <b>🔁</b> elemento repetible (un solo placeholder, se expande según la cantidad real al generar el porte) · <span class="badge nuevo">Nuevo</span> campo agregado al formulario tras diseñar la plantilla, aún sin ubicar · <b>arrastra</b> cualquier elemento del panel directamente a la hoja, al encabezado o al pie de página — un clic simple lo agrega a la última hoja · <b>Firmas ya no tiene hoja fija</b>: colócala donde tú decidas, igual que cualquier otro elemento · una vez colocado, arrástralo dentro de su misma zona para reposicionarlo · "+ Agregar hoja" crea páginas adicionales libremente · <b>Encabezado / Pie de página</b>: lo que se suelte ahí se repite en TODAS las hojas del documento, incluidas las agregadas por desbordamiento · si el contenido no cabe, el porte real agrega hojas automáticamente al imprimir, respetando el mismo diseño de la última hoja.
+  <b>▤</b> elemento único · <b>📝</b> texto fijo (se puede agregar varias veces, tú escribes el contenido) · <b>🔁</b> elemento repetible (un solo placeholder, se expande según la cantidad real al generar el porte) · <span class="badge nuevo">Nuevo</span> campo agregado al formulario tras diseñar el formato, aún sin ubicar · <b>arrastra</b> cualquier elemento del panel directamente a la hoja, al encabezado o al pie de página — un clic simple lo agrega a la última hoja · <b>Firmas ya no tiene hoja fija</b>: colócala donde tú decidas, igual que cualquier otro elemento · una vez colocado, arrástralo dentro de su misma zona para reposicionarlo · "+ Agregar hoja" crea páginas adicionales libremente · <b>Encabezado / Pie de página</b>: lo que se suelte ahí se repite en TODAS las hojas del documento, incluidas las agregadas por desbordamiento · si el contenido no cabe, el porte real agrega hojas automáticamente al imprimir, respetando el mismo diseño de la última hoja.
 </div>
 
 </div>
 <!-- ============ VISTA EXPLICACIONES ============ -->
 <div class="view-pane" id="viewExplicaciones">
 <div class="exp-doc">
-<h1>Diseñador de plantilla de porte en Doble Check — Explicación para desarrollo (#SIN-HU)</h1>
+<h1>Diseñador de formato de porte en Doble Check — Explicación para desarrollo (#HU49248)</h1>
 
 <h2>Qué está pidiendo el cliente y por qué</h2>
 <p>Hoy GM Doble Check genera el porte de cada inspección siempre con el mismo formato fijo. El cliente necesita que cada formulario pueda tener su propio diseño de porte: dónde va el logo, el folio, cada pregunta, los sellos, las fotos y las firmas. Quiere armar ese diseño él mismo, arrastrando los elementos a la posición que necesite, sin depender de un desarrollador cada vez que cambia el layout.</p>
 
 <h2>Paso a paso de lo que debe pasar</h2>
 <ol>
-<li>El usuario abre la ficha de un formulario en Doble Check (ej. "Inspección Mecánica Furgón GTL TA-FO-03") y hace clic en un tab nuevo llamado <b>"Plantilla de Porte"</b>, junto a los tabs que ya existen: Preguntas Formulario, Usuarios, Configuración.</li>
+<li>El usuario abre la ficha de un formulario en Doble Check (ej. "Inspección Mecánica Furgón GTL TA-FO-03") y hace clic en un tab nuevo llamado <b>"Formato de Porte"</b>, junto a los tabs que ya existen: Preguntas Formulario, Usuarios, Configuración.</li>
 <li>Se abre un editor con dos partes:
   <ul>
     <li>Panel izquierdo: lista de elementos disponibles, agrupados en <b>General</b> (Texto fijo), <b>Fijos</b> (Logo, Folio, Fecha, SCAC, ALPHA, FAST ID — solo los que estén activados en el tab Configuración de ese formulario), <b>Preguntas del formulario</b> (una entrada por cada pregunta definida en el tab "Preguntas Formulario" de ese mismo formulario) y <b>Repetibles</b> (Sellos, Fotos capturadas, Checklist de resultados, Firmas).</li>
@@ -313,18 +313,18 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 <li><b>Firmas ya no tiene una hoja obligatoria.</b> Se coloca en cualquier hoja y posición, igual que cualquier otro elemento — el usuario decide.</li>
 <li>El usuario puede hacer clic en <b>"+ Agregar hoja"</b> las veces que quiera para crear más hojas y decidir qué va en cada una.</li>
 <li>Además del cuerpo de cada hoja, hay dos franjas separadas: <b>Encabezado</b> y <b>Pie de página</b>. Lo que se arrastre ahí (cualquier campo o Texto fijo) se repite automáticamente en <b>todas</b> las hojas del documento — incluidas las que se agreguen más adelante por desbordamiento de contenido (ver punto 12).</li>
-<li>Si el usuario abre el editor de un formulario cuya plantilla ya estaba guardada, y desde la última vez que se guardó se agregó una pregunta nueva en el tab "Preguntas Formulario", el sistema muestra un aviso: <b>"Se agregó 1 campo nuevo al formulario desde la última edición de esta plantilla — no se imprime hasta que lo ubiques"</b>. Esa pregunta aparece en el panel izquierdo marcada como "Nuevo" y <b>no se imprime en el porte</b> hasta que el usuario la arrastre al lienzo.</li>
+<li>Si el usuario abre el editor de un formulario cuyo formato ya estaba guardado, y desde la última vez que se guardó se agregó una pregunta nueva en el tab "Preguntas Formulario", el sistema muestra un aviso: <b>"Se agregó 1 campo nuevo al formulario desde la última edición de este formato — no se imprime hasta que lo ubiques"</b>. Esa pregunta aparece en el panel izquierdo marcada como "Nuevo" y <b>no se imprime en el porte</b> hasta que el usuario la arrastre al lienzo.</li>
 <li>El botón <b>"Vista previa con datos de ejemplo"</b> abre un visor separado del editor, tipo lector de PDF, que arma el documento completo con datos de ejemplo (nunca vacíos), repitiendo el encabezado y pie en cada página, con botones "Imprimir" y "Descargar".</li>
-<li>Al hacer clic en <b>"Guardar plantilla"</b>, siempre aparece un mensaje de confirmación — sin importar si es la primera vez o una edición — que dice que el cambio va a <b>regenerar automáticamente el PDF de todos los portes ya generados</b> con ese formulario, usando los datos originales de cada uno con el diseño nuevo. El mensaje aclara que la acción no se puede deshacer.
+<li>Al hacer clic en <b>"Guardar formato"</b>, siempre aparece un mensaje de confirmación — sin importar si es la primera vez o una edición — que dice que el cambio va a <b>regenerar automáticamente el PDF de todos los portes ya generados</b> con ese formulario, usando los datos originales de cada uno con el diseño nuevo. El mensaje aclara que la acción no se puede deshacer.
   <ul>
-    <li>Si el usuario confirma con <b>"Guardar y regenerar"</b>: la plantilla queda activa y los portes ya emitidos se regeneran en segundo plano (no bloquea al usuario mientras termina).</li>
-    <li>Si el usuario hace clic en <b>"Cancelar"</b>: no se guarda nada, la plantilla anterior sigue activa, ningún porte existente se toca.</li>
+    <li>Si el usuario confirma con <b>"Guardar y regenerar"</b>: el formato queda activo y los portes ya emitidos se regeneran en segundo plano (no bloquea al usuario mientras termina).</li>
+    <li>Si el usuario hace clic en <b>"Cancelar"</b>: no se guarda nada, el formato anterior sigue activa, ningún porte existente se toca.</li>
   </ul>
 </li>
 <li>Cuando una inspección de ese formulario se completa (con todas sus firmas capturadas), el sistema genera el porte automáticamente:
   <ul>
-    <li>Si el formulario <b>tiene una plantilla personalizada guardada</b>, el porte se genera con esa plantilla.</li>
-    <li>Si el formulario <b>no tiene ninguna plantilla personalizada guardada</b>, el porte se genera igual que hoy: con el <b>formato por default</b> que ya existe en Doble Check. Nunca se combinan las dos.</li>
+    <li>Si el formulario <b>tiene un formato personalizado guardado</b>, el porte se genera con ese formato.</li>
+    <li>Si el formulario <b>no tiene ningun formato personalizado guardado</b>, el porte se genera igual que hoy: con el <b>formato por default</b> que ya existe en Doble Check. Nunca se combinan las dos.</li>
   </ul>
 </li>
 <li>Si al generar el porte real el contenido colocado no cabe en una hoja, el sistema agrega automáticamente una hoja adicional después, repitiendo el mismo diseño de la última hoja del cuerpo — y el encabezado/pie siguen repitiéndose igual en esa hoja nueva.</li>
@@ -332,47 +332,47 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 
 <h2>Casos que también debes cubrir (no son opcionales)</h2>
 <ul>
-<li><b>Formulario recién creado, sin plantilla y sin porte generado todavía</b>: el tab "Plantilla de Porte" se abre igual, con el lienzo en blanco. No hay ningún error ni mensaje especial por no tener plantilla — es el estado inicial normal.</li>
+<li><b>Formulario recién creado, sin formato personalizado y sin porte generado todavía</b>: el tab "Formato de Porte" se abre igual, con el lienzo en blanco. No hay ningún error ni mensaje especial por no tener formato personalizado — es el estado inicial normal.</li>
 <li><b>El usuario intenta arrastrar un campo fijo que no está activado en Configuración</b> (ej. FAST ID desactivado para ese formulario): ese campo no debe aparecer en el panel izquierdo. Solo se listan los campos fijos que estén activos en el tab Configuración de ese formulario específico.</li>
 <li><b>Doble clic o arrastre repetido del mismo campo</b>: nunca genera un segundo elemento en el lienzo (ver punto 3). Esto aplica también si el usuario intenta arrastrarlo por segunda vez estando ya colocado.</li>
 <li><b>Texto fijo vacío</b>: si el usuario coloca un "Texto fijo" y no escribe nada, ese elemento se guarda igual (no se bloquea el guardado), pero en el porte real y en la vista previa se imprime como espacio vacío, no como error.</li>
 <li><b>Quitar un elemento del lienzo</b>: al eliminarlo, el campo correspondiente vuelve a estar disponible (ya no aparece como "colocado") en el panel izquierdo, listo para volver a colocarse.</li>
-<li><b>Formulario sin ningún porte generado todavía y se guarda una plantilla nueva</b>: el mensaje de confirmación de guardado se muestra igual, aunque no haya portes que regenerar (en ese caso simplemente no hay nada que actualizar, pero el flujo de guardado es el mismo).</li>
+<li><b>Formulario sin ningún porte generado todavía y se guarda un formato nuevo</b>: el mensaje de confirmación de guardado se muestra igual, aunque no haya portes que regenerar (en ese caso simplemente no hay nada que actualizar, pero el flujo de guardado es el mismo).</li>
 <li><b>Falla la regeneración de algún porte específico</b> (de los ya emitidos): ese porte conserva su PDF anterior — nunca debe quedar en blanco, corrupto o sin archivo.</li>
 <li><b>Formulario con más de una pregunta nueva agregada a la vez</b>: el aviso debe reflejar el número real de campos nuevos pendientes de ubicar, no solo "1" fijo — ajustar el texto al conteo real.</li>
-<li><b>Elemento repetible sin ningún dato capturado en una inspección concreta</b> (ej. una inspección donde no se agregó ningún sello aunque el placeholder de Sellos esté en la plantilla): el porte de esa inspección no imprime esa sección, o la imprime vacía — debe decidirse un comportamiento y aplicarse siempre igual, no depende del diseño de la plantilla.</li>
+<li><b>Elemento repetible sin ningún dato capturado en una inspección concreta</b> (ej. una inspección donde no se agregó ningún sello aunque el placeholder de Sellos esté en el formato): el porte de esa inspección no imprime esa sección, o la imprime vacía — debe decidirse un comportamiento y aplicarse siempre igual, no depende del diseño del formato.</li>
 </ul>
 
 <h2>Qué NO te puedes brincar (excusas ya resueltas)</h2>
 <ul>
 <li>"¿Y si el usuario coloca Firmas en la Hoja 1 en vez de una hoja dedicada?" → Es válido, ya no hay hoja fija para firmas. No se debe forzar ni advertir nada al respecto.</li>
 <li>"¿Encabezado y pie de página son parte del lienzo normal?" → No. Son dos zonas separadas del cuerpo de la hoja, con su propio comportamiento: lo que se coloca ahí se repite automáticamente en todas las hojas, incluidas las agregadas por desbordamiento.</li>
-<li>"¿Qué pasa si el cliente no guarda ninguna plantilla nunca?" → El sistema sigue funcionando exactamente igual que hoy, usando el porte por default. Esto no es un caso de error, es el comportamiento esperado y permanente para cualquier formulario sin plantilla personalizada.</li>
-<li>"¿Se regeneran los portes ya generados aunque hayan pasado meses?" → Sí, siempre, sin importar cuánto tiempo llevan generados. El único requisito es que se haya confirmado el guardado de una plantilla nueva o editada.</li>
+<li>"¿Qué pasa si el cliente no guarda ningun formato nunca?" → El sistema sigue funcionando exactamente igual que hoy, usando el porte por default. Esto no es un caso de error, es el comportamiento esperado y permanente para cualquier formulario sin formato personalizado.</li>
+<li>"¿Se regeneran los portes ya generados aunque hayan pasado meses?" → Sí, siempre, sin importar cuánto tiempo llevan generados. El único requisito es que se haya confirmado el guardado de un formato nuevo o editada.</li>
 <li>"¿La regeneración bloquea al usuario hasta que termine?" → No. Ocurre en segundo plano.</li>
-<li>"¿Cualquier usuario puede editar la plantilla, o solo un admin?" → Cualquier usuario con acceso al formulario. No hay restricción de rol adicional para este editor.</li>
+<li>"¿Cualquier usuario puede editar el formato, o solo un admin?" → Cualquier usuario con acceso al formulario. No hay restricción de rol adicional para este editor.</li>
 <li>"¿Un campo se puede colocar dos veces en distintas hojas para repetirlo manualmente?" → No. Cada campo del catálogo (fijo, pregunta, repetible) se coloca una sola vez en todo el documento. La única forma de repetir contenido en cada hoja es a través de Encabezado o Pie de página. Texto fijo es la única excepción sin límite de repetición.</li>
 </ul>
 
 <h2>Cómo saber que ya quedó bien</h2>
 <ul>
-<li><span class="exp-check">✅</span> El tab "Plantilla de Porte" aparece en la ficha de cualquier formulario de Doble Check, junto a Preguntas Formulario, Usuarios y Configuración.</li>
+<li><span class="exp-check">✅</span> El tab "Formato de Porte" aparece en la ficha de cualquier formulario de Doble Check, junto a Preguntas Formulario, Usuarios y Configuración.</li>
 <li><span class="exp-check">✅</span> Se puede arrastrar cualquier elemento del panel izquierdo al lienzo, al encabezado o al pie de página, y queda exactamente donde se soltó.</li>
 <li><span class="exp-check">✅</span> Un campo ya colocado no se puede duplicar; Texto fijo sí se puede agregar varias veces.</li>
 <li><span class="exp-check">✅</span> Lo colocado en Encabezado o Pie de página aparece repetido en cada hoja al abrir la Vista previa.</li>
 <li><span class="exp-check">✅</span> Al guardar, siempre aparece el aviso de que se regenerarán los portes ya emitidos, y al confirmar esos PDFs cambian de diseño manteniendo sus datos originales.</li>
-<li><span class="exp-check">✅</span> Una inspección completada de un formulario sin plantilla genera el porte con el formato de siempre (default); una inspección de un formulario con plantilla guardada genera el porte con ese diseño.</li>
-<li><span class="exp-check">✅</span> Si se agrega una pregunta nueva al formulario después de guardar la plantilla, aparece el aviso correspondiente hasta que se ubique esa pregunta en el lienzo.</li>
+<li><span class="exp-check">✅</span> Una inspección completada de un formulario sin formato personalizado genera el porte con el formato de siempre (default); una inspección de un formulario con formato personalizado guardado genera el porte con ese diseño.</li>
+<li><span class="exp-check">✅</span> Si se agrega una pregunta nueva al formulario después de guardar el formato, aparece el aviso correspondiente hasta que se ubique esa pregunta en el lienzo.</li>
 </ul>
 
-<div class="exp-ref">Ver Gherkin: <code>SIN-HU Plantilla de Porte.feature</code> — mismo alcance, ahí está en formato de criterios de aceptación.</div>
+<div class="exp-ref">Ver Gherkin: <code>HU49248 Formato de Porte.feature</code> — mismo alcance, ahí está en formato de criterios de aceptación.</div>
 </div>
 </div>
 
 <!-- Modal guardar -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <div class="modal-header">Guardar plantilla de porte</div>
+    <div class="modal-header">Guardar formato de porte</div>
     <div class="modal-body">
       Este cambio aplicará a las próximas inspecciones y <b>regenerará automáticamente</b> el PDF de todos los portes ya generados con este formulario, usando sus datos originales con el diseño nuevo.
       <br/><br/>
@@ -555,7 +555,7 @@ function attachElHandlers(el, isFreeText){
       if(item){ const hint = item.querySelector('.hint'); if(hint) hint.remove(); }
       el.remove();
       document.getElementById('propsPanel') && document.getElementById('propsPanel').classList.remove('show');
-      showToast('Elemento quitado de la plantilla.');
+      showToast('Elemento quitado del formato.');
     });
   }
 }
@@ -727,7 +727,7 @@ document.getElementById('modalCancelar').addEventListener('click', ()=>{
 });
 document.getElementById('modalConfirmar').addEventListener('click', ()=>{
   document.getElementById('modalOverlay').classList.remove('open');
-  showToast('Plantilla guardada. Regenerando portes existentes en segundo plano…');
+  showToast('Formato guardado. Regenerando portes existentes en segundo plano…');
 });
 document.getElementById('btnCancelar').addEventListener('click', ()=>{
   showToast('Cambios descartados.');
@@ -824,8 +824,8 @@ document.getElementById('pdfPrint').addEventListener('click', ()=>{ showToast('A
 
 /* ---------- onboarding tour ---------- */
 const steps = [
-  { sel:"#tabPlantilla", title:"1. Dónde vive el editor", text:"Nuevo tab 'Plantilla de Porte' dentro de la ficha de cada Formulario, junto a Preguntas Formulario, Usuarios y Configuración. Cada formulario tiene su propia plantilla." },
-  { sel:"#alertNuevo", title:"2. Aviso de campo nuevo", text:"Si se agrega una pregunta nueva al formulario después de diseñar la plantilla, este aviso aparece hasta que la ubiques en el lienzo — mientras tanto no se imprime en el porte." },
+  { sel:"#tabPlantilla", title:"1. Dónde vive el editor", text:"Nuevo tab 'Formato de Porte' dentro de la ficha de cada Formulario, junto a Preguntas Formulario, Usuarios y Configuración. Cada formulario tiene su propio formato." },
+  { sel:"#alertNuevo", title:"2. Aviso de campo nuevo", text:"Si se agrega una pregunta nueva al formulario después de diseñar el formato, este aviso aparece hasta que la ubiques en el lienzo — mientras tanto no se imprime en el porte." },
   { sel:"#sidebar", title:"3. Elementos disponibles", text:"Fijos, preguntas del formulario, repetibles (sellos, fotos, checklist, firmas) y 'Texto fijo' para escribir lo que quieras. Arrástralos a donde los necesites — incluidas las preguntas, ninguna está bloqueada." },
   { sel:"#hoja-1", title:"4. Lienzo libre, tú decides todo", text:"Arrastra cualquier elemento del panel a la posición exacta que quieras dentro de la hoja. Las firmas ya no tienen una hoja fija — se colocan igual que cualquier otro elemento, donde tú decidas." },
   { sel:"#pageHeader", title:"5. Encabezado y pie de página configurables", text:"Arrastra cualquier campo — o un Texto fijo — directamente a esta franja. Lo que coloques ahí se repite automáticamente en todas las hojas del porte, incluidas las que se agreguen por desbordamiento." },

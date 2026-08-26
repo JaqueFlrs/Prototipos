@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<title>Diseñador de Plantilla de Porte — Doble Check</title>
+<style>
+:root{
+  --page-bg:#f2f3f5; --card-bg:#ffffff; --ink:#2b2b2b; --sub:#8a8f94;
+  --accent:#f7941d; --accent-bg:#fff3e2; --border:#e6e7ea; --red:#e5484d;
+}
+*{box-sizing:border-box;}
+body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);background:var(--page-bg);margin:0;padding:24px 32px 90px;}
+.page-title{font-size:16px;font-weight:bold;margin-bottom:4px;}
+.page-sub{font-size:12px;color:var(--sub);margin-bottom:16px;}
+
+.view-tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:1px solid var(--border);}
+.view-tab{padding:9px 4px;margin-right:18px;font-size:13px;color:var(--sub);cursor:pointer;border-bottom:2px solid transparent;font-weight:600;user-select:none;}
+.view-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.view-pane{display:none;}
+.view-pane.active{display:block;}
+
+.exp-doc{max-width:820px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:28px 34px;box-shadow:0 1px 4px rgba(0,0,0,.06);line-height:1.65;font-size:13px;color:#2b2b2b;}
+.exp-doc h1{font-size:18px;margin:0 0 18px;color:#1a1a1a;}
+.exp-doc h2{font-size:14px;margin:26px 0 10px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:6px;}
+.exp-doc h2:first-of-type{margin-top:0;}
+.exp-doc p{margin:0 0 12px;}
+.exp-doc ol,.exp-doc ul{margin:0 0 14px;padding-left:22px;}
+.exp-doc li{margin-bottom:8px;}
+.exp-doc li ul{margin-top:6px;margin-bottom:0;}
+.exp-doc b{color:#1a1a1a;}
+.exp-doc code{background:#f2f3f5;border-radius:3px;padding:1px 5px;font-size:12px;}
+.exp-doc .exp-quote{background:#fafbfc;border-left:3px solid #c9ccd0;padding:8px 14px;color:#555;margin:0 0 14px;font-style:italic;}
+.exp-doc .exp-check{color:#1f9254;font-weight:bold;}
+.exp-doc .exp-ref{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--sub);}
+.exp-doc .exp-ref a{color:var(--accent);}
+.disclaimer{background:#fff8ee;border:1px solid #e0c080;padding:12px 16px;margin-bottom:24px;font-size:12px;line-height:1.6;color:#3a3020;}
+.disclaimer strong{display:block;margin-bottom:4px;font-size:13px;}
+.badge{display:inline-block;font-size:10px;font-weight:bold;padding:2px 8px;border-radius:10px;margin-left:6px;}
+.badge.nuevo{background:#e2f8ec;color:#1f9254;}
+.badge.req{background:#fdeaea;color:#c23b3b;}
+
+.dc-frame{border:1px solid #dcdfe3;border-radius:10px;background:#fff;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.dc-crumbbar{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:12px;color:#555;background:#fff;}
+.dc-crumbbar b{color:#1a1a1a;}
+.dc-tabs{display:flex;gap:20px;padding:0 16px;border-bottom:1px solid var(--border);background:#fff;}
+.dc-tab{padding:10px 2px;font-size:12.5px;color:#8a8f94;cursor:pointer;border-bottom:2px solid transparent;user-select:none;}
+.dc-tab.active{color:var(--accent);font-weight:bold;border-bottom-color:var(--accent);}
+
+.alert-nuevo{display:none;align-items:center;justify-content:space-between;gap:10px;background:#fff3e2;border-bottom:1px solid #f3d9ad;color:#8a5a12;font-size:12px;padding:9px 16px;}
+.alert-nuevo.show{display:flex;}
+.alert-nuevo .lnk{color:var(--accent);font-weight:bold;cursor:pointer;text-decoration:underline;white-space:nowrap;}
+
+.editor-toolbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#fafbfc;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+.tb-left{display:flex;align-items:center;gap:8px;}
+.tb-right{display:flex;gap:8px;align-items:center;}
+.btn-solid{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn-ghost{background:#fff;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12.5px;color:#3a3f45;cursor:pointer;}
+.btn-preview{background:#fff;border:1px solid var(--accent);color:var(--accent);border-radius:6px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.btn-preview:hover{background:var(--accent-bg);}
+
+.editor-body{display:flex;}
+.editor-side{width:240px;border-right:1px solid var(--border);padding:12px 0;background:#fcfcfd;max-height:900px;overflow-y:auto;}
+.side-group-label{font-size:10px;color:#9a9ea3;font-weight:bold;text-transform:uppercase;letter-spacing:.4px;padding:8px 14px 4px;}
+.side-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 14px;font-size:12px;color:#3a3f45;cursor:pointer;}
+.side-item .ic{color:#b7bbbe;font-size:12px;margin-right:6px;}
+.side-item:hover{background:#f5f6f7;}
+.side-item .hint{font-size:9.5px;color:#c4cad0;}
+.side-item.pulse{animation:pulseit 1s ease-in-out 2;}
+@keyframes pulseit{0%,100%{background:transparent;}50%{background:#fff3e2;}}
+.side-hint-top{font-size:10.5px;color:#9a9ea3;padding:2px 14px 10px;line-height:1.5;}
+.side-item-row{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 14px;}
+.side-item-row .lbl{font-size:12px;color:#3a3f45;cursor:pointer;flex:1;}
+.side-item-row .lbl:hover{color:var(--accent);}
+.zone-btns{display:flex;gap:3px;flex-shrink:0;}
+.zone-btn{width:20px;height:20px;border:1px solid var(--border);border-radius:4px;background:#fff;color:#9a9ea3;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.zone-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);}
+
+.editor-canvas-wrap{flex:1;background:#eef0f2;padding:22px;display:flex;flex-direction:column;align-items:center;gap:18px;position:relative;}
+.hoja-wrap{position:relative;}
+.hoja-tag{font-size:10.5px;color:#9a9ea3;margin-bottom:4px;text-align:left;width:520px;}
+.hoja{width:520px;min-height:600px;background:#fff;border:1px solid #d8dade;box-shadow:0 2px 8px rgba(0,0,0,.08);position:relative;padding:0;}
+.hoja.dragover{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.add-hoja-btn{width:520px;padding:10px;text-align:center;border:1px dashed #c9ccd0;border-radius:8px;color:#9a9ea3;font-size:12px;cursor:pointer;background:#f8f9fa;}
+.add-hoja-btn:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-bg);}
+
+.pagezone-wrap{width:520px;}
+.pagezone-tag{font-size:10.5px;color:#b96f10;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.pagezone-tag .rep{background:var(--accent-bg);color:var(--accent);font-size:9px;font-weight:bold;padding:1px 7px;border-radius:8px;}
+.pagezone{width:520px;min-height:64px;background:#fffaf3;border:1.5px dashed #ffd6a8;border-radius:6px;position:relative;padding:4px;}
+.pagezone .el{background:#fff;}
+.pagezone.dragover{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.side-item[draggable]{cursor:grab;}
+.side-item.dragging{opacity:.4;}
+.el.freetext{border-color:#c9ccd0;}
+.el.freetext .el-val{outline:none;min-width:60px;}
+.el.freetext .el-val:empty:before{content:'Escribe aquí...';color:#c4cad0;}
+
+.el{position:absolute;border:1px dashed #c9ccd0;border-radius:4px;padding:6px 8px;background:#fbfbfc;cursor:move;user-select:none;}
+.el .el-label{font-size:9px;color:#9a9ea3;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px;}
+.el .el-val{font-size:12px;color:#2b2b2b;}
+.el.selected{border:1px solid var(--accent);background:#fff9f0;z-index:5;}
+.el .handle{position:absolute;top:-9px;right:-9px;width:17px;height:17px;background:var(--accent);border-radius:50%;color:#fff;font-size:10px;display:none;align-items:center;justify-content:center;cursor:pointer;}
+.el.selected .handle{display:flex;}
+.el.repetible{border-style:solid;border-color:#c9d8ff;background:#f5f8ff;}
+.el.repetible .el-label{color:#5a7bd8;}
+.el.firmas-el{border-color:#ffd6a8;background:#fffaf3;}
+.el.firmas-el .el-label{color:#b96f10;}
+.logo-box{width:70px;height:44px;background:#f0f0f0;border:1px dashed #c9ccd0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#9a9ea3;text-align:center;}
+
+.props-panel{position:fixed;width:190px;background:#26292c;color:#fff;font-size:11px;border-radius:6px;padding:10px 12px;box-shadow:0 6px 18px rgba(0,0,0,.25);line-height:1.6;display:none;z-index:50;}
+.props-panel.show{display:block;}
+.props-panel b{display:block;margin-bottom:4px;}
+
+.legend{margin-top:14px;background:#fafbfc;border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11.5px;color:#555;line-height:1.7;}
+.legend b{color:#2b2b2b;}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(20,22,24,.45);display:none;align-items:center;justify-content:center;z-index:800;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#fff;border-radius:10px;width:420px;box-shadow:0 8px 28px rgba(0,0,0,.22);overflow:hidden;}
+.modal-header{padding:14px 18px;font-weight:700;font-size:14px;border-bottom:1px solid var(--border);color:#2b2b2b;}
+.modal-body{padding:16px 18px;font-size:12.5px;line-height:1.6;color:#3a3f45;}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid var(--border);background:#fafbfc;}
+
+.toast{position:fixed;bottom:24px;right:24px;background:#26292c;color:#fff;padding:11px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:2000;max-width:320px;display:none;}
+.toast.show{display:block;}
+
+/* vista previa PDF */
+.pdf-overlay{position:fixed;inset:0;background:#3a3d40;display:none;z-index:1000;flex-direction:column;}
+.pdf-overlay.open{display:flex;}
+.pdf-topbar{background:#26292c;color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.pdf-topbar .pt-left{display:flex;align-items:center;gap:10px;font-size:13px;}
+.pdf-topbar .pt-left .fname{font-weight:600;}
+.pdf-topbar .pt-left .fsub{font-size:11px;color:#aeb2b6;}
+.pdf-actions{display:flex;gap:8px;}
+.pdf-btn{background:#3a3d40;color:#fff;border:1px solid #52565a;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.pdf-btn.close{background:transparent;border:none;font-size:18px;color:#cfd2d5;}
+.pdf-scroll{flex:1;overflow-y:auto;padding:28px 0;display:flex;flex-direction:column;align-items:center;gap:22px;}
+.pdf-page{width:560px;min-height:660px;background:#fff;box-shadow:0 6px 22px rgba(0,0,0,.35);padding:34px 30px;}
+.pdf-page .pg-num{text-align:center;font-size:10px;color:#c4c8cc;margin-top:10px;}
+.pv-logo{width:80px;height:50px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#9a9ea3;text-align:center;margin-bottom:14px;}
+.pv-row{display:flex;gap:24px;margin-bottom:10px;}
+.pv-field{flex:1;}
+.pv-field .fl{font-size:9px;color:#9a9ea3;text-transform:uppercase;letter-spacing:.3px;}
+.pv-field .fv{font-size:12.5px;color:#26292c;border-bottom:1px solid #e6e7ea;padding-bottom:3px;}
+.pv-title{font-size:14px;font-weight:bold;margin-bottom:14px;color:#26292c;}
+.pv-section{margin:18px 0 10px;font-size:11px;font-weight:bold;color:#9a9ea3;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+.pv-chk{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px dotted #eee;}
+.pv-chk .ok{color:#1f9254;font-weight:bold;}
+.pv-chk .bad{color:#e5484d;font-weight:bold;}
+.pv-sello{display:inline-block;background:#f5f8ff;border:1px solid #c9d8ff;border-radius:4px;padding:4px 10px;font-size:11.5px;margin:0 6px 6px 0;color:#3a3f45;}
+.pv-photos{display:flex;gap:10px;flex-wrap:wrap;}
+.pv-photo{width:90px;height:66px;background:#eef0f2;border:1px solid #dde0e3;font-size:9px;color:#9aa5c9;display:flex;align-items:center;justify-content:center;text-align:center;}
+.pv-firma{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding:8px 0;}
+.pv-firma .fname{font-size:12.5px;}
+.pv-firma .frole{font-size:10px;color:#9a9ea3;}
+.pv-firma .fmark{font-family:'Brush Script MT',cursive;font-size:20px;color:#3a3f6b;}
+.pv-empty{font-size:11.5px;color:#c4cad0;font-style:italic;padding:14px 0;text-align:center;}
+
+/* onboarding tour */
+.tour-overlay{position:fixed;inset:0;background:rgba(20,22,24,.5);z-index:900;display:none;}
+.tour-overlay.active{display:block;}
+.tour-highlight{position:relative;z-index:901;box-shadow:0 0 0 4px var(--accent),0 0 26px rgba(0,0,0,.35);border-radius:8px;background:#fff;}
+.tour-tip{position:fixed;z-index:902;background:#fff;border-radius:10px;width:300px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:16px 18px;display:none;}
+.tour-tip.active{display:block;}
+.tour-tip h4{font-size:13px;margin:0 0 6px;color:var(--accent);}
+.tour-tip p{font-size:12px;line-height:1.5;color:#3a3f45;margin:0 0 12px;}
+.tour-footer-row{display:flex;justify-content:space-between;align-items:center;}
+.tour-step-count{font-size:11px;color:var(--sub);}
+.tour-btns{display:flex;gap:8px;}
+.tour-btn{border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.tour-btn.primary{background:var(--accent);color:#fff;font-weight:600;}
+.tour-btn.ghost{background:#f0f1f3;color:#3a3f45;}
+.tour-skip{font-size:11px;color:var(--sub);text-decoration:underline;cursor:pointer;display:block;text-align:right;margin-top:8px;}
+.tour-fab-group{position:fixed;bottom:26px;left:26px;display:flex;z-index:500;box-shadow:0 8px 22px rgba(0,0,0,.28);border-radius:30px;}
+.tour-fab-main{background:var(--accent);color:#fff;border:none;border-right:1px solid rgba(255,255,255,.35);border-radius:30px 0 0 30px;padding:14px 22px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.tour-fab-arrow{background:var(--accent);color:#fff;border:none;border-radius:0 30px 30px 0;padding:14px 16px;font-size:14px;cursor:pointer;display:flex;align-items:center;}
+.tour-menu{position:fixed;bottom:80px;left:26px;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:8px;min-width:280px;display:none;z-index:501;}
+.tour-menu.open{display:block;}
+.tour-menu-title{font-size:10.5px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;padding:6px 10px 8px;}
+.tour-menu-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;font-size:12.5px;color:#26292c;cursor:pointer;}
+.tour-menu-item:hover{background:var(--accent-bg);color:var(--accent);}
+.tour-menu-item .tmi-num{width:20px;height:20px;border-radius:50%;background:#f0f1f3;color:#6b6f74;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tour-menu-item:hover .tmi-num{background:var(--accent);color:#fff;}
+</style>
+</head>
+<body>
+
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 32px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:-24px -32px 0;">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Doble Check, eso significa colores, tipografía, estructura de paneles y componentes propios de ese sistema.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div style="padding-top:20px;">
+<div class="page-title">Diseñador de Plantilla de Porte — Doble Check</div>
+<div class="page-sub">Prototipo funcional — tú decides dónde va cada elemento, incluidas las firmas. Sin hoja fija para firmas.</div>
+</div>
+
+<div class="view-tabs">
+  <div class="view-tab active" id="viewTabProto">🧩 Prototipo</div>
+  <div class="view-tab" id="viewTabExp">📄 Explicaciones</div>
+</div>
+
+<div class="view-pane active" id="viewProto">
+
+<div class="dc-frame" id="frameRoot">
+  <div class="dc-crumbbar">
+    ← Formularios &nbsp;|&nbsp; <b>Inspección Mecánica Furgón GTL TA-FO-03</b>
+  </div>
+  <div class="dc-tabs" id="tabsBar">
+    <div class="dc-tab">Preguntas Formulario</div>
+    <div class="dc-tab">Usuarios</div>
+    <div class="dc-tab">Configuración</div>
+    <div class="dc-tab active" id="tabPlantilla">Plantilla de Porte</div>
+  </div>
+
+  <div class="alert-nuevo show" id="alertNuevo">
+    ⚠️ <span><b>Se agregó 1 campo nuevo</b> al formulario desde la última edición de esta plantilla — no se imprime hasta que lo ubiques.</span>
+    <span class="lnk" id="lnkUbicar">Ubicarlo</span>
+  </div>
+
+  <div class="editor-toolbar" id="toolbar">
+    <div class="tb-left">
+      <button class="btn-preview" id="btnPreview">👁 Vista previa con datos de ejemplo</button>
+    </div>
+    <div class="tb-right">
+      <button class="btn-ghost" id="btnCancelar">Cancelar</button>
+      <button class="btn-solid" id="btnGuardar">Guardar plantilla</button>
+    </div>
+  </div>
+
+  <div class="editor-body">
+    <div class="editor-side" id="sidebar">
+      <div class="side-hint-top"><b>Arrastra</b> cualquier elemento a donde lo necesites — cuerpo, encabezado o pie de página. Un clic simple lo agrega a la última hoja. Si ya está colocado, el clic lo selecciona.</div>
+
+      <div class="side-group-label">General</div>
+      <div class="side-item" draggable="true" data-id="textofijo"><span><span class="ic">📝</span>Texto fijo</span></div>
+
+      <div class="side-group-label">Fijos</div>
+      <div class="side-item" draggable="true" data-id="logo"><span><span class="ic">▤</span>Logo de empresa</span></div>
+      <div class="side-item" draggable="true" data-id="folio"><span><span class="ic">▤</span>Folio de viaje</span></div>
+      <div class="side-item" draggable="true" data-id="fecha"><span><span class="ic">▤</span>Fecha de inspección</span></div>
+      <div class="side-item" draggable="true" data-id="scac"><span><span class="ic">▤</span>SCAC CODE</span></div>
+      <div class="side-item" draggable="true" data-id="alpha"><span><span class="ic">▤</span>ALPHA CODE</span></div>
+      <div class="side-item" draggable="true" data-id="fastid"><span><span class="ic">▤</span>FAST ID</span></div>
+
+      <div class="side-group-label">Preguntas del formulario</div>
+      <div class="side-item" draggable="true" data-id="mecanico"><span><span class="ic">▤</span>Nombre del Mecánico</span></div>
+      <div class="side-item" draggable="true" data-id="orden"><span><span class="ic">▤</span># Orden de Trabajo</span></div>
+      <div class="side-item" draggable="true" data-id="odometro" id="itemOdometro"><span><span class="ic">▤</span>Odómetro al recibir (KMS)</span><span class="badge nuevo">Nuevo</span></div>
+      <div class="side-item" draggable="true" data-id="entrega"><span><span class="ic">▤</span>Fecha estimada de entrega</span></div>
+      <div class="side-item" draggable="true" data-id="obs"><span><span class="ic">▤</span>Observaciones generales</span></div>
+
+      <div class="side-group-label">Resultado de inspección</div>
+      <div class="side-item" draggable="true" data-id="checklist"><span><span class="ic">🔁</span>Checklist de resultados</span></div>
+
+      <div class="side-group-label">Repetibles</div>
+      <div class="side-item" draggable="true" data-id="sellos"><span><span class="ic">🔁</span>Sellos</span></div>
+      <div class="side-item" draggable="true" data-id="fotos"><span><span class="ic">🔁</span>Fotos capturadas</span></div>
+      <div class="side-item" draggable="true" data-id="firmas"><span><span class="ic">🔁</span>Firmas</span></div>
+    </div>
+
+    <div class="editor-canvas-wrap" id="canvasWrap">
+      <div class="pagezone-wrap">
+        <div class="pagezone-tag">Encabezado <span class="rep">se repite en todas las hojas</span></div>
+        <div class="pagezone" id="pageHeader"></div>
+      </div>
+
+      <div class="hoja-wrap">
+        <div class="hoja-tag">Hoja 1</div>
+        <div class="hoja" id="hoja-1" data-hoja="1"></div>
+      </div>
+      <div class="add-hoja-btn" id="btnAddHoja">+ Agregar hoja</div>
+
+      <div class="pagezone-wrap">
+        <div class="pagezone-tag">Pie de página <span class="rep">se repite en todas las hojas</span></div>
+        <div class="pagezone" id="pageFooter"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="legend">
+  <b>▤</b> elemento único · <b>📝</b> texto fijo (se puede agregar varias veces, tú escribes el contenido) · <b>🔁</b> elemento repetible (un solo placeholder, se expande según la cantidad real al generar el porte) · <span class="badge nuevo">Nuevo</span> campo agregado al formulario tras diseñar la plantilla, aún sin ubicar · <b>arrastra</b> cualquier elemento del panel directamente a la hoja, al encabezado o al pie de página — un clic simple lo agrega a la última hoja · <b>Firmas ya no tiene hoja fija</b>: colócala donde tú decidas, igual que cualquier otro elemento · una vez colocado, arrástralo dentro de su misma zona para reposicionarlo · "+ Agregar hoja" crea páginas adicionales libremente · <b>Encabezado / Pie de página</b>: lo que se suelte ahí se repite en TODAS las hojas del documento, incluidas las agregadas por desbordamiento · si el contenido no cabe, el porte real agrega hojas automáticamente al imprimir, respetando el mismo diseño de la última hoja.
+</div>
+
+</div>
+<!-- ============ VISTA EXPLICACIONES ============ -->
+<div class="view-pane" id="viewExplicaciones">
+<div class="exp-doc">
+<h1>Diseñador de plantilla de porte en Doble Check — Explicación para desarrollo (#SIN-HU)</h1>
+
+<h2>Qué está pidiendo el cliente y por qué</h2>
+<p>Hoy GM Doble Check genera el porte de cada inspección siempre con el mismo formato fijo. El cliente necesita que cada formulario pueda tener su propio diseño de porte: dónde va el logo, el folio, cada pregunta, los sellos, las fotos y las firmas. Quiere armar ese diseño él mismo, arrastrando los elementos a la posición que necesite, sin depender de un desarrollador cada vez que cambia el layout.</p>
+
+<h2>Paso a paso de lo que debe pasar</h2>
+<ol>
+<li>El usuario abre la ficha de un formulario en Doble Check (ej. "Inspección Mecánica Furgón GTL TA-FO-03") y hace clic en un tab nuevo llamado <b>"Plantilla de Porte"</b>, junto a los tabs que ya existen: Preguntas Formulario, Usuarios, Configuración.</li>
+<li>Se abre un editor con dos partes:
+  <ul>
+    <li>Panel izquierdo: lista de elementos disponibles, agrupados en <b>General</b> (Texto fijo), <b>Fijos</b> (Logo, Folio, Fecha, SCAC, ALPHA, FAST ID — solo los que estén activados en el tab Configuración de ese formulario), <b>Preguntas del formulario</b> (una entrada por cada pregunta definida en el tab "Preguntas Formulario" de ese mismo formulario) y <b>Repetibles</b> (Sellos, Fotos capturadas, Checklist de resultados, Firmas).</li>
+    <li>Lienzo: representa la Hoja 1 del documento, en blanco al principio.</li>
+  </ul>
+</li>
+<li>El usuario arrastra cualquier elemento del panel a cualquier posición x,y del lienzo.
+  <ul>
+    <li>Si el usuario <b>hace clic</b> (sin arrastrar) en un campo (fijo, pregunta o repetible) que <b>ya está colocado en algún lugar del documento</b>, el sistema no lo duplica: lo resalta donde ya está, sin moverlo.</li>
+    <li>Si el usuario <b>arrastra desde el panel</b> un campo que ya está colocado, el sistema tampoco lo duplica — pero en este caso sí lo mueve: lo quita de su posición anterior y lo coloca en la nueva posición donde se soltó (puede ser otra hoja, el encabezado o el pie de página). Es la forma de reubicar un campo entre zonas distintas.</li>
+    <li>"Texto fijo" es la excepción: no tiene límite, se puede arrastrar tantas veces como se quiera. Cada vez que se coloca, el usuario escribe el texto directamente sobre el elemento.</li>
+  </ul>
+</li>
+<li>Elementos <b>repetibles</b> (Sellos, Fotos capturadas, Checklist de resultados, Firmas) se colocan <b>una sola vez</b> como un placeholder. No representan un dato fijo — al generarse el porte real de una inspección, ese placeholder se expande verticalmente según la cantidad real que se haya capturado en esa inspección (si hubo 3 sellos, se imprimen 3; si hubo 1, se imprime 1).</li>
+<li><b>Firmas ya no tiene una hoja obligatoria.</b> Se coloca en cualquier hoja y posición, igual que cualquier otro elemento — el usuario decide.</li>
+<li>El usuario puede hacer clic en <b>"+ Agregar hoja"</b> las veces que quiera para crear más hojas y decidir qué va en cada una.</li>
+<li>Además del cuerpo de cada hoja, hay dos franjas separadas: <b>Encabezado</b> y <b>Pie de página</b>. Lo que se arrastre ahí (cualquier campo o Texto fijo) se repite automáticamente en <b>todas</b> las hojas del documento — incluidas las que se agreguen más adelante por desbordamiento de contenido (ver punto 12).</li>
+<li>Si el usuario abre el editor de un formulario cuya plantilla ya estaba guardada, y desde la última vez que se guardó se agregó una pregunta nueva en el tab "Preguntas Formulario", el sistema muestra un aviso: <b>"Se agregó 1 campo nuevo al formulario desde la última edición de esta plantilla — no se imprime hasta que lo ubiques"</b>. Esa pregunta aparece en el panel izquierdo marcada como "Nuevo" y <b>no se imprime en el porte</b> hasta que el usuario la arrastre al lienzo.</li>
+<li>El botón <b>"Vista previa con datos de ejemplo"</b> abre un visor separado del editor, tipo lector de PDF, que arma el documento completo con datos de ejemplo (nunca vacíos), repitiendo el encabezado y pie en cada página, con botones "Imprimir" y "Descargar".</li>
+<li>Al hacer clic en <b>"Guardar plantilla"</b>, siempre aparece un mensaje de confirmación — sin importar si es la primera vez o una edición — que dice que el cambio va a <b>regenerar automáticamente el PDF de todos los portes ya generados</b> con ese formulario, usando los datos originales de cada uno con el diseño nuevo. El mensaje aclara que la acción no se puede deshacer.
+  <ul>
+    <li>Si el usuario confirma con <b>"Guardar y regenerar"</b>: la plantilla queda activa y los portes ya emitidos se regeneran en segundo plano (no bloquea al usuario mientras termina).</li>
+    <li>Si el usuario hace clic en <b>"Cancelar"</b>: no se guarda nada, la plantilla anterior sigue activa, ningún porte existente se toca.</li>
+  </ul>
+</li>
+<li>Cuando una inspección de ese formulario se completa (con todas sus firmas capturadas), el sistema genera el porte automáticamente:
+  <ul>
+    <li>Si el formulario <b>tiene una plantilla personalizada guardada</b>, el porte se genera con esa plantilla.</li>
+    <li>Si el formulario <b>no tiene ninguna plantilla personalizada guardada</b>, el porte se genera igual que hoy: con el <b>formato por default</b> que ya existe en Doble Check. Nunca se combinan las dos.</li>
+  </ul>
+</li>
+<li>Si al generar el porte real el contenido colocado no cabe en una hoja, el sistema agrega automáticamente una hoja adicional después, repitiendo el mismo diseño de la última hoja del cuerpo — y el encabezado/pie siguen repitiéndose igual en esa hoja nueva.</li>
+</ol>
+
+<h2>Casos que también debes cubrir (no son opcionales)</h2>
+<ul>
+<li><b>Formulario recién creado, sin plantilla y sin porte generado todavía</b>: el tab "Plantilla de Porte" se abre igual, con el lienzo en blanco. No hay ningún error ni mensaje especial por no tener plantilla — es el estado inicial normal.</li>
+<li><b>El usuario intenta arrastrar un campo fijo que no está activado en Configuración</b> (ej. FAST ID desactivado para ese formulario): ese campo no debe aparecer en el panel izquierdo. Solo se listan los campos fijos que estén activos en el tab Configuración de ese formulario específico.</li>
+<li><b>Doble clic o arrastre repetido del mismo campo</b>: nunca genera un segundo elemento en el lienzo (ver punto 3). Esto aplica también si el usuario intenta arrastrarlo por segunda vez estando ya colocado.</li>
+<li><b>Texto fijo vacío</b>: si el usuario coloca un "Texto fijo" y no escribe nada, ese elemento se guarda igual (no se bloquea el guardado), pero en el porte real y en la vista previa se imprime como espacio vacío, no como error.</li>
+<li><b>Quitar un elemento del lienzo</b>: al eliminarlo, el campo correspondiente vuelve a estar disponible (ya no aparece como "colocado") en el panel izquierdo, listo para volver a colocarse.</li>
+<li><b>Formulario sin ningún porte generado todavía y se guarda una plantilla nueva</b>: el mensaje de confirmación de guardado se muestra igual, aunque no haya portes que regenerar (en ese caso simplemente no hay nada que actualizar, pero el flujo de guardado es el mismo).</li>
+<li><b>Falla la regeneración de algún porte específico</b> (de los ya emitidos): ese porte conserva su PDF anterior — nunca debe quedar en blanco, corrupto o sin archivo.</li>
+<li><b>Formulario con más de una pregunta nueva agregada a la vez</b>: el aviso debe reflejar el número real de campos nuevos pendientes de ubicar, no solo "1" fijo — ajustar el texto al conteo real.</li>
+<li><b>Elemento repetible sin ningún dato capturado en una inspección concreta</b> (ej. una inspección donde no se agregó ningún sello aunque el placeholder de Sellos esté en la plantilla): el porte de esa inspección no imprime esa sección, o la imprime vacía — debe decidirse un comportamiento y aplicarse siempre igual, no depende del diseño de la plantilla.</li>
+</ul>
+
+<h2>Qué NO te puedes brincar (excusas ya resueltas)</h2>
+<ul>
+<li>"¿Y si el usuario coloca Firmas en la Hoja 1 en vez de una hoja dedicada?" → Es válido, ya no hay hoja fija para firmas. No se debe forzar ni advertir nada al respecto.</li>
+<li>"¿Encabezado y pie de página son parte del lienzo normal?" → No. Son dos zonas separadas del cuerpo de la hoja, con su propio comportamiento: lo que se coloca ahí se repite automáticamente en todas las hojas, incluidas las agregadas por desbordamiento.</li>
+<li>"¿Qué pasa si el cliente no guarda ninguna plantilla nunca?" → El sistema sigue funcionando exactamente igual que hoy, usando el porte por default. Esto no es un caso de error, es el comportamiento esperado y permanente para cualquier formulario sin plantilla personalizada.</li>
+<li>"¿Se regeneran los portes ya generados aunque hayan pasado meses?" → Sí, siempre, sin importar cuánto tiempo llevan generados. El único requisito es que se haya confirmado el guardado de una plantilla nueva o editada.</li>
+<li>"¿La regeneración bloquea al usuario hasta que termine?" → No. Ocurre en segundo plano.</li>
+<li>"¿Cualquier usuario puede editar la plantilla, o solo un admin?" → Cualquier usuario con acceso al formulario. No hay restricción de rol adicional para este editor.</li>
+<li>"¿Un campo se puede colocar dos veces en distintas hojas para repetirlo manualmente?" → No. Cada campo del catálogo (fijo, pregunta, repetible) se coloca una sola vez en todo el documento. La única forma de repetir contenido en cada hoja es a través de Encabezado o Pie de página. Texto fijo es la única excepción sin límite de repetición.</li>
+</ul>
+
+<h2>Cómo saber que ya quedó bien</h2>
+<ul>
+<li><span class="exp-check">✅</span> El tab "Plantilla de Porte" aparece en la ficha de cualquier formulario de Doble Check, junto a Preguntas Formulario, Usuarios y Configuración.</li>
+<li><span class="exp-check">✅</span> Se puede arrastrar cualquier elemento del panel izquierdo al lienzo, al encabezado o al pie de página, y queda exactamente donde se soltó.</li>
+<li><span class="exp-check">✅</span> Un campo ya colocado no se puede duplicar; Texto fijo sí se puede agregar varias veces.</li>
+<li><span class="exp-check">✅</span> Lo colocado en Encabezado o Pie de página aparece repetido en cada hoja al abrir la Vista previa.</li>
+<li><span class="exp-check">✅</span> Al guardar, siempre aparece el aviso de que se regenerarán los portes ya emitidos, y al confirmar esos PDFs cambian de diseño manteniendo sus datos originales.</li>
+<li><span class="exp-check">✅</span> Una inspección completada de un formulario sin plantilla genera el porte con el formato de siempre (default); una inspección de un formulario con plantilla guardada genera el porte con ese diseño.</li>
+<li><span class="exp-check">✅</span> Si se agrega una pregunta nueva al formulario después de guardar la plantilla, aparece el aviso correspondiente hasta que se ubique esa pregunta en el lienzo.</li>
+</ul>
+
+<div class="exp-ref">Ver Gherkin: <code>SIN-HU Plantilla de Porte.feature</code> — mismo alcance, ahí está en formato de criterios de aceptación.</div>
+</div>
+</div>
+
+<!-- Modal guardar -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-header">Guardar plantilla de porte</div>
+    <div class="modal-body">
+      Este cambio aplicará a las próximas inspecciones y <b>regenerará automáticamente</b> el PDF de todos los portes ya generados con este formulario, usando sus datos originales con el diseño nuevo.
+      <br/><br/>
+      Esta acción no se puede deshacer.
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" id="modalCancelar">Cancelar</button>
+      <button class="btn-solid" id="modalConfirmar">Guardar y regenerar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Vista previa PDF -->
+<div class="pdf-overlay" id="pdfOverlay">
+  <div class="pdf-topbar">
+    <div class="pt-left">
+      <span>📄</span>
+      <div><div class="fname">Porte_VJ-00481.pdf</div><div class="fsub">Vista previa con datos de ejemplo — así se ve el porte real</div></div>
+    </div>
+    <div class="pdf-actions">
+      <button class="pdf-btn" id="pdfPrint">🖨 Imprimir</button>
+      <button class="pdf-btn" id="pdfDownload">⬇ Descargar</button>
+      <button class="pdf-btn close" id="pdfClose">✕</button>
+    </div>
+  </div>
+  <div class="pdf-scroll" id="pdfScroll"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Onboarding -->
+<div class="tour-overlay" id="tourOverlay"></div>
+<div class="tour-tip" id="tourTip">
+  <h4 id="tourTitle"></h4>
+  <p id="tourText"></p>
+  <div class="tour-footer-row">
+    <span class="tour-step-count" id="tourCount"></span>
+    <div class="tour-btns">
+      <button class="tour-btn ghost" id="tourPrev">Anterior</button>
+      <button class="tour-btn primary" id="tourNext">Siguiente</button>
+    </div>
+  </div>
+  <span class="tour-skip" id="tourSkip">Saltar recorrido</span>
+</div>
+<div class="tour-fab-group">
+  <button class="tour-fab-main" id="tourStart">👀 Iniciar recorrido</button>
+  <button class="tour-fab-arrow" id="tourArrow">▾</button>
+</div>
+<div class="tour-menu" id="tourMenu">
+  <div class="tour-menu-title">Ir directo a...</div>
+</div>
+
+<script>
+/* ---------- catálogo de campos: valor de ejemplo + si es repetible ---------- */
+const FIELD_DATA = {
+  logo:     { label:'Logo de empresa', repetible:false, isLogo:true },
+  folio:    { label:'Folio de viaje', repetible:false, val:'VJ-00481' },
+  fecha:    { label:'Fecha de inspección', repetible:false, val:'25/08/2026 08:14' },
+  scac:     { label:'SCAC CODE', repetible:false, val:'GMTR' },
+  alpha:    { label:'ALPHA CODE', repetible:false, val:'MX4471' },
+  fastid:   { label:'FAST ID', repetible:false, val:'FID-778210' },
+  mecanico: { label:'Nombre del Mecánico', repetible:false, val:'Juan Pérez López' },
+  orden:    { label:'# Orden de Trabajo', repetible:false, val:'OT-2210' },
+  odometro: { label:'Odómetro al recibir (KMS)', repetible:false, val:'184,320 km' },
+  entrega:  { label:'Fecha estimada de entrega', repetible:false, val:'28/08/2026' },
+  obs:      { label:'Observaciones generales', repetible:false, val:'Unidad recibida sin daños visibles en carrocería. Se detecta desgaste leve en llanta trasera derecha.' },
+  checklist:{ label:'Checklist de resultados', repetible:true, kind:'checklist' },
+  sellos:   { label:'Sellos', repetible:true, kind:'sellos' },
+  fotos:    { label:'Fotos capturadas', repetible:true, kind:'fotos' },
+  firmas:   { label:'Firmas', repetible:true, kind:'firmas' }
+};
+const CHECKLIST_SAMPLE = [
+  ['Sistema de aire', true], ['Luces delanteras', true], ['Luces traseras', false],
+  ['Frenos', true], ['Llantas', true], ['Estructura del furgón', true],
+  ['Limpieza interior', false], ['Extintor vigente', true]
+];
+const SELLOS_SAMPLE = ['SL-88213','SL-88214','SL-88215'];
+const FOTOS_SAMPLE = ['Foto Unidad','Foto Operador','Foto Placa'];
+const FIRMAS_SAMPLE = [
+  ['Juan Pérez López','Operador'], ['Miriam Cortés','Supervisor'], ['Roberto Salas','Revisor C-TPAT']
+];
+
+/* ---------- helpers ---------- */
+/* ---------- cambiar entre vista Prototipo y Explicaciones ---------- */
+document.getElementById('viewTabProto').addEventListener('click', ()=>{
+  document.getElementById('viewTabProto').classList.add('active');
+  document.getElementById('viewTabExp').classList.remove('active');
+  document.getElementById('viewProto').classList.add('active');
+  document.getElementById('viewExplicaciones').classList.remove('active');
+});
+document.getElementById('viewTabExp').addEventListener('click', ()=>{
+  document.getElementById('viewTabExp').classList.add('active');
+  document.getElementById('viewTabProto').classList.remove('active');
+  document.getElementById('viewExplicaciones').classList.add('active');
+  document.getElementById('viewProto').classList.remove('active');
+});
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+/* ---------- crear elemento en el lienzo ---------- */
+let addCount = {};
+let freeTextCounter = 0;
+function placeFreeText(zone, x, y){
+  freeTextCounter++;
+  const uid = 'textofijo-'+freeTextCounter;
+  const el = document.createElement('div');
+  el.className = 'el freetext';
+  el.id = 'el-'+uid;
+  el.dataset.field = uid;
+  el.dataset.freetext = '1';
+  el.style.width = '190px';
+  el.style.left = (x!=null?x:24)+'px';
+  el.style.top = (y!=null?y:24)+'px';
+  el.innerHTML = '<div class="handle" data-remove="'+uid+'">✕</div><span style="position:absolute;top:6px;right:22px;font-size:10px;color:#c4cad0;cursor:move;" class="dragh">⠿</span><div class="el-label">Texto fijo</div><div class="el-val" contenteditable="true" spellcheck="false"></div>';
+  zone.appendChild(el);
+  attachElHandlers(el, true);
+  setTimeout(()=>{ el.querySelector('.el-val').focus(); }, 30);
+  return el;
+}
+function placeElement(id, hoja, xOverride, yOverride){
+  const data = FIELD_DATA[id];
+  const el = document.createElement('div');
+  el.className = 'el' + (data.repetible ? ' repetible' : '') + (id==='firmas' ? ' firmas-el' : '');
+  el.id = 'el-'+id;
+  el.dataset.field = id;
+  if(xOverride!=null){
+    el.style.left = xOverride+'px'; el.style.top = yOverride+'px';
+  } else {
+    addCount[hoja.id] = (addCount[hoja.id]||0);
+    const n = addCount[hoja.id]++;
+    el.style.left = (24 + (n%3)*30)+'px';
+    el.style.top = (24 + Math.floor(n/3)*60)+'px';
+  }
+
+  if(data.isLogo){
+    el.style.width='70px'; el.style.height='44px'; el.style.padding='0'; el.style.border='none'; el.style.background='none';
+    el.innerHTML = '<div class="handle" data-remove="'+id+'">✕</div><div class="logo-box">LOGO<br/>EMPRESA</div>';
+  } else if(!data.repetible){
+    el.style.width='210px';
+    el.innerHTML = '<div class="handle" data-remove="'+id+'">✕</div><div class="el-label">'+data.label+'</div><div class="el-val">'+data.val+'</div>';
+  } else if(data.kind==='sellos'){
+    el.style.width='330px';
+    el.innerHTML = '<div class="handle" data-remove="'+id+'">✕</div><div class="el-label">🔁 Sellos (placeholder repetible)</div><div class="el-val" style="color:#5a7bd8;">'+SELLOS_SAMPLE.map(s=>'Sello: '+s).join(' &nbsp;·&nbsp; ')+' &nbsp;<i style="color:#9aa5c9;">(+N según inspección real)</i></div>';
+  } else if(data.kind==='fotos'){
+    el.style.width='330px';
+    el.innerHTML = '<div class="handle" data-remove="'+id+'">✕</div><div class="el-label">🔁 Fotos capturadas (placeholder repetible)</div><div style="display:flex;gap:8px;margin-top:6px;">'+FOTOS_SAMPLE.map(f=>'<div style="width:70px;height:52px;background:#eef0f2;border:1px dashed #c9d8ff;display:flex;align-items:center;justify-content:center;font-size:8.5px;color:#9aa5c9;text-align:center;">'+f+'</div>').join('')+'</div>';
+  } else if(data.kind==='firmas'){
+    el.style.width='330px';
+    el.innerHTML = '<div class="handle" data-remove="'+id+'">✕</div><div class="el-label">🔁 Firmas (placeholder repetible — colócala donde tú decidas)</div>'+FIRMAS_SAMPLE.map(f=>'<div style="font-size:11px;margin-top:4px;color:#3a3f45;">'+f[0]+' <span style="color:#9a9ea3;">— '+f[1]+'</span></div>').join('')+'<div style="color:#9aa5c9;font-size:10.5px;margin-top:4px;">+N firmas más si se agregan roles adicionales</div>';
+  } else if(data.kind==='checklist'){
+    el.style.width='330px';
+    el.innerHTML = '<div class="handle" data-remove="'+id+'">✕</div><div class="el-label">🔁 Checklist de resultados (placeholder repetible)</div>'+CHECKLIST_SAMPLE.slice(0,3).map(c=>'<div style="font-size:11px;margin-top:3px;">'+c[0]+': <b style="color:'+(c[1]?'#1f9254':'#e5484d')+'">'+(c[1]?'Aprobado':'Rechazado')+'</b></div>').join('')+'<div style="color:#9aa5c9;font-size:10.5px;margin-top:4px;">+ resto de las preguntas del checklist</div>';
+  }
+  hoja.appendChild(el);
+  attachElHandlers(el);
+  return el;
+}
+
+function attachElHandlers(el, isFreeText){
+  el.addEventListener('mousedown', (e)=>{
+    if(e.target.classList.contains('handle')) return;
+    if(isFreeText && !e.target.classList.contains('dragh')){ selectElement(el); return; }
+    selectElement(el);
+    dragEl = el;
+    const rect = el.getBoundingClientRect();
+    offX = e.clientX - rect.left; offY = e.clientY - rect.top;
+    e.preventDefault();
+  });
+  const h = el.querySelector('.handle');
+  if(h){
+    h.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const id = h.dataset.remove;
+      const item = document.querySelector('.side-item[data-id="'+id+'"]');
+      if(item){ const hint = item.querySelector('.hint'); if(hint) hint.remove(); }
+      el.remove();
+      document.getElementById('propsPanel') && document.getElementById('propsPanel').classList.remove('show');
+      showToast('Elemento quitado de la plantilla.');
+    });
+  }
+}
+
+/* ---------- seleccionar / mover ---------- */
+let dragEl = null, offX=0, offY=0;
+let propsPanel;
+function ensurePropsPanel(){
+  if(!propsPanel){
+    propsPanel = document.createElement('div');
+    propsPanel.className = 'props-panel';
+    propsPanel.id = 'propsPanel';
+    propsPanel.innerHTML = '<b id="propsTitle"></b><span id="propsBody"></span>';
+    document.body.appendChild(propsPanel);
+  }
+  return propsPanel;
+}
+function selectElement(el){
+  document.querySelectorAll('.el.selected').forEach(x=>x.classList.remove('selected'));
+  el.classList.add('selected');
+  const panel = ensurePropsPanel();
+  const label = el.querySelector('.el-label') ? el.querySelector('.el-label').textContent : el.id;
+  document.getElementById('propsTitle').textContent = label.replace('🔁 ','').split(' (')[0];
+  const zoneEl = el.closest('.hoja, .pagezone');
+  const zoneLabel = zoneEl.classList.contains('hoja') ? 'Hoja '+zoneEl.dataset.hoja : (zoneEl.id==='pageHeader' ? 'Encabezado' : 'Pie de página');
+  document.getElementById('propsBody').innerHTML = 'Ancho: '+el.offsetWidth+'px<br/>Zona: '+zoneLabel;
+  const r = el.getBoundingClientRect();
+  panel.style.left = (r.right + 14)+'px';
+  panel.style.top = r.top+'px';
+  panel.classList.add('show');
+}
+document.addEventListener('mousemove', (e)=>{
+  if(!dragEl) return;
+  const wrap = dragEl.closest('.hoja, .pagezone').getBoundingClientRect();
+  let x = e.clientX - wrap.left - offX;
+  let y = e.clientY - wrap.top - offY;
+  x = Math.max(0, Math.min(x, wrap.width - dragEl.offsetWidth));
+  y = Math.max(0, Math.min(y, wrap.height - dragEl.offsetHeight));
+  dragEl.style.left = x+'px'; dragEl.style.top = y+'px';
+});
+document.addEventListener('mouseup', ()=>{ dragEl=null; });
+
+function attachHojaDeselect(hoja){
+  hoja.addEventListener('mousedown', (e)=>{
+    if(e.target === hoja){
+      document.querySelectorAll('.el.selected').forEach(x=>x.classList.remove('selected'));
+      const p = document.getElementById('propsPanel'); if(p) p.classList.remove('show');
+    }
+  });
+}
+attachHojaDeselect(document.getElementById('hoja-1'));
+attachHojaDeselect(document.getElementById('pageHeader'));
+attachHojaDeselect(document.getElementById('pageFooter'));
+
+/* ---------- marcar "colocado" en el panel lateral ---------- */
+function markPlaced(id){
+  const item = document.querySelector('.side-item[data-id="'+id+'"]');
+  if(item && !item.querySelector('.hint')){
+    const hint = document.createElement('span'); hint.className='hint'; hint.textContent='colocado';
+    item.appendChild(hint);
+  }
+  const badge = item ? item.querySelector('.badge') : null; if(badge) badge.remove();
+  if(id==='odometro'){ document.getElementById('alertNuevo').classList.remove('show'); }
+}
+
+/* ---------- arrastrar desde el panel lateral ---------- */
+document.querySelectorAll('.side-item[draggable]').forEach(item=>{
+  item.addEventListener('dragstart', (e)=>{
+    e.dataTransfer.setData('text/plain', item.dataset.id);
+    item.classList.add('dragging');
+  });
+  item.addEventListener('dragend', ()=> item.classList.remove('dragging'));
+});
+
+/* ---------- zonas de destino (hojas, encabezado, pie) ---------- */
+function attachDropTarget(zoneDiv){
+  zoneDiv.addEventListener('dragover', (e)=>{ e.preventDefault(); zoneDiv.classList.add('dragover'); });
+  zoneDiv.addEventListener('dragleave', ()=> zoneDiv.classList.remove('dragover'));
+  zoneDiv.addEventListener('drop', (e)=>{
+    e.preventDefault();
+    zoneDiv.classList.remove('dragover');
+    const id = e.dataTransfer.getData('text/plain');
+    if(!id) return;
+    const rect = zoneDiv.getBoundingClientRect();
+    let x = e.clientX - rect.left - 90, y = e.clientY - rect.top - 16;
+    x = Math.max(4, x); y = Math.max(4, y);
+
+    if(id === 'textofijo'){
+      const el = placeFreeText(zoneDiv, x, y);
+      selectElement(el);
+      return;
+    }
+    const existing = document.getElementById('el-'+id);
+    if(existing){
+      existing.remove();
+      const el2 = placeElement(id, zoneDiv, x, y);
+      selectElement(el2);
+      showToast('Elemento movido.');
+      return;
+    }
+    const el = placeElement(id, zoneDiv, x, y);
+    selectElement(el);
+    markPlaced(id);
+    if(zoneDiv.id==='pageHeader' || zoneDiv.id==='pageFooter'){
+      showToast('Colocado en '+(zoneDiv.id==='pageHeader'?'el encabezado':'el pie de página')+' — se repite en todas las hojas.');
+    }
+  });
+}
+attachDropTarget(document.getElementById('hoja-1'));
+attachDropTarget(document.getElementById('pageHeader'));
+attachDropTarget(document.getElementById('pageFooter'));
+
+/* ---------- agregar hoja ---------- */
+let hojaCount = 1;
+document.getElementById('btnAddHoja').addEventListener('click', ()=>{
+  hojaCount++;
+  const wrap = document.createElement('div');
+  wrap.className = 'hoja-wrap';
+  wrap.innerHTML = '<div class="hoja-tag">Hoja '+hojaCount+'</div>';
+  const hoja = document.createElement('div');
+  hoja.className = 'hoja';
+  hoja.id = 'hoja-'+hojaCount;
+  hoja.dataset.hoja = hojaCount;
+  wrap.appendChild(hoja);
+  document.getElementById('canvasWrap').insertBefore(wrap, document.getElementById('btnAddHoja'));
+  attachHojaDeselect(hoja);
+  attachDropTarget(hoja);
+  showToast('Hoja '+hojaCount+' agregada. Coloca ahí lo que necesites, incluidas las firmas.');
+});
+
+/* ---------- clic en panel: agrega en la última hoja o selecciona si ya existe ---------- */
+document.querySelectorAll('.side-item[data-id]').forEach(item=>{
+  item.addEventListener('click', ()=>{
+    const id = item.dataset.id;
+    if(id==='textofijo'){
+      const hojas = document.querySelectorAll('.hoja');
+      const el = placeFreeText(hojas[hojas.length-1]);
+      selectElement(el);
+      return;
+    }
+    const existing = document.getElementById('el-'+id);
+    if(existing){
+      selectElement(existing);
+      existing.scrollIntoView({block:'center', behavior:'smooth'});
+      return;
+    }
+    const hojas = document.querySelectorAll('.hoja');
+    const targetHoja = hojas[hojas.length-1];
+    const el = placeElement(id, targetHoja);
+    selectElement(el);
+    markPlaced(id);
+  });
+});
+
+/* ---------- alerta campo nuevo -> resaltar item ---------- */
+document.getElementById('lnkUbicar').addEventListener('click', ()=>{
+  const item = document.getElementById('itemOdometro');
+  item.scrollIntoView({block:'center'});
+  item.classList.add('pulse');
+  setTimeout(()=>item.classList.remove('pulse'), 2000);
+});
+
+/* ---------- modal guardar ---------- */
+document.getElementById('btnGuardar').addEventListener('click', ()=>{
+  document.getElementById('modalOverlay').classList.add('open');
+});
+document.getElementById('modalCancelar').addEventListener('click', ()=>{
+  document.getElementById('modalOverlay').classList.remove('open');
+});
+document.getElementById('modalConfirmar').addEventListener('click', ()=>{
+  document.getElementById('modalOverlay').classList.remove('open');
+  showToast('Plantilla guardada. Regenerando portes existentes en segundo plano…');
+});
+document.getElementById('btnCancelar').addEventListener('click', ()=>{
+  showToast('Cambios descartados.');
+});
+
+/* ---------- vista previa PDF ---------- */
+function renderZoneHtml(zoneId){
+  const zone = document.getElementById(zoneId);
+  const els = Array.from(zone.querySelectorAll('.el'));
+  if(els.length===0) return '';
+  let html = '<div style="display:flex;gap:18px;flex-wrap:wrap;'+(zoneId==='pageHeader'?'margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #eee;':'margin-top:14px;padding-top:10px;border-top:1px solid #eee;')+'">';
+  els.forEach(el=>{
+    if(el.dataset.freetext){
+      const txt = el.querySelector('.el-val').textContent.trim() || '&nbsp;';
+      html += '<div class="pv-field"><div class="fv" style="border:none;">'+txt+'</div></div>';
+      return;
+    }
+    const id = el.dataset.field;
+    const data = FIELD_DATA[id];
+    if(!data) return;
+    if(data.isLogo){ html += '<div class="pv-logo" style="margin:0;">LOGO<br/>EMPRESA</div>'; }
+    else { html += '<div class="pv-field"><div class="fl">'+data.label+'</div><div class="fv" style="border:none;">'+data.val+'</div></div>'; }
+  });
+  html += '</div>';
+  return html;
+}
+function renderPreview(){
+  const scroll = document.getElementById('pdfScroll');
+  scroll.innerHTML = '';
+  const hojas = document.querySelectorAll('.hoja');
+  const headerHtml = renderZoneHtml('pageHeader');
+  const footerHtml = renderZoneHtml('pageFooter');
+  hojas.forEach((hoja, idx)=>{
+    const page = document.createElement('div');
+    page.className = 'pdf-page';
+    const els = Array.from(hoja.querySelectorAll('.el'));
+    if(els.length===0){
+      page.innerHTML = headerHtml + '<div class="pv-title">Hoja '+(idx+1)+'</div><div class="pv-empty">Sin elementos colocados en esta hoja todavía.</div>' + footerHtml;
+    } else {
+      let html = headerHtml + '<div class="pv-title">Porte de Inspección — Hoja '+(idx+1)+'</div>';
+      els.forEach(el=>{
+        if(el.dataset.freetext){
+          const txt = el.querySelector('.el-val').textContent.trim() || '&nbsp;';
+          html += '<div class="pv-row"><div class="pv-field"><div class="fv">'+txt+'</div></div></div>';
+          return;
+        }
+        const id = el.dataset.field;
+        const data = FIELD_DATA[id];
+        if(!data) return;
+        if(data.isLogo){
+          html += '<div class="pv-logo">LOGO<br/>EMPRESA</div>';
+        } else if(!data.repetible){
+          html += '<div class="pv-row"><div class="pv-field"><div class="fl">'+data.label+'</div><div class="fv">'+data.val+'</div></div></div>';
+        } else if(data.kind==='sellos'){
+          html += '<div class="pv-section">Sellos</div>' + SELLOS_SAMPLE.map(s=>'<span class="pv-sello">🔒 '+s+'</span>').join('');
+        } else if(data.kind==='fotos'){
+          html += '<div class="pv-section">Fotos capturadas</div><div class="pv-photos">' + FOTOS_SAMPLE.map(f=>'<div class="pv-photo">'+f+'</div>').join('') + '</div>';
+        } else if(data.kind==='firmas'){
+          html += '<div class="pv-section">Firmas</div>' + FIRMAS_SAMPLE.map(f=>'<div class="pv-firma"><div><div class="fname">'+f[0]+'</div><div class="frole">'+f[1]+'</div></div><div class="fmark">'+f[0].split(' ').map(w=>w[0]).join('')+'</div></div>').join('');
+        } else if(data.kind==='checklist'){
+          html += '<div class="pv-section">Checklist de resultados</div>' + CHECKLIST_SAMPLE.map(c=>'<div class="pv-chk"><span>'+c[0]+'</span><span class="'+(c[1]?'ok':'bad')+'">'+(c[1]?'✔ Aprobado':'✘ Rechazado')+'</span></div>').join('');
+        }
+      });
+      html += footerHtml;
+      page.innerHTML = html;
+    }
+    const num = document.createElement('div'); num.className='pg-num'; num.textContent = 'Página '+(idx+1)+' de '+hojas.length;
+    page.appendChild(num);
+    scroll.appendChild(page);
+  });
+}
+document.getElementById('btnPreview').addEventListener('click', ()=>{
+  renderPreview();
+  document.getElementById('pdfOverlay').classList.add('open');
+});
+document.getElementById('pdfClose').addEventListener('click', ()=>{
+  document.getElementById('pdfOverlay').classList.remove('open');
+});
+document.getElementById('pdfDownload').addEventListener('click', ()=>{ showToast('Descargando Porte_VJ-00481.pdf…'); });
+document.getElementById('pdfPrint').addEventListener('click', ()=>{ showToast('Abriendo diálogo de impresión…'); });
+
+/* ---------- estado inicial: un par de elementos ya colocados como ejemplo ---------- */
+(function seed(){
+  const hoja1 = document.getElementById('hoja-1');
+  ['logo','folio','mecanico'].forEach(id=>{
+    const el = placeElement(id, hoja1);
+    if(id==='folio') el.style.left='260px';
+    if(id==='mecanico'){ el.style.left='24px'; el.style.top='90px'; }
+    const item = document.querySelector('.side-item[data-id="'+id+'"]');
+    if(item){ const hint=document.createElement('span'); hint.className='hint'; hint.textContent='colocado'; item.appendChild(hint); }
+  });
+  addCount['hoja-1'] = 3;
+})();
+
+/* ---------- onboarding tour ---------- */
+const steps = [
+  { sel:"#tabPlantilla", title:"1. Dónde vive el editor", text:"Nuevo tab 'Plantilla de Porte' dentro de la ficha de cada Formulario, junto a Preguntas Formulario, Usuarios y Configuración. Cada formulario tiene su propia plantilla." },
+  { sel:"#alertNuevo", title:"2. Aviso de campo nuevo", text:"Si se agrega una pregunta nueva al formulario después de diseñar la plantilla, este aviso aparece hasta que la ubiques en el lienzo — mientras tanto no se imprime en el porte." },
+  { sel:"#sidebar", title:"3. Elementos disponibles", text:"Fijos, preguntas del formulario, repetibles (sellos, fotos, checklist, firmas) y 'Texto fijo' para escribir lo que quieras. Arrástralos a donde los necesites — incluidas las preguntas, ninguna está bloqueada." },
+  { sel:"#hoja-1", title:"4. Lienzo libre, tú decides todo", text:"Arrastra cualquier elemento del panel a la posición exacta que quieras dentro de la hoja. Las firmas ya no tienen una hoja fija — se colocan igual que cualquier otro elemento, donde tú decidas." },
+  { sel:"#pageHeader", title:"5. Encabezado y pie de página configurables", text:"Arrastra cualquier campo — o un Texto fijo — directamente a esta franja. Lo que coloques ahí se repite automáticamente en todas las hojas del porte, incluidas las que se agreguen por desbordamiento." },
+  { sel:"#btnAddHoja", title:"6. Agregar más hojas", text:"Si necesitas más espacio o quieres separar contenido, agrega hojas libremente y decide qué va en cada una." },
+  { sel:"#btnPreview", title:"7. Vista previa con datos de ejemplo", text:"Abre una vista tipo PDF con datos de ejemplo más completos — así se vería el porte real impreso, con el encabezado y pie repetidos en cada página, y opciones de imprimir y descargar." },
+  { sel:"#btnGuardar", title:"8. Guardar y regenerar", text:"Al guardar, se muestra un aviso: el cambio también regenera el PDF de los portes ya generados con este formulario, usando sus datos originales." }
+];
+let current = -1;
+const overlay = document.getElementById("tourOverlay");
+const tip = document.getElementById("tourTip");
+const menu = document.getElementById("tourMenu");
+function clearHighlight(){ document.querySelectorAll(".tour-highlight").forEach(e=>e.classList.remove("tour-highlight")); }
+function positionTip(el){
+  const r = el.getBoundingClientRect();
+  const tipW = 300, tipH = tip.offsetHeight || 160;
+  let top = r.bottom + 14;
+  if (top + tipH > window.innerHeight) top = Math.max(14, r.top - tipH - 14);
+  let left = Math.min(Math.max(14, r.left), window.innerWidth - tipW - 14);
+  tip.style.top = top + "px"; tip.style.left = left + "px";
+}
+function showStep(i){
+  clearHighlight();
+  current = i;
+  const s = steps[i];
+  const el = document.querySelector(s.sel);
+  el.classList.add("tour-highlight");
+  el.scrollIntoView({ block:"center", behavior:"smooth" });
+  document.getElementById("tourTitle").textContent = s.title;
+  document.getElementById("tourText").textContent = s.text;
+  document.getElementById("tourCount").textContent = (i+1) + "/" + steps.length;
+  document.getElementById("tourPrev").style.visibility = i===0 ? "hidden" : "visible";
+  document.getElementById("tourNext").textContent = i===steps.length-1 ? "Finalizar" : "Siguiente";
+  overlay.classList.add("active"); tip.classList.add("active"); menu.classList.remove("open");
+  setTimeout(()=>positionTip(el), 220);
+}
+function endTour(){ clearHighlight(); overlay.classList.remove("active"); tip.classList.remove("active"); }
+document.getElementById("tourStart").onclick = ()=>showStep(0);
+document.getElementById("tourNext").onclick = ()=>{ if (current >= steps.length-1) endTour(); else showStep(current+1); };
+document.getElementById("tourPrev").onclick = ()=>{ if (current>0) showStep(current-1); };
+document.getElementById("tourSkip").onclick = endTour;
+document.getElementById("tourArrow").onclick = ()=>menu.classList.toggle("open");
+steps.forEach((s,i)=>{
+  const row = document.createElement("div");
+  row.className = "tour-menu-item";
+  row.innerHTML = '<span class="tmi-num">'+(i+1)+'</span><span>'+s.title.replace(/^\d+\.\s*/,"")+"</span>";
+  row.onclick = ()=>showStep(i);
+  menu.appendChild(row);
+});
+</script>
+</body>
+</html>

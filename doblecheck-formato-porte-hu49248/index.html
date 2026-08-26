@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<title>Diseñador de Formato de Porte — Doble Check</title>
+<title>Diseñador de Formato — Doble Check</title>
 <style>
 :root{
   --page-bg:#f2f3f5; --card-bg:#ffffff; --ink:#2b2b2b; --sub:#8a8f94;
@@ -193,7 +193,7 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 </div>
 
 <div style="padding-top:20px;">
-<div class="page-title">Diseñador de Formato de Porte — Doble Check</div>
+<div class="page-title">Diseñador de Formato — Doble Check</div>
 <div class="page-sub">Prototipo funcional — tú decides dónde va cada elemento, incluidas las firmas. Sin hoja fija para firmas.</div>
 </div>
 
@@ -212,7 +212,7 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
     <div class="dc-tab">Preguntas Formulario</div>
     <div class="dc-tab">Usuarios</div>
     <div class="dc-tab">Configuración</div>
-    <div class="dc-tab active" id="tabPlantilla">Formato de Porte</div>
+    <div class="dc-tab active" id="tabPlantilla">Formato</div>
   </div>
 
   <div class="alert-nuevo show" id="alertNuevo">
@@ -288,14 +288,14 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 <!-- ============ VISTA EXPLICACIONES ============ -->
 <div class="view-pane" id="viewExplicaciones">
 <div class="exp-doc">
-<h1>Diseñador de formato de porte en Doble Check — Explicación para desarrollo (#HU49248)</h1>
+<h1>Diseñador de formato en Doble Check — Explicación para desarrollo (#HU49248)</h1>
 
 <h2>Qué está pidiendo el cliente y por qué</h2>
-<p>Hoy GM Doble Check genera el porte de cada inspección siempre con el mismo formato fijo. El cliente necesita que cada formulario pueda tener su propio diseño de porte: dónde va el logo, el folio, cada pregunta, los sellos, las fotos y las firmas. Quiere armar ese diseño él mismo, arrastrando los elementos a la posición que necesite, sin depender de un desarrollador cada vez que cambia el layout.</p>
+<p>Hoy GM Doble Check genera el porte de cada inspección siempre con el mismo formato fijo. El cliente necesita que cada formulario pueda tener su propio diseño de porte: dónde va el logo, el folio, cada pregunta, los sellos, las fotos y las firmas. Quiere armar ese diseño él mismo, arrastrando los elementos a la posición que necesite, sin depender de un desarrollador cada vez que cambia el formato.</p>
 
 <h2>Paso a paso de lo que debe pasar</h2>
 <ol>
-<li>El usuario abre la ficha de un formulario en Doble Check (ej. "Inspección Mecánica Furgón GTL TA-FO-03") y hace clic en un tab nuevo llamado <b>"Formato de Porte"</b>, junto a los tabs que ya existen: Preguntas Formulario, Usuarios, Configuración.</li>
+<li>El usuario abre la ficha de un formulario en Doble Check (ej. "Inspección Mecánica Furgón GTL TA-FO-03") y hace clic en un tab nuevo llamado <b>"Formato"</b>, junto a los tabs que ya existen: Preguntas Formulario, Usuarios, Configuración.</li>
 <li>Se abre un editor con dos partes:
   <ul>
     <li>Panel izquierdo: lista de elementos disponibles, agrupados en <b>General</b> (Texto fijo), <b>Fijos</b> (Logo, Folio, Fecha, SCAC, ALPHA, FAST ID — solo los que estén activados en el tab Configuración de ese formulario), <b>Preguntas del formulario</b> (una entrada por cada pregunta definida en el tab "Preguntas Formulario" de ese mismo formulario) y <b>Repetibles</b> (Sellos, Fotos capturadas, Checklist de resultados, Firmas).</li>
@@ -323,8 +323,8 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 </li>
 <li>Cuando una inspección de ese formulario se completa (con todas sus firmas capturadas), el sistema genera el porte automáticamente:
   <ul>
-    <li>Si el formulario <b>tiene un formato personalizado guardado</b>, el porte se genera con ese formato.</li>
-    <li>Si el formulario <b>no tiene ningun formato personalizado guardado</b>, el porte se genera igual que hoy: con el <b>formato por default</b> que ya existe en Doble Check. Nunca se combinan las dos.</li>
+    <li>Si el formulario <b>tiene un formato guardado</b>, el porte se genera con ese formato.</li>
+    <li>Si el formulario <b>no tiene ningun formato guardado</b>, el porte se genera igual que hoy: con el <b>formato por default</b> que ya existe en Doble Check. Nunca se combinan las dos.</li>
   </ul>
 </li>
 <li>Si al generar el porte real el contenido colocado no cabe en una hoja, el sistema agrega automáticamente una hoja adicional después, repitiendo el mismo diseño de la última hoja del cuerpo — y el encabezado/pie siguen repitiéndose igual en esa hoja nueva.</li>
@@ -332,7 +332,7 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 
 <h2>Casos que también debes cubrir (no son opcionales)</h2>
 <ul>
-<li><b>Formulario recién creado, sin formato personalizado y sin porte generado todavía</b>: el tab "Formato de Porte" se abre igual, con el lienzo en blanco. No hay ningún error ni mensaje especial por no tener formato personalizado — es el estado inicial normal.</li>
+<li><b>Formulario recién creado, sin formato y sin porte generado todavía</b>: el tab "Formato" se abre igual, con el lienzo en blanco. No hay ningún error ni mensaje especial por no tener formato — es el estado inicial normal.</li>
 <li><b>El usuario intenta arrastrar un campo fijo que no está activado en Configuración</b> (ej. FAST ID desactivado para ese formulario): ese campo no debe aparecer en el panel izquierdo. Solo se listan los campos fijos que estén activos en el tab Configuración de ese formulario específico.</li>
 <li><b>Doble clic o arrastre repetido del mismo campo</b>: nunca genera un segundo elemento en el lienzo (ver punto 3). Esto aplica también si el usuario intenta arrastrarlo por segunda vez estando ya colocado.</li>
 <li><b>Texto fijo vacío</b>: si el usuario coloca un "Texto fijo" y no escribe nada, ese elemento se guarda igual (no se bloquea el guardado), pero en el porte real y en la vista previa se imprime como espacio vacío, no como error.</li>
@@ -347,7 +347,7 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 <ul>
 <li>"¿Y si el usuario coloca Firmas en la Hoja 1 en vez de una hoja dedicada?" → Es válido, ya no hay hoja fija para firmas. No se debe forzar ni advertir nada al respecto.</li>
 <li>"¿Encabezado y pie de página son parte del lienzo normal?" → No. Son dos zonas separadas del cuerpo de la hoja, con su propio comportamiento: lo que se coloca ahí se repite automáticamente en todas las hojas, incluidas las agregadas por desbordamiento.</li>
-<li>"¿Qué pasa si el cliente no guarda ningun formato nunca?" → El sistema sigue funcionando exactamente igual que hoy, usando el porte por default. Esto no es un caso de error, es el comportamiento esperado y permanente para cualquier formulario sin formato personalizado.</li>
+<li>"¿Qué pasa si el cliente no guarda ningun formato nunca?" → El sistema sigue funcionando exactamente igual que hoy, usando el porte por default. Esto no es un caso de error, es el comportamiento esperado y permanente para cualquier formulario sin formato.</li>
 <li>"¿Se regeneran los portes ya generados aunque hayan pasado meses?" → Sí, siempre, sin importar cuánto tiempo llevan generados. El único requisito es que se haya confirmado el guardado de un formato nuevo o editada.</li>
 <li>"¿La regeneración bloquea al usuario hasta que termine?" → No. Ocurre en segundo plano.</li>
 <li>"¿Cualquier usuario puede editar el formato, o solo un admin?" → Cualquier usuario con acceso al formulario. No hay restricción de rol adicional para este editor.</li>
@@ -356,23 +356,23 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);back
 
 <h2>Cómo saber que ya quedó bien</h2>
 <ul>
-<li><span class="exp-check">✅</span> El tab "Formato de Porte" aparece en la ficha de cualquier formulario de Doble Check, junto a Preguntas Formulario, Usuarios y Configuración.</li>
+<li><span class="exp-check">✅</span> El tab "Formato" aparece en la ficha de cualquier formulario de Doble Check, junto a Preguntas Formulario, Usuarios y Configuración.</li>
 <li><span class="exp-check">✅</span> Se puede arrastrar cualquier elemento del panel izquierdo al lienzo, al encabezado o al pie de página, y queda exactamente donde se soltó.</li>
 <li><span class="exp-check">✅</span> Un campo ya colocado no se puede duplicar; Texto fijo sí se puede agregar varias veces.</li>
 <li><span class="exp-check">✅</span> Lo colocado en Encabezado o Pie de página aparece repetido en cada hoja al abrir la Vista previa.</li>
 <li><span class="exp-check">✅</span> Al guardar, siempre aparece el aviso de que se regenerarán los portes ya emitidos, y al confirmar esos PDFs cambian de diseño manteniendo sus datos originales.</li>
-<li><span class="exp-check">✅</span> Una inspección completada de un formulario sin formato personalizado genera el porte con el formato de siempre (default); una inspección de un formulario con formato personalizado guardado genera el porte con ese diseño.</li>
+<li><span class="exp-check">✅</span> Una inspección completada de un formulario sin formato genera el porte con el formato de siempre (default); una inspección de un formulario con formato guardado genera el porte con ese diseño.</li>
 <li><span class="exp-check">✅</span> Si se agrega una pregunta nueva al formulario después de guardar el formato, aparece el aviso correspondiente hasta que se ubique esa pregunta en el lienzo.</li>
 </ul>
 
-<div class="exp-ref">Ver Gherkin: <code>HU49248 Formato de Porte.feature</code> — mismo alcance, ahí está en formato de criterios de aceptación.</div>
+<div class="exp-ref">Ver Gherkin: <code>HU49248 Formato.feature</code> — mismo alcance, ahí está en formato de criterios de aceptación.</div>
 </div>
 </div>
 
 <!-- Modal guardar -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <div class="modal-header">Guardar formato de porte</div>
+    <div class="modal-header">Guardar formato</div>
     <div class="modal-body">
       Este cambio aplicará a las próximas inspecciones y <b>regenerará automáticamente</b> el PDF de todos los portes ya generados con este formulario, usando sus datos originales con el diseño nuevo.
       <br/><br/>
@@ -824,7 +824,7 @@ document.getElementById('pdfPrint').addEventListener('click', ()=>{ showToast('A
 
 /* ---------- onboarding tour ---------- */
 const steps = [
-  { sel:"#tabPlantilla", title:"1. Dónde vive el editor", text:"Nuevo tab 'Formato de Porte' dentro de la ficha de cada Formulario, junto a Preguntas Formulario, Usuarios y Configuración. Cada formulario tiene su propio formato." },
+  { sel:"#tabPlantilla", title:"1. Dónde vive el editor", text:"Nuevo tab 'Formato' dentro de la ficha de cada Formulario, junto a Preguntas Formulario, Usuarios y Configuración. Cada formulario tiene su propio formato." },
   { sel:"#alertNuevo", title:"2. Aviso de campo nuevo", text:"Si se agrega una pregunta nueva al formulario después de diseñar el formato, este aviso aparece hasta que la ubiques en el lienzo — mientras tanto no se imprime en el porte." },
   { sel:"#sidebar", title:"3. Elementos disponibles", text:"Fijos, preguntas del formulario, repetibles (sellos, fotos, checklist, firmas) y 'Texto fijo' para escribir lo que quieras. Arrástralos a donde los necesites — incluidas las preguntas, ninguna está bloqueada." },
   { sel:"#hoja-1", title:"4. Lienzo libre, tú decides todo", text:"Arrastra cualquier elemento del panel a la posición exacta que quieras dentro de la hoja. Las firmas ya no tienen una hoja fija — se colocan igual que cualquier otro elemento, donde tú decidas." },

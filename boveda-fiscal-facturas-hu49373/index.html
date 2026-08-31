@@ -152,7 +152,7 @@
     <ol class="steps-list">
       <li>Un proceso aparte consulta Bóveda Fiscal, valida qué empresas están registradas y marca una bandera local por empresa. La pantalla de Facturación <b>nunca</b> consulta Bóveda Fiscal en vivo solo para decidir si mostrar el botón.</li>
       <li>El usuario abre el Listado de Facturas. Ve el botón <code class="v">Importar desde Bóveda Fiscal</code> solo si la bandera está marcada <b>y</b> tiene el permiso. Si falta cualquiera de las dos, el botón simplemente no aparece.</li>
-      <li>Al hacer clic, la ventana se abre y consulta de inmediato — sin pedir fecha ni filtro — mostrando un resumen (ej. <code class="v">5 facturas · $145,000.00</code>) y la tabla.
+      <li>Al hacer clic, la ventana se abre y consulta de inmediato — sin pedir fecha ni filtro — mostrando un resumen (ej. <code class="v">5 facturas pendientes de importar</code>) y la tabla.
         <div class="sub">
           <div>Sin resultados → mensaje <code class="v">No se encontraron CFDI pendientes de importar</code>.</div>
           <div>Los CFDI con el mismo UUID ya importado antes nunca vuelven a aparecer.</div>
@@ -168,7 +168,7 @@
           <div>Si pasa ambas → se da de alta en el Listado de Facturas con los datos del CFDI.</div>
         </div>
       </li>
-      <li>Al terminar, el usuario ve cuántos se importaron y cuántos no, agrupados por motivo (cancelados por UUID/RFC/total; sin cliente agrupado por RFC). Si la conexión se cae a la mitad, lo importado se queda y lo pendiente se reintenta después sin duplicar nada.</li>
+      <li>Al terminar, el usuario ve cuántos se importaron y cuántos no, agrupados por motivo (cancelados por UUID/RFC; sin cliente agrupado por RFC). Si la conexión se cae a la mitad, lo importado se queda y lo pendiente se reintenta después sin duplicar nada.</li>
       <li>Cancelar una factura importada por esta vía es idéntico a cancelar una capturada a mano — mismas reglas, sin excepción.</li>
     </ol>
 
@@ -285,17 +285,17 @@ const scenarios = [
 
 ["Al entrar se muestra de inmediato el total de CFDI pendientes",[
 ["given","la empresa activa tiene la bandera habilitada y el usuario tiene el permiso"],
-["and","existen 5 CFDI pendientes por un total de <em>$145,000.00</em>"],
+["and","existen 5 CFDI pendientes de importar"],
 ["when","el usuario hace clic en <em>Importar desde Bóveda Fiscal</em>"],
 ["then","se abre la ventana y consulta automáticamente, sin pedir filtros"],
 ["and","mientras consulta muestra un indicador de carga"],
-["and","al terminar muestra el resumen <em>5 facturas pendientes · $145,000.00</em> y la tabla"],
+["and","al terminar muestra el resumen <em>5 facturas pendientes de importar</em> y la tabla"],
 ["and","cada renglón muestra Fecha, RFC receptor, Serie/Folio, Total y UUID"]]],
 
 ["Acotar por fecha reduce el resumen y la tabla",[
-["given","la ventana ya muestra 5 CFDI por $145,000.00; de esos, 2 caen en <em>01–15 ago</em> por $60,000.00"],
+["given","la ventana ya muestra 5 CFDI; de esos, 2 caen en <em>01–15 ago</em>"],
 ["when","el usuario captura ese rango y da clic en <em>Generar</em>"],
-["then","el resumen cambia a <em>2 facturas · $60,000.00</em> y la tabla muestra solo esos 2"]]],
+["then","el resumen cambia a <em>2 facturas pendientes de importar</em> y la tabla muestra solo esos 2"]]],
 
 ["Sin ningún CFDI pendiente de importar",[
 ["given","la bandera está habilitada, el usuario tiene permiso y no hay CFDI pendientes"],
@@ -333,18 +333,17 @@ const scenarios = [
 ["and","el resultado muestra el motivo <em>No se encontró un cliente activo con ese RFC</em>"]]],
 
 ["El resumen agrupa los cancelados en el SAT",[
-["given","4 CFDI seleccionados; 3 con estatus <em>Cancelado</em> por $18,000.00; 1 vigente"],
+["given","4 CFDI seleccionados; 3 con estatus <em>Cancelado</em>; 1 vigente"],
 ["when","el usuario da clic en <em>Importar</em>"],
 ["then","se importa 1 de 4"],
-["and","se muestra la tabla <em>Facturas no importadas por estar canceladas en el SAT</em> con UUID, RFC y total"],
-["and","el total de esa tabla suma $18,000.00"]]],
+["and","se muestra la tabla <em>Facturas no importadas por estar canceladas en el SAT</em> con UUID y RFC"]]],
 
 ["El resumen agrupa por RFC los rechazados por falta de cliente",[
-["given","5 CFDI seleccionados: 2 con RFC <em>AAA010101AAA</em> ($25,000.00), 1 con <em>BBB020202BBB</em> ($10,000.00), 2 válidos"],
+["given","5 CFDI seleccionados: 2 con RFC <em>AAA010101AAA</em>, 1 con <em>BBB020202BBB</em>, 2 válidos"],
 ["when","el usuario da clic en <em>Importar</em>"],
 ["then","se importan 2 de 5"],
 ["and","la tabla <em>Facturas no importadas por cliente no encontrado</em> agrupa por RFC"],
-["and","muestra <em>AAA010101AAA · 2 CFDI · $25,000.00</em> y <em>BBB020202BBB · 1 CFDI · $10,000.00</em>"]]],
+["and","muestra <em>AAA010101AAA · 2 CFDI</em> y <em>BBB020202BBB · 1 CFDI</em>"]]],
 
 ["La conexión falla a la mitad del lote",[
 ["given","5 CFDI válidos seleccionados; la conexión se pierde tras importar 2"],

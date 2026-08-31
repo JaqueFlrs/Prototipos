@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HU49373 Bóveda Fiscal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;650&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3F5F7; --surface:#FFFFFF; --surface-2:#EFF2F4;
+    --text:#1B2430; --muted:#5B6472; --border:#E1E5EA;
+    --accent:#2A5D63; --accent-soft:#E4EEEC;
+    --given:#4A6FA5; --when:#B5762A; --then:#2A5D63; --and:#8A93A0;
+    --warn-bg:#FBF3E3; --warn-border:#E9CE96; --warn-text:#7A5A12;
+    --scope-bg:#F3EEF7; --scope-border:#D9C9E8; --scope-text:#5B3E75;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"IBM Plex Sans", system-ui, sans-serif;
+    margin:0; padding:0 1.25rem 6rem;
+  }
+  .page{max-width:760px; margin:0 auto; padding-top:2.5rem;}
+
+  .tags{display:flex; gap:.4rem; margin-bottom:.9rem;}
+  .tag{
+    font-family:"IBM Plex Mono", monospace; font-size:.72rem;
+    color:var(--accent); background:var(--accent-soft);
+    padding:.2rem .55rem; border-radius:4px; letter-spacing:.02em;
+  }
+  h1{
+    font-size:1.45rem; line-height:1.3; margin:0 0 1.5rem;
+    font-weight:650;
+  }
+
+  .tabbar{
+    display:flex; gap:.3rem; border-bottom:1px solid var(--border);
+    margin-bottom:1.8rem; position:sticky; top:0; background:var(--bg);
+    padding-top:.2rem; z-index:5;
+  }
+  .tabbtn{
+    font-family:"IBM Plex Sans", sans-serif; font-size:.85rem; font-weight:600;
+    color:var(--muted); background:none; border:none; cursor:pointer;
+    padding:.6rem .9rem; border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .tabbtn.active{color:var(--accent); border-bottom-color:var(--accent);}
+  .tabbtn:hover{color:var(--text);}
+
+  .tabpanel{display:none;}
+  .tabpanel.active{display:block;}
+
+  .lede{font-size:.94rem; line-height:1.7; color:var(--text); margin:0 0 1.6rem;}
+  .lede strong{color:var(--accent);}
+  .section-label{
+    font-size:.72rem; text-transform:uppercase; letter-spacing:.07em;
+    color:var(--muted); margin:1.9rem 0 .7rem;
+  }
+  .steps-list{counter-reset:step; display:flex; flex-direction:column; gap:.9rem; margin:0; padding:0; list-style:none;}
+  .steps-list > li{
+    counter-increment:step; position:relative; padding-left:2.3rem;
+    font-size:.92rem; line-height:1.6;
+  }
+  .steps-list > li::before{
+    content:counter(step); position:absolute; left:0; top:.05rem;
+    width:1.6rem; height:1.6rem; border-radius:50%; background:var(--accent-soft);
+    color:var(--accent); font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.78rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .steps-list .sub{margin:.4rem 0 0; padding-left:1rem; font-size:.87rem; color:var(--muted); border-left:2px solid var(--border);}
+  .steps-list .sub div{margin:.25rem 0;}
+  code.v{font-family:"IBM Plex Mono",monospace; font-size:.83rem; background:var(--surface-2); padding:.05rem .3rem; border-radius:3px;}
+
+  .cards{display:flex; flex-direction:column; gap:.7rem;}
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:.9rem 1.1rem; font-size:.88rem; line-height:1.55; margin-bottom:.7rem;
+  }
+  .card b{display:block; font-size:.86rem; margin-bottom:.25rem;}
+
+  .qa{display:flex; flex-direction:column; gap:.55rem;}
+  .qa div{font-size:.88rem; line-height:1.55;}
+  .qa .q{color:var(--muted);}
+  .qa .a{color:var(--text); font-weight:500;}
+
+  .checklist{display:flex; flex-direction:column; gap:.5rem; list-style:none; margin:0; padding:0;}
+  .checklist li{font-size:.89rem; display:flex; gap:.6rem; align-items:flex-start;}
+  .checklist li::before{content:"✓"; color:var(--accent); font-weight:700; flex-shrink:0;}
+
+  .story{
+    font-size:.9rem; color:var(--muted); line-height:1.65;
+    margin:0 0 1.5rem; padding-left:.9rem; border-left:2px solid var(--border);
+  }
+  .story strong{color:var(--text); font-weight:600;}
+  .background{
+    display:flex; gap:.6rem; align-items:baseline;
+    font-size:.85rem; color:var(--muted);
+    margin-bottom:1.4rem; padding-bottom:1.2rem; border-bottom:1px dashed var(--border);
+  }
+  .background .kw{color:var(--given); font-weight:600; font-family:"IBM Plex Mono",monospace; font-size:.78rem;}
+  .count-row{display:flex; justify-content:flex-end; margin-bottom:1rem;}
+  .count-row .n{font-size:.78rem; color:var(--muted); font-variant-numeric:tabular-nums;}
+  .scenarios{display:flex; flex-direction:column; gap:.9rem;}
+  .scenario{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem;}
+  .scenario .idx{font-family:"IBM Plex Mono", monospace; font-size:.72rem; color:var(--muted); margin-right:.5rem;}
+  .scenario h2{font-size:.96rem; margin:0 0 .75rem; font-weight:600;}
+  .stepsg{display:flex; flex-direction:column; gap:.32rem;}
+  .stepg{display:grid; grid-template-columns:4.2rem 1fr; gap:.6rem; font-size:.86rem; line-height:1.55;}
+  .stepg .kw{font-family:"IBM Plex Mono", monospace; font-size:.74rem; font-weight:600; text-align:right; padding-top:.1rem;}
+  .stepg.given .kw{color:var(--given);}
+  .stepg.when .kw{color:var(--when);}
+  .stepg.then .kw{color:var(--then);}
+  .stepg.and .kw{color:var(--and);}
+  .stepg .txt{color:var(--text);}
+  .stepg .txt em{font-style:normal; font-family:"IBM Plex Mono", monospace; font-size:.82rem; background:var(--surface-2); padding:.05rem .3rem; border-radius:3px;}
+
+  .box{border-radius:10px; padding:1rem 1.2rem; font-size:.86rem; line-height:1.6; border:1px solid var(--border); margin-bottom:.8rem;}
+  .box.dod{background:var(--surface);}
+  .box.dod .grp{font-weight:600; font-size:.8rem; color:var(--text); margin:.7rem 0 .3rem;}
+  .box.dod .grp:first-child{margin-top:0;}
+  .box.dod ul{margin:0; padding-left:1.1rem; color:var(--muted);}
+  .box.dod li{margin:.2rem 0;}
+  .box.scope{background:var(--scope-bg); border-color:var(--scope-border); color:var(--scope-text);}
+  .box.scope ul{margin:0; padding-left:1.1rem;}
+  .box.scope li{margin:.3rem 0;}
+</style>
+</head>
+<body>
+
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para el ERP GM Transport, eso significa colores, tipografía, estructura de paneles y componentes propios del ERP.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div class="page">
+  <div class="tags"><span class="tag">HU49373</span><span class="tag">BovedaFiscalFacturas</span></div>
+  <h1>Importación de facturas desde Bóveda Fiscal</h1>
+
+  <div class="tabbar">
+    <button class="tabbtn active" data-tab="dev">Explicación Dev</button>
+    <button class="tabbtn" data-tab="gherkin">Gherkins</button>
+    <button class="tabbtn" data-tab="dod">DoD</button>
+  </div>
+
+  <section class="tabpanel active" id="tab-dev">
+    <p class="lede">
+      Hoy, si un CFDI de ingreso ya existe en Bóveda Fiscal pero nunca se capturó en Facturación, no hay forma de traerlo automáticamente — hay que darlo de alta a mano. Se pide el mismo mecanismo que ya existe en Cuentas por Pagar (<strong>GM Importa</strong>), del lado de Facturación. A futuro, esta vía debe <strong>sustituir</strong> a GM Importa, no convivir con él para siempre. No todos los clientes tienen Bóveda Fiscal, así que el botón solo aparece donde sí aplica.
+    </p>
+
+    <div class="section-label">Paso a paso</div>
+    <ol class="steps-list">
+      <li>Un proceso aparte consulta Bóveda Fiscal, valida qué empresas están registradas y marca una bandera local por empresa. La pantalla de Facturación <b>nunca</b> consulta Bóveda Fiscal en vivo solo para decidir si mostrar el botón.</li>
+      <li>El usuario abre el Listado de Facturas. Ve el botón <code class="v">Importar desde Bóveda Fiscal</code> solo si la bandera está marcada <b>y</b> tiene el permiso. Si falta cualquiera de las dos, el botón simplemente no aparece.</li>
+      <li>Al hacer clic, la ventana se abre y consulta de inmediato — sin pedir fecha ni filtro — mostrando un resumen (ej. <code class="v">5 facturas · $145,000.00</code>) y la tabla.
+        <div class="sub">
+          <div>Sin resultados → mensaje <code class="v">No se encontraron CFDI pendientes de importar</code>.</div>
+          <div>Los CFDI con el mismo UUID ya importado antes nunca vuelven a aparecer.</div>
+          <div>El rango de fechas es opcional, solo para acotar — no es requisito para ver algo.</div>
+        </div>
+      </li>
+      <li>Cada renglón muestra Fecha, RFC del receptor, Serie y Folio, Total y UUID.</li>
+      <li>El usuario selecciona los CFDI a importar — sin límite. Si selecciona más de 500, el sistema los procesa en lotes de 500 automáticamente y muestra el avance.</li>
+      <li>Al importar, por cada CFDI:
+        <div class="sub">
+          <div>Cancelado en el SAT → no se importa, motivo <code class="v">CFDI cancelado en el SAT</code>.</div>
+          <div>RFC receptor sin cliente activo en el catálogo → no se importa, motivo <code class="v">No se encontró un cliente activo con ese RFC</code>.</div>
+          <div>Si pasa ambas → se da de alta en el Listado de Facturas con los datos del CFDI.</div>
+        </div>
+      </li>
+      <li>Al terminar, el usuario ve cuántos se importaron y cuántos no, agrupados por motivo (cancelados por UUID/RFC/total; sin cliente agrupado por RFC). Si la conexión se cae a la mitad, lo importado se queda y lo pendiente se reintenta después sin duplicar nada.</li>
+      <li>Cancelar una factura importada por esta vía es idéntico a cancelar una capturada a mano — mismas reglas, sin excepción.</li>
+    </ol>
+
+    <div class="section-label">Casos que también debes cubrir</div>
+    <div class="cards">
+      <div class="card"><b>Certificado del emisor</b>No se revalida su vigencia — se confía en Bóveda Fiscal. Si hay varios certificados vigentes, se resuelve con el mismo mecanismo automático del alta manual.</div>
+      <div class="card"><b>Duplicados a nivel de base de datos</b>El UUID debe quedar protegido contra duplicados en la base de datos, no solo por el filtro de pantalla.</div>
+      <div class="card"><b>Bitácora</b>Cada acción (entrar, buscar, importar) se registra en el historial, igual que en la pantalla equivalente de Cuentas por Pagar.</div>
+      <div class="card"><b>Permiso nuevo</b>Se da de alta un permiso propio de Facturación — no se reutiliza el de Cuentas por Pagar ni uno genérico de administrador.</div>
+      <div class="card"><b>Bloqueo del CFDI</b>Se libera de inmediato si el usuario cierra la ventana o navega fuera. Como respaldo, si ese cierre no se detecta (ej. se cae la conexión), el bloqueo expira solo a los 5 minutos de inactividad — nunca queda bloqueado indefinidamente.</div>
+    </div>
+
+    <div class="section-label">Excusas ya resueltas</div>
+    <div class="qa">
+      <div><span class="q">¿Y si la empresa no tiene Bóveda Fiscal?</span> <span class="a">El botón no aparece. No hay mensaje de error.</span></div>
+      <div><span class="q">¿Reviso el certificado antes de importar?</span> <span class="a">No, se confía en Bóveda Fiscal.</span></div>
+      <div><span class="q">¿Qué hago si el lote falla a la mitad?</span> <span class="a">Lo importado se queda; el resto se reintenta después.</span></div>
+      <div><span class="q">¿Filtro los CFDI cancelados después de importarlos?</span> <span class="a">No, se filtran antes de insertar.</span></div>
+      <div><span class="q">¿La cancelación de una factura importada necesita regla especial?</span> <span class="a">No, es idéntica a la cancelación manual.</span></div>
+      <div><span class="q">¿Pido un rango de fechas antes de mostrar algo?</span> <span class="a">No, el resumen y la tabla aparecen de inmediato; el rango es opcional.</span></div>
+      <div><span class="q">¿Bloqueo la selección en 500?</span> <span class="a">No — aquí se decidió distinto de Cuentas por Pagar: todo se selecciona, se procesa por lotes.</span></div>
+    </div>
+
+    <div class="section-label">Cómo saber que quedó bien</div>
+    <ul class="checklist">
+      <li>Una empresa sin la bandera no ve el botón, aunque tenga el permiso.</li>
+      <li>Al abrir la ventana, el resumen y la tabla aparecen sin pedir ningún filtro.</li>
+      <li>Un CFDI ya importado no vuelve a aparecer en una búsqueda posterior.</li>
+      <li>Un CFDI cancelado en el SAT nunca llega a existir como factura.</li>
+      <li>Una factura importada se cancela igual que una manual.</li>
+      <li>Seleccionar más de 500 no bloquea nada — se procesa por lotes con avance visible.</li>
+    </ul>
+  </section>
+
+  <section class="tabpanel" id="tab-gherkin">
+    <p class="story">
+      <strong>Yo</strong> como usuario de Facturación
+      <strong>requiero</strong> consultar en Bóveda Fiscal los CFDI de ingreso que aún no están en el ERP e importarlos
+      <strong>para</strong> no capturarlos uno por uno y evitar que falten facturas en Facturación.
+    </p>
+    <div class="background"><span class="kw">Background</span> el usuario tiene abierto el Listado de Facturas</div>
+    <div class="count-row"><span class="n"></span></div>
+    <div class="scenarios" id="scenarios"></div>
+  </section>
+
+  <section class="tabpanel" id="tab-dod">
+    <div class="section-label" style="margin-top:0">Definition of Done</div>
+    <div class="box dod">
+      <div class="grp">Datos y validación</div>
+      <ul>
+        <li>Tipo de dato en pantalla = tipo de dato en BD</li>
+        <li>Longitud máxima en pantalla no excede la de BD</li>
+        <li>Campos NOT NULL en BD son obligatorios en pantalla</li>
+      </ul>
+      <div class="grp">Ortografía y redacción</div>
+      <ul><li>Correctas en todo texto visible (títulos, labels, mensajes, tooltips)</li></ul>
+      <div class="grp">Impacto en el sistema</div>
+      <ul>
+        <li>Reportes, procesos y pantallas existentes siguen funcionando igual</li>
+        <li>Si el cambio toca un catálogo compartido, funciona igual para todos los clientes salvo configuración explícita</li>
+      </ul>
+      <div class="grp">Consistencia con el ERP</div>
+      <ul>
+        <li>Filtros de catálogo: texto + botón "…", nunca dropdown</li>
+        <li>Mensajes con el mismo estilo y tono del resto del ERP</li>
+        <li>Reutiliza la conexión de Bóveda Fiscal del Listado de Pasivos — pero sin el tope de 500 de esa pantalla; aquí se selecciona todo y se procesa por lotes de 500</li>
+        <li>La bandera "Bóveda Fiscal habilitada" es local por empresa, actualizada por un proceso aparte — nunca se verifica en vivo al abrir la pantalla</li>
+        <li>No se revalida vigencia del certificado del emisor — se confía en Bóveda Fiscal</li>
+        <li>El UUID queda protegido contra duplicados a nivel de base de datos, no solo por el filtro de pantalla</li>
+        <li>El bloqueo de un CFDI se libera de inmediato al cerrar la ventana, y como respaldo expira a los 5 minutos de inactividad si el cierre no se detectó</li>
+      </ul>
+      <div class="grp">Permisos</div>
+      <ul><li>Respeta los derechos de acceso ya configurados</li></ul>
+    </div>
+
+    <div class="section-label">Fuera de alcance</div>
+    <div class="box scope">
+      <ul>
+        <li>Sin carga masiva del histórico — el usuario elige el rango cada vez</li>
+        <li>Busca sustituir a futuro a GM Importa (Hades) del lado de Cuentas por Pagar; no lo modifica ni lo elimina</li>
+        <li>No valida si el estatus SAT de una factura ya existente cambió después del alta (ej. cancelación posterior) — se propone como HU aparte</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+document.querySelectorAll('.tabbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+const scenarios = [
+["El botón se muestra cuando la empresa tiene la bandera habilitada",[
+["given","la empresa activa tiene marcada la bandera de Bóveda Fiscal habilitada"],
+["and","el usuario tiene el permiso para importar facturas desde Bóveda Fiscal"],
+["when","el usuario revisa el Listado de Facturas"],
+["then","ve el botón <em>Importar desde Bóveda Fiscal</em>"]]],
+
+["El botón no se muestra si la empresa no tiene la bandera habilitada",[
+["given","la empresa activa no tiene marcada la bandera de Bóveda Fiscal habilitada"],
+["when","el usuario revisa el Listado de Facturas"],
+["then","no ve el botón <em>Importar desde Bóveda Fiscal</em>"]]],
+
+["El botón no se muestra a un usuario sin el permiso",[
+["given","la empresa activa tiene marcada la bandera de Bóveda Fiscal habilitada"],
+["and","el usuario no tiene el permiso para importar facturas desde Bóveda Fiscal"],
+["when","el usuario revisa el Listado de Facturas"],
+["then","no ve el botón <em>Importar desde Bóveda Fiscal</em>"]]],
+
+["Al entrar se muestra de inmediato el total de CFDI pendientes",[
+["given","la empresa activa tiene la bandera habilitada y el usuario tiene el permiso"],
+["and","existen 5 CFDI pendientes por un total de <em>$145,000.00</em>"],
+["when","el usuario hace clic en <em>Importar desde Bóveda Fiscal</em>"],
+["then","se abre la ventana y consulta automáticamente, sin pedir filtros"],
+["and","mientras consulta muestra un indicador de carga"],
+["and","al terminar muestra el resumen <em>5 facturas pendientes · $145,000.00</em> y la tabla"],
+["and","cada renglón muestra Fecha, RFC receptor, Serie/Folio, Total y UUID"]]],
+
+["Acotar por fecha reduce el resumen y la tabla",[
+["given","la ventana ya muestra 5 CFDI por $145,000.00; de esos, 2 caen en <em>01–15 ago</em> por $60,000.00"],
+["when","el usuario captura ese rango y da clic en <em>Generar</em>"],
+["then","el resumen cambia a <em>2 facturas · $60,000.00</em> y la tabla muestra solo esos 2"]]],
+
+["Sin ningún CFDI pendiente de importar",[
+["given","la bandera está habilitada, el usuario tiene permiso y no hay CFDI pendientes"],
+["when","el usuario hace clic en <em>Importar desde Bóveda Fiscal</em>"],
+["then","tras consultar, en vez de la tabla ve <em>No se encontraron CFDI pendientes de importar</em>"]]],
+
+["Un CFDI ya importado no vuelve a aparecer",[
+["given","el CFDI <em>UUID AAAAAAAA-…</em> ya fue importado antes"],
+["when","el usuario consulta un rango que lo incluye"],
+["then","ese UUID no aparece en la tabla de resultados"]]],
+
+["Seleccionar más de 500 CFDI",[
+["given","existen 800 CFDI pendientes"],
+["when","el usuario selecciona los 800 y da clic en <em>Importar</em>"],
+["then","el sistema permite la selección completa"],
+["and","procesa en lotes de 500 sin que el usuario los divida"],
+["and","muestra el avance mientras procesa"]]],
+
+["Importar exitosamente los CFDI seleccionados",[
+["given","3 CFDI vigentes con RFC receptor de clientes activos"],
+["when","el usuario da clic en <em>Importar</em>"],
+["then","las 3 facturas aparecen en el Listado con UUID, cliente y total"],
+["and","ve el mensaje <em>Se importaron 3 de 3 facturas seleccionadas</em>"]]],
+
+["Un CFDI cancelado en el SAT no se importa",[
+["given","un CFDI seleccionado con estatus <em>Cancelado</em> en el SAT"],
+["when","el usuario da clic en <em>Importar</em>"],
+["then","no se da de alta"],
+["and","el resultado muestra el motivo <em>CFDI cancelado en el SAT</em>"]]],
+
+["Un RFC receptor sin cliente en el catálogo no se importa",[
+["given","un CFDI cuyo RFC receptor no coincide con ningún cliente activo"],
+["when","el usuario da clic en <em>Importar</em>"],
+["then","no se da de alta"],
+["and","el resultado muestra el motivo <em>No se encontró un cliente activo con ese RFC</em>"]]],
+
+["El resumen agrupa los cancelados en el SAT",[
+["given","4 CFDI seleccionados; 3 con estatus <em>Cancelado</em> por $18,000.00; 1 vigente"],
+["when","el usuario da clic en <em>Importar</em>"],
+["then","se importa 1 de 4"],
+["and","se muestra la tabla <em>Facturas no importadas por estar canceladas en el SAT</em> con UUID, RFC y total"],
+["and","el total de esa tabla suma $18,000.00"]]],
+
+["El resumen agrupa por RFC los rechazados por falta de cliente",[
+["given","5 CFDI seleccionados: 2 con RFC <em>AAA010101AAA</em> ($25,000.00), 1 con <em>BBB020202BBB</em> ($10,000.00), 2 válidos"],
+["when","el usuario da clic en <em>Importar</em>"],
+["then","se importan 2 de 5"],
+["and","la tabla <em>Facturas no importadas por cliente no encontrado</em> agrupa por RFC"],
+["and","muestra <em>AAA010101AAA · 2 CFDI · $25,000.00</em> y <em>BBB020202BBB · 1 CFDI · $10,000.00</em>"]]],
+
+["La conexión falla a la mitad del lote",[
+["given","5 CFDI válidos seleccionados; la conexión se pierde tras importar 2"],
+["when","el usuario intenta continuar"],
+["then","las 2 facturas ya importadas permanecen en el Listado"],
+["and","ve <em>Se importaron 2 de 5, revisa el detalle de las que no se importaron</em>"]]],
+
+["Reintentar tras una falla parcial no duplica nada",[
+["given","ya se importaron 2 facturas de una selección anterior de 5"],
+["when","el usuario vuelve a consultar el mismo rango"],
+["then","la tabla solo muestra los 3 CFDI todavía pendientes"]]],
+
+["Dos usuarios intentan importar el mismo CFDI",[
+["given","<em>Usuario A</em> ya seleccionó un CFDI y lo está importando"],
+["when","<em>Usuario B</em> intenta seleccionar ese mismo CFDI"],
+["then","el sistema no lo permite"],
+["and","<em>Usuario B</em> ve <em>Este CFDI ya está siendo importado por otro usuario</em>"]]],
+
+["El bloqueo se libera si el primer usuario cierra la ventana sin terminar",[
+["given","<em>Usuario A</em> seleccionó un CFDI y no ha terminado de importarlo"],
+["when","<em>Usuario A</em> cierra la ventana sin completar la importación"],
+["then","el CFDI queda disponible de inmediato para otro usuario"]]],
+
+["El bloqueo expira solo si el cierre no se detectó",[
+["given","la conexión de <em>Usuario A</em> se cayó sin cerrar la ventana correctamente"],
+["when","pasan 5 minutos sin actividad sobre ese CFDI"],
+["then","el bloqueo expira automáticamente y el CFDI queda disponible"]]],
+
+["Cancelar una factura importada desde Bóveda Fiscal",[
+["given","una factura importada por esta vía, sin abonos ni pagos"],
+["when","el usuario la cancela indicando el motivo"],
+["then","cambia a <em>Cancelada</em>, igual que una factura capturada manualmente"]]],
+];
+
+const el = document.getElementById('scenarios');
+scenarios.forEach(([title, steps], i)=>{
+  const card = document.createElement('div');
+  card.className = 'scenario';
+  const stepsHtml = steps.map(([kw,txt])=>`
+    <div class="stepg ${kw}"><span class="kw">${kw}</span><span class="txt">${txt}</span></div>
+  `).join('');
+  card.innerHTML = `
+    <h2><span class="idx">${String(i+1).padStart(2,'0')}</span>${title}</h2>
+    <div class="stepsg">${stepsHtml}</div>
+  `;
+  el.appendChild(card);
+});
+document.querySelector('.count-row .n').textContent = scenarios.length + ' escenarios';
+</script>
+</body>
+</html>

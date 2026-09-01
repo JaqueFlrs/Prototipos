@@ -151,7 +151,8 @@
     <div class="section-label">Qué hay que construir</div>
     <div class="cards">
       <div class="card"><b>Botón nuevo — hoy NO existe</b>Se agrega un botón llamado <code class="v">Importar desde Bóveda Fiscal</code> en la pantalla <b>Listado de Facturas</b> del módulo de Facturación (donde hoy se ven y se dan de alta las facturas). Ese botón no existe hoy ahí — hay que crearlo.</div>
-      <div class="card"><b>Mismo patrón que Cuentas por Pagar</b>Es exactamente el mismo mecanismo que ya existe en el Listado de Pasivos, botón "Generar Pasivo Vía Bóveda Fiscal" — se construye el equivalente para Facturas.</div>
+      <div class="card"><b>Este ticket es 100% de Facturación</b>NO se toca nada en Cuentas por Pagar ni en la pantalla de Pasivos. Pasivos se menciona abajo únicamente como referencia de un mecanismo que ya existe ahí — no como el lugar donde va este botón.</div>
+      <div class="card"><b>Mismo patrón que Cuentas por Pagar</b>Es exactamente el mismo mecanismo que ya existe en el Listado de Pasivos, botón "Generar Pasivo Vía Bóveda Fiscal" — se construye el equivalente, pero en Facturación, no en Pasivos.</div>
       <div class="card"><b>Si ya existe algo parecido</b>Confirmar con Jaqueline antes de asumir que ya cubre esto — no cerrar el ticket por parecido.</div>
     </div>
 
@@ -277,7 +278,8 @@ const scenarios = [
 ["given","hoy el Listado de Facturas NO tiene ningún botón para importar desde Bóveda Fiscal"],
 ["when","se libera esta HU"],
 ["then","el Listado de Facturas tiene un botón nuevo llamado <em>Importar desde Bóveda Fiscal</em>"],
-["and","ese botón está en la misma pantalla donde el usuario da de alta y consulta facturas manualmente"]]],
+["and","ese botón está en la misma pantalla donde el usuario da de alta y consulta facturas manualmente"],
+["and","este botón vive en el módulo de Facturación, no en Cuentas por Pagar ni en el Listado de Pasivos"]]],
 
 ["El botón se muestra cuando la empresa tiene la bandera habilitada",[
 ["given","la empresa activa tiene marcada la bandera de Bóveda Fiscal habilitada"],

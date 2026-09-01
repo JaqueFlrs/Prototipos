@@ -148,6 +148,13 @@
       Hoy, si un CFDI de ingreso ya existe en Bóveda Fiscal pero nunca se capturó en Facturación, no hay forma de traerlo automáticamente — hay que darlo de alta a mano. Se pide el mismo mecanismo que ya existe en Cuentas por Pagar (<strong>GM Importa</strong>), del lado de Facturación. A futuro, esta vía debe <strong>sustituir</strong> a GM Importa, no convivir con él para siempre. No todos los clientes tienen Bóveda Fiscal, así que el botón solo aparece donde sí aplica.
     </p>
 
+    <div class="section-label">Qué hay que construir</div>
+    <div class="cards">
+      <div class="card"><b>Botón nuevo — hoy NO existe</b>Se agrega un botón llamado <code class="v">Importar desde Bóveda Fiscal</code> en la pantalla <b>Listado de Facturas</b> del módulo de Facturación (donde hoy se ven y se dan de alta las facturas). Ese botón no existe hoy ahí — hay que crearlo.</div>
+      <div class="card"><b>Mismo patrón que Cuentas por Pagar</b>Es exactamente el mismo mecanismo que ya existe en el Listado de Pasivos, botón "Generar Pasivo Vía Bóveda Fiscal" — se construye el equivalente para Facturas.</div>
+      <div class="card"><b>Si ya existe algo parecido</b>Confirmar con Jaqueline antes de asumir que ya cubre esto — no cerrar el ticket por parecido.</div>
+    </div>
+
     <div class="section-label">Paso a paso</div>
     <ol class="steps-list">
       <li>Un proceso aparte consulta Bóveda Fiscal, valida qué empresas están registradas y marca una bandera local por empresa. La pantalla de Facturación <b>nunca</b> consulta Bóveda Fiscal en vivo solo para decidir si mostrar el botón.</li>
@@ -266,6 +273,12 @@ document.querySelectorAll('.tabbtn').forEach(btn=>{
 });
 
 const scenarios = [
+["Se agrega el botón nuevo en el Listado de Facturas",[
+["given","hoy el Listado de Facturas NO tiene ningún botón para importar desde Bóveda Fiscal"],
+["when","se libera esta HU"],
+["then","el Listado de Facturas tiene un botón nuevo llamado <em>Importar desde Bóveda Fiscal</em>"],
+["and","ese botón está en la misma pantalla donde el usuario da de alta y consulta facturas manualmente"]]],
+
 ["El botón se muestra cuando la empresa tiene la bandera habilitada",[
 ["given","la empresa activa tiene marcada la bandera de Bóveda Fiscal habilitada"],
 ["and","el usuario tiene el permiso para importar facturas desde Bóveda Fiscal"],

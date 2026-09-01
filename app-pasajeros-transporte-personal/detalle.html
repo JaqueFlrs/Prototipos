@@ -1,0 +1,1440 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Transporte — Propuesta Ejecutiva</title>
+
+<!-- ==========================================================================
+     PROPUESTA EJECUTIVA — App de seguimiento de viaje para transporte de personal
+     Archivo único. Sin backend, sin instalación, sin dependencias obligatorias.
+
+     Índice del archivo:
+       1. VARIABLES Y BASE
+       2. LAYOUT
+       3. COMPONENTES
+       4. PROTOTIPO (embebido en el documento)
+       5. CONTENIDO — 11 secciones
+       6. DATOS DE DEMOSTRACIÓN
+       7. LÓGICA
+     ========================================================================== -->
+
+<style>
+/* ============ 1. VARIABLES Y BASE ============ */
+:root{
+  --ink:#17191e; --ink-2:#525861; --ink-3:#8a9098; --ink-4:#aeb4bb;
+  --bg:#fff; --bg-2:#fafbfc; --bg-3:#f4f6f8;
+  --line:#e7e9ec; --line-2:#f1f3f5;
+  --accent:#C2410C; --accent-2:#9A3412; --accent-soft:#FEF5F0; --accent-line:#F3D8C9;
+  --ok:#15803D; --ok-soft:#F2FBF5;
+  --warn:#B45309; --warn-soft:#FFFBEB; --warn-line:#EFDFBB;
+  --info:#1D4ED8; --info-soft:#F3F6FF;
+  --nav-w:238px; --max:760px; --r:10px;
+  --font:'Inter','Segoe UI',system-ui,-apple-system,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font); background:var(--bg); color:var(--ink);
+  font-size:15.5px; line-height:1.7; -webkit-font-smoothing:antialiased; letter-spacing:-.005em;
+}
+h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640}
+p{color:var(--ink-2); margin-bottom:17px}
+p:last-child{margin-bottom:0}
+strong{color:var(--ink); font-weight:600}
+a{color:var(--accent); text-decoration:none}
+
+/* ============ 2. LAYOUT ============ */
+.shell{display:flex; min-height:100vh}
+.nav{
+  width:var(--nav-w); flex-shrink:0; border-right:1px solid var(--line);
+  padding:30px 0; position:sticky; top:0; height:100vh; overflow-y:auto; background:var(--bg-2);
+}
+.nav-brand{padding:0 26px 20px; border-bottom:1px solid var(--line); margin-bottom:14px}
+.nav-mark{display:inline-flex; align-items:center; gap:9px; font-size:15px; font-weight:680}
+.nav-dot{width:9px; height:9px; border-radius:50%; background:var(--accent); flex-shrink:0}
+.nav-sub{font-size:11.5px; color:var(--ink-3); margin-top:5px; line-height:1.4}
+.nav-list{list-style:none; padding:0 12px}
+.nav-list a{
+  display:flex; gap:10px; padding:7px 14px; font-size:13.2px; color:var(--ink-2);
+  border-radius:7px; transition:background .13s, color .13s;
+}
+.nav-list a:hover{background:var(--bg-3); color:var(--ink)}
+.nav-list a.on{background:var(--accent-soft); color:var(--accent-2); font-weight:600}
+.nav-num{font-size:10.5px; color:var(--ink-4); font-variant-numeric:tabular-nums; min-width:14px}
+.nav-list a.on .nav-num{color:var(--accent)}
+.nav-foot{padding:18px 26px 0; margin-top:16px; border-top:1px solid var(--line)}
+.vswitch{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden}
+.vswitch button{
+  flex:1; border:none; background:var(--bg); font-family:inherit; font-size:11.5px;
+  padding:7px 4px; cursor:pointer; color:var(--ink-3);
+}
+.vswitch button.on{background:var(--ink); color:#fff; font-weight:600}
+.vswitch-lbl{font-size:10px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-4); margin-bottom:7px; font-weight:600}
+
+.main{flex:1; min-width:0}
+.wrap{max-width:var(--max); margin:0 auto; padding:0 44px}
+section{padding:74px 0; border-bottom:1px solid var(--line-2)}
+section:last-of-type{border-bottom:none}
+.eyebrow{font-size:10.5px; font-weight:680; text-transform:uppercase; letter-spacing:.1em; color:var(--accent); margin-bottom:12px}
+h2.sec{font-size:29px; margin-bottom:20px}
+.lede{font-size:17px; color:var(--ink-2); line-height:1.62; margin-bottom:0}
+
+/* Portada */
+.hero{padding:92px 0 68px; border-bottom:1px solid var(--line-2)}
+.hero-tag{
+  display:inline-block; font-size:11px; font-weight:600; letter-spacing:.05em;
+  text-transform:uppercase; color:var(--accent-2); background:var(--accent-soft);
+  border:1px solid var(--accent-line); padding:4px 11px; border-radius:20px; margin-bottom:24px;
+}
+.hero h1{font-size:43px; line-height:1.12; margin-bottom:22px}
+.hero-claim{
+  font-size:18.5px; color:var(--ink-2); line-height:1.58;
+  padding-left:20px; border-left:3px solid var(--accent);
+}
+
+/* ============ 3. COMPONENTES ============ */
+/* Lista numerada de puntos — sustituye rejillas de tarjetas */
+.plist{list-style:none; margin-top:26px}
+.plist li{padding:20px 0; border-top:1px solid var(--line-2); display:flex; gap:20px}
+.plist li:last-child{border-bottom:1px solid var(--line-2)}
+.plist .n{
+  font-size:11px; font-weight:700; color:var(--accent); flex-shrink:0;
+  font-variant-numeric:tabular-nums; padding-top:4px; min-width:18px;
+}
+.plist h3{font-size:15.5px; margin-bottom:4px}
+.plist p{font-size:14.5px; margin-bottom:0; line-height:1.6}
+
+/* Lista simple con viñeta cuadrada */
+.slist{list-style:none; margin:14px 0 0}
+.slist li{font-size:14.8px; color:var(--ink-2); padding:5px 0 5px 21px; position:relative; line-height:1.6}
+.slist li::before{
+  content:''; position:absolute; left:2px; top:14px; width:7px; height:7px;
+  border:1.5px solid var(--accent); border-radius:2px;
+}
+.slist.mute li::before{border-color:var(--ink-4); background:var(--bg-3)}
+
+/* Subtítulo dentro de sección */
+h3.sub{font-size:17px; margin:42px 0 12px}
+h3.sub:first-of-type{margin-top:34px}
+
+/* Perfiles / bloques de dos columnas de texto */
+.cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:34px; margin-top:30px}
+.col-k{font-size:10.5px; font-weight:680; text-transform:uppercase; letter-spacing:.09em; color:var(--accent); margin-bottom:9px}
+.cols h4{font-size:15px; font-weight:620; margin-bottom:5px}
+.cols p{font-size:14.5px; margin-bottom:0}
+
+/* Flujo interactivo, compacto */
+.flow{display:flex; gap:7px; margin-top:28px; flex-wrap:wrap}
+.step{
+  flex:1; min-width:104px; border:1px solid var(--line); border-radius:8px;
+  padding:12px 13px; cursor:pointer; background:var(--bg); text-align:left;
+  font-family:inherit; transition:border-color .14s, background .14s;
+}
+.step:hover{border-color:var(--accent-line); background:var(--accent-soft)}
+.step.on{border-color:var(--accent); background:var(--accent-soft)}
+.step-n{font-size:10px; font-weight:680; color:var(--ink-4); margin-bottom:5px; font-variant-numeric:tabular-nums}
+.step.on .step-n{color:var(--accent)}
+.step-t{font-size:12.5px; font-weight:580; line-height:1.35}
+.flow-panel{margin-top:16px; border-left:3px solid var(--accent); padding:4px 0 4px 20px; min-height:76px}
+.flow-panel .who{font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; font-weight:660; color:var(--accent); margin-bottom:6px}
+.flow-panel h4{font-size:16px; margin-bottom:6px}
+.flow-panel p{font-size:14.8px; margin-bottom:0}
+
+/* Fases */
+.phases{margin-top:28px}
+.phase{padding:22px 0; border-top:1px solid var(--line-2); display:flex; gap:24px}
+.phase:last-child{border-bottom:1px solid var(--line-2)}
+.phase-k{
+  flex-shrink:0; width:96px; font-size:10.5px; font-weight:680; text-transform:uppercase;
+  letter-spacing:.08em; color:var(--ink-4); padding-top:4px;
+}
+.phase.mvp .phase-k{color:var(--accent)}
+.phase-b{flex:1; min-width:0}
+.phase-t{font-size:16px; font-weight:620; margin-bottom:7px}
+.phase.mvp .phase-t{color:var(--accent-2)}
+.phase-b p{font-size:14.5px; margin-bottom:0}
+.badge-mvp{
+  display:inline-block; font-size:9.5px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em; background:var(--accent); color:#fff;
+  padding:2px 8px; border-radius:20px; margin-left:8px; vertical-align:2px;
+}
+
+/* Tabla */
+.tbl-wrap{margin-top:26px; border-top:1px solid var(--line); overflow-x:auto}
+table.t{width:100%; border-collapse:collapse; font-size:14.2px; min-width:520px}
+table.t th{
+  text-align:left; padding:11px 0; font-size:10.5px; text-transform:uppercase;
+  letter-spacing:.08em; color:var(--ink-3); font-weight:680;
+  border-bottom:1px solid var(--line); white-space:nowrap;
+}
+table.t th:not(:first-child),table.t td:not(:first-child){padding-left:22px}
+table.t td{padding:16px 0; border-bottom:1px solid var(--line-2); vertical-align:top; color:var(--ink-2); line-height:1.55}
+table.t td:first-child{color:var(--ink); font-weight:560}
+
+/* Nota */
+.note{border-left:3px solid var(--info); background:var(--info-soft); padding:16px 20px; border-radius:0 8px 8px 0; margin-top:28px}
+.note.warn{border-left-color:var(--warn); background:var(--warn-soft)}
+.note-k{font-size:10.5px; font-weight:680; text-transform:uppercase; letter-spacing:.08em; color:var(--info); margin-bottom:6px}
+.note.warn .note-k{color:var(--warn)}
+.note p{font-size:14.2px; margin-bottom:0; line-height:1.6}
+
+/* Marcador de pendiente */
+.tbd{
+  display:inline-block; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:11.5px;
+  background:var(--warn-soft); color:var(--warn); border:1px dashed var(--warn-line);
+  padding:1px 7px; border-radius:4px; font-weight:600;
+}
+
+/* Acordeón */
+.acc{border-bottom:1px solid var(--line-2)}
+.acc:first-of-type{border-top:1px solid var(--line-2)}
+.acc-h{
+  width:100%; text-align:left; border:none; background:transparent; cursor:pointer;
+  padding:17px 0; font-family:inherit; font-size:15px; font-weight:600; color:var(--ink);
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+}
+.acc-h .chev{color:var(--ink-4); font-size:12px; transition:transform .18s; flex-shrink:0}
+.acc.open .chev{transform:rotate(180deg)}
+.acc-b{display:none; padding:0 0 24px}
+.acc.open .acc-b{display:block}
+.acc-b p{font-size:14.2px}
+.acc-b ul{list-style:none}
+.acc-b li{font-size:14.2px; color:var(--ink-2); padding:5px 0 5px 19px; position:relative; line-height:1.6}
+.acc-b li::before{content:'—'; position:absolute; left:0; color:var(--ink-4)}
+.acc-b h4{font-size:11.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-3); margin:20px 0 7px; font-weight:680}
+.acc-b h4:first-child{margin-top:0}
+
+/* Decisión */
+.decision{margin-top:32px; border:1px solid var(--ink); border-radius:var(--r); overflow:hidden}
+.decision-h{background:var(--ink); color:#fff; padding:15px 24px}
+.decision-h .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.1em; opacity:.62; margin-bottom:3px; font-weight:600}
+.decision-h h3{font-size:16.5px; color:#fff}
+.decision-b{padding:6px 24px 20px}
+.dec-row{display:flex; gap:15px; padding:15px 0; border-bottom:1px solid var(--line-2)}
+.dec-row:last-child{border-bottom:none}
+.dec-box{width:18px; height:18px; border:1.5px solid var(--ink-4); border-radius:4px; flex-shrink:0; margin-top:3px}
+.dec-t{font-size:14.5px; font-weight:600; margin-bottom:2px}
+.dec-d{font-size:13.8px; color:var(--ink-2); line-height:1.5}
+
+/* Visibilidad por modo de vista */
+body.exec .detail-only{display:none !important}
+.exec-hint{display:none; margin-top:24px; font-size:13.5px; color:var(--ink-3); font-style:italic}
+body.exec .exec-hint{display:block}
+
+/* ============ 4. PROTOTIPO EMBEBIDO ============ */
+/* Banda con fondo propio para distinguirlo, pero alineada al mismo eje que el texto */
+.proto-band{
+  background:var(--bg-2); border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line); padding:0;
+}
+.proto-inner{max-width:var(--max); margin:0 auto; padding:64px 44px}
+.proto-live{
+  display:inline-flex; align-items:center; gap:8px; font-size:10.5px; font-weight:680;
+  text-transform:uppercase; letter-spacing:.09em; color:var(--ok); margin-bottom:12px;
+}
+.proto-live i{width:7px; height:7px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px rgba(21,128,61,.14)}
+
+.proto-stage{display:flex; gap:32px; align-items:flex-start; margin-top:30px; flex-wrap:wrap}
+.proto-guide{flex:1; min-width:240px; max-width:302px}
+.proto-guide h4{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-3); font-weight:680; margin-bottom:12px}
+.pnav{list-style:none}
+.pnav li{
+  padding:11px 14px; border-radius:8px; margin-bottom:5px; cursor:pointer;
+  font-size:13.8px; color:var(--ink-2); border:1px solid transparent; transition:background .13s, border-color .13s;
+}
+.pnav li:hover{background:#fff; border-color:var(--line)}
+.pnav li.on{background:#fff; border-color:var(--accent); color:var(--accent-2); font-weight:600}
+.pnav li .s{display:block; font-size:11.5px; color:var(--ink-4); margin-top:2px; font-weight:400}
+.pnav li.on .s{color:var(--ink-3)}
+
+/* Teléfono */
+.phone{
+  width:314px; flex-shrink:0; border:10px solid #23272e; border-radius:44px;
+  background:#23272e; box-shadow:0 14px 44px rgba(23,25,30,.2); position:relative; margin:0 auto;
+}
+.phone-notch{position:absolute; top:9px; left:50%; transform:translateX(-50%); width:86px; height:20px; background:#23272e; border-radius:0 0 14px 14px; z-index:9}
+.vp{position:relative; height:634px; background:#F9FAFB; border-radius:34px; overflow:hidden}
+.sbar{position:absolute; top:0; left:0; right:0; height:27px; z-index:8; display:flex; align-items:center; justify-content:space-between; padding:0 22px; font-size:11px; font-weight:640; color:var(--ink); pointer-events:none}
+.m-scr{display:none; flex-direction:column; height:100%; padding-top:27px; overflow-y:auto}
+.m-scr.on{display:flex}
+.m-hd{padding:16px 18px 10px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+.m-greet{font-size:10.5px; color:var(--ink-3)}
+.m-name{font-size:14px; font-weight:640}
+.m-av{width:37px; height:37px; border-radius:50%; background:var(--accent-soft); color:var(--accent-2); display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700; flex-shrink:0}
+.m-bell{width:41px; height:41px; border-radius:50%; background:#fff; border:1px solid var(--line-2); display:flex; align-items:center; justify-content:center; font-size:17px; position:relative; cursor:pointer; flex-shrink:0}
+.m-bell .dot{position:absolute; top:7px; right:9px; width:8px; height:8px; border-radius:50%; background:#DC2626; border:2px solid #fff}
+.m-card{margin:0 15px 13px; background:#fff; border:1px solid var(--line-2); border-radius:13px; padding:17px; box-shadow:0 1px 3px rgba(23,25,30,.04)}
+.m-row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:13px}
+.m-eta{font-size:25px; font-weight:660; letter-spacing:-.03em; margin:8px 0 3px}
+.m-eta-s{font-size:11.5px; color:var(--ink-3); margin-bottom:15px; line-height:1.5}
+.m-track{position:relative; height:38px; margin:6px 4px 4px}
+.m-track-bg{position:absolute; top:16px; left:0; right:0; height:3px; background:var(--line-2); border-radius:3px}
+.m-track-fl{position:absolute; top:16px; left:0; height:3px; background:var(--accent); border-radius:3px}
+.m-track-a{position:absolute; top:11px; left:0; width:12px; height:12px; border-radius:50%; background:var(--info); border:2.5px solid #fff}
+.m-track-b{position:absolute; top:11px; right:0; width:12px; height:12px; border-radius:50%; background:#DC2626; border:2.5px solid #fff}
+.m-track-u{position:absolute; top:-1px; font-size:19px}
+.m-btn{
+  background:var(--accent); color:#fff; text-align:center; border-radius:9px; padding:13px;
+  font-size:13.5px; font-weight:600; cursor:pointer; border:none; width:100%;
+  font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.m-btn:hover{background:var(--accent-2)}
+.m-btn.ghost{background:#F3F4F6; color:var(--ink-2)}
+.m-btn:disabled{opacity:.42; cursor:not-allowed}
+.m-tiles{display:flex; gap:9px; padding:0 15px 15px}
+.m-tile{flex:1; background:#fff; border:1px solid var(--line-2); border-radius:13px; padding:12px 5px; text-align:center; cursor:pointer; transition:border-color .13s}
+.m-tile:hover{border-color:var(--accent-line)}
+.m-tile.off{opacity:.4; cursor:not-allowed}
+.m-tile-i{font-size:20px; margin-bottom:5px}
+.m-tile-l{font-size:10.5px; font-weight:560; color:var(--ink-2); line-height:1.3}
+.m-opt{margin:0 15px 9px; background:#fff; border:1.5px solid var(--line-2); border-radius:11px; padding:14px 15px; cursor:pointer; transition:border-color .13s, background .13s}
+.m-opt:hover{border-color:var(--accent-line)}
+.m-opt.sel{border-color:var(--accent); background:var(--accent-soft)}
+.m-opt-t{font-size:13px; font-weight:600; margin-bottom:2px}
+.m-opt.sel .m-opt-t{color:var(--accent-2)}
+.m-opt-s{font-size:11px; color:var(--ink-3)}
+.m-pill{font-size:10.5px; font-weight:640; padding:4px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px}
+.m-list{padding:0 0 15px}
+.m-nitem{display:flex; gap:12px; padding:13px 18px; border-bottom:1px solid var(--line-2)}
+.m-nic{width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0}
+.m-nt{font-size:12.5px; font-weight:620; line-height:1.35}
+.m-nb{font-size:11.5px; color:var(--ink-3); margin-top:3px; line-height:1.45}
+.m-ntm{font-size:10px; color:var(--ink-4); margin-top:4px}
+.m-map{position:absolute; inset:0; background:
+  repeating-linear-gradient(0deg,#EEF1F3 0 40px,#E7EBEE 40px 42px),
+  repeating-linear-gradient(90deg,#EEF1F3 0 40px,#E7EBEE 40px 42px);}
+.m-road{position:absolute; left:28%; top:0; bottom:0; width:24px; background:#fff}
+.m-road::after{content:''; position:absolute; left:50%; top:0; bottom:0; width:3px; transform:translateX(-50%); background:repeating-linear-gradient(#CBD2D7 0 15px,transparent 15px 28px)}
+.m-map-top{position:relative; z-index:3; padding:34px 15px 12px; display:flex; align-items:center; gap:10px}
+.m-back{width:36px; height:36px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.16); display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; flex-shrink:0}
+.m-map-pill{background:#fff; border-radius:20px; padding:8px 15px; box-shadow:0 2px 8px rgba(0,0,0,.14); font-size:12px; font-weight:620}
+.m-unit{position:absolute; left:calc(28% + 12px); top:44%; transform:translate(-50%,-50%); z-index:3}
+.m-unit-i{width:40px; height:40px; border-radius:50%; background:var(--accent); border:3px solid #fff; box-shadow:0 3px 10px rgba(0,0,0,.26); display:flex; align-items:center; justify-content:center; font-size:18px}
+.m-pin{position:absolute; left:calc(28% + 12px); top:76%; transform:translate(-50%,-100%); z-index:3}
+.m-pin-i{width:30px; height:30px; border-radius:50% 50% 50% 0; background:var(--info); transform:rotate(-45deg); display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.22)}
+.m-pin-i span{transform:rotate(45deg); font-size:14px}
+.m-map-btm{position:absolute; left:13px; right:13px; bottom:15px; z-index:3}
+.m-ok{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:26px; text-align:center}
+.m-ok-c{width:110px; height:110px; border-radius:50%; background:var(--ok-soft); display:flex; align-items:center; justify-content:center; font-size:50px; margin-bottom:20px}
+
+/* Pantallas del ERP, embebidas y simples */
+.erp-shot{margin-top:22px; border:1px solid var(--line); border-radius:var(--r); overflow:hidden; background:#fff}
+.erp-bar{background:#3f4249; color:#fff; padding:9px 16px; font-size:12.5px; font-weight:600}
+.erp-in{padding:16px}
+.erp-f{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; padding:12px 14px; background:var(--bg-2); border:1px solid var(--line); border-radius:7px; margin-bottom:14px}
+.erp-f label{display:block; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-3); font-weight:640; margin-bottom:5px}
+.erp-f select,.erp-f input{border:1px solid var(--line); border-radius:6px; padding:7px 10px; font-family:inherit; font-size:12.8px; color:var(--ink); background:#fff; min-width:132px}
+.erp-f select:focus,.erp-f input:focus{outline:2px solid var(--accent-soft); border-color:var(--accent)}
+.p-tbl-wrap{border:1px solid var(--line); border-radius:7px; overflow-x:auto}
+.p-tbl{width:100%; border-collapse:collapse; font-size:12.8px}
+.p-tbl th{text-align:left; padding:10px 13px; background:var(--bg-2); font-size:10px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-3); font-weight:680; border-bottom:1px solid var(--line); white-space:nowrap}
+.p-tbl td{padding:11px 13px; border-bottom:1px solid var(--line-2); color:var(--ink-2); white-space:nowrap}
+.p-tbl tbody tr:last-child td{border-bottom:none}
+.p-tbl td.nm{color:var(--ink); font-weight:580}
+.pill{display:inline-flex; align-items:center; font-size:10.5px; font-weight:660; padding:3px 9px; border-radius:20px; white-space:nowrap}
+.p-ok{background:var(--ok-soft); color:var(--ok); border:1px solid #CFEBD9}
+.p-warn{background:var(--warn-soft); color:var(--warn); border:1px solid var(--warn-line)}
+.p-mute{background:var(--bg-3); color:var(--ink-3); border:1px solid var(--line)}
+.btn{display:inline-flex; align-items:center; gap:8px; font-family:inherit; font-size:13px; font-weight:600; padding:8px 16px; border-radius:7px; cursor:pointer; border:1px solid transparent}
+.btn-1{background:var(--accent); color:#fff}
+.btn-1:hover{background:var(--accent-2)}
+.btn-2{background:#fff; color:var(--ink); border-color:var(--line)}
+.btn-2:hover{background:var(--bg-2)}
+.erp-cap{font-size:12.8px; color:var(--ink-3); margin-top:11px; line-height:1.55}
+
+/* Aviso flotante */
+.toast{
+  position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:var(--ink); color:#fff; padding:12px 22px; border-radius:9px; font-size:13.5px;
+  font-weight:560; z-index:999; box-shadow:0 8px 30px rgba(0,0,0,.3);
+  transition:transform .28s cubic-bezier(.2,.9,.3,1); max-width:88vw; text-align:center;
+}
+.toast.on{transform:translateX(-50%) translateY(0)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:920px){
+  .shell{flex-direction:column}
+  .nav{
+    width:100%; height:auto; position:sticky; top:0; z-index:80; border-right:none;
+    border-bottom:1px solid var(--line); padding:14px 0;
+    background:rgba(250,251,252,.96); backdrop-filter:blur(10px);
+  }
+  .nav-brand{padding:0 22px 12px; margin-bottom:10px}
+  .nav-list{display:flex; overflow-x:auto; gap:4px; padding:0 18px; scrollbar-width:none}
+  .nav-list::-webkit-scrollbar{display:none}
+  .nav-list a{white-space:nowrap; padding:7px 13px}
+  .nav-num{display:none}
+  .nav-foot{padding:14px 22px 0; margin-top:12px}
+  .vswitch-lbl{display:none}
+  .wrap,.proto-inner{padding:0 24px}
+  .proto-inner{padding:40px 24px}
+  section{padding:52px 0}
+  .hero{padding:48px 0 42px}
+  .hero h1{font-size:31px}
+  .hero-claim{font-size:16.5px}
+  h2.sec{font-size:24px}
+  .lede{font-size:16px}
+  .proto-stage{gap:30px; justify-content:center}
+  .proto-guide{max-width:none}
+}
+@media (max-width:560px){
+  .phone{width:100%; max-width:314px; border-width:8px}
+  .plist li{flex-direction:column; gap:6px}
+}
+@media print{
+  .nav,.toast,.pnav,.proto-banner,.back-link{display:none !important}
+  section{page-break-inside:avoid; border-bottom:none; padding:22px 0}
+  body{font-size:11pt}
+}
+
+/* Enlace de regreso a la versión corta */
+.back-link{
+  display:flex; align-items:center; gap:8px; margin:0 12px 14px;
+  padding:9px 14px; font-size:12.5px; font-weight:600; color:var(--ink-2);
+  text-decoration:none; border:1px solid var(--line); border-radius:7px;
+  transition:background .13s;
+}
+.back-link:hover{background:var(--bg-3); color:var(--ink)}
+.back-link span{color:var(--accent)}
+</style>
+
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para el ERP GM Transport, eso significa colores, tipografía, estructura de paneles y componentes propios del ERP.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<!-- ==========================================================================
+     5. CONTENIDO
+     ========================================================================== -->
+<div class="shell">
+
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-mark"><span class="nav-dot"></span> Mi Transporte</div>
+    <div class="nav-sub">Propuesta ejecutiva</div>
+  </div>
+  <a class="back-link" href="index.html"><span>←</span> Volver a la versión corta</a>
+  <ul class="nav-list" id="navList">
+    <li><a href="#s1"><span class="nav-num">01</span> Resumen Ejecutivo</a></li>
+    <li><a href="#s2"><span class="nav-num">02</span> Situación Actual</a></li>
+    <li><a href="#s3"><span class="nav-num">03</span> Qué vamos a construir</a></li>
+    <li><a href="#s4"><span class="nav-num">04</span> Flujo General</a></li>
+    <li><a href="#s5"><span class="nav-num">05</span> Alcance</a></li>
+    <li><a href="#s6"><span class="nav-num">06</span> Beneficios</a></li>
+    <li><a href="#s7"><span class="nav-num">07</span> MVP y Evolución</a></li>
+    <li><a href="#s8"><span class="nav-num">08</span> Riesgos</a></li>
+    <li><a href="#s9"><span class="nav-num">09</span> Prototipo</a></li>
+    <li><a href="#s10"><span class="nav-num">10</span> Siguientes Pasos</a></li>
+    <li class="detail-only"><a href="#s11"><span class="nav-num">11</span> Anexo Funcional</a></li>
+  </ul>
+  <div class="nav-foot">
+    <div class="vswitch-lbl">Nivel de detalle</div>
+    <div class="vswitch">
+      <button id="vExec" class="on" onclick="setView('exec')">Ejecutiva</button>
+      <button id="vFull" onclick="setView('full')">Detallada</button>
+    </div>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- Portada -->
+<header class="hero">
+  <div class="wrap">
+    <span class="hero-tag">Propuesta de desarrollo · Transporte de Personal</span>
+    <h1>App para seguir tu viaje</h1>
+    <p class="hero-claim">
+      Poner el servicio de transporte de personal en el celular del empleado: saber a qué hora y
+      dónde lo recogen, seguir su unidad en camino y confirmar su abordaje.
+    </p>
+  </div>
+</header>
+
+<!-- 01. RESUMEN EJECUTIVO -->
+<section id="s1">
+  <div class="wrap">
+    <div class="eyebrow">01 · Resumen Ejecutivo</div>
+    <h2 class="sec">Lo esencial</h2>
+    <p class="lede">
+      El transporte de personal se opera bien: hay rutas, unidades, operadores y seguimiento por
+      GPS. Lo que no llega hoy al empleado es la información de su propio viaje. Esta propuesta
+      construye ese puente.
+    </p>
+
+    <h3 class="sub">Qué se va a construir</h3>
+    <p>
+      Una <strong>aplicación móvil para el pasajero</strong> donde consulta su parada y horario,
+      sigue la ubicación de su unidad y confirma que abordó. Y en el sistema, lo mínimo necesario
+      para que esa app exista: dar de alta a los empleados y enviarles su acceso.
+    </p>
+    <p>
+      No se toca la operación de tráfico ni la facturación. Todo lo que ya funciona se reutiliza
+      tal cual.
+    </p>
+
+    <h3 class="sub">Qué se busca de esta sesión</h3>
+    <p>
+      Confirmar que el enfoque es el correcto y validar el alcance de la primera versión, para
+      pasar a la estimación formal de esfuerzo y tiempos.
+    </p>
+  </div>
+</section>
+
+<!-- 02. SITUACIÓN ACTUAL -->
+<section id="s2">
+  <div class="wrap">
+    <div class="eyebrow">02 · Situación Actual</div>
+    <h2 class="sec">Qué está costando hoy</h2>
+    <p class="lede">
+      Tres puntos que se resuelven con la app. No son fallas del servicio: son cosas que hoy se
+      sostienen con esfuerzo manual y comunicación informal.
+    </p>
+
+    <ul class="plist">
+      <li>
+        <span class="n">01</span>
+        <div>
+          <h3>El empleado no sabe si su unidad ya viene</h3>
+          <p>
+            Pregunta por teléfono o mensaje, o simplemente espera sin saber. El personal operativo
+            atiende esas consultas todos los días, en los dos picos de turno.
+          </p>
+        </div>
+      </li>
+      <li>
+        <span class="n">02</span>
+        <div>
+          <h3>Los cambios se avisan por canales informales</h3>
+          <p>
+            Un ajuste de ruta u horario se comunica por mensajería personal y no llega a todos por
+            igual, lo que genera confusión y reclamos.
+          </p>
+        </div>
+      </li>
+      <li>
+        <span class="n">03</span>
+        <div>
+          <h3>El uso del servicio no queda documentado</h3>
+          <p>
+            Al presentar resultados o renovar un contrato, no hay manera de mostrar quién usó el
+            transporte y con qué frecuencia.
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 03. QUÉ VAMOS A CONSTRUIR -->
+<section id="s3">
+  <div class="wrap">
+    <div class="eyebrow">03 · Qué vamos a construir</div>
+    <h2 class="sec">La solución, en concreto</h2>
+    <p class="lede">
+      Dos piezas: la aplicación del pasajero, que es el producto, y una pantalla de alta en el
+      sistema para que el pasajero pueda existir.
+    </p>
+
+    <h3 class="sub">La aplicación del pasajero</h3>
+    <p>
+      El empleado recibe un enlace de invitación, lo abre y elige su parada. A partir de ahí, cada
+      día abre la app y ve:
+    </p>
+    <ul class="slist">
+      <li>Su parada y su hora programada</li>
+      <li>La unidad y el operador asignados, cuando ya se definieron</li>
+      <li>La ubicación de su unidad en el mapa mientras va en camino</li>
+      <li>Un aviso cuando la unidad sale y cuando está por llegar</li>
+      <li>Un botón para confirmar que abordó</li>
+    </ul>
+
+    <h3 class="sub">El alta en el sistema</h3>
+    <p>
+      Una pantalla donde se carga el padrón de empleados y se envían las invitaciones. Se registra
+      nombre, número de empleado y un medio de contacto. No hay que asignar rutas persona por
+      persona: eso lo resuelve el propio empleado al activar su acceso.
+    </p>
+
+    <h3 class="sub">Lo que ya existe y se reutiliza</h3>
+    <p>
+      Rutas, paradas con horario, recorridos diarios, asignación de unidad y operador, y el
+      seguimiento por GPS. La app los consume a través de una capa de servicios; el sistema actual
+      no se modifica.
+    </p>
+
+    <div class="cols">
+      <div>
+        <div class="col-k">Pasajero</div>
+        <h4>Certeza sobre su traslado</h4>
+        <p>Sabe dónde, a qué hora y si su unidad viene en camino. Deja de depender de preguntar.</p>
+      </div>
+      <div>
+        <div class="col-k">Personal operativo</div>
+        <h4>Menos consultas que atender</h4>
+        <p>La información que hoy se da por teléfono está disponible en el celular del empleado.</p>
+      </div>
+      <div>
+        <div class="col-k">Supervisión</div>
+        <h4>Registro de quién viajó</h4>
+        <p>Cada abordaje queda con persona, parada, fecha y hora.</p>
+      </div>
+      <div>
+        <div class="col-k">Dirección</div>
+        <h4>Un servicio diferenciado</h4>
+        <p>Una herramienta propia que la competencia no ofrece, con respaldo de uso real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04. FLUJO GENERAL -->
+<section id="s4">
+  <div class="wrap">
+    <div class="eyebrow">04 · Flujo General</div>
+    <h2 class="sec">Cómo se usa</h2>
+    <p class="lede">
+      Cinco pasos. Los dos primeros ocurren una sola vez por empleado; los tres siguientes son el
+      uso diario. Selecciona un paso para ver el detalle.
+    </p>
+
+    <div class="flow" id="flow">
+      <button class="step on" data-i="0"><div class="step-n">01</div><div class="step-t">Alta e invitación</div></button>
+      <button class="step" data-i="1"><div class="step-n">02</div><div class="step-t">Elige su parada</div></button>
+      <button class="step" data-i="2"><div class="step-n">03</div><div class="step-t">Consulta su viaje</div></button>
+      <button class="step" data-i="3"><div class="step-n">04</div><div class="step-t">Sigue su unidad</div></button>
+      <button class="step" data-i="4"><div class="step-n">05</div><div class="step-t">Confirma abordaje</div></button>
+    </div>
+    <div class="flow-panel" id="flowPanel"></div>
+  </div>
+</section>
+
+<!-- 05. ALCANCE -->
+<section id="s5">
+  <div class="wrap">
+    <div class="eyebrow">05 · Alcance</div>
+    <h2 class="sec">Qué entra en la primera versión</h2>
+    <p class="lede">
+      Delimitado a la app y a lo indispensable para operarla.
+    </p>
+
+    <h3 class="sub">Aplicación del pasajero</h3>
+    <ul class="slist">
+      <li>Activación mediante enlace de invitación, sin necesidad de crear contraseña</li>
+      <li>Selección de su parada la primera vez, y cambio posterior desde su perfil</li>
+      <li>Consulta de parada, horario, unidad y operador</li>
+      <li>Ubicación de la unidad en el mapa mientras el recorrido está activo</li>
+      <li>Avisos de unidad en camino y por llegar</li>
+      <li>Confirmación de abordaje</li>
+    </ul>
+
+    <h3 class="sub">Alta de pasajeros en el sistema</h3>
+    <ul class="slist">
+      <li>Registro de las empresas atendidas</li>
+      <li>Carga del padrón de empleados desde archivo</li>
+      <li>Envío de invitaciones, individual o en lote</li>
+      <li>Consulta del padrón y estado de cada invitación</li>
+      <li>Corrección puntual de la parada de un empleado</li>
+      <li>Baja de empleados que dejan de usar el servicio</li>
+    </ul>
+
+    <h3 class="sub">No incluido en esta primera versión</h3>
+    <ul class="slist mute">
+      <li>Tableros, indicadores y reportes de explotación</li>
+      <li>Control de cupo y ocupación por unidad</li>
+      <li>Avisos de retraso, cancelación y corrección</li>
+      <li>Acceso propio para cada empresa atendida</li>
+      <li>Contraseñas y recuperación de acceso</li>
+    </ul>
+    <p style="margin-top:18px;font-size:14.5px">
+      Lo anterior queda contemplado como evolución posterior, no descartado.
+    </p>
+  </div>
+</section>
+
+<!-- 06. BENEFICIOS -->
+<section id="s6">
+  <div class="wrap">
+    <div class="eyebrow">06 · Beneficios</div>
+    <h2 class="sec">Qué se gana</h2>
+    <p class="lede">
+      Los indicadores cuantitativos se establecerán con la operación una vez definida la línea base.
+      No se presentan cifras estimadas.
+    </p>
+
+    <div class="cols">
+      <div>
+        <div class="col-k">Operativos</div>
+        <h4>Menos carga de atención</h4>
+        <p>
+          Las consultas sobre dónde va la unidad se resuelven en la app. El alta de personal se hace
+          por archivo y sin asignar rutas individualmente.
+        </p>
+      </div>
+      <div>
+        <div class="col-k">Supervisión</div>
+        <h4>Visibilidad de quién viajó</h4>
+        <p>
+          Cada abordaje queda registrado con persona, parada y hora, disponible para consulta cuando
+          se necesite aclarar algo.
+        </p>
+      </div>
+      <div>
+        <div class="col-k">Dirección</div>
+        <h4>Respaldo comercial</h4>
+        <p>
+          El servicio deja de defenderse con percepción. Existe evidencia del uso real y una
+          herramienta propia que suma valor frente al cliente.
+        </p>
+      </div>
+      <div>
+        <div class="col-k">Pasajero</div>
+        <h4>Mejor experiencia diaria</h4>
+        <p>
+          Certeza sobre su traslado y menos tiempo de espera sin información, dos veces al día.
+        </p>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-k">Indicadores a definir</div>
+      <p>
+        Reducción de consultas al personal operativo, tiempo de alta de personal nuevo y porcentaje
+        de empleados con la app activa. <span class="tbd">[PENDIENTE POR DEFINIR]</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 07. MVP Y EVOLUCIÓN -->
+<section id="s7">
+  <div class="wrap">
+    <div class="eyebrow">07 · MVP y Evolución</div>
+    <h2 class="sec">Entrega por fases</h2>
+    <p class="lede">
+      La Fase 1 es la recomendación principal: entrega la app completa al pasajero, que es donde
+      está el valor.
+    </p>
+
+    <div class="phases">
+      <div class="phase mvp">
+        <div class="phase-k">Fase 1</div>
+        <div class="phase-b">
+          <div class="phase-t">MVP operable <span class="badge-mvp">Recomendada</span></div>
+          <p>
+            Alta de empresas atendidas y de padrón, envío de invitaciones, y la app del pasajero
+            completa: elección de parada, consulta de su viaje, ubicación de la unidad en el mapa,
+            avisos de en camino y por llegar, y confirmación de abordaje.
+          </p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-k">Fase 2</div>
+        <div class="phase-b">
+          <div class="phase-t">Control y explotación</div>
+          <p>
+            Cupo y ocupación por unidad, avisos de retraso y cancelación, reportes de uso por
+            empresa atendida y periodo, y exportación de resultados.
+          </p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-k">Fase 3</div>
+        <div class="phase-b">
+          <div class="phase-t">Futuro</div>
+          <p>
+            Acceso propio para cada empresa atendida, analítica de patrones de uso y sugerencia
+            automática de apertura de unidades. <span class="tbd">[PENDIENTE POR DEFINIR]</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08. RIESGOS -->
+<section id="s8">
+  <div class="wrap">
+    <div class="eyebrow">08 · Riesgos</div>
+    <h2 class="sec">Lo que hay que atender</h2>
+    <p class="lede">
+      Cuatro puntos con impacto a nivel dirección, cada uno con su mitigación.
+    </p>
+
+    <div class="tbl-wrap">
+      <table class="t">
+        <thead><tr><th style="width:31%">Riesgo</th><th>Mitigación propuesta</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Volumen de consultas de ubicación</td>
+            <td>
+              Cientos de empleados consultando el mapa a la misma hora, dos veces al día. Se resuelve
+              consultando la posición una vez por unidad y distribuyéndola a todos sus pasajeros, en
+              lugar de una consulta por persona.
+            </td>
+          </tr>
+          <tr>
+            <td>Momento de asignación de la unidad</td>
+            <td>
+              La unidad y el operador se definen el mismo día del viaje. La app muestra el horario
+              programado desde antes y agrega la unidad cuando ya está asignada, sin prometer
+              información anticipada.
+            </td>
+          </tr>
+          <tr>
+            <td>Bajas de personal no informadas</td>
+            <td>
+              Si no se informan las bajas, un ex empleado conserva acceso. Requiere definir el
+              proceso de baja o una vigencia de acceso.
+              <span class="tbd">[PENDIENTE POR DEFINIR]</span>
+            </td>
+          </tr>
+          <tr>
+            <td>Datos de contacto de los empleados</td>
+            <td>
+              Los datos pertenecen a personal de las empresas atendidas. Debe existir un acuerdo
+              formal que respalde su entrega y uso.
+              <span class="tbd">[PENDIENTE POR DEFINIR]</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <div class="note-k">Sin impacto en facturación</div>
+      <p>
+        El cobro del servicio se calcula por recorrido, no por pasajero. El registro de abordajes no
+        altera ningún proceso de facturación ni tiene implicación fiscal.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- 09. PROTOTIPO (embebido en el flujo del documento) ---------- -->
+<section class="proto-band" id="s9">
+  <div class="proto-inner">
+    <div class="proto-live"><i></i> Prototipo interactivo · datos de demostración</div>
+    <h2 class="sec" style="max-width:640px">Así se vería</h2>
+    <p class="lede" style="max-width:640px">
+      Recorre la aplicación del pasajero tocando los elementos del teléfono, o elige una pantalla de
+      la lista. Abajo están las dos pantallas de alta en el sistema.
+    </p>
+
+    <div class="proto-stage">
+      <div class="proto-guide">
+        <h4>Pantallas de la app</h4>
+        <ul class="pnav" id="pnav">
+          <li class="on" data-m="inv">Activar invitación <span class="s">Elige su parada la primera vez</span></li>
+          <li data-m="pend">Mi viaje · sin asignar <span class="s">Antes de que definan la unidad</span></li>
+          <li data-m="home">Mi viaje · en camino <span class="s">Con unidad y operador</span></li>
+          <li data-m="map">Ubicación en vivo <span class="s">Seguimiento de la unidad</span></li>
+          <li data-m="ok">Abordaje confirmado <span class="s">Registro del viaje</span></li>
+          <li data-m="notif">Avisos <span class="s">Notificaciones recibidas</span></li>
+        </ul>
+      </div>
+
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="vp">
+          <div class="sbar"><span id="mTime">9:41</span><span style="font-size:10px">▮▮▮ ⌁ ▰</span></div>
+
+          <!-- Invitación -->
+          <div class="m-scr on" id="m-inv">
+            <div style="padding:22px 18px 8px;text-align:center">
+              <div style="width:54px;height:54px;border-radius:15px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;margin:6px auto 14px">🚌</div>
+              <div style="font-size:16px;font-weight:660;margin-bottom:3px">Bienvenido, Marco</div>
+              <div style="font-size:12px;color:var(--ink-3)">Confirma tus datos y elige tu parada</div>
+            </div>
+            <div class="m-card">
+              <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--ink-3)">Nombre</span><span style="font-size:12.5px;font-weight:560">Marco Ruiz</span></div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--ink-3)">Nº de empleado</span><span style="font-size:12.5px;font-weight:560">EA-04910</span></div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--ink-3)">Empresa</span><span style="font-size:12.5px;font-weight:560">Empresa A</span></div>
+            </div>
+            <div style="padding:6px 18px 9px;font-size:12px;font-weight:620">¿Dónde te recogen?</div>
+            <div id="mStops"></div>
+            <div style="padding:6px 15px 20px">
+              <button class="m-btn" id="mInvBtn" disabled onclick="confirmStop()">Confirmar y entrar</button>
+              <div style="font-size:10.5px;color:var(--ink-4);margin-top:11px;text-align:center;line-height:1.45">
+                Si estos datos no son tuyos, avisa a tu supervisor
+              </div>
+            </div>
+          </div>
+
+          <!-- Sin asignar -->
+          <div class="m-scr" id="m-pend">
+            <div class="m-hd">
+              <div style="display:flex;align-items:center;gap:9px">
+                <span class="m-av">MR</span>
+                <div><div class="m-greet">Buen día</div><div class="m-name">Marco Ruiz</div></div>
+              </div>
+              <div class="m-bell" onclick="mgo('notif')">🔔</div>
+            </div>
+            <div class="m-card">
+              <div class="m-row"><span class="m-pill" style="background:var(--bg-3);color:var(--ink-3)">⏳ Sin asignar</span></div>
+              <div style="font-size:14px;font-weight:600;margin-bottom:2px">Turno Matutino</div>
+              <div class="m-eta-s">Hora programada 7:00 a.m. · Portón 3</div>
+              <div style="font-size:11.5px;color:var(--ink-3);background:var(--bg-2);border:1px solid var(--line-2);border-radius:9px;padding:11px 13px;margin-bottom:14px;line-height:1.5">
+                Tu unidad se confirma más tarde hoy mismo. Te avisamos en cuanto salga.
+              </div>
+              <button class="m-btn ghost" disabled>Ver ubicación en vivo</button>
+            </div>
+            <div class="m-tiles">
+              <div class="m-tile off"><div class="m-tile-i">👆</div><div class="m-tile-l">Confirmar abordaje</div></div>
+              <div class="m-tile"><div class="m-tile-i">📅</div><div class="m-tile-l">Mi horario</div></div>
+              <div class="m-tile"><div class="m-tile-i">👤</div><div class="m-tile-l">Mi perfil</div></div>
+            </div>
+          </div>
+
+          <!-- En camino -->
+          <div class="m-scr" id="m-home">
+            <div class="m-hd">
+              <div style="display:flex;align-items:center;gap:9px">
+                <span class="m-av">MR</span>
+                <div><div class="m-greet">Buen día</div><div class="m-name">Marco Ruiz</div></div>
+              </div>
+              <div class="m-bell" onclick="mgo('notif')">🔔<span class="dot"></span></div>
+            </div>
+            <div class="m-card">
+              <div class="m-row">
+                <span class="m-pill" style="background:var(--accent-soft);color:var(--accent-2)">🕐 En camino</span>
+                <span style="font-size:10.5px;color:var(--ink-3)">Unidad T-08 · R. Méndez</span>
+              </div>
+              <div class="m-track">
+                <div class="m-track-bg"></div>
+                <div class="m-track-fl" style="width:62%"></div>
+                <div class="m-track-a"></div>
+                <div class="m-track-b"></div>
+                <div class="m-track-u" style="left:58%">🚌</div>
+              </div>
+              <div class="m-eta">Llega en 12 min</div>
+              <div class="m-eta-s">Portón 3 · 7:00 a.m.</div>
+              <button class="m-btn" onclick="mgo('map')">🗺️ Ver ubicación en vivo</button>
+            </div>
+            <div class="m-tiles">
+              <div class="m-tile" onclick="mgo('ok')"><div class="m-tile-i">👆</div><div class="m-tile-l">Confirmar abordaje</div></div>
+              <div class="m-tile"><div class="m-tile-i">📅</div><div class="m-tile-l">Mi horario</div></div>
+              <div class="m-tile"><div class="m-tile-i">👤</div><div class="m-tile-l">Mi perfil</div></div>
+            </div>
+          </div>
+
+          <!-- Mapa -->
+          <div class="m-scr" id="m-map" style="padding-top:0">
+            <div class="m-map"><div class="m-road"></div></div>
+            <div class="m-map-top">
+              <div class="m-back" onclick="mgo('home')">←</div>
+              <div class="m-map-pill">Unidad T-08 · 12 min</div>
+            </div>
+            <div class="m-unit"><div class="m-unit-i">🚌</div></div>
+            <div class="m-pin"><div class="m-pin-i"><span>📍</span></div></div>
+            <div class="m-map-btm">
+              <div style="background:#fff;border-radius:13px;padding:15px 16px;box-shadow:0 4px 18px rgba(0,0,0,.14)">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px">
+                  <span style="font-size:13px;font-weight:620">Portón 3</span>
+                  <span class="m-pill" style="background:var(--accent-soft);color:var(--accent-2)">1.8 km</span>
+                </div>
+                <div style="font-size:11px;color:var(--ink-3)">Se actualiza cada pocos segundos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Abordaje -->
+          <div class="m-scr" id="m-ok">
+            <div class="m-ok">
+              <div class="m-ok-c">✓</div>
+              <div style="font-size:17px;font-weight:660;color:var(--ok);margin-bottom:5px">Abordaje confirmado</div>
+              <div style="font-size:12.5px;color:var(--ink-3);margin-bottom:26px;line-height:1.5">
+                Hoy 7:11 a.m.<br>Portón 3 · Unidad T-08
+              </div>
+              <button class="m-btn ghost" onclick="mgo('home')">Volver al inicio</button>
+            </div>
+          </div>
+
+          <!-- Avisos -->
+          <div class="m-scr" id="m-notif">
+            <div style="padding:16px 18px 10px;display:flex;align-items:center;gap:11px">
+              <div class="m-back" onclick="mgo('home')" style="box-shadow:none;border:1px solid var(--line-2)">←</div>
+              <div style="font-size:16px;font-weight:660">Avisos</div>
+            </div>
+            <div class="m-list">
+              <div class="m-nitem">
+                <div class="m-nic" style="background:var(--accent-soft)">🚌</div>
+                <div><div class="m-nt">Tu unidad salió</div><div class="m-nb">La unidad T-08 va en camino a tu parada.</div><div class="m-ntm">Hace 8 minutos</div></div>
+              </div>
+              <div class="m-nitem">
+                <div class="m-nic" style="background:var(--info-soft)">📍</div>
+                <div><div class="m-nt">Llega en 12 minutos</div><div class="m-nb">Prepárate, tu unidad está por llegar.</div><div class="m-ntm">Hace 2 minutos</div></div>
+              </div>
+              <div class="m-nitem">
+                <div class="m-nic" style="background:var(--ok-soft)">✓</div>
+                <div><div class="m-nt">Acceso activado</div><div class="m-nb">Tu parada quedó registrada: Portón 3, 7:00 a.m.</div><div class="m-ntm">Ayer</div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Pantallas del sistema -->
+    <h3 class="sub" style="margin-top:52px">Las dos pantallas del sistema</h3>
+    <p style="font-size:14.5px;max-width:640px">
+      Todo lo que se necesita del lado administrativo: cargar el padrón y enviar invitaciones.
+    </p>
+
+    <div class="erp-shot">
+      <div class="erp-bar">Padrón de pasajeros</div>
+      <div class="erp-in">
+        <div class="erp-f">
+          <div>
+            <label>Empresa atendida</label>
+            <select id="fEmp" onchange="renderList()">
+              <option value="">Todas</option>
+              <option>Empresa A</option><option>Empresa B</option><option>Empresa C</option>
+            </select>
+          </div>
+          <div style="flex:1;min-width:150px">
+            <label>Buscar</label>
+            <input id="fQ" placeholder="Nombre o número de empleado" oninput="renderList()" style="width:100%">
+          </div>
+          <button class="btn btn-2" onclick="sendSel()">Enviar invitaciones</button>
+          <button class="btn btn-1" onclick="toast('Se abriría el formulario de alta o la carga de archivo.')">Cargar padrón</button>
+        </div>
+        <div class="p-tbl-wrap">
+          <table class="p-tbl">
+            <thead>
+              <tr>
+                <th style="width:30px"><input type="checkbox" onclick="chkAll(this)"></th>
+                <th>Nombre</th><th>Empresa</th><th>Nº empleado</th>
+                <th>Parada</th><th>Invitación</th>
+              </tr>
+            </thead>
+            <tbody id="listBody"></tbody>
+          </table>
+        </div>
+        <div class="erp-cap" id="listCount"></div>
+      </div>
+    </div>
+
+    <div class="erp-shot">
+      <div class="erp-bar">Alta de pasajero</div>
+      <div class="erp-in">
+        <div style="max-width:430px">
+          <div style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px">Nombre completo</label>
+            <input id="nNom" placeholder="Ej. Laura Medina Salas" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-family:inherit;font-size:13.2px">
+            <div class="p-err" id="eNom" style="display:none;font-size:11.5px;color:#B91C1C;margin-top:5px;font-weight:560">El nombre es obligatorio.</div>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px">Empresa atendida</label>
+            <select id="nEmp" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-family:inherit;font-size:13.2px">
+              <option value="">Seleccionar…</option>
+              <option>Empresa A</option><option>Empresa B</option><option>Empresa C</option>
+            </select>
+            <div class="p-err" id="eEmp" style="display:none;font-size:11.5px;color:#B91C1C;margin-top:5px;font-weight:560">Debe seleccionar la empresa.</div>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px">Número de empleado</label>
+            <input id="nNum" placeholder="Ej. EA-05120" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-family:inherit;font-size:13.2px">
+            <div class="p-err" id="eNum" style="display:none;font-size:11.5px;color:#B91C1C;margin-top:5px;font-weight:560">El número de empleado es obligatorio.</div>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px">Teléfono o correo</label>
+            <input id="nCon" placeholder="Para poder enviarle su invitación" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-family:inherit;font-size:13.2px">
+            <div class="p-err" id="eCon" style="display:none;font-size:11.5px;color:#B91C1C;margin-top:5px;font-weight:560">Se requiere un medio de contacto.</div>
+          </div>
+          <div style="display:flex;gap:9px;margin-top:20px">
+            <button class="btn btn-1" onclick="saveNew()">Guardar</button>
+            <button class="btn btn-2" onclick="clearNew()">Limpiar</button>
+          </div>
+        </div>
+        <div class="erp-cap">
+          No se captura la parada: la elige el propio empleado al activar su invitación.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. SIGUIENTES PASOS -->
+<section id="s10">
+  <div class="wrap">
+    <div class="eyebrow">10 · Siguientes Pasos</div>
+    <h2 class="sec">Ruta hacia la liberación</h2>
+    <p class="lede">
+      Esta presentación corresponde a la primera etapa. Cada etapa requiere el cierre de la anterior.
+    </p>
+
+    <div class="flow" style="margin-top:28px">
+      <div class="step on" style="cursor:default"><div class="step-n">Actual</div><div class="step-t">Validación</div></div>
+      <div class="step" style="cursor:default"><div class="step-n">Sigue</div><div class="step-t">Aprobación de alcance</div></div>
+      <div class="step" style="cursor:default"><div class="step-n">03</div><div class="step-t">Estimación</div></div>
+      <div class="step" style="cursor:default"><div class="step-n">04</div><div class="step-t">Desarrollo</div></div>
+      <div class="step" style="cursor:default"><div class="step-n">05</div><div class="step-t">Pruebas</div></div>
+      <div class="step" style="cursor:default"><div class="step-n">06</div><div class="step-t">Liberación</div></div>
+    </div>
+
+    <div class="decision">
+      <div class="decision-h">
+        <div class="k">Decisión requerida</div>
+        <h3>Tres confirmaciones para avanzar</h3>
+      </div>
+      <div class="decision-b">
+        <div class="dec-row">
+          <div class="dec-box"></div>
+          <div>
+            <div class="dec-t">Aprobar el concepto</div>
+            <div class="dec-d">Confirmar que una app de seguimiento de viaje para el pasajero es la dirección correcta.</div>
+          </div>
+        </div>
+        <div class="dec-row">
+          <div class="dec-box"></div>
+          <div>
+            <div class="dec-t">Validar el alcance de la Fase 1</div>
+            <div class="dec-d">Ratificar lo incluido y lo que queda para fases posteriores.</div>
+          </div>
+        </div>
+        <div class="dec-row">
+          <div class="dec-box"></div>
+          <div>
+            <div class="dec-t">Autorizar la estimación</div>
+            <div class="dec-d">Permitir el desglose formal de esfuerzo y tiempos sobre el alcance aprobado.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. ANEXO -->
+<section id="s11" class="detail-only">
+  <div class="wrap">
+    <div class="eyebrow">11 · Anexo Funcional</div>
+    <h2 class="sec">Detalle para revisión técnica</h2>
+    <p class="lede">Contenido de profundidad para gerencia y equipo de desarrollo.</p>
+
+    <div style="margin-top:30px">
+      <div class="acc">
+        <button class="acc-h" onclick="acc(this)">Perfiles de usuario <span class="chev">▾</span></button>
+        <div class="acc-b">
+          <h4>Pasajero</h4>
+          <ul>
+            <li>Empleado de una empresa atendida. No es usuario del sistema administrativo.</li>
+            <li>Accede solo desde la app mediante su enlace de invitación y ve únicamente su información.</li>
+            <li>Elige y puede cambiar su parada, y confirma su abordaje.</li>
+          </ul>
+          <h4>Personal operativo</h4>
+          <ul>
+            <li>Usuario existente del sistema. Carga el padrón y envía invitaciones.</li>
+            <li>Opera con los derechos y la sucursal que ya tiene asignados.</li>
+          </ul>
+          <h4>Supervisor</h4>
+          <ul>
+            <li>Figura que ya existe en el catálogo de rutas.</li>
+            <li>Consulta y corrige la parada de los pasajeros de sus rutas.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-h" onclick="acc(this)">Reglas de negocio <span class="chev">▾</span></button>
+        <div class="acc-b">
+          <ul>
+            <li>Cada ruta pertenece a una sola empresa atendida.</li>
+            <li>El pasajero tiene su empresa atendida desde el padrón, independiente de la ruta, porque se da de alta antes de tener parada.</li>
+            <li>Al elegir parada se valida que pertenezca a una ruta de su misma empresa.</li>
+            <li>Un pasajero sin parada elegida entra a la app pero no consulta viaje ni confirma abordaje.</li>
+            <li>El enlace de invitación es personal y de un solo uso.</li>
+            <li>La consulta del viaje se resuelve por empresa, fecha y ruta, sin depender del recorrido del día anterior.</li>
+            <li>Un cambio de parada no modifica los abordajes ya registrados.</li>
+            <li>El registro de abordaje no modifica el conteo que captura el operador; ambos coexisten.</li>
+            <li>Regla adicional a confirmar: <span class="tbd">[REGLA DE NEGOCIO]</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-h" onclick="acc(this)">Catálogos e integraciones <span class="chev">▾</span></button>
+        <div class="acc-b">
+          <h4>Nuevos</h4>
+          <ul>
+            <li>Empresas atendidas, dependientes del cliente transportista.</li>
+            <li>Pasajeros, con empresa atendida, número de empleado, contacto, parada y estado.</li>
+            <li>Registro de abordajes por pasajero y parada.</li>
+          </ul>
+          <h4>Existentes que se consumen</h4>
+          <ul>
+            <li>Rutas y paradas, con horario programado.</li>
+            <li>Recorridos del día, con unidad y operador asignados.</li>
+            <li>Servicio de localización vehicular, a través de la capa de servicios nueva.</li>
+          </ul>
+          <h4>Existente que se modifica</h4>
+          <ul>
+            <li>Rutas: se agrega la empresa atendida como campo opcional, sin afectar a clientes que no usen esta funcionalidad.</li>
+          </ul>
+          <h4>Por definir</h4>
+          <ul>
+            <li>Proveedor de mensajería para el envío de invitaciones: <span class="tbd">[INTEGRACIÓN]</span></li>
+            <li>Servicio de notificaciones para los avisos al pasajero: <span class="tbd">[INTEGRACIÓN]</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-h" onclick="acc(this)">Validaciones y notificaciones <span class="chev">▾</span></button>
+        <div class="acc-b">
+          <h4>Validaciones</h4>
+          <ul>
+            <li>Número de empleado obligatorio y único dentro de la misma empresa atendida.</li>
+            <li>Al menos un medio de contacto válido para poder enviar la invitación.</li>
+            <li>La parada elegida debe pertenecer a una ruta de la empresa del pasajero.</li>
+            <li>No se permite confirmar abordaje si el recorrido del día no está activo.</li>
+            <li>No se permite un segundo abordaje del mismo pasajero en la misma parada y fecha.</li>
+            <li>La carga del padrón reporta los registros rechazados y el motivo, sin abortar el archivo completo.</li>
+          </ul>
+          <h4>Notificaciones de la Fase 1</h4>
+          <ul>
+            <li>Invitación para activar la aplicación.</li>
+            <li>Unidad en camino hacia su parada.</li>
+            <li>Unidad por llegar a su parada.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-h" onclick="acc(this)">Consideraciones técnicas <span class="chev">▾</span></button>
+        <div class="acc-b">
+          <ul>
+            <li>La capa de servicios sigue el patrón ya utilizado por otra aplicación móvil del grupo, reutilizando criterios de autenticación y despliegue.</li>
+            <li>La ubicación se obtiene una vez por unidad y se distribuye a sus pasajeros desde memoria intermedia, para no multiplicar consultas al servicio externo.</li>
+            <li>El estado del recorrido es configurable por instalación, por lo que la lógica se basa en la existencia de registros de salida y llegada, no en nombres de estado fijos.</li>
+            <li>Las pantallas nuevas se incorporan al árbol de derechos con su proceso correspondiente.</li>
+            <li>La aplicación no almacena información sensible en el dispositivo más allá de la sesión activa.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc open">
+        <button class="acc-h" onclick="acc(this)">Pendientes por definir <span class="chev">▾</span></button>
+        <div class="acc-b">
+          <p>Puntos que requieren decisión de negocio antes de cerrar la estimación.</p>
+          <ul>
+            <li><strong>Proceso de baja de personal.</strong> Quién informa las bajas y con qué frecuencia, o si se opta por vigencia con revalidación. <span class="tbd">[PENDIENTE POR DEFINIR]</span></li>
+            <li><strong>Tratamiento de datos personales.</strong> Acuerdo que respalde la entrega y uso de datos de contacto de personal de terceros. <span class="tbd">[PENDIENTE POR DEFINIR]</span></li>
+            <li><strong>Proveedor y costo de mensajería.</strong> Definir proveedor, costo por evento y responsable del gasto recurrente. <span class="tbd">[PENDIENTE POR DEFINIR]</span></li>
+            <li><strong>Comunicación inicial de la parada.</strong> Cómo se le informa al empleado cuál es su parada la primera vez. <span class="tbd">[PENDIENTE POR DEFINIR]</span></li>
+            <li><strong>Modelo de administración del padrón.</strong> Se asume centralizado; confirmar si alguna empresa atendida requerirá acceso propio. <span class="tbd">[PENDIENTE POR DEFINIR]</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exec-hint">Cambia a <strong>Vista Detallada</strong> para consultar el anexo funcional.</div>
+  </div>
+</section>
+
+<footer style="padding:40px 0 60px">
+  <div class="wrap" style="font-size:13px;color:var(--ink-4)">
+    Documento de trabajo · Propuesta sujeta a validación de alcance
+  </div>
+</footer>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ==========================================================================
+     6. DATOS DE DEMOSTRACIÓN
+     ========================================================================== -->
+<script>
+let PAS = [
+  {id:1, nom:'Jorge García',  emp:'Empresa A', num:'EA-04821', con:'664 ••• 1234',        parada:'Portón 3 · 7:00 a.m.', inv:'Confirmada'},
+  {id:2, nom:'Ana López',     emp:'Empresa A', num:'EA-04822', con:'a.lopez@correo.com',  parada:'Portón 3 · 7:00 a.m.', inv:'Confirmada'},
+  {id:3, nom:'Marco Ruiz',    emp:'Empresa A', num:'EA-04910', con:'664 ••• 9087',        parada:'—',                    inv:'Enviada'},
+  {id:4, nom:'Luis Peña',     emp:'Empresa A', num:'EA-05011', con:'664 ••• 4410',        parada:'Portón 1 · 3:00 p.m.', inv:'Confirmada'},
+  {id:5, nom:'Sofía Cruz',    emp:'Empresa B', num:'EB-1187',  con:'664 ••• 2201',        parada:'—',                    inv:'Sin enviar'},
+  {id:6, nom:'Daniela Ortiz', emp:'Empresa B', num:'EB-1204',  con:'d.ortiz@correo.com',  parada:'Planta B · 6:40 a.m.', inv:'Confirmada'},
+  {id:7, nom:'Ricardo Salas', emp:'Empresa C', num:'EC-8830',  con:'664 ••• 7715',        parada:'Planta C · 10:00 p.m.',inv:'Confirmada'},
+  {id:8, nom:'Fernanda Ríos', emp:'Empresa A', num:'EA-05044', con:'f.rios@correo.com',   parada:'—',                    inv:'Sin enviar'}
+];
+
+/* Paradas que ve el pasajero al activar su invitación */
+const STOPS = [
+  {parada:'Portón 3', hora:'7:00 a.m.', ruta:'Turno Matutino',   uni:'T-08'},
+  {parada:'Portón 1', hora:'3:00 p.m.', ruta:'Turno Vespertino', uni:'T-09'},
+  {parada:'Portón 2', hora:'3:00 p.m.', ruta:'Turno Vespertino', uni:'T-11'}
+];
+
+/* Detalle de los pasos del flujo general */
+const FLOW = [
+  {who:'Una sola vez', t:'Alta e invitación',
+   d:'Se carga el padrón con nombre, número de empleado y un medio de contacto, y se envían las invitaciones. No se asigna ruta ni parada en este momento.'},
+  {who:'El empleado · una sola vez', t:'Elige su parada',
+   d:'Abre el enlace que recibió, confirma que los datos son suyos y elige su parada de una lista con nombres entendibles. Su acceso queda activo sin crear contraseña.'},
+  {who:'El empleado · todos los días', t:'Consulta su viaje',
+   d:'Ve su parada y su hora programada. Cuando la unidad y el operador quedan definidos, aparecen en la pantalla junto con el tiempo estimado de llegada.'},
+  {who:'El empleado · mientras espera', t:'Sigue su unidad',
+   d:'Ve en el mapa dónde va su unidad y recibe aviso cuando sale y cuando está por llegar a su parada.'},
+  {who:'El empleado · al subir', t:'Confirma abordaje',
+   d:'Con un toque deja constancia de que abordó. Se registra la persona, la parada, la fecha y la hora.'}
+];
+</script>
+
+<!-- ==========================================================================
+     7. LÓGICA
+     ========================================================================== -->
+<script>
+/* ---------- Navegación y resaltado por scroll ---------- */
+const links = [...document.querySelectorAll('#navList a')];
+const secs  = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+if ('IntersectionObserver' in window){
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting){
+        links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
+      }
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(s => io.observe(s));
+}
+
+/* ---------- Vista Ejecutiva / Detallada ---------- */
+function setView(m){
+  document.body.classList.toggle('exec', m === 'exec');
+  document.getElementById('vExec').classList.toggle('on', m === 'exec');
+  document.getElementById('vFull').classList.toggle('on', m !== 'exec');
+}
+setView('exec');
+
+/* ---------- Flujo general ---------- */
+function paintFlow(i){
+  const f = FLOW[i];
+  document.getElementById('flowPanel').innerHTML =
+    '<div class="who">' + f.who + '</div><h4>' + f.t + '</h4><p>' + f.d + '</p>';
+  document.querySelectorAll('#flow .step').forEach(s => s.classList.toggle('on', +s.dataset.i === i));
+}
+document.querySelectorAll('#flow .step').forEach(s => {
+  if (s.dataset.i !== undefined) s.onclick = () => paintFlow(+s.dataset.i);
+});
+paintFlow(0);
+
+/* ---------- Acordeones ---------- */
+function acc(btn){ btn.parentElement.classList.toggle('open'); }
+
+/* ---------- Aviso flotante ---------- */
+let tT;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(tT); tT = setTimeout(() => t.classList.remove('on'), 3200);
+}
+
+/* ---------- Padrón: listado, selección y envío ---------- */
+function invPill(v){
+  if (v === 'Confirmada')  return '<span class="pill p-ok">Confirmada</span>';
+  if (v === 'Enviada')     return '<span class="pill p-warn">Enviada</span>';
+  return '<span class="pill p-mute">Sin enviar</span>';
+}
+function renderList(){
+  const fe = document.getElementById('fEmp').value;
+  const q  = document.getElementById('fQ').value.trim().toLowerCase();
+  const rows = PAS.filter(p =>
+    (!fe || p.emp === fe) &&
+    (!q || p.nom.toLowerCase().includes(q) || p.num.toLowerCase().includes(q))
+  );
+  document.getElementById('listBody').innerHTML = rows.length ? rows.map(p => `
+    <tr>
+      <td><input type="checkbox" class="selChk" value="${p.id}"></td>
+      <td class="nm">${p.nom}</td>
+      <td>${p.emp}</td>
+      <td>${p.num}</td>
+      <td>${p.parada === '—' ? '<span class="pill p-mute">Sin elegir</span>' : p.parada}</td>
+      <td>${invPill(p.inv)}</td>
+    </tr>`).join('')
+    : '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--ink-4);font-style:italic">Sin resultados para los filtros aplicados</td></tr>';
+  document.getElementById('listCount').textContent =
+    'Mostrando ' + rows.length + ' de ' + PAS.length + ' empleados. La parada la elige cada quien al activar su invitación.';
+}
+function chkAll(cb){ document.querySelectorAll('.selChk').forEach(c => c.checked = cb.checked); }
+function sendSel(){
+  const ids = [...document.querySelectorAll('.selChk:checked')].map(c => +c.value);
+  if (!ids.length){ toast('Selecciona al menos un empleado.'); return; }
+  let n = 0;
+  ids.forEach(id => {
+    const p = PAS.find(x => x.id === id);
+    if (p && p.inv === 'Sin enviar'){ p.inv = 'Enviada'; n++; }
+  });
+  renderList();
+  toast(n ? n + ' invitación(es) enviada(s).' : 'Los seleccionados ya tenían invitación enviada.');
+}
+
+/* ---------- Alta con validaciones ---------- */
+function fieldErr(inp, err, on){
+  document.getElementById(err).style.display = on ? 'block' : 'none';
+  document.getElementById(inp).style.borderColor = on ? '#B91C1C' : 'var(--line)';
+}
+function saveNew(){
+  const nom = document.getElementById('nNom').value.trim();
+  const emp = document.getElementById('nEmp').value;
+  const num = document.getElementById('nNum').value.trim();
+  const con = document.getElementById('nCon').value.trim();
+  let ok = true;
+
+  fieldErr('nNom','eNom', !nom); if (!nom) ok = false;
+  fieldErr('nEmp','eEmp', !emp); if (!emp) ok = false;
+  fieldErr('nCon','eCon', !con); if (!con) ok = false;
+
+  const dup = num && emp && PAS.some(p => p.emp === emp && p.num.toLowerCase() === num.toLowerCase());
+  document.getElementById('eNum').textContent = !num
+    ? 'El número de empleado es obligatorio.'
+    : 'Ese número ya existe en ' + emp + '.';
+  fieldErr('nNum','eNum', !num || dup);
+  if (!num || dup) ok = false;
+
+  if (!ok){ toast('Revisa los campos marcados.'); return; }
+
+  PAS.push({id: Math.max(...PAS.map(p => p.id)) + 1, nom, emp, num, con, parada:'—', inv:'Sin enviar'});
+  clearNew();
+  renderList();
+  toast(nom + ' se agregó al padrón. Falta enviarle su invitación.');
+}
+function clearNew(){
+  ['nNom','nNum','nCon'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('nEmp').value = '';
+  [['nNom','eNom'],['nEmp','eEmp'],['nNum','eNum'],['nCon','eCon']].forEach(([i,e]) => fieldErr(i,e,false));
+}
+
+/* ---------- App del pasajero ---------- */
+let selStop = null;
+function renderStops(){
+  document.getElementById('mStops').innerHTML = STOPS.map((s,i) => `
+    <div class="m-opt" data-s="${i}" onclick="pickStop(${i})">
+      <div class="m-opt-t">${s.parada} · ${s.hora}</div>
+      <div class="m-opt-s">${s.ruta} · Unidad ${s.uni}</div>
+    </div>`).join('');
+}
+function pickStop(i){
+  selStop = i;
+  document.querySelectorAll('#mStops .m-opt').forEach(o => o.classList.toggle('sel', +o.dataset.s === i));
+  document.getElementById('mInvBtn').disabled = false;
+}
+function confirmStop(){
+  if (selStop === null) return;
+  const p = PAS.find(x => x.num === 'EA-04910');
+  if (p){ p.parada = STOPS[selStop].parada + ' · ' + STOPS[selStop].hora; p.inv = 'Confirmada'; renderList(); }
+  toast('Acceso activado. Parada registrada.');
+  mgo('pend');
+}
+function mgo(id){
+  document.querySelectorAll('.m-scr').forEach(s => s.classList.remove('on'));
+  const el = document.getElementById('m-' + id);
+  if (el){ el.classList.add('on'); el.scrollTop = 0; }
+  document.querySelectorAll('#pnav li').forEach(l => l.classList.toggle('on', l.dataset.m === id));
+  document.getElementById('mTime').textContent = id === 'pend' ? '6:15' : '9:41';
+}
+document.querySelectorAll('#pnav li').forEach(l => l.onclick = () => mgo(l.dataset.m));
+
+/* ---------- Arranque ---------- */
+renderStops();
+renderList();
+</script>

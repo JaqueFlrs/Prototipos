@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>Entrar a Claude Code con token</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #f4f6f8;
+    --surface: #ffffff;
+    --ink: #101c2c;
+    --ink-soft: #48566a;
+    --ink-faint: #7a879a;
+    --line: #dfe4ea;
+    --line-strong: #c3cbd6;
+    --accent: #1b5fa8;
+    --accent-soft: #e7eff8;
+    --warn: #8f4d14;
+    --warn-soft: #fbf0e4;
+    --warn-line: #e6cba6;
+    --term-bg: #0b1220;
+    --term-ink: #dbe4f0;
+    --term-line: #22314a;
+    --term-prompt: #7fb2e8;
+
+    --step: clamp(1.15rem, 1rem + 0.7vw, 1.4rem);
+    --h1: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+    --body: clamp(1rem, 0.97rem + 0.15vw, 1.075rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0c121c;
+      --surface: #141c28;
+      --ink: #e6ecf4;
+      --ink-soft: #a3b0c2;
+      --ink-faint: #75839a;
+      --line: #263243;
+      --line-strong: #38475c;
+      --accent: #74aae4;
+      --accent-soft: #19273a;
+      --warn: #e0a468;
+      --warn-soft: #2a2013;
+      --warn-line: #4d3a1f;
+      --term-bg: #060b14;
+      --term-ink: #d6e0ee;
+      --term-line: #1d283a;
+      --term-prompt: #7fb2e8;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0c121c;
+    --surface: #141c28;
+    --ink: #e6ecf4;
+    --ink-soft: #a3b0c2;
+    --ink-faint: #75839a;
+    --line: #263243;
+    --line-strong: #38475c;
+    --accent: #74aae4;
+    --accent-soft: #19273a;
+    --warn: #e0a468;
+    --warn-soft: #2a2013;
+    --warn-line: #4d3a1f;
+    --term-bg: #060b14;
+    --term-ink: #d6e0ee;
+    --term-line: #1d283a;
+    --term-prompt: #7fb2e8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size: var(--body);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 47rem;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 1rem + 3vw, 4rem) clamp(1rem, 0.5rem + 3vw, 2rem) 5rem;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1.5rem; }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+
+  h1 {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 700;
+    font-size: var(--h1);
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+    margin: 0 0 0.7rem;
+  }
+
+  .standfirst {
+    margin: 0;
+    max-width: 34rem;
+    font-size: 1.08em;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- section headings ---------- */
+
+  h2 {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    margin: 0 0 0.9rem;
+  }
+
+  h3 {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: -0.005em;
+    margin: 0 0 0.55rem;
+  }
+
+  p { margin: 0 0 0.9rem; }
+  p:last-child { margin-bottom: 0; }
+
+  strong { font-weight: 600; }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- the fork chooser ---------- */
+
+  .chooser {
+    margin-top: 2.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.35rem 1.35rem;
+  }
+
+  .chooser-q {
+    font-family: Archivo, sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 0 0 0.35rem;
+  }
+
+  .chooser-hint { margin: 0 0 1rem; font-size: 0.94em; color: var(--ink-soft); }
+
+  .choices { display: grid; gap: 0.6rem; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 33rem) { .choices { grid-template-columns: 1fr; } }
+
+  .choice {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    background: var(--ground);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    padding: 0.7rem 0.85rem;
+    transition: border-color 120ms, background 120ms;
+  }
+
+  .choice:hover { border-color: var(--accent); }
+
+  .choice[aria-pressed="true"] {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+
+  .choice code {
+    display: block;
+    background: transparent;
+    padding: 0;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.15rem;
+  }
+
+  .choice span { font-size: 0.92em; color: var(--ink-soft); }
+
+  .verdict {
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--line-strong);
+    font-size: 0.96em;
+  }
+
+  .verdict[hidden] { display: none !important; }
+
+  /* ---------- steps ---------- */
+
+  .steps { margin: 2.5rem 0 0; padding: 0; list-style: none; display: grid; gap: 1.5rem; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    gap: 0 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.3rem 1.4rem;
+  }
+
+  @media (max-width: 33rem) {
+    .step { grid-template-columns: 1fr; gap: 0.75rem; padding: 1.1rem; }
+  }
+
+  .num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1;
+    color: var(--surface);
+    background: var(--ink);
+    width: 2.4rem;
+    height: 2.4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 2px;
+    grid-row: span 2;
+  }
+
+  @media (max-width: 33rem) { .num { grid-row: auto; } }
+
+  .step-body > :first-child { margin-top: 0; }
+
+  .must {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warn);
+    background: var(--warn-soft);
+    border: 1px solid var(--warn-line);
+    padding: 0.16rem 0.42rem;
+    border-radius: 2px;
+    vertical-align: 0.15em;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+  }
+
+  /* ---------- command blocks ---------- */
+
+  .cmd {
+    margin: 0.9rem 0;
+    background: var(--term-bg);
+    border: 1px solid var(--term-line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .cmd-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.4rem 0.5rem 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--term-line);
+  }
+
+  .cmd-label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--term-prompt);
+  }
+
+  .copy {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    background: transparent;
+    color: var(--term-ink);
+    border: 1px solid var(--term-line);
+    border-radius: 2px;
+    padding: 0.22rem 0.55rem;
+    transition: border-color 120ms, color 120ms;
+  }
+
+  .copy:hover { border-color: var(--term-prompt); color: var(--term-prompt); }
+
+  .cmd pre {
+    margin: 0;
+    padding: 0.8rem 0.75rem 0.85rem;
+    overflow-x: auto;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--term-ink);
+    tab-size: 2;
+  }
+
+  .cmd pre::before {
+    content: "PS> ";
+    color: var(--term-prompt);
+    user-select: none;
+  }
+
+  .fill { color: #f0b86e; font-weight: 600; }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.87em;
+    background: var(--accent-soft);
+    color: var(--ink);
+    padding: 0.08em 0.32em;
+    border-radius: 2px;
+  }
+
+  .route[hidden] { display: none !important; }
+
+  /* ---------- substeps (paso 2) ---------- */
+
+  .substeps {
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: sub;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .substeps > li {
+    counter-increment: sub;
+    display: grid;
+    grid-template-columns: 1.6rem 1fr;
+    gap: 0 0.7rem;
+    align-items: start;
+  }
+
+  .substeps > li::before {
+    content: counter(sub, lower-alpha) ")";
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.75;
+  }
+
+  .substeps > li > * { grid-column: 2; }
+  .substeps > li > p { margin: 0; }
+
+  .keys {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.8em;
+    font-weight: 600;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    padding: 0.08em 0.36em;
+    white-space: nowrap;
+  }
+
+  .compare {
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: 1fr;
+    margin: 1.1rem 0 0;
+  }
+
+  .cmp {
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .cmp-tag {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.6rem;
+  }
+
+  .cmp-bad .cmp-tag { background: var(--warn-soft); color: var(--warn); border-bottom: 1px solid var(--warn-line); }
+  .cmp-good .cmp-tag { background: var(--accent-soft); color: var(--accent); border-bottom: 1px solid var(--line); }
+
+  .cmp code {
+    display: block;
+    background: transparent;
+    padding: 0.55rem 0.6rem;
+    font-size: 0.79rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre;
+    border-radius: 0;
+  }
+
+  .checklist {
+    margin: 1.1rem 0 0;
+    padding: 0.9rem 1rem;
+    background: var(--ground);
+    border: 1px dashed var(--line-strong);
+    border-radius: 2px;
+  }
+
+  .checklist h3 { margin-bottom: 0.5rem; }
+  .checklist ul { margin: 0; padding-left: 1.1rem; }
+  .checklist li { margin-bottom: 0.32rem; font-size: 0.95em; color: var(--ink-soft); }
+  .checklist li:last-child { margin-bottom: 0; }
+  .checklist li code { color: var(--ink); }
+
+  .route-hdr {
+    display: block;
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin: 0.9rem 0 0.35rem;
+  }
+
+  .route-hdr b { color: var(--accent); font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.92em; }
+
+  .route-hdr + .compare { margin-top: 0.35rem; }
+
+  .route-tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .pick-first {
+    font-size: 0.95em;
+    color: var(--ink-soft);
+    border: 1px dashed var(--line-strong);
+    padding: 0.75rem 0.85rem;
+    border-radius: 2px;
+  }
+
+  .expect {
+    font-size: 0.95em;
+    color: var(--ink-soft);
+    border-left: 2px solid var(--line-strong);
+    padding-left: 0.8rem;
+    margin: 0.9rem 0 0;
+  }
+
+  /* ---------- troubleshooting ---------- */
+
+  .fixes { margin: 1rem 0 0; display: grid; gap: 0.85rem; }
+
+  .fix { border-top: 1px solid var(--line); padding-top: 0.85rem; }
+  .fix:first-child { border-top: none; padding-top: 0; }
+
+  .symptom {
+    font-family: Archivo, sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .fix p { margin: 0; font-size: 0.97em; color: var(--ink-soft); }
+  .fix p code { color: var(--ink); }
+
+  /* ---------- blocks ---------- */
+
+  section { margin-top: 3rem; }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.35rem 1.4rem;
+  }
+
+  .panel-warn {
+    background: var(--warn-soft);
+    border: 1px solid var(--warn-line);
+    border-left: 3px solid var(--warn);
+    padding: 1.25rem 1.4rem;
+  }
+
+  .panel-warn h2 { font-size: 1.15rem; color: var(--warn); }
+  .panel-warn p { color: var(--ink); font-size: 0.98em; }
+
+  .no-list { margin: 0.6rem 0 0; padding-left: 1.15rem; }
+  .no-list li { margin-bottom: 0.4rem; }
+  .no-list li:last-child { margin-bottom: 0; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Guía paso a paso · Windows</p>
+    <h1>Entrar a Claude Code con token</h1>
+    <p class="standfirst">Para quien no tiene cuenta propia y le pasaron un token. Sirve en la terminal. En la app de Claude no sirve — eso se explica al final.</p>
+  </header>
+
+  <div class="chooser">
+    <p class="chooser-q">Antes de empezar: ¿cómo empieza tu token?</p>
+    <p class="chooser-hint">Fíjate solo en los primeros caracteres. Es opcional: si eliges, el paso 2 esconde el comando que no te toca.</p>
+    <div class="choices">
+      <button class="choice" type="button" id="pick-a" aria-pressed="false">
+        <code>sk-ant-api03…</code>
+        <span>API key de la consola</span>
+      </button>
+      <button class="choice" type="button" id="pick-b" aria-pressed="false">
+        <code>sk-ant-oat01…</code>
+        <span>Token de suscripción</span>
+      </button>
+    </div>
+    <p class="verdict" id="verdict-a" hidden>Es una <strong>API key</strong>. El consumo se le factura a quien la generó, por uso. Vas por la <strong>Ruta A</strong> en el paso 2.</p>
+    <p class="verdict" id="verdict-b" hidden>Es un <strong>token OAuth</strong>, sacado de una suscripción Pro o Max con <code>claude setup-token</code>. Vas por la <strong>Ruta B</strong> en el paso 2.</p>
+  </div>
+
+  <ol class="steps">
+
+    <li class="step">
+      <span class="num">1</span>
+      <div class="step-body">
+        <h2>Abre PowerShell e instala Claude Code</h2>
+        <p>Tecla <strong>Windows</strong>, escribe <code>powershell</code>, Enter. Pega esto y espera a que termine:</p>
+        <div class="cmd">
+          <div class="cmd-bar">
+            <span class="cmd-label">Instalador</span>
+            <button class="copy" type="button" data-copy="irm https://claude.ai/install.ps1 | iex">Copiar</button>
+          </div>
+          <pre>irm https://claude.ai/install.ps1 | iex</pre>
+        </div>
+        <p class="expect">Si ya tenías Claude Code instalado, sáltate este paso.</p>
+      </div>
+    </li>
+
+    <li class="step">
+      <span class="num">2</span>
+      <div class="step-body">
+        <h2>Guarda el token</h2>
+        <p>Este es el paso donde se traba la gente, así que va bien despacio. La idea es armar la línea completa en el <strong>Bloc de notas</strong> y hasta el final pegarla en PowerShell.</p>
+
+        <div id="step2-flow">
+
+          <ol class="substeps">
+
+            <li>
+              <p>Abre el <strong>Bloc de notas</strong>: tecla <span class="keys">Windows</span>, escribe <code>notepad</code>, <span class="keys">Enter</span>. Déjalo abierto.</p>
+            </li>
+
+            <li>
+              <p>Copia la línea que te toca según cómo empieza tu token, y pégala en el Bloc de notas con <span class="keys">Ctrl</span> + <span class="keys">V</span>.</p>
+              <div class="route route-a">
+                <span class="route-hdr">Si tu token empieza con <b>sk-ant-api03</b></span>
+                <div class="cmd">
+                  <div class="cmd-bar">
+                    <span class="cmd-label">Guardar API key</span>
+                    <button class="copy" type="button" data-copy='setx ANTHROPIC_API_KEY "PEGA_AQUI_EL_TOKEN"'>Copiar</button>
+                  </div>
+                  <pre>setx ANTHROPIC_API_KEY "<span class="fill">PEGA_AQUI_EL_TOKEN</span>"</pre>
+                </div>
+              </div>
+              <div class="route route-b">
+                <span class="route-hdr">Si tu token empieza con <b>sk-ant-oat01</b></span>
+                <div class="cmd">
+                  <div class="cmd-bar">
+                    <span class="cmd-label">Guardar token OAuth</span>
+                    <button class="copy" type="button" data-copy='setx CLAUDE_CODE_OAUTH_TOKEN "PEGA_AQUI_EL_TOKEN"'>Copiar</button>
+                  </div>
+                  <pre>setx CLAUDE_CODE_OAUTH_TOKEN "<span class="fill">PEGA_AQUI_EL_TOKEN</span>"</pre>
+                </div>
+              </div>
+            </li>
+
+            <li>
+              <p>Ve al mensaje o correo donde te mandaron el token. Selecciona el token <strong>completo</strong>, desde <code>sk-ant</code> hasta el último carácter, y cópialo con <span class="keys">Ctrl</span> + <span class="keys">C</span>.</p>
+            </li>
+
+            <li>
+              <p>Regresa al Bloc de notas. Haz <strong>doble clic</strong> encima de <code>PEGA_AQUI_EL_TOKEN</code>: se pinta toda de azul.</p>
+            </li>
+
+            <li>
+              <p>Sin quitar la selección, pega con <span class="keys">Ctrl</span> + <span class="keys">V</span>. El token entra en el lugar exacto donde estaba esa palabra.</p>
+            </li>
+
+            <li>
+              <p>Revisa la línea: debe seguir siendo <strong>una sola</strong>, con una comilla antes del token y otra después. Si el token quedó cortado en dos renglones, bórralo y vuelve al inciso c.</p>
+            </li>
+
+            <li>
+              <p>Selecciona toda la línea con <span class="keys">Ctrl</span> + <span class="keys">A</span> y cópiala con <span class="keys">Ctrl</span> + <span class="keys">C</span>.</p>
+            </li>
+
+            <li>
+              <p>Ve a la ventana de <strong>PowerShell</strong>, pega con <strong>clic derecho</strong> y presiona <span class="keys">Enter</span>.</p>
+            </li>
+
+          </ol>
+
+          <div class="route route-a">
+            <span class="route-hdr">Cómo debe quedar &middot; sk-ant-api03</span>
+            <div class="compare">
+              <div class="cmp cmp-bad">
+                <span class="cmp-tag">Así NO &mdash; sin reemplazar</span>
+                <code>setx ANTHROPIC_API_KEY "PEGA_AQUI_EL_TOKEN"</code>
+              </div>
+              <div class="cmp cmp-good">
+                <span class="cmp-tag">Así SÍ &mdash; token real adentro</span>
+                <code>setx ANTHROPIC_API_KEY "sk-ant-api03-Ab3xK9...z7Qw"</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="route route-b">
+            <span class="route-hdr">Cómo debe quedar &middot; sk-ant-oat01</span>
+            <div class="compare">
+              <div class="cmp cmp-bad">
+                <span class="cmp-tag">Así NO &mdash; sin reemplazar</span>
+                <code>setx CLAUDE_CODE_OAUTH_TOKEN "PEGA_AQUI_EL_TOKEN"</code>
+              </div>
+              <div class="cmp cmp-good">
+                <span class="cmp-tag">Así SÍ &mdash; token real adentro</span>
+                <code>setx CLAUDE_CODE_OAUTH_TOKEN "sk-ant-oat01-Ab3xK9...z7Qw"</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist">
+            <h3>Antes de dar Enter, checa estas 4 cosas</h3>
+            <ul>
+              <li>La palabra <code>PEGA_AQUI_EL_TOKEN</code> ya <strong>no aparece</strong> en ninguna parte.</li>
+              <li>Hay <strong>exactamente dos comillas</strong>: una antes del token y una después. Ni más, ni menos.</li>
+              <li>Todo está en <strong>un solo renglón</strong>.</li>
+              <li>No cambiaste ni una letra del nombre en mayúsculas que va antes de las comillas.</li>
+            </ul>
+          </div>
+
+          <p class="expect">PowerShell debe responder <code>SUCCESS: Specified value was saved.</code> Si dice otra cosa, casi siempre es una comilla suelta: corrige en el Bloc de notas y vuelve a pegar.</p>
+
+        </div>
+      </div>
+    </li>
+
+    <li class="step">
+      <span class="num">3</span>
+      <div class="step-body">
+        <h2>Cierra PowerShell y ábrelo otra vez <span class="must">Obligatorio</span></h2>
+        <p>El token no existe para la terminal hasta que abres una ventana nueva. Ciérrala con la <strong>X</strong> y vuelve a abrir PowerShell desde cero.</p>
+        <p class="expect">Este es el paso que la gente se salta, y luego Claude sigue pidiendo iniciar sesión.</p>
+      </div>
+    </li>
+
+    <li class="step">
+      <span class="num">4</span>
+      <div class="step-body">
+        <h2>Entra a tu carpeta de trabajo</h2>
+        <p>Si no tienes un proyecto en mente, tu carpeta de usuario está bien:</p>
+        <div class="cmd">
+          <div class="cmd-bar">
+            <span class="cmd-label">Ir a la carpeta</span>
+            <button class="copy" type="button" data-copy="cd $env:USERPROFILE">Copiar</button>
+          </div>
+          <pre>cd $env:USERPROFILE</pre>
+        </div>
+      </div>
+    </li>
+
+    <li class="step">
+      <span class="num">5</span>
+      <div class="step-body">
+        <h2>Arranca</h2>
+        <div class="cmd">
+          <div class="cmd-bar">
+            <span class="cmd-label">Iniciar</span>
+            <button class="copy" type="button" data-copy="claude">Copiar</button>
+          </div>
+          <pre>claude</pre>
+        </div>
+        <p class="expect">Si todo salió bien, entra directo: no pide correo ni contraseña.</p>
+      </div>
+    </li>
+
+  </ol>
+
+  <section>
+    <h2>Si algo falla</h2>
+    <div class="fixes">
+
+      <div class="fix">
+        <p class="symptom">Dice que no reconoce el comando <code>claude</code></p>
+        <p>La instalación no terminó, o no se reabrió la terminal. Repite el paso 1, cierra PowerShell y ábrelo de nuevo.</p>
+      </div>
+
+      <div class="fix">
+        <p class="symptom">Sigue pidiendo iniciar sesión</p>
+        <p>El token no se guardó. Comprueba con <code>echo $env:ANTHROPIC_API_KEY</code> (o <code>echo $env:CLAUDE_CODE_OAUTH_TOKEN</code> en la Ruta B). Si sale vacío, repite el paso 2 revisando las comillas.</p>
+      </div>
+
+      <div class="fix">
+        <p class="symptom">Error <code>invalid API key</code> o <code>401</code></p>
+        <p>El token está incompleto, vencido o revocado. Que lo revise quien lo generó.</p>
+      </div>
+
+      <div class="fix">
+        <p class="symptom">Quiero probar sin dejarlo guardado</p>
+        <p>Usa <code>$env:ANTHROPIC_API_KEY = "el-token"; claude</code> — vive solo en esa ventana y se borra al cerrarla.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="panel">
+      <h2>La app de Claude no acepta tokens</h2>
+      <p>Aquí no hay pasos, porque no se puede:</p>
+      <ul class="no-list">
+        <li>La <strong>app de escritorio</strong> y <strong>claude.ai</strong> solo entran con correo y contraseña, o con el SSO de la empresa.</li>
+        <li><strong>Claude Code en web</strong> también pide iniciar sesión con cuenta.</li>
+      </ul>
+      <p style="margin-top:0.9rem">Si de verdad necesita la app, la única salida es que le den un asiento en el plan de la organización.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="panel-warn">
+      <h2>Antes de compartir un token</h2>
+      <p>Si el token salió de la <strong>suscripción personal de otra persona</strong>, compartirlo va contra los términos de uso de Anthropic y pueden suspender la cuenta original.</p>
+      <p>Si es una <strong>API key</strong>, todo el consumo se le factura a quien la generó, sin límite por usuario.</p>
+      <p style="margin-bottom:0">Lo sano es pedir un asiento en la organización. Lo demás es decisión de ustedes.</p>
+    </div>
+  </section>
+
+  <footer>Guía interna · PowerShell en Windows</footer>
+
+</div>
+
+<script>
+  (function () {
+    var KEY = "cc-token-route";
+
+    var pickA = document.getElementById("pick-a");
+    var pickB = document.getElementById("pick-b");
+    var routeA = document.querySelectorAll(".route-a");
+    var routeB = document.querySelectorAll(".route-b");
+    var step2 = document.getElementById("step2-flow");
+    var verdictA = document.getElementById("verdict-a");
+    var verdictB = document.getElementById("verdict-b");
+
+    function apply(route) {
+      var isA = route === "a";
+      var isB = route === "b";
+      pickA.setAttribute("aria-pressed", String(isA));
+      pickB.setAttribute("aria-pressed", String(isB));
+      var none = !isA && !isB;
+      routeA.forEach(function (el) { el.hidden = !(isA || none); });
+      routeB.forEach(function (el) { el.hidden = !(isB || none); });
+      verdictA.hidden = !isA;
+      verdictB.hidden = !isB;
+      if (step2) { step2.hidden = false; }
+    }
+
+    function choose(route) {
+      apply(route);
+      try { localStorage.setItem(KEY, route); } catch (e) {}
+    }
+
+    pickA.addEventListener("click", function () { choose("a"); });
+    pickB.addEventListener("click", function () { choose("b"); });
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    apply(saved === "a" || saved === "b" ? saved : null);
+
+    // copy buttons
+    document.querySelectorAll(".copy").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var text = btn.getAttribute("data-copy") || "";
+        var done = function () {
+          var old = btn.textContent;
+          btn.textContent = "Copiado";
+          setTimeout(function () { btn.textContent = old; }, 1400);
+        };
+        var fallback = function () {
+          try {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            done();
+          } catch (e) {
+            btn.textContent = "Copia a mano";
+          }
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(fallback);
+        } else {
+          fallback();
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

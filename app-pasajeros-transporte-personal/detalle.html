@@ -530,8 +530,8 @@ body.exec .exec-hint{display:block}
 
     <h3 class="sub">La aplicación del pasajero</h3>
     <p>
-      El empleado recibe un enlace de invitación, lo abre y elige su parada. A partir de ahí, cada
-      día abre la app y ve:
+      El empleado recibe un enlace de invitación y lo abre. Su ruta, parada y horario ya vienen
+      asignados desde la carga del padrón. A partir de ahí, cada día abre la app y ve:
     </p>
     <ul class="slist">
       <li>Su parada y su hora programada</li>
@@ -592,7 +592,7 @@ body.exec .exec-hint{display:block}
 
     <div class="flow" id="flow">
       <button class="step on" data-i="0"><div class="step-n">01</div><div class="step-t">Alta e invitación</div></button>
-      <button class="step" data-i="1"><div class="step-n">02</div><div class="step-t">Elige su parada</div></button>
+      <button class="step" data-i="1"><div class="step-n">02</div><div class="step-t">Activa su acceso</div></button>
       <button class="step" data-i="2"><div class="step-n">03</div><div class="step-t">Consulta su viaje</div></button>
       <button class="step" data-i="3"><div class="step-n">04</div><div class="step-t">Sigue su unidad</div></button>
       <button class="step" data-i="4"><div class="step-n">05</div><div class="step-t">Confirma abordaje</div></button>
@@ -613,7 +613,7 @@ body.exec .exec-hint{display:block}
     <h3 class="sub">Aplicación del pasajero</h3>
     <ul class="slist">
       <li>Activación mediante enlace de invitación, sin necesidad de crear contraseña</li>
-      <li>Selección de su parada la primera vez, y cambio posterior desde su perfil</li>
+      <li>Consulta de la ruta y parada que le fueron asignadas</li>
       <li>Consulta de parada, horario, unidad y operador</li>
       <li>Ubicación de la unidad en el mapa mientras el recorrido está activo</li>
       <li>Avisos de unidad en camino y por llegar</li>
@@ -660,7 +660,7 @@ body.exec .exec-hint{display:block}
         <h4>Menos carga de atención</h4>
         <p>
           Las consultas sobre dónde va la unidad se resuelven en la app. El alta de personal se hace
-          por archivo y sin asignar rutas individualmente.
+          por archivo, cargando el padrón directamente a cada ruta.
         </p>
       </div>
       <div>
@@ -817,7 +817,7 @@ body.exec .exec-hint{display:block}
       <div class="proto-guide">
         <h4>Pantallas de la app</h4>
         <ul class="pnav" id="pnav">
-          <li class="on" data-m="inv">Activar invitación <span class="s">Elige su parada la primera vez</span></li>
+          <li class="on" data-m="inv">Activar invitación <span class="s">Confirma su ruta ya asignada</span></li>
           <li data-m="pend">Mi viaje · sin asignar <span class="s">Antes de que definan la unidad</span></li>
           <li data-m="home">Mi viaje · en camino <span class="s">Con unidad y operador</span></li>
           <li data-m="map">Ubicación en vivo <span class="s">Seguimiento de la unidad</span></li>
@@ -836,19 +836,23 @@ body.exec .exec-hint{display:block}
             <div style="padding:22px 18px 8px;text-align:center">
               <div style="width:54px;height:54px;border-radius:15px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;margin:6px auto 14px">🚌</div>
               <div style="font-size:16px;font-weight:660;margin-bottom:3px">Bienvenido, Marco</div>
-              <div style="font-size:12px;color:var(--ink-3)">Confirma tus datos y elige tu parada</div>
+              <div style="font-size:12px;color:var(--ink-3)">Este es tu transporte asignado</div>
             </div>
             <div class="m-card">
               <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--ink-3)">Nombre</span><span style="font-size:12.5px;font-weight:560">Marco Ruiz</span></div>
               <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--ink-3)">Nº de empleado</span><span style="font-size:12.5px;font-weight:560">EA-04910</span></div>
               <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--ink-3)">Empresa</span><span style="font-size:12.5px;font-weight:560">Empresa A</span></div>
             </div>
-            <div style="padding:6px 18px 9px;font-size:12px;font-weight:620">¿Dónde te recogen?</div>
-            <div id="mStops"></div>
+            <div class="m-card" style="border-color:var(--accent);background:var(--accent-soft)">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--accent);margin-bottom:8px">TU RUTA ASIGNADA</div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--accent-2);opacity:.75">Ruta</span><span style="font-size:12.5px;font-weight:560;color:var(--accent-2)">Turno Matutino</span></div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--accent-2);opacity:.75">Parada</span><span style="font-size:12.5px;font-weight:560;color:var(--accent-2)">Portón 3</span></div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--accent-2);opacity:.75">Horario</span><span style="font-size:12.5px;font-weight:560;color:var(--accent-2)">7:00 a.m.</span></div>
+            </div>
             <div style="padding:6px 15px 20px">
-              <button class="m-btn" id="mInvBtn" disabled onclick="confirmStop()">Confirmar y entrar</button>
+              <button class="m-btn" id="mInvBtn" onclick="confirmStop()">Confirmar y entrar</button>
               <div style="font-size:10.5px;color:var(--ink-4);margin-top:11px;text-align:center;line-height:1.45">
-                Si estos datos no son tuyos, avisa a tu supervisor
+                Si algo no coincide, avisa a tu supervisor
               </div>
             </div>
           </div>
@@ -985,12 +989,18 @@ body.exec .exec-hint{display:block}
               <option>Empresa A</option><option>Empresa B</option><option>Empresa C</option>
             </select>
           </div>
+          <div>
+            <label>Ruta</label>
+            <select id="fRuta" onchange="renderList()" style="border-color:var(--accent);color:var(--accent-2)">
+              <option>Turno Matutino</option><option>Turno Vespertino</option><option>Turno Nocturno</option>
+            </select>
+          </div>
           <div style="flex:1;min-width:150px">
             <label>Buscar</label>
             <input id="fQ" placeholder="Nombre o número de empleado" oninput="renderList()" style="width:100%">
           </div>
           <button class="btn btn-2" onclick="sendSel()">Enviar invitaciones</button>
-          <button class="btn btn-1" onclick="toast('Se abriría el formulario de alta o la carga de archivo.')">Cargar padrón</button>
+          <button class="btn btn-1" onclick="toast('Se cargaría el listado de quién va en la ruta seleccionada.')">Cargar padrón a esta ruta</button>
         </div>
         <div class="p-tbl-wrap">
           <table class="p-tbl">
@@ -1041,7 +1051,7 @@ body.exec .exec-hint{display:block}
           </div>
         </div>
         <div class="erp-cap">
-          No se captura la parada: la elige el propio empleado al activar su invitación.
+          Se elige la ruta y se carga el listado de quién va en ella. La gente queda asignada desde la carga.
         </div>
       </div>
     </div>
@@ -1113,7 +1123,7 @@ body.exec .exec-hint{display:block}
           <ul>
             <li>Empleado de una empresa atendida. No es usuario del sistema administrativo.</li>
             <li>Accede solo desde la app mediante su enlace de invitación y ve únicamente su información.</li>
-            <li>Elige y puede cambiar su parada, y confirma su abordaje.</li>
+            <li>Recibe su ruta y parada ya asignadas. Solo consulta su viaje y confirma su abordaje.</li>
           </ul>
           <h4>Personal operativo</h4>
           <ul>
@@ -1134,8 +1144,8 @@ body.exec .exec-hint{display:block}
           <ul>
             <li>Cada ruta pertenece a una sola empresa atendida.</li>
             <li>El pasajero tiene su empresa atendida desde el padrón, independiente de la ruta, porque se da de alta antes de tener parada.</li>
-            <li>Al elegir parada se valida que pertenezca a una ruta de su misma empresa.</li>
-            <li>Un pasajero sin parada elegida entra a la app pero no consulta viaje ni confirma abordaje.</li>
+            <li>El padrón se carga a una ruta específica, por lo que el pasajero queda asignado a la empresa de esa ruta.</li>
+            <li>Un pasajero dado de alta pero sin invitación confirmada no puede entrar a la app.</li>
             <li>El enlace de invitación es personal y de un solo uso.</li>
             <li>La consulta del viaje se resuelve por empresa, fecha y ruta, sin depender del recorrido del día anterior.</li>
             <li>Un cambio de parada no modifica los abordajes ya registrados.</li>
@@ -1179,7 +1189,7 @@ body.exec .exec-hint{display:block}
           <ul>
             <li>Número de empleado obligatorio y único dentro de la misma empresa atendida.</li>
             <li>Al menos un medio de contacto válido para poder enviar la invitación.</li>
-            <li>La parada elegida debe pertenecer a una ruta de la empresa del pasajero.</li>
+            <li>Un pasajero no puede quedar cargado en dos rutas del mismo turno.</li>
             <li>No se permite confirmar abordaje si el recorrido del día no está activo.</li>
             <li>No se permite un segundo abordaje del mismo pasajero en la misma parada y fecha.</li>
             <li>La carga del padrón reporta los registros rechazados y el motivo, sin abortar el archivo completo.</li>
@@ -1261,9 +1271,9 @@ const STOPS = [
 /* Detalle de los pasos del flujo general */
 const FLOW = [
   {who:'Una sola vez', t:'Alta e invitación',
-   d:'Se carga el padrón con nombre, número de empleado y un medio de contacto, y se envían las invitaciones. No se asigna ruta ni parada en este momento.'},
-  {who:'El empleado · una sola vez', t:'Elige su parada',
-   d:'Abre el enlace que recibió, confirma que los datos son suyos y elige su parada de una lista con nombres entendibles. Su acceso queda activo sin crear contraseña.'},
+   d:'Se eligen la ruta y se carga el listado de quién va en ella, con nombre, número de empleado y un medio de contacto. La gente queda asignada a esa ruta desde la carga, y se le envían las invitaciones.'},
+  {who:'El empleado · una sola vez', t:'Activa su acceso',
+   d:'Abre el enlace que recibió y ve su ruta, parada y horario ya asignados. Solo confirma que los datos son suyos y su acceso queda activo, sin crear contraseña.'},
   {who:'El empleado · todos los días', t:'Consulta su viaje',
    d:'Ve su parada y su hora programada. Cuando la unidad y el operador quedan definidos, aparecen en la pantalla junto con el tiempo estimado de llegada.'},
   {who:'El empleado · mientras espera', t:'Sigue su unidad',
@@ -1341,12 +1351,12 @@ function renderList(){
       <td class="nm">${p.nom}</td>
       <td>${p.emp}</td>
       <td>${p.num}</td>
-      <td>${p.parada === '—' ? '<span class="pill p-mute">Sin elegir</span>' : p.parada}</td>
+      <td>${p.parada === '—' ? '<span class="pill p-mute">Sin cargar a ruta</span>' : p.parada}</td>
       <td>${invPill(p.inv)}</td>
     </tr>`).join('')
     : '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--ink-4);font-style:italic">Sin resultados para los filtros aplicados</td></tr>';
   document.getElementById('listCount').textContent =
-    'Mostrando ' + rows.length + ' de ' + PAS.length + ' empleados. La parada la elige cada quien al activar su invitación.';
+    'Mostrando ' + rows.length + ' de ' + PAS.length + ' empleados de la ruta seleccionada.';
 }
 function chkAll(cb){ document.querySelectorAll('.selChk').forEach(c => c.checked = cb.checked); }
 function sendSel(){
@@ -1398,24 +1408,13 @@ function clearNew(){
 }
 
 /* ---------- App del pasajero ---------- */
-let selStop = null;
-function renderStops(){
-  document.getElementById('mStops').innerHTML = STOPS.map((s,i) => `
-    <div class="m-opt" data-s="${i}" onclick="pickStop(${i})">
-      <div class="m-opt-t">${s.parada} · ${s.hora}</div>
-      <div class="m-opt-s">${s.ruta} · Unidad ${s.uni}</div>
-    </div>`).join('');
-}
-function pickStop(i){
-  selStop = i;
-  document.querySelectorAll('#mStops .m-opt').forEach(o => o.classList.toggle('sel', +o.dataset.s === i));
-  document.getElementById('mInvBtn').disabled = false;
-}
+/* La parada viene asignada desde la carga del padrón: el pasajero solo confirma. */
+const ASIGNADA = STOPS[0];
+function renderStops(){ /* la parada ya no se elige */ }
 function confirmStop(){
-  if (selStop === null) return;
   const p = PAS.find(x => x.num === 'EA-04910');
-  if (p){ p.parada = STOPS[selStop].parada + ' · ' + STOPS[selStop].hora; p.inv = 'Confirmada'; renderList(); }
-  toast('Acceso activado. Parada registrada.');
+  if (p){ p.parada = ASIGNADA.parada + ' · ' + ASIGNADA.hora; p.inv = 'Confirmada'; renderList(); }
+  toast('Acceso activado.');
   mgo('pend');
 }
 function mgo(id){

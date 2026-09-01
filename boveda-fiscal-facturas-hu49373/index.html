@@ -306,7 +306,7 @@ const scenarios = [
 ["and","cada renglón muestra Fecha, RFC receptor, Serie/Folio, Total y UUID"]]],
 
 ["Acotar por fecha reduce el resumen y la tabla",[
-["given","la ventana ya muestra 5 CFDI; de esos, 2 caen en <em>01–15 ago</em>"],
+["given","la ventana ya muestra 5 CFDI pendientes sin ningún filtro; de esos, 2 caen en <em>01–15 ago</em>"],
 ["when","el usuario captura ese rango y da clic en <em>Generar</em>"],
 ["then","el resumen cambia a <em>2 facturas pendientes de importar</em> y la tabla muestra solo esos 2"]]],
 
@@ -352,7 +352,7 @@ const scenarios = [
 ["and","se muestra la tabla <em>Facturas no importadas por estar canceladas en el SAT</em> con UUID y RFC"]]],
 
 ["El resumen agrupa por RFC los rechazados por falta de cliente",[
-["given","5 CFDI seleccionados: 2 con RFC <em>AAA010101AAA</em>, 1 con <em>BBB020202BBB</em>, 2 válidos"],
+["given","5 CFDI seleccionados: los con RFC <em>AAA010101AAA</em> (2) y <em>BBB020202BBB</em> (1) no tienen cliente activo; los otros 2 sí"],
 ["when","el usuario da clic en <em>Importar</em>"],
 ["then","se importan 2 de 5"],
 ["and","la tabla <em>Facturas no importadas por cliente no encontrado</em> agrupa por RFC"],

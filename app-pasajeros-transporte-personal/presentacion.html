@@ -1,593 +1,253 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mi Transporte</title>
+<title>Mi Transporte — Propuesta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
 
 <style>
   :root{
-    --navy: #0E2A3D;
-    --navy-deep: #081C29;
-    --paper: #EFF5F5;
+    --orange: #F2891C;
+    --orange-deep: #C96A0F;
+    --charcoal: #242426;
+    --charcoal-deep: #17171A;
+    --paper: #F1EFEC;
     --panel: #FFFFFF;
-    --amber: #F2A93B;
-    --teal: #1C8C82;
-    --ink: #12242E;
-    --mist: #5B7480;
-    --line: #C9D8D8;
-    --good: #2C7A5E;
-    --bad: #A83A3A;
+    --ink: #202022;
+    --mist: #6E6C69;
+    --line: #DAD5CE;
   }
 
   *{ box-sizing: border-box; }
-  html, body{
-    margin: 0;
-    height: 100%;
-    background: var(--navy);
-    overscroll-behavior: none;
-  }
-  body{
-    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
-    color: var(--ink);
-  }
+  html, body{ margin: 0; height: 100%; background: var(--charcoal); overscroll-behavior: none; }
+  body{ font-family: "IBM Plex Sans", "Segoe UI", sans-serif; color: var(--ink); }
+  h1, h2, h3{ font-family: "Overpass", "Arial Narrow", sans-serif; text-wrap: balance; margin: 0; }
+  .mono{ font-family: "IBM Plex Mono", "Courier New", monospace; }
 
-  h1, h2, h3, h4{
-    font-family: "Overpass", "Arial Narrow", sans-serif;
-    text-wrap: balance;
-    margin: 0;
-  }
-
-  .mono{
-    font-family: "IBM Plex Mono", "Courier New", monospace;
-  }
-
-  .deck{
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    background: var(--navy);
-  }
-
+  .deck{ position: fixed; inset: 0; overflow: hidden; background: var(--charcoal); }
   .deck-track{
-    display: flex;
-    width: 300%;
-    height: 100%;
-    transition: transform .65s cubic-bezier(.65,0,.35,1);
-    will-change: transform;
+    display: flex; width: 400%; height: 100%;
+    transition: transform .65s cubic-bezier(.65,0,.35,1); will-change: transform;
   }
-  @media (prefers-reduced-motion: reduce){
-    .deck-track{ transition: none; }
-  }
-
+  @media (prefers-reduced-motion: reduce){ .deck-track{ transition: none; } }
   .slide{
-    flex: 0 0 33.3334%;
-    width: 33.3334%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: clamp(28px, 5.5vh, 64px) clamp(24px, 6vw, 100px);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .slide--dark{ background: var(--navy); color: #EAF1F1; }
-  .slide--light{ background: var(--paper); color: var(--ink); }
-
-  .eyebrow{
-    font-family: "IBM Plex Mono", monospace;
-    font-size: clamp(11px, 1vw, 13px);
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--amber);
-    font-weight: 600;
-    margin-bottom: 14px;
-  }
-
-  .slide--light .eyebrow{ color: var(--teal); }
-
-  /* ---------- Cover ---------- */
-  .cover-title{
-    font-size: clamp(48px, 9vw, 108px);
-    font-weight: 800;
-    line-height: .98;
-    letter-spacing: -.01em;
-    max-width: 14ch;
-  }
-  .cover-sub{
-    margin-top: 22px;
-    max-width: 46ch;
-    font-size: clamp(16px, 1.7vw, 21px);
-    line-height: 1.5;
-    color: #C7DADA;
-  }
-  .cover-route{
-    position: absolute;
-    right: -4%;
-    bottom: -8%;
-    width: min(60vw, 720px);
-    opacity: .5;
-  }
-  .cover-note{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: clamp(34px, 6vh, 56px);
-    font-size: 14px;
-    font-style: italic;
-    color: #9FBBBB;
-    max-width: 44ch;
-  }
-  .badge{
-    flex: none;
-    width: 40px; height: 40px;
-    border-radius: 999px;
-    background: var(--teal);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .badge svg{ width: 20px; height: 20px; stroke: white; }
-
-  /* ---------- Shared section heads ---------- */
-  .head{ max-width: 66ch; }
-  .head h2{
-    font-size: clamp(28px, 3.2vw, 42px);
-    font-weight: 800;
-  }
-  .head p{
-    margin-top: 10px;
-    font-size: clamp(13.5px, 1.2vw, 16px);
-    color: var(--mist);
-    line-height: 1.5;
-    max-width: 62ch;
-  }
-  .head--on-dark h2{ color: #F2F7F7; }
-  .head--on-dark p{ color: #A9C2C2; }
-
-  /* ---------- Phone mockups ---------- */
-  .phone{
-    flex: none;
-    width: 108px;
-    background: var(--navy);
-    border-radius: 18px;
-    padding: 7px 7px 9px;
-    box-shadow: 0 10px 22px -13px rgba(14,42,61,.45);
-  }
-  .phone-status{
-    display: flex; justify-content: space-between;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 7px; color: #9FBBBB;
-    padding: 0 2px 5px;
-  }
-  .phone-screen{
-    background: #fff;
-    border-radius: 12px;
-    padding: 8px;
-    height: 148px;
-    display: flex; flex-direction: column; gap: 5px;
-    color: var(--ink);
-    overflow: hidden;
-  }
-  .ph-row{ display: flex; align-items: center; gap: 5px; }
-  .ph-avatar{
-    width: 20px; height: 20px; border-radius: 999px; flex: none;
-    background: var(--teal); color: #fff;
-    font-family: "IBM Plex Mono", monospace; font-size: 7px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .ph-line{ font-size: 8px; line-height: 1.3; color: var(--ink); }
-  .ph-line--title{ font-weight: 700; font-size: 9px; }
-  .ph-line--muted{ color: var(--mist); font-size: 7.5px; }
-  .ph-card{
-    background: var(--paper); border-radius: 8px; padding: 6px 7px;
-    display: flex; flex-direction: column; gap: 2px;
-  }
-  .ph-btn{
-    margin-top: auto; background: var(--teal); color: #fff;
-    text-align: center; border-radius: 7px; padding: 6px;
-    font-size: 7.5px; font-weight: 600;
-  }
-  .ph-pill{
-    display: inline-flex; align-items: center; gap: 4px;
-    background: #EAF6F1; color: var(--good);
-    font-size: 7px; font-weight: 600;
-    padding: 3px 7px; border-radius: 999px; width: fit-content;
-  }
-  .ph-pill svg{ width: 8px; height: 8px; stroke: var(--good); }
-  .ph-map{
-    margin-top: auto; height: 46px; border-radius: 8px;
-    background: linear-gradient(135deg, #DCEBEA, #EFF5F5);
+    flex: 0 0 25%; width: 25%;
+    height: 100%; display: flex; flex-direction: column; justify-content: center;
+    padding: clamp(26px, 5vh, 60px) clamp(26px, 7vw, 120px);
     position: relative; overflow: hidden;
   }
-  .ph-map::before{
-    content: "";
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(circle at 28% 72%, var(--teal) 3px, transparent 3px),
-      radial-gradient(circle at 76% 28%, var(--amber) 3.5px, transparent 3.5px);
-  }
-  .ph-check{
-    width: 30px; height: 30px; border-radius: 999px;
-    background: var(--good); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    margin: 8px auto 2px;
-  }
-  .ph-check svg{ width: 15px; height: 15px; stroke: #fff; }
-  .ph-notif{
-    display: flex; align-items: center; gap: 6px;
-    background: var(--paper); border-radius: 8px; padding: 6px 7px;
-  }
-  .ph-notif svg{ width: 11px; height: 11px; stroke: var(--teal); flex: none; }
+  .slide--dark{ background: var(--charcoal); color: #EDEBE7; }
+  .slide--light{ background: var(--paper); color: var(--ink); }
 
-  /* ---------- Uso: una sola vez / cada día ---------- */
-  .usage{ margin-top: clamp(18px, 3vh, 28px); }
-  .usage-group{ margin-top: clamp(16px, 2.6vh, 24px); }
-  .usage-group:first-child{ margin-top: 0; }
-  .usage-tag{
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-    padding: 5px 12px; border-radius: 999px;
+  /* Topbar: eyebrow (contexto del slide) + marca en texto, nunca imagen */
+  .slide-top{ display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; position: relative; z-index: 2; }
+  .eyebrow{
+    font-family: "IBM Plex Mono", monospace; font-size: clamp(11px, 1vw, 13px);
+    letter-spacing: .14em; text-transform: uppercase; color: var(--orange); font-weight: 600; margin: 0;
   }
-  .usage-tag--once{ background: #FCEEDA; color: #B4791F; }
-  .usage-tag--daily{ background: #DCEEEC; color: var(--teal); }
-  .usage-items{
-    display: flex; gap: clamp(16px, 2vw, 26px);
-    margin-top: 13px; flex-wrap: wrap;
-  }
-  .usage-item{ display: flex; gap: 11px; align-items: flex-start; }
-  .usage-copy{ max-width: 20ch; padding-top: 2px; }
-  .usage-copy h3{ font-size: 13.5px; font-weight: 700; color: var(--navy); line-height: 1.25; }
-  .usage-copy p{ margin-top: 6px; font-size: 11px; line-height: 1.4; color: var(--mist); }
+  .brand-text{ font-family: "Overpass", sans-serif; font-weight: 800; font-size: clamp(17px, 1.9vw, 24px); letter-spacing: -.01em; white-space: nowrap; flex: none; }
+  .brand-text .accent{ color: var(--orange); }
+  .brand-text .rest{ color: var(--ink); margin-left: .18em; }
+  .slide--dark .brand-text .rest{ color: #F4F2EF; }
 
-  /* ---------- Admin options ---------- */
-  .options{
-    margin-top: clamp(20px, 3.5vh, 32px);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(14px, 1.8vw, 20px);
-  }
-  .option{
-    background: var(--panel);
-    border-radius: 16px;
-    padding: 16px 18px;
-    box-shadow: 0 12px 28px -18px rgba(14,42,61,.35);
-  }
-  .option.option--b{ background: #FCF3E4; }
-  .option-top{ display: flex; align-items: center; gap: 12px; }
-  .option .icon{
-    width: 38px; height: 38px; border-radius: 11px;
-    display: flex; align-items: center; justify-content: center; flex: none;
-    background: var(--teal);
-  }
-  .option .icon svg{ width: 19px; height: 19px; stroke: white; fill: none; }
-  .option--b .icon{ background: #C9822E; }
-  .option-tag{
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px; font-weight: 600; letter-spacing: .09em;
-    color: var(--teal);
-  }
-  .option--b .option-tag{ color: #C9822E; }
-  .option h3{ font-size: 14.5px; font-weight: 700; color: var(--navy); margin-top: 1px; }
-  .option dl{ margin: 11px 0 0; font-size: 11.5px; line-height: 1.45; }
-  .option dt{ font-weight: 700; display: inline; }
-  .option dt.pro{ color: var(--good); }
-  .option dt.con{ color: var(--bad); }
-  .option dd{ display: inline; margin: 0; color: var(--mist); }
-  .option dd::after{ content: ""; display: block; margin-bottom: 7px; }
-  .admin-footnote{
-    margin-top: 14px;
-    font-size: 11.5px; font-style: italic; color: #A9C2C2;
+  .foot-brand{
+    position: fixed; left: clamp(26px, 7vw, 120px); bottom: clamp(16px, 2.6vh, 26px); z-index: 4;
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: rgba(242,137,28,.6);
   }
 
-  /* ---------- Implementación (dos columnas) ---------- */
-  .implementa{
-    margin-top: clamp(20px, 3.2vh, 30px);
-    display: grid;
-    grid-template-columns: 1.15fr .85fr;
-    gap: clamp(26px, 3.2vw, 44px);
-    align-items: start;
-  }
-  .impl-label{
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
-    color: var(--amber); font-weight: 600; margin-bottom: 12px;
-  }
-  .impl-timeline{ position: relative; padding-left: 32px; }
-  .impl-timeline::before{
-    content: ""; position: absolute; left: 14px; top: 4px; bottom: 4px;
-    width: 0; border-left: 2px dashed #2C4F63;
-  }
-  .impl-phase{ position: relative; padding-bottom: 16px; }
-  .impl-phase:last-child{ padding-bottom: 0; }
-  .impl-phase-marker{
-    position: absolute; left: -32px; top: 0;
-    width: 28px; height: 28px; border-radius: 999px;
-    background: var(--amber); color: var(--navy-deep);
-    display: flex; align-items: center; justify-content: center;
-    font-family: "Overpass", sans-serif; font-weight: 800; font-size: 12.5px;
-    box-shadow: 0 0 0 5px var(--navy);
-  }
-  .impl-phase .weeks{
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 10px; font-weight: 600; color: var(--amber);
-  }
-  .impl-phase h4{ margin-top: 2px; font-size: 13px; font-weight: 700; color: #F2F7F7; }
-  .impl-phase p{ margin-top: 3px; font-size: 10.5px; line-height: 1.4; color: #A9C2C2; max-width: 36ch; }
-  .impl-total{
-    margin-top: 16px;
-    background: var(--navy-deep);
-    border-radius: 12px;
-    padding: 11px 15px;
-    display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px;
-  }
-  .impl-total strong{ color: var(--amber); font-family: "Overpass"; font-size: 13.5px; }
-  .impl-total span{ color: #C7DADA; font-size: 11.5px; }
+  /* Fondo decorativo: camino curveado punteado, fijo en todas las slides */
+  .bg-route{ position: fixed; left: 0; right: 0; bottom: 0; width: 100%; height: 32vh; z-index: 1; pointer-events: none; }
 
-  /* ---------- Nav ---------- */
-  .edge-zone{
-    position: fixed;
-    top: 0; bottom: 0;
-    width: 8%;
-    z-index: 5;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 0;
+  .cover-split{ display: flex; align-items: center; gap: clamp(30px, 4.4vw, 64px); margin-top: clamp(16px, 2.8vh, 28px); }
+  .cover-left{ flex: 1 1 42%; min-width: 0; }
+  .cover-right{ flex: 1 1 54%; min-width: 0; }
+  .cover-title{
+    margin-top: 14px; font-size: clamp(26px, 3.4vw, 44px); font-weight: 800; line-height: 1.12;
+    letter-spacing: -.01em; max-width: 16ch; color: var(--ink); position: relative; z-index: 2;
   }
+  .cover-sub{ margin-top: 12px; max-width: 42ch; font-size: clamp(14px, 1.3vw, 16.5px); line-height: 1.55; color: var(--mist); position: relative; z-index: 2; }
+
+  .head{ max-width: 68ch; position: relative; z-index: 2; }
+  .head h2{ font-size: clamp(26px, 3.1vw, 39px); font-weight: 800; }
+  .head p{ margin-top: 10px; font-size: clamp(13.5px, 1.2vw, 16px); color: var(--mist); line-height: 1.55; max-width: 64ch; }
+  .slide--dark .head p{ color: #BFBBB5; }
+
+  /* Tarjetas con ícono: para puntos PARALELOS (no secuencia) */
+  .adjust-list{ margin-top: clamp(20px, 3.2vh, 32px); display: flex; flex-direction: column; gap: clamp(11px, 1.6vh, 16px); max-width: 78ch; position: relative; z-index: 2; }
+  .adjust-list--grid{ display: grid; grid-template-columns: 1fr 1fr; max-width: none; }
+  .adjust{ display: flex; gap: 16px; align-items: flex-start; border-radius: 14px; padding: clamp(13px, 1.5vw, 18px) clamp(16px, 1.8vw, 22px); }
+  .slide--light .adjust{ background: var(--panel); box-shadow: 0 10px 24px -16px rgba(0,0,0,.25); }
+  .slide--dark .adjust{ background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); }
+  .adjust .icon-badge{ width: 40px; height: 40px; flex: none; }
+  .adjust .icon-badge svg{ width: 100%; height: 100%; }
+  .adjust h3{ font-size: 15.5px; font-weight: 700; }
+  .slide--light .adjust h3{ color: var(--ink); }
+  .slide--dark .adjust h3{ color: #F4F2EF; }
+  .adjust p{ margin: 4px 0 0; font-size: 13px; line-height: 1.48; }
+  .slide--light .adjust p{ color: var(--mist); }
+  .slide--dark .adjust p{ color: #C9C6C1; }
+
+  /* Ruta de pasos: para SECUENCIAS reales */
+  .route{ margin-top: clamp(26px, 4.4vh, 44px); position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2vw, 26px); z-index: 2; }
+  .route::before{ content: ""; position: absolute; top: 25px; left: calc(16.6667% - 1px); right: calc(16.6667% - 1px); height: 0; border-top: 2px dashed var(--line); z-index: 0; }
+  .stop{ position: relative; z-index: 1; }
+  .stop-marker{ width: 50px; height: 50px; border-radius: 999px; background: var(--orange); color: white; display: flex; align-items: center; justify-content: center; font-family: "Overpass", sans-serif; font-weight: 800; font-size: 19px; margin-bottom: 16px; box-shadow: 0 0 0 6px var(--paper); }
+  .stop h3{ font-size: clamp(15px, 1.3vw, 17.5px); font-weight: 700; color: var(--ink); line-height: 1.25; }
+  .stop p{ margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--mist); max-width: 26ch; }
+
+  /* Plan: bloques de fase */
+  .plan-phases{ margin-top: clamp(30px, 5vh, 50px); display: flex; gap: clamp(24px, 3.6vw, 48px); position: relative; z-index: 2; }
+  .phase-block{ flex: 1; border-radius: 16px; padding: clamp(20px, 2.2vw, 30px); background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); }
+  .phase-block--b{ background: var(--orange); border-color: var(--orange); }
+  .phase-label{ font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #C9C6C1; }
+  .phase-block--b .phase-label{ color: rgba(23,23,26,.65); }
+  .phase-value{ margin-top: 8px; font-family: "Overpass", sans-serif; font-weight: 800; font-size: clamp(24px, 2.6vw, 32px); color: #F4F2EF; }
+  .phase-block--b .phase-value{ color: var(--charcoal-deep); }
+  .phase-block p{ margin-top: 12px; font-size: 13.5px; line-height: 1.5; color: #C9C6C1; }
+  .phase-block--b p{ color: rgba(23,23,26,.8); }
+
+  .edge-zone{ position: fixed; top: 0; bottom: 0; width: 8%; z-index: 5; cursor: pointer; background: transparent; border: none; padding: 0; }
   .edge-zone--prev{ left: 0; }
   .edge-zone--next{ right: 0; }
-
   .deck-nav{
-    position: fixed;
-    left: 50%;
-    bottom: clamp(14px, 3vh, 28px);
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: rgba(8, 28, 41, .55);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 999px;
-    padding: 8px 16px;
+    position: fixed; left: 50%; bottom: clamp(14px, 3vh, 26px); transform: translateX(-50%); z-index: 10;
+    display: flex; align-items: center; gap: 14px; background: rgba(23, 23, 26, .6); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 8px 16px;
   }
-  .nav-btn{
-    width: 30px; height: 30px;
-    border-radius: 999px;
-    border: none;
-    background: rgba(255,255,255,.12);
-    color: white;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-  }
+  .nav-btn{ width: 30px; height: 30px; border-radius: 999px; border: none; background: rgba(255,255,255,.12); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .nav-btn:hover{ background: rgba(255,255,255,.24); }
   .nav-btn svg{ width: 15px; height: 15px; stroke: white; fill: none; }
   .nav-dots{ display: flex; gap: 8px; }
-  .nav-dot{
-    width: 8px; height: 8px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.3);
-    border: none;
-    cursor: pointer;
-    padding: 0;
-  }
-  .nav-dot.is-active{ background: var(--amber); width: 22px; border-radius: 999px; transition: width .3s ease; }
-  .nav-count{ font-size: 12px; color: #C7DADA; min-width: 44px; text-align: center; }
-
-  button:focus-visible, .edge-zone:focus-visible{
-    outline: 2px solid var(--amber);
-    outline-offset: 2px;
-  }
+  .nav-dot{ width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.3); border: none; cursor: pointer; padding: 0; }
+  .nav-dot.is-active{ background: var(--orange); width: 22px; border-radius: 999px; transition: width .3s ease; }
+  .nav-count{ font-size: 12px; color: #D8D5D0; min-width: 44px; text-align: center; }
+  button:focus-visible, .edge-zone:focus-visible{ outline: 2px solid var(--orange); outline-offset: 2px; }
 
   @media (max-width: 760px){
-    .options{ grid-template-columns: 1fr; }
-    .implementa{ grid-template-columns: 1fr; }
-    .usage-items{ flex-direction: column; }
-    .cover-route{ display: none; }
-    .slide{
-      justify-content: flex-start;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-top: clamp(56px, 10vh, 90px);
-      padding-bottom: 84px;
-    }
+    .route{ grid-template-columns: 1fr; gap: 22px; }
+    .route::before{ display: none; }
+    .plan-phases, .cover-split, .adjust-list--grid{ flex-direction: column; grid-template-columns: 1fr; }
+    .foot-brand{ display: none; }
+    .brand-text{ font-size: 16px; }
+    .slide{ justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-top: clamp(58px, 10vh, 92px); padding-bottom: 88px; }
   }
 </style>
 
 <div class="deck">
+  <svg class="bg-route" viewBox="0 0 1440 300" preserveAspectRatio="none" fill="none">
+    <path d="M-40 230 C 220 230, 260 70, 480 70 S 780 250, 1000 190 S 1300 40, 1500 100" stroke="var(--orange)" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round" opacity=".3"/>
+    <circle cx="480" cy="70" r="6" fill="var(--orange)" opacity=".45"/>
+    <circle cx="1000" cy="190" r="4.5" fill="var(--orange-deep)" opacity=".45"/>
+    <circle cx="1500" cy="100" r="5.5" fill="var(--orange)" opacity=".4"/>
+    <circle cx="-40" cy="230" r="4" fill="var(--orange-deep)" opacity=".4"/>
+  </svg>
+  <div class="foot-brand">GM Transport · Transporte de Personal</div>
   <div class="deck-track" id="track">
 
-    <!-- Slide 1: Cover -->
-    <section class="slide slide--dark" data-slide="0">
-      <div class="eyebrow">Propuesta · Transporte de personal</div>
-      <h1 class="cover-title">Mi Transporte</h1>
-      <p class="cover-sub">Que el empleado sepa cuándo y dónde lo recogen, vea su unidad en camino y confirme que abordó.</p>
-      <div class="cover-note">
-        <span class="badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M4 17a1.5 1.5 0 0 0 3 0M17 17a1.5 1.5 0 0 0 3 0M6 12h12"/></svg>
-        </span>
-        <span>Se apoya en las rutas y el seguimiento que ya opera GM&nbsp;Transport hoy.</span>
+    <!-- Slide 1: Portada + puntos clave -->
+    <section class="slide slide--light" data-slide="0">
+      <div class="slide-top">
+        <p class="eyebrow">Propuesta</p>
+        <div class="brand-text"><span class="accent">Mi</span><span class="rest">Transporte</span></div>
       </div>
-      <svg class="cover-route" viewBox="0 0 600 220" fill="none">
-        <path d="M-20 180 C 120 180, 140 60, 280 60 S 460 180, 620 180" stroke="#1C8C82" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
-        <circle cx="280" cy="60" r="5" fill="#F2A93B"/>
-        <circle cx="-20" cy="180" r="4" fill="#1C8C82"/>
-      </svg>
+      <div class="cover-split">
+        <div class="cover-left">
+          <h1 class="cover-title">Que el empleado sepa cuándo y dónde lo recogen</h1>
+          <p class="cover-sub">Se apoya en las rutas y el seguimiento que ya opera GM Transport hoy. No cambia tráfico ni facturación.</p>
+        </div>
+        <div class="cover-right">
+          <div class="adjust-list">
+            <div class="adjust">
+              <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.5s5-4.4 5-8.2a5 5 0 1 0-10 0c0 3.8 5 8.2 5 8.2Z"/><circle cx="12" cy="9.3" r="1.8"/></g></svg></span>
+              <div><h3>Ubicación en vivo</h3><p>Ve su unidad en el mapa mientras espera y sabe cuánto falta.</p></div>
+            </div>
+            <div class="adjust">
+              <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="3.4"/><path d="M9 12.2l2 2 4-4.4"/></g></svg></span>
+              <div><h3>Confirma abordaje</h3><p>Un toque al subir deja constancia de quién viajó, dónde y a qué hora.</p></div>
+            </div>
+            <div class="adjust">
+              <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16v-4.4a4 4 0 0 1 8 0V16l1.4 2H6.6L8 16Z"/><path d="M10.6 19.3a1.6 1.6 0 0 0 2.8 0"/></g></svg></span>
+              <div><h3>Avisos automáticos</h3><p>Le llega aviso cuando su unidad sale y cuando está por llegar.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Slide 2: La idea + Flujo del empleado -->
+    <!-- Slide 2: Cómo funciona -->
     <section class="slide slide--light" data-slide="1">
-      <div class="eyebrow">Cómo se usa</div>
+      <div class="slide-top">
+        <p class="eyebrow">Cómo funciona</p>
+        <div class="brand-text"><span class="accent">Mi</span><span class="rest">Transporte</span></div>
+      </div>
       <div class="head">
         <h2>Así lo vive el empleado</h2>
-        <p>Recibe su invitación una sola vez. Después, cada día ve su viaje, sigue su unidad y confirma que abordó — sin tocar tráfico ni facturación.</p>
+        <p>Recibe su invitación una sola vez, sin crear contraseña. Después, cada día:</p>
       </div>
+      <div class="route">
+        <div class="stop">
+          <div class="stop-marker">1</div>
+          <h3>Ve su viaje</h3>
+          <p>Consulta su horario y qué unidad le toca.</p>
+        </div>
+        <div class="stop">
+          <div class="stop-marker">2</div>
+          <h3>Sigue su unidad</h3>
+          <p>La ve en el mapa mientras espera.</p>
+        </div>
+        <div class="stop">
+          <div class="stop-marker">3</div>
+          <h3>Confirma y recibe avisos</h3>
+          <p>Un toque al subir; le avisa cuando la unidad sale y cuando está por llegar.</p>
+        </div>
+      </div>
+    </section>
 
-      <div class="usage">
-        <div class="usage-group">
-          <span class="usage-tag usage-tag--once">Una sola vez</span>
-          <div class="usage-items">
-            <div class="usage-item">
-              <div class="phone">
-                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
-                <div class="phone-screen">
-                  <div class="ph-avatar">MR</div>
-                  <div class="ph-line ph-line--title">Bienvenido, Marco</div>
-                  <div class="ph-card">
-                    <div class="ph-line ph-line--muted">Turno Matutino</div>
-                    <div class="ph-line ph-line--muted">Portón 3 · 7:00 a.m.</div>
-                  </div>
-                  <div class="ph-btn">Confirmar y entrar</div>
-                </div>
-              </div>
-              <div class="usage-copy">
-                <h3>Recibe su invitación</h3>
-                <p>Abre un enlace y ya tiene ruta, parada y horario. Sin crear contraseña.</p>
-              </div>
-            </div>
+    <!-- Slide 3: Del lado administrativo -->
+    <section class="slide slide--light" data-slide="2">
+      <div class="slide-top">
+        <p class="eyebrow">Del lado administrativo</p>
+        <div class="brand-text"><span class="accent">Mi</span><span class="rest">Transporte</span></div>
+      </div>
+      <div class="head">
+        <h2>El padrón se sube por ruta, no persona por persona</h2>
+        <p>Primero se dan de alta las rutas con sus paradas y horarios. Después se elige una ruta y se carga el listado de quién va en ella.</p>
+      </div>
+      <div class="adjust-list adjust-list--grid">
+        <div class="adjust">
+          <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5h16M6 16.5V8.7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7.8M6 12h12"/></g></svg></span>
+          <div>
+            <h3>Opción 1 — Lo carga el transportista</h3>
+            <p>Cada empresa le manda su listado y el transportista lo sube. Más rápida de arrancar, pero depende de que cada empresa mande la información actualizada.</p>
           </div>
         </div>
-
-        <div class="usage-group">
-          <span class="usage-tag usage-tag--daily">Cada día</span>
-          <div class="usage-items">
-            <div class="usage-item">
-              <div class="phone">
-                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
-                <div class="phone-screen">
-                  <div class="ph-row"><div class="ph-avatar">MR</div><div class="ph-line">Buen día</div></div>
-                  <div class="ph-pill">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg>
-                    En camino
-                  </div>
-                  <div class="ph-line ph-line--title">Llega en 12 min</div>
-                  <div class="ph-map"></div>
-                </div>
-              </div>
-              <div class="usage-copy">
-                <h3>Ve su viaje y sigue su unidad</h3>
-                <p>Consulta su horario y ve en el mapa dónde va su unidad.</p>
-              </div>
-            </div>
-
-            <div class="usage-item">
-              <div class="phone">
-                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
-                <div class="phone-screen">
-                  <div class="ph-check">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-                  </div>
-                  <div class="ph-line ph-line--title" style="text-align:center">Abordaje confirmado</div>
-                  <div class="ph-line ph-line--muted" style="text-align:center">Hoy 7:11 a.m.</div>
-                  <div class="ph-line ph-line--muted" style="text-align:center">Portón 3 · Unidad T-08</div>
-                </div>
-              </div>
-              <div class="usage-copy">
-                <h3>Confirma abordaje</h3>
-                <p>Un toque al subir. Queda registrado quién viajó, dónde y a qué hora.</p>
-              </div>
-            </div>
-
-            <div class="usage-item">
-              <div class="phone">
-                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
-                <div class="phone-screen">
-                  <div class="ph-line ph-line--title">Avisos</div>
-                  <div class="ph-notif">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg>
-                    <div class="ph-line ph-line--muted">Tu unidad salió</div>
-                  </div>
-                  <div class="ph-notif">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
-                    <div class="ph-line ph-line--muted">Llega en 12 min</div>
-                  </div>
-                </div>
-              </div>
-              <div class="usage-copy">
-                <h3>Recibe avisos</h3>
-                <p>Le avisa cuando la unidad sale y cuando está por llegar.</p>
-              </div>
-            </div>
+        <div class="adjust">
+          <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5V8l7.5-4.5L19.5 8v11.5M9 19.5v-5.5h6v5.5"/></g></svg></span>
+          <div>
+            <h3>Opción 2 — Lo carga cada empresa</h3>
+            <p>Cada empresa entra a su propio acceso y administra a su gente. Se mantiene actualizado solo, pero implica construir un portal nuevo para las empresas — alcance adicional.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Slide 3: Lado administrativo + Tiempos -->
-    <section class="slide slide--dark" data-slide="2">
-      <div class="eyebrow">Implementación</div>
-      <div class="head head--on-dark">
-        <h2>Cómo se implementa</h2>
-        <p>El padrón se sube por ruta, no persona por persona. En 2 meses se pasa de la definición a un piloto funcionando.</p>
+    <!-- Slide 4: El plan -->
+    <section class="slide slide--dark" data-slide="3">
+      <div class="slide-top">
+        <p class="eyebrow">El plan</p>
+        <div class="brand-text"><span class="accent">Mi</span><span class="rest">Transporte</span></div>
       </div>
-
-      <div class="implementa">
-        <div>
-          <div class="impl-label">Lado administrativo</div>
-          <div class="options">
-            <div class="option">
-              <div class="option-top">
-                <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg></div>
-                <div>
-                  <div class="option-tag">OPCIÓN 1</div>
-                  <h3>Lo carga el transportista</h3>
-                </div>
-              </div>
-              <dl>
-                <dt class="pro">A favor </dt><dd>Más rápida de arrancar, sin accesos nuevos.</dd>
-                <dt class="con">En contra </dt><dd>Depende de que cada empresa mande su listado actualizado.</dd>
-              </dl>
-            </div>
-            <div class="option option--b">
-              <div class="option-top">
-                <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12M9 21v-6h6v6"/></svg></div>
-                <div>
-                  <div class="option-tag">OPCIÓN 2</div>
-                  <h3>Lo carga cada empresa</h3>
-                </div>
-              </div>
-              <dl>
-                <dt class="pro">A favor </dt><dd>El padrón se mantiene actualizado solo.</dd>
-                <dt class="con">En contra </dt><dd>Requiere un portal nuevo por empresa (alcance adicional).</dd>
-              </dl>
-            </div>
-          </div>
-          <p class="admin-footnote">El empleado nunca elige su ruta ni su parada — las recibe ya asignadas en su invitación.</p>
+      <div class="head"><h2 style="color:#F4F2EF">Listo en 2 meses</h2></div>
+      <div class="plan-phases">
+        <div class="phase-block">
+          <div class="phase-label">Se arma</div>
+          <div class="phase-value">7 semanas</div>
+          <p>Se integra el flujo del empleado y la carga de rutas y padrón.</p>
         </div>
-
-        <div>
-          <div class="impl-label">Tiempos · 2 meses</div>
-          <div class="impl-timeline">
-            <div class="impl-phase">
-              <div class="impl-phase-marker">1</div>
-              <div class="weeks">Semanas 1–2</div>
-              <h4>Definición y diseño</h4>
-              <p>Alcance final, pantallas y qué opción de padrón se usa.</p>
-            </div>
-            <div class="impl-phase">
-              <div class="impl-phase-marker">2</div>
-              <div class="weeks">Semanas 3–5</div>
-              <h4>App del empleado</h4>
-              <p>Invitación, viaje del día, mapa en vivo, abordaje y avisos.</p>
-            </div>
-            <div class="impl-phase">
-              <div class="impl-phase-marker">3</div>
-              <div class="weeks">Semanas 6–7</div>
-              <h4>Lado administrativo</h4>
-              <p>Alta de rutas y carga de padrón por ruta.</p>
-            </div>
-            <div class="impl-phase">
-              <div class="impl-phase-marker">4</div>
-              <div class="weeks">Semana 8</div>
-              <h4>Piloto y ajustes</h4>
-              <p>Prueba con una ruta real y afinación antes de escalar.</p>
-            </div>
-          </div>
-          <div class="impl-total">
-            <strong>Total: 2 meses</strong>
-            <span>de la definición al piloto con una ruta real.</span>
-          </div>
+        <div class="phase-block phase-block--b">
+          <div class="phase-label">Lanzamiento</div>
+          <div class="phase-value">1 semana</div>
+          <p>Piloto con una ruta real antes de escalar a las demás.</p>
         </div>
       </div>
     </section>
@@ -596,16 +256,11 @@
 
   <button class="edge-zone edge-zone--prev" aria-label="Diapositiva anterior" onclick="go(-1)"></button>
   <button class="edge-zone edge-zone--next" aria-label="Siguiente diapositiva" onclick="go(1)"></button>
-
   <nav class="deck-nav" aria-label="Navegación de la presentación">
-    <button class="nav-btn" aria-label="Anterior" onclick="go(-1)">
-      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
+    <button class="nav-btn" aria-label="Anterior" onclick="go(-1)"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
     <div class="nav-dots" id="dots"></div>
-    <button class="nav-btn" aria-label="Siguiente" onclick="go(1)">
-      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-    <span class="nav-count mono" id="count">01 · 03</span>
+    <button class="nav-btn" aria-label="Siguiente" onclick="go(1)"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    <span class="nav-count mono" id="count">01 · 04</span>
   </nav>
 </div>
 
@@ -616,7 +271,6 @@
   const countEl = document.getElementById('count');
   const total = slides.length;
   let current = 0;
-
   slides.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'nav-dot';
@@ -625,25 +279,20 @@
     dotsEl.appendChild(dot);
   });
   const dotEls = Array.from(dotsEl.children);
-
   function pad(n){ return String(n).padStart(2, '0'); }
-
   function render(index){
     current = Math.max(0, Math.min(total - 1, index));
     track.style.transform = 'translateX(-' + (current * (100 / total)) + '%)';
     dotEls.forEach((d, i) => d.classList.toggle('is-active', i === current));
     countEl.textContent = pad(current + 1) + ' · ' + pad(total);
   }
-
   function go(delta){ render(current + delta); }
-
   window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ go(1); e.preventDefault(); }
     if (e.key === 'ArrowLeft' || e.key === 'PageUp'){ go(-1); e.preventDefault(); }
     if (e.key === 'Home'){ render(0); }
     if (e.key === 'End'){ render(total - 1); }
   });
-
   let touchX = null;
   window.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
   window.addEventListener('touchend', (e) => {
@@ -652,6 +301,5 @@
     if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
     touchX = null;
   }, { passive: true });
-
   render(0);
 </script>

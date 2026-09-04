@@ -1,0 +1,586 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Transporte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+
+<style>
+  :root{
+    --navy: #0E2A3D;
+    --navy-deep: #081C29;
+    --paper: #EFF5F5;
+    --panel: #FFFFFF;
+    --amber: #F2A93B;
+    --teal: #1C8C82;
+    --ink: #12242E;
+    --mist: #5B7480;
+    --line: #C9D8D8;
+    --good: #2C7A5E;
+    --bad: #A83A3A;
+  }
+
+  *{ box-sizing: border-box; }
+  html, body{
+    margin: 0;
+    height: 100%;
+    background: var(--navy);
+    overscroll-behavior: none;
+  }
+  body{
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    color: var(--ink);
+  }
+
+  h1, h2, h3{
+    font-family: "Overpass", "Arial Narrow", sans-serif;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .mono{
+    font-family: "IBM Plex Mono", "Courier New", monospace;
+  }
+
+  .deck{
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--navy);
+  }
+
+  .deck-track{
+    display: flex;
+    width: 500%;
+    height: 100%;
+    transition: transform .65s cubic-bezier(.65,0,.35,1);
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .deck-track{ transition: none; }
+  }
+
+  .slide{
+    flex: 0 0 20%;
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(28px, 6vh, 72px) clamp(24px, 7vw, 120px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide--dark{ background: var(--navy); color: #EAF1F1; }
+  .slide--light{ background: var(--paper); color: var(--ink); }
+
+  .eyebrow{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: clamp(11px, 1vw, 13px);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .slide--light .eyebrow{ color: var(--teal); }
+
+  /* ---------- Cover ---------- */
+  .cover-title{
+    font-size: clamp(48px, 9vw, 108px);
+    font-weight: 800;
+    line-height: .98;
+    letter-spacing: -.01em;
+    max-width: 14ch;
+  }
+  .cover-sub{
+    margin-top: 22px;
+    max-width: 46ch;
+    font-size: clamp(16px, 1.7vw, 21px);
+    line-height: 1.5;
+    color: #C7DADA;
+  }
+  .cover-route{
+    position: absolute;
+    right: -4%;
+    bottom: -8%;
+    width: min(60vw, 720px);
+    opacity: .5;
+  }
+  .cover-note{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: clamp(34px, 6vh, 56px);
+    font-size: 14px;
+    font-style: italic;
+    color: #9FBBBB;
+    max-width: 44ch;
+  }
+  .badge{
+    flex: none;
+    width: 40px; height: 40px;
+    border-radius: 999px;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .badge svg{ width: 20px; height: 20px; stroke: white; }
+
+  /* ---------- Shared section heads ---------- */
+  .head{ max-width: 62ch; }
+  .head h2{
+    font-size: clamp(30px, 3.6vw, 46px);
+    font-weight: 800;
+  }
+  .head p{
+    margin-top: 12px;
+    font-size: clamp(14.5px, 1.3vw, 17px);
+    color: var(--mist);
+    line-height: 1.55;
+    max-width: 58ch;
+  }
+
+  /* ---------- Idea cards ---------- */
+  .cards{
+    margin-top: clamp(28px, 5vh, 48px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2vw, 28px);
+  }
+  .card{
+    background: var(--panel);
+    border-radius: 18px;
+    padding: clamp(20px, 2.2vw, 30px);
+    box-shadow: 0 12px 28px -18px rgba(14,42,61,.35);
+  }
+  .card .icon{
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+  }
+  .card .icon svg{ width: 26px; height: 26px; stroke: white; fill: none; }
+  .card h3{ font-size: 18px; font-weight: 700; color: var(--navy); }
+  .card p{ margin-top: 8px; font-size: 13.5px; line-height: 1.5; color: var(--mist); }
+  .idea-footnote{
+    margin-top: clamp(20px, 3vh, 34px);
+    font-size: 13px;
+    font-style: italic;
+    color: var(--mist);
+  }
+
+  /* ---------- Route / flujo (line diagram) ---------- */
+  .route{
+    margin-top: clamp(34px, 6vh, 60px);
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(14px, 2vw, 22px);
+  }
+  .route::before{
+    content: "";
+    position: absolute;
+    top: 26px;
+    left: calc(12.5% - 1px);
+    right: calc(12.5% - 1px);
+    height: 0;
+    border-top: 2px dashed var(--line);
+    z-index: 0;
+  }
+  .stop{ position: relative; z-index: 1; }
+  .stop-marker{
+    width: 52px; height: 52px;
+    border-radius: 999px;
+    background: var(--teal);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Overpass", sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 0 0 6px var(--paper);
+  }
+  .stop:nth-child(even) .stop-marker{ background: var(--navy); }
+  .stop h3{ font-size: clamp(15px, 1.3vw, 17.5px); font-weight: 700; color: var(--navy); line-height: 1.25; }
+  .stop p{ margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--mist); max-width: 26ch; }
+
+  /* ---------- Admin options ---------- */
+  .options{
+    margin-top: clamp(28px, 5vh, 48px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(18px, 2.4vw, 30px);
+  }
+  .option{
+    background: var(--panel);
+    border-radius: 18px;
+    padding: clamp(22px, 2.4vw, 32px);
+    box-shadow: 0 12px 28px -18px rgba(14,42,61,.35);
+  }
+  .option.option--b{ background: #FCF3E4; }
+  .option-top{ display: flex; align-items: center; gap: 16px; }
+  .option .icon{
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .option .icon svg{ width: 24px; height: 24px; stroke: white; fill: none; }
+  .option .icon{ background: var(--teal); }
+  .option--b .icon{ background: #C9822E; }
+  .option-tag{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .1em;
+    color: var(--teal);
+  }
+  .option--b .option-tag{ color: #C9822E; }
+  .option h3{ font-size: 18px; font-weight: 700; color: var(--navy); margin-top: 2px; }
+  .option dl{ margin: 18px 0 0; font-size: 13.5px; line-height: 1.55; }
+  .option dt{ font-weight: 700; display: inline; }
+  .option dt.pro{ color: var(--good); }
+  .option dt.con{ color: var(--bad); }
+  .option dd{ display: inline; margin: 0; color: var(--mist); }
+  .option dd::after{ content: ""; display: block; margin-bottom: 10px; }
+  .admin-footnote{
+    margin-top: clamp(18px, 3vh, 30px);
+    font-size: 13px; font-style: italic; color: var(--mist);
+  }
+
+  /* ---------- Timeline (tiempos) ---------- */
+  .timeline{
+    margin-top: clamp(30px, 5.5vh, 54px);
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(14px, 2vw, 22px);
+  }
+  .timeline::before{
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: calc(12.5% - 1px);
+    right: calc(12.5% - 1px);
+    height: 0;
+    border-top: 2px solid #294B5F;
+  }
+  .phase-marker{
+    width: 48px; height: 48px;
+    border-radius: 999px;
+    background: var(--amber);
+    color: var(--navy-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Overpass", sans-serif; font-weight: 800; font-size: 19px;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+    box-shadow: 0 0 0 6px var(--navy);
+  }
+  .phase .weeks{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px; font-weight: 600; color: var(--amber);
+  }
+  .phase h3{ margin-top: 6px; font-size: clamp(15px, 1.3vw, 17.5px); font-weight: 700; color: #F2F7F7; }
+  .phase p{ margin-top: 8px; font-size: 13px; line-height: 1.5; color: #A9C2C2; max-width: 26ch; }
+
+  .total-bar{
+    margin-top: clamp(28px, 5vh, 46px);
+    background: var(--navy-deep);
+    border-radius: 14px;
+    padding: 18px 26px;
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    max-width: fit-content;
+  }
+  .total-bar strong{ color: var(--amber); font-family: "Overpass"; font-size: 17px; }
+  .total-bar span{ color: #C7DADA; font-size: 14px; }
+
+  /* ---------- Nav ---------- */
+  .edge-zone{
+    position: fixed;
+    top: 0; bottom: 0;
+    width: 8%;
+    z-index: 5;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  .edge-zone--prev{ left: 0; }
+  .edge-zone--next{ right: 0; }
+
+  .deck-nav{
+    position: fixed;
+    left: 50%;
+    bottom: clamp(14px, 3vh, 28px);
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(8, 28, 41, .55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+  .nav-btn{
+    width: 30px; height: 30px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255,255,255,.12);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .nav-btn:hover{ background: rgba(255,255,255,.24); }
+  .nav-btn svg{ width: 15px; height: 15px; stroke: white; fill: none; }
+  .nav-dots{ display: flex; gap: 8px; }
+  .nav-dot{
+    width: 8px; height: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.3);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .nav-dot.is-active{ background: var(--amber); width: 22px; border-radius: 999px; transition: width .3s ease; }
+  .nav-count{ font-size: 12px; color: #C7DADA; min-width: 44px; text-align: center; }
+
+  button:focus-visible, .edge-zone:focus-visible{
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 760px){
+    .cards, .options{ grid-template-columns: 1fr; }
+    .route, .timeline{ grid-template-columns: 1fr; gap: 22px; }
+    .route::before, .timeline::before{ display: none; }
+    .cover-route{ display: none; }
+    .slide{
+      justify-content: flex-start;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-top: clamp(56px, 10vh, 90px);
+      padding-bottom: 84px;
+    }
+    .stop-marker, .phase-marker{ margin-bottom: 10px; }
+  }
+</style>
+
+<div class="deck">
+  <div class="deck-track" id="track">
+
+    <!-- Slide 1: Cover -->
+    <section class="slide slide--dark" data-slide="0">
+      <div class="eyebrow">Propuesta · Transporte de personal</div>
+      <h1 class="cover-title">Mi Transporte</h1>
+      <p class="cover-sub">Que el empleado sepa cuándo y dónde lo recogen, vea su unidad en camino y confirme que abordó.</p>
+      <div class="cover-note">
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M4 17a1.5 1.5 0 0 0 3 0M17 17a1.5 1.5 0 0 0 3 0M6 12h12"/></svg>
+        </span>
+        <span>Se apoya en las rutas y el seguimiento que ya opera GM&nbsp;Transport hoy.</span>
+      </div>
+      <svg class="cover-route" viewBox="0 0 600 220" fill="none">
+        <path d="M-20 180 C 120 180, 140 60, 280 60 S 460 180, 620 180" stroke="#1C8C82" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
+        <circle cx="280" cy="60" r="5" fill="#F2A93B"/>
+        <circle cx="-20" cy="180" r="4" fill="#1C8C82"/>
+      </svg>
+    </section>
+
+    <!-- Slide 2: La idea -->
+    <section class="slide slide--light" data-slide="1">
+      <div class="eyebrow">La idea</div>
+      <div class="head">
+        <h2>La idea, en resumen</h2>
+        <p>Hoy el empleado espera su transporte sin saber ni cuándo ni dónde. La app le da esa visibilidad, sin tocar tráfico ni facturación.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg></div>
+          <h3>Ubicación en vivo</h3>
+          <p>Ve su unidad en el mapa mientras espera y sabe cuánto falta.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5l2 2 4.5-5"/><rect x="3.5" y="3.5" width="17" height="17" rx="5"/></svg></div>
+          <h3>Confirma abordaje</h3>
+          <p>Un toque al subir deja constancia de quién viajó, dónde y a qué hora.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 18a2 2 0 0 0 4 0"/></svg></div>
+          <h3>Avisos automáticos</h3>
+          <p>Le llega aviso cuando su unidad sale y cuando está por llegar.</p>
+        </div>
+      </div>
+      <p class="idea-footnote">No cambia la operación de tráfico ni la facturación — se apoya en lo que ya opera hoy.</p>
+    </section>
+
+    <!-- Slide 3: Flujo del empleado -->
+    <section class="slide slide--light" data-slide="2">
+      <div class="eyebrow">Flujo del empleado</div>
+      <div class="head">
+        <h2>Así lo vive el empleado</h2>
+        <p>Cuatro paradas, del primer enlace al aviso de llegada.</p>
+      </div>
+      <div class="route">
+        <div class="stop">
+          <div class="stop-marker">1</div>
+          <h3>Recibe su invitación</h3>
+          <p>Abre un enlace y ya tiene ruta, parada y horario. Sin crear contraseña.</p>
+        </div>
+        <div class="stop">
+          <div class="stop-marker">2</div>
+          <h3>Ve su viaje y sigue su unidad</h3>
+          <p>Cada día consulta su horario y ve en el mapa dónde va su unidad.</p>
+        </div>
+        <div class="stop">
+          <div class="stop-marker">3</div>
+          <h3>Confirma abordaje</h3>
+          <p>Un toque al subir. Queda registrado quién viajó, dónde y a qué hora.</p>
+        </div>
+        <div class="stop">
+          <div class="stop-marker">4</div>
+          <h3>Recibe avisos</h3>
+          <p>Le avisa cuando la unidad sale y cuando está por llegar a su parada.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Lado administrativo -->
+    <section class="slide slide--light" data-slide="3">
+      <div class="eyebrow">Lado administrativo</div>
+      <div class="head">
+        <h2>Del lado administrativo</h2>
+        <p>Se dan de alta las rutas y luego se sube el padrón por ruta — no persona por persona.</p>
+      </div>
+      <div class="options">
+        <div class="option">
+          <div class="option-top">
+            <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg></div>
+            <div>
+              <div class="option-tag">OPCIÓN 1</div>
+              <h3>Lo carga el transportista</h3>
+            </div>
+          </div>
+          <dl>
+            <dt class="pro">A favor </dt><dd>Más rápida de arrancar, sin accesos nuevos.</dd>
+            <dt class="con">En contra </dt><dd>Depende de que cada empresa mande su listado actualizado.</dd>
+          </dl>
+        </div>
+        <div class="option option--b">
+          <div class="option-top">
+            <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12M9 21v-6h6v6"/></svg></div>
+            <div>
+              <div class="option-tag">OPCIÓN 2</div>
+              <h3>Lo carga cada empresa</h3>
+            </div>
+          </div>
+          <dl>
+            <dt class="pro">A favor </dt><dd>El padrón se mantiene actualizado solo.</dd>
+            <dt class="con">En contra </dt><dd>Requiere un portal nuevo por empresa (alcance adicional).</dd>
+          </dl>
+        </div>
+      </div>
+      <p class="admin-footnote">El empleado nunca elige su ruta ni su parada — las recibe ya asignadas en su invitación.</p>
+    </section>
+
+    <!-- Slide 5: Tiempos -->
+    <section class="slide slide--dark" data-slide="4">
+      <div class="eyebrow">Tiempos</div>
+      <div class="head">
+        <h2 style="color:#F2F7F7">Tiempos</h2>
+        <p style="color:#A9C2C2">2 meses, en cuatro paradas.</p>
+      </div>
+      <div class="timeline">
+        <div class="phase">
+          <div class="phase-marker">1</div>
+          <div class="weeks">Semanas 1–2</div>
+          <h3>Definición y diseño</h3>
+          <p>Alcance final, pantallas y qué opción de padrón se usa.</p>
+        </div>
+        <div class="phase">
+          <div class="phase-marker">2</div>
+          <div class="weeks">Semanas 3–5</div>
+          <h3>App del empleado</h3>
+          <p>Invitación, viaje del día, mapa en vivo, abordaje y avisos.</p>
+        </div>
+        <div class="phase">
+          <div class="phase-marker">3</div>
+          <div class="weeks">Semanas 6–7</div>
+          <h3>Lado administrativo</h3>
+          <p>Alta de rutas y carga de padrón por ruta.</p>
+        </div>
+        <div class="phase">
+          <div class="phase-marker">4</div>
+          <div class="weeks">Semana 8</div>
+          <h3>Piloto y ajustes</h3>
+          <p>Prueba con una ruta real y afinación antes de escalar.</p>
+        </div>
+      </div>
+      <div class="total-bar">
+        <strong>Total: 2 meses</strong>
+        <span>de la definición al piloto funcionando con una ruta real.</span>
+      </div>
+    </section>
+
+  </div>
+
+  <button class="edge-zone edge-zone--prev" aria-label="Diapositiva anterior" onclick="go(-1)"></button>
+  <button class="edge-zone edge-zone--next" aria-label="Siguiente diapositiva" onclick="go(1)"></button>
+
+  <nav class="deck-nav" aria-label="Navegación de la presentación">
+    <button class="nav-btn" aria-label="Anterior" onclick="go(-1)">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-btn" aria-label="Siguiente" onclick="go(1)">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <span class="nav-count mono" id="count">01 · 05</span>
+  </nav>
+</div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsEl = document.getElementById('dots');
+  const countEl = document.getElementById('count');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.setAttribute('aria-label', 'Ir a la diapositiva ' + (i + 1));
+    dot.addEventListener('click', () => render(i));
+    dotsEl.appendChild(dot);
+  });
+  const dotEls = Array.from(dotsEl.children);
+
+  function pad(n){ return String(n).padStart(2, '0'); }
+
+  function render(index){
+    current = Math.max(0, Math.min(total - 1, index));
+    track.style.transform = 'translateX(-' + (current * (100 / total)) + '%)';
+    dotEls.forEach((d, i) => d.classList.toggle('is-active', i === current));
+    countEl.textContent = pad(current + 1) + ' · ' + pad(total);
+  }
+
+  function go(delta){ render(current + delta); }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ go(1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp'){ go(-1); e.preventDefault(); }
+    if (e.key === 'Home'){ render(0); }
+    if (e.key === 'End'){ render(total - 1); }
+  });
+
+  let touchX = null;
+  window.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  window.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    touchX = null;
+  }, { passive: true });
+
+  render(0);
+</script>

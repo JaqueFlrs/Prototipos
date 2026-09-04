@@ -31,7 +31,7 @@
     color: var(--ink);
   }
 
-  h1, h2, h3{
+  h1, h2, h3, h4{
     font-family: "Overpass", "Arial Narrow", sans-serif;
     text-wrap: balance;
     margin: 0;
@@ -50,7 +50,7 @@
 
   .deck-track{
     display: flex;
-    width: 500%;
+    width: 300%;
     height: 100%;
     transition: transform .65s cubic-bezier(.65,0,.35,1);
     will-change: transform;
@@ -60,13 +60,13 @@
   }
 
   .slide{
-    flex: 0 0 20%;
-    width: 20%;
+    flex: 0 0 33.3334%;
+    width: 33.3334%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: clamp(28px, 6vh, 72px) clamp(24px, 7vw, 120px);
+    padding: clamp(28px, 5.5vh, 64px) clamp(24px, 6vw, 100px);
     position: relative;
     overflow: hidden;
   }
@@ -128,169 +128,200 @@
   .badge svg{ width: 20px; height: 20px; stroke: white; }
 
   /* ---------- Shared section heads ---------- */
-  .head{ max-width: 62ch; }
+  .head{ max-width: 66ch; }
   .head h2{
-    font-size: clamp(30px, 3.6vw, 46px);
+    font-size: clamp(28px, 3.2vw, 42px);
     font-weight: 800;
   }
   .head p{
-    margin-top: 12px;
-    font-size: clamp(14.5px, 1.3vw, 17px);
+    margin-top: 10px;
+    font-size: clamp(13.5px, 1.2vw, 16px);
     color: var(--mist);
-    line-height: 1.55;
-    max-width: 58ch;
+    line-height: 1.5;
+    max-width: 62ch;
   }
+  .head--on-dark h2{ color: #F2F7F7; }
+  .head--on-dark p{ color: #A9C2C2; }
 
-  /* ---------- Idea cards ---------- */
-  .cards{
-    margin-top: clamp(28px, 5vh, 48px);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(16px, 2vw, 28px);
-  }
-  .card{
-    background: var(--panel);
+  /* ---------- Phone mockups ---------- */
+  .phone{
+    flex: none;
+    width: 108px;
+    background: var(--navy);
     border-radius: 18px;
-    padding: clamp(20px, 2.2vw, 30px);
-    box-shadow: 0 12px 28px -18px rgba(14,42,61,.35);
+    padding: 7px 7px 9px;
+    box-shadow: 0 10px 22px -13px rgba(14,42,61,.45);
   }
-  .card .icon{
-    width: 52px; height: 52px;
-    border-radius: 14px;
-    background: var(--teal);
+  .phone-status{
+    display: flex; justify-content: space-between;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 7px; color: #9FBBBB;
+    padding: 0 2px 5px;
+  }
+  .phone-screen{
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px;
+    height: 148px;
+    display: flex; flex-direction: column; gap: 5px;
+    color: var(--ink);
+    overflow: hidden;
+  }
+  .ph-row{ display: flex; align-items: center; gap: 5px; }
+  .ph-avatar{
+    width: 20px; height: 20px; border-radius: 999px; flex: none;
+    background: var(--teal); color: #fff;
+    font-family: "IBM Plex Mono", monospace; font-size: 7px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
-    margin-bottom: 18px;
   }
-  .card .icon svg{ width: 26px; height: 26px; stroke: white; fill: none; }
-  .card h3{ font-size: 18px; font-weight: 700; color: var(--navy); }
-  .card p{ margin-top: 8px; font-size: 13.5px; line-height: 1.5; color: var(--mist); }
-  .idea-footnote{
-    margin-top: clamp(20px, 3vh, 34px);
-    font-size: 13px;
-    font-style: italic;
-    color: var(--mist);
+  .ph-line{ font-size: 8px; line-height: 1.3; color: var(--ink); }
+  .ph-line--title{ font-weight: 700; font-size: 9px; }
+  .ph-line--muted{ color: var(--mist); font-size: 7.5px; }
+  .ph-card{
+    background: var(--paper); border-radius: 8px; padding: 6px 7px;
+    display: flex; flex-direction: column; gap: 2px;
   }
-
-  /* ---------- Route / flujo (line diagram) ---------- */
-  .route{
-    margin-top: clamp(34px, 6vh, 60px);
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: clamp(14px, 2vw, 22px);
+  .ph-btn{
+    margin-top: auto; background: var(--teal); color: #fff;
+    text-align: center; border-radius: 7px; padding: 6px;
+    font-size: 7.5px; font-weight: 600;
   }
-  .route::before{
+  .ph-pill{
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #EAF6F1; color: var(--good);
+    font-size: 7px; font-weight: 600;
+    padding: 3px 7px; border-radius: 999px; width: fit-content;
+  }
+  .ph-pill svg{ width: 8px; height: 8px; stroke: var(--good); }
+  .ph-map{
+    margin-top: auto; height: 46px; border-radius: 8px;
+    background: linear-gradient(135deg, #DCEBEA, #EFF5F5);
+    position: relative; overflow: hidden;
+  }
+  .ph-map::before{
     content: "";
-    position: absolute;
-    top: 26px;
-    left: calc(12.5% - 1px);
-    right: calc(12.5% - 1px);
-    height: 0;
-    border-top: 2px dashed var(--line);
-    z-index: 0;
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 28% 72%, var(--teal) 3px, transparent 3px),
+      radial-gradient(circle at 76% 28%, var(--amber) 3.5px, transparent 3.5px);
   }
-  .stop{ position: relative; z-index: 1; }
-  .stop-marker{
-    width: 52px; height: 52px;
-    border-radius: 999px;
-    background: var(--teal);
-    color: white;
+  .ph-check{
+    width: 30px; height: 30px; border-radius: 999px;
+    background: var(--good); color: #fff;
     display: flex; align-items: center; justify-content: center;
-    font-family: "Overpass", sans-serif;
-    font-weight: 800;
-    font-size: 20px;
-    margin-bottom: 18px;
-    box-shadow: 0 0 0 6px var(--paper);
+    margin: 8px auto 2px;
   }
-  .stop:nth-child(even) .stop-marker{ background: var(--navy); }
-  .stop h3{ font-size: clamp(15px, 1.3vw, 17.5px); font-weight: 700; color: var(--navy); line-height: 1.25; }
-  .stop p{ margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--mist); max-width: 26ch; }
+  .ph-check svg{ width: 15px; height: 15px; stroke: #fff; }
+  .ph-notif{
+    display: flex; align-items: center; gap: 6px;
+    background: var(--paper); border-radius: 8px; padding: 6px 7px;
+  }
+  .ph-notif svg{ width: 11px; height: 11px; stroke: var(--teal); flex: none; }
+
+  /* ---------- Uso: una sola vez / cada día ---------- */
+  .usage{ margin-top: clamp(18px, 3vh, 28px); }
+  .usage-group{ margin-top: clamp(16px, 2.6vh, 24px); }
+  .usage-group:first-child{ margin-top: 0; }
+  .usage-tag{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 999px;
+  }
+  .usage-tag--once{ background: #FCEEDA; color: #B4791F; }
+  .usage-tag--daily{ background: #DCEEEC; color: var(--teal); }
+  .usage-items{
+    display: flex; gap: clamp(16px, 2vw, 26px);
+    margin-top: 13px; flex-wrap: wrap;
+  }
+  .usage-item{ display: flex; gap: 11px; align-items: flex-start; }
+  .usage-copy{ max-width: 20ch; padding-top: 2px; }
+  .usage-copy h3{ font-size: 13.5px; font-weight: 700; color: var(--navy); line-height: 1.25; }
+  .usage-copy p{ margin-top: 6px; font-size: 11px; line-height: 1.4; color: var(--mist); }
 
   /* ---------- Admin options ---------- */
   .options{
-    margin-top: clamp(28px, 5vh, 48px);
+    margin-top: clamp(20px, 3.5vh, 32px);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: clamp(18px, 2.4vw, 30px);
+    gap: clamp(14px, 1.8vw, 20px);
   }
   .option{
     background: var(--panel);
-    border-radius: 18px;
-    padding: clamp(22px, 2.4vw, 32px);
+    border-radius: 16px;
+    padding: 16px 18px;
     box-shadow: 0 12px 28px -18px rgba(14,42,61,.35);
   }
   .option.option--b{ background: #FCF3E4; }
-  .option-top{ display: flex; align-items: center; gap: 16px; }
+  .option-top{ display: flex; align-items: center; gap: 12px; }
   .option .icon{
-    width: 48px; height: 48px; border-radius: 12px;
+    width: 38px; height: 38px; border-radius: 11px;
     display: flex; align-items: center; justify-content: center; flex: none;
+    background: var(--teal);
   }
-  .option .icon svg{ width: 24px; height: 24px; stroke: white; fill: none; }
-  .option .icon{ background: var(--teal); }
+  .option .icon svg{ width: 19px; height: 19px; stroke: white; fill: none; }
   .option--b .icon{ background: #C9822E; }
   .option-tag{
     font-family: "IBM Plex Mono", monospace;
-    font-size: 11px; font-weight: 600; letter-spacing: .1em;
+    font-size: 10px; font-weight: 600; letter-spacing: .09em;
     color: var(--teal);
   }
   .option--b .option-tag{ color: #C9822E; }
-  .option h3{ font-size: 18px; font-weight: 700; color: var(--navy); margin-top: 2px; }
-  .option dl{ margin: 18px 0 0; font-size: 13.5px; line-height: 1.55; }
+  .option h3{ font-size: 14.5px; font-weight: 700; color: var(--navy); margin-top: 1px; }
+  .option dl{ margin: 11px 0 0; font-size: 11.5px; line-height: 1.45; }
   .option dt{ font-weight: 700; display: inline; }
   .option dt.pro{ color: var(--good); }
   .option dt.con{ color: var(--bad); }
   .option dd{ display: inline; margin: 0; color: var(--mist); }
-  .option dd::after{ content: ""; display: block; margin-bottom: 10px; }
+  .option dd::after{ content: ""; display: block; margin-bottom: 7px; }
   .admin-footnote{
-    margin-top: clamp(18px, 3vh, 30px);
-    font-size: 13px; font-style: italic; color: var(--mist);
+    margin-top: 14px;
+    font-size: 11.5px; font-style: italic; color: #A9C2C2;
   }
 
-  /* ---------- Timeline (tiempos) ---------- */
-  .timeline{
-    margin-top: clamp(30px, 5.5vh, 54px);
-    position: relative;
+  /* ---------- Implementación (dos columnas) ---------- */
+  .implementa{
+    margin-top: clamp(20px, 3.2vh, 30px);
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: clamp(14px, 2vw, 22px);
+    grid-template-columns: 1.15fr .85fr;
+    gap: clamp(26px, 3.2vw, 44px);
+    align-items: start;
   }
-  .timeline::before{
-    content: "";
-    position: absolute;
-    top: 24px;
-    left: calc(12.5% - 1px);
-    right: calc(12.5% - 1px);
-    height: 0;
-    border-top: 2px solid #294B5F;
-  }
-  .phase-marker{
-    width: 48px; height: 48px;
-    border-radius: 999px;
-    background: var(--amber);
-    color: var(--navy-deep);
-    display: flex; align-items: center; justify-content: center;
-    font-family: "Overpass", sans-serif; font-weight: 800; font-size: 19px;
-    margin-bottom: 16px;
-    position: relative; z-index: 1;
-    box-shadow: 0 0 0 6px var(--navy);
-  }
-  .phase .weeks{
+  .impl-label{
     font-family: "IBM Plex Mono", monospace;
-    font-size: 12px; font-weight: 600; color: var(--amber);
+    font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--amber); font-weight: 600; margin-bottom: 12px;
   }
-  .phase h3{ margin-top: 6px; font-size: clamp(15px, 1.3vw, 17.5px); font-weight: 700; color: #F2F7F7; }
-  .phase p{ margin-top: 8px; font-size: 13px; line-height: 1.5; color: #A9C2C2; max-width: 26ch; }
-
-  .total-bar{
-    margin-top: clamp(28px, 5vh, 46px);
+  .impl-timeline{ position: relative; padding-left: 32px; }
+  .impl-timeline::before{
+    content: ""; position: absolute; left: 14px; top: 4px; bottom: 4px;
+    width: 0; border-left: 2px dashed #2C4F63;
+  }
+  .impl-phase{ position: relative; padding-bottom: 16px; }
+  .impl-phase:last-child{ padding-bottom: 0; }
+  .impl-phase-marker{
+    position: absolute; left: -32px; top: 0;
+    width: 28px; height: 28px; border-radius: 999px;
+    background: var(--amber); color: var(--navy-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Overpass", sans-serif; font-weight: 800; font-size: 12.5px;
+    box-shadow: 0 0 0 5px var(--navy);
+  }
+  .impl-phase .weeks{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px; font-weight: 600; color: var(--amber);
+  }
+  .impl-phase h4{ margin-top: 2px; font-size: 13px; font-weight: 700; color: #F2F7F7; }
+  .impl-phase p{ margin-top: 3px; font-size: 10.5px; line-height: 1.4; color: #A9C2C2; max-width: 36ch; }
+  .impl-total{
+    margin-top: 16px;
     background: var(--navy-deep);
-    border-radius: 14px;
-    padding: 18px 26px;
-    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
-    max-width: fit-content;
+    border-radius: 12px;
+    padding: 11px 15px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px;
   }
-  .total-bar strong{ color: var(--amber); font-family: "Overpass"; font-size: 17px; }
-  .total-bar span{ color: #C7DADA; font-size: 14px; }
+  .impl-total strong{ color: var(--amber); font-family: "Overpass"; font-size: 13.5px; }
+  .impl-total span{ color: #C7DADA; font-size: 11.5px; }
 
   /* ---------- Nav ---------- */
   .edge-zone{
@@ -350,9 +381,9 @@
   }
 
   @media (max-width: 760px){
-    .cards, .options{ grid-template-columns: 1fr; }
-    .route, .timeline{ grid-template-columns: 1fr; gap: 22px; }
-    .route::before, .timeline::before{ display: none; }
+    .options{ grid-template-columns: 1fr; }
+    .implementa{ grid-template-columns: 1fr; }
+    .usage-items{ flex-direction: column; }
     .cover-route{ display: none; }
     .slide{
       justify-content: flex-start;
@@ -361,7 +392,6 @@
       padding-top: clamp(56px, 10vh, 90px);
       padding-bottom: 84px;
     }
-    .stop-marker, .phase-marker{ margin-bottom: 10px; }
   }
 </style>
 
@@ -386,138 +416,179 @@
       </svg>
     </section>
 
-    <!-- Slide 2: La idea -->
+    <!-- Slide 2: La idea + Flujo del empleado -->
     <section class="slide slide--light" data-slide="1">
-      <div class="eyebrow">La idea</div>
-      <div class="head">
-        <h2>La idea, en resumen</h2>
-        <p>Hoy el empleado espera su transporte sin saber ni cuándo ni dónde. La app le da esa visibilidad, sin tocar tráfico ni facturación.</p>
-      </div>
-      <div class="cards">
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg></div>
-          <h3>Ubicación en vivo</h3>
-          <p>Ve su unidad en el mapa mientras espera y sabe cuánto falta.</p>
-        </div>
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5l2 2 4.5-5"/><rect x="3.5" y="3.5" width="17" height="17" rx="5"/></svg></div>
-          <h3>Confirma abordaje</h3>
-          <p>Un toque al subir deja constancia de quién viajó, dónde y a qué hora.</p>
-        </div>
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 18a2 2 0 0 0 4 0"/></svg></div>
-          <h3>Avisos automáticos</h3>
-          <p>Le llega aviso cuando su unidad sale y cuando está por llegar.</p>
-        </div>
-      </div>
-      <p class="idea-footnote">No cambia la operación de tráfico ni la facturación — se apoya en lo que ya opera hoy.</p>
-    </section>
-
-    <!-- Slide 3: Flujo del empleado -->
-    <section class="slide slide--light" data-slide="2">
-      <div class="eyebrow">Flujo del empleado</div>
+      <div class="eyebrow">Cómo se usa</div>
       <div class="head">
         <h2>Así lo vive el empleado</h2>
-        <p>Cuatro paradas, del primer enlace al aviso de llegada.</p>
+        <p>Recibe su invitación una sola vez. Después, cada día ve su viaje, sigue su unidad y confirma que abordó — sin tocar tráfico ni facturación.</p>
       </div>
-      <div class="route">
-        <div class="stop">
-          <div class="stop-marker">1</div>
-          <h3>Recibe su invitación</h3>
-          <p>Abre un enlace y ya tiene ruta, parada y horario. Sin crear contraseña.</p>
+
+      <div class="usage">
+        <div class="usage-group">
+          <span class="usage-tag usage-tag--once">Una sola vez</span>
+          <div class="usage-items">
+            <div class="usage-item">
+              <div class="phone">
+                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
+                <div class="phone-screen">
+                  <div class="ph-avatar">MR</div>
+                  <div class="ph-line ph-line--title">Bienvenido, Marco</div>
+                  <div class="ph-card">
+                    <div class="ph-line ph-line--muted">Turno Matutino</div>
+                    <div class="ph-line ph-line--muted">Portón 3 · 7:00 a.m.</div>
+                  </div>
+                  <div class="ph-btn">Confirmar y entrar</div>
+                </div>
+              </div>
+              <div class="usage-copy">
+                <h3>Recibe su invitación</h3>
+                <p>Abre un enlace y ya tiene ruta, parada y horario. Sin crear contraseña.</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="stop">
-          <div class="stop-marker">2</div>
-          <h3>Ve su viaje y sigue su unidad</h3>
-          <p>Cada día consulta su horario y ve en el mapa dónde va su unidad.</p>
-        </div>
-        <div class="stop">
-          <div class="stop-marker">3</div>
-          <h3>Confirma abordaje</h3>
-          <p>Un toque al subir. Queda registrado quién viajó, dónde y a qué hora.</p>
-        </div>
-        <div class="stop">
-          <div class="stop-marker">4</div>
-          <h3>Recibe avisos</h3>
-          <p>Le avisa cuando la unidad sale y cuando está por llegar a su parada.</p>
+
+        <div class="usage-group">
+          <span class="usage-tag usage-tag--daily">Cada día</span>
+          <div class="usage-items">
+            <div class="usage-item">
+              <div class="phone">
+                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
+                <div class="phone-screen">
+                  <div class="ph-row"><div class="ph-avatar">MR</div><div class="ph-line">Buen día</div></div>
+                  <div class="ph-pill">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg>
+                    En camino
+                  </div>
+                  <div class="ph-line ph-line--title">Llega en 12 min</div>
+                  <div class="ph-map"></div>
+                </div>
+              </div>
+              <div class="usage-copy">
+                <h3>Ve su viaje y sigue su unidad</h3>
+                <p>Consulta su horario y ve en el mapa dónde va su unidad.</p>
+              </div>
+            </div>
+
+            <div class="usage-item">
+              <div class="phone">
+                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
+                <div class="phone-screen">
+                  <div class="ph-check">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                  </div>
+                  <div class="ph-line ph-line--title" style="text-align:center">Abordaje confirmado</div>
+                  <div class="ph-line ph-line--muted" style="text-align:center">Hoy 7:11 a.m.</div>
+                  <div class="ph-line ph-line--muted" style="text-align:center">Portón 3 · Unidad T-08</div>
+                </div>
+              </div>
+              <div class="usage-copy">
+                <h3>Confirma abordaje</h3>
+                <p>Un toque al subir. Queda registrado quién viajó, dónde y a qué hora.</p>
+              </div>
+            </div>
+
+            <div class="usage-item">
+              <div class="phone">
+                <div class="phone-status"><span>9:41</span><span>▮▮▮</span></div>
+                <div class="phone-screen">
+                  <div class="ph-line ph-line--title">Avisos</div>
+                  <div class="ph-notif">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg>
+                    <div class="ph-line ph-line--muted">Tu unidad salió</div>
+                  </div>
+                  <div class="ph-notif">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
+                    <div class="ph-line ph-line--muted">Llega en 12 min</div>
+                  </div>
+                </div>
+              </div>
+              <div class="usage-copy">
+                <h3>Recibe avisos</h3>
+                <p>Le avisa cuando la unidad sale y cuando está por llegar.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Slide 4: Lado administrativo -->
-    <section class="slide slide--light" data-slide="3">
-      <div class="eyebrow">Lado administrativo</div>
-      <div class="head">
-        <h2>Del lado administrativo</h2>
-        <p>Se dan de alta las rutas y luego se sube el padrón por ruta — no persona por persona.</p>
+    <!-- Slide 3: Lado administrativo + Tiempos -->
+    <section class="slide slide--dark" data-slide="2">
+      <div class="eyebrow">Implementación</div>
+      <div class="head head--on-dark">
+        <h2>Cómo se implementa</h2>
+        <p>El padrón se sube por ruta, no persona por persona. En 2 meses se pasa de la definición a un piloto funcionando.</p>
       </div>
-      <div class="options">
-        <div class="option">
-          <div class="option-top">
-            <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg></div>
-            <div>
-              <div class="option-tag">OPCIÓN 1</div>
-              <h3>Lo carga el transportista</h3>
-            </div>
-          </div>
-          <dl>
-            <dt class="pro">A favor </dt><dd>Más rápida de arrancar, sin accesos nuevos.</dd>
-            <dt class="con">En contra </dt><dd>Depende de que cada empresa mande su listado actualizado.</dd>
-          </dl>
-        </div>
-        <div class="option option--b">
-          <div class="option-top">
-            <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12M9 21v-6h6v6"/></svg></div>
-            <div>
-              <div class="option-tag">OPCIÓN 2</div>
-              <h3>Lo carga cada empresa</h3>
-            </div>
-          </div>
-          <dl>
-            <dt class="pro">A favor </dt><dd>El padrón se mantiene actualizado solo.</dd>
-            <dt class="con">En contra </dt><dd>Requiere un portal nuevo por empresa (alcance adicional).</dd>
-          </dl>
-        </div>
-      </div>
-      <p class="admin-footnote">El empleado nunca elige su ruta ni su parada — las recibe ya asignadas en su invitación.</p>
-    </section>
 
-    <!-- Slide 5: Tiempos -->
-    <section class="slide slide--dark" data-slide="4">
-      <div class="eyebrow">Tiempos</div>
-      <div class="head">
-        <h2 style="color:#F2F7F7">Tiempos</h2>
-        <p style="color:#A9C2C2">2 meses, en cuatro paradas.</p>
-      </div>
-      <div class="timeline">
-        <div class="phase">
-          <div class="phase-marker">1</div>
-          <div class="weeks">Semanas 1–2</div>
-          <h3>Definición y diseño</h3>
-          <p>Alcance final, pantallas y qué opción de padrón se usa.</p>
+      <div class="implementa">
+        <div>
+          <div class="impl-label">Lado administrativo</div>
+          <div class="options">
+            <div class="option">
+              <div class="option-top">
+                <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9M6 12h12"/></svg></div>
+                <div>
+                  <div class="option-tag">OPCIÓN 1</div>
+                  <h3>Lo carga el transportista</h3>
+                </div>
+              </div>
+              <dl>
+                <dt class="pro">A favor </dt><dd>Más rápida de arrancar, sin accesos nuevos.</dd>
+                <dt class="con">En contra </dt><dd>Depende de que cada empresa mande su listado actualizado.</dd>
+              </dl>
+            </div>
+            <div class="option option--b">
+              <div class="option-top">
+                <div class="icon"><svg viewBox="0 0 24 24" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12M9 21v-6h6v6"/></svg></div>
+                <div>
+                  <div class="option-tag">OPCIÓN 2</div>
+                  <h3>Lo carga cada empresa</h3>
+                </div>
+              </div>
+              <dl>
+                <dt class="pro">A favor </dt><dd>El padrón se mantiene actualizado solo.</dd>
+                <dt class="con">En contra </dt><dd>Requiere un portal nuevo por empresa (alcance adicional).</dd>
+              </dl>
+            </div>
+          </div>
+          <p class="admin-footnote">El empleado nunca elige su ruta ni su parada — las recibe ya asignadas en su invitación.</p>
         </div>
-        <div class="phase">
-          <div class="phase-marker">2</div>
-          <div class="weeks">Semanas 3–5</div>
-          <h3>App del empleado</h3>
-          <p>Invitación, viaje del día, mapa en vivo, abordaje y avisos.</p>
+
+        <div>
+          <div class="impl-label">Tiempos · 2 meses</div>
+          <div class="impl-timeline">
+            <div class="impl-phase">
+              <div class="impl-phase-marker">1</div>
+              <div class="weeks">Semanas 1–2</div>
+              <h4>Definición y diseño</h4>
+              <p>Alcance final, pantallas y qué opción de padrón se usa.</p>
+            </div>
+            <div class="impl-phase">
+              <div class="impl-phase-marker">2</div>
+              <div class="weeks">Semanas 3–5</div>
+              <h4>App del empleado</h4>
+              <p>Invitación, viaje del día, mapa en vivo, abordaje y avisos.</p>
+            </div>
+            <div class="impl-phase">
+              <div class="impl-phase-marker">3</div>
+              <div class="weeks">Semanas 6–7</div>
+              <h4>Lado administrativo</h4>
+              <p>Alta de rutas y carga de padrón por ruta.</p>
+            </div>
+            <div class="impl-phase">
+              <div class="impl-phase-marker">4</div>
+              <div class="weeks">Semana 8</div>
+              <h4>Piloto y ajustes</h4>
+              <p>Prueba con una ruta real y afinación antes de escalar.</p>
+            </div>
+          </div>
+          <div class="impl-total">
+            <strong>Total: 2 meses</strong>
+            <span>de la definición al piloto con una ruta real.</span>
+          </div>
         </div>
-        <div class="phase">
-          <div class="phase-marker">3</div>
-          <div class="weeks">Semanas 6–7</div>
-          <h3>Lado administrativo</h3>
-          <p>Alta de rutas y carga de padrón por ruta.</p>
-        </div>
-        <div class="phase">
-          <div class="phase-marker">4</div>
-          <div class="weeks">Semana 8</div>
-          <h3>Piloto y ajustes</h3>
-          <p>Prueba con una ruta real y afinación antes de escalar.</p>
-        </div>
-      </div>
-      <div class="total-bar">
-        <strong>Total: 2 meses</strong>
-        <span>de la definición al piloto funcionando con una ruta real.</span>
       </div>
     </section>
 
@@ -534,7 +605,7 @@
     <button class="nav-btn" aria-label="Siguiente" onclick="go(1)">
       <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
-    <span class="nav-count mono" id="count">01 · 05</span>
+    <span class="nav-count mono" id="count">01 · 03</span>
   </nav>
 </div>
 

@@ -41,7 +41,7 @@
 
   .deck-track{
     display: flex;
-    width: 300%;
+    width: 400%;
     height: 100%;
     transition: transform .65s cubic-bezier(.65,0,.35,1);
     will-change: transform;
@@ -49,8 +49,8 @@
   @media (prefers-reduced-motion: reduce){ .deck-track{ transition: none; } }
 
   .slide{
-    flex: 0 0 33.3333%;
-    width: 33.3333%;
+    flex: 0 0 25%;
+    width: 25%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -219,7 +219,12 @@
   .slide--light .adjust p{ color: var(--mist); }
   .slide--dark .adjust p{ color: #C9C6C1; }
 
-  /* ---------- Slide 3: el plan ---------- */
+  /* ---------- Slide de mapa ---------- */
+  .map-wrap{ margin-top: clamp(10px, 1.6vh, 18px); position: relative; z-index: 2; }
+  .map-wrap svg{ display: block; width: 100%; height: auto; max-width: 720px; margin: 0 auto; }
+  .map-caption{ margin-top: 10px; text-align: center; font-size: 12.5px; font-style: italic; color: var(--mist); position: relative; z-index: 2; }
+
+  /* ---------- Slide 4: el plan ---------- */
   .plan-phases{
     margin-top: clamp(30px, 5vh, 50px);
     display: flex;
@@ -249,6 +254,12 @@
   .phase-block--b .phase-value{ color: var(--charcoal-deep); }
   .phase-block p{ margin-top: 12px; font-size: 13.5px; line-height: 1.5; color: #C9C6C1; }
   .phase-block--b p{ color: rgba(23,23,26,.8); }
+  .plan-ask{
+    margin-top: clamp(22px, 3.6vh, 36px);
+    font-family: "Overpass", sans-serif; font-weight: 700;
+    font-size: clamp(15px, 1.4vw, 18px); color: #F4F2EF;
+    position: relative; z-index: 2;
+  }
 
   /* ---------- Nav ---------- */
   .edge-zone{
@@ -341,6 +352,7 @@
 
       </div>
       <div class="cover-right">
+      <p class="eyebrow" style="margin-bottom:10px">Lo que cambia para lograrlo</p>
       <div class="adjust-list">
         <div class="adjust">
           <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5v7.2M12 13.7l3-3M12 13.7l-3-3"/><path d="M6.5 17h11"/></g></svg></span>
@@ -392,8 +404,71 @@
       </div>
     </section>
 
-    <!-- Slide 3: El plan -->
-    <section class="slide slide--dark" data-slide="2">
+    <!-- Slide 3: Vista general (mapa) -->
+    <section class="slide slide--light" data-slide="2">
+      <div class="slide-top">
+        <p class="eyebrow">Vista general</p>
+        <div class="brand-text"><span class="gm">GM</span><span class="rest">Transport</span></div>
+      </div>
+      <div class="head" style="margin-top:8px">
+        <h2>Mis Viajes + Conduce 087, de un vistazo</h2>
+      </div>
+      <div class="map-wrap">
+        <svg viewBox="0 0 1000 540" role="img" aria-label="Mis Viajes y Conduce 087 se descargan libremente; un cliente de GM entra con su login existente y tiene acceso completo, mientras un no-cliente se registra y solo obtiene Conduce 087. Hoy Conduce 087 ya guarda a los no-clientes pero crea una base de datos distinta por cada RFC; la propuesta es consolidar eso en una sola base centralizada, lista para migrar. Ambos caminos convergen en el motor de Conduce 087.">
+          <defs>
+            <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--mist)"/>
+            </marker>
+          </defs>
+          <rect x="350" y="16" width="300" height="56" rx="12" fill="var(--orange)"/>
+          <text x="500" y="49" text-anchor="middle" font-family="Overpass" font-weight="800" font-size="16" fill="var(--charcoal-deep)">Mis Viajes + Conduce 087</text>
+          <line x1="500" y1="72" x2="500" y2="100" stroke="var(--mist)" stroke-width="1.6"/>
+          <polyline points="500,100 230,100 230,128" fill="none" stroke="var(--mist)" stroke-width="1.6" marker-end="url(#arrow2)"/>
+          <polyline points="500,100 770,100 770,128" fill="none" stroke="var(--mist)" stroke-width="1.6" marker-end="url(#arrow2)"/>
+          <text x="345" y="93" font-family="IBM Plex Mono" font-size="11" fill="var(--mist)">login</text>
+          <text x="640" y="93" font-family="IBM Plex Mono" font-size="11" fill="var(--mist)">registro</text>
+          <rect x="90" y="130" width="280" height="70" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-width="1.4"/>
+          <text x="230" y="158" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="14.5" fill="var(--ink)">Cliente de GM</text>
+          <text x="230" y="177" text-anchor="middle" font-size="11" fill="var(--mist)">RFC + núm. operador +</text>
+          <text x="230" y="190" text-anchor="middle" font-size="11" fill="var(--mist)">contraseña (Admon / ERP)</text>
+          <rect x="630" y="130" width="280" height="70" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-width="1.4"/>
+          <text x="770" y="158" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="14.5" fill="var(--ink)">No es cliente</text>
+          <text x="770" y="177" text-anchor="middle" font-size="11" fill="var(--mist)">RFC de empresa + teléfono</text>
+          <text x="770" y="190" text-anchor="middle" font-size="11" fill="var(--mist)">(registro propio)</text>
+          <line x1="230" y1="200" x2="230" y2="248" stroke="var(--mist)" stroke-width="1.6" marker-end="url(#arrow2)"/>
+          <text x="238" y="228" font-family="IBM Plex Mono" font-size="10.5" fill="var(--mist)">acceso completo</text>
+          <line x1="770" y1="200" x2="770" y2="248" stroke="var(--mist)" stroke-width="1.6" marker-end="url(#arrow2)"/>
+          <text x="778" y="228" font-family="IBM Plex Mono" font-size="10.5" fill="var(--mist)">acceso limitado</text>
+          <rect x="90" y="250" width="280" height="62" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-width="1.4"/>
+          <text x="230" y="277" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="13.5" fill="var(--ink)">Mis Viajes completo</text>
+          <text x="230" y="295" text-anchor="middle" font-size="11" fill="var(--mist)">+ Conduce 087</text>
+          <rect x="630" y="250" width="280" height="62" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-width="1.4"/>
+          <text x="770" y="277" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="13.5" fill="var(--ink)">Solo Conduce 087</text>
+          <text x="770" y="295" text-anchor="middle" font-size="11" fill="var(--mist)">resto de Mis Viajes bloqueado</text>
+          <polyline points="860,190 910,190 910,335" fill="none" stroke="var(--mist)" stroke-width="1.4" stroke-dasharray="3 5" marker-end="url(#arrow2)"/>
+          <text x="800" y="185" font-family="IBM Plex Mono" font-size="10" fill="var(--mist)">guarda registro</text>
+          <rect x="800" y="336" width="180" height="56" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-width="1.4" stroke-dasharray="4 4"/>
+          <text x="890" y="359" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="12" fill="var(--ink)">Hoy: 1 BD por RFC</text>
+          <text x="890" y="376" text-anchor="middle" font-size="10" fill="var(--mist)">(fragmentada)</text>
+          <line x1="890" y1="392" x2="890" y2="428" stroke="var(--mist)" stroke-width="1.4" marker-end="url(#arrow2)"/>
+          <text x="800" y="414" font-family="IBM Plex Mono" font-size="10" fill="var(--orange-deep)" font-weight="600">se consolida</text>
+          <rect x="800" y="430" width="180" height="56" rx="10" fill="var(--orange)"/>
+          <text x="890" y="453" text-anchor="middle" font-family="Overpass" font-weight="800" font-size="12" fill="var(--charcoal-deep)">1 sola BD</text>
+          <text x="890" y="470" text-anchor="middle" font-size="10" fill="var(--charcoal-deep)">centralizada · lista para migrar</text>
+          <line x1="230" y1="312" x2="415" y2="350" stroke="var(--mist)" stroke-width="1.6" marker-end="url(#arrow2)"/>
+          <line x1="770" y1="312" x2="585" y2="350" stroke="var(--mist)" stroke-width="1.6" marker-end="url(#arrow2)"/>
+          <text x="300" y="335" font-family="IBM Plex Mono" font-size="10.5" fill="var(--mist)">usa</text>
+          <text x="655" y="335" font-family="IBM Plex Mono" font-size="10.5" fill="var(--mist)">usa</text>
+          <rect x="350" y="352" width="300" height="68" rx="12" fill="var(--orange)"/>
+          <text x="500" y="380" text-anchor="middle" font-family="Overpass" font-weight="800" font-size="15" fill="var(--charcoal-deep)">Conduce 087</text>
+          <text x="500" y="398" text-anchor="middle" font-size="11" fill="var(--charcoal-deep)">Timer → alertas → bitácora (NOM-087)</text>
+        </svg>
+      </div>
+      <p class="map-caption">Cada operador que la usa sin ser cliente es una empresa que ya conoce a GM el día que busca transportista.</p>
+    </section>
+
+    <!-- Slide 4: El plan -->
+    <section class="slide slide--dark" data-slide="3">
       <div class="slide-top">
         <p class="eyebrow">El plan</p>
         <div class="brand-text"><span class="gm">GM</span><span class="rest">Transport</span></div>
@@ -413,6 +488,7 @@
           <p>Se prueba y se pone en marcha con operadores, clientes y no clientes.</p>
         </div>
       </div>
+      <p class="plan-ask">Solo falta tu aprobación para arrancar.</p>
     </section>
 
   </div>
@@ -428,7 +504,7 @@
     <button class="nav-btn" aria-label="Siguiente" onclick="go(1)">
       <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
-    <span class="nav-count mono" id="count">01 · 03</span>
+    <span class="nav-count mono" id="count">01 · 04</span>
   </nav>
 </div>
 

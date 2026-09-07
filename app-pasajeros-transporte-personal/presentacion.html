@@ -78,7 +78,7 @@
   </div>
 
   <h1 class="cover-title">Que el empleado sepa cuándo y dónde lo recogen</h1>
-  <p class="cover-sub">Mi Transporte se apoya en las rutas y el seguimiento que ya opera GM Transport hoy — sin tocar tráfico ni facturación.</p>
+  <p class="cover-sub">Mi Transporte lee la información de tráfico que ya existe — no la modifica, no toca facturación.</p>
 
   <div class="body-split">
     <div class="cards-col">
@@ -100,7 +100,7 @@
 
     <div class="map-col">
       <div class="map-wrap">
-        <svg viewBox="0 0 1000 460" role="img" aria-label="Mi Transporte se alimenta del padrón de empleados, subido por ruta con dos opciones: lo carga el transportista, o lo carga cada empresa con su propio portal. Ambas opciones llegan a las rutas con paradas y horario ya armadas. El empleado recibe su invitación, sigue su unidad en el mapa y confirma abordaje.">
+        <svg viewBox="0 0 1000 460" role="img" aria-label="Mi Transporte se alimenta del padrón de empleados, subido por ruta con dos opciones: lo carga el transportista, o lo carga cada empresa con su propio portal. Ambas opciones llegan a las rutas con paradas y horario ya armadas, que también leen la ubicación y las unidades directo de Tráfico, sin modificarlo. El empleado recibe su invitación, sigue su unidad en el mapa y confirma abordaje.">
           <defs>
             <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" fill="var(--mist)"/>
@@ -126,6 +126,11 @@
           <rect x="350" y="252" width="300" height="62" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-width="1.4"/>
           <text x="500" y="280" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="13.5" fill="var(--ink)">Rutas armadas</text>
           <text x="500" y="298" text-anchor="middle" font-size="11" fill="var(--mist)">paradas y horario, por ruta</text>
+          <rect x="760" y="252" width="170" height="62" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-width="1.4" stroke-dasharray="4 4"/>
+          <text x="845" y="278" text-anchor="middle" font-family="Overpass" font-weight="700" font-size="12.5" fill="var(--ink)">Tráfico</text>
+          <text x="845" y="295" text-anchor="middle" font-size="10" fill="var(--mist)">unidades y ubicación</text>
+          <line x1="760" y1="283" x2="654" y2="283" stroke="var(--mist)" stroke-width="1.4" marker-end="url(#arrow3)"/>
+          <text x="672" y="275" font-family="IBM Plex Mono" font-size="9.5" fill="var(--mist)">lee, no modifica</text>
           <line x1="500" y1="314" x2="500" y2="350" stroke="var(--mist)" stroke-width="1.6" marker-end="url(#arrow3)"/>
           <rect x="300" y="352" width="400" height="76" rx="12" fill="var(--orange)"/>
           <text x="500" y="380" text-anchor="middle" font-family="Overpass" font-weight="800" font-size="15" fill="var(--charcoal-deep)">Empleado</text>

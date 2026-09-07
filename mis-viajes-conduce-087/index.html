@@ -41,7 +41,7 @@
 
   .deck-track{
     display: flex;
-    width: 400%;
+    width: 300%;
     height: 100%;
     transition: transform .65s cubic-bezier(.65,0,.35,1);
     will-change: transform;
@@ -49,8 +49,8 @@
   @media (prefers-reduced-motion: reduce){ .deck-track{ transition: none; } }
 
   .slide{
-    flex: 0 0 25%;
-    width: 25%;
+    flex: 0 0 33.3333%;
+    width: 33.3333%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -110,7 +110,7 @@
   }
 
   /* ---------- Slide 1: portada ---------- */
-  .mini-merge{ display: flex; align-items: center; gap: 12px; margin-top: clamp(16px, 2.6vh, 26px); position: relative; z-index: 2; }
+  .mini-merge{ display: flex; align-items: center; gap: 12px; margin-top: clamp(10px, 1.6vh, 16px); position: relative; z-index: 2; }
   .mini-merge img{ width: 38px; height: 38px; border-radius: 10px; box-shadow: 0 8px 18px -10px rgba(0,0,0,.35); }
   .mini-merge .plus-mini{ font-family: "Overpass", sans-serif; font-weight: 800; color: var(--orange); font-size: 20px; }
   .mini-merge span.label{ font-family: "Overpass", sans-serif; font-size: clamp(17px, 1.9vw, 22px); font-weight: 800; letter-spacing: -.01em; color: var(--ink); text-transform: none; }
@@ -121,20 +121,20 @@
   .cover-right .adjust-list{ margin-top: 0; }
 
   .cover-title{
-    margin-top: 14px;
-    font-size: clamp(26px, 3.4vw, 44px);
+    margin-top: 10px;
+    font-size: clamp(22px, 2.7vw, 34px);
     font-weight: 800;
-    line-height: 1.12;
+    line-height: 1.14;
     letter-spacing: -.01em;
-    max-width: 16ch;
+    max-width: 44ch;
     color: var(--ink);
     position: relative; z-index: 2;
   }
   .cover-sub{
-    margin-top: 12px;
-    max-width: 42ch;
-    font-size: clamp(14px, 1.3vw, 16.5px);
-    line-height: 1.55;
+    margin-top: 8px;
+    max-width: 72ch;
+    font-size: clamp(13px, 1.2vw, 15px);
+    line-height: 1.5;
     color: var(--mist);
     position: relative; z-index: 2;
   }
@@ -220,9 +220,9 @@
   .slide--dark .adjust p{ color: #C9C6C1; }
 
   /* ---------- Slide de mapa ---------- */
-  .map-wrap{ margin-top: clamp(10px, 1.6vh, 18px); position: relative; z-index: 2; }
-  .map-wrap svg{ display: block; width: 100%; height: auto; max-width: 720px; margin: 0 auto; }
-  .map-caption{ margin-top: 10px; text-align: center; font-size: 12.5px; font-style: italic; color: var(--mist); position: relative; z-index: 2; }
+  .map-wrap{ margin-top: clamp(14px, 2.2vh, 22px); position: relative; z-index: 2; }
+  .map-wrap svg{ display: block; width: 100%; height: auto; max-width: 620px; margin: 0 auto; }
+  .map-caption{ margin-top: 8px; text-align: center; font-size: 12px; font-style: italic; color: var(--mist); position: relative; z-index: 2; }
 
   /* ---------- Slide 4: el plan ---------- */
   .plan-phases{
@@ -351,68 +351,8 @@
       <p class="cover-sub">Conduce 087 se integra a Mis Viajes para que cualquier operador de México cuente sus horas de manejo y descanse cuando la norma NOM-087 lo exige.</p>
 
       </div>
-      <div class="cover-right">
-      <p class="eyebrow" style="margin-bottom:10px">Lo que cambia para lograrlo</p>
-      <div class="adjust-list">
-        <div class="adjust">
-          <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5v7.2M12 13.7l3-3M12 13.7l-3-3"/><path d="M6.5 17h11"/></g></svg></span>
-          <div><h3>Descarga libre</h3><p>Cualquier operador de México puede bajar la app, sea o no cliente de GM.</p></div>
-        </div>
-        <div class="adjust">
-          <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="15.4" r="2.6"/><path d="M10.6 13.4 17 7"/><path d="M14.6 9.4l2 2M16.8 7.2l2 2"/></g></svg></span>
-          <div><h3>Mis Viajes sigue siendo de sus clientes</h3><p>Solo las empresas que contratan a GM usan el resto de Mis Viajes. Quien no es cliente solo entra a Conduce 087.</p></div>
-        </div>
-        <div class="adjust">
-          <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="8.2" rx="5" ry="2"/><path d="M7 8.2v7.6c0 1.1 2.24 2 5 2s5-.9 5-2V8.2"/><path d="M7 12c0 1.1 2.24 2 5 2s5-.9 5-2"/></g></svg></span>
-          <div><h3>Una sola base para no clientes</h3><p>Todos los que no son clientes quedan centralizados en una misma base de datos, lista para el día que su empresa sí se vuelva cliente.</p></div>
-        </div>
-        <div class="adjust">
-          <span class="icon-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--orange)" fill-opacity=".14"/><g stroke="var(--orange)" stroke-width="1.8" stroke-linejoin="round"><rect x="6" y="6" width="8" height="8" rx="2" fill="none"/><rect x="10.5" y="10.5" width="8" height="8" rx="2" fill="var(--orange)" fill-opacity=".3"/></g></svg></span>
-          <div><h3>Conduce 087, integrado</h3><p>Vive dentro de Mis Viajes — nada que instalar aparte ni otra contraseña que recordar.</p></div>
-        </div>
       </div>
-      </div>
-      </div>
-    </section>
 
-    <!-- Slide 2: Qué hace Conduce 087 -->
-    <section class="slide slide--light" data-slide="1">
-      <div class="slide-top">
-        <p class="eyebrow">Qué hace Conduce 087</p>
-        <div class="brand-text"><span class="gm">GM</span><span class="rest">Transport</span></div>
-      </div>
-      <div class="head">
-        <h2>Cumple la norma de descanso, sola</h2>
-        <p>La NOM-087 obliga a pausar 30 minutos cada 5 horas de manejo y a descansar 8 horas entre turnos. Hoy eso depende de que el operador se acuerde — Conduce 087 lo hace automático.</p>
-      </div>
-      <div class="route">
-        <div class="stop">
-          <div class="stop-marker">1</div>
-          <h3>Inicia turno</h3>
-          <p>Un botón, antes de arrancar el viaje.</p>
-        </div>
-        <div class="stop">
-          <div class="stop-marker">2</div>
-          <h3>Cuenta y avisa</h3>
-          <p>La app cuenta las horas y avisa cuándo toca pausa o descanso.</p>
-        </div>
-        <div class="stop">
-          <div class="stop-marker">3</div>
-          <h3>Bitácora lista</h3>
-          <p>Queda firmada, lista para mostrar a la autoridad.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Slide 3: Vista general (mapa) -->
-    <section class="slide slide--light" data-slide="2">
-      <div class="slide-top">
-        <p class="eyebrow">Vista general</p>
-        <div class="brand-text"><span class="gm">GM</span><span class="rest">Transport</span></div>
-      </div>
-      <div class="head" style="margin-top:8px">
-        <h2>Mis Viajes + Conduce 087, de un vistazo</h2>
-      </div>
       <div class="map-wrap">
         <svg viewBox="0 0 1000 540" role="img" aria-label="Mis Viajes y Conduce 087 se descargan libremente; un cliente de GM entra con su login existente y tiene acceso completo, mientras un no-cliente se registra y solo obtiene Conduce 087. Hoy Conduce 087 ya guarda a los no-clientes pero crea una base de datos distinta por cada RFC; la propuesta es consolidar eso en una sola base centralizada, lista para migrar. Ambos caminos convergen en el motor de Conduce 087.">
           <defs>
@@ -467,8 +407,37 @@
       <p class="map-caption">Cada operador que la usa sin ser cliente es una empresa que ya conoce a GM el día que busca transportista.</p>
     </section>
 
-    <!-- Slide 4: El plan -->
-    <section class="slide slide--dark" data-slide="3">
+    <!-- Slide 2: Qué hace Conduce 087 -->
+    <section class="slide slide--light" data-slide="1">
+      <div class="slide-top">
+        <p class="eyebrow">Qué hace Conduce 087</p>
+        <div class="brand-text"><span class="gm">GM</span><span class="rest">Transport</span></div>
+      </div>
+      <div class="head">
+        <h2>Cumple la norma de descanso, sola</h2>
+        <p>La NOM-087 obliga a pausar 30 minutos cada 5 horas de manejo y a descansar 8 horas entre turnos. Hoy eso depende de que el operador se acuerde — Conduce 087 lo hace automático.</p>
+      </div>
+      <div class="route">
+        <div class="stop">
+          <div class="stop-marker">1</div>
+          <h3>Inicia turno</h3>
+          <p>Un botón, antes de arrancar el viaje.</p>
+        </div>
+        <div class="stop">
+          <div class="stop-marker">2</div>
+          <h3>Cuenta y avisa</h3>
+          <p>La app cuenta las horas y avisa cuándo toca pausa o descanso.</p>
+        </div>
+        <div class="stop">
+          <div class="stop-marker">3</div>
+          <h3>Bitácora lista</h3>
+          <p>Queda firmada, lista para mostrar a la autoridad.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: El plan -->
+    <section class="slide slide--dark" data-slide="2">
       <div class="slide-top">
         <p class="eyebrow">El plan</p>
         <div class="brand-text"><span class="gm">GM</span><span class="rest">Transport</span></div>
@@ -504,7 +473,7 @@
     <button class="nav-btn" aria-label="Siguiente" onclick="go(1)">
       <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
-    <span class="nav-count mono" id="count">01 · 04</span>
+    <span class="nav-count mono" id="count">01 · 03</span>
   </nav>
 </div>
 

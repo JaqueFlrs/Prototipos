@@ -71,48 +71,65 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
 .step-text p{color:var(--ink-2); font-size:15px; line-height:1.65; margin:0}
 .step-shot{width:100%}
 
-/* pantalla web — alta fidelidad, texto legible */
+/* pantalla web — alta fidelidad, con navegación lateral real */
 .screen-bar{
-  background:var(--bg-3); padding:12px 16px; font-size:13.5px; font-weight:700; color:var(--ink-2);
+  display:flex; justify-content:space-between; align-items:center;
+  background:#fff; padding:14px 20px; font-size:15px; font-weight:700; color:var(--ink);
   border-bottom:1px solid var(--line-2);
 }
-.screen-body{padding:16px 18px; font-size:13.5px; color:var(--ink-2)}
-.row{
-  display:flex; justify-content:space-between; align-items:center; padding:12px 14px; margin-bottom:8px;
-  border:1px solid var(--line-2); border-radius:8px; background:var(--bg-2);
+.screen-bar .sb-sub{font-size:12px; font-weight:500; color:var(--ink-3); margin-top:2px}
+.app{display:flex}
+.app-nav{
+  flex:0 0 168px; background:var(--bg-2); border-right:1px solid var(--line-2); padding:14px 8px;
 }
-.row .r-name{font-weight:600; color:var(--ink); font-size:14px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-.row .r-tag{
-  font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap;
+.app-nav .brand{font-size:10.5px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.04em; padding:4px 8px 12px}
+.app-nav .nitem{
+  display:flex; align-items:center; gap:8px; padding:9px 10px; border-radius:7px; font-size:12.5px; font-weight:600;
+  color:var(--ink-2); margin-bottom:2px;
+}
+.app-nav .nitem.on{background:var(--ink); color:#fff}
+.app-content{flex:1; min-width:0; padding:18px 20px}
+
+/* tabla real */
+.mtable{width:100%; border-collapse:collapse; font-size:13.5px}
+.mtable th{
+  text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-3);
+  padding:0 12px 9px; border-bottom:1px solid var(--line);
+}
+.mtable td{padding:12px; border-bottom:1px solid var(--line-2); color:var(--ink-2); vertical-align:middle}
+.mtable td.num{text-align:right; font-weight:700; color:var(--ink)}
+.mtable tr:last-child td{border-bottom:none}
+.mname{font-weight:700; color:var(--ink); font-size:13.5px}
+.msub{font-size:11.5px; color:var(--ink-3); margin-top:2px}
+.mchk{width:16px; height:16px}
+
+.r-tag{
+  font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap; display:inline-block;
 }
 .tag-pend{background:var(--warn-soft); color:var(--warn); border:1px solid var(--warn-line)}
 .tag-ok{background:var(--ok-soft); color:var(--ok)}
 .tag-info{background:var(--info-soft); color:var(--info)}
-.chip-row{display:flex; gap:4px; margin-top:5px; flex-wrap:wrap}
-.chip{font-size:11px; font-weight:600; padding:3px 8px; border-radius:5px; background:var(--bg-3); color:var(--ink-3); border:1px solid var(--line-2)}
-.btn-mini{
-  margin-top:6px; text-align:center; background:var(--ink); color:#fff; font-size:13.5px; font-weight:700;
-  padding:12px; border-radius:8px;
-}
-.amt{font-weight:700; color:var(--ink); font-size:14.5px}
-.r-sub{font-size:12px; color:var(--ink-3); margin-top:2px; width:100%}
-.r-check{width:16px; height:16px; margin-right:2px; flex:0 0 auto}
+.tag-cancel{background:#FCEBEA; color:#B91C1C; border:1px solid #F3C6C4}
 
-/* project chip (mismo lenguaje visual que el prototipo detallado) */
+.btn-mini{
+  margin-top:14px; text-align:center; background:var(--ink); color:#fff; font-size:13.5px; font-weight:700;
+  padding:12px; border-radius:8px; max-width:260px;
+}
+
+/* project chip */
 .pchip{
-  display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:700; padding:4px 10px 4px 7px;
-  border-radius:999px;
+  display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:3px 9px 3px 6px;
+  border-radius:999px; margin-right:4px;
 }
 .pc-tdc{background:#EFF4FF; color:#2451C2}
 .pc-ia{background:#F3F0FF; color:#6D3FC4}
 .pc-sl{background:#EAFBF1; color:#0F8A4A}
 
 /* stat mini cards dentro del mockup */
-.mini-stats{display:flex; gap:10px; margin-bottom:14px}
+.mini-stats{display:flex; gap:10px; margin-bottom:16px}
 .mini-stat{flex:1; border:1px solid var(--line-2); border-radius:8px; padding:12px 14px; background:var(--bg-2)}
 .mini-stat .v{font-size:19px; font-weight:700; color:var(--ink)}
 .mini-stat .l{font-size:11.5px; color:var(--ink-3); margin-top:2px}
-.thead{display:flex; justify-content:space-between; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-3); padding:0 14px 8px}
 .dots-mini{display:inline-flex; gap:5px; vertical-align:middle}
 .dots-mini span{width:7px; height:7px; border-radius:50%; background:var(--info); display:inline-block}
 
@@ -154,17 +171,30 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
       <p class="desc sub">No reemplaza la facturación del ERP: es el puente que faltaba entre estos productos nuevos y el sistema de facturación que Paquetería ya opera.</p>
     </div>
     <div class="browser">
-      <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
-      <div class="screen-bar">Pendiente de facturar</div>
-      <div class="screen-body">
-        <div class="mini-stats">
-          <div class="mini-stat"><div class="v">$6,930</div><div class="l">Total pendiente</div></div>
-          <div class="mini-stat"><div class="v">3</div><div class="l">Clientes</div></div>
+      <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+      <div class="app">
+        <div class="app-nav">
+          <div class="brand">Admin. de Cobros</div>
+          <div class="nitem on">📋 Pendiente</div>
+          <div class="nitem">🧾 Facturado</div>
+          <div class="nitem">⚙️ Tarifas</div>
         </div>
-        <div class="thead"><span>Cliente</span><span>Pendiente</span></div>
-        <div class="row"><span class="r-name">Empresa A <span class="pchip pc-tdc">📡</span><span class="pchip pc-sl">🛡️</span></span><span class="amt">$4,820</span></div>
-        <div class="row"><span class="r-name">Empresa B <span class="pchip pc-ia">🪙</span></span><span class="amt">$1,150</span></div>
-        <div class="row"><span class="r-name">Empresa C <span class="pchip pc-tdc">📡</span><span class="pchip pc-ia">🪙</span></span><span class="amt">$960</span></div>
+        <div class="app-content">
+          <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Pendiente de facturar</div>
+          <div class="mini-stats">
+            <div class="mini-stat"><div class="v">$9,340.00</div><div class="l">Total pendiente</div></div>
+            <div class="mini-stat"><div class="v">5</div><div class="l">Clientes</div></div>
+            <div class="mini-stat"><div class="v">9</div><div class="l">Cargos sin facturar</div></div>
+          </div>
+          <table class="mtable">
+            <tr><th>Cliente</th><th>Proyectos</th><th style="text-align:right">Pendiente</th></tr>
+            <tr><td><div class="mname">Empresa A</div><div class="msub">RFC AAA010101AAA</div></td><td><span class="pchip pc-tdc">📡 Torre de Control</span><span class="pchip pc-sl">🛡️ Safelink</span></td><td class="num">$1,450.00</td></tr>
+            <tr><td><div class="mname">Empresa B</div><div class="msub">RFC BBB020202BBB</div></td><td><span class="pchip pc-ia">🪙 Portal IA</span></td><td class="num">$1,150.00</td></tr>
+            <tr><td><div class="mname">Empresa C</div><div class="msub">RFC CCC030303CCC</div></td><td><span class="pchip pc-tdc">📡 Torre de Control</span><span class="pchip pc-ia">🪙 Portal IA</span></td><td class="num">$960.00</td></tr>
+            <tr><td><div class="mname">Empresa D</div><div class="msub">RFC DDD040404DDD</div></td><td><span class="pchip pc-sl">🛡️ Safelink</span></td><td class="num">$2,460.00</td></tr>
+            <tr><td><div class="mname">Empresa E</div><div class="msub">RFC EEE050505EEE</div></td><td><span class="pchip pc-ia">🪙 Portal IA</span><span class="pchip pc-tdc">📡 Torre de Control</span></td><td class="num">$2,610.00</td></tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -181,12 +211,25 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     </div>
     <div class="step-shot">
       <div class="browser">
-        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
-        <div class="screen-bar">Consumos entrantes</div>
-        <div class="screen-body">
-          <div class="row"><span class="r-name"><span class="pchip pc-tdc">📡</span> Torre de Control</span><span class="r-tag tag-info">integrado</span></div>
-          <div class="row"><span class="r-name"><span class="pchip pc-sl">🛡️</span> Safelink</span><span class="r-tag tag-info">integrado</span></div>
-          <div class="row"><span class="r-name"><span class="pchip pc-ia">🪙</span> Portal IA</span><span class="r-tag tag-info">integrado</span></div>
+        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+        <div class="app">
+          <div class="app-nav">
+            <div class="brand">Admin. de Cobros</div>
+            <div class="nitem on">📋 Pendiente</div>
+            <div class="nitem">🧾 Facturado</div>
+            <div class="nitem">⚙️ Tarifas</div>
+          </div>
+          <div class="app-content">
+            <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Consumos recibidos hoy</div>
+            <table class="mtable">
+              <tr><th>Integración</th><th>Folio</th><th>Cliente</th><th style="text-align:right">Monto</th><th></th></tr>
+              <tr><td><span class="pchip pc-tdc">📡 Torre de Control</span></td><td>RET-88213</td><td>Empresa A</td><td class="num">$500.00</td><td><span class="r-tag tag-info">integrado</span></td></tr>
+              <tr><td><span class="pchip pc-sl">🛡️ Safelink</span></td><td>POL-40217</td><td>Empresa A</td><td class="num">$950.00</td><td><span class="r-tag tag-info">integrado</span></td></tr>
+              <tr><td><span class="pchip pc-ia">🪙 Portal IA</span></td><td>TKN-91004</td><td>Empresa B</td><td class="num">$1,150.00</td><td><span class="r-tag tag-info">integrado</span></td></tr>
+              <tr><td><span class="pchip pc-sl">🛡️ Safelink</span></td><td>POL-40233</td><td>Empresa D</td><td class="num">$1,820.00</td><td><span class="r-tag tag-info">integrado</span></td></tr>
+              <tr><td><span class="pchip pc-tdc">📡 Torre de Control</span></td><td>RET-88266</td><td>Empresa E</td><td class="num">$210.00</td><td><span class="r-tag tag-info">integrado</span></td></tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -200,11 +243,24 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     </div>
     <div class="step-shot">
       <div class="browser">
-        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
-        <div class="screen-bar">Empresa A — RFC AAA010101AAA</div>
-        <div class="screen-body">
-          <div class="row"><span class="r-name"><span class="pchip pc-tdc">📡</span> Torre de Control<div class="r-sub">RET-88213</div></span><span class="r-tag tag-pend">No pagado · No facturado</span></div>
-          <div class="row"><span class="r-name"><span class="pchip pc-ia">🪙</span> Portal IA<div class="r-sub">TKN-91004</div></span><span class="r-tag tag-ok">Pagado · No facturado</span></div>
+        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+        <div class="app">
+          <div class="app-nav">
+            <div class="brand">Admin. de Cobros</div>
+            <div class="nitem on">📋 Pendiente</div>
+            <div class="nitem">🧾 Facturado</div>
+            <div class="nitem">⚙️ Tarifas</div>
+          </div>
+          <div class="app-content">
+            <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">
+              Empresa C <span class="sb-sub">· RFC CCC030303CCC</span>
+            </div>
+            <table class="mtable">
+              <tr><th></th><th>Proyecto</th><th>Referencia</th><th>Estatus</th><th style="text-align:right">Monto</th></tr>
+              <tr><td><input type="checkbox" class="mchk"></td><td><span class="pchip pc-tdc">📡 Torre de Control</span></td><td>RET-88240</td><td><span class="r-tag tag-pend">No pagado · No facturado</span></td><td class="num">$300.00</td></tr>
+              <tr><td><input type="checkbox" class="mchk"></td><td><span class="pchip pc-ia">🪙 Portal IA</span></td><td>TKN-91020</td><td><span class="r-tag tag-ok">Pagado · No facturado</span></td><td class="num">$660.00</td></tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -218,13 +274,24 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     </div>
     <div class="step-shot">
       <div class="browser">
-        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
-        <div class="screen-bar">Generar factura · No pagado</div>
-        <div class="screen-body">
-          <div class="row"><input type="checkbox" class="r-check" checked><span class="r-name"><span class="pchip pc-tdc">📡</span> Torre de Control</span><span class="amt">$500</span></div>
-          <div class="row"><input type="checkbox" class="r-check" checked><span class="r-name"><span class="pchip pc-sl">🛡️</span> Safelink</span><span class="amt">$950</span></div>
-          <div class="row" style="background:none;border:none;font-weight:700"><span class="r-name">Total</span><span class="amt">$1,450</span></div>
-          <div class="btn-mini">Generar factura</div>
+        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+        <div class="app">
+          <div class="app-nav">
+            <div class="brand">Admin. de Cobros</div>
+            <div class="nitem on">📋 Pendiente</div>
+            <div class="nitem">🧾 Facturado</div>
+            <div class="nitem">⚙️ Tarifas</div>
+          </div>
+          <div class="app-content">
+            <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Empresa A — generar factura · No pagado</div>
+            <table class="mtable">
+              <tr><th></th><th>Proyecto</th><th>Referencia</th><th style="text-align:right">Monto</th></tr>
+              <tr><td><input type="checkbox" class="mchk" checked></td><td><span class="pchip pc-tdc">📡 Torre de Control</span></td><td>RET-88213</td><td class="num">$500.00</td></tr>
+              <tr><td><input type="checkbox" class="mchk" checked></td><td><span class="pchip pc-sl">🛡️ Safelink</span></td><td>POL-40217</td><td class="num">$950.00</td></tr>
+              <tr><td colspan="3" style="text-align:right;font-weight:700;color:var(--ink)">Total seleccionado</td><td class="num">$1,450.00</td></tr>
+            </table>
+            <div class="btn-mini">Generar factura</div>
+          </div>
         </div>
       </div>
     </div>
@@ -238,11 +305,13 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     </div>
     <div class="step-shot">
       <div class="browser">
-        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">fe.paqueteria</span></div>
-        <div class="screen-bar">FE · Paquetería</div>
-        <div class="screen-body" style="text-align:center;padding:22px 10px">
-          <div class="dots-mini"><span></span><span></span><span></span></div>
-          <div style="margin-top:8px;font-weight:600;color:var(--ink-2)">Timbrando el CFDI…</div>
+        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">fe.paqueteria.gm.local</span></div>
+        <div class="screen-bar">FE · Paquetería — Timbrado de CFDI</div>
+        <div style="padding:14px 20px 20px">
+          <table class="mtable">
+            <tr><th>Cliente</th><th>Conceptos</th><th style="text-align:right">Total</th><th></th></tr>
+            <tr><td>Empresa A</td><td>Torre de Control, Safelink</td><td class="num">$1,450.00</td><td><span class="r-tag tag-info"><span class="dots-mini"><span></span><span></span><span></span></span> timbrando</span></td></tr>
+          </table>
         </div>
       </div>
     </div>
@@ -256,10 +325,23 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     </div>
     <div class="step-shot">
       <div class="browser">
-        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
-        <div class="screen-bar">Facturado</div>
-        <div class="screen-body">
-          <div class="row"><span class="r-name">CFDI 00841<div class="r-sub">Empresa A · 2026-09-08</div></span><span class="r-tag tag-ok">Timbrada</span></div>
+        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+        <div class="app">
+          <div class="app-nav">
+            <div class="brand">Admin. de Cobros</div>
+            <div class="nitem">📋 Pendiente</div>
+            <div class="nitem on">🧾 Facturado</div>
+            <div class="nitem">⚙️ Tarifas</div>
+          </div>
+          <div class="app-content">
+            <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Facturado</div>
+            <table class="mtable">
+              <tr><th>Folio</th><th>Cliente</th><th>Estatus</th><th style="text-align:right">Total</th></tr>
+              <tr><td><div class="mname">CFDI 00841</div><div class="msub">2026-09-08</div></td><td>Empresa A</td><td><span class="r-tag tag-ok">Timbrada</span></td><td class="num">$1,450.00</td></tr>
+              <tr><td><div class="mname">CFDI 00839</div><div class="msub">2026-08-29</div></td><td>Empresa F</td><td><span class="r-tag tag-ok">Timbrada</span></td><td class="num">$2,100.00</td></tr>
+              <tr><td><div class="mname">CFDI 00835</div><div class="msub">2026-08-27</div></td><td>Empresa G</td><td><span class="r-tag tag-ok">Timbrada</span></td><td class="num">$980.00</td></tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -273,10 +355,22 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     </div>
     <div class="step-shot">
       <div class="browser">
-        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
-        <div class="screen-bar">Facturado</div>
-        <div class="screen-body">
-          <div class="row"><span class="r-name">CFDI 00841<div class="r-sub">Empresa A · regresa a pendientes</div></span><span class="r-tag" style="background:#FCEBEA;color:#B91C1C;border:1px solid #F3C6C4">Cancelada</span></div>
+        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+        <div class="app">
+          <div class="app-nav">
+            <div class="brand">Admin. de Cobros</div>
+            <div class="nitem">📋 Pendiente</div>
+            <div class="nitem on">🧾 Facturado</div>
+            <div class="nitem">⚙️ Tarifas</div>
+          </div>
+          <div class="app-content">
+            <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Facturado</div>
+            <table class="mtable">
+              <tr><th>Folio</th><th>Cliente</th><th>Estatus</th><th style="text-align:right">Total</th></tr>
+              <tr><td><div class="mname">CFDI 00841</div><div class="msub">Regresó a Pendiente de facturar</div></td><td>Empresa A</td><td><span class="r-tag tag-cancel">Cancelada</span></td><td class="num">$1,450.00</td></tr>
+              <tr><td><div class="mname">CFDI 00839</div><div class="msub">2026-08-29</div></td><td>Empresa F</td><td><span class="r-tag tag-ok">Timbrada</span></td><td class="num">$2,100.00</td></tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>

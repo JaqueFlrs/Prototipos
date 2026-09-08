@@ -346,10 +346,10 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
     <section id="s1">
       <div class="eyebrow">01 · Resumen Ejecutivo</div>
       <h2>Un sistema web que integra los consumos de Torre de Control, Portal IA y Safelink</h2>
-      <p>Hoy cada uno de estos tres productos de Nuevas Tecnologías genera su propio consumo por separado, y ninguno tiene conexión con el sistema de facturación (FE) que el equipo de Paquetería ya opera para el negocio del ERP. El resultado: nadie en Facturación tiene un lugar donde ver, cliente por cliente, qué se le debe cobrar por estos productos.</p>
+      <p>Hoy cada uno de estos tres productos de Nuevas Tecnologías genera su propio consumo por separado, y ninguno tiene conexión con el sistema de facturación (FE) que ya opera para el negocio del ERP. El resultado: nadie en Facturación tiene un lugar donde ver, cliente por cliente, qué se le debe cobrar por estos productos.</p>
       <p>El <b>Administrador de Cobros</b> es un sistema web nuevo que integra el consumo que reportan estas tres fuentes, lo concentra por cliente, y desde ahí manda la información a FE para generar la factura. No construye un timbrado propio ni reemplaza la facturación del ERP — conecta lo que hoy queda fuera de ella.</p>
       <p>Cada una de estas tres integraciones fue desarrollo real, porque cada producto calcula su cobro distinto. Sumar un producto nuevo más adelante (KPIs Premium u otro) implica ese mismo trabajo de desarrollo si su forma de cobrar no coincide con las ya construidas — no es una alta de catálogo sin costo.</p>
-      <p>Lo que se busca de esta sesión es <b>validar el alcance de la Fase 1</b> (los tres productos ya definidos) y dar luz verde para iniciar la definición técnica con el equipo de Paquetería.</p>
+      <p>Lo que se busca de esta sesión es <b>validar el alcance de la Fase 1</b> (los tres productos ya definidos) y dar luz verde para iniciar la definición técnica con el equipo dueño del sistema de facturación.</p>
     </section>
 
     <section id="s2">
@@ -377,7 +377,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
         </div>
         <div class="piece">
           <h4>🧾 Generación de factura vía FE</h4>
-          <p>El portal no timbra por sí mismo — manda la información al sistema de Paquetería y consulta de vuelta el CFDI ya generado.</p>
+          <p>El portal no timbra por sí mismo — manda la información al sistema de facturación (FE) y consulta de vuelta el CFDI ya generado.</p>
         </div>
         <div class="piece">
           <h4>📁 Módulo Facturado</h4>
@@ -388,7 +388,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           <p>Semáforo de vencido/por vencer, registro manual de pago, y recordatorio redactado por el sistema que Facturación decide enviar.</p>
         </div>
       </div>
-      <div class="reuse"><b>Se reutiliza:</b> el catálogo de clientes ya existente en el ERP (todo cliente que puede generar consumo ya está identificado por su RFC) y el sistema de facturación FE que Paquetería ya opera — no se construye un timbrado propio.</div>
+      <div class="reuse"><b>Se reutiliza:</b> el catálogo de clientes ya existente en el ERP (todo cliente que puede generar consumo ya está identificado por su RFC) y el sistema de facturación (FE) que ya opera — no se construye un timbrado propio.</div>
     </section>
 
     <section id="s4">
@@ -480,7 +480,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
       <table class="risk">
         <tr><th>Riesgo</th><th>Mitigación</th></tr>
         <tr><td>Un consumo se reporta dos veces y el cliente termina pagando doble.</td><td>Cada consumo trae un identificador único de su integración de origen; un duplicado se guarda marcado para revisión, nunca se factura automáticamente.</td></tr>
-        <tr><td>Una factura se cancela en el sistema de Paquetería y el portal no se entera.</td><td>El sistema de Paquetería avisa siempre al portal, regresando esos cargos a pendientes de forma automática.</td></tr>
+        <tr><td>Una factura se cancela en el sistema de facturación y el portal no se entera.</td><td>El sistema de facturación avisa siempre al portal, regresando esos cargos a pendientes de forma automática.</td></tr>
         <tr><td>Dos personas de Facturación trabajan al mismo cliente a la vez y generan facturas encimadas.</td><td>El portal bloquea al cliente completo mientras alguien lo está trabajando.</td></tr>
         <tr><td>Se asume que sumar un producto nuevo al catálogo es gratis en desarrollo.</td><td>Solo se evita desarrollo si el producto nuevo usa un tipo de cálculo ya construido (paquete, monto directo, costo-menos-descuento). Una forma de cobro distinta — como la renta fija de KPIs Premium — requiere desarrollo igual que cada uno de los tres productos actuales lo requirió.</td></tr>
       </table>
@@ -565,11 +565,11 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
       <h2>Ruta</h2>
       <div class="route">
         <div class="route-item"><div class="route-dot">1</div><div class="route-text"><b>Validar el alcance de Fase 1</b> con Dirección.</div></div>
-        <div class="route-item"><div class="route-dot">2</div><div class="route-text"><b>Definir con el equipo de Paquetería</b> el contrato técnico para enviar información y consultar el CFDI.</div></div>
+        <div class="route-item"><div class="route-dot">2</div><div class="route-text"><b>Definir con el equipo dueño del sistema de facturación</b> el contrato técnico para enviar información y consultar el CFDI.</div></div>
         <div class="route-item"><div class="route-dot">3</div><div class="route-text"><b>Desarrollo de Fase 1</b> — los cuatro productos, los dos módulos y cobranza básica.</div></div>
         <div class="route-item"><div class="route-dot">4</div><div class="route-text"><b>Piloto</b> con un solo producto (Torre de Control) antes del rollout completo.</div></div>
       </div>
-      <div class="decision"><b>Decisión requerida:</b> aprobar el alcance de Fase 1 y autorizar el inicio de la definición técnica con el equipo de Paquetería.</div>
+      <div class="decision"><b>Decisión requerida:</b> aprobar el alcance de Fase 1 y autorizar el inicio de la definición técnica con el equipo dueño del sistema de facturación.</div>
     </section>
 
     <section id="s11" class="detail-only">
@@ -605,7 +605,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           <div class="acc-body">
             <ul>
               <li>Cliente identificado siempre por <b>RFC</b>, tomado del catálogo de clientes ya existente en el ERP.</li>
-              <li>Clave de producto/servicio SAT la asigna Paquetería, una vez por proyecto.</li>
+              <li>Clave de producto/servicio SAT la asigna el sistema de facturación, una vez por proyecto.</li>
               <li>Emisor siempre GM, una sola razón social.</li>
               <li>Moneda: pesos y dólares (Portal IA puede vender en USD).</li>
             </ul>
@@ -619,7 +619,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
               <li>Montos de Portal IA y cantidades/precios de Torre de Control no pueden ser cero o negativos.</li>
               <li>% de descuento de Safelink: 0% a 100%.</li>
               <li>Identificador único de consumo por integración (folio de póliza / retransmisión / id de compra) evita duplicados — un duplicado se guarda marcado para revisión.</li>
-              <li>El sistema de Paquetería notifica al portal toda cancelación de factura.</li>
+              <li>El sistema de facturación notifica al portal toda cancelación de factura.</li>
             </ul>
           </div>
         </div>
@@ -628,7 +628,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           <div class="acc-h" onclick="toggleAcc(this)">Consideraciones técnicas <span class="arrow">▸</span></div>
           <div class="acc-body">
             <ul>
-              <li><span class="pend">[PENDIENTE POR DEFINIR]</span> Contrato técnico exacto con el sistema de Paquetería (cómo se envía la información a facturar y cómo se consulta el CFDI de vuelta) — a definir con ese equipo.</li>
+              <li><span class="pend">[PENDIENTE POR DEFINIR]</span> Contrato técnico exacto con el sistema de facturación (cómo se envía la información a facturar y cómo se consulta el CFDI de vuelta) — a definir con ese equipo.</li>
               <li>Bloqueo de concurrencia: al cliente completo mientras Facturación lo está trabajando (detalle de liberación del bloqueo fuera de este análisis).</li>
             </ul>
           </div>
@@ -680,9 +680,9 @@ const FLOW = [
   {t:'Cada integración manda su consumo', d:'Torre de Control, Safelink y Portal IA reportan al sistema cada consumo, identificado con un folio único de su propia fuente (folio de retransmisión, número de póliza, id de compra) para que nunca se registre dos veces el mismo consumo.'},
   {t:'El portal concentra los pendientes por cliente', d:'Cada cargo se agrupa por RFC. El estatus siempre incluye "No facturado" — sea que el cargo ya esté pagado (Portal IA) o no (Torre de Control, Safelink) — para que ningún estatus se lea como una tarea resuelta.'},
   {t:'Facturación selecciona y confirma', d:'Se puede mezclar cargos de varios proyectos en una sola factura y facturar solo una parte de lo pendiente. La única separación obligatoria es entre lo ya pagado y lo por cobrar, porque cada uno usa una forma de pago distinta ante el SAT (PUE / PPD).'},
-  {t:'La factura se timbra en el sistema de Paquetería', d:'El portal envía la información necesaria (cliente, conceptos, montos, forma y método de pago) al sistema FE que Paquetería ya opera. Ahí se genera el CFDI real.'},
+  {t:'La factura se timbra en el sistema de facturación', d:'El portal envía la información necesaria (cliente, conceptos, montos, forma y método de pago) al sistema FE que ya opera hoy. Ahí se genera el CFDI real.'},
   {t:'El portal muestra el CFDI ya emitido', d:'El folio timbrado se consulta de vuelta y se refleja en el módulo Facturado, sin mezclarse con el flujo de pendientes.'},
-  {t:'Si se cancela, regresa solo a pendientes', d:'Las cancelaciones ocurren en el sistema de Paquetería. El portal recibe el aviso y regresa automáticamente esos cargos a la bandeja de pendientes, respetando la tarifa vigente al momento de la cancelación.'},
+  {t:'Si se cancela, regresa solo a pendientes', d:'Las cancelaciones ocurren en el sistema de facturación. El portal recibe el aviso y regresa automáticamente esos cargos a la bandeja de pendientes, respetando la tarifa vigente al momento de la cancelación.'},
 ];
 const flowList = document.getElementById('flow-list');
 const flowDetail = document.getElementById('flow-detail');
@@ -838,7 +838,7 @@ function toggleCargo(i){
 function generarFactura(){
   document.getElementById('detalle-body').innerHTML = `<div class="p-sending">
     <div class="dots"><span></span><span></span><span></span></div>
-    <div style="font-size:12.5px;font-weight:600;color:var(--ink-2)">Enviando a Paquetería (FE)…</div>
+    <div style="font-size:12.5px;font-weight:600;color:var(--ink-2)">Enviando al sistema de facturación (FE)…</div>
   </div>`;
   setTimeout(()=>{
     const folio = 'CFDI 00' + (842 + Math.floor(Math.random()*50));

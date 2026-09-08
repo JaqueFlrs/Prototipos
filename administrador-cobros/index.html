@@ -125,6 +125,19 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
 .pc-ia{background:#F3F0FF; color:#6D3FC4}
 .pc-sl{background:#EAFBF1; color:#0F8A4A}
 
+/* barra de filtros */
+.fbar{display:flex; gap:10px; margin-bottom:14px; align-items:center}
+.fsearch{
+  flex:1; min-width:0; font-size:12.5px; border:1px solid var(--line); border-radius:6px;
+  padding:8px 11px; color:var(--ink-3); background:#fff;
+}
+.fselect{
+  flex:0 0 auto; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--ink-2);
+  border:1px solid var(--line); border-radius:6px; padding:8px 12px; background:#fff; white-space:nowrap;
+}
+.fselect b{color:var(--ink); font-weight:700}
+.fselect .arrow{color:var(--ink-3); font-size:10px}
+
 /* stat mini cards dentro del mockup */
 .mini-stats{display:flex; gap:10px; margin-bottom:16px}
 .mini-stat{flex:1; border:1px solid var(--line-2); border-radius:8px; padding:12px 14px; background:var(--bg-2)}
@@ -168,7 +181,7 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     <div>
       <h1>Administrador de Cobros</h1>
       <p class="desc">Sistema web que junta en un solo lugar los consumos de Torre de Control, Portal IA y Safelink, para que Facturación de GM sepa qué le debe cobrar a cada cliente y pueda generar la factura desde ahí.</p>
-      <p class="desc sub">No reemplaza la facturación del ERP: es el puente que faltaba entre estos productos nuevos y el sistema de facturación que Paquetería ya opera.</p>
+      <p class="desc sub">No reemplaza la facturación del ERP: es el puente que faltaba entre estos productos nuevos y el sistema de facturación que ya opera.</p>
     </div>
     <div class="browser">
       <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
@@ -185,6 +198,10 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
             <div class="mini-stat"><div class="v">$9,340.00</div><div class="l">Total pendiente</div></div>
             <div class="mini-stat"><div class="v">5</div><div class="l">Clientes</div></div>
             <div class="mini-stat"><div class="v">9</div><div class="l">Cargos sin facturar</div></div>
+          </div>
+          <div class="fbar">
+            <input class="fsearch" placeholder="Buscar cliente o RFC…">
+            <div class="fselect">Proyecto: <b>Todos</b><span class="arrow">▾</span></div>
           </div>
           <table class="mtable">
             <tr><th>Cliente</th><th>Proyectos</th><th style="text-align:right">Pendiente</th></tr>
@@ -253,6 +270,10 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
           </div>
           <div class="app-content">
             <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Pendiente de facturar</div>
+            <div class="fbar">
+              <input class="fsearch" placeholder="Buscar cliente o RFC…">
+              <div class="fselect">Proyecto: <b>Todos</b><span class="arrow">▾</span></div>
+            </div>
             <table class="mtable">
               <tr><th>Cliente</th><th>Proyectos</th><th style="text-align:right">Pendiente</th><th></th></tr>
               <tr class="clickrow"><td><div class="mname">Empresa A</div><div class="msub">RFC AAA010101AAA</div></td><td><span class="pchip pc-tdc">📡 Torre de Control</span><span class="pchip pc-sl">🛡️ Safelink</span></td><td class="num">$1,450.00</td><td>→</td></tr>
@@ -331,8 +352,8 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
   <div class="step">
     <div class="step-text">
       <div class="step-num">Paso 5</div>
-      <h3>Se timbra en Paquetería y aparece en Facturado</h3>
-      <p>El portal no factura por sí mismo: manda la información al sistema de facturación (FE) que Paquetería ya opera. En cuanto esa factura se timbra, el folio queda disponible aquí mismo, en el módulo Facturado, separado por completo del flujo de pendientes.</p>
+      <h3>Se timbra en el sistema de facturación y aparece en Facturado</h3>
+      <p>El portal no factura por sí mismo: manda la información al sistema de facturación (FE) que ya opera hoy. En cuanto esa factura se timbra, el folio queda disponible aquí mismo, en el módulo Facturado, separado por completo del flujo de pendientes.</p>
     </div>
     <div class="step-shot">
       <div class="browser">
@@ -346,6 +367,10 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
           </div>
           <div class="app-content">
             <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Facturado</div>
+            <div class="fbar">
+              <input class="fsearch" placeholder="Buscar folio o cliente…">
+              <div class="fselect">Estatus: <b>Todas</b><span class="arrow">▾</span></div>
+            </div>
             <table class="mtable">
               <tr><th>Folio</th><th>Cliente</th><th>Estatus</th><th style="text-align:right">Total</th></tr>
               <tr><td><div class="mname">CFDI 00841</div><div class="msub">2026-09-08</div></td><td>Empresa A</td><td><span class="r-tag tag-ok">Timbrada</span></td><td class="num">$1,450.00</td></tr>
@@ -362,7 +387,7 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
     <div class="step-text">
       <div class="step-num">Paso 6</div>
       <h3>Si se cancela, regresa solo a pendientes</h3>
-      <p>Las cancelaciones se hacen en el sistema de Paquetería, no aquí. El portal solo recibe el aviso y regresa automáticamente esos cargos a la bandeja de pendientes.</p>
+      <p>Las cancelaciones se hacen en el sistema de facturación, no aquí. El portal solo recibe el aviso y regresa automáticamente esos cargos a la bandeja de pendientes.</p>
     </div>
     <div class="step-shot">
       <div class="browser">
@@ -376,10 +401,14 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
           </div>
           <div class="app-content">
             <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Facturado</div>
+            <div class="fbar">
+              <input class="fsearch" placeholder="Buscar folio o cliente…">
+              <div class="fselect">Estatus: <b>Canceladas</b><span class="arrow">▾</span></div>
+            </div>
             <table class="mtable">
               <tr><th>Folio</th><th>Cliente</th><th>Estatus</th><th style="text-align:right">Total</th></tr>
               <tr><td><div class="mname">CFDI 00841</div><div class="msub">Regresó a Pendiente de facturar</div></td><td>Empresa A</td><td><span class="r-tag tag-cancel">Cancelada</span></td><td class="num">$1,450.00</td></tr>
-              <tr><td><div class="mname">CFDI 00839</div><div class="msub">2026-08-29</div></td><td>Empresa F</td><td><span class="r-tag tag-ok">Timbrada</span></td><td class="num">$2,100.00</td></tr>
+              <tr><td><div class="mname">CFDI 00819</div><div class="msub">Regresó a Pendiente de facturar</div></td><td>Empresa C</td><td><span class="r-tag tag-cancel">Cancelada</span></td><td class="num">$305.00</td></tr>
             </table>
           </div>
         </div>
@@ -388,6 +417,6 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
   </div>
 
   <div class="close">
-    Lo que hace distinto a este sistema es que <b>no reemplaza la facturación del ERP</b> — es la pieza que faltaba para conectar Torre de Control, Safelink y Portal IA con el mismo sistema de facturación que Paquetería ya opera, algo que hoy ninguno de esos productos tiene. Integrar cada uno de estos tres fue desarrollo real: cada uno necesitó su propia forma de calcular el cobro. Sumar un producto nuevo más adelante (KPIs Premium u otro) implica ese mismo trabajo si su forma de cobrar es distinta a las tres ya construidas.
+    Lo que hace distinto a este sistema es que <b>no reemplaza la facturación del ERP</b> — es la pieza que faltaba para conectar Torre de Control, Safelink y Portal IA con el mismo sistema de facturación que ya opera, algo que hoy ninguno de esos productos tiene. Integrar cada uno de estos tres fue desarrollo real: cada uno necesitó su propia forma de calcular el cobro. Sumar un producto nuevo más adelante (KPIs Premium u otro) implica ese mismo trabajo si su forma de cobrar es distinta a las tres ya construidas.
   </div>
 </div>

@@ -238,8 +238,39 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
   <div class="step">
     <div class="step-text">
       <div class="step-num">Paso 2</div>
-      <h3>El portal concentra los pendientes por cliente</h3>
-      <p>Cada cargo queda visible con un estatus claro — Pagado o No pagado — pero siempre marcado como No Facturado, para que nunca se lea como algo ya resuelto.</p>
+      <h3>Facturación ve la lista de clientes con pendientes</h3>
+      <p>Al entrar al sistema, esta es la primera pantalla: todos los clientes que tienen algo sin facturar, con el total pendiente de cada uno. De aquí se elige a cuál cliente entrar.</p>
+    </div>
+    <div class="step-shot">
+      <div class="browser">
+        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+        <div class="app">
+          <div class="app-nav">
+            <div class="brand">Admin. de Cobros</div>
+            <div class="nitem on">📋 Pendiente</div>
+            <div class="nitem">🧾 Facturado</div>
+            <div class="nitem">⚙️ Tarifas</div>
+          </div>
+          <div class="app-content">
+            <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Pendiente de facturar</div>
+            <table class="mtable">
+              <tr><th>Cliente</th><th>Proyectos</th><th style="text-align:right">Pendiente</th><th></th></tr>
+              <tr class="clickrow"><td><div class="mname">Empresa A</div><div class="msub">RFC AAA010101AAA</div></td><td><span class="pchip pc-tdc">📡 Torre de Control</span><span class="pchip pc-sl">🛡️ Safelink</span></td><td class="num">$1,450.00</td><td>→</td></tr>
+              <tr><td><div class="mname">Empresa B</div><div class="msub">RFC BBB020202BBB</div></td><td><span class="pchip pc-ia">🪙 Portal IA</span></td><td class="num">$1,150.00</td><td>→</td></tr>
+              <tr><td><div class="mname">Empresa C</div><div class="msub">RFC CCC030303CCC</div></td><td><span class="pchip pc-tdc">📡 Torre de Control</span><span class="pchip pc-ia">🪙 Portal IA</span></td><td class="num">$960.00</td><td>→</td></tr>
+              <tr><td><div class="mname">Empresa D</div><div class="msub">RFC DDD040404DDD</div></td><td><span class="pchip pc-sl">🛡️ Safelink</span></td><td class="num">$2,460.00</td><td>→</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-num">Paso 3</div>
+      <h3>Al entrar, ve todos los consumos de ese cliente</h3>
+      <p>Empresa A tiene dos cargos sin facturar, de dos proyectos distintos. Cada uno muestra su referencia de origen y su estatus — siempre terminando en "No facturado", para que nunca se lea como algo ya resuelto.</p>
     </div>
     <div class="step-shot">
       <div class="browser">
@@ -253,12 +284,12 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
           </div>
           <div class="app-content">
             <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">
-              Empresa A <span class="sb-sub">· RFC AAA010101AAA</span>
+              ← Empresa A <span class="sb-sub">· RFC AAA010101AAA</span>
             </div>
             <table class="mtable">
-              <tr><th></th><th>Proyecto</th><th>Referencia</th><th>Estatus</th><th style="text-align:right">Monto</th></tr>
-              <tr><td><input type="checkbox" class="mchk"></td><td><span class="pchip pc-tdc">📡 Torre de Control</span></td><td>RET-88213</td><td><span class="r-tag tag-pend">No pagado · No facturado</span></td><td class="num">$500.00</td></tr>
-              <tr><td><input type="checkbox" class="mchk"></td><td><span class="pchip pc-sl">🛡️ Safelink</span></td><td>POL-40217</td><td><span class="r-tag tag-pend">No pagado · No facturado</span></td><td class="num">$950.00</td></tr>
+              <tr><th>Proyecto</th><th>Referencia</th><th>Estatus</th><th style="text-align:right">Monto</th></tr>
+              <tr><td><span class="pchip pc-tdc">📡 Torre de Control</span></td><td>RET-88213</td><td><span class="r-tag tag-pend">No pagado · No facturado</span></td><td class="num">$500.00</td></tr>
+              <tr><td><span class="pchip pc-sl">🛡️ Safelink</span></td><td>POL-40217</td><td><span class="r-tag tag-pend">No pagado · No facturado</span></td><td class="num">$950.00</td></tr>
             </table>
           </div>
         </div>
@@ -268,8 +299,8 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
 
   <div class="step">
     <div class="step-text">
-      <div class="step-num">Paso 3</div>
-      <h3>Facturación selecciona y confirma</h3>
+      <div class="step-num">Paso 4</div>
+      <h3>Facturación selecciona cuáles cargos facturar</h3>
       <p>Puede juntar cargos de varios proyectos en una sola factura y facturar solo una parte de lo pendiente. Lo único que no se mezcla es lo ya pagado con lo por cobrar, porque cada uno usa una forma de pago distinta ante el SAT.</p>
     </div>
     <div class="step-shot">
@@ -299,29 +330,9 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
 
   <div class="step">
     <div class="step-text">
-      <div class="step-num">Paso 4</div>
-      <h3>La factura se timbra en el sistema de Paquetería</h3>
-      <p>El portal no factura por sí mismo: manda la información al sistema de facturación (FE) que Paquetería ya opera, y ese sistema genera el CFDI.</p>
-    </div>
-    <div class="step-shot">
-      <div class="browser">
-        <div class="browser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">fe.paqueteria.gm.local</span></div>
-        <div class="screen-bar">FE · Paquetería — Timbrado de CFDI</div>
-        <div style="padding:14px 20px 20px">
-          <table class="mtable">
-            <tr><th>Cliente</th><th>Conceptos</th><th style="text-align:right">Total</th><th></th></tr>
-            <tr><td>Empresa A</td><td>Torre de Control, Safelink</td><td class="num">$1,450.00</td><td><span class="r-tag tag-info"><span class="dots-mini"><span></span><span></span><span></span></span> timbrando</span></td></tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="step">
-    <div class="step-text">
       <div class="step-num">Paso 5</div>
-      <h3>El portal muestra el CFDI ya emitido</h3>
-      <p>El folio timbrado se consulta de vuelta y queda disponible en el módulo Facturado, separado por completo del flujo de pendientes.</p>
+      <h3>Se timbra en Paquetería y aparece en Facturado</h3>
+      <p>El portal no factura por sí mismo: manda la información al sistema de facturación (FE) que Paquetería ya opera. En cuanto esa factura se timbra, el folio queda disponible aquí mismo, en el módulo Facturado, separado por completo del flujo de pendientes.</p>
     </div>
     <div class="step-shot">
       <div class="browser">

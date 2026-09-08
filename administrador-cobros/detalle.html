@@ -268,10 +268,11 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
 
     <section id="s1">
       <div class="eyebrow">01 · Resumen Ejecutivo</div>
-      <h2>Un sistema web que integra los consumos de Torre de Control, Portal IA, Safelink y KPIs Premium</h2>
-      <p>Hoy cada uno de estos cuatro productos de Nuevas Tecnologías genera su propio consumo por separado, y ninguno tiene conexión con el sistema de facturación (FE) que el equipo de Paquetería ya opera para el negocio del ERP. El resultado: nadie en Facturación tiene un lugar donde ver, cliente por cliente, qué se le debe cobrar por estos productos.</p>
-      <p>El <b>Administrador de Cobros</b> es un sistema web nuevo que integra el consumo que reportan estas cuatro fuentes, lo concentra por cliente, y desde ahí manda la información a FE para generar la factura. No construye un timbrado propio ni reemplaza la facturación del ERP — conecta lo que hoy queda fuera de ella.</p>
-      <p>Lo que se busca de esta sesión es <b>validar el alcance de la Fase 1</b> (los cuatro productos ya definidos) y dar luz verde para iniciar la definición técnica con el equipo de Paquetería.</p>
+      <h2>Un sistema web que integra los consumos de Torre de Control, Portal IA y Safelink</h2>
+      <p>Hoy cada uno de estos tres productos de Nuevas Tecnologías genera su propio consumo por separado, y ninguno tiene conexión con el sistema de facturación (FE) que el equipo de Paquetería ya opera para el negocio del ERP. El resultado: nadie en Facturación tiene un lugar donde ver, cliente por cliente, qué se le debe cobrar por estos productos.</p>
+      <p>El <b>Administrador de Cobros</b> es un sistema web nuevo que integra el consumo que reportan estas tres fuentes, lo concentra por cliente, y desde ahí manda la información a FE para generar la factura. No construye un timbrado propio ni reemplaza la facturación del ERP — conecta lo que hoy queda fuera de ella.</p>
+      <p>Cada una de estas tres integraciones fue desarrollo real, porque cada producto calcula su cobro distinto. Sumar un producto nuevo más adelante (KPIs Premium u otro) implica ese mismo trabajo de desarrollo si su forma de cobrar no coincide con las ya construidas — no es una alta de catálogo sin costo.</p>
+      <p>Lo que se busca de esta sesión es <b>validar el alcance de la Fase 1</b> (los tres productos ya definidos) y dar luz verde para iniciar la definición técnica con el equipo de Paquetería.</p>
     </section>
 
     <section id="s2">
@@ -291,7 +292,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
       <div class="pieces">
         <div class="piece">
           <h4>📥 Catálogo de integraciones</h4>
-          <p>Cada producto (Torre de Control, Portal IA, Safelink, KPIs Premium, y los que se sumen a futuro) se integra dando de alta su propia forma de calcular el cobro. Un producto nuevo con una fórmula ya conocida no requiere desarrollo adicional para integrarse.</p>
+          <p>Cada producto (Torre de Control, Portal IA, Safelink, y los que se sumen a futuro) se integra dando de alta su propia forma de calcular el cobro. Solo se evita desarrollo si el producto nuevo usa un tipo de cálculo que ya existe en el catálogo — si su forma de cobrar es distinta, integrarlo sí requiere desarrollo, igual que lo requirió cada uno de estos tres.</p>
         </div>
         <div class="piece">
           <h4>📋 Módulo Pendiente de facturar</h4>
@@ -330,7 +331,6 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
             <li>Torre de Control (paquete de llamadas)</li>
             <li>Portal IA (compra de tokens, monto directo)</li>
             <li>Safelink (costo de póliza menos descuento)</li>
-            <li>KPIs Premium (renta mensual fija)</li>
           </ul>
         </div>
         <div class="scope-col">
@@ -359,7 +359,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           </ul>
         </div>
       </div>
-      <div class="not-included"><b>No incluido en esta primera versión:</b> integración automática con el banco para detectar pagos, reportes analíticos avanzados, y cualquier producto de Nuevas Tecnologías más allá de los cuatro ya definidos (el catálogo queda listo para sumarlos después).</div>
+      <div class="not-included"><b>No incluido en esta primera versión:</b> integración automática con el banco para detectar pagos, reportes analíticos avanzados, KPIs Premium (se quitó del alcance), y cualquier otro producto de Nuevas Tecnologías más allá de los tres ya definidos — sumar cualquiera de ellos después implica desarrollo si su forma de cobrar no coincide con un tipo de cálculo ya construido.</div>
     </section>
 
     <section id="s6">
@@ -385,7 +385,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
       <h2>Etapas</h2>
       <div class="phase rec">
         <h4>Fase 1 <span class="badge-rec">Recomendada</span></h4>
-        <p>Los cuatro productos ya definidos (Torre de Control, Portal IA, Safelink, KPIs Premium), los dos módulos principales (Pendiente/Facturado) y la cobranza básica.</p>
+        <p>Los tres productos ya definidos (Torre de Control, Portal IA, Safelink), los dos módulos principales (Pendiente/Facturado) y la cobranza básica.</p>
       </div>
       <div class="phase">
         <h4>Fase 2</h4>
@@ -405,7 +405,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
         <tr><td>Un consumo se reporta dos veces y el cliente termina pagando doble.</td><td>Cada consumo trae un identificador único de su integración de origen; un duplicado se guarda marcado para revisión, nunca se factura automáticamente.</td></tr>
         <tr><td>Una factura se cancela en el sistema de Paquetería y el portal no se entera.</td><td>El sistema de Paquetería avisa siempre al portal, regresando esos cargos a pendientes de forma automática.</td></tr>
         <tr><td>Dos personas de Facturación trabajan al mismo cliente a la vez y generan facturas encimadas.</td><td>El portal bloquea al cliente completo mientras alguien lo está trabajando.</td></tr>
-        <tr><td>KPIs Premium, al ser renta fija y no consumo variable, no encaja con el resto del modelo.</td><td>Se definió como generación automática mensual dentro del propio catálogo, sin depender de una integración externa.</td></tr>
+        <tr><td>Se asume que sumar un producto nuevo al catálogo es gratis en desarrollo.</td><td>Solo se evita desarrollo si el producto nuevo usa un tipo de cálculo ya construido (paquete, monto directo, costo-menos-descuento). Una forma de cobro distinta — como la renta fija de KPIs Premium — requiere desarrollo igual que cada uno de los tres productos actuales lo requirió.</td></tr>
       </table>
     </section>
 
@@ -486,8 +486,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           <div class="acc-h" onclick="toggleAcc(this)">Reglas de negocio <span class="arrow">▸</span></div>
           <div class="acc-body">
             <ul>
-              <li><b>3 tipos de cálculo de tarifa:</b> paquete/equivalencia (Torre de Control), monto directo sin descuento (Portal IA), costo de póliza menos % de descuento con tope 100% (Safelink).</li>
-              <li><b>KPIs Premium:</b> renta mensual fija, se genera automáticamente cada mes.</li>
+              <li><b>3 tipos de cálculo de tarifa:</b> paquete/equivalencia (Torre de Control), monto directo sin descuento (Portal IA), costo de póliza menos % de descuento con tope 100% (Safelink). Un producto nuevo con una de estas 3 fórmulas no requiere desarrollo para integrarse; una fórmula distinta sí lo requiere.</li>
               <li><b>Tarifa por cliente:</b> default general por proyecto + override negociado por cliente.</li>
               <li><b>Cambio de tarifa:</b> pregunta si se recalculan los cargos pendientes; lo ya facturado nunca cambia (se corrige con nota de crédito).</li>
               <li><b>1 factura puede llevar N proyectos</b>, cada uno como partida distinta, siempre que compartan forma y método de pago.</li>
@@ -576,7 +575,7 @@ function setMode(m){
 
 // ---- flow clickable ----
 const FLOW = [
-  {t:'Cada integración manda su consumo', d:'Torre de Control, Safelink, Portal IA y KPIs Premium reportan al portal cada consumo, identificado con un folio único de su propia fuente (folio de retransmisión, número de póliza, id de compra) para que nunca se registre dos veces el mismo consumo.'},
+  {t:'Cada integración manda su consumo', d:'Torre de Control, Safelink y Portal IA reportan al sistema cada consumo, identificado con un folio único de su propia fuente (folio de retransmisión, número de póliza, id de compra) para que nunca se registre dos veces el mismo consumo.'},
   {t:'El portal concentra los pendientes por cliente', d:'Cada cargo se agrupa por RFC. El estatus siempre incluye "No facturado" — sea que el cargo ya esté pagado (Portal IA) o no (Torre de Control, Safelink) — para que ningún estatus se lea como una tarea resuelta.'},
   {t:'Facturación selecciona y confirma', d:'Se puede mezclar cargos de varios proyectos en una sola factura y facturar solo una parte de lo pendiente. La única separación obligatoria es entre lo ya pagado y lo por cobrar, porque cada uno usa una forma de pago distinta ante el SAT (PUE / PPD).'},
   {t:'La factura se timbra en el sistema de Paquetería', d:'El portal envía la información necesaria (cliente, conceptos, montos, forma y método de pago) al sistema FE que Paquetería ya opera. Ahí se genera el CFDI real.'},

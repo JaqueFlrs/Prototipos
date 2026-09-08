@@ -127,17 +127,11 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
   padding:48px 0; margin:0 -48px;
 }
 .proto-inner{max-width:var(--max); margin:0 auto; padding:0 48px}
-.proto-shell{display:flex; gap:28px; margin-top:22px; align-items:flex-start}
-.proto-nav{flex:0 0 168px; display:flex; flex-direction:column; gap:6px; padding-top:44px}
-.proto-nav button{
-  text-align:left; font-size:12.5px; font-weight:600; color:var(--ink-2); background:#fff;
-  border:1px solid var(--line); border-radius:7px; padding:9px 12px; cursor:pointer; font-family:var(--font);
-}
-.proto-nav button.active{background:var(--ink); color:#fff; border-color:var(--ink)}
+.proto-shell{margin-top:22px}
 /* ventana de navegador — sistema web de escritorio, no app móvil */
 .browser-shell{
-  width:100%; max-width:560px; border:1px solid var(--line); border-radius:10px; background:#fff;
-  flex:1 1 auto; box-shadow:0 2px 10px rgba(23,25,30,.06); overflow:hidden;
+  width:100%; max-width:680px; margin:0 auto; border:1px solid var(--line); border-radius:10px; background:#fff;
+  box-shadow:0 4px 18px rgba(23,25,30,.08); overflow:hidden;
 }
 .pbrowser-bar{
   display:flex; align-items:center; gap:8px; padding:9px 12px; background:var(--bg-3); border-bottom:1px solid var(--line-2);
@@ -147,48 +141,131 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
   flex:1; background:#fff; border:1px solid var(--line); border-radius:6px; padding:4px 10px; margin-left:8px;
   font-size:11px; color:var(--ink-3);
 }
-.phone-scr{background:#fff; min-height:420px; overflow:hidden; position:relative}
-.pscr-bar{background:var(--bg-3); padding:14px 16px; border-bottom:1px solid var(--line-2); font-size:13px; font-weight:700}
-.pscr-body{padding:16px 18px; font-size:12.5px}
+/* layout interno tipo app real: sidebar + contenido */
+.app-shell{display:flex; min-height:490px}
+.app-side{
+  flex:0 0 178px; background:var(--bg-2); border-right:1px solid var(--line-2); padding:16px 10px;
+}
+.app-brand{font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.04em; padding:4px 10px 14px}
+.side-item{
+  display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:7px; font-size:12.5px; font-weight:600;
+  color:var(--ink-2); cursor:pointer; margin-bottom:2px; transition:background .12s;
+}
+.side-item:hover{background:var(--bg-3)}
+.side-item.active{background:var(--ink); color:#fff}
+.app-main{flex:1; min-width:0; padding:18px 20px; max-height:560px; overflow-y:auto}
 .p-view{display:none}
 .p-view.show{display:block}
-.p-row{
-  display:flex; justify-content:space-between; align-items:center; padding:11px 12px; margin-bottom:8px;
-  border:1px solid var(--line-2); border-radius:8px; background:var(--bg-2); cursor:pointer;
+.pscr-title{font-size:15px; font-weight:700; margin-bottom:3px}
+.pscr-sub{font-size:11.5px; color:var(--ink-3); margin-bottom:16px}
+
+/* stat cards */
+.p-stats{display:flex; gap:10px; margin-bottom:16px}
+.p-stat{flex:1; border:1px solid var(--line-2); border-radius:8px; padding:11px 13px; background:var(--bg-2)}
+.p-stat .v{font-size:17px; font-weight:700; color:var(--ink)}
+.p-stat .l{font-size:10px; color:var(--ink-3); margin-top:2px}
+
+/* filter bar */
+.p-filter{display:flex; gap:8px; margin-bottom:12px}
+.p-filter input{
+  flex:1; font-size:12px; border:1px solid var(--line); border-radius:6px; padding:8px 10px; font-family:var(--font);
 }
-.p-row:hover{border-color:var(--line)}
-.p-row .name{font-weight:700; font-size:12.5px}
-.p-row .sub{font-size:10.5px; color:var(--ink-3); margin-top:2px}
-.p-amt{font-weight:700; font-size:13px}
-.p-tag{font-size:9px; font-weight:700; padding:3px 7px; border-radius:999px; white-space:nowrap}
+.p-chip-filter{
+  display:flex; gap:6px; font-size:11px; font-weight:600; color:var(--ink-3); border:1px solid var(--line);
+  border-radius:6px; padding:8px 11px; background:#fff; cursor:pointer; white-space:nowrap;
+}
+.p-chip-filter.active{background:var(--ink); color:#fff; border-color:var(--ink)}
+
+/* tables */
+.p-table{width:100%; border-collapse:collapse; font-size:12px}
+.p-table th{
+  text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-3);
+  padding:0 10px 8px; border-bottom:1px solid var(--line);
+}
+.p-table td{padding:11px 10px; border-bottom:1px solid var(--line-2); vertical-align:middle}
+.p-table tr.clickable{cursor:pointer}
+.p-table tr.clickable:hover td{background:var(--bg-3)}
+.p-table td.num{text-align:right; font-weight:700}
+.p-name{font-weight:700; font-size:12.5px; color:var(--ink)}
+.p-sub{font-size:10.5px; color:var(--ink-3); margin-top:2px}
+
+/* project chip */
+.proj-chip{
+  display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700; padding:3px 8px 3px 6px;
+  border-radius:999px; margin:0 4px 4px 0; white-space:nowrap;
+}
+.pc-tdc{background:#EFF4FF; color:#2451C2}
+.pc-ia{background:#F3F0FF; color:#6D3FC4}
+.pc-sl{background:#EAFBF1; color:#0F8A4A}
+
+/* tags de estatus */
+.p-tag{font-size:9.5px; font-weight:700; padding:3px 8px; border-radius:999px; white-space:nowrap; display:inline-block}
 .pt-pend{background:var(--warn-soft); color:var(--warn); border:1px solid var(--warn-line)}
 .pt-ok{background:var(--ok-soft); color:var(--ok)}
 .pt-cancel{background:#FCEBEA; color:#B91C1C; border:1px solid #F3C6C4}
-.p-filter{display:flex; gap:6px; margin-bottom:10px}
-.p-filter input{
-  flex:1; font-size:11.5px; border:1px solid var(--line); border-radius:6px; padding:7px 9px; font-family:var(--font);
+.pt-info{background:var(--info-soft); color:var(--info)}
+
+/* detalle cliente */
+.p-back{font-size:11.5px; color:var(--ink-3); margin-bottom:12px; cursor:pointer; font-weight:600}
+.p-back:hover{color:var(--ink)}
+.bloque{margin-bottom:20px; border:1px solid var(--line-2); border-radius:8px; overflow:hidden}
+.bloque-h{
+  display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:var(--bg-2);
+  font-size:11.5px; font-weight:700; color:var(--ink-2); border-bottom:1px solid var(--line-2);
 }
-.p-check{margin-right:8px; width:14px; height:14px; flex:0 0 auto}
+.p-row{
+  display:flex; justify-content:space-between; align-items:center; padding:11px 14px; border-bottom:1px solid var(--line-2);
+}
+.p-row:last-child{border-bottom:none}
+.p-check{margin-right:10px; width:14px; height:14px; flex:0 0 auto}
+.p-amt{font-weight:700; color:var(--ink); font-size:12.5px}
 .p-btn{
-  margin-top:10px; text-align:center; background:var(--ink); color:#fff; font-size:12px; font-weight:700;
-  padding:10px; border-radius:8px; cursor:pointer;
+  text-align:center; background:var(--ink); color:#fff; font-size:12px; font-weight:700;
+  padding:10px; border-radius:8px; cursor:pointer; transition:opacity .12s;
 }
-.p-btn[disabled]{opacity:.35; cursor:not-allowed}
-.p-back{font-size:11px; color:var(--ink-3); margin-bottom:10px; cursor:pointer; font-weight:600}
+.p-btn:hover{opacity:.88}
+.p-btn[disabled]{opacity:.3; cursor:not-allowed}
 .p-total{
-  display:flex; justify-content:space-between; font-weight:700; font-size:13px; padding:10px 0; border-top:1px solid var(--line-2); margin-top:6px;
+  display:flex; justify-content:space-between; font-weight:700; font-size:12.5px; padding:10px 14px; background:var(--bg-2);
 }
 .p-warn{
-  font-size:11px; color:var(--warn); background:var(--warn-soft); border:1px solid var(--warn-line);
-  border-radius:6px; padding:8px 10px; margin:8px 0;
+  font-size:11.5px; color:var(--warn); background:var(--warn-soft); border:1px solid var(--warn-line);
+  border-radius:6px; padding:9px 11px; margin-bottom:14px;
 }
-.p-empty{font-size:11.5px; color:var(--ink-3); text-align:center; padding:20px 0}
+.p-empty{font-size:11.5px; color:var(--ink-3); text-align:center; padding:30px 0}
+
+/* estado de envío / éxito */
+.p-sending{text-align:center; padding:50px 20px}
+.dots{display:inline-flex; gap:5px; margin-bottom:14px}
+.dots span{width:7px; height:7px; border-radius:50%; background:var(--ink-4); animation:pulse 1s infinite ease-in-out}
+.dots span:nth-child(2){animation-delay:.15s}
+.dots span:nth-child(3){animation-delay:.3s}
+@keyframes pulse{0%,100%{opacity:.3; transform:scale(.85)} 50%{opacity:1; transform:scale(1)}}
+.p-success{text-align:center; padding:40px 20px}
+.p-success .ic{font-size:32px; margin-bottom:10px}
+.p-success .t{font-weight:700; font-size:13.5px}
+.p-success .s{font-size:11.5px; color:var(--ink-3); margin-top:5px}
+.p-success .folio{
+  display:inline-block; margin-top:14px; font-size:12px; font-weight:700; color:var(--ink); background:var(--bg-2);
+  border:1px solid var(--line); border-radius:6px; padding:6px 14px;
+}
+
+/* tarifas */
+.tarifa-card{border:1px solid var(--line-2); border-radius:8px; padding:14px 16px; margin-bottom:12px}
+.tarifa-h{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px}
+.tarifa-h .tn{font-weight:700; font-size:13px}
+.tarifa-h .tt{font-size:10px; font-weight:700; color:var(--ink-3); text-transform:uppercase}
+.tarifa-row{display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-2); padding:5px 0; border-top:1px solid var(--line-2)}
+.tarifa-row b{color:var(--ink)}
+
 @media(max-width:820px){
   .proto-band{margin:0 -24px; padding:36px 0}
   .proto-inner{padding:0 24px}
-  .proto-shell{flex-direction:column; align-items:stretch}
-  .proto-nav{flex:0 0 auto; flex-direction:row; flex-wrap:wrap; width:100%; padding-top:0}
-  .browser-shell{max-width:100%}
+  .app-shell{flex-direction:column; min-height:0}
+  .app-side{flex:0 0 auto; flex-direction:row; flex-wrap:wrap; width:100%; display:flex; border-right:none; border-bottom:1px solid var(--line-2)}
+  .app-brand{display:none}
+  .side-item{flex:1 1 auto; justify-content:center}
+  .app-main{max-height:none}
 }
 
 /* next steps */
@@ -420,19 +497,26 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
     <h2>Así se vería el portal</h2>
     <p style="margin-bottom:0">Datos de ejemplo, sin conexión real a ningún sistema.</p>
     <div class="proto-shell">
-      <div class="proto-nav">
-        <button class="pnav-btn active" data-view="pendientes" onclick="protoNav('pendientes')">Pendiente de facturar</button>
-        <button class="pnav-btn" data-view="facturado" onclick="protoNav('facturado')">Facturado</button>
-      </div>
       <div class="browser-shell">
-        <div class="pbrowser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
-        <div class="phone-scr">
-          <div class="pscr-bar" id="pscr-title">Pendiente de facturar</div>
-          <div class="pscr-body">
+        <div class="pbrowser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros.gm.local</span></div>
+        <div class="app-shell">
+          <div class="app-side">
+            <div class="app-brand">Administrador de Cobros</div>
+            <div class="side-item active" data-view="pendientes" onclick="protoNav('pendientes')">📋 Pendiente de facturar</div>
+            <div class="side-item" data-view="facturado" onclick="protoNav('facturado')">🧾 Facturado</div>
+            <div class="side-item" data-view="tarifas" onclick="protoNav('tarifas')">⚙️ Tarifas</div>
+          </div>
+          <div class="app-main">
 
             <!-- LISTADO -->
             <div class="p-view show" id="view-pendientes">
+              <div class="pscr-title">Pendiente de facturar</div>
+              <div class="pscr-sub">Consumo integrado de Torre de Control, Portal IA y Safelink, agrupado por cliente.</div>
+              <div class="p-stats" id="pendientes-stats"></div>
               <div class="p-filter"><input placeholder="Buscar cliente…" oninput="filterClients(this.value)"></div>
+              <table class="p-table">
+                <tr><th>Cliente</th><th>Proyectos</th><th style="text-align:right">Pendiente</th></tr>
+              </table>
               <div id="client-list"></div>
             </div>
 
@@ -444,7 +528,25 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
 
             <!-- FACTURADO -->
             <div class="p-view" id="view-facturado">
+              <div class="pscr-title">Facturado</div>
+              <div class="pscr-sub">Consulta de lo ya emitido — separado por completo de los pendientes.</div>
+              <div class="p-filter">
+                <input placeholder="Buscar folio o cliente…" oninput="filterFacturas(this.value)">
+                <div class="p-chip-filter active" data-f="todas" onclick="setFacturaFilter('todas')">Todas</div>
+                <div class="p-chip-filter" data-f="Timbrada" onclick="setFacturaFilter('Timbrada')">Timbradas</div>
+                <div class="p-chip-filter" data-f="Cancelada" onclick="setFacturaFilter('Cancelada')">Canceladas</div>
+              </div>
+              <table class="p-table">
+                <tr><th>Folio</th><th>Cliente</th><th>Estatus</th><th style="text-align:right">Total</th></tr>
+              </table>
               <div id="facturado-list"></div>
+            </div>
+
+            <!-- TARIFAS -->
+            <div class="p-view" id="view-tarifas">
+              <div class="pscr-title">Tarifas por proyecto</div>
+              <div class="pscr-sub">Valor default por proyecto, con overrides negociados por cliente.</div>
+              <div id="tarifas-list"></div>
             </div>
 
           </div>
@@ -600,68 +702,133 @@ FLOW.forEach((f,i)=>{
 function toggleAcc(h){ h.parentElement.classList.toggle('open'); }
 
 // ---- prototipo ----
+const PROJ_CHIP = {
+  'Torre de Control': 'pc-tdc', 'Portal IA': 'pc-ia', 'Safelink': 'pc-sl',
+};
+const PROJ_ICON = { 'Torre de Control':'📡', 'Portal IA':'🪙', 'Safelink':'🛡️' };
+
 const CLIENTS = [
   {rfc:'AAA010101AAA', name:'Empresa A', cargos:[
-    {proj:'Torre de Control', amt:500, pagado:false},
-    {proj:'Safelink', amt:950, pagado:false},
+    {proj:'Torre de Control', amt:500, pagado:false, ref:'RET-88213'},
+    {proj:'Safelink', amt:950, pagado:false, ref:'POL-40217'},
   ]},
   {rfc:'BBB020202BBB', name:'Empresa B', cargos:[
-    {proj:'Portal IA', amt:1150, pagado:true},
+    {proj:'Portal IA', amt:1150, pagado:true, ref:'TKN-91004'},
   ]},
   {rfc:'CCC030303CCC', name:'Empresa C', cargos:[
-    {proj:'Torre de Control', amt:300, pagado:false},
-    {proj:'Portal IA', amt:660, pagado:true},
+    {proj:'Torre de Control', amt:300, pagado:false, ref:'RET-88240'},
+    {proj:'Portal IA', amt:660, pagado:true, ref:'TKN-91020'},
+  ]},
+  {rfc:'DDD040404DDD', name:'Empresa D', cargos:[
+    {proj:'Safelink', amt:1820, pagado:false, ref:'POL-40233'},
+    {proj:'Safelink', amt:640, pagado:false, ref:'POL-40241'},
+  ]},
+  {rfc:'EEE050505EEE', name:'Empresa E', cargos:[
+    {proj:'Portal IA', amt:2400, pagado:true, ref:'TKN-91055'},
+    {proj:'Torre de Control', amt:210, pagado:false, ref:'RET-88266'},
   ]},
 ];
 const FACTURAS = [
-  {folio:'CFDI 00841', cliente:'Empresa D', total:2100, estatus:'Timbrada'},
-  {folio:'CFDI 00839', cliente:'Empresa A', total:640, estatus:'Cancelada'},
-  {folio:'CFDI 00835', cliente:'Empresa E', total:980, estatus:'Timbrada'},
+  {folio:'CFDI 00841', cliente:'Empresa F', total:2100, estatus:'Timbrada', fecha:'2026-09-02'},
+  {folio:'CFDI 00839', cliente:'Empresa A', total:640, estatus:'Cancelada', fecha:'2026-08-29'},
+  {folio:'CFDI 00835', cliente:'Empresa G', total:980, estatus:'Timbrada', fecha:'2026-08-27'},
+  {folio:'CFDI 00828', cliente:'Empresa B', total:1450, estatus:'Timbrada', fecha:'2026-08-21'},
+  {folio:'CFDI 00819', cliente:'Empresa C', total:305, estatus:'Cancelada', fecha:'2026-08-14'},
 ];
+const TARIFAS = [
+  {proj:'Torre de Control', tipo:'Paquete / equivalencia', icon:PROJ_ICON['Torre de Control'], chip:'pc-tdc',
+    default_:'50 llamadas = $100.00 ($2.00 c/u)',
+    overrides:[{cliente:'Empresa E', valor:'100 llamadas = $150.00 ($1.50 c/u)'}]},
+  {proj:'Portal IA', tipo:'Monto directo', icon:PROJ_ICON['Portal IA'], chip:'pc-ia',
+    default_:'100% del monto ya pagado, sin descuento', overrides:[]},
+  {proj:'Safelink', tipo:'Costo de póliza − % descuento', icon:PROJ_ICON['Safelink'], chip:'pc-sl',
+    default_:'0% (sin descuento)',
+    overrides:[{cliente:'Empresa A', valor:'5% de descuento'},{cliente:'Empresa D', valor:'8% de descuento'}]},
+];
+
 let selectedClient = null;
 let selectedCargos = new Set();
+let facturaFilter = 'todas';
+let facturaSearch = '';
+
+function money(n){ return '$' + n.toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+function renderStats(){
+  const totalPend = CLIENTS.reduce((s,c)=>s+c.cargos.reduce((a,x)=>a+x.amt,0),0);
+  const nClientes = CLIENTS.length;
+  const nCargos = CLIENTS.reduce((s,c)=>s+c.cargos.length,0);
+  document.getElementById('pendientes-stats').innerHTML = `
+    <div class="p-stat"><div class="v">${money(totalPend)}</div><div class="l">Total pendiente</div></div>
+    <div class="p-stat"><div class="v">${nClientes}</div><div class="l">Clientes con pendientes</div></div>
+    <div class="p-stat"><div class="v">${nCargos}</div><div class="l">Cargos sin facturar</div></div>
+  `;
+}
+
+function projChips(cargos){
+  const set = [...new Set(cargos.map(c=>c.proj))];
+  return set.map(p=>`<span class="proj-chip ${PROJ_CHIP[p]}">${PROJ_ICON[p]} ${p}</span>`).join('');
+}
 
 function renderClients(filter=''){
   const el = document.getElementById('client-list');
   const f = filter.toLowerCase();
   const rows = CLIENTS.filter(c=>c.name.toLowerCase().includes(f));
   if(!rows.length){ el.innerHTML = '<div class="p-empty">Sin clientes con pendientes.</div>'; return; }
-  el.innerHTML = rows.map(c=>{
+  el.innerHTML = `<table class="p-table"><tbody>` + rows.map(c=>{
     const total = c.cargos.reduce((s,x)=>s+x.amt,0);
-    return `<div class="p-row" onclick="openClient('${c.rfc}')">
-      <div><div class="name">${c.name}</div><div class="sub">${c.cargos.length} cargo(s) pendiente(s)</div></div>
-      <div class="p-amt">$${total.toLocaleString()}</div>
-    </div>`;
-  }).join('');
+    return `<tr class="clickable" onclick="openClient('${c.rfc}')">
+      <td><div class="p-name">${c.name}</div><div class="p-sub">RFC ${c.rfc}</div></td>
+      <td>${projChips(c.cargos)}</td>
+      <td class="num">${money(total)}</td>
+    </tr>`;
+  }).join('') + `</tbody></table>`;
 }
 
 function openClient(rfc){
   selectedClient = CLIENTS.find(c=>c.rfc===rfc);
   selectedCargos = new Set();
   renderDetalle();
-  protoNav('detalle', true);
+  protoNav('detalle');
 }
 
 function renderDetalle(){
   const el = document.getElementById('detalle-body');
   const c = selectedClient;
-  const hasBoth = c.cargos.some(x=>x.pagado) && c.cargos.some(x=>!x.pagado);
-  let html = `<h4 style="margin-bottom:10px;font-size:13.5px">${c.name}</h4>`;
-  if(hasBoth) html += `<div class="p-warn">Este cliente tiene cargos pagados y por cobrar — no se pueden facturar juntos, se separan automáticamente.</div>`;
-  c.cargos.forEach((cg,i)=>{
-    const tag = cg.pagado ? '<span class="p-tag pt-ok">Pagado · No facturado</span>' : '<span class="p-tag pt-pend">No pagado · No facturado</span>';
-    const checked = selectedCargos.has(i) ? 'checked' : '';
-    html += `<div class="p-row">
-      <div style="display:flex;align-items:center">
-        <input type="checkbox" class="p-check" ${checked} onchange="toggleCargo(${i})">
-        <div><div class="name">${cg.proj}</div>${tag}</div>
+  const pagados = c.cargos.map((cg,i)=>({...cg,i})).filter(x=>x.pagado);
+  const noPagados = c.cargos.map((cg,i)=>({...cg,i})).filter(x=>!x.pagado);
+
+  let html = `<div class="pscr-title">${c.name}</div><div class="pscr-sub">RFC ${c.rfc}</div>`;
+  if(pagados.length && noPagados.length){
+    html += `<div class="p-warn">⚠️ Este cliente tiene cargos pagados y por cobrar — no se pueden facturar juntos en el mismo CFDI, así que se separan en dos bloques.</div>`;
+  }
+
+  function bloque(titulo, lista, tagClass, tagTxt){
+    if(!lista.length) return '';
+    let rows = lista.map(cg=>{
+      const checked = selectedCargos.has(cg.i) ? 'checked' : '';
+      return `<div class="p-row">
+        <div style="display:flex;align-items:center">
+          <input type="checkbox" class="p-check" ${checked} onchange="toggleCargo(${cg.i})">
+          <div><div class="p-name">${PROJ_ICON[cg.proj]} ${cg.proj}</div><div class="p-sub">${cg.ref} · <span class="p-tag ${tagClass}">${tagTxt} · No facturado</span></div></div>
+        </div>
+        <div class="p-amt">${money(cg.amt)}</div>
+      </div>`;
+    }).join('');
+    const subtotal = lista.reduce((s,x)=>s+x.amt,0);
+    const selCount = lista.filter(x=>selectedCargos.has(x.i)).length;
+    const selTotal = lista.filter(x=>selectedCargos.has(x.i)).reduce((s,x)=>s+x.amt,0);
+    return `<div class="bloque">
+      <div class="bloque-h"><span>${titulo}</span><span>${money(subtotal)}</span></div>
+      ${rows}
+      <div class="p-total"><span>Seleccionado (${selCount})</span><span>${money(selTotal)}</span></div>
+      <div style="padding:12px 14px">
+        <div class="p-btn" style="${selCount? '':'opacity:.3;pointer-events:none'}" onclick="generarFactura('${titulo.includes('cobrar')?'ppd':'pue'}')">Generar factura de este bloque</div>
       </div>
-      <div class="p-amt">$${cg.amt.toLocaleString()}</div>
     </div>`;
-  });
-  const total = [...selectedCargos].reduce((s,i)=>s+c.cargos[i].amt,0);
-  html += `<div class="p-total"><span>Seleccionado</span><span>$${total.toLocaleString()}</span></div>`;
-  html += `<div class="p-btn" style="${selectedCargos.size? '':'opacity:.35;pointer-events:none'}" onclick="generarFactura()">Generar factura</div>`;
+  }
+
+  html += bloque('No pagado · por cobrar', noPagados, 'pt-pend', 'No pagado');
+  html += bloque('Ya pagado · pendiente de timbrar', pagados, 'pt-ok', 'Pagado');
   el.innerHTML = html;
 }
 function toggleCargo(i){
@@ -669,33 +836,68 @@ function toggleCargo(i){
   renderDetalle();
 }
 function generarFactura(){
-  document.getElementById('detalle-body').innerHTML = `<div style="text-align:center;padding:30px 0">
-    <div style="font-size:28px;margin-bottom:8px">✅</div>
-    <div style="font-weight:700;font-size:13px">Enviado a Paquetería</div>
-    <div style="font-size:11px;color:var(--ink-3);margin-top:4px">El CFDI aparecerá en Facturado en cuanto se timbre.</div>
+  document.getElementById('detalle-body').innerHTML = `<div class="p-sending">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div style="font-size:12.5px;font-weight:600;color:var(--ink-2)">Enviando a Paquetería (FE)…</div>
   </div>`;
+  setTimeout(()=>{
+    const folio = 'CFDI 00' + (842 + Math.floor(Math.random()*50));
+    document.getElementById('detalle-body').innerHTML = `<div class="p-success">
+      <div class="ic">✅</div>
+      <div class="t">Factura enviada y timbrada</div>
+      <div class="s">Ya está disponible en el módulo Facturado.</div>
+      <div class="folio">${folio}</div>
+    </div>`;
+  }, 900);
 }
 function renderFacturado(){
-  document.getElementById('facturado-list').innerHTML = FACTURAS.map(f=>{
+  const s = facturaSearch.toLowerCase();
+  const rows = FACTURAS.filter(f=>
+    (facturaFilter==='todas' || f.estatus===facturaFilter) &&
+    (f.folio.toLowerCase().includes(s) || f.cliente.toLowerCase().includes(s))
+  );
+  const el = document.getElementById('facturado-list');
+  if(!rows.length){ el.innerHTML = '<div class="p-empty">Sin resultados.</div>'; return; }
+  el.innerHTML = `<table class="p-table"><tbody>` + rows.map(f=>{
     const tag = f.estatus==='Cancelada' ? '<span class="p-tag pt-cancel">Cancelada</span>' : '<span class="p-tag pt-ok">Timbrada</span>';
-    return `<div class="p-row">
-      <div><div class="name">${f.folio}</div><div class="sub">${f.cliente}</div></div>
-      <div style="text-align:right"><div class="p-amt">$${f.total.toLocaleString()}</div>${tag}</div>
-    </div>`;
-  }).join('');
+    return `<tr>
+      <td><div class="p-name">${f.folio}</div><div class="p-sub">${f.fecha}</div></td>
+      <td>${f.cliente}</td>
+      <td>${tag}</td>
+      <td class="num">${money(f.total)}</td>
+    </tr>`;
+  }).join('') + `</tbody></table>`;
 }
 function filterClients(v){ renderClients(v); }
+function filterFacturas(v){ facturaSearch = v; renderFacturado(); }
+function setFacturaFilter(f){
+  facturaFilter = f;
+  document.querySelectorAll('.p-chip-filter').forEach(c=>c.classList.toggle('active', c.dataset.f===f));
+  renderFacturado();
+}
+function renderTarifas(){
+  document.getElementById('tarifas-list').innerHTML = TARIFAS.map(t=>`
+    <div class="tarifa-card">
+      <div class="tarifa-h">
+        <span class="tn">${t.icon} ${t.proj}</span>
+        <span class="tt">${t.tipo}</span>
+      </div>
+      <div class="tarifa-row"><span>Default</span><b>${t.default_}</b></div>
+      ${t.overrides.map(o=>`<div class="tarifa-row"><span>${o.cliente}</span><b>${o.valor}</b></div>`).join('') || '<div class="tarifa-row"><span>Sin overrides por cliente</span><b>—</b></div>'}
+    </div>
+  `).join('');
+}
 function protoNav(view){
   document.querySelectorAll('.p-view').forEach(v=>v.classList.remove('show'));
-  document.querySelectorAll('.pnav-btn').forEach(b=>b.classList.remove('active'));
-  const titles = {pendientes:'Pendiente de facturar', detalle: selectedClient ? selectedClient.name : '', facturado:'Facturado'};
-  document.getElementById('pscr-title').textContent = titles[view] || '';
+  document.querySelectorAll('.side-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('view-'+view).classList.add('show');
-  if(view==='pendientes' || view==='facturado'){
-    const btn = document.querySelector(`.pnav-btn[data-view="${view}"]`);
+  if(view==='pendientes' || view==='facturado' || view==='tarifas'){
+    const btn = document.querySelector(`.side-item[data-view="${view}"]`);
     if(btn) btn.classList.add('active');
   }
   if(view==='facturado') renderFacturado();
+  if(view==='tarifas') renderTarifas();
 }
+renderStats();
 renderClients();
 </script>

@@ -1,0 +1,702 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrador de Cobros — Propuesta Detallada</title>
+<style>
+:root{
+  --ink:#17191e; --ink-2:#525861; --ink-3:#8a9098; --ink-4:#aeb4bb;
+  --bg:#fff; --bg-2:#fafbfc; --bg-3:#f4f6f8;
+  --line:#e7e9ec; --line-2:#f1f3f5;
+  --accent:#C2410C; --accent-2:#9A3412; --accent-soft:#FEF5F0; --accent-line:#F3D8C9;
+  --ok:#15803D; --ok-soft:#F2FBF5;
+  --warn:#B45309; --warn-soft:#FFFBEB; --warn-line:#EFDFBB;
+  --info:#1D4ED8; --info-soft:#F3F6FF;
+  --nav-w:238px; --max:760px; --r:10px;
+  --font:'Inter','Segoe UI',system-ui,-apple-system,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--font);
+  font-size:15.5px; line-height:1.7; letter-spacing:-.005em; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--ink); margin:0 0 14px}
+p{margin:0 0 14px; color:var(--ink-2)}
+a{color:var(--accent-2)}
+
+/* Layout */
+.layout{display:flex; min-height:100vh}
+nav{
+  width:var(--nav-w); flex:0 0 auto; border-right:1px solid var(--line); padding:32px 20px;
+  position:sticky; top:0; height:100vh; overflow-y:auto; background:var(--bg-2);
+}
+.nav-back{display:block; font-size:12.5px; color:var(--ink-3); text-decoration:none; margin-bottom:22px}
+.nav-title{font-size:13px; font-weight:700; color:var(--ink); margin-bottom:16px}
+.nav-item{
+  display:block; font-size:13.5px; color:var(--ink-2); text-decoration:none; padding:6px 10px;
+  border-radius:6px; margin-bottom:2px; border-left:2px solid transparent;
+}
+.nav-item:hover{background:var(--bg-3)}
+.nav-item.active{color:var(--accent-2); font-weight:600; background:var(--accent-soft); border-left:2px solid var(--accent)}
+.nav-toggle{
+  margin-top:24px; padding-top:20px; border-top:1px solid var(--line);
+}
+.toggle-btn{
+  display:flex; background:var(--bg-3); border:1px solid var(--line); border-radius:8px; padding:3px; font-size:12px;
+}
+.toggle-btn button{
+  flex:1; border:none; background:none; padding:7px 4px; border-radius:6px; font-size:12px; font-weight:600;
+  color:var(--ink-3); cursor:pointer; font-family:var(--font);
+}
+.toggle-btn button.active{background:var(--ink); color:#fff}
+
+main{flex:1; min-width:0; padding:56px 48px 120px; max-width:calc(var(--max) + 96px)}
+section{max-width:var(--max); margin:0 auto 88px; scroll-margin-top:24px}
+section:last-of-type{margin-bottom:24px}
+.eyebrow{font-size:12px; font-weight:700; letter-spacing:.08em; color:var(--accent-2); text-transform:uppercase; margin-bottom:10px}
+.detail-only{}
+body.exec-mode .detail-only{display:none !important}
+
+/* lists */
+ol.plain, ul.plain{padding-left:22px; margin:0 0 14px}
+ol.plain li, ul.plain li{margin-bottom:10px; color:var(--ink-2)}
+ul.plain{list-style:disc}
+
+/* piece cards */
+.pieces{display:flex; flex-direction:column; gap:16px; margin-top:18px}
+.piece{border:1px solid var(--line); border-radius:var(--r); padding:18px 20px}
+.piece h4{font-size:15px; margin-bottom:6px}
+.piece p{font-size:14px; margin:0}
+.reuse{
+  margin-top:22px; padding:16px 20px; background:var(--info-soft); border:1px solid #C7D5F9; border-radius:var(--r);
+  font-size:14px; color:var(--ink-2);
+}
+.reuse b{color:var(--info)}
+
+/* flow clickable */
+.flow-list{display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:var(--r); overflow:hidden; margin-top:18px}
+.flow-item{
+  padding:16px 18px; border-bottom:1px solid var(--line-2); cursor:pointer; font-size:14.5px; font-weight:600;
+  display:flex; justify-content:space-between; align-items:center; background:#fff; transition:background .15s;
+}
+.flow-item:last-child{border-bottom:none}
+.flow-item:hover{background:var(--bg-3)}
+.flow-item.active{background:var(--accent-soft); color:var(--accent-2)}
+.flow-item .n{color:var(--ink-3); font-weight:700; margin-right:10px}
+.flow-detail{
+  margin-top:14px; padding:20px 22px; background:var(--bg-2); border:1px solid var(--line); border-radius:var(--r);
+  font-size:14px; color:var(--ink-2); display:none;
+}
+.flow-detail.show{display:block}
+.flow-detail b{color:var(--ink)}
+
+/* scope */
+.scope-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:18px}
+.scope-col h4{font-size:13.5px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.04em; margin-bottom:10px}
+.scope-col ul{padding-left:18px; margin:0}
+.scope-col li{font-size:14px; color:var(--ink-2); margin-bottom:8px}
+.not-included{
+  margin-top:24px; padding:16px 20px; background:var(--warn-soft); border:1px solid var(--warn-line); border-radius:var(--r);
+  font-size:14px; color:var(--warn);
+}
+@media(max-width:640px){.scope-grid{grid-template-columns:1fr}}
+
+/* benefits */
+.benef-group{margin-bottom:22px}
+.benef-group h4{font-size:14px; color:var(--accent-2); margin-bottom:8px}
+.benef-group ul{padding-left:18px; margin:0}
+.benef-group li{font-size:14px; color:var(--ink-2); margin-bottom:6px}
+
+/* MVP phases */
+.phase{border:1px solid var(--line); border-radius:var(--r); padding:20px 22px; margin-bottom:14px}
+.phase.rec{border-color:var(--accent-line); background:var(--accent-soft)}
+.phase h4{font-size:15px; display:flex; align-items:center; gap:8px}
+.badge-rec{font-size:10.5px; font-weight:700; color:#fff; background:var(--accent); padding:2px 8px; border-radius:999px}
+.phase p{font-size:14px; margin:6px 0 0}
+
+/* risk table */
+table.risk{width:100%; border-collapse:collapse; margin-top:18px; font-size:13.5px}
+table.risk th{
+  text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-3);
+  padding:0 14px 10px; border-bottom:1px solid var(--line);
+}
+table.risk td{padding:14px; border-bottom:1px solid var(--line-2); color:var(--ink-2); vertical-align:top}
+table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
+
+/* prototype band */
+.proto-band{
+  background:var(--bg-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  padding:48px 0; margin:0 -48px;
+}
+.proto-inner{max-width:var(--max); margin:0 auto; padding:0 48px}
+.proto-shell{display:flex; gap:28px; margin-top:22px; align-items:flex-start}
+.proto-nav{flex:0 0 168px; display:flex; flex-direction:column; gap:6px; padding-top:44px}
+.proto-nav button{
+  text-align:left; font-size:12.5px; font-weight:600; color:var(--ink-2); background:#fff;
+  border:1px solid var(--line); border-radius:7px; padding:9px 12px; cursor:pointer; font-family:var(--font);
+}
+.proto-nav button.active{background:var(--ink); color:#fff; border-color:var(--ink)}
+/* ventana de navegador — sistema web de escritorio, no app móvil */
+.browser-shell{
+  width:100%; max-width:560px; border:1px solid var(--line); border-radius:10px; background:#fff;
+  flex:1 1 auto; box-shadow:0 2px 10px rgba(23,25,30,.06); overflow:hidden;
+}
+.pbrowser-bar{
+  display:flex; align-items:center; gap:8px; padding:9px 12px; background:var(--bg-3); border-bottom:1px solid var(--line-2);
+}
+.pbrowser-bar .b-dot{width:8px; height:8px; border-radius:50%; background:var(--line-2); border:1px solid var(--line)}
+.pbrowser-bar .b-url{
+  flex:1; background:#fff; border:1px solid var(--line); border-radius:6px; padding:4px 10px; margin-left:8px;
+  font-size:11px; color:var(--ink-3);
+}
+.phone-scr{background:#fff; min-height:420px; overflow:hidden; position:relative}
+.pscr-bar{background:var(--bg-3); padding:14px 16px; border-bottom:1px solid var(--line-2); font-size:13px; font-weight:700}
+.pscr-body{padding:16px 18px; font-size:12.5px}
+.p-view{display:none}
+.p-view.show{display:block}
+.p-row{
+  display:flex; justify-content:space-between; align-items:center; padding:11px 12px; margin-bottom:8px;
+  border:1px solid var(--line-2); border-radius:8px; background:var(--bg-2); cursor:pointer;
+}
+.p-row:hover{border-color:var(--line)}
+.p-row .name{font-weight:700; font-size:12.5px}
+.p-row .sub{font-size:10.5px; color:var(--ink-3); margin-top:2px}
+.p-amt{font-weight:700; font-size:13px}
+.p-tag{font-size:9px; font-weight:700; padding:3px 7px; border-radius:999px; white-space:nowrap}
+.pt-pend{background:var(--warn-soft); color:var(--warn); border:1px solid var(--warn-line)}
+.pt-ok{background:var(--ok-soft); color:var(--ok)}
+.pt-cancel{background:#FCEBEA; color:#B91C1C; border:1px solid #F3C6C4}
+.p-filter{display:flex; gap:6px; margin-bottom:10px}
+.p-filter input{
+  flex:1; font-size:11.5px; border:1px solid var(--line); border-radius:6px; padding:7px 9px; font-family:var(--font);
+}
+.p-check{margin-right:8px; width:14px; height:14px; flex:0 0 auto}
+.p-btn{
+  margin-top:10px; text-align:center; background:var(--ink); color:#fff; font-size:12px; font-weight:700;
+  padding:10px; border-radius:8px; cursor:pointer;
+}
+.p-btn[disabled]{opacity:.35; cursor:not-allowed}
+.p-back{font-size:11px; color:var(--ink-3); margin-bottom:10px; cursor:pointer; font-weight:600}
+.p-total{
+  display:flex; justify-content:space-between; font-weight:700; font-size:13px; padding:10px 0; border-top:1px solid var(--line-2); margin-top:6px;
+}
+.p-warn{
+  font-size:11px; color:var(--warn); background:var(--warn-soft); border:1px solid var(--warn-line);
+  border-radius:6px; padding:8px 10px; margin:8px 0;
+}
+.p-empty{font-size:11.5px; color:var(--ink-3); text-align:center; padding:20px 0}
+@media(max-width:820px){
+  .proto-band{margin:0 -24px; padding:36px 0}
+  .proto-inner{padding:0 24px}
+  .proto-shell{flex-direction:column; align-items:stretch}
+  .proto-nav{flex:0 0 auto; flex-direction:row; flex-wrap:wrap; width:100%; padding-top:0}
+  .browser-shell{max-width:100%}
+}
+
+/* next steps */
+.route{display:flex; flex-direction:column; gap:0; margin-top:18px}
+.route-item{display:flex; gap:16px; padding:14px 0; border-top:1px solid var(--line-2)}
+.route-item:first-child{border-top:1px solid var(--line)}
+.route-dot{
+  flex:0 0 26px; height:26px; border-radius:50%; background:var(--bg-3); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700; color:var(--ink-3);
+}
+.route-text{font-size:14px; color:var(--ink-2); padding-top:3px}
+.route-text b{color:var(--ink)}
+.decision{
+  margin-top:22px; padding:18px 20px; background:var(--accent-soft); border:1px solid var(--accent-line);
+  border-radius:var(--r); font-size:14.5px; color:var(--accent-2);
+}
+.decision b{color:var(--accent-2)}
+
+/* accordion */
+.acc{border:1px solid var(--line); border-radius:var(--r); overflow:hidden; margin-top:18px}
+.acc-item{border-bottom:1px solid var(--line-2)}
+.acc-item:last-child{border-bottom:none}
+.acc-h{
+  padding:16px 18px; font-size:14px; font-weight:650; display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer; background:#fff;
+}
+.acc-h:hover{background:var(--bg-3)}
+.acc-h .arrow{color:var(--ink-3); font-size:12px; transition:transform .15s}
+.acc-item.open .arrow{transform:rotate(90deg)}
+.acc-body{display:none; padding:0 18px 18px; font-size:13.5px; color:var(--ink-2)}
+.acc-item.open .acc-body{display:block}
+.acc-body ul{padding-left:18px; margin:0}
+.acc-body li{margin-bottom:8px}
+.pend{color:var(--warn); font-weight:600}
+
+@media(max-width:920px){
+  .layout{flex-direction:column}
+  nav{
+    position:sticky; top:0; width:100%; height:auto; display:flex; overflow-x:auto; padding:14px 16px;
+    align-items:center; gap:4px; border-right:none; border-bottom:1px solid var(--line); z-index:10;
+  }
+  .nav-back,.nav-title,.nav-toggle{display:none}
+  .nav-item{white-space:nowrap; margin-bottom:0}
+  main{padding:32px 20px 90px}
+}
+@media print{
+  nav{display:none}
+  .layout{display:block}
+  main{padding:0; max-width:100%}
+}
+</style>
+
+<div class="layout">
+  <nav>
+    <a class="nav-back" href="index.html">← Volver a la versión corta</a>
+    <div class="nav-title">Administrador de Cobros</div>
+    <a class="nav-item" data-target="s1">1. Resumen Ejecutivo</a>
+    <a class="nav-item" data-target="s2">2. Situación Actual</a>
+    <a class="nav-item" data-target="s3">3. Qué vamos a construir</a>
+    <a class="nav-item" data-target="s4">4. Flujo General</a>
+    <a class="nav-item" data-target="s5">5. Alcance</a>
+    <a class="nav-item" data-target="s6">6. Beneficios</a>
+    <a class="nav-item" data-target="s7">7. MVP y Evolución</a>
+    <a class="nav-item" data-target="s8">8. Riesgos</a>
+    <a class="nav-item" data-target="s9">9. Prototipo</a>
+    <a class="nav-item" data-target="s10">10. Siguientes Pasos</a>
+    <a class="nav-item detail-only" data-target="s11">11. Anexo Funcional</a>
+    <div class="nav-toggle detail-only">
+      <div class="toggle-btn">
+        <button id="btn-exec" onclick="setMode('exec')">Vista Ejecutiva</button>
+        <button id="btn-detail" class="active" onclick="setMode('detail')">Vista Detallada</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <section id="s1">
+      <div class="eyebrow">01 · Resumen Ejecutivo</div>
+      <h2>Un sistema web que integra los consumos de Torre de Control, Portal IA, Safelink y KPIs Premium</h2>
+      <p>Hoy cada uno de estos cuatro productos de Nuevas Tecnologías genera su propio consumo por separado, y ninguno tiene conexión con el sistema de facturación (FE) que el equipo de Paquetería ya opera para el negocio del ERP. El resultado: nadie en Facturación tiene un lugar donde ver, cliente por cliente, qué se le debe cobrar por estos productos.</p>
+      <p>El <b>Administrador de Cobros</b> es un sistema web nuevo que integra el consumo que reportan estas cuatro fuentes, lo concentra por cliente, y desde ahí manda la información a FE para generar la factura. No construye un timbrado propio ni reemplaza la facturación del ERP — conecta lo que hoy queda fuera de ella.</p>
+      <p>Lo que se busca de esta sesión es <b>validar el alcance de la Fase 1</b> (los cuatro productos ya definidos) y dar luz verde para iniciar la definición técnica con el equipo de Paquetería.</p>
+    </section>
+
+    <section id="s2">
+      <div class="eyebrow">02 · Situación Actual</div>
+      <h2>Qué pasa hoy sin esta integración</h2>
+      <ol class="plain">
+        <li>Cada producto de Nuevas Tecnologías lleva su propio registro de consumo, sin ningún lugar central donde Facturación pueda ver todo lo pendiente de un cliente en un solo vistazo.</li>
+        <li>Sin visibilidad centralizada, existe el riesgo real de que un consumo se quede sin facturar por meses simplemente porque nadie lo revisó a tiempo en el sistema correspondiente.</li>
+        <li>Cada producto calcula su cobro de forma distinta (por paquete, por monto ya pagado, por descuento sobre costo), y hoy no hay ningún lugar que unifique esas reglas de forma consistente y auditable.</li>
+        <li>El único puente de facturación que existe (Admon → FE) fue construido para el negocio del ERP — extenderlo a productos nuevos hoy implicaría procesos manuales, no un flujo confiable.</li>
+      </ol>
+    </section>
+
+    <section id="s3">
+      <div class="eyebrow">03 · Qué vamos a construir</div>
+      <h2>Los componentes del sistema</h2>
+      <div class="pieces">
+        <div class="piece">
+          <h4>📥 Catálogo de integraciones</h4>
+          <p>Cada producto (Torre de Control, Portal IA, Safelink, KPIs Premium, y los que se sumen a futuro) se integra dando de alta su propia forma de calcular el cobro. Un producto nuevo con una fórmula ya conocida no requiere desarrollo adicional para integrarse.</p>
+        </div>
+        <div class="piece">
+          <h4>📋 Módulo Pendiente de facturar</h4>
+          <p>Vista simple por cliente de todo lo que tiene consumido y sin facturar, sin mezclar nada que ya esté resuelto.</p>
+        </div>
+        <div class="piece">
+          <h4>🧾 Generación de factura vía FE</h4>
+          <p>El portal no timbra por sí mismo — manda la información al sistema de Paquetería y consulta de vuelta el CFDI ya generado.</p>
+        </div>
+        <div class="piece">
+          <h4>📁 Módulo Facturado</h4>
+          <p>Consulta de todo lo ya emitido, incluyendo si una factura fue cancelada, completamente separada del flujo de pendientes.</p>
+        </div>
+        <div class="piece">
+          <h4>⏰ Cobranza básica</h4>
+          <p>Semáforo de vencido/por vencer, registro manual de pago, y recordatorio redactado por el sistema que Facturación decide enviar.</p>
+        </div>
+      </div>
+      <div class="reuse"><b>Se reutiliza:</b> el catálogo de clientes ya existente en el ERP (todo cliente que puede generar consumo ya está identificado por su RFC) y el sistema de facturación FE que Paquetería ya opera — no se construye un timbrado propio.</div>
+    </section>
+
+    <section id="s4">
+      <div class="eyebrow">04 · Flujo General</div>
+      <h2>Paso a paso</h2>
+      <div class="flow-list" id="flow-list"></div>
+      <div class="flow-detail" id="flow-detail"></div>
+    </section>
+
+    <section id="s5">
+      <div class="eyebrow">05 · Alcance</div>
+      <h2>Qué entra en esta primera versión</h2>
+      <div class="scope-grid">
+        <div class="scope-col">
+          <h4>Ingesta de consumo</h4>
+          <ul>
+            <li>Torre de Control (paquete de llamadas)</li>
+            <li>Portal IA (compra de tokens, monto directo)</li>
+            <li>Safelink (costo de póliza menos descuento)</li>
+            <li>KPIs Premium (renta mensual fija)</li>
+          </ul>
+        </div>
+        <div class="scope-col">
+          <h4>Facturación</h4>
+          <ul>
+            <li>Mezcla de proyectos en una misma factura</li>
+            <li>Facturación parcial de lo pendiente</li>
+            <li>Separación automática entre lo ya pagado y lo por cobrar</li>
+            <li>Regreso automático a pendientes si se cancela</li>
+          </ul>
+        </div>
+        <div class="scope-col">
+          <h4>Cobranza</h4>
+          <ul>
+            <li>Semáforo de vencido / por vencer</li>
+            <li>Registro manual de pago</li>
+            <li>Recordatorio redactado, envío manual</li>
+          </ul>
+        </div>
+        <div class="scope-col">
+          <h4>Catálogo</h4>
+          <ul>
+            <li>Tarifa default por proyecto</li>
+            <li>Tarifa propia por cliente</li>
+            <li>Alta de proyectos futuros</li>
+          </ul>
+        </div>
+      </div>
+      <div class="not-included"><b>No incluido en esta primera versión:</b> integración automática con el banco para detectar pagos, reportes analíticos avanzados, y cualquier producto de Nuevas Tecnologías más allá de los cuatro ya definidos (el catálogo queda listo para sumarlos después).</div>
+    </section>
+
+    <section id="s6">
+      <div class="eyebrow">06 · Beneficios</div>
+      <h2>Por audiencia</h2>
+      <div class="benef-group">
+        <h4>Para Facturación de GM</h4>
+        <ul><li>Un solo lugar para ver qué cobrar a cada cliente, sin revisar cuatro sistemas distintos.</li><li>Menor riesgo de un cobro olvidado por falta de visibilidad.</li></ul>
+      </div>
+      <div class="benef-group">
+        <h4>Para Dirección</h4>
+        <ul><li>Visibilidad real de lo que generan los productos nuevos de Nuevas Tecnologías antes de que se facture.</li><li>Base para monetizar consistentemente cada producto nuevo que se sume a futuro.</li></ul>
+      </div>
+      <div class="benef-group">
+        <h4>Para el cliente final</h4>
+        <ul><li>Facturación más consistente y a tiempo por los servicios que consume.</li></ul>
+      </div>
+      <p class="detail-only" style="font-size:13px;color:var(--ink-3)">Indicador de ahorro de tiempo / reducción de cobros no facturados: por definir una vez operando la Fase 1.</p>
+    </section>
+
+    <section id="s7">
+      <div class="eyebrow">07 · MVP y Evolución</div>
+      <h2>Etapas</h2>
+      <div class="phase rec">
+        <h4>Fase 1 <span class="badge-rec">Recomendada</span></h4>
+        <p>Los cuatro productos ya definidos (Torre de Control, Portal IA, Safelink, KPIs Premium), los dos módulos principales (Pendiente/Facturado) y la cobranza básica.</p>
+      </div>
+      <div class="phase">
+        <h4>Fase 2</h4>
+        <p>Incorporar nuevos productos de Nuevas Tecnologías al catálogo conforme se lancen, y evaluar integración con el banco para detectar pagos automáticamente.</p>
+      </div>
+      <div class="phase">
+        <h4>Fase 3</h4>
+        <p>Reportes analíticos por cliente/producto para Dirección.</p>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="eyebrow">08 · Riesgos</div>
+      <h2>Riesgo y mitigación</h2>
+      <table class="risk">
+        <tr><th>Riesgo</th><th>Mitigación</th></tr>
+        <tr><td>Un consumo se reporta dos veces y el cliente termina pagando doble.</td><td>Cada consumo trae un identificador único de su integración de origen; un duplicado se guarda marcado para revisión, nunca se factura automáticamente.</td></tr>
+        <tr><td>Una factura se cancela en el sistema de Paquetería y el portal no se entera.</td><td>El sistema de Paquetería avisa siempre al portal, regresando esos cargos a pendientes de forma automática.</td></tr>
+        <tr><td>Dos personas de Facturación trabajan al mismo cliente a la vez y generan facturas encimadas.</td><td>El portal bloquea al cliente completo mientras alguien lo está trabajando.</td></tr>
+        <tr><td>KPIs Premium, al ser renta fija y no consumo variable, no encaja con el resto del modelo.</td><td>Se definió como generación automática mensual dentro del propio catálogo, sin depender de una integración externa.</td></tr>
+      </table>
+    </section>
+
+    <section id="s9">
+    </section>
+  </main>
+</div>
+
+<div class="proto-band">
+  <div class="proto-inner">
+    <div class="eyebrow">09 · Prototipo</div>
+    <h2>Así se vería el portal</h2>
+    <p style="margin-bottom:0">Datos de ejemplo, sin conexión real a ningún sistema.</p>
+    <div class="proto-shell">
+      <div class="proto-nav">
+        <button class="pnav-btn active" data-view="pendientes" onclick="protoNav('pendientes')">Pendiente de facturar</button>
+        <button class="pnav-btn" data-view="facturado" onclick="protoNav('facturado')">Facturado</button>
+      </div>
+      <div class="browser-shell">
+        <div class="pbrowser-bar"><span class="b-dot"></span><span class="b-dot"></span><span class="b-dot"></span><span class="b-url">administrador-cobros</span></div>
+        <div class="phone-scr">
+          <div class="pscr-bar" id="pscr-title">Pendiente de facturar</div>
+          <div class="pscr-body">
+
+            <!-- LISTADO -->
+            <div class="p-view show" id="view-pendientes">
+              <div class="p-filter"><input placeholder="Buscar cliente…" oninput="filterClients(this.value)"></div>
+              <div id="client-list"></div>
+            </div>
+
+            <!-- DETALLE CLIENTE -->
+            <div class="p-view" id="view-detalle">
+              <div class="p-back" onclick="protoNav('pendientes')">← Clientes pendientes</div>
+              <div id="detalle-body"></div>
+            </div>
+
+            <!-- FACTURADO -->
+            <div class="p-view" id="view-facturado">
+              <div id="facturado-list"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout" style="display:block">
+  <div style="max-width:760px;margin:0 auto;padding:0 48px">
+    <main style="padding:0">
+
+    <section id="s10">
+      <div class="eyebrow">10 · Siguientes Pasos</div>
+      <h2>Ruta</h2>
+      <div class="route">
+        <div class="route-item"><div class="route-dot">1</div><div class="route-text"><b>Validar el alcance de Fase 1</b> con Dirección.</div></div>
+        <div class="route-item"><div class="route-dot">2</div><div class="route-text"><b>Definir con el equipo de Paquetería</b> el contrato técnico para enviar información y consultar el CFDI.</div></div>
+        <div class="route-item"><div class="route-dot">3</div><div class="route-text"><b>Desarrollo de Fase 1</b> — los cuatro productos, los dos módulos y cobranza básica.</div></div>
+        <div class="route-item"><div class="route-dot">4</div><div class="route-text"><b>Piloto</b> con un solo producto (Torre de Control) antes del rollout completo.</div></div>
+      </div>
+      <div class="decision"><b>Decisión requerida:</b> aprobar el alcance de Fase 1 y autorizar el inicio de la definición técnica con el equipo de Paquetería.</div>
+    </section>
+
+    <section id="s11" class="detail-only">
+      <div class="eyebrow">11 · Anexo Funcional</div>
+      <h2>Detalle para equipo técnico</h2>
+      <div class="acc" id="accordion">
+
+        <div class="acc-item">
+          <div class="acc-h" onclick="toggleAcc(this)">Perfiles <span class="arrow">▸</span></div>
+          <div class="acc-body">
+            <ul><li><b>Facturación de GM</b>: único perfil. Configura tarifas/descuentos y también genera facturas — no se requiere separación de funciones.</li></ul>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-h" onclick="toggleAcc(this)">Reglas de negocio <span class="arrow">▸</span></div>
+          <div class="acc-body">
+            <ul>
+              <li><b>3 tipos de cálculo de tarifa:</b> paquete/equivalencia (Torre de Control), monto directo sin descuento (Portal IA), costo de póliza menos % de descuento con tope 100% (Safelink).</li>
+              <li><b>KPIs Premium:</b> renta mensual fija, se genera automáticamente cada mes.</li>
+              <li><b>Tarifa por cliente:</b> default general por proyecto + override negociado por cliente.</li>
+              <li><b>Cambio de tarifa:</b> pregunta si se recalculan los cargos pendientes; lo ya facturado nunca cambia (se corrige con nota de crédito).</li>
+              <li><b>1 factura puede llevar N proyectos</b>, cada uno como partida distinta, siempre que compartan forma y método de pago.</li>
+              <li><b>No se mezcla PUE con PPD</b> en una misma factura.</li>
+              <li><b>Facturación parcial</b> de lo pendiente de un cliente, sin corte fijo.</li>
+              <li><b>Cancelación</b> siempre de la factura completa; los cargos regresan a pendientes usando la tarifa vigente, con opción de ajuste manual solo para esa factura.</li>
+              <li><b>Estatus de cargo:</b> Pagado/No pagado + siempre "No facturado", nunca se muestra como resuelto.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-h" onclick="toggleAcc(this)">Catálogos e integraciones <span class="arrow">▸</span></div>
+          <div class="acc-body">
+            <ul>
+              <li>Cliente identificado siempre por <b>RFC</b>, tomado del catálogo de clientes ya existente en el ERP.</li>
+              <li>Clave de producto/servicio SAT la asigna Paquetería, una vez por proyecto.</li>
+              <li>Emisor siempre GM, una sola razón social.</li>
+              <li>Moneda: pesos y dólares (Portal IA puede vender en USD).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-h" onclick="toggleAcc(this)">Validaciones y notificaciones <span class="arrow">▸</span></div>
+          <div class="acc-body">
+            <ul>
+              <li>Montos de Portal IA y cantidades/precios de Torre de Control no pueden ser cero o negativos.</li>
+              <li>% de descuento de Safelink: 0% a 100%.</li>
+              <li>Identificador único de consumo por integración (folio de póliza / retransmisión / id de compra) evita duplicados — un duplicado se guarda marcado para revisión.</li>
+              <li>El sistema de Paquetería notifica al portal toda cancelación de factura.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-h" onclick="toggleAcc(this)">Consideraciones técnicas <span class="arrow">▸</span></div>
+          <div class="acc-body">
+            <ul>
+              <li><span class="pend">[PENDIENTE POR DEFINIR]</span> Contrato técnico exacto con el sistema de Paquetería (cómo se envía la información a facturar y cómo se consulta el CFDI de vuelta) — a definir con ese equipo.</li>
+              <li>Bloqueo de concurrencia: al cliente completo mientras Facturación lo está trabajando (detalle de liberación del bloqueo fuera de este análisis).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-h" onclick="toggleAcc(this)">Pendientes por definir <span class="arrow">▸</span></div>
+          <div class="acc-body">
+            <ul>
+              <li><span class="pend">[PENDIENTE POR DEFINIR]</span> Qué % de descuento de Safelink debe prevalecer si un cliente tiene 0% capturado explícitamente y luego cambia el % default del proyecto.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+// ---- scroll spy ----
+const items = document.querySelectorAll('.nav-item');
+items.forEach(it=>it.addEventListener('click', e=>{
+  e.preventDefault();
+  document.getElementById(it.dataset.target).scrollIntoView({behavior:'smooth'});
+}));
+const secIds = ['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11'];
+function onScroll(){
+  let current = secIds[0];
+  for(const id of secIds){
+    const el = document.getElementById(id);
+    if(el && el.getBoundingClientRect().top < 140) current = id;
+  }
+  items.forEach(it=>it.classList.toggle('active', it.dataset.target===current));
+}
+window.addEventListener('scroll', onScroll); onScroll();
+
+// ---- exec/detail toggle ----
+function setMode(m){
+  document.body.classList.toggle('exec-mode', m==='exec');
+  document.getElementById('btn-exec').classList.toggle('active', m==='exec');
+  document.getElementById('btn-detail').classList.toggle('active', m==='detail');
+}
+
+// ---- flow clickable ----
+const FLOW = [
+  {t:'Cada integración manda su consumo', d:'Torre de Control, Safelink, Portal IA y KPIs Premium reportan al portal cada consumo, identificado con un folio único de su propia fuente (folio de retransmisión, número de póliza, id de compra) para que nunca se registre dos veces el mismo consumo.'},
+  {t:'El portal concentra los pendientes por cliente', d:'Cada cargo se agrupa por RFC. El estatus siempre incluye "No facturado" — sea que el cargo ya esté pagado (Portal IA) o no (Torre de Control, Safelink) — para que ningún estatus se lea como una tarea resuelta.'},
+  {t:'Facturación selecciona y confirma', d:'Se puede mezclar cargos de varios proyectos en una sola factura y facturar solo una parte de lo pendiente. La única separación obligatoria es entre lo ya pagado y lo por cobrar, porque cada uno usa una forma de pago distinta ante el SAT (PUE / PPD).'},
+  {t:'La factura se timbra en el sistema de Paquetería', d:'El portal envía la información necesaria (cliente, conceptos, montos, forma y método de pago) al sistema FE que Paquetería ya opera. Ahí se genera el CFDI real.'},
+  {t:'El portal muestra el CFDI ya emitido', d:'El folio timbrado se consulta de vuelta y se refleja en el módulo Facturado, sin mezclarse con el flujo de pendientes.'},
+  {t:'Si se cancela, regresa solo a pendientes', d:'Las cancelaciones ocurren en el sistema de Paquetería. El portal recibe el aviso y regresa automáticamente esos cargos a la bandeja de pendientes, respetando la tarifa vigente al momento de la cancelación.'},
+];
+const flowList = document.getElementById('flow-list');
+const flowDetail = document.getElementById('flow-detail');
+FLOW.forEach((f,i)=>{
+  const div = document.createElement('div');
+  div.className='flow-item'; div.innerHTML = `<span><span class="n">0${i+1}</span>${f.t}</span><span>›</span>`;
+  div.onclick = ()=>{
+    document.querySelectorAll('.flow-item').forEach(x=>x.classList.remove('active'));
+    div.classList.add('active');
+    flowDetail.innerHTML = `<b>${f.t}</b><br><br>${f.d}`;
+    flowDetail.classList.add('show');
+  };
+  flowList.appendChild(div);
+});
+
+// ---- accordion ----
+function toggleAcc(h){ h.parentElement.classList.toggle('open'); }
+
+// ---- prototipo ----
+const CLIENTS = [
+  {rfc:'AAA010101AAA', name:'Empresa A', cargos:[
+    {proj:'Torre de Control', amt:500, pagado:false},
+    {proj:'Safelink', amt:950, pagado:false},
+  ]},
+  {rfc:'BBB020202BBB', name:'Empresa B', cargos:[
+    {proj:'Portal IA', amt:1150, pagado:true},
+  ]},
+  {rfc:'CCC030303CCC', name:'Empresa C', cargos:[
+    {proj:'Torre de Control', amt:300, pagado:false},
+    {proj:'Portal IA', amt:660, pagado:true},
+  ]},
+];
+const FACTURAS = [
+  {folio:'CFDI 00841', cliente:'Empresa D', total:2100, estatus:'Timbrada'},
+  {folio:'CFDI 00839', cliente:'Empresa A', total:640, estatus:'Cancelada'},
+  {folio:'CFDI 00835', cliente:'Empresa E', total:980, estatus:'Timbrada'},
+];
+let selectedClient = null;
+let selectedCargos = new Set();
+
+function renderClients(filter=''){
+  const el = document.getElementById('client-list');
+  const f = filter.toLowerCase();
+  const rows = CLIENTS.filter(c=>c.name.toLowerCase().includes(f));
+  if(!rows.length){ el.innerHTML = '<div class="p-empty">Sin clientes con pendientes.</div>'; return; }
+  el.innerHTML = rows.map(c=>{
+    const total = c.cargos.reduce((s,x)=>s+x.amt,0);
+    return `<div class="p-row" onclick="openClient('${c.rfc}')">
+      <div><div class="name">${c.name}</div><div class="sub">${c.cargos.length} cargo(s) pendiente(s)</div></div>
+      <div class="p-amt">$${total.toLocaleString()}</div>
+    </div>`;
+  }).join('');
+}
+
+function openClient(rfc){
+  selectedClient = CLIENTS.find(c=>c.rfc===rfc);
+  selectedCargos = new Set();
+  renderDetalle();
+  protoNav('detalle', true);
+}
+
+function renderDetalle(){
+  const el = document.getElementById('detalle-body');
+  const c = selectedClient;
+  const hasBoth = c.cargos.some(x=>x.pagado) && c.cargos.some(x=>!x.pagado);
+  let html = `<h4 style="margin-bottom:10px;font-size:13.5px">${c.name}</h4>`;
+  if(hasBoth) html += `<div class="p-warn">Este cliente tiene cargos pagados y por cobrar — no se pueden facturar juntos, se separan automáticamente.</div>`;
+  c.cargos.forEach((cg,i)=>{
+    const tag = cg.pagado ? '<span class="p-tag pt-ok">Pagado · No facturado</span>' : '<span class="p-tag pt-pend">No pagado · No facturado</span>';
+    const checked = selectedCargos.has(i) ? 'checked' : '';
+    html += `<div class="p-row">
+      <div style="display:flex;align-items:center">
+        <input type="checkbox" class="p-check" ${checked} onchange="toggleCargo(${i})">
+        <div><div class="name">${cg.proj}</div>${tag}</div>
+      </div>
+      <div class="p-amt">$${cg.amt.toLocaleString()}</div>
+    </div>`;
+  });
+  const total = [...selectedCargos].reduce((s,i)=>s+c.cargos[i].amt,0);
+  html += `<div class="p-total"><span>Seleccionado</span><span>$${total.toLocaleString()}</span></div>`;
+  html += `<div class="p-btn" style="${selectedCargos.size? '':'opacity:.35;pointer-events:none'}" onclick="generarFactura()">Generar factura</div>`;
+  el.innerHTML = html;
+}
+function toggleCargo(i){
+  if(selectedCargos.has(i)) selectedCargos.delete(i); else selectedCargos.add(i);
+  renderDetalle();
+}
+function generarFactura(){
+  document.getElementById('detalle-body').innerHTML = `<div style="text-align:center;padding:30px 0">
+    <div style="font-size:28px;margin-bottom:8px">✅</div>
+    <div style="font-weight:700;font-size:13px">Enviado a Paquetería</div>
+    <div style="font-size:11px;color:var(--ink-3);margin-top:4px">El CFDI aparecerá en Facturado en cuanto se timbre.</div>
+  </div>`;
+}
+function renderFacturado(){
+  document.getElementById('facturado-list').innerHTML = FACTURAS.map(f=>{
+    const tag = f.estatus==='Cancelada' ? '<span class="p-tag pt-cancel">Cancelada</span>' : '<span class="p-tag pt-ok">Timbrada</span>';
+    return `<div class="p-row">
+      <div><div class="name">${f.folio}</div><div class="sub">${f.cliente}</div></div>
+      <div style="text-align:right"><div class="p-amt">$${f.total.toLocaleString()}</div>${tag}</div>
+    </div>`;
+  }).join('');
+}
+function filterClients(v){ renderClients(v); }
+function protoNav(view){
+  document.querySelectorAll('.p-view').forEach(v=>v.classList.remove('show'));
+  document.querySelectorAll('.pnav-btn').forEach(b=>b.classList.remove('active'));
+  const titles = {pendientes:'Pendiente de facturar', detalle: selectedClient ? selectedClient.name : '', facturado:'Facturado'};
+  document.getElementById('pscr-title').textContent = titles[view] || '';
+  document.getElementById('view-'+view).classList.add('show');
+  if(view==='pendientes' || view==='facturado'){
+    const btn = document.querySelector(`.pnav-btn[data-view="${view}"]`);
+    if(btn) btn.classList.add('active');
+  }
+  if(view==='facturado') renderFacturado();
+}
+renderClients();
+</script>

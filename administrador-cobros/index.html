@@ -125,6 +125,15 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
 .pc-ia{background:#F3F0FF; color:#6D3FC4}
 .pc-sl{background:#EAFBF1; color:#0F8A4A}
 
+/* conexión con el sistema de facturación (FE) */
+.fe-link{
+  display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--info-soft);
+  border:1px solid #C7D5F9; border-radius:8px; margin-bottom:16px; font-size:12px; color:var(--ink-2); flex-wrap:wrap;
+}
+.fe-link .node{font-weight:700; color:var(--ink)}
+.fe-link .arrow{color:var(--info); font-weight:700}
+.fe-link .ok{color:var(--ok); font-weight:700}
+
 /* barra de filtros */
 .fbar{display:flex; gap:10px; margin-bottom:14px; align-items:center}
 .fsearch{
@@ -367,6 +376,9 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
           </div>
           <div class="app-content">
             <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Facturado</div>
+            <div class="fe-link">
+              <span class="node">Administrador de Cobros</span><span class="arrow">→ envía cliente, conceptos y montos →</span><span class="node">Sistema de facturación (FE)</span><span class="arrow">→ regresa CFDI timbrado →</span><span class="ok">✓ CFDI 00841</span>
+            </div>
             <div class="fbar">
               <input class="fsearch" placeholder="Buscar folio o cliente…">
               <div class="fselect">Estatus: <b>Todas</b><span class="arrow">▾</span></div>
@@ -401,6 +413,9 @@ h1,h2,h3{letter-spacing:-.022em; line-height:1.25; font-weight:640; color:var(--
           </div>
           <div class="app-content">
             <div class="screen-bar" style="margin:-18px -20px 14px; padding:16px 20px">Facturado</div>
+            <div class="fe-link">
+              <span class="node">Sistema de facturación (FE)</span><span class="arrow">→ avisa "CFDI 00841 cancelado" →</span><span class="node">Administrador de Cobros</span><span class="arrow">→</span><span class="ok">✓ regresa a Pendiente de facturar</span>
+            </div>
             <div class="fbar">
               <input class="fsearch" placeholder="Buscar folio o cliente…">
               <div class="fselect">Estatus: <b>Canceladas</b><span class="arrow">▾</span></div>

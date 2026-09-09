@@ -1,6 +1,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Administrador de Cobros — Propuesta Detallada</title>
+<title>Administrador de Cobros · Propuesta Detallada</title>
 <style>
 :root{
   --ink:#17191e; --ink-2:#525861; --ink-3:#8a9098; --ink-4:#aeb4bb;
@@ -323,16 +323,14 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
     <a class="nav-back" href="index.html">← Volver a la versión corta</a>
     <div class="nav-title">Administrador de Cobros</div>
     <a class="nav-item" data-target="s1">1. Resumen Ejecutivo</a>
-    <a class="nav-item" data-target="s2">2. Situación Actual</a>
-    <a class="nav-item" data-target="s3">3. Qué vamos a construir</a>
-    <a class="nav-item" data-target="s4">4. Flujo General</a>
-    <a class="nav-item" data-target="s5">5. Alcance</a>
-    <a class="nav-item" data-target="s6">6. Beneficios</a>
-    <a class="nav-item" data-target="s7">7. MVP y Evolución</a>
-    <a class="nav-item" data-target="s8">8. Riesgos</a>
-    <a class="nav-item" data-target="s9">9. Prototipo</a>
-    <a class="nav-item" data-target="s10">10. Siguientes Pasos</a>
-    <a class="nav-item detail-only" data-target="s11">11. Anexo Funcional</a>
+    <a class="nav-item" data-target="s3">2. Qué vamos a construir</a>
+    <a class="nav-item" data-target="s5">3. Alcance</a>
+    <a class="nav-item" data-target="s6">4. Beneficios</a>
+    <a class="nav-item" data-target="s7">5. MVP y Evolución</a>
+    <a class="nav-item" data-target="s8">6. Riesgos</a>
+    <a class="nav-item" data-target="s9">7. Prototipo</a>
+    <a class="nav-item" data-target="s10">8. Siguientes Pasos</a>
+    <a class="nav-item detail-only" data-target="s11">9. Anexo Funcional</a>
     <div class="nav-toggle detail-only">
       <div class="toggle-btn">
         <button id="btn-exec" onclick="setMode('exec')">Vista Ejecutiva</button>
@@ -347,29 +345,18 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
       <div class="eyebrow">01 · Resumen Ejecutivo</div>
       <h2>Un sistema web que integra los consumos de Torre de Control, Portal IA y Safelink</h2>
       <p>Hoy cada uno de estos tres productos de Nuevas Tecnologías genera su propio consumo por separado, y ninguno tiene conexión con el sistema de facturación (FE) que ya opera para el negocio del ERP. El resultado: nadie en Facturación tiene un lugar donde ver, cliente por cliente, qué se le debe cobrar por estos productos.</p>
-      <p>El <b>Administrador de Cobros</b> es un sistema web nuevo que integra el consumo que reportan estas tres fuentes, lo concentra por cliente, y desde ahí manda la información a FE para generar la factura. No construye un timbrado propio ni reemplaza la facturación del ERP — conecta lo que hoy queda fuera de ella.</p>
-      <p>Cada una de estas tres integraciones fue desarrollo real, porque cada producto calcula su cobro distinto. Sumar un producto nuevo más adelante (KPIs Premium u otro) implica ese mismo trabajo de desarrollo si su forma de cobrar no coincide con las ya construidas — no es una alta de catálogo sin costo.</p>
+      <p>El <b>Administrador de Cobros</b> es un sistema web nuevo que integra el consumo que reportan estas tres fuentes, lo concentra por cliente, y desde ahí manda la información a FE para generar la factura. No construye un timbrado propio ni reemplaza la facturación del ERP, sino que conecta lo que hoy queda fuera de ella.</p>
+      <p>Cada una de estas tres integraciones fue desarrollo real, porque cada producto calcula su cobro distinto. Sumar un producto nuevo más adelante, como KPIs Premium u otro, implica ese mismo trabajo de desarrollo si su forma de cobrar no coincide con las ya construidas, así que no es una alta de catálogo sin costo.</p>
       <p>Lo que ponemos sobre la mesa en esta sesión es el alcance de la Fase 1, los tres productos ya definidos, para que el equipo dueño del sistema de facturación defina si esto está listo para pasar a la definición técnica.</p>
     </section>
 
-    <section id="s2">
-      <div class="eyebrow">02 · Situación Actual</div>
-      <h2>Qué pasa hoy sin esta integración</h2>
-      <ol class="plain">
-        <li>Cada producto de Nuevas Tecnologías lleva su propio registro de consumo, sin ningún lugar central donde Facturación pueda ver todo lo pendiente de un cliente en un solo vistazo.</li>
-        <li>Sin visibilidad centralizada, existe el riesgo real de que un consumo se quede sin facturar por meses simplemente porque nadie lo revisó a tiempo en el sistema correspondiente.</li>
-        <li>Cada producto calcula su cobro de forma distinta (por paquete, por monto ya pagado, por descuento sobre costo), y hoy no hay ningún lugar que unifique esas reglas de forma consistente y auditable.</li>
-        <li>El único puente de facturación que existe (Admon → FE) fue construido para el negocio del ERP — extenderlo a productos nuevos hoy implicaría procesos manuales, no un flujo confiable.</li>
-      </ol>
-    </section>
-
     <section id="s3">
-      <div class="eyebrow">03 · Qué vamos a construir</div>
+      <div class="eyebrow">02 · Qué vamos a construir</div>
       <h2>Los componentes del sistema</h2>
       <div class="pieces">
         <div class="piece">
           <h4>📥 Catálogo de integraciones</h4>
-          <p>Cada producto (Torre de Control, Portal IA, Safelink, y los que se sumen a futuro) se integra dando de alta su propia forma de calcular el cobro. Solo se evita desarrollo si el producto nuevo usa un tipo de cálculo que ya existe en el catálogo — si su forma de cobrar es distinta, integrarlo sí requiere desarrollo, igual que lo requirió cada uno de estos tres.</p>
+          <p>Cada producto, como Torre de Control, Portal IA, Safelink y los que se sumen a futuro, se integra dando de alta su propia forma de calcular el cobro. Solo se evita desarrollo si el producto nuevo usa un tipo de cálculo que ya existe en el catálogo. Si su forma de cobrar es distinta, integrarlo sí requiere desarrollo, igual que lo requirió cada uno de estos tres.</p>
         </div>
         <div class="piece">
           <h4>📋 Módulo Pendiente de facturar</h4>
@@ -377,29 +364,22 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
         </div>
         <div class="piece">
           <h4>🧾 Generación de factura vía FE</h4>
-          <p>El portal no timbra por sí mismo — manda la información al sistema de facturación (FE) y consulta de vuelta el CFDI ya generado.</p>
+          <p>El portal no timbra por sí mismo, manda la información al sistema de facturación FE y consulta de vuelta el CFDI ya generado.</p>
         </div>
         <div class="piece">
           <h4>📁 Módulo Facturado</h4>
-          <p>Consulta de todo lo ya emitido, incluyendo si una factura fue cancelada, completamente separada del flujo de pendientes.</p>
-        </div>
-        <div class="piece">
-          <h4>⏰ Cobranza básica</h4>
-          <p>Semáforo de vencido/por vencer, registro manual de pago, y recordatorio redactado por el sistema que Facturación decide enviar.</p>
+          <p>Consulta de todo lo ya emitido, incluyendo si una factura fue cancelada, completamente separada del flujo de pendientes. Desde ahí también se puede abrir la factura como tal, el PDF y el XML que regresó FE.</p>
         </div>
       </div>
-      <div class="reuse"><b>Se reutiliza:</b> el catálogo de clientes ya existente en el ERP (todo cliente que puede generar consumo ya está identificado por su RFC) y el sistema de facturación (FE) que ya opera — no se construye un timbrado propio.</div>
-    </section>
+      <div class="reuse"><b>Se reutiliza:</b> el catálogo de clientes ya existente en el ERP, ya que todo cliente que puede generar consumo ya está identificado por su RFC, y el sistema de facturación FE que ya opera, así que no se construye un timbrado propio.</div>
 
-    <section id="s4">
-      <div class="eyebrow">04 · Flujo General</div>
-      <h2>Paso a paso</h2>
+      <h2 style="margin-top:32px">Paso a paso</h2>
       <div class="flow-list" id="flow-list"></div>
       <div class="flow-detail" id="flow-detail"></div>
     </section>
 
     <section id="s5">
-      <div class="eyebrow">05 · Alcance</div>
+      <div class="eyebrow">03 · Alcance</div>
       <h2>Qué entra en esta primera versión</h2>
       <div class="scope-grid">
         <div class="scope-col">
@@ -420,14 +400,6 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           </ul>
         </div>
         <div class="scope-col">
-          <h4>Cobranza</h4>
-          <ul>
-            <li>Semáforo de vencido / por vencer</li>
-            <li>Registro manual de pago</li>
-            <li>Recordatorio redactado, envío manual</li>
-          </ul>
-        </div>
-        <div class="scope-col">
           <h4>Catálogo</h4>
           <ul>
             <li>Tarifa default por proyecto</li>
@@ -436,11 +408,11 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           </ul>
         </div>
       </div>
-      <div class="not-included"><b>No incluido en esta primera versión:</b> integración automática con el banco para detectar pagos, reportes analíticos avanzados, KPIs Premium (se quitó del alcance), y cualquier otro producto de Nuevas Tecnologías más allá de los tres ya definidos — sumar cualquiera de ellos después implica desarrollo si su forma de cobrar no coincide con un tipo de cálculo ya construido.</div>
+      <div class="not-included"><b>No incluido en esta primera versión:</b> cobranza, como semáforo de vencido/por vencer, registro de pago o recordatorios; integración automática con el banco para detectar pagos; reportes analíticos avanzados; KPIs Premium, que se quitó del alcance; y cualquier otro producto de Nuevas Tecnologías más allá de los tres ya definidos, ya que sumar cualquiera de ellos después implica desarrollo si su forma de cobrar no coincide con un tipo de cálculo ya construido.</div>
     </section>
 
     <section id="s6">
-      <div class="eyebrow">06 · Beneficios</div>
+      <div class="eyebrow">04 · Beneficios</div>
       <h2>Por audiencia</h2>
       <div class="benef-group">
         <h4>Para Facturación de GM</h4>
@@ -458,11 +430,11 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
     </section>
 
     <section id="s7">
-      <div class="eyebrow">07 · MVP y Evolución</div>
+      <div class="eyebrow">05 · MVP y Evolución</div>
       <h2>Etapas</h2>
       <div class="phase rec">
         <h4>Fase 1 <span class="badge-rec">Recomendada</span></h4>
-        <p>Los tres productos ya definidos (Torre de Control, Portal IA, Safelink), los dos módulos principales (Pendiente/Facturado) y la cobranza básica.</p>
+        <p>Los tres productos ya definidos, Torre de Control, Portal IA y Safelink, y los dos módulos principales, Pendiente y Facturado.</p>
       </div>
       <div class="phase">
         <h4>Fase 2</h4>
@@ -475,14 +447,14 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
     </section>
 
     <section id="s8">
-      <div class="eyebrow">08 · Riesgos</div>
+      <div class="eyebrow">06 · Riesgos</div>
       <h2>Riesgo y mitigación</h2>
       <table class="risk">
         <tr><th>Riesgo</th><th>Mitigación</th></tr>
         <tr><td>Un consumo se reporta dos veces y el cliente termina pagando doble.</td><td>Cada consumo trae un identificador único de su integración de origen; un duplicado se guarda marcado para revisión, nunca se factura automáticamente.</td></tr>
         <tr><td>Una factura se cancela en el sistema de facturación y el portal no se entera.</td><td>El sistema de facturación avisa siempre al portal, regresando esos cargos a pendientes de forma automática.</td></tr>
         <tr><td>Dos personas de Facturación trabajan al mismo cliente a la vez y generan facturas encimadas.</td><td>El portal bloquea al cliente completo mientras alguien lo está trabajando.</td></tr>
-        <tr><td>Se asume que sumar un producto nuevo al catálogo es gratis en desarrollo.</td><td>Solo se evita desarrollo si el producto nuevo usa un tipo de cálculo ya construido (paquete, monto directo, costo-menos-descuento). Una forma de cobro distinta — como la renta fija de KPIs Premium — requiere desarrollo igual que cada uno de los tres productos actuales lo requirió.</td></tr>
+        <tr><td>Se asume que sumar un producto nuevo al catálogo es gratis en desarrollo.</td><td>Solo se evita desarrollo si el producto nuevo usa un tipo de cálculo ya construido, como paquete, monto directo o costo menos descuento. Una forma de cobro distinta, como la renta fija de KPIs Premium, requiere desarrollo igual que cada uno de los tres productos actuales lo requirió.</td></tr>
       </table>
     </section>
 
@@ -493,7 +465,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
 
 <div class="proto-band">
   <div class="proto-inner">
-    <div class="eyebrow">09 · Prototipo</div>
+    <div class="eyebrow">07 · Prototipo</div>
     <h2>Así se vería el portal</h2>
     <p style="margin-bottom:0">Datos de ejemplo, sin conexión real a ningún sistema.</p>
     <div class="proto-shell">
@@ -529,7 +501,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
             <!-- FACTURADO -->
             <div class="p-view" id="view-facturado">
               <div class="pscr-title">Facturado</div>
-              <div class="pscr-sub">Consulta de lo ya emitido — separado por completo de los pendientes.</div>
+              <div class="pscr-sub">Consulta de lo ya emitido, separado por completo de los pendientes.</div>
               <div class="p-filter">
                 <input placeholder="Buscar folio o cliente…" oninput="filterFacturas(this.value)">
                 <div class="p-chip-filter active" data-f="todas" onclick="setFacturaFilter('todas')">Todas</div>
@@ -561,26 +533,26 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
     <main style="padding:0">
 
     <section id="s10">
-      <div class="eyebrow">10 · Siguientes Pasos</div>
+      <div class="eyebrow">08 · Siguientes Pasos</div>
       <h2>Ruta</h2>
       <div class="route">
         <div class="route-item"><div class="route-dot">1</div><div class="route-text"><b>Validar el alcance de Fase 1</b> con Dirección.</div></div>
         <div class="route-item"><div class="route-dot">2</div><div class="route-text"><b>Definir con el equipo dueño del sistema de facturación</b> el contrato técnico para enviar información y consultar el CFDI.</div></div>
-        <div class="route-item"><div class="route-dot">3</div><div class="route-text"><b>Desarrollo de Fase 1</b> — los tres productos, los dos módulos y cobranza básica.</div></div>
+        <div class="route-item"><div class="route-dot">3</div><div class="route-text"><b>Desarrollo de Fase 1</b>: los tres productos y los dos módulos.</div></div>
         <div class="route-item"><div class="route-dot">4</div><div class="route-text"><b>Piloto</b> con un solo producto (Torre de Control) antes del rollout completo.</div></div>
       </div>
       <div class="decision"><b>Decisión requerida:</b> aprobar el alcance de Fase 1 y autorizar el inicio de la definición técnica con el equipo dueño del sistema de facturación.</div>
     </section>
 
     <section id="s11" class="detail-only">
-      <div class="eyebrow">11 · Anexo Funcional</div>
+      <div class="eyebrow">09 · Anexo Funcional</div>
       <h2>Detalle para equipo técnico</h2>
       <div class="acc" id="accordion">
 
         <div class="acc-item">
           <div class="acc-h" onclick="toggleAcc(this)">Perfiles <span class="arrow">▸</span></div>
           <div class="acc-body">
-            <ul><li><b>Facturación de GM</b>: único perfil. Configura tarifas/descuentos y también genera facturas — no se requiere separación de funciones.</li></ul>
+            <ul><li><b>Facturación de GM</b>: único perfil. Configura tarifas/descuentos y también genera facturas, así que no se requiere separación de funciones.</li></ul>
           </div>
         </div>
 
@@ -618,7 +590,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
             <ul>
               <li>Montos de Portal IA y cantidades/precios de Torre de Control no pueden ser cero o negativos.</li>
               <li>% de descuento de Safelink: 0% a 100%.</li>
-              <li>Identificador único de consumo por integración (folio de póliza / retransmisión / id de compra) evita duplicados — un duplicado se guarda marcado para revisión.</li>
+              <li>Identificador único de consumo por integración, como folio de póliza, retransmisión o id de compra, evita duplicados; un duplicado se guarda marcado para revisión.</li>
               <li>El sistema de facturación notifica al portal toda cancelación de factura.</li>
             </ul>
           </div>
@@ -628,7 +600,7 @@ table.risk td:first-child{font-weight:600; color:var(--ink); width:38%}
           <div class="acc-h" onclick="toggleAcc(this)">Consideraciones técnicas <span class="arrow">▸</span></div>
           <div class="acc-body">
             <ul>
-              <li><span class="pend">[PENDIENTE POR DEFINIR]</span> Contrato técnico exacto con el sistema de facturación (cómo se envía la información a facturar y cómo se consulta el CFDI de vuelta) — a definir con ese equipo.</li>
+              <li><span class="pend">[PENDIENTE POR DEFINIR]</span> Contrato técnico exacto con el sistema de facturación, es decir, cómo se envía la información a facturar y cómo se consulta el CFDI de vuelta, a definir con ese equipo.</li>
               <li>Bloqueo de concurrencia: al cliente completo mientras Facturación lo está trabajando (detalle de liberación del bloqueo fuera de este análisis).</li>
             </ul>
           </div>
@@ -657,7 +629,7 @@ items.forEach(it=>it.addEventListener('click', e=>{
   e.preventDefault();
   document.getElementById(it.dataset.target).scrollIntoView({behavior:'smooth'});
 }));
-const secIds = ['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11'];
+const secIds = ['s1','s3','s5','s6','s7','s8','s9','s10','s11'];
 function onScroll(){
   let current = secIds[0];
   for(const id of secIds){
@@ -678,7 +650,7 @@ function setMode(m){
 // ---- flow clickable ----
 const FLOW = [
   {t:'Cada integración manda su consumo', d:'Torre de Control, Safelink y Portal IA reportan al sistema cada consumo, identificado con un folio único de su propia fuente (folio de retransmisión, número de póliza, id de compra) para que nunca se registre dos veces el mismo consumo.'},
-  {t:'El portal concentra los pendientes por cliente', d:'Cada cargo se agrupa por RFC. El estatus siempre incluye "No facturado" — sea que el cargo ya esté pagado (Portal IA) o no (Torre de Control, Safelink) — para que ningún estatus se lea como una tarea resuelta.'},
+  {t:'El portal concentra los pendientes por cliente', d:'Cada cargo se agrupa por RFC. El estatus siempre incluye "No facturado", sea que el cargo ya esté pagado, como en Portal IA, o no, como en Torre de Control y Safelink, para que ningún estatus se lea como una tarea resuelta.'},
   {t:'Facturación selecciona y confirma', d:'Se puede mezclar cargos de varios proyectos en una sola factura y facturar solo una parte de lo pendiente. La única separación obligatoria es entre lo ya pagado y lo por cobrar, porque cada uno usa una forma de pago distinta ante el SAT (PUE / PPD).'},
   {t:'La factura se timbra en el sistema de facturación', d:'El portal envía la información necesaria (cliente, conceptos, montos, forma y método de pago) al sistema FE que ya opera hoy. Ahí se genera el CFDI real.'},
   {t:'El portal muestra el CFDI ya emitido', d:'El folio timbrado se consulta de vuelta y se refleja en el módulo Facturado, sin mezclarse con el flujo de pendientes.'},
@@ -799,7 +771,7 @@ function renderDetalle(){
 
   let html = `<div class="pscr-title">${c.name}</div><div class="pscr-sub">RFC ${c.rfc}</div>`;
   if(pagados.length && noPagados.length){
-    html += `<div class="p-warn">⚠️ Este cliente tiene cargos pagados y por cobrar — no se pueden facturar juntos en el mismo CFDI, así que se separan en dos bloques.</div>`;
+    html += `<div class="p-warn">⚠️ Este cliente tiene cargos pagados y por cobrar, y no se pueden facturar juntos en el mismo CFDI, así que se separan en dos bloques.</div>`;
   }
 
   function bloque(titulo, lista, tagClass, tagTxt){

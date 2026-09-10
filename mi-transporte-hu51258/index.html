@@ -296,35 +296,6 @@ const HU = {
     errores:['PENDIENTE DE DEFINICIÓN: no se define qué debe ver el usuario si el token de acceso a GM Integra falla o expira al momento del clic (queda fuera de alcance explícito de esta HU).'],
     dependencias:[], fueraDeAlcance:['No incluye ninguna pantalla de configuración nueva dentro del ERP.','No incluye el manejo de falla del token de acceso a GM Integra (pendiente de definición técnica).']
   },
-  'HU51258-9':{
-    orden:9, archivo:'HU51258-9', nombre:'Envío único de invitación, con reintento controlado', pantalla:'Mi Transporte › Clientes › Detalle › Pasajeros › Nuevo/Editar pasajero',
-    como:'usuario administrativo del transportista', quiero:'que la invitación al pasajero se envíe solo la primera vez que el sistema lo detecta como nuevo', para:'evitar invitaciones repetidas cuando ese mismo pasajero se actualiza, se le asigna recorrido después, o se vuelve a cargar en un archivo posterior',
-    implementar:[
-      'Campo nuevo "Estado de invitación" en el registro del pasajero, con los valores "Enviada", "Reintentando automáticamente" o "Pendiente de reintento manual".',
-      'Al detectar un pasajero nuevo (por archivo HU51258-6 o alta manual HU51258-7), enviar la invitación una sola vez.',
-      'Al actualizar un pasajero ya existente (por archivo, por alta manual, o al asignarle recorrido desde Pendientes HU51258-8), no reenviar la invitación.',
-      'Si el envío inicial falla, reintentar automáticamente hasta 2 veces.',
-      'Si los reintentos automáticos se agotan, mostrar el botón "Reintentar envío" para que el usuario lo intente manualmente.'
-    ],
-    reglas:['Un pasajero puede quedarse en "Pendiente de asignar" (sin recorrido/parada) de forma permanente para clientes que no llevan ese detalle, sin que eso afecte que su invitación ya fue enviada una sola vez.','La notificación que ve el pasajero dentro de su app cuando se le asigna recorrido después no es parte de esta HU.'],
-    principales:['Alta de un pasajero nuevo dispara su primera y única invitación.'],
-    alternos:['Actualizar, reasignar o volver a cargar al mismo pasajero no reenvía la invitación.','Reintento automático hasta 2 veces si el envío inicial falla.'],
-    errores:['Reintentos automáticos agotados → queda habilitado el reintento manual.'],
-    dependencias:['HU51258-6','HU51258-7','HU51258-8'], fueraDeAlcance:['No incluye el diseño de la notificación dentro de la app del pasajero.','No incluye el mecanismo técnico de envío (proveedor, colas, intervalos entre reintentos).']
-  },
-  'HU51258-10':{
-    orden:10, archivo:'HU51258-10', nombre:'Descarga de plantilla para la carga de padrón', pantalla:'Mi Transporte › Carga de padrón',
-    como:'usuario administrativo del transportista', quiero:'descargar la plantilla de Excel con el formato esperado del padrón', para:'llenarla con los datos correctos antes de cargarla y evitar que se rechacen filas por un formato distinto',
-    implementar:[
-      'Botón "Descargar plantilla" en la pantalla de Carga de padrón, junto al cargador de archivo.',
-      'La plantilla trae exactamente las columnas que procesa la carga (HU51258-6): Nombre completo, Número de empleado, Teléfono, Correo, Recorrido y Parada.',
-      'La plantilla incluye una fila de ejemplo genérica, sin datos reales de ningún cliente.'
-    ],
-    reglas:['La plantilla debe mantenerse igual a las columnas que realmente procesa la carga; si una columna se agrega o se quita en HU51258-6, se actualiza aquí también.'],
-    principales:['El usuario descarga la plantilla antes de tener su propio archivo listo.'],
-    alternos:[], errores:[],
-    dependencias:['HU51258-6'], fueraDeAlcance:['No valida el contenido del archivo al momento de la descarga; esa validación ocurre al cargarlo (HU51258-6).']
-  },
   'HU51258-3':{
     orden:3, archivo:'HU51258-3', nombre:'Consulta de clientes', pantalla:'Mi Transporte › Clientes',
     como:'usuario administrativo del transportista', quiero:'ver la lista de mis clientes con recorridos de personal', para:'elegir a cuál le voy a administrar el padrón',
@@ -342,41 +313,32 @@ const HU = {
     dependencias:['HU51258-1'], fueraDeAlcance:['No incluye alta, edición ni baja de clientes; se administran en el catálogo ya existente del ERP.']
   },
   'HU51258-4':{
-    orden:4, archivo:'HU51258-4', nombre:'Configuración del modo de asignación por cliente', pantalla:'Mi Transporte › Clientes › Detalle › Modo de asignación',
-    como:'usuario administrativo del transportista', quiero:'definir si un cliente carga su padrón en un solo archivo o recorrido por recorrido', para:'adaptar la carga a como maneja sus rutas cada cliente',
+    orden:4, archivo:'HU51258-4', nombre:'Detalle de cliente: recorridos y modo de asignación', pantalla:'Mi Transporte › Clientes › Detalle (Recorridos / Modo de asignación)',
+    como:'usuario administrativo del transportista', quiero:'ver los recorridos de un cliente y definir si carga su padrón en un solo archivo o recorrido por recorrido', para:'saber a cuáles recorridos cargar padrón y adaptar la carga a como maneja sus rutas cada cliente',
     implementar:[
-      'Selector con dos opciones exclusivas: "General" y "Por cada recorrido", dentro del detalle del cliente.',
+      'Tabla de solo lectura con folio, descripción, número de paradas, número de pasajeros y número de invitaciones confirmadas por recorrido, leídos en vivo del ERP.',
+      'Releer los recorridos del ERP cada vez que se entra o se refresca el detalle del cliente (no se cachea de forma obsoleta).',
+      'Botón "Cargar padrón" por cada recorrido, siempre habilitado sin importar el modo de asignación del cliente.',
+      'Si el cliente no tiene recorridos dados de alta, mostrar el mensaje correspondiente y mantener disponible el botón "Cargar padrón" a nivel cliente.',
+      'Selector con dos opciones exclusivas: "General" y "Por cada recorrido", en la pestaña "Modo de asignación" del mismo detalle.',
       'Un cliente que nunca se ha configurado en Mi Transporte muestra "General" por default al entrar por primera vez.',
       'Al guardar "Por cada recorrido", deshabilitar el botón "Cargar padrón" a nivel cliente; el de cada recorrido individual permanece habilitado.',
       'Excepción: si el cliente todavía no tiene ningún recorrido dado de alta, el botón "Cargar padrón" a nivel cliente permanece habilitado aunque el modo sea "Por cada recorrido"; se deshabilita en cuanto se da de alta el primer recorrido.',
       'Al guardar "General", volver a habilitar el botón "Cargar padrón" a nivel cliente.',
       'Cambiar el modo nunca modifica ni elimina pasajeros ya cargados.'
     ],
-    reglas:['El modo es siempre por cliente; no existe un modo global único para todo el transportista.','Sin recorridos dados de alta, el botón de cliente nunca se bloquea por modo — evita dejar al cliente sin ninguna vía para cargar su padrón.'],
-    principales:['Cambiar de "General" a "Por cada recorrido" y viceversa.'],
-    alternos:['Cliente nuevo sin configuración previa arranca en "General".','Cliente en modo "Por cada recorrido" sin recorridos aún → botón de cliente sigue habilitado por excepción.'],
+    reglas:['Esta pantalla es de solo lectura sobre los recorridos del ERP: nunca los crea, edita ni elimina.','El modo es siempre por cliente; no existe un modo global único para todo el transportista.','Sin recorridos dados de alta, el botón de cliente nunca se bloquea por modo — evita dejar al cliente sin ninguna vía para cargar su padrón.'],
+    principales:['Ver los recorridos de un cliente con sus métricas.','Cambiar de "General" a "Por cada recorrido" y viceversa.'],
+    alternos:['Cliente sin recorridos → mensaje y botón de carga a nivel cliente sigue disponible.','Cliente nuevo sin configuración previa arranca en "General".','Cliente en modo "Por cada recorrido" sin recorridos aún → botón de cliente sigue habilitado por excepción.'],
     errores:[],
-    dependencias:['HU51258-3'], fueraDeAlcance:['No incluye un modo global único para todo el transportista, el modo siempre es por cliente.']
+    dependencias:['HU51258-3'], fueraDeAlcance:['No incluye alta, edición ni baja de recorridos ni paradas; eso se hace en el ERP.','No incluye un modo global único para todo el transportista, el modo siempre es por cliente.']
   },
   'HU51258-5':{
-    orden:5, archivo:'HU51258-5', nombre:'Consulta de recorridos de un cliente', pantalla:'Mi Transporte › Clientes › Detalle › Recorridos',
-    como:'usuario administrativo del transportista', quiero:'ver los recorridos de un cliente específico', para:'saber a cuáles les voy a cargar padrón o consultar su avance',
+    orden:5, archivo:'HU51258-5', nombre:'Carga de padrón por archivo Excel, con plantilla', pantalla:'Mi Transporte › Carga de padrón',
+    como:'usuario administrativo del transportista', quiero:'cargar un archivo con el padrón de pasajeros de un cliente, apoyándome en una plantilla con el formato esperado', para:'dar de alta a muchos pasajeros de una sola vez, sin que se rechacen filas por un formato incorrecto',
     implementar:[
-      'Tabla de solo lectura con folio, descripción, número de paradas, número de pasajeros y número de invitaciones confirmadas por recorrido, leídos en vivo del ERP.',
-      'Releer los recorridos del ERP cada vez que se entra o se refresca el detalle del cliente (no se cachea de forma obsoleta).',
-      'Botón "Cargar padrón" por cada recorrido, siempre habilitado sin importar el modo de asignación del cliente.',
-      'Si el cliente no tiene recorridos dados de alta, mostrar el mensaje correspondiente y mantener disponible el botón "Cargar padrón" a nivel cliente.'
-    ],
-    reglas:['Esta pantalla es de solo lectura sobre los recorridos del ERP: nunca los crea, edita ni elimina.'],
-    principales:['Ver los recorridos de un cliente con sus métricas.'],
-    alternos:['Cliente sin recorridos → mensaje y botón de carga a nivel cliente sigue disponible.'],
-    errores:[],
-    dependencias:['HU51258-3'], fueraDeAlcance:['No incluye alta, edición ni baja de recorridos ni paradas; eso se hace en el ERP.']
-  },
-  'HU51258-6':{
-    orden:6, archivo:'HU51258-6', nombre:'Carga de padrón por archivo Excel', pantalla:'Mi Transporte › Carga de padrón',
-    como:'usuario administrativo del transportista', quiero:'cargar un archivo con el padrón de pasajeros de un cliente', para:'dar de alta a muchos pasajeros de una sola vez sin capturarlos uno por uno',
-    implementar:[
+      'Botón "Descargar plantilla" en la pantalla de Carga de padrón, junto al cargador de archivo.',
+      'La plantilla trae exactamente las columnas que procesa la carga: Nombre completo, Número de empleado, Teléfono, Correo, Recorrido y Parada, con una fila de ejemplo genérica.',
       'Cargador de archivo Excel sin límite de tamaño ni de número de filas.',
       'Procesar el archivo fila por fila: filas válidas se guardan, filas inválidas se rechazan sin detener el resto del archivo.',
       'Rechazar y reportar por número de fila cuando falte "Nombre completo", o cuando falten a la vez "Teléfono" y "Correo".',
@@ -389,44 +351,32 @@ const HU = {
       'Bloquear la carga a nivel cliente cuando el cliente está en modo "Por cada recorrido" (el botón llega deshabilitado desde Clientes/Recorridos).',
       'Archivo sin ningún renglón de datos → mensaje "El archivo no tiene pasajeros para cargar" y no guardar nada.'
     ],
-    reglas:['La detección de duplicados en este flujo usa el número de empleado; es la misma llave que usa el alta manual (HU51258-7) cuando ese dato se captura ahí.'],
-    principales:['Carga exitosa de un archivo válido con 50 filas.'],
+    reglas:['La plantilla debe mantenerse igual a las columnas que realmente procesa la carga.','La detección de duplicados en este flujo usa el número de empleado; es la misma llave que usa el alta manual (HU51258-6) cuando ese dato se captura ahí.'],
+    principales:['El usuario descarga la plantilla antes de tener su propio archivo listo.','Carga exitosa de un archivo válido con 50 filas.'],
     alternos:['Fila sin recorrido ni parada → pasajero queda "Pendiente de asignar".','Pasajero ya existente por número de empleado → se actualiza, no se duplica.','Pasajero que estaba "Pendiente de asignar" y ahora la fila trae su recorrido → queda asignado, sin volver a cargarse como nuevo.'],
     errores:['Falta nombre completo en una fila.','Falta teléfono y correo en una fila.','Recorrido de la fila no pertenece al cliente.','Archivo sin filas de datos.'],
-    dependencias:['HU51258-4','HU51258-5'], fueraDeAlcance:['No incluye el envío de invitaciones al pasajero; la regla de cuándo se envía y sus reintentos se define en HU51258-9.','No incluye reporte descargable de errores, el detalle se revisa en la misma pantalla.']
+    dependencias:['HU51258-4'], fueraDeAlcance:['No incluye el envío de invitaciones al pasajero; la regla de cuándo se envía y sus reintentos se define en HU51258-6.','No incluye reporte descargable de errores, el detalle se revisa en la misma pantalla.','No permite editar la plantilla dentro del sistema; el usuario la llena fuera, en Excel u otro programa.']
   },
-  'HU51258-7':{
-    orden:7, archivo:'HU51258-7', nombre:'Registro y edición manual de pasajeros', pantalla:'Mi Transporte › Clientes › Detalle › Pasajeros › Nuevo/Editar pasajero',
-    como:'usuario administrativo del transportista', quiero:'dar de alta o editar un pasajero a mano sin necesidad de un archivo', para:'corregir datos puntuales o agregar a alguien que se me olvidó en el archivo',
+  'HU51258-6':{
+    orden:6, archivo:'HU51258-6', nombre:'Gestión de pasajeros del cliente (alta, edición, asignación e invitación única)', pantalla:'Mi Transporte › Clientes › Detalle › Pasajeros',
+    como:'usuario administrativo del transportista', quiero:'dar de alta, editar y asignar recorrido a los pasajeros de un cliente desde un solo lugar, viendo su estado de invitación', para:'administrar el padrón completo sin salir de esa pantalla, y sin generar invitaciones repetidas',
     implementar:[
-      'Formulario con Nombre completo (obligatorio), Número de empleado (opcional), Teléfono, Correo, y Recorrido/Parada del cliente activo.',
+      'Formulario "+ Nuevo pasajero" con Nombre completo (obligatorio), Número de empleado (opcional), Teléfono, Correo, y Recorrido/Parada del cliente activo.',
       'Exigir al menos un dato de contacto: teléfono o correo, además del nombre.',
-      'Si se captura Número de empleado, detectar duplicado por ese dato (misma llave que usa la carga por archivo, HU51258-6). Si se deja vacío, detectar duplicado por teléfono + nombre completo.',
+      'Si se captura Número de empleado, detectar duplicado por ese dato (misma llave que usa la carga por archivo, HU51258-5). Si se deja vacío, detectar duplicado por teléfono + nombre completo.',
       'Ante un duplicado, preguntar "¿Este pasajero ya existe, deseas actualizar sus datos?" antes de guardar; no crear un segundo registro sin confirmación explícita.',
-      'Si el usuario confirma "Actualizar", sobrescribir los datos del pasajero existente y no crear un registro nuevo.',
-      'Permitir editar un pasajero ya cargado, incluido su recorrido asignado, sin afectar su historial de invitación.'
-    ],
-    reglas:['La detección de duplicados usa número de empleado cuando está disponible; si no, usa teléfono + nombre completo como respaldo. Es la misma llave que la carga por archivo (HU51258-6), unificada entre los dos canales.'],
-    principales:['Alta manual exitosa con nombre y correo.','Edición de recorrido de un pasajero existente.'],
-    alternos:['Pasajero ya existente → confirmar antes de actualizar.'],
-    errores:['Nombre completo vacío → "El nombre es obligatorio".','Sin teléfono ni correo → "Captura al menos un teléfono o un correo".'],
-    dependencias:['HU51258-6'], fueraDeAlcance:['No incluye la carga masiva por archivo (ver HU51258-6).','No incluye la regla de cuándo se envía o se reintenta la invitación; eso se define en HU51258-9, que agrega el campo "Estado de invitación" y el botón "Reintentar envío" en esta misma pantalla.']
-  },
-  'HU51258-8':{
-    orden:8, archivo:'HU51258-8', nombre:'Corrección de pasajeros pendientes de asignar', pantalla:'Mi Transporte › Clientes › Detalle › Pasajeros',
-    como:'usuario administrativo del transportista', quiero:'completar el recorrido y la parada de un pasajero que quedó pendiente', para:'que quede identificado en qué recorrido y parada debe abordar (la invitación ya se le envió al darlo de alta, ver HU51258-9)',
-    implementar:[
-      'Listado de todos los pasajeros en estado "Pendiente de asignar", con su cliente y datos de contacto.',
-      'Acción "Asignar" que abre un selector de Recorrido y Parada, filtrado únicamente a los del mismo cliente del pasajero.',
-      'Al guardar una asignación válida, el pasajero deja el estado "Pendiente de asignar" y queda ligado a ese recorrido y parada.',
+      'Permitir editar un pasajero ya cargado, incluido su recorrido asignado, sin afectar su historial de invitación.',
+      'Acción "Asignar" (solo cuando el pasajero no tiene recorrido) que abre un selector de Recorrido y Parada, filtrado únicamente a los del mismo cliente.',
       'Si el cliente del pasajero no tiene ningún recorrido dado de alta, mostrar el mensaje correspondiente y mantenerlo en "Pendiente de asignar".',
-      'Cerrar la ventana de asignación sin elegir recorrido ni parada no guarda ningún cambio.'
+      'Campo nuevo "Estado de invitación" al editar un pasajero, con los valores "Enviada", "Reintentando automáticamente" o "Pendiente de reintento manual".',
+      'Al detectar un pasajero nuevo (por archivo o alta manual), enviar la invitación una sola vez; al actualizarlo o asignarle recorrido después, no reenviarla.',
+      'Si el envío inicial falla, reintentar automáticamente hasta 2 veces; si se agotan, mostrar el botón "Reintentar envío" para reintento manual.'
     ],
-    reglas:['El recorrido y la parada elegidos deben pertenecer al mismo cliente del pasajero.','Asignar recorrido a un pasajero pendiente no genera una nueva invitación (HU51258-9).','Un pasajero puede quedarse "Pendiente de asignar" de forma permanente para clientes que no llevan ese detalle; esta HU no obliga a resolverlo (HU51258-9).'],
-    principales:['Asignar recorrido y parada válidos a un pasajero pendiente.'],
-    alternos:['Cancelar la asignación sin elegir nada.'],
-    errores:['Cliente del pasajero sin recorridos disponibles para asignar.'],
-    dependencias:['HU51258-6','HU51258-7','HU51258-5','HU51258-9'], fueraDeAlcance:['No incluye la sugerencia automática de recorridos por ubicación del celular; eso se resuelve en el análisis de la app del pasajero.','No incluye el envío de invitaciones ni su reintento, eso se rige por HU51258-9.']
+    reglas:['La detección de duplicados usa número de empleado cuando está disponible; si no, usa teléfono + nombre completo como respaldo. Es la misma llave que la carga por archivo (HU51258-5).','El recorrido y la parada elegidos al asignar deben pertenecer al mismo cliente del pasajero.','Un pasajero puede quedarse "Pendiente de asignar" de forma permanente para clientes que no llevan ese detalle, sin que eso afecte que su invitación ya fue enviada una sola vez.','La notificación que ve el pasajero dentro de su app cuando se le asigna recorrido después no es parte de esta HU.'],
+    principales:['Alta manual exitosa con nombre y correo, que dispara su primera y única invitación.','Edición de recorrido de un pasajero existente.','Asignar recorrido y parada válidos a un pasajero pendiente, sin reenviar invitación.'],
+    alternos:['Pasajero ya existente → confirmar antes de actualizar, sin reenviar invitación.','Cancelar la asignación sin elegir nada.','Reintento automático hasta 2 veces si el envío inicial falla.'],
+    errores:['Nombre completo vacío → "El nombre es obligatorio".','Sin teléfono ni correo → "Captura al menos un teléfono o un correo".','Cliente del pasajero sin recorridos disponibles para asignar.','Reintentos automáticos agotados → queda habilitado el reintento manual.'],
+    dependencias:['HU51258-5'], fueraDeAlcance:['No incluye la carga masiva por archivo (ver HU51258-5).','No incluye la sugerencia automática de recorridos por ubicación del celular; eso se resuelve en el análisis de la app del pasajero.','No incluye el diseño de la notificación dentro de la app del pasajero cuando se le asigna un recorrido.','No incluye el mecanismo técnico de envío de correo/SMS (proveedor, colas, intervalos entre reintentos).']
   }
 };
 
@@ -586,9 +536,9 @@ function openNotas(){
         <div class="spec-block">
           <h4>Decisiones cerradas sobre los huecos detectados</h4>
           <ul>
-            <li><b>Criterio de duplicado entre canales.</b> Se unificó: "Número de empleado" ahora también se captura como campo opcional en el alta manual (HU51258-7). Si el pasajero trae número de empleado, la deduplicación usa ese dato en ambos canales, igual que en la carga por archivo (HU51258-6). Si se deja vacío en el alta manual, se usa teléfono + nombre completo como respaldo.</li>
+            <li><b>Criterio de duplicado entre canales.</b> Se unificó: "Número de empleado" ahora también se captura como campo opcional en el alta manual (HU51258-6). Si el pasajero trae número de empleado, la deduplicación usa ese dato en ambos canales, igual que en la carga por archivo (HU51258-5). Si se deja vacío en el alta manual, se usa teléfono + nombre completo como respaldo.</li>
             <li><b>Cliente sin recorridos en modo "Por cada recorrido".</b> Se resolvió como excepción temporal: el botón "Cargar padrón (cliente)" permanece habilitado mientras el cliente no tenga ningún recorrido dado de alta, sin importar el modo configurado. En cuanto se da de alta el primer recorrido en el ERP, el botón se deshabilita y la carga pasa a hacerse por recorrido, como en cualquier cliente en ese modo. Reproducible en este mockup con el cliente <b>Nestlé México</b>.</li>
-            <li><b>Cuándo se envía la invitación (HU51258-9).</b> Se envía una sola vez, al detectar al pasajero como nuevo (por archivo o alta manual). Actualizarlo, reasignarle recorrido o volverlo a cargar después nunca la reenvía. Si el envío inicial falla, se reintenta automáticamente hasta 2 veces; si ambos fallan, queda disponible el botón "Reintentar envío" en su registro. Un pasajero puede quedarse "Pendiente de asignar" de forma permanente para clientes que no llevan ese detalle, sin que afecte que su invitación ya se envió. El diseño de la notificación dentro de la app del pasajero queda fuera de esta HU.</li>
+            <li><b>Cuándo se envía la invitación (HU51258-6).</b> Se envía una sola vez, al detectar al pasajero como nuevo (por archivo o alta manual). Actualizarlo, reasignarle recorrido o volverlo a cargar después nunca la reenvía. Si el envío inicial falla, se reintenta automáticamente hasta 2 veces; si ambos fallan, queda disponible el botón "Reintentar envío" en su registro. Un pasajero puede quedarse "Pendiente de asignar" de forma permanente para clientes que no llevan ese detalle, sin que afecte que su invitación ya se envió. El diseño de la notificación dentro de la app del pasajero queda fuera de esta HU.</li>
           </ul>
         </div>
         <div class="spec-block">
@@ -669,8 +619,8 @@ function renderClienteDetalle(){
       <div><h1>${c.nombre}</h1><p>${c.activo?'Cliente activo':'Cliente inactivo'} · Modo de asignación actual: <b>${c.modo}</b></p></div>
     </div>
     <div class="tabs">
-      <button class="${tab==='recorridos'?'on':''}" onclick="goTo('clienteDetalle',{clienteId:${c.id},tab:'recorridos'})">Recorridos ${huTag('HU51258-5')}</button>
-      <button class="${tab==='pasajeros'?'on':''}" onclick="goTo('clienteDetalle',{clienteId:${c.id},tab:'pasajeros'})">Pasajeros ${huTag('HU51258-8')}</button>
+      <button class="${tab==='recorridos'?'on':''}" onclick="goTo('clienteDetalle',{clienteId:${c.id},tab:'recorridos'})">Recorridos ${huTag('HU51258-4')}</button>
+      <button class="${tab==='pasajeros'?'on':''}" onclick="goTo('clienteDetalle',{clienteId:${c.id},tab:'pasajeros'})">Pasajeros ${huTag('HU51258-6')}</button>
       <button class="${tab==='modo'?'on':''}" onclick="goTo('clienteDetalle',{clienteId:${c.id},tab:'modo'})">Modo de asignación ${huTag('HU51258-4')}</button>
     </div>
     ${tab==='recorridos' ? renderTabRecorridos(c, excepcionSinRecorridos) : tab==='pasajeros' ? renderTabPasajeros(c) : renderTabModo(c)}
@@ -681,7 +631,7 @@ function renderTabPasajeros(c){
   const lista = PASAJEROS.filter(p=>p.clienteId===c.id);
   return `
     <div class="head-actions" style="justify-content:space-between;display:flex;margin-bottom:14px;gap:8px;align-items:center;">
-      <p style="margin:0;color:var(--ink-soft);font-size:13px;">Padrón completo de este cliente: quién ya tiene recorrido, quién sigue pendiente y el estado de su invitación. ${huTag('HU51258-9')}</p>
+      <p style="margin:0;color:var(--ink-soft);font-size:13px;">Padrón completo de este cliente: quién ya tiene recorrido, quién sigue pendiente y el estado de su invitación. ${huTag('HU51258-6')}</p>
       <div style="display:flex;gap:8px;flex:none;">
         <button class="spec-link" onclick='openSpec("Detalle de cliente · Pasajeros", ${JSON.stringify(SPEC.pasajeros)})'>Ver especificación</button>
         <button class="btn btn-primary btn-sm" onclick="nuevoPasajeroParaCliente(${c.id})">+ Nuevo pasajero</button>
@@ -784,12 +734,12 @@ function renderCargaPadron(){
   return `
     <div class="breadcrumb-mini"><a href="#" onclick="goTo('clienteDetalle',{clienteId:${c.id},tab:'recorridos'});return false;" style="color:var(--ink-faint)">${c.nombre}</a> / Carga de padrón</div>
     <div class="page-head">
-      <div><h1>Carga de padrón de pasajeros</h1><p>${c.nombre} · nivel: ${nivel}. ${huTag('HU51258-6')}</p></div>
+      <div><h1>Carga de padrón de pasajeros</h1><p>${c.nombre} · nivel: ${nivel}. ${huTag('HU51258-5')}</p></div>
       <div class="head-actions"><button class="spec-link" onclick='openSpec("Carga de padrón", ${JSON.stringify(SPEC.carga)})'>Ver especificación</button></div>
     </div>
     <div class="card card-pad" id="tarjetaPlantilla" style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
       <div>
-        <div style="font-weight:600;font-size:13.5px;">¿Aún no tienes el archivo listo? ${huTag('HU51258-10')}</div>
+        <div style="font-weight:600;font-size:13.5px;">¿Aún no tienes el archivo listo? ${huTag('HU51258-5')}</div>
         <div style="color:var(--ink-soft);font-size:12.5px;margin-top:2px;">Descarga la plantilla con las columnas exactas que espera esta carga.</div>
       </div>
       <button class="btn" id="btnDescargarPlantilla" onclick="descargarPlantilla()">Descargar plantilla</button>
@@ -862,7 +812,7 @@ function renderResultadoCarga(){
       </div>
       <div class="callout callout-info" style="margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex:none;margin-top:1px;"><path d="M2 4h12v8H2z" stroke="currentColor" stroke-width="1.3"/><path d="M2 4l6 5 6-5" stroke="currentColor" stroke-width="1.3"/></svg>
-        <div><b>Invitación enviada.</b> Se mandó por primera vez a los ${nuevos} pasajeros nuevos (cargados + pendientes de asignar). Los que ya existían — ${r.actualizados} actualizados y ${r.asignados} que solo recibieron recorrido — ya la habían recibido antes, así que no se les reenvía. ${huTag('HU51258-9')}</div>
+        <div><b>Invitación enviada.</b> Se mandó por primera vez a los ${nuevos} pasajeros nuevos (cargados + pendientes de asignar). Los que ya existían — ${r.actualizados} actualizados y ${r.asignados} que solo recibieron recorrido — ya la habían recibido antes, así que no se les reenvía. ${huTag('HU51258-6')}</div>
       </div>
       <div class="table-wrap">
         <table class="dtable">
@@ -894,7 +844,7 @@ function renderRegistroManual(){
   return `
     <div class="breadcrumb-mini"><a href="#" onclick="goTo('clienteDetalle',{clienteId:${c.id},tab:'pasajeros'});return false;" style="color:var(--ink-faint)">${c.nombre}</a> / Pasajeros / ${regEditId?'Editar pasajero':'Nuevo pasajero'}</div>
     <div class="page-head">
-      <div><h1>${regEditId?'Editar pasajero':'Registro manual de pasajeros'}</h1><p>${c.nombre} · alta o edición puntual sin necesidad de un archivo. ${huTag('HU51258-7')}</p></div>
+      <div><h1>${regEditId?'Editar pasajero':'Registro manual de pasajeros'}</h1><p>${c.nombre} · alta o edición puntual sin necesidad de un archivo. ${huTag('HU51258-6')}</p></div>
       <div class="head-actions"><button class="spec-link" onclick='openSpec("Registro manual de pasajeros", ${JSON.stringify(SPEC.registro)})'>Ver especificación</button></div>
     </div>
     <div class="card card-pad" style="max-width:560px;" id="formRegistro">
@@ -932,7 +882,7 @@ function renderRegistroManual(){
       </div>
       ${pasajeroEditado ? `
       <div class="field" id="fieldEstadoInvitacion">
-        <label>Estado de invitación ${huTag('HU51258-9')}</label>
+        <label>Estado de invitación ${huTag('HU51258-6')}</label>
         <div>${pillEstadoInvitacion(pasajeroEditado.estadoInvitacion)}</div>
         ${pasajeroEditado.estadoInvitacion==='Pendiente de reintento manual' ? `<button class="btn btn-sm" style="margin-top:8px;" id="btnReintentarEnvio" onclick="reintentarEnvio(${pasajeroEditado.id})">Reintentar envío</button>` : ''}
       </div>` : ''}
@@ -1063,7 +1013,7 @@ const SPEC = {
     acciones:['Elegir General o Por cada recorrido','Guardar'], validaciones:['Ninguna; ambas opciones son siempre válidas.'],
     reglas:['El modo es siempre por cliente, nunca global.','Cambiar el modo no afecta pasajeros ya cargados.'],
     estados:['General','Por cada recorrido'], resultado:'El botón "Cargar padrón (cliente)" refleja el nuevo modo de inmediato.', dependencias:'Requiere estar en el detalle de un cliente (HU51258-3).'},
-  recorridos:{objetivo:'Ver los recorridos de un cliente para decidir a cuál cargarle padrón o revisar su avance.', hus:['HU51258-5','HU51258-4'],
+  recorridos:{objetivo:'Ver los recorridos de un cliente para decidir a cuál cargarle padrón o revisar su avance.', hus:['HU51258-4'],
     implementar:['Releer recorridos del ERP al entrar o refrescar (sin caché obsoleto).','Botón "Cargar padrón" por recorrido, siempre habilitado.','Botón "Cargar padrón (cliente)" habilitado si el modo es General, o si el cliente aún no tiene ningún recorrido dado de alta (excepción, ver reglas).'],
     recibe:'Recorridos del cliente (folio, descripción, paradas, pasajeros, invitaciones confirmadas) desde el ERP.', muestra:'Tabla de recorridos con sus métricas.',
     acciones:['Iniciar carga por recorrido','Iniciar carga a nivel cliente (si el modo lo permite)'],
@@ -1071,34 +1021,34 @@ const SPEC = {
     estados:['Con recorridos','Sin recorridos','Sin recorridos + modo "Por cada recorrido" (excepción: botón de cliente habilitado)'],
     resultado:'El usuario identifica dónde cargar el padrón según el modo configurado.', dependencias:'Requiere estar en el detalle de un cliente (HU51258-3) y conocer su modo (HU51258-4).',
     casosEspeciales:['Cliente sin recorridos y en modo "Por cada recorrido": el botón de cliente permanece habilitado como excepción, en vez de dejar al usuario sin ninguna vía para cargar su padrón.']},
-  carga:{objetivo:'Dar de alta o actualizar muchos pasajeros de un cliente a partir de un archivo.', hus:['HU51258-6','HU51258-9','HU51258-10'],
-    implementar:['Botón "Descargar plantilla" con las columnas exactas que procesa la carga (HU51258-10).','Procesar el archivo fila por fila sin detenerse ante filas inválidas.','Aplicar las reglas de rechazo, pendiente, actualización y asignación de recorrido descritas en HU51258-6.','Mostrar el desglose de resultados: cargados, actualizados, recorrido asignado, pendientes y rechazados con motivo por fila.','Mostrar por fila si se envió la invitación, y un resumen de cuántos pasajeros nuevos la recibieron (HU51258-9).'],
+  carga:{objetivo:'Dar de alta o actualizar muchos pasajeros de un cliente a partir de un archivo.', hus:['HU51258-5','HU51258-6'],
+    implementar:['Botón "Descargar plantilla" con las columnas exactas que procesa la carga (HU51258-5).','Procesar el archivo fila por fila sin detenerse ante filas inválidas.','Aplicar las reglas de rechazo, pendiente, actualización y asignación de recorrido descritas en HU51258-5.','Mostrar el desglose de resultados: cargados, actualizados, recorrido asignado, pendientes y rechazados con motivo por fila.','Mostrar por fila si se envió la invitación, y un resumen de cuántos pasajeros nuevos la recibieron (HU51258-6).'],
     recibe:'Archivo Excel con Nombre completo, Teléfono, Correo, Número de empleado, Recorrido y Parada.', muestra:'Resumen en pills + tabla de resultado por fila, con columna de invitación.',
     acciones:['Seleccionar archivo','Procesar archivo'],
     validaciones:['Nombre completo obligatorio por fila.','Teléfono o correo obligatorio por fila.','Recorrido debe existir y pertenecer al cliente.','Archivo con al menos una fila de datos.'],
-    reglas:['Duplicado se detecta por número de empleado (actualiza, no duplica).','Fila sin recorrido ni parada válidos → pasajero "Pendiente de asignar", no se rechaza.','Si el pasajero ya existía "Pendiente de asignar" y la fila trae Recorrido y Parada, se le asignan y sale de pendiente, sin duplicarse.','Los "cargados" y "pendientes de asignar" son pasajeros nuevos → reciben invitación una sola vez; los "actualizados" y los que solo reciben recorrido asignado no la reciben de nuevo (HU51258-9).'],
+    reglas:['Duplicado se detecta por número de empleado (actualiza, no duplica).','Fila sin recorrido ni parada válidos → pasajero "Pendiente de asignar", no se rechaza.','Si el pasajero ya existía "Pendiente de asignar" y la fila trae Recorrido y Parada, se le asignan y sale de pendiente, sin duplicarse.','Los "cargados" y "pendientes de asignar" son pasajeros nuevos → reciben invitación una sola vez; los "actualizados" y los que solo reciben recorrido asignado no la reciben de nuevo (HU51258-6).'],
     estados:['Cargando (simulado, sin loading real por ser síncrono)','Resultado con desglose','Archivo vacío'],
     resultado:'Pasajeros nuevos, actualizados y recién asignados reflejados de inmediato en la pestaña Pasajeros del cliente.',
-    dependencias:'Requiere conocer el modo del cliente (HU51258-4) y sus recorridos (HU51258-5).',
+    dependencias:'Requiere conocer el modo del cliente y sus recorridos (HU51258-4).',
     casosEspeciales:['Carga a nivel cliente estando en modo "Por cada recorrido": el botón que la origina ya llega deshabilitado.','Volver a cargar el mismo archivo (o uno actualizado) es la forma esperada de resolver pasajeros que quedaron "Pendiente de asignar" en una carga previa.']},
-  registro:{objetivo:'Dar de alta o editar un pasajero puntual, sin usar un archivo.', hus:['HU51258-7','HU51258-9'],
-    implementar:['Formulario con Nombre completo, Número de empleado (opcional), Teléfono, Correo, Recorrido y Parada.','Validar nombre obligatorio y al menos un contacto.','Si hay número de empleado, detectar duplicado por ese dato; si no, usar teléfono + nombre y pedir confirmación antes de sobrescribir.','Permitir editar un pasajero existente, incluido su recorrido, sin tocar su historial de invitación.','Al editar un pasajero existente, mostrar su "Estado de invitación" (Enviada / Reintentando automáticamente / Pendiente de reintento manual) y el botón "Reintentar envío" cuando aplique (HU51258-9).'],
+  registro:{objetivo:'Dar de alta o editar un pasajero puntual, sin usar un archivo.', hus:['HU51258-6'],
+    implementar:['Formulario con Nombre completo, Número de empleado (opcional), Teléfono, Correo, Recorrido y Parada.','Validar nombre obligatorio y al menos un contacto.','Si hay número de empleado, detectar duplicado por ese dato; si no, usar teléfono + nombre y pedir confirmación antes de sobrescribir.','Permitir editar un pasajero existente, incluido su recorrido, sin tocar su historial de invitación.','Al editar un pasajero existente, mostrar su "Estado de invitación" (Enviada / Reintentando automáticamente / Pendiente de reintento manual) y el botón "Reintentar envío" cuando aplique (HU51258-6).'],
     recibe:'Catálogo de clientes y sus recorridos; datos del pasajero si se está editando.', muestra:'Formulario de captura o edición; estado de invitación al editar.',
     acciones:['Capturar datos','Guardar','Confirmar actualización de un duplicado','Reintentar envío de invitación'],
     validaciones:['Nombre completo obligatorio.','Al menos teléfono o correo.'],
-    reglas:['Duplicado se detecta por número de empleado cuando está disponible; si no, por teléfono + nombre completo. Misma llave que la carga por archivo (HU51258-6), ya unificada.','La invitación solo se envía la primera vez que el pasajero se detecta como nuevo; guardar una edición nunca la reenvía (HU51258-9).'],
+    reglas:['Duplicado se detecta por número de empleado cuando está disponible; si no, por teléfono + nombre completo. Misma llave que la carga por archivo (HU51258-5), ya unificada.','La invitación solo se envía la primera vez que el pasajero se detecta como nuevo; guardar una edición nunca la reenvía (HU51258-6).'],
     estados:['Formulario limpio','Error de validación','Confirmación de duplicado','Guardado exitoso'],
     resultado:'Pasajero disponible de inmediato en el listado del cliente y, si no tiene recorrido, en Pendientes de asignar.',
-    dependencias:'Comparte la misma lógica de duplicados que la carga por archivo (HU51258-6) y la regla de invitación única (HU51258-9).'},
-  pasajeros:{objetivo:'Ver el padrón completo de un cliente en un solo lugar: quién ya tiene recorrido, quién sigue pendiente, y su estado de invitación — y poder registrar, editar o asignar desde ahí mismo.', hus:['HU51258-8','HU51258-7','HU51258-9'],
-    implementar:['Listar todos los pasajeros del cliente (no solo los pendientes), con recorrido asignado o "Pendiente de asignar", y estado de invitación.','Botón "+ Nuevo pasajero" que abre el alta manual ya con este cliente fijo, sin pedirlo de nuevo.','Botón "Editar" por pasajero, que abre el mismo formulario con sus datos.','Botón "Asignar" solo cuando el pasajero no tiene recorrido, con selección de Recorrido y Parada filtrados a este cliente.','Validar que el recorrido y la parada pertenezcan al mismo cliente.','Cerrar la asignación sin elegir no guarda ningún cambio.','Ni asignar ni editar reenvían la invitación (HU51258-9): el pasajero ya la recibió al darse de alta.'],
+    dependencias:'Comparte la misma lógica de duplicados que la carga por archivo (HU51258-5) y la regla de invitación única (HU51258-6).'},
+  pasajeros:{objetivo:'Ver el padrón completo de un cliente en un solo lugar: quién ya tiene recorrido, quién sigue pendiente, y su estado de invitación — y poder registrar, editar o asignar desde ahí mismo.', hus:['HU51258-6'],
+    implementar:['Listar todos los pasajeros del cliente (no solo los pendientes), con recorrido asignado o "Pendiente de asignar", y estado de invitación.','Botón "+ Nuevo pasajero" que abre el alta manual ya con este cliente fijo, sin pedirlo de nuevo.','Botón "Editar" por pasajero, que abre el mismo formulario con sus datos.','Botón "Asignar" solo cuando el pasajero no tiene recorrido, con selección de Recorrido y Parada filtrados a este cliente.','Validar que el recorrido y la parada pertenezcan al mismo cliente.','Cerrar la asignación sin elegir no guarda ningún cambio.','Ni asignar ni editar reenvían la invitación (HU51258-6): el pasajero ya la recibió al darse de alta.'],
     recibe:'Todos los pasajeros del cliente, sus recorridos disponibles y su estado de invitación.', muestra:'Tabla completa de pasajeros del cliente; modal de asignación; formulario de alta/edición.',
     acciones:['+ Nuevo pasajero','Editar un pasajero','Asignar recorrido y parada','Guardar','Cancelar'],
     validaciones:['Recorrido y parada deben pertenecer al mismo cliente del pasajero.'],
-    reglas:['Sin recorridos disponibles del cliente → mensaje, el pasajero permanece pendiente.','Para clientes que no llevan ese detalle, un pasajero puede quedarse pendiente de forma permanente sin que sea un error (HU51258-9).'],
+    reglas:['Sin recorridos disponibles del cliente → mensaje, el pasajero permanece pendiente.','Para clientes que no llevan ese detalle, un pasajero puede quedarse pendiente de forma permanente sin que sea un error (HU51258-6).'],
     estados:['Con pasajeros','Cliente sin pasajeros registrados aún','Cliente sin recorridos disponibles para asignar'],
     resultado:'El pasajero asignado deja de mostrarse como pendiente y aparece con su recorrido, sin generar una nueva invitación.',
-    dependencias:'Requiere pasajeros generados por HU51258-6 o dados de alta aquí mismo (HU51258-7), y recorridos existentes (HU51258-5).'}
+    dependencias:'Requiere pasajeros generados por HU51258-5 o dados de alta aquí mismo (HU51258-6), y recorridos existentes (HU51258-4).'}
 };
 
 /* ============================= ROUTER PRINCIPAL ============================= */
@@ -1125,39 +1075,39 @@ const TOUR = [
   {hu:'HU51258-3', loc:'Clientes › Grupo Bimbo', titulo:'Entrar al detalle de un cliente', sel:'.breadcrumb-mini',
    setup:()=>{ goTo('clienteDetalle',{clienteId:2, tab:'recorridos'}); },
    bullets:['Al dar clic en el renglón de "Grupo Bimbo" en el listado, se llega aquí, a su detalle.','Por default aterriza en la pestaña "Recorridos"; la otra pestaña, "Modo de asignación", se ve en el siguiente paso.']},
-  {hu:'HU51258-5', loc:'Clientes › Grupo Bimbo › Recorridos', titulo:'Recorridos del cliente', sel:'#tablaRecorridos',
+  {hu:'HU51258-4', loc:'Clientes › Grupo Bimbo › Recorridos', titulo:'Recorridos del cliente', sel:'#tablaRecorridos',
    setup:()=>{ goTo('clienteDetalle',{clienteId:2, tab:'recorridos'}); },
    bullets:['Folio, descripción, paradas, pasajeros e invitaciones confirmadas se releen del ERP cada vez que se entra o refresca.','El botón "Cargar padrón" de cada recorrido está siempre habilitado, sin importar el modo.','Como el modo de este cliente es "Por cada recorrido", el botón de cliente completo aparece deshabilitado (se explica en el siguiente paso).']},
   {hu:'HU51258-4', loc:'Clientes › Grupo Bimbo › Modo de asignación', titulo:'Modo General vs. Por cada recorrido', sel:'#segModo',
    setup:()=>{ goTo('clienteDetalle',{clienteId:2, tab:'modo'}); },
    bullets:['Se llega aquí dando clic en la pestaña "Modo de asignación", junto a "Recorridos".','Un cliente nunca configurado arranca en "General" por default.','Cambiar a "Por cada recorrido" deshabilita el botón de carga a nivel cliente, sin afectar los botones por recorrido.','Cambiar el modo nunca borra ni modifica pasajeros ya cargados.']},
-  {hu:'HU51258-5', loc:'Clientes › Nestlé México › Recorridos', titulo:'Cambiamos de cliente: Nestlé México', sel:'#avisoExcepcionNestle',
+  {hu:'HU51258-4', loc:'Clientes › Nestlé México › Recorridos', titulo:'Cambiamos de cliente: Nestlé México', sel:'#avisoExcepcionNestle',
    setup:()=>{ goTo('clienteDetalle',{clienteId:3, tab:'recorridos'}); },
    bullets:['Salimos de Grupo Bimbo a propósito para entrar al detalle de otro cliente, Nestlé México, y mostrar un caso distinto.','Nestlé México todavía no tiene recorridos dados de alta y ya está en modo "Por cada recorrido".','Como excepción, el botón "Cargar padrón (cliente)" se mantiene habilitado mientras no exista ningún recorrido.','En cuanto se dé de alta el primer recorrido en el ERP, ese botón se deshabilita y la carga pasa a hacerse por recorrido.']},
-  {hu:'HU51258-10', loc:'Unilever de México › Carga de padrón', titulo:'Descargar la plantilla antes de cargar', sel:'#tarjetaPlantilla',
+  {hu:'HU51258-5', loc:'Unilever de México › Carga de padrón', titulo:'Descargar la plantilla antes de cargar', sel:'#tarjetaPlantilla',
    setup:()=>{ irACargaPadron(1, null); },
-   bullets:['Antes de tener su archivo listo, el usuario puede descargar la plantilla con las columnas exactas que espera esta carga.','Evita rechazos por columnas mal nombradas o en otro orden.','Esta plantilla debe mantenerse igual a las columnas reales que procesa HU51258-6; si una cambia ahí, cambia aquí también.']},
-  {hu:'HU51258-6', loc:'Unilever de México › Carga de padrón', titulo:'Cargar el archivo y ver el resultado', sel:'#cargadorArchivo',
+   bullets:['Antes de tener su archivo listo, el usuario puede descargar la plantilla con las columnas exactas que espera esta carga.','Evita rechazos por columnas mal nombradas o en otro orden.','Esta plantilla debe mantenerse igual a las columnas reales que procesa HU51258-5; si una cambia ahí, cambia aquí también.']},
+  {hu:'HU51258-5', loc:'Unilever de México › Carga de padrón', titulo:'Cargar el archivo y ver el resultado', sel:'#cargadorArchivo',
    setup:()=>{ irACargaPadron(1, null); },
    bullets:['El procesamiento es fila por fila: una fila inválida no detiene al resto del archivo.','Faltar nombre, o faltar teléfono y correo a la vez, rechaza esa fila puntual.','Sin recorrido ni parada en la fila, el pasajero se guarda como "Pendiente de asignar" en vez de rechazarse.']},
-  {hu:'HU51258-6', loc:'Unilever de México › Carga de padrón', titulo:'Desglose de resultados, incluida la invitación', sel:'#resultadoCarga',
+  {hu:'HU51258-5', loc:'Unilever de México › Carga de padrón', titulo:'Desglose de resultados, incluida la invitación', sel:'#resultadoCarga',
    setup:()=>{ if(!cargaResultado || cargaResultado.vacio) simularCarga('ok'); },
-   bullets:['Cargados, actualizados, recorrido asignado, pendientes de asignar y rechazados se cuentan por separado.','"Diana Cano" ya existía "Pendiente de asignar": esta misma carga le trajo su recorrido y la sacó de pendiente, sin duplicarla — así se resuelve un pendiente, volviendo a cargar el archivo.','El aviso de arriba y la columna "Invitación" dejan explícito a quién se le mandó por primera vez y a quién no (HU51258-9).']},
-  {hu:'HU51258-8', loc:'Clientes › Unilever de México › Pasajeros', titulo:'El padrón completo de un cliente, en un solo lugar', sel:'#tablaPasajerosCliente',
+   bullets:['Cargados, actualizados, recorrido asignado, pendientes de asignar y rechazados se cuentan por separado.','"Diana Cano" ya existía "Pendiente de asignar": esta misma carga le trajo su recorrido y la sacó de pendiente, sin duplicarla — así se resuelve un pendiente, volviendo a cargar el archivo.','El aviso de arriba y la columna "Invitación" dejan explícito a quién se le mandó por primera vez y a quién no (HU51258-6).']},
+  {hu:'HU51258-6', loc:'Clientes › Unilever de México › Pasajeros', titulo:'El padrón completo de un cliente, en un solo lugar', sel:'#tablaPasajerosCliente',
    setup:()=>{ goTo('clienteDetalle',{clienteId:1, tab:'pasajeros'}); },
    bullets:['Esta pestaña vive dentro del cliente, no aparte: aquí se ve a todos sus pasajeros, tengan o no recorrido asignado.','Cada fila muestra su recorrido (o "Pendiente de asignar") y su estado de invitación.','Desde aquí mismo se puede registrar, editar o asignar recorrido, sin salir del cliente.']},
-  {hu:'HU51258-7', loc:'Unilever de México › Pasajeros › Nuevo pasajero', titulo:'Alta manual y sus validaciones', sel:'#formRegistro',
+  {hu:'HU51258-6', loc:'Unilever de México › Pasajeros › Nuevo pasajero', titulo:'Alta manual y sus validaciones', sel:'#formRegistro',
    setup:()=>{ nuevoPasajeroParaCliente(1); },
    bullets:['"+ Nuevo pasajero" ya trae fijo el cliente desde el que se entró — no se vuelve a preguntar.','El nombre completo es obligatorio; sin él no se guarda el registro.','Se exige al menos un teléfono o un correo, además del nombre.','Si se captura "Número de empleado", la deduplicación usa ese dato — igual que en la carga por archivo. Si se deja vacío, se compara por teléfono + nombre y se pregunta antes de sobrescribir.']},
-  {hu:'HU51258-8', loc:'Clientes › Unilever de México › Pasajeros', titulo:'Asignar recorrido a un pendiente', sel:'#tablaPasajerosCliente',
+  {hu:'HU51258-6', loc:'Clientes › Unilever de México › Pasajeros', titulo:'Asignar recorrido a un pendiente', sel:'#tablaPasajerosCliente',
    setup:()=>{ goTo('clienteDetalle',{clienteId:1, tab:'pasajeros'}); },
    bullets:['El botón "Asignar" solo aparece cuando el pasajero todavía no tiene recorrido.','Abre un selector de Recorrido y Parada filtrado únicamente a este cliente.','Cerrar sin elegir nada no guarda ningún cambio; el pasajero sigue pendiente.']},
-  {hu:'HU51258-9', loc:'Grupo Bimbo › Pasajeros › Editar pasajero', titulo:'Invitación enviada una sola vez', sel:'#fieldEstadoInvitacion',
+  {hu:'HU51258-6', loc:'Grupo Bimbo › Pasajeros › Editar pasajero', titulo:'Invitación enviada una sola vez', sel:'#fieldEstadoInvitacion',
    setup:()=>{ editarPasajero(5); },
    bullets:['"Rubén Silva" ya recibió su invitación al darse de alta; asignarle recorrido después no genera una nueva.','Aquí quedó con "Pendiente de reintento manual" porque su envío inicial y sus 2 reintentos automáticos fallaron.','El botón "Reintentar envío" lo intenta de nuevo manualmente; si funciona, el estado pasa a "Enviada".']},
-  {hu:'HU51258-8', loc:'Mi Transporte', titulo:'Fin del recorrido', sel:'#sidebar',
+  {hu:'HU51258-6', loc:'Mi Transporte', titulo:'Fin del recorrido', sel:'#sidebar',
    setup:()=>{ goTo('clientes'); },
-   bullets:['Las 10 HU de HU51258 quedan representadas en el mockup, sin inventar pantallas para huecos que no lo requerían.','Los puntos que estaban abiertos (criterio de duplicado, cliente sin recorridos y la regla de invitación única) ya se resolvieron y quedan documentados en "Notas del análisis" (arriba a la derecha).']},
+   bullets:['Las 6 HU de HU51258 quedan representadas en el mockup, sin inventar pantallas para huecos que no lo requerían.','Los puntos que estaban abiertos (criterio de duplicado, cliente sin recorridos y la regla de invitación única) ya se resolvieron y quedan documentados en "Notas del análisis" (arriba a la derecha).']},
 ];
 
 function toggleTour(){

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mi Transporte — App del Pasajero</title>
+<style>
+html{color-scheme:light;}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:#f0f1f4;color:#1c1f23;
+  font-family:'Inter',Arial,Helvetica,sans-serif;font-size:13px;
+  padding:0 0 80px;
+}
+:root{
+  --accent:#ee7d1e; --accent-2:#c9660f; --accent-bg:#fdece0;
+  --ink:#1c1f23; --sub:#70757c; --border:#e5e7eb; --surface:#fff; --page:#f0f1f4;
+  --success:#1f9254; --success-bg:#e2f8ec;
+  --warn:#b9791f; --warn-bg:#fdf3e3;
+  --danger:#d64545; --danger-bg:#fdeaea;
+  --pending:#5b6067; --pending-bg:#eef0f2;
+  --brand:#ee7d1e;
+}
+input,select,textarea{background:#fff;color:#1a1a1a;}
+
+.page-wrap{padding:28px 20px 0;}
+
+/* ---------- Page chrome ---------- */
+.page-head{max-width:1180px;margin:0 auto 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+.page-title{font-size:20px;font-weight:800;color:var(--ink);}
+.page-sub{font-size:12.5px;color:var(--sub);margin-top:3px;}
+.head-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.hbtn{border:1px solid var(--border);background:#fff;color:#3a3f45;font-size:12px;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:6px;}
+.hbtn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.hbtn.primary:hover{background:var(--accent-2);}
+.hbtn:hover{background:#fafafa;}
+
+.layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:400px 1fr;gap:28px;align-items:start;}
+@media (max-width:860px){ .layout{grid-template-columns:1fr;} }
+
+/* ---------- Caption bar above phone ---------- */
+.caption{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.caption-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.caption-title{font-size:13.5px;font-weight:700;color:var(--ink);}
+.caption-desc{font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.5;}
+.spec-link{font-size:11.5px;color:var(--accent);font-weight:700;cursor:pointer;white-space:nowrap;}
+.spec-link:hover{text-decoration:underline;}
+.hu-tag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--accent);background:var(--accent-bg);border:1px solid #f4cfa5;padding:2px 8px;border-radius:20px;cursor:pointer;margin-right:5px;}
+.hu-tag:hover{background:#fbe0c2;}
+
+/* ---------- Phone frame ---------- */
+.phone-wrap{display:flex;justify-content:center;}
+.phone{width:360px;height:720px;background:#111;border-radius:42px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.28);position:relative;flex-shrink:0;}
+.phone-screen{width:100%;height:100%;background:var(--page);border-radius:32px;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:120px;height:22px;background:#111;border-radius:14px;z-index:50;}
+.statusbar{height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:11px;font-weight:700;color:#111;}
+.app-body{flex:1;overflow-y:auto;background:var(--page);}
+.app-body::-webkit-scrollbar{width:0;}
+
+/* ---------- Shared app UI ---------- */
+.app-topbar{background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10;}
+.app-topbar .back{font-size:16px;color:var(--ink);cursor:pointer;}
+.app-topbar .t{font-size:14.5px;font-weight:800;color:var(--ink);}
+.brandmark{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;margin:14px 16px;}
+.center-pad{padding:40px 26px;text-align:center;}
+.big-icon{font-size:38px;margin-bottom:14px;}
+.h1{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:6px;}
+.p-sub{font-size:12.5px;color:var(--sub);line-height:1.6;}
+.btn-block{width:100%;border:none;border-radius:10px;padding:12px;font-size:13.5px;font-weight:700;cursor:pointer;margin-top:16px;}
+.btn-block.primary{background:var(--accent);color:#fff;}
+.btn-block.primary:hover{background:var(--accent-2);}
+.btn-block.done{background:var(--success-bg);color:var(--success);cursor:default;}
+.btn-block:disabled{opacity:.55;cursor:not-allowed;}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.pill.pending{background:var(--pending-bg);color:var(--pending);}
+.pill.ok{background:var(--success-bg);color:var(--success);}
+.pill.warn{background:var(--warn-bg);color:var(--warn);}
+.pill.danger{background:var(--danger-bg);color:var(--danger);}
+
+/* Inbox / notif screen */
+.inbox-item{background:#fff;border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin:0 16px 10px;display:flex;gap:11px;cursor:pointer;}
+.inbox-item:hover{border-color:var(--accent);}
+.inbox-ic{width:34px;height:34px;border-radius:9px;background:var(--accent-bg);color:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.inbox-from{font-size:12px;font-weight:800;color:var(--ink);}
+.inbox-subj{font-size:11.5px;color:#3a3f45;margin-top:2px;}
+.inbox-time{font-size:10px;color:var(--sub);margin-top:2px;}
+
+/* Home screen */
+.section-lbl{font-size:10.5px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;padding:0 16px;margin:16px 0 6px;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0f1f3;}
+.info-row:last-child{border-bottom:none;}
+.info-row .k{font-size:11.5px;color:var(--sub);}
+.info-row .v{font-size:12.5px;font-weight:700;color:var(--ink);text-align:right;}
+.banner{margin:0 16px 12px;border-radius:12px;padding:12px 14px;font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:9px;}
+.banner.enroute{background:var(--accent-bg);color:var(--accent-2);}
+.banner.arriving{background:var(--success-bg);color:var(--success);}
+
+.map-box{margin:0 16px;border-radius:14px;overflow:hidden;position:relative;height:150px;background:
+  linear-gradient(135deg,#dce8f2,#eef2f6);
+}
+.map-grid{position:absolute;inset:0;background-image:linear-gradient(#c9d4de 1px,transparent 1px),linear-gradient(90deg,#c9d4de 1px,transparent 1px);background-size:22px 22px;opacity:.5;}
+.map-route{position:absolute;inset:0;}
+.map-pin{position:absolute;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 3px 8px rgba(0,0,0,.25);}
+.map-dest{position:absolute;width:14px;height:14px;border-radius:50%;background:#3a3f45;border:3px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.2);}
+.map-fail{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:#eef0f2;color:var(--sub);font-size:11.5px;text-align:center;padding:0 20px;}
+
+.tabbar-seg{display:flex;margin:14px 16px 4px;background:#eceef1;border-radius:10px;padding:3px;}
+.tabbar-seg .seg-btn{flex:1;text-align:center;padding:7px 6px;font-size:11.5px;font-weight:700;color:var(--sub);border-radius:8px;cursor:pointer;}
+.tabbar-seg .seg-btn.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+
+.empty-state{margin:60px 26px 0;text-align:center;}
+.empty-state .ic{font-size:40px;margin-bottom:12px;}
+.empty-state .t{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:6px;}
+.empty-state .s{font-size:12px;color:var(--sub);line-height:1.6;}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#20242a;color:#fff;padding:10px 18px;border-radius:24px;font-size:12px;font-weight:600;box-shadow:0 8px 22px rgba(0,0,0,.3);z-index:3000;opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+/* ---------- QA state switcher (outside phone, dev tool) ---------- */
+.qa-panel{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-top:14px;}
+.qa-title{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;}
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.qa-btn{border:1px solid var(--border);background:#fafbfc;color:#3a3f45;font-size:11px;padding:8px 9px;border-radius:7px;cursor:pointer;text-align:left;font-weight:600;}
+.qa-btn:hover{border-color:var(--accent);color:var(--accent-2);}
+.qa-btn.active{background:var(--accent-bg);border-color:var(--accent);color:var(--accent-2);}
+
+/* ---------- Modals ---------- */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,22,24,.5);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#fff;border-radius:14px;width:480px;max-width:100%;max-height:82vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-head .t{font-size:14.5px;font-weight:800;color:var(--ink);}
+.modal-close{cursor:pointer;color:var(--sub);font-size:18px;}
+.modal-body{padding:18px 20px;font-size:12.5px;line-height:1.65;color:#333;}
+.modal-body h4{font-size:12px;font-weight:800;color:var(--accent-2);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.4px;}
+.modal-body h4:first-child{margin-top:0;}
+.modal-body ul{margin:0 0 4px 18px;padding:0;}
+.modal-body li{margin-bottom:4px;}
+.gherkin-block{background:#f7f8fa;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;line-height:1.7;color:#2a2d31;margin:6px 0 12px;white-space:pre-wrap;}
+.spec-field{display:flex;gap:6px;margin-bottom:5px;}
+.spec-field b{flex-shrink:0;color:var(--ink);}
+
+/* right rail for drawer */
+.drawer-overlay{position:fixed;inset:0;background:rgba(20,22,24,.4);display:none;z-index:1000;}
+.drawer-overlay.open{display:block;}
+.drawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;background:#fff;box-shadow:-12px 0 30px rgba(0,0,0,.2);z-index:1001;transform:translateX(100%);transition:transform .25s;overflow-y:auto;}
+.drawer.open{transform:translateX(0);}
+.drawer-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;}
+.drawer-head .t{font-size:14px;font-weight:800;color:var(--accent-2);}
+.drawer-head .s{font-size:11.5px;color:var(--sub);margin-top:3px;}
+.drawer-body{padding:18px 20px;font-size:12.5px;line-height:1.65;}
+.drawer-body h4{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin:16px 0 6px;}
+.drawer-body h4:first-child{margin-top:0;}
+.drawer-body .story{background:#f7f8fa;border-radius:8px;padding:11px 13px;font-style:italic;color:#3a3f45;}
+
+/* ---------- Tour ---------- */
+.tour-overlay{position:fixed;inset:0;background:rgba(20,22,24,.5);z-index:1900;display:none;}
+.tour-overlay.active{display:block;}
+.tour-highlight{position:relative;z-index:1901;box-shadow:0 0 0 4px var(--accent),0 0 26px rgba(0,0,0,.35);border-radius:10px;}
+.tour-tip{position:fixed;z-index:1902;background:#fff;border-radius:12px;width:300px;box-shadow:0 12px 32px rgba(0,0,0,.35);padding:16px 18px;display:none;}
+.tour-tip.active{display:block;}
+.tour-tip h4{font-size:13px;margin:0 0 6px;color:var(--accent-2);}
+.tour-tip .hu{font-size:10px;font-weight:800;color:var(--accent);background:var(--accent-bg);border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:8px;}
+.tour-tip p{font-size:12px;line-height:1.55;color:#3a3f45;margin:0 0 12px;}
+.tour-footer-row{display:flex;justify-content:space-between;align-items:center;}
+.tour-step-count{font-size:11px;color:var(--sub);}
+.tour-btns{display:flex;gap:8px;}
+.tour-btn{border:none;border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.tour-btn.primary{background:var(--accent);color:#fff;font-weight:700;}
+.tour-btn.ghost{background:#f0f1f3;color:#3a3f45;}
+.tour-skip{font-size:11px;color:var(--sub);text-decoration:underline;cursor:pointer;display:block;text-align:right;margin-top:8px;}
+.tourbar{position:fixed;left:0;right:0;bottom:0;background:#20242a;color:#fff;padding:10px 22px;display:none;align-items:center;gap:16px;z-index:1800;}
+.tourbar.active{display:flex;}
+.tourbar .tb-hu{font-size:10px;font-weight:800;background:var(--accent);padding:2px 9px;border-radius:20px;}
+.tourbar .tb-title{font-size:12.5px;font-weight:700;flex:1;}
+.tourbar .tb-prog{width:160px;height:5px;background:#3a3f45;border-radius:4px;overflow:hidden;}
+.tourbar .tb-prog i{display:block;height:100%;background:var(--accent);}
+
+/* ---------- Disclaimer banner ---------- */
+.proto-banner{background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;}
+.proto-banner .tt{font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;}
+</style>
+</head>
+<body>
+
+<div class="proto-banner">
+  <div class="tt">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para la app móvil del pasajero de Transporte de Personal, eso significa una interfaz propia de app (no el estilo del ERP ni de GM Integra), con la marca GM como acento.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div class="page-wrap">
+<div class="page-head">
+  <div>
+    <div class="page-title">Mi Transporte — App del Pasajero</div>
+    <div class="page-sub">Transporte de Personal · flujo del pasajero (invitación → seguimiento del recorrido). Basado en AppPasajeros-1 y AppPasajeros-2.</div>
+  </div>
+  <div class="head-actions">
+    <button class="hbtn" onclick="openNotes()">📝 Notas del análisis</button>
+    <button class="hbtn primary" id="tourToggle" onclick="toggleTour()">▶ Recorrido de desarrollo</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div>
+    <div class="caption" id="caption">
+      <div class="caption-top">
+        <div>
+          <div class="caption-title" id="capTitle">—</div>
+        </div>
+        <span class="spec-link" onclick="openSpec()">Ver especificación</span>
+      </div>
+      <div class="caption-desc" id="capDesc"></div>
+      <div id="capTags" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="phone-screen">
+          <div class="statusbar"><span>9:41</span><span>📶 🔋 100%</span></div>
+          <div class="app-body" id="appBody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="qa-panel">
+      <div class="qa-title">Ir directo a un estado (control del mockup, no es parte de la app)</div>
+      <div class="qa-grid" id="qaGrid"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Spec modal -->
+<div class="modal-overlay" id="specOverlay">
+  <div class="modal-box">
+    <div class="modal-head"><span class="t" id="specTitle">Especificación</span><span class="modal-close" onclick="closeSpec()">✕</span></div>
+    <div class="modal-body" id="specBody"></div>
+  </div>
+</div>
+
+<!-- Notes modal -->
+<div class="modal-overlay" id="notesOverlay">
+  <div class="modal-box">
+    <div class="modal-head"><span class="t">Notas del análisis</span><span class="modal-close" onclick="closeNotes()">✕</span></div>
+    <div class="modal-body" id="notesBody"></div>
+  </div>
+</div>
+
+<!-- HU drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div><div class="t" id="drawerTitle"></div><div class="s" id="drawerSub"></div></div>
+    <span class="modal-close" onclick="closeDrawer()">✕</span>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<!-- Tour -->
+<div class="tour-overlay" id="tourOverlay"></div>
+<div class="tour-tip" id="tourTip">
+  <span class="hu" id="tourHu"></span>
+  <h4 id="tourTitle"></h4>
+  <p id="tourText"></p>
+  <div class="tour-footer-row">
+    <span class="tour-step-count" id="tourCount"></span>
+    <div class="tour-btns">
+      <button class="tour-btn ghost" id="tourPrev">Anterior</button>
+      <button class="tour-btn primary" id="tourNext">Siguiente</button>
+    </div>
+  </div>
+  <span class="tour-skip" id="tourSkip">Salir del recorrido</span>
+</div>
+<div class="tourbar" id="tourbar">
+  <span class="tb-hu" id="tbHu"></span>
+  <span class="tb-title" id="tbTitle"></span>
+  <div class="tb-prog"><i id="tbProg" style="width:0%"></i></div>
+</div>
+
+<script>
+/* ============================================================
+   DATOS DE EJEMPLO
+   ============================================================ */
+const PASAJERO_A = { nombre:"Marco Ruiz", empresa:"Envases del Bajio", parada:"Puerta 3 — Nave Norte", horarioProg:"07:00", horarioReal:null,
+  unidad:"Unidad 214 — Sprinter blanca", operador:"J. Alberto Cortes" };
+const PASAJERO_B = { nombre:"Diana Lopez", empresa:"Componentes Alfa" };
+const PASAJERO_C = { nombre:"Roberto Sanchez", empresa:"Textiles del Norte" };
+const PASAJERO_D = { nombre:"Ana Torres", empresa:"Logistica Rioverde" };
+
+/* ============================================================
+   FICHAS DE HU (tomadas de los .feature en backlog, sin inventar nada)
+   ============================================================ */
+const HU = {
+  "AppPasajeros-1": {
+    titulo: "AppPasajeros-1 — Activacion de cuenta por invitacion",
+    story: "Yo como pasajero invitado a la app de Transporte de Personal, requiero activar mi cuenta con el link que recibi por correo o SMS, para empezar a ver mi recorrido sin tener que crear usuario ni contrasena.",
+    pantalla: "Apertura del link de invitacion (con o sin recorrido asignado), link ya usado, link vencido.",
+    implementar: [
+      "El link es de un solo uso; se marca como usado hasta que el pasajero toca “Confirmar”, no al solo abrirlo (evita que una vista previa de correo lo invalide).",
+      "Al abrir un link valido y no usado, la app trae precargados nombre, y si existen, parada/horario/unidad/operador del recorrido asignado.",
+      "Si el pasajero no tiene recorrido asignado todavia, se muestra “Pendiente de asignar recorrido” en vez de esos datos, con el mismo boton Confirmar.",
+      "Al confirmar, la cuenta queda activada y la app navega a la pantalla principal (AppPasajeros-2) en el estado que corresponda."
+    ],
+    reglas: [
+      "Alta de pasajeros solo por carga de padron, nunca autorregistro.",
+      "Invitacion enviada una sola vez al detectar al pasajero como nuevo (correo primero, SMS solo de respaldo).",
+      "Sin contrasenas en v1 — el link funciona como credencial.",
+      "Vigencia del link configurable desde el lado administrativo (Mi Transporte / GM Integra)."
+    ],
+    principal: "El pasajero activa su cuenta y ya tiene recorrido asignado / El pasajero activa su cuenta sin recorrido asignado todavia",
+    alternos: "El pasajero intenta usar un link que ya fue confirmado antes",
+    errores: "El pasajero intenta usar un link vencido / El servicio de invitaciones no responde al validar el link",
+    dependencias: ["AppPasajeros-2"],
+    fuera: "No incluye contrasena ni recuperacion de acceso. No incluye reemision de un link vencido o perdido (se resuelve desde Mi Transporte). No incluye la sugerencia automatica de recorrido por GPS."
+  },
+  "AppPasajeros-2": {
+    titulo: "AppPasajeros-2 — Seguimiento y confirmacion del recorrido asignado",
+    story: "Yo como pasajero con la cuenta ya activada, requiero ver el estado de mi recorrido y confirmar que aborde, para saber cuando y donde me toca subir a la unidad.",
+    pantalla: "Pantalla principal de la app (todas sus variantes de estado).",
+    implementar: [
+      "Muestra parada, horario (programado; el horario real lo reemplaza en cuanto existe), unidad y operador cuando estan asignados.",
+      "Si unidad/operador aun no se asignaron (se asignan el mismo dia del viaje), se muestra “Unidad y operador pendientes de asignar” y no se muestra mapa.",
+      "Si el pasajero no tiene recorrido asignado, se muestra “Pendiente de asignar recorrido” sin mapa, avisos ni boton de abordaje.",
+      "Si el pasajero tiene mas de un recorrido activo, se muestra el mas proximo en pantalla y un acceso (tabs) a los demas.",
+      "El mapa muestra la ubicacion de la unidad cuando esta asignada; si el servicio de ubicacion no responde, se muestra un mensaje y el resto de la pantalla sigue funcionando.",
+      "Avisos automaticos “Tu unidad va en camino” y “Tu unidad esta por llegar”.",
+      "Confirmar abordaje es una accion simple que no modifica los campos Suben/Bajan que ya captura el operador en el ERP (registros independientes). No se puede confirmar dos veces.",
+      "Si el recorrido se cancela el mismo dia, se muestra un mensaje generico, sin flujo de reasignacion."
+    ],
+    reglas: [
+      "Horario real reemplaza al programado en cuanto el operador registra la salida.",
+      "Unidad y operador se asignan el mismo dia del viaje, nunca la noche anterior.",
+      "Confirmar abordaje no altera Suben/Bajan del ERP."
+    ],
+    principal: "El pasajero ve los datos de su recorrido asignado / El pasajero ve la ubicacion de la unidad en el mapa",
+    alternos: "Recorrido asignado pero sin unidad ni operador / Pasajero pendiente de asignar recorrido / Mas de un recorrido activo",
+    errores: "El servicio de ubicacion no responde / El recorrido se cancela el mismo dia",
+    dependencias: ["AppPasajeros-1"],
+    fuera: "No incluye cupo ni ocupacion de la unidad. No incluye flujo de reasignacion tras cancelacion. No incluye portal por empresa atendida ni contrasenas. No incluye proveedor ni costo de SMS."
+  }
+};
+
+/* ============================================================
+   ESPECIFICACION POR PANTALLA (para "Ver especificacion")
+   ============================================================ */
+const SPECS = {
+  inbox: {
+    title:"Bandeja de entrada simulada",
+    hu:null,
+    gherkin:null,
+    body:`<div class="spec-field"><b>Objetivo:</b> Simular el punto de entrada real de la app: el correo/SMS de invitacion que recibe el pasajero. No es una pantalla de la app en si, es el contexto de llegada.</div>
+    <div class="spec-field"><b>Contiene:</b> 4 notificaciones de ejemplo, una por cada escenario cubierto en AppPasajeros-1.</div>`
+  },
+  "invite-assigned": {
+    title:"Invitacion — recorrido ya asignado",
+    hu:"AppPasajeros-1",
+    gherkin:`Scenario: El pasajero activa su cuenta y ya tiene recorrido asignado
+    Given que el pasajero recibio el link de invitacion y no lo ha usado antes
+    And ya tiene un recorrido y una parada asignados
+    When abre el link desde su celular
+    Then la app muestra su nombre completo
+    And muestra la parada, el horario, la unidad y el operador de su recorrido asignado
+    And muestra el boton "Confirmar"`,
+    body:`<div class="spec-field"><b>Datos que recibe:</b> nombre del pasajero, parada, horario programado, unidad, operador.</div>
+    <div class="spec-field"><b>Accion del usuario:</b> tocar "Confirmar".</div>
+    <div class="spec-field"><b>Resultado:</b> la cuenta queda activada y navega a la pantalla principal en el estado "recorrido completo".</div>`
+  },
+  "invite-pending": {
+    title:"Invitacion — pendiente de asignar",
+    hu:"AppPasajeros-1",
+    gherkin:`Scenario: El pasajero activa su cuenta sin recorrido asignado todavia
+    Given que el pasajero recibio el link de invitacion y no lo ha usado antes
+    And todavia no tiene recorrido ni parada asignados
+    When abre el link desde su celular
+    Then la app muestra su nombre completo
+    And muestra el mensaje "Pendiente de asignar recorrido" en vez de datos de recorrido
+    And muestra el boton "Confirmar"`,
+    body:`<div class="spec-field"><b>Diferencia clave:</b> no hay datos de recorrido que mostrar, solo el mensaje de pendiente. El boton "Confirmar" se muestra igual.</div>
+    <div class="spec-field"><b>Resultado:</b> la cuenta queda activada y navega a la pantalla principal en el estado "pendiente de asignar".</div>`
+  },
+  "link-used": {
+    title:"Link ya utilizado",
+    hu:"AppPasajeros-1",
+    gherkin:`Scenario: El pasajero intenta usar un link que ya fue confirmado antes
+    Given que el pasajero ya confirmo su cuenta con este link anteriormente
+    When vuelve a abrir el mismo link
+    Then la app muestra el mensaje "Este enlace ya fue utilizado"
+    And no vuelve a pedir confirmacion
+    And no crea una segunda cuenta para el mismo pasajero`,
+    body:`<div class="spec-field"><b>Importante:</b> no se reintenta la confirmacion ni se crea una cuenta nueva. Solo se informa.</div>`
+  },
+  "link-expired": {
+    title:"Link vencido",
+    hu:"AppPasajeros-1",
+    gherkin:`Scenario: El pasajero intenta usar un link vencido
+    Given que paso el tiempo de vigencia configurado para el link de invitacion
+    And el pasajero nunca confirmo su cuenta con ese link
+    When abre el link desde su celular
+    Then la app muestra el mensaje "Este enlace ya no es valido, contacta a tu transportista"
+    And no muestra datos del pasajero ni de recorrido
+    And no permite confirmar la cuenta con ese link`,
+    body:`<div class="spec-field"><b>Importante:</b> no se muestra ningun dato del pasajero ni de recorrido, solo el mensaje. La vigencia del link es un parametro configurable desde el lado administrativo.</div>
+    <div class="spec-field"><b>Fuera de alcance:</b> el mecanismo para reemitir un link vencido no esta definido en esta HU, se resuelve desde Mi Transporte.</div>`
+  },
+  "home-full": {
+    title:"Pantalla principal — recorrido completo",
+    hu:"AppPasajeros-2",
+    gherkin:`Scenario: El pasajero ve los datos de su recorrido asignado
+    Given que el pasajero tiene un recorrido, parada, unidad y operador asignados para hoy
+    When entra a la pantalla principal
+    Then ve la parada asignada
+    And ve el horario programado de esa parada
+    And ve el nombre del operador y los datos de la unidad asignada
+
+Scenario: El pasajero ve la ubicacion de la unidad en el mapa
+    Given que el pasajero tiene unidad asignada y el servicio de ubicacion responde con datos
+    When entra a la pantalla principal
+    Then ve un mapa con la posicion actual de la unidad asignada
+
+Scenario: El pasajero confirma su abordaje
+    Given que el pasajero tiene unidad asignada y ve el boton "Confirme su abordaje"
+    When toca el boton "Confirme su abordaje"
+    Then la app registra el abordaje del pasajero para ese recorrido
+    And el boton cambia a "Abordaje confirmado" y queda deshabilitado
+    And el registro de Suben/Bajan que captura el operador en el ERP no se modifica`,
+    body:`<div class="spec-field"><b>Datos mostrados:</b> parada, horario (programado o real si ya existe), unidad, operador, mapa con posicion de la unidad.</div>
+    <div class="spec-field"><b>Avisos:</b> "Tu unidad va en camino" y "Tu unidad esta por llegar" — automaticos, no requieren accion del pasajero. Usa el boton de simulacion debajo del banner solo para efectos de este mockup.</div>
+    <div class="spec-field"><b>Boton Confirme su abordaje:</b> una sola confirmacion por recorrido. Al tocarlo cambia a "Abordaje confirmado" y se deshabilita. No modifica Suben/Bajan del ERP.</div>
+    <div class="spec-field"><b>Proveedor de mapa (tecnico, no de negocio):</b> HERE. No aplica al Gherkin, solo referencia para desarrollo.</div>`
+  },
+  "home-no-unit": {
+    title:"Pantalla principal — sin unidad/operador",
+    hu:"AppPasajeros-2",
+    gherkin:`Scenario: El pasajero tiene recorrido asignado pero sin unidad ni operador todavia
+    Given que el pasajero tiene recorrido y parada asignados para hoy
+    And la unidad y el operador todavia no fueron asignados en el ERP
+    When entra a la pantalla principal
+    Then ve la parada y el horario programado
+    And ve el mensaje "Unidad y operador pendientes de asignar" en vez de esos datos
+    And no ve el mapa de ubicacion de la unidad`,
+    body:`<div class="spec-field"><b>Por que pasa:</b> unidad y operador se asignan el mismo dia del viaje en el ERP, nunca la noche anterior. Este es el estado normal antes de esa asignacion, no un error.</div>
+    <div class="spec-field"><b>Que si se muestra:</b> parada y horario programado, igual que en el estado completo.</div>
+    <div class="spec-field"><b>Que no se muestra:</b> datos de unidad/operador (reemplazados por el mensaje) ni el mapa.</div>`
+  },
+  "home-pending": {
+    title:"Pantalla principal — pendiente de asignar",
+    hu:"AppPasajeros-2",
+    gherkin:`Scenario: El pasajero esta pendiente de asignar recorrido
+    Given que el pasajero todavia no tiene recorrido ni parada asignados
+    When entra a la pantalla principal
+    Then ve el mensaje "Pendiente de asignar recorrido"
+    And no ve mapa, avisos ni boton de confirmar abordaje`,
+    body:`<div class="spec-field"><b>Estado minimo:</b> sin parada, sin horario, sin mapa, sin avisos, sin boton de abordaje. Solo el mensaje de pendiente.</div>
+    <div class="spec-field"><b>Fuera de alcance:</b> la sugerencia automatica de recorrido por ubicacion del celular es mejora tecnica futura, no esta en esta HU.</div>`
+  },
+  "home-cancelled": {
+    title:"Pantalla principal — recorrido cancelado",
+    hu:"AppPasajeros-2",
+    gherkin:`Scenario: El recorrido del pasajero se cancela el mismo dia
+    Given que el pasajero tiene un recorrido asignado para hoy
+    When el recorrido se cancela antes de que el pasajero confirme su abordaje
+    Then la app muestra el mensaje "Tu recorrido no esta disponible por hoy"
+    And no muestra mapa, avisos ni boton de confirmar abordaje para ese recorrido`,
+    body:`<div class="spec-field"><b>Importante:</b> mensaje generico, sin flujo de reasignacion. La reasignacion automatica queda fuera de alcance (Fase 2).</div>`
+  },
+  "home-multi": {
+    title:"Pantalla principal — mas de un recorrido activo",
+    hu:"AppPasajeros-2",
+    gherkin:`Scenario: El pasajero tiene mas de un recorrido activo
+    Given que el pasajero tiene dos recorridos activos, uno a las "07:00" y otro a las "17:30"
+    When entra a la pantalla principal
+    Then ve en pantalla el recorrido de las "07:00" por ser el mas proximo
+    And ve un acceso para consultar el otro recorrido de las "17:30"`,
+    body:`<div class="spec-field"><b>Regla cerrada:</b> se muestra siempre el recorrido mas proximo en el tiempo. Los demas se consultan desde un acceso secundario (tabs), nunca listados todos de entrada.</div>`
+  }
+};
+
+/* ============================================================
+   NOTAS DEL ANALISIS
+   ============================================================ */
+const NOTES_HTML = `
+<h4>Decisiones cerradas sobre huecos detectados</h4>
+<ul>
+  <li>El link de invitacion se marca como usado al <b>confirmar</b>, no al solo abrirlo — evita que una vista previa de correo o un clic accidental invalide el link. (Pendiente de confirmar con Jaqueline, marcado tambien en el .feature).</li>
+  <li>Con varios recorridos activos, la pantalla principal muestra siempre el <b>mas proximo primero</b>, con acceso secundario a los demas (decision cerrada 2026-09-21, antes de escribir el Gherkin).</li>
+  <li>El proveedor de mapa es <b>HERE</b> — decision tecnica, no cambia el Gherkin (que describe el mapa en lenguaje de negocio).</li>
+</ul>
+<h4>Interpretaciones aplicadas</h4>
+<ul>
+  <li>El boton "Confirme su abordaje" se asume disponible en cuanto hay unidad asignada, sin depender del aviso "en camino"/"por llegar" — el Gherkin no ata la confirmacion a un momento especifico del trayecto.</li>
+  <li>La actualizacion de la pantalla cuando cambian unidad/operador/horario real se asume automatica (sondeo o notificacion push); el mecanismo tecnico exacto queda a criterio del desarrollador, marcado como pendiente en el .feature.</li>
+</ul>
+<h4>Fuera de alcance de este mockup</h4>
+<ul>
+  <li>Sugerencia automatica de recorrido por ubicacion del celular cuando el pasajero esta pendiente de asignar (mejora tecnica futura).</li>
+  <li>Flujo de reasignacion cuando el recorrido se cancela (Fase 2).</li>
+  <li>Cupo/ocupacion de la unidad, portal por empresa atendida y contrasenas — fuera de v1 en toda la propuesta.</li>
+</ul>
+`;
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+let currentRoute = "inbox";
+let multiMode = false;
+let tripPhase = "asignado"; // asignado | encamino | porllegar
+let boarded = false;
+let activeRecorrido = "am"; // am | pm  (para home-multi)
+
+const CAPTIONS = {
+  inbox:{ title:"① Bandeja de entrada simulada", desc:"Punto de entrada real del flujo: el pasajero recibe la invitacion por correo o SMS. Toca una notificacion para simular abrir ese link.", hus:[] },
+  "invite-assigned":{ title:"② Invitacion — recorrido ya asignado", desc:"Marco Ruiz abre su link. Ya tiene recorrido, parada, unidad y operador asignados en el ERP.", hus:["AppPasajeros-1"] },
+  "invite-pending":{ title:"③ Invitacion — pendiente de asignar", desc:"Diana Lopez abre su link. Todavia no tiene recorrido asignado en el ERP.", hus:["AppPasajeros-1"] },
+  "link-used":{ title:"④ Link ya utilizado", desc:"Roberto Sanchez ya habia confirmado su cuenta antes y vuelve a abrir el mismo link.", hus:["AppPasajeros-1"] },
+  "link-expired":{ title:"⑤ Link vencido", desc:"Ana Torres nunca abrio su invitacion y ya paso el tiempo de vigencia configurado.", hus:["AppPasajeros-1"] },
+  "home-full":{ title:"⑥ Pantalla principal — recorrido completo", desc:"Estado mas rico: parada, horario, unidad, operador, mapa, avisos y confirmacion de abordaje.", hus:["AppPasajeros-2"] },
+  "home-no-unit":{ title:"⑦ Pantalla principal — sin unidad/operador", desc:"El recorrido ya esta asignado pero unidad y operador todavia no (se asignan el mismo dia del viaje).", hus:["AppPasajeros-2"] },
+  "home-pending":{ title:"⑧ Pantalla principal — pendiente de asignar", desc:"El pasajero confirmo su cuenta pero aun no tiene recorrido asignado.", hus:["AppPasajeros-2"] },
+  "home-cancelled":{ title:"⑨ Pantalla principal — recorrido cancelado", desc:"El recorrido se cancelo el mismo dia, antes de que el pasajero confirmara su abordaje.", hus:["AppPasajeros-2"] },
+  "home-multi":{ title:"⑩ Pantalla principal — mas de un recorrido activo", desc:"El pasajero tiene ida y vuelta el mismo dia. Se muestra el mas proximo, con acceso a el otro.", hus:["AppPasajeros-2"] }
+};
+
+function huTagsHtml(list){
+  if(!list || !list.length) return "";
+  return list.map(h=>`<span class="hu-tag" onclick="openDrawer('${h}')">${h}</span>`).join("");
+}
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+function setCaption(route){
+  const c = CAPTIONS[route];
+  document.getElementById("capTitle").textContent = c.title;
+  document.getElementById("capDesc").textContent = c.desc;
+  document.getElementById("capTags").innerHTML = huTagsHtml(c.hus);
+}
+
+function goTo(route, opts){
+  opts = opts || {};
+  currentRoute = route;
+  if(opts.multi !== undefined) multiMode = opts.multi;
+  if(opts.tripPhase !== undefined) tripPhase = opts.tripPhase;
+  if(opts.boarded !== undefined) boarded = opts.boarded;
+  if(opts.activeRecorrido !== undefined) activeRecorrido = opts.activeRecorrido;
+  render();
+  setCaption(route);
+  updateQaActive();
+}
+
+function render(){
+  const body = document.getElementById("appBody");
+  body.innerHTML = renderers[currentRoute]();
+}
+
+/* ---------- Renderers ---------- */
+const renderers = {
+  inbox: ()=>`
+    <div class="app-topbar"><span class="brandmark">MT</span><span class="t">Notificaciones</span></div>
+    <div style="padding-top:14px;">
+      <div class="inbox-item" onclick="goTo('invite-assigned')">
+        <div class="inbox-ic">✉️</div>
+        <div><div class="inbox-from">Mi Transporte</div><div class="inbox-subj">Hola ${PASAJERO_A.nombre}, activa tu cuenta y consulta tu recorrido</div><div class="inbox-time">Hoy · 6:10 am</div></div>
+      </div>
+      <div class="inbox-item" onclick="goTo('invite-pending')">
+        <div class="inbox-ic">✉️</div>
+        <div><div class="inbox-from">Mi Transporte</div><div class="inbox-subj">Hola ${PASAJERO_B.nombre}, activa tu cuenta de transporte</div><div class="inbox-time">Hoy · 6:12 am</div></div>
+      </div>
+      <div class="inbox-item" onclick="goTo('link-used')">
+        <div class="inbox-ic">📩</div>
+        <div><div class="inbox-from">Mi Transporte</div><div class="inbox-subj">Hola ${PASAJERO_C.nombre}, activa tu cuenta de transporte</div><div class="inbox-time">Ayer · 5:50 pm</div></div>
+      </div>
+      <div class="inbox-item" onclick="goTo('link-expired')">
+        <div class="inbox-ic">📩</div>
+        <div><div class="inbox-from">Mi Transporte</div><div class="inbox-subj">Hola ${PASAJERO_D.nombre}, activa tu cuenta de transporte</div><div class="inbox-time">Hace 9 dias</div></div>
+      </div>
+    </div>`,
+
+  "invite-assigned": ()=>`
+    <div class="app-topbar"><span class="back" onclick="goTo('inbox')">←</span><span class="t">Activar cuenta</span></div>
+    <div class="card center-pad">
+      <div class="big-icon">👋</div>
+      <div class="h1">Hola, ${PASAJERO_A.nombre}</div>
+      <div class="p-sub">${PASAJERO_A.empresa}</div>
+    </div>
+    <div class="section-lbl">Tu recorrido</div>
+    <div class="card">
+      <div class="info-row"><span class="k">Parada</span><span class="v">${PASAJERO_A.parada}</span></div>
+      <div class="info-row"><span class="k">Horario</span><span class="v">${PASAJERO_A.horarioProg}</span></div>
+      <div class="info-row"><span class="k">Unidad</span><span class="v">${PASAJERO_A.unidad}</span></div>
+      <div class="info-row"><span class="k">Operador</span><span class="v">${PASAJERO_A.operador}</span></div>
+    </div>
+    <div style="padding:0 16px 20px;">
+      <button class="btn-block primary" onclick="toast('Cuenta activada'); goTo('home-full', {tripPhase:'asignado', boarded:false, multi:false})">Confirmar</button>
+    </div>`,
+
+  "invite-pending": ()=>`
+    <div class="app-topbar"><span class="back" onclick="goTo('inbox')">←</span><span class="t">Activar cuenta</span></div>
+    <div class="card center-pad">
+      <div class="big-icon">👋</div>
+      <div class="h1">Hola, ${PASAJERO_B.nombre}</div>
+      <div class="p-sub">${PASAJERO_B.empresa}</div>
+    </div>
+    <div class="card center-pad">
+      <div class="big-icon">🕓</div>
+      <div class="h1">Pendiente de asignar recorrido</div>
+      <div class="p-sub">Tu transportista todavia no te asigno una parada. Te avisaremos en cuanto este lista.</div>
+    </div>
+    <div style="padding:0 16px 20px;">
+      <button class="btn-block primary" onclick="toast('Cuenta activada'); goTo('home-pending')">Confirmar</button>
+    </div>`,
+
+  "link-used": ()=>`
+    <div class="app-topbar"><span class="back" onclick="goTo('inbox')">←</span><span class="t">Activar cuenta</span></div>
+    <div class="card center-pad" style="margin-top:60px;">
+      <div class="big-icon">🔗</div>
+      <div class="h1">Este enlace ya fue utilizado</div>
+      <div class="p-sub">Ya activaste tu cuenta con este enlace anteriormente. Abre la app para consultar tu recorrido.</div>
+    </div>`,
+
+  "link-expired": ()=>`
+    <div class="app-topbar"><span class="back" onclick="goTo('inbox')">←</span><span class="t">Activar cuenta</span></div>
+    <div class="card center-pad" style="margin-top:60px;">
+      <div class="big-icon">⏰</div>
+      <div class="h1">Este enlace ya no es valido</div>
+      <div class="p-sub">Contacta a tu transportista para que te envie una nueva invitacion.</div>
+    </div>`,
+
+  "home-full": ()=> homeFullRender(),
+  "home-multi": ()=> homeFullRender(),
+
+  "home-no-unit": ()=>`
+    ${homeTopbar()}
+    ${multiTabsHtml()}
+    <div class="section-lbl">Tu recorrido de hoy</div>
+    <div class="card">
+      <div class="info-row"><span class="k">Parada</span><span class="v">${PASAJERO_A.parada}</span></div>
+      <div class="info-row"><span class="k">Horario</span><span class="v">${PASAJERO_A.horarioProg}</span></div>
+    </div>
+    <div class="card" style="background:var(--pending-bg);border-color:#dde0e3;">
+      <div style="font-size:12.5px;font-weight:700;color:var(--pending);">Unidad y operador pendientes de asignar</div>
+      <div style="font-size:11.5px;color:var(--sub);margin-top:4px;">Se asignan el mismo dia del viaje. Vuelve a revisar mas tarde.</div>
+    </div>`,
+
+  "home-pending": ()=>`
+    ${homeTopbar()}
+    <div class="empty-state">
+      <div class="ic">🕓</div>
+      <div class="t">Pendiente de asignar recorrido</div>
+      <div class="s">Todavia no tienes parada ni horario asignados. Te avisaremos en cuanto tu transportista lo defina.</div>
+    </div>`,
+
+  "home-cancelled": ()=>`
+    ${homeTopbar()}
+    <div class="empty-state">
+      <div class="ic">🚫</div>
+      <div class="t">Tu recorrido no esta disponible por hoy</div>
+      <div class="s">Tu transportista cancelo este recorrido. Consulta con el si necesitas otra opcion para hoy.</div>
+    </div>`
+};
+
+function homeTopbar(){
+  return `<div class="app-topbar"><span class="brandmark">MT</span><span class="t">Mi recorrido</span></div>`;
+}
+
+function multiTabsHtml(){
+  if(!multiMode) return "";
+  return `<div class="tabbar-seg">
+    <div class="seg-btn ${activeRecorrido==='am'?'on':''}" onclick="goTo('home-multi',{multi:true, activeRecorrido:'am'})">Proximo · 07:00</div>
+    <div class="seg-btn ${activeRecorrido==='pm'?'on':''}" onclick="goTo('home-multi',{multi:true, activeRecorrido:'pm'})">17:30</div>
+  </div>`;
+}
+
+function homeFullRender(){
+  const data = activeRecorrido==='pm'
+    ? { parada:"Puerta 3 — Nave Norte", horario:"17:30", unidad:"Unidad 214 — Sprinter blanca", operador:"J. Alberto Cortes" }
+    : { parada: PASAJERO_A.parada, horario: PASAJERO_A.horarioReal || PASAJERO_A.horarioProg, unidad: PASAJERO_A.unidad, operador: PASAJERO_A.operador };
+
+  let banner = "";
+  if(tripPhase==="encamino") banner = `<div class="banner enroute">🚐 Tu unidad va en camino</div>`;
+  if(tripPhase==="porllegar") banner = `<div class="banner arriving">📍 Tu unidad esta por llegar</div>`;
+
+  return `
+    ${homeTopbar()}
+    ${multiTabsHtml()}
+    <div class="section-lbl">Tu recorrido de hoy</div>
+    <div class="card">
+      <div class="info-row"><span class="k">Parada</span><span class="v">${data.parada}</span></div>
+      <div class="info-row"><span class="k">Horario</span><span class="v">${data.horario}${PASAJERO_A.horarioReal && activeRecorrido!=='pm' ? ' <span style="color:var(--success);font-weight:700;">(real)</span>':''}</span></div>
+      <div class="info-row"><span class="k">Unidad</span><span class="v">${data.unidad}</span></div>
+      <div class="info-row"><span class="k">Operador</span><span class="v">${data.operador}</span></div>
+    </div>
+    ${banner}
+    <div class="section-lbl">Ubicacion de la unidad</div>
+    <div class="map-box">
+      <div class="map-grid"></div>
+      <div class="map-pin" style="left:38%;top:58%;">🚐</div>
+      <div class="map-dest" style="left:72%;top:28%;"></div>
+    </div>
+    <div style="padding:0 16px;margin-top:8px;">
+      <button class="hbtn" style="width:100%;justify-content:center;" onclick="cycleTrip()">🔁 Simular avance del viaje (solo mockup)</button>
+    </div>
+    <div style="padding:0 16px 22px;margin-top:14px;">
+      ${boarded
+        ? `<button class="btn-block done" disabled>✓ Abordaje confirmado</button>`
+        : `<button class="btn-block primary" onclick="confirmarAbordaje()">Confirme su abordaje</button>`}
+    </div>`;
+}
+
+function cycleTrip(){
+  if(tripPhase==="asignado"){ tripPhase="encamino"; toast("Simulado: unidad en camino"); }
+  else if(tripPhase==="encamino"){ tripPhase="porllegar"; toast("Simulado: unidad por llegar"); }
+  else { tripPhase="asignado"; toast("Simulado: reinicia estado del viaje"); }
+  render();
+}
+
+function confirmarAbordaje(){
+  boarded = true;
+  toast("Abordaje confirmado. No se modifican los registros del operador en el ERP.");
+  render();
+}
+
+/* ============================================================
+   QA quick-jump panel
+   ============================================================ */
+const QA_STATES = [
+  { key:"inbox", label:"① Bandeja de entrada" },
+  { key:"invite-assigned", label:"② Invitacion con recorrido" },
+  { key:"invite-pending", label:"③ Invitacion pendiente" },
+  { key:"link-used", label:"④ Link ya usado" },
+  { key:"link-expired", label:"⑤ Link vencido" },
+  { key:"home-full", label:"⑥ Principal completa", opts:{multi:false, tripPhase:"asignado", boarded:false} },
+  { key:"home-no-unit", label:"⑦ Sin unidad/operador" },
+  { key:"home-pending", label:"⑧ Pendiente de asignar" },
+  { key:"home-cancelled", label:"⑨ Recorrido cancelado" },
+  { key:"home-multi", label:"⑩ Multi-recorrido", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false} }
+];
+function buildQaGrid(){
+  const grid = document.getElementById("qaGrid");
+  grid.innerHTML = QA_STATES.map(s=>`<button class="qa-btn" data-key="${s.key}" onclick='goTo("${s.key}", ${JSON.stringify(s.opts||{})})'>${s.label}</button>`).join("");
+}
+function updateQaActive(){
+  document.querySelectorAll(".qa-btn").forEach(b=>b.classList.toggle("active", b.dataset.key===currentRoute));
+}
+
+/* ============================================================
+   Spec modal / Notes modal / HU drawer
+   ============================================================ */
+function openSpec(){
+  const s = SPECS[currentRoute];
+  document.getElementById("specTitle").textContent = s.title;
+  let html = s.gherkin ? `<h4>Escenario Gherkin</h4><div class="gherkin-block">${s.gherkin}</div>` : "";
+  html += s.body;
+  document.getElementById("specBody").innerHTML = html;
+  document.getElementById("specOverlay").classList.add("open");
+}
+function closeSpec(){ document.getElementById("specOverlay").classList.remove("open"); }
+
+function openNotes(){
+  document.getElementById("notesBody").innerHTML = NOTES_HTML;
+  document.getElementById("notesOverlay").classList.add("open");
+}
+function closeNotes(){ document.getElementById("notesOverlay").classList.remove("open"); }
+
+function openDrawer(key){
+  const h = HU[key];
+  document.getElementById("drawerTitle").textContent = h.titulo;
+  document.getElementById("drawerSub").textContent = "Ficha de historia de usuario";
+  document.getElementById("drawerBody").innerHTML = `
+    <div class="story">${h.story}</div>
+    <h4>Pantalla</h4><div>${h.pantalla}</div>
+    <h4>Que debe implementarse</h4><ul>${h.implementar.map(i=>`<li>${i}</li>`).join("")}</ul>
+    <h4>Reglas de negocio</h4><ul>${h.reglas.map(i=>`<li>${i}</li>`).join("")}</ul>
+    <h4>Escenario principal</h4><div>${h.principal}</div>
+    <h4>Flujos alternos</h4><div>${h.alternos}</div>
+    <h4>Errores</h4><div>${h.errores}</div>
+    <h4>Dependencias</h4><div>${h.dependencias.map(d=>`<span class="hu-tag" onclick="openDrawer('${d}')">${d}</span>`).join(" ")}</div>
+    <h4>Fuera de alcance</h4><div>${h.fuera}</div>
+  `;
+  document.getElementById("drawerOverlay").classList.add("open");
+  document.getElementById("drawer").classList.add("open");
+}
+function closeDrawer(){
+  document.getElementById("drawerOverlay").classList.remove("open");
+  document.getElementById("drawer").classList.remove("open");
+}
+
+/* ============================================================
+   TOUR GUIADO
+   ============================================================ */
+const TOUR = [
+  { route:"inbox", opts:{}, hu:"AppPasajeros-1", title:"El pasajero recibe su invitacion", text:"Todo empieza con el correo o SMS que ya envio el lado administrativo. Toca la primera notificacion para simular que Marco abre su link." },
+  { route:"invite-assigned", opts:{}, hu:"AppPasajeros-1", title:"Invitacion con recorrido ya asignado", text:"El link trae precargados nombre, parada, horario, unidad y operador. El pasajero solo confirma, sin capturar nada." },
+  { route:"invite-pending", opts:{}, hu:"AppPasajeros-1", title:"Variante: sin recorrido asignado todavia", text:"Si el pasajero fue cargado en el padron pero aun no tiene recorrido, ve el mensaje de pendiente en vez de datos — mismo boton Confirmar." },
+  { route:"home-full", opts:{multi:false, tripPhase:"asignado", boarded:false}, hu:"AppPasajeros-2", title:"Pantalla principal — estado completo", text:"Al confirmar, el pasajero llega aqui: parada, horario, unidad, operador y el mapa con la ubicacion de la unidad." },
+  { route:"home-full", opts:{multi:false, tripPhase:"encamino", boarded:false}, hu:"AppPasajeros-2", title:"Aviso: unidad en camino", text:"Cuando la unidad sale hacia la parada, aparece este aviso automatico. Usa el boton de simulacion para verlo (en produccion es automatico)." },
+  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:false}, hu:"AppPasajeros-2", title:"Aviso: unidad por llegar", text:"Cuando la unidad esta cerca, el aviso cambia a “por llegar”." },
+  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:true}, hu:"AppPasajeros-2", title:"Confirmacion de abordaje", text:"El pasajero confirma que subio a la unidad. El boton queda deshabilitado — no se puede confirmar dos veces, y esto nunca toca los registros Suben/Bajan del operador en el ERP." },
+  { route:"home-no-unit", opts:{}, hu:"AppPasajeros-2", title:"Variante: sin unidad ni operador todavia", text:"La unidad y el operador se asignan el mismo dia del viaje. Antes de eso, el pasajero ve su parada y horario, pero este mensaje en vez del mapa." },
+  { route:"home-pending", opts:{}, hu:"AppPasajeros-2", title:"Variante: pendiente de asignar recorrido", text:"Estado minimo: sin parada, sin mapa, sin avisos, sin boton de abordaje." },
+  { route:"home-multi", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false}, hu:"AppPasajeros-2", title:"Variante: mas de un recorrido activo", text:"Si el pasajero tiene ida y vuelta el mismo dia, ve primero el mas proximo, con este selector para consultar el otro." },
+  { route:"home-cancelled", opts:{}, hu:"AppPasajeros-2", title:"Variante: recorrido cancelado", text:"Si el recorrido se cancela el mismo dia, el pasajero ve este mensaje generico — sin flujo de reasignacion, eso queda para Fase 2." },
+  { route:"link-used", opts:{}, hu:"AppPasajeros-1", title:"Error: link ya utilizado", text:"Si el pasajero vuelve a abrir un link que ya confirmo antes, se le informa sin volver a pedir confirmacion." },
+  { route:"link-expired", opts:{}, hu:"AppPasajeros-1", title:"Error: link vencido", text:"Si nunca abrio el link y ya paso la vigencia configurada, se le pide contactar a su transportista." }
+];
+
+let tourActive = false, tourStep = -1;
+const tourOverlay = document.getElementById("tourOverlay");
+const tourTip = document.getElementById("tourTip");
+const tourbar = document.getElementById("tourbar");
+
+function toggleTour(){
+  if(tourActive) endTour(); else startTour();
+}
+function startTour(){
+  tourActive = true;
+  document.getElementById("tourToggle").textContent = "■ Salir del recorrido";
+  showTourStep(0);
+}
+function endTour(){
+  tourActive = false;
+  document.getElementById("tourToggle").textContent = "▶ Recorrido de desarrollo";
+  tourOverlay.classList.remove("active");
+  tourTip.classList.remove("active");
+  tourbar.classList.remove("active");
+  document.querySelectorAll(".tour-highlight").forEach(e=>e.classList.remove("tour-highlight"));
+}
+function showTourStep(i){
+  tourStep = i;
+  const s = TOUR[i];
+  goTo(s.route, s.opts);
+  document.getElementById("tourHu").textContent = s.hu;
+  document.getElementById("tourTitle").textContent = s.title;
+  document.getElementById("tourText").textContent = s.text;
+  document.getElementById("tourCount").textContent = (i+1)+"/"+TOUR.length;
+  document.getElementById("tourPrev").style.visibility = i===0 ? "hidden":"visible";
+  document.getElementById("tourNext").textContent = i===TOUR.length-1 ? "Finalizar":"Siguiente";
+  document.getElementById("tbHu").textContent = s.hu;
+  document.getElementById("tbTitle").textContent = s.title;
+  document.getElementById("tbProg").style.width = Math.round(((i+1)/TOUR.length)*100)+"%";
+  tourOverlay.classList.add("active");
+  tourbar.classList.add("active");
+  setTimeout(()=>{
+    document.querySelectorAll(".tour-highlight").forEach(e=>e.classList.remove("tour-highlight"));
+    const phoneEl = document.querySelector(".phone");
+    phoneEl.classList.add("tour-highlight");
+    const r = phoneEl.getBoundingClientRect();
+    let top = Math.max(20, r.top);
+    let left = r.right + 24;
+    if(left + 300 > window.innerWidth) left = Math.max(20, r.left - 320);
+    tourTip.style.top = top+"px"; tourTip.style.left = left+"px";
+    tourTip.classList.add("active");
+  }, 80);
+}
+document.getElementById("tourNext").onclick = ()=>{ if(tourStep>=TOUR.length-1) endTour(); else showTourStep(tourStep+1); };
+document.getElementById("tourPrev").onclick = ()=>{ if(tourStep>0) showTourStep(tourStep-1); };
+document.getElementById("tourSkip").onclick = endTour;
+
+/* ============================================================
+   INIT
+   ============================================================ */
+buildQaGrid();
+goTo("inbox");
+</script>
+</body>
+</html>

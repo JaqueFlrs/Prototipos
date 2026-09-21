@@ -102,6 +102,33 @@ input,select,textarea{background:#fff;color:#1a1a1a;}
 .sms-inputbar .send-ic{width:30px;height:30px;border-radius:50%;background:#e6e8eb;display:flex;align-items:center;justify-content:center;color:var(--sub-2);font-size:13px;}
 
 /* ---------- Opening / splash ---------- */
+/* ---------- Tienda de apps (primera vez, sin la app instalada) ---------- */
+.store-hero{padding:22px 18px 8px;display:flex;gap:14px;align-items:flex-start;}
+.store-icon{width:68px;height:68px;border-radius:17px;background:linear-gradient(150deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 6px 16px rgba(255,122,26,.3);flex-shrink:0;}
+.store-name{font-size:16px;font-weight:800;color:var(--ink);}
+.store-dev{font-size:11.5px;color:var(--info);margin-top:2px;}
+.store-meta{display:flex;gap:16px;margin-top:8px;}
+.store-meta .m{text-align:center;}
+.store-meta .m b{display:block;font-size:12.5px;font-weight:800;color:var(--ink);}
+.store-meta .m span{font-size:9.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px;}
+.store-install-row{padding:14px 18px;}
+.store-shots{display:flex;gap:9px;padding:4px 18px 16px;overflow-x:auto;}
+.store-shot{width:110px;height:200px;border-radius:14px;flex-shrink:0;background:linear-gradient(160deg,#fff2e6,#ffe0c2);border:1px solid var(--border);position:relative;overflow:hidden;}
+.store-shot .mini-status{height:14px;background:rgba(255,255,255,.6);}
+.store-shot .mini-card{margin:10px 9px;background:#fff;border-radius:8px;padding:8px;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+.store-shot .mini-line{height:5px;background:#eceef1;border-radius:3px;margin-bottom:5px;}
+.store-shot .mini-line.w60{width:60%;}
+.store-shot .mini-map{margin:0 9px;height:70px;border-radius:8px;background:linear-gradient(160deg,#dce8f2,#eef2f6);}
+.store-section{padding:6px 18px 18px;}
+.store-section h4{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;}
+.store-section p{font-size:12px;color:#3a3f45;line-height:1.6;}
+.install-toggle{margin:14px 16px 0;background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 13px;display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--sub);}
+.install-toggle .seg2{display:flex;background:#eceef1;border-radius:9px;padding:2px;}
+.install-toggle .seg2 span{padding:5px 11px;border-radius:7px;font-weight:700;cursor:pointer;font-size:11px;}
+.install-toggle .seg2 span.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,20,30,.1);}
+.progress-track{height:6px;background:#eceef1;border-radius:4px;overflow:hidden;margin-top:10px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:4px;transition:width .35s;}
+
 .splash{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#fff5ec,#ffffff 60%);}
 .splash-logo{width:78px;height:78px;border-radius:24px;background:linear-gradient(150deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 14px 34px rgba(255,122,26,.4);margin-bottom:18px;animation:pop .45s ease;}
 @keyframes pop{from{transform:scale(.7);opacity:0;}to{transform:scale(1);opacity:1;}}
@@ -405,8 +432,12 @@ const SPECS = {
   sms: { title:"Invitacion por SMS", hu:"AppPasajeros-1", gherkin:null,
     body:`<div class="spec-field"><b>Objetivo:</b> Simular el punto de entrada real: el pasajero NO tiene la app ni cuenta todavia. Recibe un SMS/correo con un link unico. Al tocarlo, se abre (o instala) la app y esta crea la cuenta a partir de los datos del link.</div>
     <div class="spec-field"><b>No es parte de la app:</b> es la bandeja de mensajes nativa del celular, fuera del control de Mi Transporte.</div>` },
+  store: { title:"Tienda de apps — primera vez sin la app", hu:"AppPasajeros-1", gherkin:null,
+    body:`<div class="spec-field"><b>Cuando aplica:</b> solo si el celular del pasajero no tiene la app instalada. El enlace detecta esto y manda primero a la tienda (App Store / Play Store) antes de continuar.</div>
+    <div class="spec-field"><b>Patron tecnico:</b> "deferred deep linking" — la app, una vez instalada y abierta por primera vez, recuerda el enlace original y lleva al pasajero directo a activar su cuenta, sin que tenga que volver a buscar el link. Servicios como Firebase Dynamic Links resuelven esto de forma estandar.</div>
+    <div class="spec-field"><b>Decision de alcance:</b> el mecanismo tecnico exacto no es parte del analisis funcional (lo resuelve el desarrollador), pero el flujo de negocio si necesita contemplarlo: un pasajero nuevo sin la app siempre debe poder llegar a activar su cuenta desde el mismo link, sin pasos manuales adicionales.</div>` },
   opening: { title:"Abriendo la app", hu:"AppPasajeros-1", gherkin:null,
-    body:`<div class="spec-field"><b>Que representa:</b> la transicion de tocar el link a que la app este lista con los datos de ese pasajero. Cubre tanto "abrir la app ya instalada" (deep link) como, la primera vez, "instalar y abrir" — el mecanismo exacto es una decision tecnica, no de negocio (ver Notas del analisis).</div>` },
+    body:`<div class="spec-field"><b>Que representa:</b> la transicion de tocar el link (o abrir la app recien instalada) a que la app este lista con los datos de ese pasajero.</div>` },
   "activation-assigned": { title:"Confirmar cuenta — recorrido ya asignado", hu:"AppPasajeros-1",
     gherkin:`Scenario: El pasajero activa su cuenta y ya tiene recorrido asignado
     Given que el pasajero recibio el link de invitacion y no lo ha usado antes
@@ -510,7 +541,7 @@ const NOTES_HTML = `
 </ul>
 <h4>Interpretaciones aplicadas</h4>
 <ul>
-  <li>El mecanismo tecnico exacto para "abrir/instalar la app desde el link" (universal link, deep link diferido, paso por la tienda de apps) es una decision de implementacion — el mockup lo representa con una transicion de apertura, sin modelar la tienda de apps.</li>
+  <li>El mecanismo tecnico exacto detras de "abrir/instalar la app desde el link" (deferred deep linking, servicio tipo Firebase Dynamic Links) es una decision de implementacion, no de negocio — pero el mockup si representa el paso de "pasar por la tienda de apps" cuando el celular no tiene la app instalada (toggle "Simular: ¿ya tienes la app instalada?" en la pantalla del SMS, agregado 2026-09-21 a peticion de Jaqueline), para que el flujo completo quede claro de principio a fin.</li>
   <li>El boton "Confirme su abordaje" se asume disponible en cuanto hay unidad asignada, sin depender del aviso "en camino"/"por llegar".</li>
   <li>La actualizacion de la pantalla cuando cambian unidad/operador/horario real se asume automatica (sondeo o notificacion push); el mecanismo exacto queda a criterio del desarrollador.</li>
 </ul>
@@ -531,19 +562,22 @@ let multiMode = false;
 let tripPhase = "asignado"; // asignado | encamino | porllegar
 let boarded = false;
 let activeRecorrido = "am";
+let hasAppInstalled = false; // controla si tocar el link va directo a "opening" o pasa primero por "store"
+let installState = "idle"; // idle | installing | installed
 
 const CAPTIONS = {
   sms:{ title:"① Invitacion por SMS", desc:"El pasajero no tiene la app ni cuenta todavia. Recibe este mensaje y toca el enlace.", hus:["AppPasajeros-1"] },
-  opening:{ title:"② Abriendo Mi Transporte", desc:"Transicion de instalar/abrir la app y validar el link antes de mostrar cualquier pantalla.", hus:["AppPasajeros-1"] },
-  "activation-assigned":{ title:"③ Confirmar cuenta — recorrido asignado", desc:"La app crea la cuenta solo con nombre y empresa. El recorrido (variable dia con dia) se ve hasta la pantalla principal.", hus:["AppPasajeros-1"] },
-  "activation-pending":{ title:"③ Confirmar cuenta — pendiente de asignar", desc:"Misma pantalla de activacion; el pasajero todavia no tiene recorrido asignado en el ERP.", hus:["AppPasajeros-1"] },
-  "link-used":{ title:"④ Link ya utilizado", desc:"El pasajero ya habia confirmado su cuenta antes y vuelve a abrir el mismo enlace.", hus:["AppPasajeros-1"] },
-  "link-expired":{ title:"⑤ Link vencido", desc:"Nunca abrio su invitacion y ya paso el tiempo de vigencia configurado.", hus:["AppPasajeros-1"] },
-  "home-full":{ title:"⑥ Pantalla principal — recorrido completo", desc:"Estado mas rico: parada, horario, unidad, operador, mapa, avisos y confirmacion de abordaje.", hus:["AppPasajeros-2"] },
-  "home-no-unit":{ title:"⑦ Pantalla principal — sin unidad/operador", desc:"El recorrido ya esta asignado pero unidad y operador todavia no (se asignan el mismo dia).", hus:["AppPasajeros-2"] },
-  "home-pending":{ title:"⑧ Pantalla principal — pendiente de asignar", desc:"El pasajero confirmo su cuenta pero aun no tiene recorrido asignado.", hus:["AppPasajeros-2"] },
-  "home-cancelled":{ title:"⑨ Pantalla principal — recorrido cancelado", desc:"El recorrido se cancelo el mismo dia, antes de que el pasajero confirmara su abordaje.", hus:["AppPasajeros-2"] },
-  "home-multi":{ title:"⑩ Pantalla principal — mas de un recorrido activo", desc:"El pasajero tiene ida y vuelta el mismo dia. Se muestra el mas proximo, con acceso al otro.", hus:["AppPasajeros-2"] }
+  store:{ title:"② Tienda de apps — primera vez", desc:"Si el celular no tiene la app instalada, el enlace manda primero a instalarla antes de continuar.", hus:["AppPasajeros-1"] },
+  opening:{ title:"③ Abriendo Mi Transporte", desc:"Transicion de abrir la app y validar el link antes de mostrar cualquier pantalla. La app ya \"recuerda\" el enlace que se toco, aunque se acabe de instalar.", hus:["AppPasajeros-1"] },
+  "activation-assigned":{ title:"④ Confirmar cuenta — recorrido asignado", desc:"La app crea la cuenta solo con nombre y empresa. El recorrido (variable dia con dia) se ve hasta la pantalla principal.", hus:["AppPasajeros-1"] },
+  "activation-pending":{ title:"④ Confirmar cuenta — pendiente de asignar", desc:"Misma pantalla de activacion; el pasajero todavia no tiene recorrido asignado en el ERP.", hus:["AppPasajeros-1"] },
+  "link-used":{ title:"⑤ Link ya utilizado", desc:"El pasajero ya habia confirmado su cuenta antes y vuelve a abrir el mismo enlace.", hus:["AppPasajeros-1"] },
+  "link-expired":{ title:"⑥ Link vencido", desc:"Nunca abrio su invitacion y ya paso el tiempo de vigencia configurado.", hus:["AppPasajeros-1"] },
+  "home-full":{ title:"⑦ Pantalla principal — recorrido completo", desc:"Estado mas rico: parada, horario, unidad, operador, mapa, avisos y confirmacion de abordaje.", hus:["AppPasajeros-2"] },
+  "home-no-unit":{ title:"⑧ Pantalla principal — sin unidad/operador", desc:"El recorrido ya esta asignado pero unidad y operador todavia no (se asignan el mismo dia).", hus:["AppPasajeros-2"] },
+  "home-pending":{ title:"⑨ Pantalla principal — pendiente de asignar", desc:"El pasajero confirmo su cuenta pero aun no tiene recorrido asignado.", hus:["AppPasajeros-2"] },
+  "home-cancelled":{ title:"⑩ Pantalla principal — recorrido cancelado", desc:"El recorrido se cancelo el mismo dia, antes de que el pasajero confirmara su abordaje.", hus:["AppPasajeros-2"] },
+  "home-multi":{ title:"⑪ Pantalla principal — mas de un recorrido activo", desc:"El pasajero tiene ida y vuelta el mismo dia. Se muestra el mas proximo, con acceso al otro.", hus:["AppPasajeros-2"] }
 };
 
 function huTagsHtml(list){
@@ -636,7 +670,47 @@ const renderers = {
       <div class="sms-bubble">${msg}</div>
       <div class="sms-time">6:10 a.m.</div>
     </div>
+    <div class="install-toggle">
+      <span>Simular: ¿ya tienes la app instalada?</span>
+      <div class="seg2">
+        <span class="${hasAppInstalled? '':'on'}" onclick="hasAppInstalled=false; render();">No</span>
+        <span class="${hasAppInstalled? 'on':''}" onclick="hasAppInstalled=true; render();">Sí</span>
+      </div>
+    </div>
     <div class="sms-inputbar"><div class="fake-input">Mensaje</div><div class="send-ic">↑</div></div>`;
+  },
+
+  store: ()=>{
+    const p = PERSONAS[currentPersona];
+    const btn = installState==="idle"
+      ? `<button class="btn-block primary" onclick="startInstall()">Instalar</button>`
+      : installState==="installing"
+        ? `<button class="btn-block primary" disabled>Instalando…</button><div class="progress-track"><div class="progress-fill" id="pfill" style="width:0%"></div></div>`
+        : `<button class="btn-block primary" onclick="continueAfterInstall()">Abrir</button>`;
+    return `
+    <div class="app-topbar"><span class="back" onclick="goTo('sms',{persona:currentPersona})">←</span><span class="t">Tienda de apps</span></div>
+    <div class="store-hero">
+      <div class="store-icon">🚌</div>
+      <div style="flex:1;">
+        <div class="store-name">Mi Transporte</div>
+        <div class="store-dev">GM Transport</div>
+        <div class="store-meta">
+          <div class="m"><b>4.8 ★</b><span>1.2k reseñas</span></div>
+          <div class="m"><b>12+</b><span>edad</span></div>
+          <div class="m"><b>68 MB</b><span>tamaño</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="store-install-row">${btn}</div>
+    <div class="store-shots">
+      <div class="store-shot"><div class="mini-status"></div><div class="mini-map"></div><div class="mini-card"><div class="mini-line w60"></div><div class="mini-line"></div><div class="mini-line" style="width:40%"></div></div></div>
+      <div class="store-shot"><div class="mini-status"></div><div class="mini-card" style="margin-top:14px;"><div class="mini-line w60"></div><div class="mini-line"></div></div><div class="mini-card"><div class="mini-line w60"></div><div class="mini-line"></div></div></div>
+      <div class="store-shot"><div class="mini-status"></div><div class="mini-card" style="margin-top:60px;text-align:center;"><div class="mini-line w60" style="margin:0 auto 6px;"></div><div class="mini-line" style="width:40%;margin:0 auto;"></div></div></div>
+    </div>
+    <div class="store-section">
+      <h4>Acerca de esta app</h4>
+      <p>Consulta tu recorrido, la ubicación de tu unidad en tiempo real y confirma tu abordaje. Tu transportista ya te dio de alta — solo activa tu cuenta con el enlace que recibiste.</p>
+    </div>`;
   },
 
   opening: ()=>`
@@ -779,6 +853,14 @@ function homeFullRender(){
 
 function openInvite(persona){
   currentPersona = persona;
+  if(!hasAppInstalled){
+    installState = "idle";
+    goTo("store", {persona});
+    return;
+  }
+  proceedToApp(persona);
+}
+function proceedToApp(persona){
   goTo("opening", {});
   setTimeout(()=>{
     const p = PERSONAS[persona];
@@ -787,6 +869,17 @@ function openInvite(persona){
     else if(p.estado==="used") goTo("link-used", {persona});
     else if(p.estado==="expired") goTo("link-expired", {persona});
   }, 1000);
+}
+function startInstall(){
+  installState = "installing";
+  render();
+  requestAnimationFrame(()=>{ const f=document.getElementById("pfill"); if(f) f.style.width="100%"; });
+  setTimeout(()=>{ installState = "installed"; render(); }, 1400);
+}
+function continueAfterInstall(){
+  installState = "idle";
+  toast("App instalada");
+  proceedToApp(currentPersona);
 }
 
 function cycleTrip(){
@@ -809,18 +902,19 @@ const QA_ENTRY = [
   { key:"sms", label:"SMS — Diana (pendiente)", opts:{persona:"diana"} },
   { key:"sms", label:"SMS — Roberto (usado)", opts:{persona:"roberto"} },
   { key:"sms", label:"SMS — Ana (vencido)", opts:{persona:"ana"} },
-  { key:"opening", label:"② Abriendo la app", opts:{} },
-  { key:"activation-assigned", label:"③ Confirmar — asignado", opts:{} },
-  { key:"activation-pending", label:"③ Confirmar — pendiente", opts:{} },
-  { key:"link-used", label:"④ Link ya usado", opts:{} },
-  { key:"link-expired", label:"⑤ Link vencido", opts:{} }
+  { key:"store", label:"② Tienda — instalar app", opts:{} },
+  { key:"opening", label:"③ Abriendo la app", opts:{} },
+  { key:"activation-assigned", label:"④ Confirmar — asignado", opts:{} },
+  { key:"activation-pending", label:"④ Confirmar — pendiente", opts:{} },
+  { key:"link-used", label:"⑤ Link ya usado", opts:{} },
+  { key:"link-expired", label:"⑥ Link vencido", opts:{} }
 ];
 const QA_HOME = [
-  { key:"home-full", label:"⑥ Principal completa", opts:{multi:false, tripPhase:"asignado", boarded:false} },
-  { key:"home-no-unit", label:"⑦ Sin unidad/operador", opts:{} },
-  { key:"home-pending", label:"⑧ Pendiente de asignar", opts:{} },
-  { key:"home-cancelled", label:"⑨ Recorrido cancelado", opts:{} },
-  { key:"home-multi", label:"⑩ Multi-recorrido", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false} }
+  { key:"home-full", label:"⑦ Principal completa", opts:{multi:false, tripPhase:"asignado", boarded:false} },
+  { key:"home-no-unit", label:"⑧ Sin unidad/operador", opts:{} },
+  { key:"home-pending", label:"⑨ Pendiente de asignar", opts:{} },
+  { key:"home-cancelled", label:"⑩ Recorrido cancelado", opts:{} },
+  { key:"home-multi", label:"⑪ Multi-recorrido", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false} }
 ];
 function buildQaGrid(){
   document.getElementById("qaGridEntry").innerHTML = QA_ENTRY.map((s,i)=>`<button class="qa-btn" data-idx="e${i}" data-key="${s.key}" data-persona="${s.opts.persona||''}" onclick='goTo("${s.key}", ${JSON.stringify(s.opts||{})})'>${s.label}</button>`).join("");
@@ -878,8 +972,9 @@ function closeDrawer(){
    TOUR GUIADO
    ============================================================ */
 const TOUR = [
-  { route:"sms", opts:{persona:"marco"}, hu:"AppPasajeros-1", title:"El pasajero recibe su invitacion", text:"Marco no tiene la app ni cuenta todavia. Recibe este SMS. Toca el enlace para continuar." },
-  { route:"opening", opts:{}, hu:"AppPasajeros-1", title:"La app se abre y valida el link", text:"Se simula el momento de instalar/abrir la app y validar el enlace, antes de mostrar cualquier dato." },
+  { route:"sms", opts:{persona:"marco"}, hu:"AppPasajeros-1", title:"El pasajero recibe su invitacion", text:"Marco no tiene la app ni cuenta todavia. Recibe este SMS. Este ejemplo simula que NO tiene la app instalada — toca el enlace para ver que pasa." },
+  { route:"store", opts:{}, hu:"AppPasajeros-1", title:"Primero pasa por la tienda de apps", text:"Como no tiene la app, el enlace lo manda a instalarla antes de continuar. Toca \"Instalar\" y luego \"Abrir\"." },
+  { route:"opening", opts:{}, hu:"AppPasajeros-1", title:"La app se abre y valida el link", text:"Una vez instalada (o si ya la tenia), la app \"recuerda\" el enlace original y valida los datos, antes de mostrar cualquier pantalla." },
   { route:"activation-assigned", opts:{}, hu:"AppPasajeros-1", title:"Se crea la cuenta: solo nombre y empresa", text:"El link solo trae nombre y empresa (datos estables). El recorrido, que cambia dia con dia, se consulta despues en la pantalla principal." },
   { route:"activation-pending", opts:{}, hu:"AppPasajeros-1", title:"Misma pantalla, sin recorrido todavia", text:"Visualmente es la misma pantalla de activacion. La diferencia esta en el estado con el que llega a la pantalla principal despues de confirmar." },
   { route:"home-full", opts:{multi:false, tripPhase:"asignado", boarded:false}, hu:"AppPasajeros-2", title:"Pantalla principal — estado completo", text:"Al confirmar, el pasajero llega aqui: mapa con la unidad, operador, parada y horario." },

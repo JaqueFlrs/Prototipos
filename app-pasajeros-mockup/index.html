@@ -80,7 +80,7 @@ input,select,textarea{background:#fff;color:#1a1a1a;}
 .btn-block.done{background:var(--success-bg);color:var(--success);cursor:default;box-shadow:none;}
 .btn-block:disabled{opacity:.65;cursor:not-allowed;box-shadow:none;}
 
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:20px;}
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;padding:9px 15px;border-radius:14px;width:100%;}
 .pill.pending{background:var(--pending-bg);color:var(--pending);}
 .pill.ok{background:var(--success-bg);color:var(--success);}
 .pill.info{background:var(--info-bg);color:var(--info);}
@@ -163,14 +163,14 @@ input,select,textarea{background:#fff;color:#1a1a1a;}
 .map-fail .ic{font-size:24px;}
 
 /* Notificación estilo sistema operativo (banner flotante) */
-.os-notif{position:absolute;top:52px;left:10px;right:10px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-radius:18px;box-shadow:0 14px 30px rgba(15,20,30,.22);padding:12px 13px;display:flex;gap:11px;align-items:flex-start;z-index:120;transform:translateY(-140%);opacity:0;transition:transform .38s cubic-bezier(.32,.95,.44,1.15), opacity .3s;}
+.os-notif{position:absolute;top:54px;left:10px;right:10px;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border-radius:22px;box-shadow:0 18px 38px rgba(15,20,30,.28);padding:16px 17px;display:flex;gap:13px;align-items:flex-start;z-index:120;transform:translateY(-160%);opacity:0;transition:transform .38s cubic-bezier(.32,.95,.44,1.15), opacity .3s;}
 .os-notif.show{transform:translateY(0);opacity:1;}
-.os-notif .nic{width:34px;height:34px;border-radius:10px;background:linear-gradient(150deg,var(--accent),var(--accent-2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;}
+.os-notif .nic{width:46px;height:46px;border-radius:13px;background:linear-gradient(150deg,var(--accent),var(--accent-2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;}
 .os-notif .ntop{display:flex;justify-content:space-between;align-items:baseline;}
-.os-notif .napp{font-size:10px;font-weight:700;color:var(--sub-2);text-transform:uppercase;letter-spacing:.3px;}
-.os-notif .ntime{font-size:10px;color:var(--sub-2);}
-.os-notif .ntitle{font-size:12.5px;font-weight:800;color:var(--ink);margin-top:1px;}
-.os-notif .nbody{font-size:11.5px;color:#3a3f45;margin-top:1px;line-height:1.4;}
+.os-notif .napp{font-size:11.5px;font-weight:800;color:var(--sub-2);text-transform:uppercase;letter-spacing:.4px;}
+.os-notif .ntime{font-size:11.5px;color:var(--sub-2);}
+.os-notif .ntitle{font-size:15px;font-weight:800;color:var(--ink);margin-top:3px;}
+.os-notif .nbody{font-size:13px;color:#3a3f45;margin-top:2px;line-height:1.45;}
 
 .tabbar-seg{display:flex;margin:16px 16px 4px;background:#eceef1;border-radius:12px;padding:3px;}
 .tabbar-seg .seg-btn{flex:1;text-align:center;padding:8px 6px;font-size:11.5px;font-weight:700;color:var(--sub);border-radius:9px;cursor:pointer;}
@@ -821,8 +821,8 @@ function homeFullRender(){
     : { parada:p.parada, horario:(p.horarioReal||p.horarioProg), unidad:p.unidad, modelo:p.modelo, operador:p.operador };
 
   let banner = "";
-  if(tripPhase==="encamino") banner = `<div class="pill info" style="margin:0 16px 4px;">🚐&nbsp; Tu unidad va en camino</div>`;
-  if(tripPhase==="porllegar") banner = `<div class="pill ok" style="margin:0 16px 4px;">📍&nbsp; Tu unidad esta por llegar</div>`;
+  if(tripPhase==="encamino") banner = `<div class="pill info">🚐&nbsp; Tu unidad va en camino</div>`;
+  if(tripPhase==="porllegar") banner = `<div class="pill ok">📍&nbsp; Tu unidad esta por llegar</div>`;
 
   return `
     ${homeTopbar()}

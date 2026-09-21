@@ -432,10 +432,17 @@ const SPECS = {
   sms: { title:"Invitacion por SMS", hu:"AppPasajeros-1", gherkin:null,
     body:`<div class="spec-field"><b>Objetivo:</b> Simular el punto de entrada real: el pasajero NO tiene la app ni cuenta todavia. Recibe un SMS/correo con un link unico. Al tocarlo, se abre (o instala) la app y esta crea la cuenta a partir de los datos del link.</div>
     <div class="spec-field"><b>No es parte de la app:</b> es la bandeja de mensajes nativa del celular, fuera del control de Mi Transporte.</div>` },
-  store: { title:"Tienda de apps — primera vez sin la app", hu:"AppPasajeros-1", gherkin:null,
+  store: { title:"Tienda de apps — primera vez sin la app", hu:"AppPasajeros-1",
+    gherkin:`Scenario: El pasajero no tiene la app instalada al abrir el link
+    Given que el pasajero recibio el link de invitacion y no tiene la app instalada en su celular
+    When abre el link desde su celular
+    Then el enlace lo dirige a instalar la app desde la tienda de su celular
+    When el pasajero instala la app y la abre por primera vez
+    Then la app recupera los datos del enlace original que toco
+    And continua directo a la pantalla de activacion de cuenta, sin que el pasajero tenga que volver a buscar el enlace`,
     body:`<div class="spec-field"><b>Cuando aplica:</b> solo si el celular del pasajero no tiene la app instalada. El enlace detecta esto y manda primero a la tienda (App Store / Play Store) antes de continuar.</div>
-    <div class="spec-field"><b>Patron tecnico:</b> "deferred deep linking" — la app, una vez instalada y abierta por primera vez, recuerda el enlace original y lleva al pasajero directo a activar su cuenta, sin que tenga que volver a buscar el link. Servicios como Firebase Dynamic Links resuelven esto de forma estandar.</div>
-    <div class="spec-field"><b>Decision de alcance:</b> el mecanismo tecnico exacto no es parte del analisis funcional (lo resuelve el desarrollador), pero el flujo de negocio si necesita contemplarlo: un pasajero nuevo sin la app siempre debe poder llegar a activar su cuenta desde el mismo link, sin pasos manuales adicionales.</div>` },
+    <div class="spec-field"><b>Patron tecnico (referencia para el dev, no es parte del Gherkin):</b> "deferred deep linking" — la app, una vez instalada y abierta por primera vez, recuerda el enlace original. Servicios como Firebase Dynamic Links resuelven esto de forma estandar.</div>
+    <div class="spec-field"><b>Decision de alcance:</b> el mecanismo tecnico exacto no es parte del analisis funcional (lo resuelve el desarrollador), pero el flujo de negocio si lo exige: un pasajero nuevo sin la app siempre debe poder llegar a activar su cuenta desde el mismo link, sin pasos manuales adicionales. Este escenario ya esta escrito en AppPasajeros-1.feature (agregado tras revision senior 2026-09-21).</div>` },
   opening: { title:"Abriendo la app", hu:"AppPasajeros-1", gherkin:null,
     body:`<div class="spec-field"><b>Que representa:</b> la transicion de tocar el link (o abrir la app recien instalada) a que la app este lista con los datos de ese pasajero.</div>` },
   "activation-assigned": { title:"Confirmar cuenta — recorrido ya asignado", hu:"AppPasajeros-1",
@@ -531,6 +538,14 @@ Scenario: El pasajero confirma su abordaje
 };
 
 const NOTES_HTML = `
+<h4>Resoluciones de la revision senior (2026-09-21)</h4>
+<ul>
+  <li><b>Hueco real cerrado:</b> el Gherkin de AppPasajeros-1 no cubria "el pasajero no tiene la app instalada". Se agrego el escenario correspondiente — es el que se ve en la pantalla de Tienda de apps de este mockup.</li>
+  <li><b>Horario mostrado:</b> siempre es el de la parada especifica del pasajero (programado o real), nunca el de la salida/llegada general del recorrido completo.</li>
+  <li><b>"Recorrido mas proximo":</b> es relativo a la hora actual, no un orden fijo del dia. En cuanto pasa el recorrido de la manana, el de la tarde se vuelve "el proximo".</li>
+  <li><b>Confirmar abordaje con multi-recorrido:</b> es independiente por recorrido — confirmar el de la manana no afecta ni pre-confirma el de la tarde (ver el estado "Multi-recorrido: abordaje independiente" en el panel de estados).</li>
+  <li><b>Duplicado por doble-toque:</b> la regla de "nunca duplicar" debe sostenerse aunque el servidor reciba dos solicitudes casi simultaneas, no solo cuando el pasajero reingresa despues de ya haber confirmado.</li>
+</ul>
 <h4>Decisiones cerradas sobre huecos detectados</h4>
 <ul>
   <li>El punto de entrada es un SMS/correo a un celular <b>sin la app instalada y sin cuenta previa</b> — la app se abre (o instala) y crea la cuenta a partir de los datos que trae el link. No existe una bandeja dentro de la app con varias invitaciones (corregido tras revision con Jaqueline, 2026-09-21).</li>
@@ -560,7 +575,7 @@ let currentRoute = "sms";
 let currentPersona = "marco";
 let multiMode = false;
 let tripPhase = "asignado"; // asignado | encamino | porllegar
-let boarded = false;
+let boardedMap = {am:false, pm:false}; // abordaje confirmado, independiente por recorrido
 let activeRecorrido = "am";
 let hasAppInstalled = false; // controla si tocar el link va directo a "opening" o pasa primero por "store"
 let installState = "idle"; // idle | installing | installed
@@ -610,8 +625,8 @@ function goTo(route, opts){
   if(opts.persona !== undefined) currentPersona = opts.persona;
   if(opts.multi !== undefined) multiMode = opts.multi;
   if(opts.tripPhase !== undefined) tripPhase = opts.tripPhase;
-  if(opts.boarded !== undefined) boarded = opts.boarded;
   if(opts.activeRecorrido !== undefined) activeRecorrido = opts.activeRecorrido;
+  if(opts.boarded !== undefined) boardedMap[activeRecorrido] = opts.boarded;
   render();
   setCaption(route);
   updateQaActive();
@@ -734,7 +749,7 @@ const renderers = {
       <div class="p-sub" style="font-size:11.5px;">Tu recorrido, horario, unidad y operador pueden cambiar día con día — los verás siempre actualizados en tu pantalla principal.</div>
     </div>
     <div style="padding:0 16px 20px;">
-      <button class="btn-block primary" onclick="toast('Cuenta creada'); goTo('home-full', {tripPhase:'asignado', boarded:false, multi:false})">Confirmar y crear mi cuenta</button>
+      <button class="btn-block primary" onclick="toast('Cuenta creada'); goTo('home-full', {tripPhase:'asignado', boarded:false, multi:false, activeRecorrido:'am'})">Confirmar y crear mi cuenta</button>
     </div>`;
   },
 
@@ -845,7 +860,7 @@ function homeFullRender(){
       <button class="hbtn" style="width:100%;justify-content:center;" onclick="cycleTrip()">🔁 Simular avance del viaje (solo mockup)</button>
     </div>
     <div style="padding:0 16px 24px;margin-top:14px;">
-      ${boarded
+      ${boardedMap[activeRecorrido]
         ? `<button class="btn-block done" disabled>✓ Abordaje confirmado</button>`
         : `<button class="btn-block primary" onclick="confirmarAbordaje()">Confirme su abordaje</button>`}
     </div>`;
@@ -889,8 +904,8 @@ function cycleTrip(){
   render();
 }
 function confirmarAbordaje(){
-  boarded = true;
-  toast("Abordaje confirmado. No se modifican los registros del operador en el ERP.");
+  boardedMap[activeRecorrido] = true;
+  toast("Abordaje confirmado para este recorrido. No se modifican los registros del operador en el ERP.");
   render();
 }
 
@@ -910,11 +925,12 @@ const QA_ENTRY = [
   { key:"link-expired", label:"⑥ Link vencido", opts:{} }
 ];
 const QA_HOME = [
-  { key:"home-full", label:"⑦ Principal completa", opts:{multi:false, tripPhase:"asignado", boarded:false} },
+  { key:"home-full", label:"⑦ Principal completa", opts:{multi:false, tripPhase:"asignado", boarded:false, activeRecorrido:"am"} },
   { key:"home-no-unit", label:"⑧ Sin unidad/operador", opts:{} },
   { key:"home-pending", label:"⑨ Pendiente de asignar", opts:{} },
   { key:"home-cancelled", label:"⑩ Recorrido cancelado", opts:{} },
-  { key:"home-multi", label:"⑪ Multi-recorrido", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false} }
+  { key:"home-multi", label:"⑪ Multi-recorrido", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false} },
+  { key:"home-multi", label:"⑪ Multi-recorrido: abordaje independiente", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:true} }
 ];
 function buildQaGrid(){
   document.getElementById("qaGridEntry").innerHTML = QA_ENTRY.map((s,i)=>`<button class="qa-btn" data-idx="e${i}" data-key="${s.key}" data-persona="${s.opts.persona||''}" onclick='goTo("${s.key}", ${JSON.stringify(s.opts||{})})'>${s.label}</button>`).join("");
@@ -977,10 +993,10 @@ const TOUR = [
   { route:"opening", opts:{}, hu:"AppPasajeros-1", title:"La app se abre y valida el link", text:"Una vez instalada (o si ya la tenia), la app \"recuerda\" el enlace original y valida los datos, antes de mostrar cualquier pantalla." },
   { route:"activation-assigned", opts:{}, hu:"AppPasajeros-1", title:"Se crea la cuenta: solo nombre y empresa", text:"El link solo trae nombre y empresa (datos estables). El recorrido, que cambia dia con dia, se consulta despues en la pantalla principal." },
   { route:"activation-pending", opts:{}, hu:"AppPasajeros-1", title:"Misma pantalla, sin recorrido todavia", text:"Visualmente es la misma pantalla de activacion. La diferencia esta en el estado con el que llega a la pantalla principal despues de confirmar." },
-  { route:"home-full", opts:{multi:false, tripPhase:"asignado", boarded:false}, hu:"AppPasajeros-2", title:"Pantalla principal — estado completo", text:"Al confirmar, el pasajero llega aqui: mapa con la unidad, operador, parada y horario." },
-  { route:"home-full", opts:{multi:false, tripPhase:"encamino", boarded:false}, hu:"AppPasajeros-2", title:"Aviso: unidad en camino", text:"Cuando la unidad sale hacia la parada, aparece esta notificacion del sistema. Usa el boton de simulacion para verla." },
-  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:false}, hu:"AppPasajeros-2", title:"Aviso: unidad por llegar", text:"Cuando la unidad esta cerca, la notificacion cambia a “por llegar”." },
-  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:true}, hu:"AppPasajeros-2", title:"Confirmacion de abordaje", text:"El pasajero confirma que subio a la unidad. El boton queda deshabilitado — no se puede confirmar dos veces, y esto nunca toca los registros Suben/Bajan del operador en el ERP." },
+  { route:"home-full", opts:{multi:false, tripPhase:"asignado", boarded:false, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Pantalla principal — estado completo", text:"Al confirmar, el pasajero llega aqui: mapa con la unidad, operador, parada y horario." },
+  { route:"home-full", opts:{multi:false, tripPhase:"encamino", boarded:false, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Aviso: unidad en camino", text:"Cuando la unidad sale hacia la parada, aparece esta notificacion del sistema. Usa el boton de simulacion para verla." },
+  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:false, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Aviso: unidad por llegar", text:"Cuando la unidad esta cerca, la notificacion cambia a “por llegar”." },
+  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:true, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Confirmacion de abordaje", text:"El pasajero confirma que subio a la unidad. El boton queda deshabilitado — no se puede confirmar dos veces, ni siquiera si tiene otro recorrido el mismo dia, y esto nunca toca los registros Suben/Bajan del operador en el ERP." },
   { route:"home-no-unit", opts:{}, hu:"AppPasajeros-2", title:"Variante: sin unidad ni operador todavia", text:"La unidad y el operador se asignan el mismo dia del viaje. Antes de eso, el pasajero ve su parada y horario, pero este mensaje en vez del mapa." },
   { route:"home-pending", opts:{}, hu:"AppPasajeros-2", title:"Variante: pendiente de asignar recorrido", text:"Estado minimo: sin parada, sin mapa, sin avisos, sin boton de abordaje." },
   { route:"home-multi", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false}, hu:"AppPasajeros-2", title:"Variante: mas de un recorrido activo", text:"Si el pasajero tiene ida y vuelta el mismo dia, ve primero el mas proximo, con este selector para consultar el otro." },

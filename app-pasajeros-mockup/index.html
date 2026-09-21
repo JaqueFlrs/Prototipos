@@ -412,21 +412,21 @@ const SPECS = {
     Given que el pasajero recibio el link de invitacion y no lo ha usado antes
     And ya tiene un recorrido y una parada asignados
     When abre el link desde su celular
-    Then la app muestra su nombre completo
-    And muestra la parada, el horario, la unidad y el operador de su recorrido asignado
+    Then la app muestra su nombre completo y la empresa a la que pertenece
+    And no muestra parada, horario, unidad ni operador en esta pantalla
     And muestra el boton "Confirmar"`,
-    body:`<div class="spec-field"><b>Datos que trae el link:</b> nombre del pasajero, parada, horario programado, unidad, operador.</div>
-    <div class="spec-field"><b>Accion del usuario:</b> tocar "Confirmar" para crear su cuenta con estos datos.</div>
-    <div class="spec-field"><b>Resultado:</b> la cuenta queda activada y navega a la pantalla principal en el estado "recorrido completo".</div>` },
+    body:`<div class="spec-field"><b>Datos que trae el link:</b> solo nombre del pasajero y empresa (datos de identidad, estables).</div>
+    <div class="spec-field"><b>Por que no se muestra el recorrido aqui:</b> parada, horario, unidad y operador cambian dia con dia — mostrarlos en la activacion generaria una expectativa desactualizada. Se consultan siempre en vivo desde la pantalla principal (AppPasajeros-2).</div>
+    <div class="spec-field"><b>Accion del usuario:</b> tocar "Confirmar" para crear su cuenta.</div>
+    <div class="spec-field"><b>Resultado:</b> la cuenta queda activada y navega a la pantalla principal, que ya trae el recorrido asignado.</div>` },
   "activation-pending": { title:"Confirmar cuenta — pendiente de asignar", hu:"AppPasajeros-1",
     gherkin:`Scenario: El pasajero activa su cuenta sin recorrido asignado todavia
     Given que el pasajero recibio el link de invitacion y no lo ha usado antes
     And todavia no tiene recorrido ni parada asignados
     When abre el link desde su celular
-    Then la app muestra su nombre completo
-    And muestra el mensaje "Pendiente de asignar recorrido" en vez de datos de recorrido
+    Then la app muestra su nombre completo y la empresa a la que pertenece
     And muestra el boton "Confirmar"`,
-    body:`<div class="spec-field"><b>Diferencia clave:</b> no hay datos de recorrido, solo el mensaje de pendiente. El boton "Confirmar" se muestra igual.</div>` },
+    body:`<div class="spec-field"><b>Misma pantalla que el caso anterior:</b> como la activacion ya no muestra datos de recorrido, esta pantalla es visualmente identica a la de un pasajero con recorrido asignado. La diferencia esta en lo que pasa despues de confirmar.</div>` },
   "link-used": { title:"Link ya utilizado", hu:"AppPasajeros-1",
     gherkin:`Scenario: El pasajero intenta usar un link que ya fue confirmado antes
     Given que el pasajero ya confirmo su cuenta con este link anteriormente
@@ -503,6 +503,7 @@ const NOTES_HTML = `
 <h4>Decisiones cerradas sobre huecos detectados</h4>
 <ul>
   <li>El punto de entrada es un SMS/correo a un celular <b>sin la app instalada y sin cuenta previa</b> — la app se abre (o instala) y crea la cuenta a partir de los datos que trae el link. No existe una bandeja dentro de la app con varias invitaciones (corregido tras revision con Jaqueline, 2026-09-21).</li>
+  <li>La pantalla de activacion <b>solo muestra nombre y empresa</b> — nunca parada, horario, unidad ni operador, porque esos datos son variables dia con dia y mostrarlos en la activacion generaria una expectativa desactualizada. El recorrido se consulta siempre en vivo desde la pantalla principal (corregido 2026-09-21, tambien actualizado en el .feature de AppPasajeros-1).</li>
   <li>El link se marca como usado al <b>confirmar</b>, no al solo abrirlo. (Pendiente de confirmar con Jaqueline, marcado tambien en el .feature).</li>
   <li>Con varios recorridos activos, se muestra siempre el <b>mas proximo primero</b>, con acceso secundario a los demas.</li>
   <li>El proveedor de mapa es <b>HERE</b> — decision tecnica, el mapa de este mockup es una representacion visual, no la integracion real.</li>
@@ -534,8 +535,8 @@ let activeRecorrido = "am";
 const CAPTIONS = {
   sms:{ title:"① Invitacion por SMS", desc:"El pasajero no tiene la app ni cuenta todavia. Recibe este mensaje y toca el enlace.", hus:["AppPasajeros-1"] },
   opening:{ title:"② Abriendo Mi Transporte", desc:"Transicion de instalar/abrir la app y validar el link antes de mostrar cualquier pantalla.", hus:["AppPasajeros-1"] },
-  "activation-assigned":{ title:"③ Confirmar cuenta — recorrido asignado", desc:"La app crea la cuenta con los datos que trae el link, incluyendo el recorrido ya asignado.", hus:["AppPasajeros-1"] },
-  "activation-pending":{ title:"③ Confirmar cuenta — pendiente de asignar", desc:"La app crea la cuenta pero el pasajero todavia no tiene recorrido asignado en el ERP.", hus:["AppPasajeros-1"] },
+  "activation-assigned":{ title:"③ Confirmar cuenta — recorrido asignado", desc:"La app crea la cuenta solo con nombre y empresa. El recorrido (variable dia con dia) se ve hasta la pantalla principal.", hus:["AppPasajeros-1"] },
+  "activation-pending":{ title:"③ Confirmar cuenta — pendiente de asignar", desc:"Misma pantalla de activacion; el pasajero todavia no tiene recorrido asignado en el ERP.", hus:["AppPasajeros-1"] },
   "link-used":{ title:"④ Link ya utilizado", desc:"El pasajero ya habia confirmado su cuenta antes y vuelve a abrir el mismo enlace.", hus:["AppPasajeros-1"] },
   "link-expired":{ title:"⑤ Link vencido", desc:"Nunca abrio su invitacion y ya paso el tiempo de vigencia configurado.", hus:["AppPasajeros-1"] },
   "home-full":{ title:"⑥ Pantalla principal — recorrido completo", desc:"Estado mas rico: parada, horario, unidad, operador, mapa, avisos y confirmacion de abordaje.", hus:["AppPasajeros-2"] },
@@ -650,17 +651,13 @@ const renderers = {
     const p = PERSONAS.marco;
     return `
     <div class="app-topbar"><span class="brandmark">MT</span><span class="t">Activar cuenta</span></div>
-    <div class="card center-pad">
+    <div class="card center-pad" style="margin-top:40px;">
       <div class="big-icon-wrap">👋</div>
       <div class="h1">Hola, ${p.nombre}</div>
-      <div class="p-sub">${p.empresa} · Estos son los datos con los que crearemos tu cuenta</div>
+      <div class="p-sub">${p.empresa}</div>
     </div>
-    <div class="section-lbl">Tu recorrido</div>
-    <div class="card">
-      <div class="info-row"><span class="k"><span class="ic">📍</span>Parada</span><span class="v">${p.parada}</span></div>
-      <div class="info-row"><span class="k"><span class="ic">⏱</span>Horario</span><span class="v">${p.horarioProg}</span></div>
-      <div class="info-row"><span class="k"><span class="ic">🚐</span>Unidad</span><span class="v">${p.unidad}</span></div>
-      <div class="info-row"><span class="k"><span class="ic">👤</span>Operador</span><span class="v">${p.operador}</span></div>
+    <div style="padding:0 26px;text-align:center;">
+      <div class="p-sub" style="font-size:11.5px;">Tu recorrido, horario, unidad y operador pueden cambiar día con día — los verás siempre actualizados en tu pantalla principal.</div>
     </div>
     <div style="padding:0 16px 20px;">
       <button class="btn-block primary" onclick="toast('Cuenta creada'); goTo('home-full', {tripPhase:'asignado', boarded:false, multi:false})">Confirmar y crear mi cuenta</button>
@@ -671,15 +668,13 @@ const renderers = {
     const p = PERSONAS.diana;
     return `
     <div class="app-topbar"><span class="brandmark">MT</span><span class="t">Activar cuenta</span></div>
-    <div class="card center-pad">
+    <div class="card center-pad" style="margin-top:40px;">
       <div class="big-icon-wrap">👋</div>
       <div class="h1">Hola, ${p.nombre}</div>
       <div class="p-sub">${p.empresa}</div>
     </div>
-    <div class="card center-pad">
-      <div class="big-icon-wrap pending">🕓</div>
-      <div class="h1">Pendiente de asignar recorrido</div>
-      <div class="p-sub">Tu transportista todavia no te asigno una parada. Te avisaremos en cuanto este lista.</div>
+    <div style="padding:0 26px;text-align:center;">
+      <div class="p-sub" style="font-size:11.5px;">Tu recorrido, horario, unidad y operador pueden cambiar día con día — los verás siempre actualizados en tu pantalla principal.</div>
     </div>
     <div style="padding:0 16px 20px;">
       <button class="btn-block primary" onclick="toast('Cuenta creada'); goTo('home-pending')">Confirmar y crear mi cuenta</button>
@@ -885,8 +880,8 @@ function closeDrawer(){
 const TOUR = [
   { route:"sms", opts:{persona:"marco"}, hu:"AppPasajeros-1", title:"El pasajero recibe su invitacion", text:"Marco no tiene la app ni cuenta todavia. Recibe este SMS. Toca el enlace para continuar." },
   { route:"opening", opts:{}, hu:"AppPasajeros-1", title:"La app se abre y valida el link", text:"Se simula el momento de instalar/abrir la app y validar el enlace, antes de mostrar cualquier dato." },
-  { route:"activation-assigned", opts:{}, hu:"AppPasajeros-1", title:"Se crea la cuenta con recorrido ya asignado", text:"El link trae precargados nombre, parada, horario, unidad y operador. El pasajero solo confirma." },
-  { route:"activation-pending", opts:{}, hu:"AppPasajeros-1", title:"Variante: sin recorrido asignado todavia", text:"Si el pasajero fue cargado en el padron pero aun no tiene recorrido, ve el mensaje de pendiente — mismo boton Confirmar." },
+  { route:"activation-assigned", opts:{}, hu:"AppPasajeros-1", title:"Se crea la cuenta: solo nombre y empresa", text:"El link solo trae nombre y empresa (datos estables). El recorrido, que cambia dia con dia, se consulta despues en la pantalla principal." },
+  { route:"activation-pending", opts:{}, hu:"AppPasajeros-1", title:"Misma pantalla, sin recorrido todavia", text:"Visualmente es la misma pantalla de activacion. La diferencia esta en el estado con el que llega a la pantalla principal despues de confirmar." },
   { route:"home-full", opts:{multi:false, tripPhase:"asignado", boarded:false}, hu:"AppPasajeros-2", title:"Pantalla principal — estado completo", text:"Al confirmar, el pasajero llega aqui: mapa con la unidad, operador, parada y horario." },
   { route:"home-full", opts:{multi:false, tripPhase:"encamino", boarded:false}, hu:"AppPasajeros-2", title:"Aviso: unidad en camino", text:"Cuando la unidad sale hacia la parada, aparece esta notificacion del sistema. Usa el boton de simulacion para verla." },
   { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:false}, hu:"AppPasajeros-2", title:"Aviso: unidad por llegar", text:"Cuando la unidad esta cerca, la notificacion cambia a “por llegar”." },

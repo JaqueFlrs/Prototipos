@@ -260,7 +260,7 @@ input,select,textarea{background:#fff;color:#1a1a1a;}
 <div class="page-head">
   <div>
     <div class="page-title">Mi Transporte — App del Pasajero</div>
-    <div class="page-sub">Transporte de Personal · flujo del pasajero (SMS/correo → instalar/abrir la app → seguimiento del recorrido). Basado en AppPasajeros-1 y AppPasajeros-2.</div>
+    <div class="page-sub">Transporte de Personal · flujo del pasajero (SMS/correo → instalar/abrir la app → seguimiento del recorrido). Basado en HU50300-1 y HU50300-2.</div>
   </div>
   <div class="head-actions">
     <button class="hbtn" onclick="openNotes()">📝 Notas del análisis</button>
@@ -374,8 +374,8 @@ const PERSONAS = {
    FICHAS DE HU
    ============================================================ */
 const HU = {
-  "AppPasajeros-1": {
-    titulo: "AppPasajeros-1 — Activacion de cuenta por invitacion",
+  "HU50300-1": {
+    titulo: "HU50300-1 — Activacion de cuenta por invitacion",
     story: "Yo como pasajero invitado a la app de Transporte de Personal, requiero activar mi cuenta con el link que recibi por correo o SMS, para empezar a ver mi recorrido sin tener que crear usuario ni contrasena.",
     pantalla: "Mensaje de invitacion (SMS/correo), apertura de la app y activacion de cuenta (con o sin recorrido asignado), link ya usado, link vencido.",
     implementar: [
@@ -383,7 +383,7 @@ const HU = {
       "El link es de un solo uso; se marca como usado hasta que el pasajero toca “Confirmar”, no al solo abrirlo (evita que una vista previa de correo lo invalide).",
       "Al abrir un link valido y no usado, la app trae precargados nombre, y si existen, parada/horario/unidad/operador del recorrido asignado.",
       "Si el pasajero no tiene recorrido asignado todavia, se muestra “Pendiente de asignar recorrido” en vez de esos datos, con el mismo boton Confirmar.",
-      "Al confirmar, la cuenta queda activada y la app navega a la pantalla principal (AppPasajeros-2) en el estado que corresponda."
+      "Al confirmar, la cuenta queda activada y la app navega a la pantalla principal (HU50300-2) en el estado que corresponda."
     ],
     reglas: [
       "Alta de pasajeros solo por carga de padron, nunca autorregistro.",
@@ -395,11 +395,11 @@ const HU = {
     principal: "El pasajero activa su cuenta y ya tiene recorrido asignado / El pasajero activa su cuenta sin recorrido asignado todavia",
     alternos: "El pasajero intenta usar un link que ya fue confirmado antes",
     errores: "El pasajero intenta usar un link vencido / El servicio de invitaciones no responde al validar el link",
-    dependencias: ["AppPasajeros-2"],
+    dependencias: ["HU50300-2"],
     fuera: "No incluye contrasena ni recuperacion de acceso. No incluye reemision de un link vencido o perdido (se resuelve desde Mi Transporte). No incluye la sugerencia automatica de recorrido por GPS."
   },
-  "AppPasajeros-2": {
-    titulo: "AppPasajeros-2 — Seguimiento y confirmacion del recorrido asignado",
+  "HU50300-2": {
+    titulo: "HU50300-2 — Seguimiento y confirmacion del recorrido asignado",
     story: "Yo como pasajero con la cuenta ya activada, requiero ver el estado de mi recorrido y confirmar que aborde, para saber cuando y donde me toca subir a la unidad.",
     pantalla: "Pantalla principal de la app (todas sus variantes de estado).",
     implementar: [
@@ -420,7 +420,7 @@ const HU = {
     principal: "El pasajero ve los datos de su recorrido asignado / El pasajero ve la ubicacion de la unidad en el mapa",
     alternos: "Recorrido asignado pero sin unidad ni operador / Pasajero pendiente de asignar recorrido / Mas de un recorrido activo",
     errores: "El servicio de ubicacion no responde / El recorrido se cancela el mismo dia",
-    dependencias: ["AppPasajeros-1"],
+    dependencias: ["HU50300-1"],
     fuera: "No incluye cupo ni ocupacion de la unidad. No incluye flujo de reasignacion tras cancelacion. No incluye portal por empresa atendida ni contrasenas. No incluye proveedor ni costo de SMS."
   }
 };
@@ -429,10 +429,10 @@ const HU = {
    ESPECIFICACION POR PANTALLA
    ============================================================ */
 const SPECS = {
-  sms: { title:"Invitacion por SMS", hu:"AppPasajeros-1", gherkin:null,
+  sms: { title:"Invitacion por SMS", hu:"HU50300-1", gherkin:null,
     body:`<div class="spec-field"><b>Objetivo:</b> Simular el punto de entrada real: el pasajero NO tiene la app ni cuenta todavia. Recibe un SMS/correo con un link unico. Al tocarlo, se abre (o instala) la app y esta crea la cuenta a partir de los datos del link.</div>
     <div class="spec-field"><b>No es parte de la app:</b> es la bandeja de mensajes nativa del celular, fuera del control de Mi Transporte.</div>` },
-  store: { title:"Tienda de apps — primera vez sin la app", hu:"AppPasajeros-1",
+  store: { title:"Tienda de apps — primera vez sin la app", hu:"HU50300-1",
     gherkin:`Scenario: El pasajero no tiene la app instalada al abrir el link
     Given que el pasajero recibio el link de invitacion y no tiene la app instalada en su celular
     When abre el link desde su celular
@@ -442,10 +442,10 @@ const SPECS = {
     And continua directo a la pantalla de activacion de cuenta, sin que el pasajero tenga que volver a buscar el enlace`,
     body:`<div class="spec-field"><b>Cuando aplica:</b> solo si el celular del pasajero no tiene la app instalada. El enlace detecta esto y manda primero a la tienda (App Store / Play Store) antes de continuar.</div>
     <div class="spec-field"><b>Patron tecnico (referencia para el dev, no es parte del Gherkin):</b> "deferred deep linking" — la app, una vez instalada y abierta por primera vez, recuerda el enlace original. Servicios como Firebase Dynamic Links resuelven esto de forma estandar.</div>
-    <div class="spec-field"><b>Decision de alcance:</b> el mecanismo tecnico exacto no es parte del analisis funcional (lo resuelve el desarrollador), pero el flujo de negocio si lo exige: un pasajero nuevo sin la app siempre debe poder llegar a activar su cuenta desde el mismo link, sin pasos manuales adicionales. Este escenario ya esta escrito en AppPasajeros-1.feature (agregado tras revision senior 2026-09-21).</div>` },
-  opening: { title:"Abriendo la app", hu:"AppPasajeros-1", gherkin:null,
+    <div class="spec-field"><b>Decision de alcance:</b> el mecanismo tecnico exacto no es parte del analisis funcional (lo resuelve el desarrollador), pero el flujo de negocio si lo exige: un pasajero nuevo sin la app siempre debe poder llegar a activar su cuenta desde el mismo link, sin pasos manuales adicionales. Este escenario ya esta escrito en HU50300-1.feature (agregado tras revision senior 2026-09-21).</div>` },
+  opening: { title:"Abriendo la app", hu:"HU50300-1", gherkin:null,
     body:`<div class="spec-field"><b>Que representa:</b> la transicion de tocar el link (o abrir la app recien instalada) a que la app este lista con los datos de ese pasajero.</div>` },
-  "activation-assigned": { title:"Confirmar cuenta — recorrido ya asignado", hu:"AppPasajeros-1",
+  "activation-assigned": { title:"Confirmar cuenta — recorrido ya asignado", hu:"HU50300-1",
     gherkin:`Scenario: El pasajero activa su cuenta y ya tiene recorrido asignado
     Given que el pasajero recibio el link de invitacion y no lo ha usado antes
     And ya tiene un recorrido y una parada asignados
@@ -454,10 +454,10 @@ const SPECS = {
     And no muestra parada, horario, unidad ni operador en esta pantalla
     And muestra el boton "Confirmar"`,
     body:`<div class="spec-field"><b>Datos que trae el link:</b> solo nombre del pasajero y empresa (datos de identidad, estables).</div>
-    <div class="spec-field"><b>Por que no se muestra el recorrido aqui:</b> parada, horario, unidad y operador cambian dia con dia — mostrarlos en la activacion generaria una expectativa desactualizada. Se consultan siempre en vivo desde la pantalla principal (AppPasajeros-2).</div>
+    <div class="spec-field"><b>Por que no se muestra el recorrido aqui:</b> parada, horario, unidad y operador cambian dia con dia — mostrarlos en la activacion generaria una expectativa desactualizada. Se consultan siempre en vivo desde la pantalla principal (HU50300-2).</div>
     <div class="spec-field"><b>Accion del usuario:</b> tocar "Confirmar" para crear su cuenta.</div>
     <div class="spec-field"><b>Resultado:</b> la cuenta queda activada y navega a la pantalla principal, que ya trae el recorrido asignado.</div>` },
-  "activation-pending": { title:"Confirmar cuenta — pendiente de asignar", hu:"AppPasajeros-1",
+  "activation-pending": { title:"Confirmar cuenta — pendiente de asignar", hu:"HU50300-1",
     gherkin:`Scenario: El pasajero activa su cuenta sin recorrido asignado todavia
     Given que el pasajero recibio el link de invitacion y no lo ha usado antes
     And todavia no tiene recorrido ni parada asignados
@@ -465,7 +465,7 @@ const SPECS = {
     Then la app muestra su nombre completo y la empresa a la que pertenece
     And muestra el boton "Confirmar"`,
     body:`<div class="spec-field"><b>Misma pantalla que el caso anterior:</b> como la activacion ya no muestra datos de recorrido, esta pantalla es visualmente identica a la de un pasajero con recorrido asignado. La diferencia esta en lo que pasa despues de confirmar.</div>` },
-  "link-used": { title:"Link ya utilizado", hu:"AppPasajeros-1",
+  "link-used": { title:"Link ya utilizado", hu:"HU50300-1",
     gherkin:`Scenario: El pasajero intenta usar un link que ya fue confirmado antes
     Given que el pasajero ya confirmo su cuenta con este link anteriormente
     When vuelve a abrir el mismo link
@@ -473,7 +473,7 @@ const SPECS = {
     And no vuelve a pedir confirmacion
     And no crea una segunda cuenta para el mismo pasajero`,
     body:`<div class="spec-field"><b>Importante:</b> no se reintenta la confirmacion ni se crea una cuenta nueva.</div>` },
-  "link-expired": { title:"Link vencido", hu:"AppPasajeros-1",
+  "link-expired": { title:"Link vencido", hu:"HU50300-1",
     gherkin:`Scenario: El pasajero intenta usar un link vencido
     Given que paso el tiempo de vigencia configurado para el link de invitacion
     And el pasajero nunca confirmo su cuenta con ese link
@@ -483,7 +483,7 @@ const SPECS = {
     And no permite confirmar la cuenta con ese link`,
     body:`<div class="spec-field"><b>Importante:</b> no se muestra ningun dato, solo el mensaje. La vigencia es un parametro configurable del lado administrativo.</div>
     <div class="spec-field"><b>Fuera de alcance:</b> reemitir un link vencido se resuelve desde Mi Transporte.</div>` },
-  "home-full": { title:"Pantalla principal — recorrido completo", hu:"AppPasajeros-2",
+  "home-full": { title:"Pantalla principal — recorrido completo", hu:"HU50300-2",
     gherkin:`Scenario: El pasajero ve los datos de su recorrido asignado
     Given que el pasajero tiene un recorrido, parada, unidad y operador asignados para hoy
     When entra a la pantalla principal
@@ -505,7 +505,7 @@ Scenario: El pasajero confirma su abordaje
     body:`<div class="spec-field"><b>Avisos:</b> "Tu unidad va en camino" y "Tu unidad esta por llegar" se muestran como notificacion del sistema (banner superior), automaticos. Usa el boton de simulacion solo para efectos de este mockup.</div>
     <div class="spec-field"><b>Boton Confirme su abordaje:</b> una sola confirmacion por recorrido, no modifica Suben/Bajan del ERP.</div>
     <div class="spec-field"><b>Proveedor de mapa (tecnico):</b> HERE. No aplica al Gherkin.</div>` },
-  "home-no-unit": { title:"Pantalla principal — sin unidad/operador", hu:"AppPasajeros-2",
+  "home-no-unit": { title:"Pantalla principal — sin unidad/operador", hu:"HU50300-2",
     gherkin:`Scenario: El pasajero tiene recorrido asignado pero sin unidad ni operador todavia
     Given que el pasajero tiene recorrido y parada asignados para hoy
     And la unidad y el operador todavia no fueron asignados en el ERP
@@ -514,21 +514,21 @@ Scenario: El pasajero confirma su abordaje
     And ve el mensaje "Unidad y operador pendientes de asignar" en vez de esos datos
     And no ve el mapa de ubicacion de la unidad`,
     body:`<div class="spec-field"><b>Por que pasa:</b> unidad y operador se asignan el mismo dia del viaje, nunca la noche anterior. Estado normal, no un error.</div>` },
-  "home-pending": { title:"Pantalla principal — pendiente de asignar", hu:"AppPasajeros-2",
+  "home-pending": { title:"Pantalla principal — pendiente de asignar", hu:"HU50300-2",
     gherkin:`Scenario: El pasajero esta pendiente de asignar recorrido
     Given que el pasajero todavia no tiene recorrido ni parada asignados
     When entra a la pantalla principal
     Then ve el mensaje "Pendiente de asignar recorrido"
     And no ve mapa, avisos ni boton de confirmar abordaje`,
     body:`<div class="spec-field"><b>Estado minimo:</b> sin parada, sin mapa, sin avisos, sin boton de abordaje.</div>` },
-  "home-cancelled": { title:"Pantalla principal — recorrido cancelado", hu:"AppPasajeros-2",
+  "home-cancelled": { title:"Pantalla principal — recorrido cancelado", hu:"HU50300-2",
     gherkin:`Scenario: El recorrido del pasajero se cancela el mismo dia
     Given que el pasajero tiene un recorrido asignado para hoy
     When el recorrido se cancela antes de que el pasajero confirme su abordaje
     Then la app muestra el mensaje "Tu recorrido no esta disponible por hoy"
     And no muestra mapa, avisos ni boton de confirmar abordaje para ese recorrido`,
     body:`<div class="spec-field"><b>Importante:</b> mensaje generico, sin flujo de reasignacion (Fase 2).</div>` },
-  "home-multi": { title:"Pantalla principal — mas de un recorrido activo", hu:"AppPasajeros-2",
+  "home-multi": { title:"Pantalla principal — mas de un recorrido activo", hu:"HU50300-2",
     gherkin:`Scenario: El pasajero tiene mas de un recorrido activo
     Given que el pasajero tiene dos recorridos activos, uno a las "07:00" y otro a las "17:30"
     When entra a la pantalla principal
@@ -540,7 +540,7 @@ Scenario: El pasajero confirma su abordaje
 const NOTES_HTML = `
 <h4>Resoluciones de la revision senior (2026-09-21)</h4>
 <ul>
-  <li><b>Hueco real cerrado:</b> el Gherkin de AppPasajeros-1 no cubria "el pasajero no tiene la app instalada". Se agrego el escenario correspondiente — es el que se ve en la pantalla de Tienda de apps de este mockup.</li>
+  <li><b>Hueco real cerrado:</b> el Gherkin de HU50300-1 no cubria "el pasajero no tiene la app instalada". Se agrego el escenario correspondiente — es el que se ve en la pantalla de Tienda de apps de este mockup.</li>
   <li><b>Horario mostrado:</b> siempre es el de la parada especifica del pasajero (programado o real), nunca el de la salida/llegada general del recorrido completo.</li>
   <li><b>"Recorrido mas proximo":</b> es relativo a la hora actual, no un orden fijo del dia. En cuanto pasa el recorrido de la manana, el de la tarde se vuelve "el proximo".</li>
   <li><b>Confirmar abordaje con multi-recorrido:</b> es independiente por recorrido — confirmar el de la manana no afecta ni pre-confirma el de la tarde (ver el estado "Multi-recorrido: abordaje independiente" en el panel de estados).</li>
@@ -549,7 +549,7 @@ const NOTES_HTML = `
 <h4>Decisiones cerradas sobre huecos detectados</h4>
 <ul>
   <li>El punto de entrada es un SMS/correo a un celular <b>sin la app instalada y sin cuenta previa</b> — la app se abre (o instala) y crea la cuenta a partir de los datos que trae el link. No existe una bandeja dentro de la app con varias invitaciones (corregido tras revision con Jaqueline, 2026-09-21).</li>
-  <li>La pantalla de activacion <b>solo muestra nombre y empresa</b> — nunca parada, horario, unidad ni operador, porque esos datos son variables dia con dia y mostrarlos en la activacion generaria una expectativa desactualizada. El recorrido se consulta siempre en vivo desde la pantalla principal (corregido 2026-09-21, tambien actualizado en el .feature de AppPasajeros-1).</li>
+  <li>La pantalla de activacion <b>solo muestra nombre y empresa</b> — nunca parada, horario, unidad ni operador, porque esos datos son variables dia con dia y mostrarlos en la activacion generaria una expectativa desactualizada. El recorrido se consulta siempre en vivo desde la pantalla principal (corregido 2026-09-21, tambien actualizado en el .feature de HU50300-1).</li>
   <li>El link se marca como usado al <b>confirmar</b>, no al solo abrirlo. (Pendiente de confirmar con Jaqueline, marcado tambien en el .feature).</li>
   <li>Con varios recorridos activos, se muestra siempre el <b>mas proximo primero</b>, con acceso secundario a los demas.</li>
   <li>El proveedor de mapa es <b>HERE</b> — decision tecnica, el mapa de este mockup es una representacion visual, no la integracion real.</li>
@@ -581,18 +581,18 @@ let hasAppInstalled = false; // controla si tocar el link va directo a "opening"
 let installState = "idle"; // idle | installing | installed
 
 const CAPTIONS = {
-  sms:{ title:"① Invitacion por SMS", desc:"El pasajero no tiene la app ni cuenta todavia. Recibe este mensaje y toca el enlace.", hus:["AppPasajeros-1"] },
-  store:{ title:"② Tienda de apps — primera vez", desc:"Si el celular no tiene la app instalada, el enlace manda primero a instalarla antes de continuar.", hus:["AppPasajeros-1"] },
-  opening:{ title:"③ Abriendo Mi Transporte", desc:"Transicion de abrir la app y validar el link antes de mostrar cualquier pantalla. La app ya \"recuerda\" el enlace que se toco, aunque se acabe de instalar.", hus:["AppPasajeros-1"] },
-  "activation-assigned":{ title:"④ Confirmar cuenta — recorrido asignado", desc:"La app crea la cuenta solo con nombre y empresa. El recorrido (variable dia con dia) se ve hasta la pantalla principal.", hus:["AppPasajeros-1"] },
-  "activation-pending":{ title:"④ Confirmar cuenta — pendiente de asignar", desc:"Misma pantalla de activacion; el pasajero todavia no tiene recorrido asignado en el ERP.", hus:["AppPasajeros-1"] },
-  "link-used":{ title:"⑤ Link ya utilizado", desc:"El pasajero ya habia confirmado su cuenta antes y vuelve a abrir el mismo enlace.", hus:["AppPasajeros-1"] },
-  "link-expired":{ title:"⑥ Link vencido", desc:"Nunca abrio su invitacion y ya paso el tiempo de vigencia configurado.", hus:["AppPasajeros-1"] },
-  "home-full":{ title:"⑦ Pantalla principal — recorrido completo", desc:"Estado mas rico: parada, horario, unidad, operador, mapa, avisos y confirmacion de abordaje.", hus:["AppPasajeros-2"] },
-  "home-no-unit":{ title:"⑧ Pantalla principal — sin unidad/operador", desc:"El recorrido ya esta asignado pero unidad y operador todavia no (se asignan el mismo dia).", hus:["AppPasajeros-2"] },
-  "home-pending":{ title:"⑨ Pantalla principal — pendiente de asignar", desc:"El pasajero confirmo su cuenta pero aun no tiene recorrido asignado.", hus:["AppPasajeros-2"] },
-  "home-cancelled":{ title:"⑩ Pantalla principal — recorrido cancelado", desc:"El recorrido se cancelo el mismo dia, antes de que el pasajero confirmara su abordaje.", hus:["AppPasajeros-2"] },
-  "home-multi":{ title:"⑪ Pantalla principal — mas de un recorrido activo", desc:"El pasajero tiene ida y vuelta el mismo dia. Se muestra el mas proximo, con acceso al otro.", hus:["AppPasajeros-2"] }
+  sms:{ title:"① Invitacion por SMS", desc:"El pasajero no tiene la app ni cuenta todavia. Recibe este mensaje y toca el enlace.", hus:["HU50300-1"] },
+  store:{ title:"② Tienda de apps — primera vez", desc:"Si el celular no tiene la app instalada, el enlace manda primero a instalarla antes de continuar.", hus:["HU50300-1"] },
+  opening:{ title:"③ Abriendo Mi Transporte", desc:"Transicion de abrir la app y validar el link antes de mostrar cualquier pantalla. La app ya \"recuerda\" el enlace que se toco, aunque se acabe de instalar.", hus:["HU50300-1"] },
+  "activation-assigned":{ title:"④ Confirmar cuenta — recorrido asignado", desc:"La app crea la cuenta solo con nombre y empresa. El recorrido (variable dia con dia) se ve hasta la pantalla principal.", hus:["HU50300-1"] },
+  "activation-pending":{ title:"④ Confirmar cuenta — pendiente de asignar", desc:"Misma pantalla de activacion; el pasajero todavia no tiene recorrido asignado en el ERP.", hus:["HU50300-1"] },
+  "link-used":{ title:"⑤ Link ya utilizado", desc:"El pasajero ya habia confirmado su cuenta antes y vuelve a abrir el mismo enlace.", hus:["HU50300-1"] },
+  "link-expired":{ title:"⑥ Link vencido", desc:"Nunca abrio su invitacion y ya paso el tiempo de vigencia configurado.", hus:["HU50300-1"] },
+  "home-full":{ title:"⑦ Pantalla principal — recorrido completo", desc:"Estado mas rico: parada, horario, unidad, operador, mapa, avisos y confirmacion de abordaje.", hus:["HU50300-2"] },
+  "home-no-unit":{ title:"⑧ Pantalla principal — sin unidad/operador", desc:"El recorrido ya esta asignado pero unidad y operador todavia no (se asignan el mismo dia).", hus:["HU50300-2"] },
+  "home-pending":{ title:"⑨ Pantalla principal — pendiente de asignar", desc:"El pasajero confirmo su cuenta pero aun no tiene recorrido asignado.", hus:["HU50300-2"] },
+  "home-cancelled":{ title:"⑩ Pantalla principal — recorrido cancelado", desc:"El recorrido se cancelo el mismo dia, antes de que el pasajero confirmara su abordaje.", hus:["HU50300-2"] },
+  "home-multi":{ title:"⑪ Pantalla principal — mas de un recorrido activo", desc:"El pasajero tiene ida y vuelta el mismo dia. Se muestra el mas proximo, con acceso al otro.", hus:["HU50300-2"] }
 };
 
 function huTagsHtml(list){
@@ -988,23 +988,23 @@ function closeDrawer(){
    TOUR GUIADO
    ============================================================ */
 const TOUR = [
-  { route:"sms", opts:{persona:"marco"}, hu:"AppPasajeros-1", title:"El pasajero recibe su invitacion", text:"Marco no tiene la app ni cuenta todavia. Recibe este SMS. Este ejemplo simula que NO tiene la app instalada — toca el enlace para ver que pasa." },
-  { route:"store", opts:{}, hu:"AppPasajeros-1", title:"Primero pasa por la tienda de apps", text:"Como no tiene la app, el enlace lo manda a instalarla antes de continuar. Toca \"Instalar\" y luego \"Abrir\"." },
-  { route:"opening", opts:{}, hu:"AppPasajeros-1", title:"La app se abre y valida el link", text:"Una vez instalada (o si ya la tenia), la app \"recuerda\" el enlace original y valida los datos, antes de mostrar cualquier pantalla." },
-  { route:"activation-assigned", opts:{}, hu:"AppPasajeros-1", title:"Se crea la cuenta: solo nombre y empresa", text:"El link solo trae nombre y empresa (datos estables). El recorrido, que cambia dia con dia, se consulta despues en la pantalla principal." },
-  { route:"activation-pending", opts:{}, hu:"AppPasajeros-1", title:"Misma pantalla, sin recorrido todavia", text:"Visualmente es la misma pantalla de activacion. La diferencia esta en el estado con el que llega a la pantalla principal despues de confirmar." },
-  { route:"home-full", opts:{multi:false, tripPhase:"asignado", boarded:false, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Pantalla principal — estado completo", text:"Al confirmar, el pasajero llega aqui: mapa con la unidad, operador, parada y horario." },
-  { route:"home-full", opts:{multi:false, tripPhase:"encamino", boarded:false, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Aviso: unidad en camino", text:"Cuando la unidad sale hacia la parada, aparece esta notificacion del sistema. Usa el boton de simulacion para verla." },
-  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:false, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Aviso: unidad por llegar", text:"Cuando la unidad esta cerca, la notificacion cambia a “por llegar”." },
-  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:true, activeRecorrido:"am"}, hu:"AppPasajeros-2", title:"Confirmacion de abordaje", text:"El pasajero confirma que subio a la unidad. El boton queda deshabilitado — no se puede confirmar dos veces, ni siquiera si tiene otro recorrido el mismo dia, y esto nunca toca los registros Suben/Bajan del operador en el ERP." },
-  { route:"home-no-unit", opts:{}, hu:"AppPasajeros-2", title:"Variante: sin unidad ni operador todavia", text:"La unidad y el operador se asignan el mismo dia del viaje. Antes de eso, el pasajero ve su parada y horario, pero este mensaje en vez del mapa." },
-  { route:"home-pending", opts:{}, hu:"AppPasajeros-2", title:"Variante: pendiente de asignar recorrido", text:"Estado minimo: sin parada, sin mapa, sin avisos, sin boton de abordaje." },
-  { route:"home-multi", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false}, hu:"AppPasajeros-2", title:"Variante: mas de un recorrido activo", text:"Si el pasajero tiene ida y vuelta el mismo dia, ve primero el mas proximo, con este selector para consultar el otro." },
-  { route:"home-cancelled", opts:{}, hu:"AppPasajeros-2", title:"Variante: recorrido cancelado", text:"Si el recorrido se cancela el mismo dia, el pasajero ve este mensaje generico — sin flujo de reasignacion, eso queda para Fase 2." },
-  { route:"sms", opts:{persona:"roberto"}, hu:"AppPasajeros-1", title:"Caso: Roberto ya activo su cuenta antes", text:"Toca el enlace de nuevo para ver el error de link ya utilizado." },
-  { route:"link-used", opts:{}, hu:"AppPasajeros-1", title:"Error: link ya utilizado", text:"Se le informa sin volver a pedir confirmacion ni crear una cuenta nueva." },
-  { route:"sms", opts:{persona:"ana"}, hu:"AppPasajeros-1", title:"Caso: a Ana se le vencio el enlace", text:"Toca el enlace para ver el mensaje de vigencia expirada." },
-  { route:"link-expired", opts:{}, hu:"AppPasajeros-1", title:"Error: link vencido", text:"Se le pide contactar a su transportista para una nueva invitacion." }
+  { route:"sms", opts:{persona:"marco"}, hu:"HU50300-1", title:"El pasajero recibe su invitacion", text:"Marco no tiene la app ni cuenta todavia. Recibe este SMS. Este ejemplo simula que NO tiene la app instalada — toca el enlace para ver que pasa." },
+  { route:"store", opts:{}, hu:"HU50300-1", title:"Primero pasa por la tienda de apps", text:"Como no tiene la app, el enlace lo manda a instalarla antes de continuar. Toca \"Instalar\" y luego \"Abrir\"." },
+  { route:"opening", opts:{}, hu:"HU50300-1", title:"La app se abre y valida el link", text:"Una vez instalada (o si ya la tenia), la app \"recuerda\" el enlace original y valida los datos, antes de mostrar cualquier pantalla." },
+  { route:"activation-assigned", opts:{}, hu:"HU50300-1", title:"Se crea la cuenta: solo nombre y empresa", text:"El link solo trae nombre y empresa (datos estables). El recorrido, que cambia dia con dia, se consulta despues en la pantalla principal." },
+  { route:"activation-pending", opts:{}, hu:"HU50300-1", title:"Misma pantalla, sin recorrido todavia", text:"Visualmente es la misma pantalla de activacion. La diferencia esta en el estado con el que llega a la pantalla principal despues de confirmar." },
+  { route:"home-full", opts:{multi:false, tripPhase:"asignado", boarded:false, activeRecorrido:"am"}, hu:"HU50300-2", title:"Pantalla principal — estado completo", text:"Al confirmar, el pasajero llega aqui: mapa con la unidad, operador, parada y horario." },
+  { route:"home-full", opts:{multi:false, tripPhase:"encamino", boarded:false, activeRecorrido:"am"}, hu:"HU50300-2", title:"Aviso: unidad en camino", text:"Cuando la unidad sale hacia la parada, aparece esta notificacion del sistema. Usa el boton de simulacion para verla." },
+  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:false, activeRecorrido:"am"}, hu:"HU50300-2", title:"Aviso: unidad por llegar", text:"Cuando la unidad esta cerca, la notificacion cambia a “por llegar”." },
+  { route:"home-full", opts:{multi:false, tripPhase:"porllegar", boarded:true, activeRecorrido:"am"}, hu:"HU50300-2", title:"Confirmacion de abordaje", text:"El pasajero confirma que subio a la unidad. El boton queda deshabilitado — no se puede confirmar dos veces, ni siquiera si tiene otro recorrido el mismo dia, y esto nunca toca los registros Suben/Bajan del operador en el ERP." },
+  { route:"home-no-unit", opts:{}, hu:"HU50300-2", title:"Variante: sin unidad ni operador todavia", text:"La unidad y el operador se asignan el mismo dia del viaje. Antes de eso, el pasajero ve su parada y horario, pero este mensaje en vez del mapa." },
+  { route:"home-pending", opts:{}, hu:"HU50300-2", title:"Variante: pendiente de asignar recorrido", text:"Estado minimo: sin parada, sin mapa, sin avisos, sin boton de abordaje." },
+  { route:"home-multi", opts:{multi:true, activeRecorrido:"am", tripPhase:"asignado", boarded:false}, hu:"HU50300-2", title:"Variante: mas de un recorrido activo", text:"Si el pasajero tiene ida y vuelta el mismo dia, ve primero el mas proximo, con este selector para consultar el otro." },
+  { route:"home-cancelled", opts:{}, hu:"HU50300-2", title:"Variante: recorrido cancelado", text:"Si el recorrido se cancela el mismo dia, el pasajero ve este mensaje generico — sin flujo de reasignacion, eso queda para Fase 2." },
+  { route:"sms", opts:{persona:"roberto"}, hu:"HU50300-1", title:"Caso: Roberto ya activo su cuenta antes", text:"Toca el enlace de nuevo para ver el error de link ya utilizado." },
+  { route:"link-used", opts:{}, hu:"HU50300-1", title:"Error: link ya utilizado", text:"Se le informa sin volver a pedir confirmacion ni crear una cuenta nueva." },
+  { route:"sms", opts:{persona:"ana"}, hu:"HU50300-1", title:"Caso: a Ana se le vencio el enlace", text:"Toca el enlace para ver el mensaje de vigencia expirada." },
+  { route:"link-expired", opts:{}, hu:"HU50300-1", title:"Error: link vencido", text:"Se le pide contactar a su transportista para una nueva invitacion." }
 ];
 
 let tourActive = false, tourStep = -1;

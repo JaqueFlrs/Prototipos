@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<title>Hermes — Nueva Cotización (mockup)</title>
+<style>
+html{color-scheme:light;}
+*{box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#fff;margin:0;padding:28px 32px 90px;color:#1a1a1a;}
+
+.page-title{font-size:18px;font-weight:700;color:#111;margin-bottom:4px;}
+.page-sub{font-size:12.5px;color:#8a8f98;margin-bottom:22px;}
+
+.screen{margin-bottom:36px;}
+.screen-label{font-size:11px;font-weight:bold;color:#9aa0a6;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.screen-desc{font-size:12px;color:#3a3f45;background:#f8f9fb;border-left:3px solid #6b7280;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:14px;line-height:1.6;}
+.screen-desc b{color:#111;}
+
+:root{
+  --accent:#e8935a; --accent-dark:#d97b3f; --accent-bg:#fdece0;
+  --ink:#1a1a1a; --sub:#767c86; --border:#e9eaee; --page:#fafafa;
+  --success:#3a9450; --success-bg:#e5f6ea;
+}
+
+/* ── shell Hermes Portal Cliente ─────────────────────────────── */
+.hermes-shell{border:1px solid #dfe1e5;border-radius:10px;background:#fff;overflow:hidden;box-shadow:0 4px 18px rgba(20,20,30,.08);display:flex;min-height:560px;max-width:960px;}
+.hermes-sidebar{width:230px;background:#fbfbfc;border-right:1px solid var(--border);flex-shrink:0;padding:18px 16px;display:flex;flex-direction:column;}
+.hermes-brand{display:flex;align-items:center;gap:9px;margin-bottom:20px;}
+.hermes-brand .logo{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.hermes-brand .name{font-size:13.5px;font-weight:700;color:#1a1a1a;line-height:1.2;}
+.hermes-brand .name small{display:block;font-size:10px;font-weight:500;color:var(--sub);}
+.hermes-user{background:var(--accent-bg);border-radius:12px;padding:12px;margin-bottom:18px;}
+.hermes-user .av{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-bottom:8px;}
+.hermes-user .nm{font-size:11.5px;font-weight:700;color:#1a1a1a;letter-spacing:.2px;}
+.hermes-user .id{font-size:10px;color:var(--sub);margin-bottom:6px;}
+.hermes-user .tag{display:inline-block;font-size:9.5px;font-weight:700;color:var(--accent-dark);background:#fff;border-radius:10px;padding:2px 9px;}
+.hermes-nav-item{font-size:12.5px;color:#40454b;padding:9px 10px;border-radius:8px;display:flex;align-items:center;gap:9px;}
+.hermes-nav-item.active{background:var(--accent-bg);color:var(--accent-dark);font-weight:700;}
+.hermes-appearance{margin-top:auto;background:#f3f4f6;border-radius:12px;padding:12px;}
+.hermes-appearance .lbl{font-size:9.5px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;}
+.hermes-appearance .tema{font-size:11px;color:#40454b;margin-bottom:6px;}
+.theme-toggle{display:flex;gap:6px;}
+.theme-toggle span{flex:1;text-align:center;padding:8px 0;border-radius:8px;background:#fff;border:1px solid var(--border);font-size:13px;}
+.theme-toggle span.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+.hermes-logout{margin-top:14px;text-align:center;font-size:11.5px;color:#e0473f;background:#fdeceb;border-radius:10px;padding:9px;}
+
+.hermes-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.hermes-topbar{padding:16px 26px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;}
+.hermes-topbar h1{font-size:20px;font-weight:700;margin:0 0 3px;}
+.hermes-topbar p{font-size:12.5px;color:var(--sub);margin:0;}
+.hermes-volver{font-size:12px;color:var(--accent-dark);font-weight:600;white-space:nowrap;}
+
+.hermes-body{flex:1;padding:22px 26px;display:flex;justify-content:center;overflow-y:auto;}
+.hermes-card-wrap{width:560px;max-width:100%;}
+
+/* intro / nc-intro */
+.nc-intro{display:flex;gap:13px;align-items:flex-start;padding:15px 16px;background:var(--page);border-radius:14px;border:1px solid var(--border);margin-bottom:16px;}
+.nc-intro .ic{font-size:22px;line-height:1;margin-top:1px;}
+.nc-intro-title{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:4px;}
+.nc-intro-sub{font-size:12.5px;color:var(--sub);line-height:1.55;}
+.nc-intro-sub .hl{color:var(--accent-dark);font-weight:600;}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;}
+.txta{width:100%;min-height:120px;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;font-size:13.5px;font-family:inherit;color:#1a1a1a;background:#fff;resize:vertical;}
+.txta:focus{outline:none;border-color:var(--accent);}
+.txta-hint{font-size:10.5px;color:#9aa0a9;text-align:right;margin-top:4px;}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;}
+.btn{border:none;border-radius:9px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent-dark);}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;}
+.btn-ghost{background:#f3f4f6;color:#3a3f45;}
+
+/* chat */
+.chat-container{display:flex;flex-direction:column;gap:14px;}
+.chat-bubble{display:flex;align-items:flex-end;gap:9px;}
+.chat-bubble.user{flex-direction:row-reverse;}
+.chat-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;flex-shrink:0;}
+.chat-bubble.assistant .chat-avatar{background:var(--accent);color:#fff;}
+.chat-bubble.user .chat-avatar{background:#eef0f2;color:#6b7280;border:1px solid var(--border);}
+.chat-text{max-width:76%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.55;}
+.chat-bubble.assistant .chat-text{background:var(--page);border:1px solid var(--border);border-bottom-left-radius:4px;}
+.chat-bubble.user .chat-text{background:var(--accent);color:#fff;border-bottom-right-radius:4px;}
+.chat-typing{display:flex;gap:5px;padding:12px 16px;}
+.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--sub);animation:bounce 1.2s infinite;}
+.chat-typing span:nth-child(2){animation-delay:.2s;}
+.chat-typing span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-4px);opacity:1;}}
+
+.cierre-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;border-top:1px solid var(--border);padding-top:14px;}
+
+.followup-box{margin-top:14px;border-top:1px solid var(--border);padding-top:14px;}
+
+/* resultado */
+.resultado-card{border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 4px 16px rgba(20,20,30,.06);}
+.resultado-strip{height:6px;background:linear-gradient(90deg,var(--success),#5cb86e);}
+.resultado-body{padding:34px 34px 30px;text-align:center;}
+.resultado-icon{width:58px;height:58px;border-radius:50%;background:var(--success-bg);color:var(--success);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;}
+.resultado-h2{font-size:20px;font-weight:700;margin-bottom:8px;}
+.resultado-p{font-size:13px;color:var(--sub);line-height:1.6;margin:0 auto 22px;max-width:360px;}
+.price-box{background:var(--page);border:1px solid var(--border);border-radius:14px;padding:18px 24px 20px;margin-bottom:22px;}
+.price-label{font-size:12px;color:var(--sub);margin-bottom:6px;}
+.price-value{font-size:38px;font-weight:800;letter-spacing:-1px;}
+
+.legend{font-size:11px;color:#9aa0a6;margin-top:10px;}
+.section-divider{font-size:11px;font-weight:bold;color:#9aa0a6;text-transform:uppercase;letter-spacing:1px;margin:44px 0 18px;padding-bottom:8px;border-bottom:1px solid #eceef1;}
+</style>
+</head>
+<body>
+
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:-28px -32px 24px;">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para Hermes Portal Cliente, eso significa colores, tipografía, estructura de paneles y componentes propios del sistema real.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div class="page-title">Hermes Portal Cliente — Nueva Cotización</div>
+<div class="page-sub">Mockup navegable de la HU: aclarar el estimado preliminar, explicar el flujo desde el inicio, y confirmar antes de cotizar.</div>
+
+<div class="screen">
+  <div class="screen-label">① Pantalla inicial — nota de "¿Cómo funciona?" actualizada</div>
+  <div class="screen-desc">
+    <b>Qué cambia:</b> el texto de la tarjeta de arriba del cuadro de texto ahora explica el proceso completo antes de que el cliente escriba nada.<br>
+    <b>Interacción:</b> escribe tu requerimiento abajo y da clic en "Enviar" para avanzar al siguiente estado de este mismo mockup.
+  </div>
+  <div class="hermes-shell" id="shell">
+
+    <div class="hermes-sidebar">
+      <div class="hermes-brand">
+        <div class="logo">✱</div>
+        <div class="name">Hermes<small>Portal Cliente</small></div>
+      </div>
+      <div class="hermes-user">
+        <div class="av">JF</div>
+        <div class="nm">JAQUELINE FLORES</div>
+        <div class="id">IIA040805DZ4</div>
+        <span class="tag">Cliente</span>
+      </div>
+      <div class="hermes-nav-item">📁 Mis Cotizaciones</div>
+      <div class="hermes-appearance">
+        <div class="lbl">Apariencia</div>
+        <div class="tema">Tema</div>
+        <div class="theme-toggle"><span class="on">☀️</span><span>🌙</span><span>🖥️</span></div>
+      </div>
+      <div class="hermes-logout">⏻ Cerrar Sesión</div>
+    </div>
+
+    <div class="hermes-main">
+      <div class="hermes-topbar">
+        <div>
+          <h1>Nueva Cotización</h1>
+          <p>Cuéntanos qué necesitas y obtendrás una estimación de precio</p>
+        </div>
+        <div class="hermes-volver">← Volver</div>
+      </div>
+
+      <div class="hermes-body">
+        <div class="hermes-card-wrap">
+
+          <div id="estado-inicial">
+            <div class="nc-intro">
+              <div class="ic">💬</div>
+              <div>
+                <div class="nc-intro-title">¿Qué necesitas?</div>
+                <div class="nc-intro-sub">
+                  Describe tu requerimiento con tus propias palabras. Si necesitamos más detalle, te lo preguntaremos.
+                  <span class="hl">Obtendrás un estimado preliminar al instante; tu solicitud se enviará a GM Transport para su revisión, y te contactaremos con la cotización completa.</span>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <textarea class="txta" id="inputInicial" placeholder="Ej: Necesito un reporte de ventas por cliente con filtro por fecha y exportación a Excel...">Necesito un reporte de ventas por cliente, con filtro por fecha y exportación a Excel, y que se pueda agrupar por vendedor.</textarea>
+              <div class="txta-hint">Enter para enviar · Shift+Enter para nueva línea</div>
+              <div class="form-actions">
+                <button class="btn btn-ghost">Cancelar</button>
+                <button class="btn btn-primary" onclick="irAConfirmacion()">Enviar</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="estado-chat" style="display:none;">
+            <div class="chat-container" id="chatContainer"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">La nota resaltada en naranja es el texto nuevo que agrega la HU — el resto de la tarjeta ya existe hoy.</div>
+</div>
+
+<div class="section-divider">Estados siguientes (misma pantalla, después de dar clic en "Enviar")</div>
+
+<div class="screen">
+  <div class="screen-label">② Confirmación antes de cotizar — paso nuevo</div>
+  <div class="screen-desc">
+    <b>Qué es nuevo:</b> antes de mostrar cualquier precio, el asistente siempre pregunta si al cliente le falta agregar algo — hoy el sistema salta directo al precio cuando el primer mensaje ya viene detallado.<br>
+    <b>Comportamiento:</b> "No, así está bien" revela el estimado (pantalla ③). "Sí, quiero agregar algo" abre un cuadro de texto para que el cliente escriba lo que falta, y esa información se reenvía para recalcular antes de mostrar el precio.
+  </div>
+  <div style="border:1px solid var(--border);border-radius:16px;padding:22px;max-width:560px;background:#fff;">
+    <div class="chat-container">
+      <div class="chat-bubble user"><div class="chat-text">Necesito un reporte de ventas por cliente, con filtro por fecha y exportación a Excel, y que se pueda agrupar por vendedor.</div><div class="chat-avatar">Tú</div></div>
+      <div class="chat-bubble assistant"><div class="chat-avatar">H</div><div class="chat-text">¿Necesitas algo más antes de darte la cotización final?</div></div>
+    </div>
+    <div class="cierre-actions">
+      <button class="btn btn-ghost">Sí, quiero agregar algo</button>
+      <button class="btn btn-primary">No, así está bien</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="screen-label">③ Pantalla de confirmación final — tono, moneda y proceso</div>
+  <div class="screen-desc">
+    <b>Qué cambia:</b> "Precio estimado" → <b>"Estimado preliminar"</b>; la moneda pasa de pesos a <b>dólares (USD)</b>; se agrega un mensaje de apertura cordial y un mensaje de cierre que explica que GM revisará la solicitud y se pondrá en contacto.
+  </div>
+  <div style="max-width:560px;">
+    <div class="resultado-card">
+      <div class="resultado-strip"></div>
+      <div class="resultado-body">
+        <div class="resultado-icon">✓</div>
+        <div class="resultado-h2">¡Solicitud enviada!</div>
+        <p class="resultado-p">¡Gracias por tu solicitud! Este es un estimado preliminar.</p>
+        <div class="price-box">
+          <div class="price-label">💲 Estimado preliminar</div>
+          <div class="price-value">$6,500</div>
+        </div>
+        <p class="resultado-p">Nuestro equipo en GM Transport la revisará y te enviaremos la cotización completa muy pronto. Si necesitamos algún detalle adicional, nos pondremos en contacto contigo.</p>
+        <button class="btn btn-primary" style="width:100%;">Ver Mis Cotizaciones</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function irAConfirmacion(){
+  document.getElementById('estado-inicial').style.display = 'none';
+  const chatEstado = document.getElementById('estado-chat');
+  chatEstado.style.display = 'block';
+  const texto = document.getElementById('inputInicial').value || 'Necesito un reporte de ventas por cliente...';
+  const cont = document.getElementById('chatContainer');
+  cont.innerHTML =
+    '<div class="chat-bubble user"><div class="chat-text">'+texto+'</div><div class="chat-avatar">Tú</div></div>'+
+    '<div class="chat-bubble assistant"><div class="chat-avatar">H</div><div class="chat-text chat-typing"><span></span><span></span><span></span></div></div>';
+  setTimeout(()=>{
+    cont.innerHTML =
+      '<div class="chat-bubble user"><div class="chat-text">'+texto+'</div><div class="chat-avatar">Tú</div></div>'+
+      '<div class="chat-bubble assistant"><div class="chat-avatar">H</div><div class="chat-text">¿Necesitas algo más antes de darte la cotización final?</div></div>'+
+      '<div class="cierre-actions">'+
+        '<button class="btn btn-ghost" onclick="agregarMas()">Sí, quiero agregar algo</button>'+
+        '<button class="btn btn-primary" onclick="verResultado()">No, así está bien</button>'+
+      '</div>';
+  }, 1100);
+}
+function agregarMas(){
+  const cont = document.getElementById('chatContainer');
+  const cierre = cont.querySelector('.cierre-actions');
+  if (cierre) cierre.outerHTML =
+    '<div class="chat-bubble user"><div class="chat-text">Sí, quiero agregar algo</div><div class="chat-avatar">Tú</div></div>'+
+    '<div class="followup-box">'+
+      '<textarea class="txta" style="min-height:70px;" placeholder="Escribe tu respuesta...">También necesito que el reporte se pueda programar para llegar por correo cada lunes.</textarea>'+
+      '<div class="form-actions"><button class="btn btn-primary" onclick="verResultado()">Responder</button></div>'+
+    '</div>';
+}
+function verResultado(){
+  document.getElementById('estado-chat').innerHTML =
+    '<div class="resultado-card">'+
+      '<div class="resultado-strip"></div>'+
+      '<div class="resultado-body">'+
+        '<div class="resultado-icon">✓</div>'+
+        '<div class="resultado-h2">¡Solicitud enviada!</div>'+
+        '<p class="resultado-p">¡Gracias por tu solicitud! Este es un estimado preliminar.</p>'+
+        '<div class="price-box"><div class="price-label">💲 Estimado preliminar</div><div class="price-value">$6,500</div></div>'+
+        '<p class="resultado-p">Nuestro equipo en GM Transport la revisará y te enviaremos la cotización completa muy pronto. Si necesitamos algún detalle adicional, nos pondremos en contacto contigo.</p>'+
+        '<button class="btn btn-primary" style="width:100%;">Ver Mis Cotizaciones</button>'+
+      '</div>'+
+    '</div>';
+}
+</script>
+
+</body>
+</html>

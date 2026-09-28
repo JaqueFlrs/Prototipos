@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -241,16 +242,24 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
 .big-modal-bd .ux{background:#F3F7FF;border-left:3px solid #1A5FB4;border-radius:0 8px 8px 0;padding:9px 13px;margin-bottom:9px;font-size:12px;}
 
 .col-caption{text-align:center;font-size:11.5px;font-weight:700;color:#666;margin-top:10px;}
+
+.hu-chip{display:inline-flex;align-items:center;gap:3px;background:#EEF0F2;color:var(--sub);font-size:8.5px;font-weight:800;padding:2px 7px;border-radius:9px;cursor:pointer;letter-spacing:.2px;border:1px solid var(--border);vertical-align:middle;margin-left:6px;}
+.hu-chip:hover{background:var(--accent-soft);color:var(--accent-dark);border-color:#f5d9c0;}
+.appbar .ttl-row{display:flex;align-items:center;flex-wrap:wrap;gap:2px;}
+.demo-btn{background:none;border:1px dashed #c7cbcf;color:#767c86;font-size:9.5px;font-weight:700;padding:6px 9px;border-radius:9px;cursor:pointer;width:100%;margin-top:6px;}
+.demo-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
+.inline-error{background:var(--crit-bg);color:var(--crit);font-size:10.5px;font-weight:600;padding:8px 11px;border-radius:9px;margin:-6px 0 12px;display:none;}
+.inline-error.show{display:block;}
+.chk-row{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:13px;cursor:pointer;}
+.chk-row input{width:16px;height:16px;margin:0;flex-shrink:0;}
+.chk-row span{font-size:11.5px;color:var(--ink);font-weight:600;}
+.block-pane{text-align:center;padding:30px 10px 10px;}
+.block-pane .ic-wrap{width:60px;height:60px;border-radius:50%;background:var(--warn-bg);color:var(--warn);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.block-pane h4{font-size:14px;margin:0 0 6px;color:var(--ink);}
+.block-pane p{font-size:12px;color:var(--sub);line-height:1.5;margin:0;padding:0 10px;}
 </style>
 </head>
 <body>
-
-<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;">
-  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
-  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
-  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Mis Viajes, eso significa colores, tipografía, estructura y componentes propios de esa app.</p>
-  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
-</div>
 
 <div class="page-title">Bitácora de Conducción en Mis Viajes</div>
 <div class="page-sub">Mockup navegable, nivel UX/UI de alta fidelidad — diseñado para uso rápido y con una sola mano, en cabina. Toca dentro del teléfono para recorrer el flujo.</div>
@@ -382,11 +391,12 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
               <div class="timer" id="live-timer-p1">02:14:37</div>
             </div>
 
-            <div class="chip-lbl">Cambiar a</div>
+            <div class="chip-lbl">Cambiar a <span class="hu-chip" onclick="openHu('HU52716-2')">HU52716-2</span></div>
             <div class="chip-row" id="chips-p1"></div>
+            <button class="demo-btn" onclick="toggleGps('p1')" id="gps-btn-p1">🔧 Simular: GPS desactivado</button>
 
             <div class="gauge-card">
-              <div class="gauge-hd"><span class="lbl">Conducción continua</span><span class="val" id="gauge-val-p1">2h 14m / 5h</span></div>
+              <div class="gauge-hd"><span class="lbl">Conducción continua <span class="hu-chip" onclick="openHu('HU52716-3')">HU52716-3</span></span><span class="val" id="gauge-val-p1">2h 14m / 5h</span></div>
               <div class="gauge-track"><div class="gauge-fill" id="gauge-fill-p1" style="width:45%;background:var(--safe);"></div></div>
               <div class="gauge-foot"><span>Pausa obligatoria de 30 min al llegar al límite</span></div>
               <div class="gauge-sub">
@@ -396,17 +406,18 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
             </div>
 
             <div class="section-link" onclick="go('p1','linea-tiempo')">
-              <span class="l">Ver línea de tiempo de hoy</span>
+              <span class="l">Ver línea de tiempo de hoy <span class="hu-chip" onclick="event.stopPropagation();openHu('HU52716-4')">HU52716-4</span></span>
               <span class="r">Detalle por hora <span class="icn" data-icon="chev"></span></span>
             </div>
             <div class="section-link" onclick="go('p1','historial')">
               <span class="l">Ver historial de días anteriores</span>
               <span class="r">Últimos 15 días <span class="icn" data-icon="chev"></span></span>
             </div>
-            <div class="section-link" onclick="go('p1','firma')">
+            <div class="section-link" onclick="goFirma('p1')">
               <span class="l">Firmar jornada de hoy</span>
               <span class="r"><span class="icn" data-icon="pen"></span> <span class="icn" data-icon="chev"></span></span>
             </div>
+            <label class="chk-row" style="margin-top:4px;"><input type="checkbox" id="chk-sin-actividad-p1" onchange="toggleSinActividad('p1')"/><span style="font-size:10.5px;">🔧 Simular: día sin ninguna actividad registrada</span></label>
           </div>
         </div>
 
@@ -433,16 +444,25 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
         </div>
 
         <div class="pg" id="firma">
-          <div class="appbar"><div class="bk" onclick="go('p1','home-bitacora')"><span class="icn" data-icon="back"></span></div><div><div class="ttl">Firma de la jornada</div><div class="sub">Cierra el día de hoy</div></div></div>
-          <div class="pg-scroll">
-            <div class="secstat" style="margin-bottom:14px;"><div class="l">Esta firma aplica a</div><div class="v" style="font-size:13px;">Las 6 actividades registradas hoy</div></div>
-            <div class="sig-pad">
-              <div class="baseline"></div>
-              <svg viewBox="0 0 200 60" style="width:80%;"><path d="M10,45 C30,10 40,50 55,25 S80,5 95,35 S130,50 150,20 S180,45 190,25" stroke="#14171A" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
-              <div class="sig-hint">Firma con el dedo sobre esta área</div>
+          <div class="appbar"><div class="bk" onclick="go('p1','home-bitacora')"><span class="icn" data-icon="back"></span></div><div class="ttl-row"><div class="ttl">Firma de la jornada</div><span class="hu-chip" onclick="openHu('HU52716-4')">HU52716-4</span></div><div class="sub">Cierra el día de hoy</div></div>
+          <div class="pg-scroll" id="firma-scroll">
+            <div id="firma-normal">
+              <div class="secstat" style="margin-bottom:14px;"><div class="l">Esta firma aplica a</div><div class="v" style="font-size:13px;">Las actividades ya cerradas de hoy. La actividad en curso ("Conduciendo") permanece abierta hasta que la cambies.</div></div>
+              <div class="sig-pad">
+                <div class="baseline"></div>
+                <svg viewBox="0 0 200 60" style="width:80%;"><path d="M10,45 C30,10 40,50 55,25 S80,5 95,35 S130,50 150,20 S180,45 190,25" stroke="#14171A" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+                <div class="sig-hint">Firma con el dedo sobre esta área</div>
+              </div>
+            </div>
+            <div id="firma-bloqueada" style="display:none;">
+              <div class="block-pane">
+                <div class="ic-wrap"><span class="icn" data-icon="warn"></span></div>
+                <h4>No hay actividades para firmar</h4>
+                <p>No registraste ninguna actividad hoy. No se puede firmar un día sin actividades registradas.</p>
+              </div>
             </div>
           </div>
-          <div class="bottombar"><button class="bp" onclick="showModal('m-firma')"><span class="icn" data-icon="check"></span> Confirmar y firmar</button></div>
+          <div class="bottombar" id="firma-bottombar"><button class="bp" onclick="showModal('m-firma')"><span class="icn" data-icon="check"></span> Confirmar y firmar</button></div>
         </div>
 
         <div class="modal-ov" id="m-capture-p1">
@@ -450,7 +470,11 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
             <h4 id="cap-title-p1">Conduciendo</h4>
             <div class="field" id="cap-detalle-p1" style="display:none;">
               <label id="cap-detalle-label-p1">Tipo</label>
-              <select id="cap-detalle-select-p1"></select>
+              <select id="cap-detalle-select-p1" onchange="toggleOtro('p1')"></select>
+            </div>
+            <div class="field" id="cap-otro-p1" style="display:none;">
+              <label>Especifica cuál (opcional)</label>
+              <input id="cap-otro-input-p1" placeholder="Escribe cuál"/>
             </div>
             <div class="field">
               <label>Ubicación</label>
@@ -499,7 +523,24 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
             </div>
             <div class="field"><label>Tu RFC</label><input id="in-rfc" value="ROSJ850314H21"/><div class="hint">El tuyo como persona, no el de la empresa</div></div>
             <div class="field"><label>Tu número de celular</label><input id="in-tel" value="6861234567"/></div>
+            <div class="inline-error" id="err-tel-uso">Este número de teléfono ya está en uso por otro operador</div>
             <button class="bp" onclick="go('p2','nogm-sms')">Enviar código por SMS</button>
+            <button class="demo-btn" onclick="document.getElementById('err-tel-uso').classList.add('show')">🔧 Simular: teléfono ya usado por otro RFC <span class="hu-chip" onclick="event.stopPropagation();openHu('HU52716-1')">HU52716-1</span></button>
+            <button class="demo-btn" onclick="go('p2','nogm-identidad')">🔧 Simular: RFC ya existe con otro teléfono <span class="hu-chip" onclick="event.stopPropagation();openHu('HU52716-1')">HU52716-1</span></button>
+          </div>
+        </div>
+
+        <div class="pg" id="nogm-identidad">
+          <div class="appbar"><div class="bk" onclick="go('p2','nogm-selector')"><span class="icn" data-icon="back"></span></div><div class="ttl-row"><div class="ttl">Confirma tu identidad</div><span class="hu-chip" onclick="openHu('HU52716-1')">HU52716-1</span></div></div>
+          <div class="pg-scroll">
+            <p style="font-size:11.5px;color:var(--sub);margin:0 0 14px;">Este RFC ya está registrado con otro número de teléfono. Confirma tus datos para continuar con el teléfono nuevo.</p>
+            <div class="field"><label>Nombre completo</label><input id="id-nombre" placeholder="Igual como lo registraste la primera vez"/></div>
+            <div class="field"><label>Número de licencia</label><input id="id-licencia" placeholder="Igual como lo registraste la primera vez"/></div>
+            <div class="inline-error" id="err-identidad">Los datos no coinciden con el perfil registrado</div>
+          </div>
+          <div class="bottombar" style="flex-direction:column;">
+            <button class="bp" onclick="checkIdentidad()">Confirmar</button>
+            <button class="demo-btn" onclick="document.getElementById('err-identidad').classList.add('show')">🔧 Simular: no coincide (sin límite de intentos)</button>
           </div>
         </div>
 
@@ -514,23 +555,33 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
         </div>
 
         <div class="pg" id="nogm-perfil">
-          <div class="appbar"><div><div class="ttl">Completa tu perfil</div><div class="sub">Solo la primera vez — queda ligado a tu RFC</div></div></div>
+          <div class="appbar"><div class="ttl-row"><div class="ttl">Completa tu perfil</div><span class="hu-chip" onclick="openHu('HU52716-1')">HU52716-1</span></div><div class="sub">Solo la primera vez — queda ligado a tu RFC</div></div>
           <div class="pg-scroll">
             <div class="step-dots"><span class="d on"></span><span class="d on"></span><span class="d"></span></div>
             <div class="field"><label>Nombre completo</label><input value="José Ramírez Ortega"/></div>
             <div class="field"><label>Número de licencia</label><input value="234567FESSS"/></div>
             <div class="field"><label>Vencimiento de licencia</label><input type="date" value="2027-04-30"/></div>
+            <div class="field"><label>Correo electrónico (opcional)</label><input type="email" placeholder="tucorreo@ejemplo.com"/></div>
           </div>
           <div class="bottombar"><button class="bp" onclick="go('p2','nogm-empresa')">Guardar y continuar</button></div>
         </div>
 
         <div class="pg" id="nogm-empresa">
-          <div class="appbar"><div><div class="ttl">¿Para quién manejas hoy?</div><div class="sub">Este dato es solo para la bitácora de hoy</div></div></div>
+          <div class="appbar"><div class="ttl-row"><div class="ttl">¿Para quién manejas hoy?</div><span class="hu-chip" onclick="openHu('HU52716-1')">HU52716-1</span></div><div class="sub">Este dato es solo para la bitácora de hoy</div></div>
           <div class="pg-scroll">
             <div class="step-dots"><span class="d on"></span><span class="d on"></span><span class="d on"></span></div>
+            <label class="chk-row"><input type="checkbox" id="chk-repite" onchange="toggleEmpresaCompleta()"/><span>Ya trabajé ayer para esta misma empresa y unidad</span></label>
             <div class="field"><label>Razón social de la empresa</label><input value="Industria Iluminadora de Almacenes"/></div>
-            <div class="field"><label>Tipo de unidad</label><input value="Tractocamión"/></div>
-            <div class="hint" style="margin-top:-6px;">Si mañana trabajas para otra empresa, solo cambias este dato — tu historial de horas no se pierde.</div>
+            <div id="empresa-completa">
+              <div class="field"><label>Domicilio (calle, colonia, municipio, estado, C.P.)</label><input value="La Escondida 1800, Centro Norte, Hermosillo, Sonora, 62661"/></div>
+              <div class="field"><label>Tipo de Servicio</label><input value="Autotransporte de Carga Federal"/></div>
+              <div class="field"><label>Modalidad</label><input placeholder="Modalidad del servicio"/></div>
+              <div class="field"><label>Descripción/Marca de la unidad</label><input value="Tractocamión Ramírez"/></div>
+              <div class="field"><label>Modelo</label><input value="2023"/></div>
+              <div class="field"><label>Placas</label><input value="XYZ-4567"/></div>
+              <div class="field"><label>Nombre del responsable</label><input placeholder="Responsable de la empresa"/></div>
+              <div class="hint" style="margin-top:-6px;">Estos datos solo se piden la primera vez que trabajas para esta empresa y unidad. Si mañana repites la misma, no se vuelven a pedir.</div>
+            </div>
           </div>
           <div class="bottombar"><button class="bp" onclick="go('p2','nogm-home')">Continuar</button></div>
         </div>
@@ -554,11 +605,12 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
               <div class="timer" id="live-timer-p2">03:44:10</div>
             </div>
 
-            <div class="chip-lbl">Cambiar a</div>
+            <div class="chip-lbl">Cambiar a <span class="hu-chip" onclick="openHu('HU52716-2')">HU52716-2</span></div>
             <div class="chip-row" id="chips-p2"></div>
+            <button class="demo-btn" onclick="toggleGps('p2')" id="gps-btn-p2">🔧 Simular: GPS desactivado</button>
 
             <div class="gauge-card">
-              <div class="gauge-hd"><span class="lbl">Conducción continua</span><span class="val">0h 00m / 5h</span></div>
+              <div class="gauge-hd"><span class="lbl">Conducción continua <span class="hu-chip" onclick="openHu('HU52716-3')">HU52716-3</span></span><span class="val">0h 00m / 5h</span></div>
               <div class="gauge-track"><div class="gauge-fill" style="width:0%;background:var(--safe);"></div></div>
               <div class="gauge-foot"><span>Pausa obligatoria de 30 min al llegar al límite</span></div>
               <div class="gauge-sub">
@@ -568,7 +620,7 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
             </div>
 
             <div class="section-link" onclick="go('p2','linea-tiempo-p2')">
-              <span class="l">Ver línea de tiempo de hoy</span>
+              <span class="l">Ver línea de tiempo de hoy <span class="hu-chip" onclick="event.stopPropagation();openHu('HU52716-4')">HU52716-4</span></span>
               <span class="r">Detalle por hora <span class="icn" data-icon="chev"></span></span>
             </div>
             <div class="section-link" onclick="go('p2','historial-p2')"><span class="l">Ver historial de días anteriores</span><span class="r">Últimos 15 días <span class="icn" data-icon="chev"></span></span></div>
@@ -607,7 +659,11 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
             <h4 id="cap-title-p2">Conduciendo</h4>
             <div class="field" id="cap-detalle-p2" style="display:none;">
               <label id="cap-detalle-label-p2">Tipo</label>
-              <select id="cap-detalle-select-p2"></select>
+              <select id="cap-detalle-select-p2" onchange="toggleOtro('p2')"></select>
+            </div>
+            <div class="field" id="cap-otro-p2" style="display:none;">
+              <label>Especifica cuál (opcional)</label>
+              <input id="cap-otro-input-p2" placeholder="Escribe cuál"/>
             </div>
             <div class="field">
               <label>Ubicación</label>
@@ -628,6 +684,7 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
     <div class="col-caption">② Operador que NO es cliente GM</div>
     <div style="text-align:center;margin-top:8px;">
       <button class="notas-btn ghost" onclick="fireNotif()">🔔 Simular aviso de descanso</button>
+      <span class="hu-chip" onclick="openHu('HU52716-3')">HU52716-3</span>
     </div>
   </div>
 
@@ -652,6 +709,14 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
       <div class="decision"><b>El operador cliente GM no tiene un segundo login.</b> Usa su sesión normal de Mis Viajes (RFC+usuario+contraseña); la bitácora es un módulo más dentro de la misma app.</div>
       <div class="decision"><b>El operador independiente (no-GM) solo ve el módulo de bitácora.</b> No ve viajes, gastos ni liquidaciones porque esos dependen de ser cliente GM.</div>
       <div class="decision"><b>El alta del operador independiente no pasa por autorización administrativa de GM.</b> En cuanto confirma su teléfono por SMS y completa su perfil, entra directo a su bitácora — sin esperar aprobación, a diferencia de lo que hacía Conduce 087 hoy.</div>
+      <div class="decision"><b>Si el RFC ya existe con un teléfono distinto al guardado, se pide confirmar identidad (nombre + licencia) antes de aceptar el cambio.</b> El RFC de una persona lo puede saber alguien más, así que solo el SMS no basta para evitar que alguien tome el perfil de otro operador. Sin límite de intentos, y el mensaje de error nunca dice cuál dato falló, para no ayudar a quien solo está adivinando.</div>
+      <div class="decision"><b>Un teléfono ya confirmado por otro RFC rechaza el registro directo.</b> Un mismo número no puede quedar ligado a dos identidades a la vez.</div>
+      <div class="decision"><b>El correo electrónico del perfil es opcional.</b></div>
+      <div class="decision"><b>Los datos completos de la empresa (domicilio, tipo de servicio, modalidad, unidad completa, responsable) se piden solo la primera vez que se trabaja para esa empresa y unidad.</b> En Conduce 087 esto se capturaba solo una vez en la vida del operador, pero eso dejaba los datos desactualizados si cambiaba de empleador — aquí se vuelve a pedir únicamente cuando cambia de empresa o de unidad, no cada día.</div>
+      <div class="decision"><b>El GPS es obligatorio para registrar cualquier cambio de actividad.</b> Sin permiso de ubicación o con el GPS desactivado, el sistema no abre el registro y pide activarlo primero.</div>
+      <div class="decision"><b>Seleccionar "Otra(s)"/"Otro(s)" en Auxiliares o Excepción muestra un campo de texto opcional</b> para especificar cuál, sin obligar a capturarlo.</div>
+      <div class="decision"><b>No se permite firmar un día sin ninguna actividad registrada.</b></div>
+      <div class="decision"><b>Si hay una actividad en curso al momento de firmar, la firma aplica solo a las actividades ya cerradas.</b> La actividad en curso permanece abierta — el operador sí puede cerrarla después cambiando de actividad, aunque el día ya esté firmado.</div>
     </div>
   </div>
 </div>
@@ -783,22 +848,104 @@ function scrollToPhone(n){
   document.getElementById('phone2col').scrollIntoView({behavior:'smooth', block:'center'});
 }
 
+var gpsOff = { p1:false, p2:false };
+function toggleGps(phone){
+  gpsOff[phone] = !gpsOff[phone];
+  document.getElementById('gps-btn-'+phone).textContent = gpsOff[phone] ? '🔧 GPS desactivado — clic para reactivar' : '🔧 Simular: GPS desactivado';
+}
 function chipTap(phone, key){
+  if(gpsOff[phone]){
+    toast('Activa tu ubicación para poder continuar');
+    return;
+  }
   var a = ACTIVITIES.filter(function(x){ return x.key===key; })[0];
   pendingActivity = a; pendingPhone = phone;
 
   document.getElementById('cap-title-'+phone).textContent = a.label;
   var det = document.getElementById('cap-detalle-'+phone);
   var sel = document.getElementById('cap-detalle-select-'+phone);
+  var otro = document.getElementById('cap-otro-'+phone);
   if(DETALLES[key]){
     det.style.display = 'block';
     document.getElementById('cap-detalle-label-'+phone).textContent = key==='aux' ? 'Tipo de actividad auxiliar' : 'Tipo de caso de excepción';
     sel.innerHTML = DETALLES[key].map(function(o){ return '<option>'+o+'</option>'; }).join('');
+    otro.style.display = 'none';
+    document.getElementById('cap-otro-input-'+phone).value = '';
   } else {
     det.style.display = 'none';
+    otro.style.display = 'none';
   }
   document.getElementById('cap-notas-'+phone).value = '';
   showModal('m-capture-'+phone);
+}
+function toggleOtro(phone){
+  var sel = document.getElementById('cap-detalle-select-'+phone);
+  var show = (sel.value === 'Otra(s)' || sel.value === 'Otro(s)');
+  document.getElementById('cap-otro-'+phone).style.display = show ? 'block' : 'none';
+}
+function checkIdentidad(){
+  var n = document.getElementById('id-nombre').value.trim();
+  var l = document.getElementById('id-licencia').value.trim();
+  document.getElementById('err-identidad').classList.remove('show');
+  if(n === 'José Ramírez Ortega' && l === '234567FESSS'){
+    go('p2','nogm-empresa');
+  } else {
+    document.getElementById('err-identidad').classList.add('show');
+  }
+}
+function toggleEmpresaCompleta(){
+  var chk = document.getElementById('chk-repite').checked;
+  document.getElementById('empresa-completa').style.display = chk ? 'none' : 'block';
+}
+var sinActividad = { p1:false };
+function toggleSinActividad(phone){
+  sinActividad[phone] = document.getElementById('chk-sin-actividad-'+phone).checked;
+}
+function goFirma(phone){
+  go(phone,'firma');
+  var blocked = sinActividad[phone];
+  document.getElementById('firma-normal').style.display = blocked ? 'none' : 'block';
+  document.getElementById('firma-bloqueada').style.display = blocked ? 'block' : 'none';
+  document.getElementById('firma-bottombar').style.display = blocked ? 'none' : 'flex';
+}
+var HU_INFO = {
+  'HU52716-1':{title:'HU52716-1 — Alta y acceso de operadores independientes', body:
+    '<h5>Quién y para qué</h5><ul><li>Operador que no es cliente GM se registra con su RFC personal + teléfono para usar la Bitácora de Conducción sin depender de una cuenta de cliente GM.</li></ul>'+
+    '<h5>Reglas clave</h5><ul>'+
+    '<li>Identidad ancla en el RFC personal, no en la empresa ni el teléfono.</li>'+
+    '<li>RFC ya existe con el mismo teléfono: entra directo, sin repetir perfil, con su historial completo.</li>'+
+    '<li>RFC ya existe con un teléfono distinto: pide confirmar nombre completo y número de licencia (sin límite de intentos) antes de aceptar el teléfono nuevo. El mensaje de error nunca dice cuál dato falló.</li>'+
+    '<li>Teléfono ya confirmado por otro RFC: rechaza el registro, no envía código.</li>'+
+    '<li>Correo electrónico es opcional en el perfil.</li>'+
+    '<li>Los datos completos de la empresa (domicilio, tipo de servicio, modalidad, datos de la unidad, responsable) se piden solo la primera vez que se trabaja para esa empresa y unidad; se repiten solo si cambia de empresa o de unidad.</li>'+
+    '<li>No requiere autorización administrativa de GM.</li></ul>'},
+  'HU52716-2':{title:'HU52716-2 — Registrar cambio de actividad', body:
+    '<h5>Quién y para qué</h5><ul><li>Operador con acceso a la Bitácora cambia de actividad con un toque, para cumplir el registro de horas de la NOM-087.</li></ul>'+
+    '<h5>Reglas clave</h5><ul>'+
+    '<li>6 botones de actividad: Conduciendo, Pausa, Auxiliares, Excepción, Descanso, Fuera de Servicio. Cualquiera cambia el estatus del operador; la actividad actual no puede volver a seleccionarse.</li>'+
+    '<li>Auxiliares y Excepción piden un tipo con default preseleccionado; si elige "Otra(s)"/"Otro(s)" aparece un campo de texto opcional para especificar cuál.</li>'+
+    '<li>Ubicación se toma del GPS y no se puede editar; el GPS es obligatorio — sin permiso o GPS activo no se puede abrir el registro de ningún cambio de actividad.</li>'+
+    '<li>Notas es opcional en todas las actividades.</li></ul>'},
+  'HU52716-3':{title:'HU52716-3 — Avisos de límite de conducción NOM-087', body:
+    '<h5>Quién y para qué</h5><ul><li>Operador con "Conduciendo" en curso recibe avisos antes y al llegar a los límites de conducción.</li></ul>'+
+    '<h5>Reglas clave</h5><ul>'+
+    '<li>4 avisos: Pausa próxima (4h30 continuas), Pausa obligatoria (5h continuas), Descanso próximo (13h30 del día), Descanso necesario (14h del día).</li>'+
+    '<li>El aviso es siempre informativo — nunca bloquea seguir registrando "Conduciendo", incluso después del límite.</li>'+
+    '<li>Llega aunque la aplicación esté cerrada.</li>'+
+    '<li>El conteo de conducción del día reinicia a partir de la medianoche.</li></ul>'},
+  'HU52716-4':{title:'HU52716-4 — Línea de tiempo, historial y firma', body:
+    '<h5>Quién y para qué</h5><ul><li>Operador consulta el detalle de su día, su historial de 15 días y firma su jornada.</li></ul>'+
+    '<h5>Reglas clave</h5><ul>'+
+    '<li>Línea de tiempo: barra de 24h por tramos de color + detalle con hora inicio/fin/duración; lo que no ha transcurrido se ve en gris rayado.</li>'+
+    '<li>Historial: últimos 15 días con total de horas; un día sin actividad muestra 0h 00m.</li>'+
+    '<li>Firmar no se permite si no hay ninguna actividad registrada ese día.</li>'+
+    '<li>Si hay una actividad en curso (sin cerrar) al firmar, la firma aplica solo a las actividades ya cerradas — la actividad en curso permanece abierta hasta que el operador la cambie a otra.</li></ul>'}
+};
+function openHu(key){
+  var h = HU_INFO[key];
+  document.getElementById('spec-title').textContent = h.title;
+  document.getElementById('spec-body').innerHTML = h.body;
+  document.getElementById('ov-spec').classList.add('open');
 }
 function finishActivity(phone){
   hideModal('m-capture-'+phone);
@@ -872,3 +1019,5 @@ setInterval(function(){
 </script>
 </body>
 </html>
+
+</body></html>

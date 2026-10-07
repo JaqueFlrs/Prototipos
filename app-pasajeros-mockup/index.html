@@ -275,7 +275,7 @@ input,select,textarea{background:#fff;color:#1a1a1a;}
 <div class="page-head">
   <div>
     <div class="page-title">Mi Transporte — App del Pasajero</div>
-    <div class="page-sub">El celular de Marco Ruiz, de la invitación a su recorrido de ida y de regreso. Basado en HU50300-1 y HU50300-2; los puntos de recolección vienen de HU50300-3.</div>
+    <div class="page-sub">El celular de Marco Ruiz, de la invitación a su recorrido de ida y de regreso. Basado en HU50300-1, -2, -4 y -5; los puntos de recolección vienen de HU50300-3.</div>
   </div>
   <div class="head-actions">
     <button class="hbtn" onclick="openNotes()">📝 Notas del análisis</button>
@@ -431,31 +431,59 @@ const HU = {
     fuera:"Contraseñas, reemisión de links, sugerir recorrido por ubicación y que el pasajero cambie su punto."
   },
   "HU50300-2": {
-    titulo:"HU50300-2 — Seguimiento y confirmación del recorrido",
-    story:"Yo como pasajero con la cuenta ya activada, requiero ver el estado de mi recorrido, cuánto le falta a la unidad para llegar a mi punto y confirmar que abordé, para saber cuándo y dónde me toca subir a la unidad.",
+    titulo:"HU50300-2 — Pantalla principal del recorrido",
+    story:"Yo como pasajero con la cuenta ya activada, requiero ver mi recorrido, mi punto de abordaje, la unidad, el operador y el mapa en una sola pantalla, para saber qué recorrido me toca y dónde está mi unidad.",
     pantalla:"Pantalla principal de la app y sus variantes.",
     implementar:[
       "Muestra punto de abordaje, unidad, operador y mapa. No muestra hora programada de paso por su punto.",
-      "Contador en pantalla que se actualiza solo: \"Tu unidad llega a tu punto en X min\".",
-      "Avisos al celular aunque la app esté cerrada: al salir la unidad, a los 10, 5 (\"ve saliendo\") y 1 minuto, y a 100 m \"Tu unidad llegó a tu punto\". Cada uno una sola vez por recorrido.",
-      "Si al salir ya faltan menos de 10 min, no se manda el aviso de 10.",
-      "Si confirmó su abordaje ANTES de que la unidad llegara a su punto, la app entiende que ahí baja: \"Llegas a tu punto en X min\" y al final \"Llegaste a tu punto\".",
-      "Si no confirmó antes, ahí sube: cuando la unidad se aleja de su punto, la pantalla cambia a \"Llegas a tu destino en X min\" hasta el destino del último tramo. Solo en pantalla, sin notificaciones.",
-      "Junto al botón aparece \"Confirma en cuanto subas para saber cuánto te falta\".",
-      "Si en el ERP quitan la salida, desaparece el tiempo estimado y vuelve a \"pendiente de salir\", sin aviso de corrección."
+      "Sin permiso de ubicación: sin punto de abordaje y con el botón \"Activar ubicación\".",
+      "Recorrido sin puntos de recolección: sin punto de abordaje, sin mensaje de error.",
+      "Si le asignan o le cambian el recorrido, o eliminan su punto, la app le vuelve a pedir ubicación y le asigna el punto más cercano.",
+      "Sin unidad ni operador: mensaje \"Unidad y operador pendientes de asignar\", sin mapa.",
+      "Pendiente de asignar recorrido, recorrido cancelado, servicio de ubicación sin respuesta.",
+      "Con dos recorridos se muestra el próximo a ocurrir, con acceso al otro. Turno nocturno: sigue vigente después de medianoche."
     ],
-    reglas:[
-      "Sube o baja no se captura en ningún lado; se deduce por la confirmación de abordaje.",
-      "Destino = destino del último tramo; con un solo tramo, el destino de ese tramo.",
-      "Confirmar abordaje no modifica Suben/Bajan del ERP ni valida la ubicación del celular.",
-      "Con dos recorridos se muestra el próximo a ocurrir; cada uno se confirma por separado.",
-      "Turno nocturno: el recorrido se identifica por su salida programada, no por el día calendario."
+    reglas:["El punto de abordaje se conserva de un día a otro.","El recorrido se identifica por su salida programada, no por el día calendario."],
+    principal:"Ve su punto, unidad, operador y mapa.",
+    alternos:"Sin permiso / sin puntos / sin unidad / pendiente de asignar / dos recorridos / turno nocturno / cambio de recorrido.",
+    errores:"El servicio de ubicación no responde / recorrido cancelado.",
+    dependencias:["HU50300-1","HU50300-3","HU50300-4","HU50300-5"],
+    fuera:"Cupo, reasignación tras cancelación, que el pasajero cambie su punto."
+  },
+  "HU50300-4": {
+    titulo:"HU50300-4 — Tiempo estimado y avisos de llegada",
+    story:"Yo como pasajero que espera su unidad, requiero ver cuánto le falta a la unidad para llegar a mi punto y recibir avisos en mi celular, para salir a tiempo y no perder mi transporte.",
+    pantalla:"Pantalla principal (contador) y notificaciones del celular.",
+    implementar:[
+      "Contador que se actualiza solo: \"Tu unidad llega a tu punto en X min\".",
+      "Avisos al celular aunque la app esté cerrada: al salir la unidad, a los 10, 5 (\"ve saliendo\") y 1 minuto, y \"Tu unidad llegó a tu punto\" a 100 m.",
+      "Cada aviso una sola vez por recorrido; si al salir ya faltan menos de 10 min, no se manda el de 10.",
+      "Solo cuentan los avisos de su propio punto, no de los demás puntos del recorrido.",
+      "Si en el ERP quitan la salida: desaparece el tiempo estimado y vuelve a \"pendiente de salir\", sin aviso de corrección; si se vuelve a registrar, se repite el aviso de salida."
     ],
-    principal:"Espera en su punto, recibe los avisos, sube y ve cuánto falta para su destino.",
-    alternos:"Regreso: ya va a bordo y ve cuánto falta para bajar / sin permiso de ubicación / sin puntos / sin unidad / pendiente de asignar / dos recorridos / turno nocturno.",
-    errores:"El servicio de ubicación no responde / recorrido cancelado / salida quitada en el ERP.",
-    dependencias:["HU50300-1","HU50300-3"],
-    fuera:"Cupo, reasignación tras cancelación, aviso de corrección, minutos y distancia configurables, saber ida o regreso sin depender de la confirmación."
+    reglas:["Minutos y distancia fijos en v1.","Sin punto de abordaje no hay tiempo estimado ni avisos."],
+    principal:"Recibe salida, 10, 5, 1 min y llegada.",
+    alternos:"La unidad sale con menos de 10 min / el tiempo sube y vuelve a bajar.",
+    errores:"Salida quitada en el ERP.",
+    dependencias:["HU50300-2","HU50300-5"],
+    fuera:"Aviso de corrección, minutos y distancia configurables, proveedor de SMS."
+  },
+  "HU50300-5": {
+    titulo:"HU50300-5 — Confirmación de abordaje y tiempo al destino",
+    story:"Yo como pasajero que ya subió a la unidad, requiero confirmar mi abordaje y ver cuánto me falta para llegar, para saber cuándo llego a mi punto o a mi destino.",
+    pantalla:"Pantalla principal: botón de abordaje y contador a bordo.",
+    implementar:[
+      "Botón \"Confirme su abordaje\" con el texto \"Confirma en cuanto subas para saber cuánto te falta\".",
+      "Si confirmó ANTES de que la unidad llegara a su punto, ahí baja: \"Llegas a tu punto en X min\", avisos de 10, 5 y 1 min y \"Llegaste a tu punto\".",
+      "Si no confirmó antes, ahí sube: cuando la unidad se aleja de su punto ve \"Llegas a tu destino en X min\" hasta el destino del último tramo, solo en pantalla.",
+      "Una sola confirmación por recorrido, aunque toque dos veces; cada recorrido se confirma por separado."
+    ],
+    reglas:["Sube o baja se deduce por la confirmación, no se captura.","Destino = destino del último tramo.","No modifica Suben/Bajan del ERP ni valida la ubicación del celular."],
+    principal:"Sube en su punto y ve cuánto falta para su destino.",
+    alternos:"Regreso: confirma en la planta y ve cuánto falta para bajar / no confirma y ve los mensajes de quien espera.",
+    errores:"Doble toque al confirmar.",
+    dependencias:["HU50300-2","HU50300-4"],
+    fuera:"Saber ida o regreso sin depender de la confirmación."
   },
   "HU50300-3": {
     titulo:"HU50300-3 — Puntos de recolección del recorrido",
@@ -470,7 +498,7 @@ const HU = {
     principal:"Jala el trazado, marca el punto como recolección y guarda.",
     alternos:"Punto sin marcar / desmarcar / eliminar / cancelar.",
     errores:"—",
-    dependencias:["HU50300-1","HU50300-2"],
+    dependencias:["HU50300-1","HU50300-2","HU50300-4"],
     fuera:"Distinguir sube o baja, nombre u horario por punto."
   }
 };
@@ -503,7 +531,7 @@ function capFor(){
     gpsfail:["El servicio de ubicación no responde","Se informa en el mapa; el resto de la pantalla sigue normal."],
     reverted:["Tráfico quitó la salida en el ERP","La app vuelve a \"pendiente de salir\" y quita el tiempo estimado, sin aviso de corrección."]
   };
-  if(variant && vdesc[variant]) return {title:"Variante · "+vdesc[variant][0], desc:vdesc[variant][1], hus:["HU50300-2"]};
+  if(variant && vdesc[variant]) return {title:"Variante · "+vdesc[variant][0], desc:vdesc[variant][1], hus:[variant==="reverted"?"HU50300-4":"HU50300-2"]};
   const ph = PHASES[t.phase];
   const lab = rec==="am" ? "⑦ Recorrido de ida (sale 07:00)" : "⑧ Recorrido de regreso (sale 17:30)";
   let d = "";
@@ -514,7 +542,10 @@ function capFor(){
   else if(ph==="destllego") d = "La unidad llegó a 100 m o menos del destino. Recorrido terminado.";
   else if(m==="bajada" && ph!=="llego") d = "Marco ya va a bordo antes de su punto: los avisos dicen \"Llegas a tu punto\".";
   else d = "Llegó a su punto, donde baja. Recorrido terminado; ya no se muestra el destino del recorrido.";
-  return {title:lab, desc:d, hus:["HU50300-2"]};
+  let hus = ["HU50300-2"];
+  if(t.boarded || ph==="dest30" || ph==="destllego") hus = ["HU50300-5"];
+  else if(t.phase>0) hus = ["HU50300-4"];
+  return {title:lab, desc:d, hus};
 }
 
 const G = {
@@ -695,6 +726,7 @@ const NOTES_HTML = `
   <li><b>Un solo celular:</b> el mockup sigue a Marco de principio a fin, ida y regreso. Los casos alternos son cosas que le pueden pasar a él.</li>
   <li><b>Puntos de recolección:</b> el punto de abordaje ya no es una geocerca de la primera parada. Es el punto marcado como recolección más cercano, buscando en todos los tramos. Los puntos se capturan en Mi Transporte (HU50300-3).</li>
   <li><b>Sin hora programada:</b> el pasajero solo ve el tiempo estimado.</li>
+  <li><b>La app quedó en 4 HU:</b> HU50300-1 activación, HU50300-2 pantalla principal, HU50300-4 tiempo estimado y avisos, HU50300-5 confirmación de abordaje y destino. HU50300-3 es la pantalla web de puntos de recolección.</li>
   <li><b>Avisos tipo Uber:</b> salida, 10, 5 ("ve saliendo") y 1 minuto, y llegada a 100 m. Cada uno una sola vez.</li>
   <li><b>Sube o baja se deduce:</b> no se captura. Si confirmó su abordaje antes de que la unidad llegue a su punto, ahí baja; si no, ahí sube y después ve cuánto falta para el destino del último tramo.</li>
   <li><b>El padrón solo asigna recorrido,</b> nunca parada.</li>
@@ -1068,20 +1100,20 @@ const TOUR = [
   {hu:"HU50300-1", title:"La app pide su ubicación", text:"Con ella busca el punto de recolección más cercano, en todos los tramos del recorrido.", run:()=>go("permission")},
   {hu:"HU50300-1", title:"Pantalla nueva: Tu punto de abordaje", text:"El pin naranja es su punto; los grises son otros puntos de recolección. Los puntos los capturan en Mi Transporte (HU50300-3).", run:()=>{resetTrips(); go("punto",{rec:"am"});}},
   {hu:"HU50300-2", title:"Pantalla principal antes de que salga", text:"Ve su punto, unidad y operador. No hay hora programada: solo tiempo estimado cuando la unidad salga.", run:()=>setAM(0)},
-  {hu:"HU50300-2", title:"Aviso: la unidad salió", text:"Le llega al celular aunque la app esté cerrada. El contador empieza a correr.", run:()=>{setAM(1); fireNotif("am");}},
-  {hu:"HU50300-2", title:"Aviso de 10 minutos", text:"Cada aviso se manda una sola vez por recorrido.", run:()=>{setAM(2); fireNotif("am");}},
-  {hu:"HU50300-2", title:"Aviso de 5 minutos: ve saliendo", text:"Si la unidad sale cuando ya faltan menos de 10 min, el de 10 no se manda.", run:()=>{setAM(3); fireNotif("am");}},
-  {hu:"HU50300-2", title:"Tu unidad llegó a tu punto", text:"Se dispara cuando la unidad está a 100 m o menos de su punto.", run:()=>{setAM(5); fireNotif("am");}},
-  {hu:"HU50300-2", title:"Sube y confirma", text:"Confirmó cuando la unidad ya estaba en su punto: la app entiende que ahí subió.", run:()=>setAM(5,true,false)},
-  {hu:"HU50300-2", title:"Cuánto falta para su destino", text:"La unidad se alejó de su punto. Ahora ve el tiempo al destino del último tramo, solo en pantalla.", run:()=>{setAM(6,true,false); fireNotif("am");}},
-  {hu:"HU50300-2", title:"Llegó a su destino", text:"A 100 m o menos del destino: recorrido terminado.", run:()=>setAM(7,true,false)},
+  {hu:"HU50300-4", title:"Aviso: la unidad salió", text:"Le llega al celular aunque la app esté cerrada. El contador empieza a correr.", run:()=>{setAM(1); fireNotif("am");}},
+  {hu:"HU50300-4", title:"Aviso de 10 minutos", text:"Cada aviso se manda una sola vez por recorrido.", run:()=>{setAM(2); fireNotif("am");}},
+  {hu:"HU50300-4", title:"Aviso de 5 minutos: ve saliendo", text:"Si la unidad sale cuando ya faltan menos de 10 min, el de 10 no se manda.", run:()=>{setAM(3); fireNotif("am");}},
+  {hu:"HU50300-4", title:"Tu unidad llegó a tu punto", text:"Se dispara cuando la unidad está a 100 m o menos de su punto.", run:()=>{setAM(5); fireNotif("am");}},
+  {hu:"HU50300-5", title:"Sube y confirma", text:"Confirmó cuando la unidad ya estaba en su punto: la app entiende que ahí subió.", run:()=>setAM(5,true,false)},
+  {hu:"HU50300-5", title:"Cuánto falta para su destino", text:"La unidad se alejó de su punto. Ahora ve el tiempo al destino del último tramo, solo en pantalla.", run:()=>{setAM(6,true,false); fireNotif("am");}},
+  {hu:"HU50300-5", title:"Llegó a su destino", text:"A 100 m o menos del destino: recorrido terminado.", run:()=>setAM(7,true,false)},
   {hu:"HU50300-2", title:"Regreso: sube en la planta", text:"Por la tarde, el próximo recorrido es el de las 17:30. Marco sube en la planta.", run:()=>setPM(0)},
-  {hu:"HU50300-2", title:"Confirma antes de llegar a su punto", text:"Como su punto todavía no pasa, la app entiende que ahí baja.", run:()=>setPM(0,true,true)},
-  {hu:"HU50300-2", title:"Llegas a tu punto en 5 min", text:"Los avisos ahora dicen \"Llegas a tu punto\".", run:()=>{setPM(3,true,true); fireNotif("pm");}},
-  {hu:"HU50300-2", title:"Llegaste a tu punto", text:"Recorrido terminado. Ya no se muestra el destino del recorrido.", run:()=>{setPM(5,true,true); fireNotif("pm");}},
+  {hu:"HU50300-5", title:"Confirma antes de llegar a su punto", text:"Como su punto todavía no pasa, la app entiende que ahí baja.", run:()=>setPM(0,true,true)},
+  {hu:"HU50300-5", title:"Llegas a tu punto en 5 min", text:"Los avisos ahora dicen \"Llegas a tu punto\".", run:()=>{setPM(3,true,true); fireNotif("pm");}},
+  {hu:"HU50300-5", title:"Llegaste a tu punto", text:"Recorrido terminado. Ya no se muestra el destino del recorrido.", run:()=>{setPM(5,true,true); fireNotif("pm");}},
   {hu:"HU50300-2", title:"Caso: no dio permiso de ubicación", text:"Sin punto, sin tiempo estimado ni avisos. Con \"Activar ubicación\" lo puede corregir.", run:()=>{resetTrips(); go("home",{variant:"noloc", rec:"am"});}},
   {hu:"HU50300-2", title:"Caso: recorrido sin puntos de recolección", text:"Nadie marcó puntos en Mi Transporte. Mismo resultado, sin mensaje de error.", run:()=>go("home",{variant:"nopoints", rec:"am"})},
-  {hu:"HU50300-2", title:"Caso: Tráfico quita la salida", text:"La app vuelve a \"aún no sale\" y quita el tiempo estimado, sin aviso de corrección.", run:()=>{resetTrips(); go("home",{variant:"reverted", rec:"am"});}}
+  {hu:"HU50300-4", title:"Caso: Tráfico quita la salida", text:"La app vuelve a \"aún no sale\" y quita el tiempo estimado, sin aviso de corrección.", run:()=>{resetTrips(); go("home",{variant:"reverted", rec:"am"});}}
 ];
 let tourOn=false, tourI=-1;
 const tourOverlay=document.getElementById("tourOverlay"), tourTip=document.getElementById("tourTip"), tourbar=document.getElementById("tourbar");

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HU50880 Emisor o receptor</title>
+<style>
+/* Layout: nota breve arriba, frame real de GM Fiscal al centro, recorrido guiado flotante. Un solo look claro, igual que la app real. */
+:root{
+  color-scheme:light;
+  --page-bg:#eceef1; --ink:#26292c; --sub:#8a8f94; --border:#edeef0; --line:#d6d9de;
+  --wine:#6d1f49; --orange:#ee7d1e; --orange-2:#d96c10; --orange-bg:#fdece0;
+  --green:#1f9254; --green-bg:#e2f8ec; --red:#d64545; --red-bg:#fdeaea;
+  --blue:#2f6fd1; --blue-bg:#e8f0fd; --white:#fff; --soft:#fafbfc; --muted:#f3f4f6;
+  --dis:#c7cbcf; --shadow:rgba(20,22,24,.45);
+}
+*{box-sizing:border-box;}
+html{color-scheme:light;}
+body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--ink);background:var(--page-bg);margin:0;padding-block:24px 90px;padding-inline:20px;}
+input,select,textarea{color-scheme:light;background:var(--white);color:var(--ink);font-family:inherit;}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:16px;}
+.head h1{font-size:19px;margin:0 0 4px;text-wrap:balance;}
+.head p{margin:0;color:var(--sub);font-size:12.5px;}
+.note{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--wine);border-radius:0 8px 8px 0;padding:12px 16px;font-size:12.5px;line-height:1.6;color:#3a3f45;}
+.note b{color:var(--ink);}
+.note ul{margin:6px 0 0;padding-left:18px;}
+.scroll{overflow-x:auto;}
+
+/* Frame GM Fiscal */
+.fiscal-frame{position:relative;min-width:900px;border:1px solid #dfe1e5;border-radius:6px;background:var(--white);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.wine-strip{height:6px;background:var(--wine);}
+.fiscal-body{display:flex;min-height:560px;}
+.fiscal-sidebar{width:200px;background:var(--white);border-right:1px solid var(--border);flex-shrink:0;padding:14px 0;}
+.sb-brand{padding:0 16px 12px;font-size:12px;font-weight:700;color:#3a3d40;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.sb-brand small{color:var(--sub);font-weight:400;font-size:10px;display:block;}
+.sb-item{padding:8px 16px;font-size:12px;color:#565a5f;display:flex;align-items:center;gap:9px;}
+.sb-item .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.6;}
+.sb-item.active{background:var(--orange-bg);color:var(--orange);font-weight:700;border-right:3px solid var(--orange);}
+.ui-disabled{color:var(--dis) !important;cursor:not-allowed;}
+.fiscal-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.content-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);}
+.ch-title{font-size:13px;font-weight:700;}
+.ch-user{font-size:11px;color:var(--sub);}
+.content-body{padding:16px 20px;}
+.inner-title{font-size:16px;font-weight:700;margin-bottom:2px;}
+.inner-sub{font-size:12px;color:var(--sub);margin-bottom:14px;}
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px;flex-wrap:wrap;}
+.tbtn{border:1px solid var(--line);background:var(--white);color:#3a3f45;font-size:12px;padding:6px 13px;border-radius:6px;}
+.btn-solid{background:var(--orange);color:var(--white);border:none;border-radius:6px;padding:7px 16px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.btn-solid:hover{background:var(--orange-2);}
+.btn-solid:disabled{opacity:.45;cursor:not-allowed;}
+.btn-ghost{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:7px 16px;font-size:12.5px;color:#3a3f45;cursor:pointer;}
+.table-scroll{border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+table.fiscal-table{border-collapse:collapse;width:100%;font-size:12px;}
+.fiscal-table th{background:var(--soft);color:#9199a1;text-transform:uppercase;font-size:10px;letter-spacing:.4px;font-weight:700;padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.fiscal-table td{padding:10px;border-bottom:1px solid #f4f5f6;vertical-align:top;font-variant-numeric:tabular-nums;}
+.fiscal-table tr.click{cursor:pointer;}
+.fiscal-table tr.click:hover td{background:var(--soft);}
+.fiscal-table tr.new td{background:#fffaf4;}
+.tipo-tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--blue-bg);color:var(--blue);margin:0 4px 4px 0;white-space:nowrap;}
+.pill-status{display:inline-flex;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.pill-status.ok{background:var(--green-bg);color:var(--green);}
+.pill-status.wait{background:#fdf3e3;color:#b9791f;}
+.mono{font-family:Consolas,"Courier New",monospace;font-size:11.5px;color:#565a5f;}
+
+/* Vista conciliación */
+.back{font-size:12px;color:var(--wine);cursor:pointer;margin-bottom:10px;display:inline-block;}
+.conc-head{border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:14px;}
+.conc-head .pct{font-size:26px;font-weight:700;color:var(--green);}
+.conc-head .lbl{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;}
+.tabs{display:flex;gap:2px;margin-bottom:-1px;}
+.tab{padding:6px 14px;font-size:12px;background:var(--muted);color:#565a5f;border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0;}
+.tab.active{background:var(--white);color:var(--wine);font-weight:700;border-top:2px solid var(--wine);}
+.tab.dis{color:var(--dis);cursor:not-allowed;}
+
+/* Modal crear solicitud */
+.modal-overlay{position:absolute;inset:0;background:var(--shadow);display:flex;align-items:flex-start;justify-content:center;padding-top:22px;z-index:50;}
+.modal-overlay[hidden]{display:none !important;}
+.modal-box{background:var(--white);border-radius:10px;width:540px;max-width:94%;box-shadow:0 8px 28px rgba(0,0,0,.22);overflow:hidden;}
+.modal-header{padding:14px 18px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{border:none;background:none;font-size:18px;color:var(--sub);cursor:pointer;}
+.mtabs{display:flex;gap:4px;padding:0 18px;border-bottom:1px solid var(--border);}
+.mtab{padding:8px 12px;font-size:12.5px;color:#565a5f;border-bottom:2px solid transparent;}
+.mtab.active{color:var(--orange);border-bottom-color:var(--orange);font-weight:700;}
+.modal-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px;max-height:470px;overflow-y:auto;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.f-field label,.f-label{display:block;font-size:12px;font-weight:700;color:#3a3f45;margin-bottom:5px;}
+.req{color:var(--red);}
+.f-field input,.f-field select{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-size:12.5px;}
+.tipos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.tipo-item{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:6px;padding:7px 8px;font-size:12px;cursor:pointer;user-select:none;}
+.tipo-item.selected{border-color:var(--orange);background:var(--orange-bg);color:var(--orange-2);font-weight:700;}
+.tipo-item.disabled{opacity:.45;cursor:not-allowed;}
+.tipo-item input{margin:0;pointer-events:none;}
+.info{font-size:11.5px;color:#5c636b;background:var(--muted);border-radius:6px;padding:6px 10px;margin-top:6px;}
+.roles{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.role-block{border:1px solid var(--border);background:var(--soft);border-radius:8px;padding:9px 12px;}
+.role-block.err{border-color:var(--red);background:var(--red-bg);}
+.role-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.role-name{font-weight:700;font-size:12.5px;min-width:70px;}
+.role-row label{display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer;}
+.role-row input{width:15px;height:15px;accent-color:var(--orange);}
+.role-err{color:var(--red);font-size:11.5px;margin-top:6px;}
+.help{font-size:11.5px;color:#5c636b;line-height:1.5;}
+.help b{color:var(--ink);}
+.hint{font-size:11px;color:var(--sub);margin-top:4px;}
+.modal-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--border);background:var(--soft);flex-wrap:wrap;}
+.modal-footer label{display:flex;align-items:center;gap:6px;font-size:12px;}
+.fbtns{display:flex;gap:8px;}
+
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--white);padding:11px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:2000;}
+
+/* Recorrido guiado (fuera del frame) */
+.tour-fab{position:fixed;bottom:24px;left:24px;z-index:500;background:var(--orange);color:var(--white);border:none;border-radius:30px;padding:13px 22px;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.25);}
+.tour-fab:hover{background:var(--orange-2);}
+.tour-spot{outline:3px solid var(--orange) !important;outline-offset:3px;box-shadow:0 0 0 9999px rgba(20,22,24,.35);position:relative;z-index:60;border-radius:6px;}
+.tour-tip{position:fixed;z-index:902;background:var(--white);border-radius:10px;width:320px;max-width:calc(100vw - 32px);box-shadow:0 10px 30px rgba(0,0,0,.35);padding:16px 18px;}
+.tour-tip h4{font-size:13.5px;margin:0 0 6px;color:var(--wine);}
+.tour-tip p{font-size:12.5px;line-height:1.55;color:#3a3f45;margin:0 0 12px;}
+.tour-row{display:flex;justify-content:space-between;align-items:center;}
+.tour-count{font-size:11px;color:var(--sub);}
+.tour-btns{display:flex;gap:8px;}
+.tbtn2{border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.tbtn2.primary{background:var(--orange);color:var(--white);font-weight:700;}
+.tbtn2.ghost{background:var(--muted);color:#3a3f45;}
+.tour-skip{font-size:11px;color:var(--sub);text-decoration:underline;cursor:pointer;display:block;text-align:right;margin-top:8px;}
+button:focus-visible,input:focus-visible,select:focus-visible,.tipo-item:focus-visible{outline:2px solid var(--orange);outline-offset:2px;}
+</style>
+</head>
+<body>
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:-24px -20px 20px;">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p>Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p>⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para GM Fiscal, eso significa colores, tipografía, estructura de paneles y componentes propios de GM Fiscal.</p>
+  <p>Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <h1>HU50880 · Elegir emisor o receptor al crear una conciliación</h1>
+    <p>GM Fiscal · Solicitudes · Crear nueva solicitud. Prototipo navegable con datos de ejemplo.</p>
+  </div>
+
+  <div class="note">
+    <b>Qué cambia</b>
+    <ul>
+      <li>Hoy la ventana "Crear nueva solicitud" no pregunta si la empresa es emisora o receptora. Al marcar Ingreso, Egreso o Pago aparecen dos casillas nuevas, "Como emisor" y "Como receptor", ambas marcadas.</li>
+      <li>Solo se concilian las facturas del papel elegido, del lado del SAT y del ERP. Cada tipo tiene su propia elección. Traslado y Nómina no cambian.</li>
+      <li>Si un tipo queda sin ninguna casilla, aparece "Selecciona al menos emisor o receptor" y no se puede crear la solicitud.</li>
+      <li>La elección se ve en la lista de solicitudes y en el encabezado de la conciliación. Prueba con el botón "Nueva solicitud" o con el recorrido.</li>
+    </ul>
+  </div>
+
+  <div class="scroll">
+    <div class="fiscal-frame" id="frame">
+      <div class="wine-strip"></div>
+      <div class="fiscal-body">
+        <aside class="fiscal-sidebar">
+          <div class="sb-brand">GM Fiscal<small>Transportes del Bajío SA de CV</small></div>
+          <div class="sb-item ui-disabled"><span class="dot"></span>Dashboard</div>
+          <div class="sb-item active"><span class="dot"></span>Solicitudes</div>
+          <div class="sb-item ui-disabled"><span class="dot"></span>Conciliaciones</div>
+          <div class="sb-item ui-disabled"><span class="dot"></span>CFDI</div>
+          <div class="sb-item ui-disabled"><span class="dot"></span>Reportes</div>
+          <div class="sb-item ui-disabled"><span class="dot"></span>Descargas</div>
+          <div class="sb-item ui-disabled"><span class="dot"></span>Consulta EFOS</div>
+        </aside>
+        <div class="fiscal-main">
+          <div class="content-header">
+            <div class="ch-title" id="chTitle">Solicitudes</div>
+            <div class="ch-user">TBA120315KX9 · Laura Méndez</div>
+          </div>
+          <div class="content-body" id="view"></div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="modal" hidden>
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+          <div class="modal-header"><span id="mTitle">Crear nueva solicitud</span><button class="modal-close" id="mClose" aria-label="Cerrar">×</button></div>
+          <div class="mtabs"><span class="mtab active">Conciliación</span><span class="mtab ui-disabled">Reportes</span><span class="mtab ui-disabled">Carga de XML</span></div>
+          <div class="modal-body">
+            <div class="row2">
+              <div class="f-field"><label for="fIni">Fecha de inicio <span class="req">*</span></label><input type="date" id="fIni" max="2026-10-07"></div>
+              <div class="f-field"><label for="fFin">Fecha de fin <span class="req">*</span></label><input type="date" id="fFin" max="2026-10-07"></div>
+            </div>
+            <div id="tiposWrap">
+              <span class="f-label">Tipos de factura <span class="req">*</span></span>
+              <div class="tipos-grid" id="tipos"></div>
+              <div id="tiposInfo"></div>
+              <div class="roles" id="roles"></div>
+            </div>
+            <div class="f-field">
+              <label for="fAnt">Conciliación anterior (opcional)</label>
+              <select id="fAnt">
+                <option value="">Seleccionar conciliación (opcional)</option>
+                <option value="a1">Ventas septiembre · 01/09/2026 al 30/09/2026</option>
+                <option value="a2">Cierre agosto · 01/08/2026 al 31/08/2026</option>
+              </select>
+            </div>
+            <div class="f-field">
+              <label for="fNom">Nombre (opcional)</label>
+              <input type="text" id="fNom" maxlength="100" placeholder="Se generará automáticamente">
+              <div class="hint">Déjalo en blanco para asignar un nombre aleatorio</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <label><input type="checkbox" id="fTer"> Se procesará en hasta 24h</label>
+            <div class="fbtns"><button class="btn-ghost" id="mCancel">Cancelar</button><button class="btn-solid" id="mCreate" disabled>Crear Conciliación</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="tour-fab" id="tourStart">¿Te muestro cómo funciona?</button>
+<div class="tour-tip" id="tourTip" hidden>
+  <h4 id="tTitle"></h4>
+  <p id="tText"></p>
+  <div class="tour-row">
+    <span class="tour-count" id="tCount"></span>
+    <div class="tour-btns"><button class="tbtn2 ghost" id="tPrev">Anterior</button><button class="tbtn2 primary" id="tNext">Siguiente</button></div>
+  </div>
+  <span class="tour-skip" id="tSkip">Salir del recorrido</span>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const TIPOS=[{id:"I",n:"Ingreso"},{id:"E",n:"Egreso"},{id:"T",n:"Traslado"},{id:"P",n:"Pago"},{id:"N",n:"Nómina"}];
+const CON_ROL=["I","E","P"];
+const NOMBRE=Object.fromEntries(TIPOS.map(t=>[t.id,t.n]));
+const HELP='<b>Como emisor:</b> facturas que tu empresa emitió. <b>Como receptor:</b> facturas que tu empresa recibió.';
+
+let sel=[], roles={}, route={name:"lista"};
+let solicitudes=[
+  {nombre:"Ventas septiembre",ini:"01/09/2026",fin:"30/09/2026",tipos:[{id:"I",e:true,r:false}],estatus:"Conciliada",pct:"94.2%"},
+  {nombre:"Cierre agosto",ini:"01/08/2026",fin:"31/08/2026",tipos:[{id:"I",e:true,r:true},{id:"E",e:true,r:true}],estatus:"Conciliada",pct:"88.7%",antes:true},
+  {nombre:"Compras julio",ini:"01/07/2026",fin:"31/07/2026",tipos:[{id:"I",e:false,r:true},{id:"P",e:true,r:true}],estatus:"Conciliada",pct:"97.5%"}
+];
+const ANT={a1:{ini:"2026-09-01",fin:"2026-09-30",tipos:[{id:"I",e:true,r:false}]},a2:{ini:"2026-08-01",fin:"2026-08-31",tipos:[{id:"I",e:true,r:true},{id:"E",e:true,r:true}]}};
+
+const $=id=>document.getElementById(id);
+function rolTxt(t){ if(!CON_ROL.includes(t.id)) return NOMBRE[t.id]; const p=t.e&&t.r?"Emisor y receptor":t.e?"Emisor":"Receptor"; return NOMBRE[t.id]+" · "+p; }
+function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2600);}
+
+function renderView(){
+  const v=$("view");
+  if(route.name==="lista"){
+    $("chTitle").textContent="Solicitudes";
+    v.innerHTML=`<div class="inner-title">Solicitudes</div><div class="inner-sub">Descargas del SAT y conciliaciones contra el ERP</div>
+    <div class="toolbar"><div style="display:flex;gap:8px"><span class="tbtn ui-disabled">Filtros</span><span class="tbtn ui-disabled">Actualizar</span></div><button class="btn-solid" id="btnNueva">Nueva solicitud</button></div>
+    <div class="table-scroll"><table class="fiscal-table" id="tabla"><thead><tr><th>Nombre</th><th>Rango</th><th>Tipos de factura</th><th>Estatus</th></tr></thead><tbody>${
+      solicitudes.map((s,i)=>`<tr class="click ${s.nueva?"new":""}" data-i="${i}" id="row${i}"><td><b>${s.nombre}</b></td><td class="mono">${s.ini} al ${s.fin}</td><td id="tipos${i}">${s.tipos.map(t=>`<span class="tipo-tag">${rolTxt(t)}</span>`).join("")}</td><td><span class="pill-status ${s.estatus==="Conciliada"?"ok":"wait"}">${s.estatus}</span></td></tr>`).join("")
+    }</tbody></table></div>`;
+    $("btnNueva").onclick=()=>openModal();
+    v.querySelectorAll("tr.click").forEach(r=>r.onclick=()=>{route={name:"conc",i:+r.dataset.i};renderView();});
+  } else {
+    const s=solicitudes[route.i];
+    $("chTitle").textContent="Conciliación";
+    v.innerHTML=`<span class="back" id="back">‹ Volver a Solicitudes</span>
+    <div class="inner-title">${s.nombre}</div><div class="inner-sub">${s.ini} al ${s.fin}</div>
+    <div class="conc-head" id="concHead">
+      <div><div class="lbl">Conciliado</div><div class="pct">${s.pct||"—"}</div></div>
+      <div><div class="lbl">Tipos de factura</div><div style="margin-top:4px">${s.tipos.map(t=>`<span class="tipo-tag">${rolTxt(t)}</span>`).join("")}</div></div>
+    </div>
+    <div class="tabs"><span class="tab active">Conciliación</span><span class="tab dis">Discrepancias</span></div>
+    <div class="table-scroll"><table class="fiscal-table"><thead><tr><th>UUID</th><th>Tipo</th><th>RFC emisor</th><th>RFC receptor</th><th>Total</th></tr></thead><tbody>${
+      ejemplo(s).map(f=>`<tr><td class="mono">${f.u}</td><td>${f.t}</td><td class="mono">${f.e}</td><td class="mono">${f.r}</td><td>${f.m}</td></tr>`).join("")
+    }</tbody></table></div>`;
+    $("back").onclick=()=>{route={name:"lista"};renderView();};
+  }
+}
+function ejemplo(s){
+  const yo="TBA120315KX9", out=[];
+  const filas={I:{e:[["3F2A91C4-…-77B1","LOG080512QA3","$48,720.00"],["9C11E0A2-…-0D3F","DIS150901MM2","$12,180.00"]],r:[["B7D40E18-…-2A6C","CMB990714HT5","$6,960.00"]]},
+    E:{e:[["0AE7F552-…-91C0","LOG080512QA3","$1,740.00"]],r:[["5D9B2C33-…-E812","CMB990714HT5","$580.00"]]},
+    P:{e:[["7E61A0B9-…-44D2","DIS150901MM2","$12,180.00"]],r:[["C2F8D417-…-6B09","CMB990714HT5","$6,960.00"]]}};
+  s.tipos.forEach(t=>{const f=filas[t.id]; if(!f) return;
+    if(t.e) f.e.forEach(x=>out.push({u:x[0],t:NOMBRE[t.id],e:yo,r:x[1],m:x[2]}));
+    if(t.r) f.r.forEach(x=>out.push({u:x[0],t:NOMBRE[t.id],e:x[1],r:yo,m:x[2]}));});
+  return out;
+}
+
+function openModal(){ resetModal(); $("modal").hidden=false; }
+function closeModal(){ $("modal").hidden=true; }
+function resetModal(){ sel=[]; roles={}; $("fIni").value=""; $("fFin").value=""; $("fAnt").value=""; $("fNom").value=""; $("fTer").checked=false; renderTipos(); }
+
+function toggleTipo(id){
+  const on=sel.includes(id);
+  if(on){ sel=sel.filter(x=>x!==id); delete roles[id]; }
+  else{
+    if(id==="N"){ if(sel.length) return; sel=["N"]; }
+    else{ if(sel.includes("N")) return; sel.push(id); }
+    if(CON_ROL.includes(id)) roles[id]={e:true,r:true};
+  }
+  renderTipos();
+}
+function renderTipos(){
+  const g=$("tipos"); g.innerHTML="";
+  TIPOS.forEach(t=>{
+    const dis=(t.id!=="N"&&sel.includes("N"))||(t.id==="N"&&sel.length&&!sel.includes("N"));
+    const d=document.createElement("div");
+    d.className="tipo-item"+(sel.includes(t.id)?" selected":"")+(dis?" disabled":"");
+    d.id="tipo-"+t.id; d.tabIndex=dis?-1:0; d.setAttribute("role","checkbox"); d.setAttribute("aria-checked",sel.includes(t.id));
+    d.innerHTML=`<input type="checkbox" ${sel.includes(t.id)?"checked":""} tabindex="-1"> ${t.n}`;
+    if(!dis){ d.onclick=()=>toggleTipo(t.id); d.onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();toggleTipo(t.id);}}; }
+    g.appendChild(d);
+  });
+  $("tiposInfo").innerHTML=sel.includes("N")?'<div class="info">Al seleccionar Nómina, no se puede elegir otros tipos de factura</div>':sel.length?'<div class="info">Nómina no puede ser seleccionada con otros tipos de factura</div>':"";
+  const r=$("roles"); r.innerHTML="";
+  const conRol=CON_ROL.filter(id=>sel.includes(id));
+  conRol.forEach(id=>{
+    const ro=roles[id], err=!ro.e&&!ro.r;
+    const b=document.createElement("div"); b.className="role-block"+(err?" err":""); b.id="rol-"+id;
+    b.innerHTML=`<div class="role-row"><span class="role-name">${NOMBRE[id]}</span>
+      <label><input type="checkbox" id="rol-${id}-e" ${ro.e?"checked":""}> Como emisor</label>
+      <label><input type="checkbox" id="rol-${id}-r" ${ro.r?"checked":""}> Como receptor</label></div>${err?'<div class="role-err">Selecciona al menos emisor o receptor</div>':""}`;
+    r.appendChild(b);
+    $("rol-"+id+"-e").onchange=e=>{roles[id].e=e.target.checked;renderTipos();};
+    $("rol-"+id+"-r").onchange=e=>{roles[id].r=e.target.checked;renderTipos();};
+  });
+  if(conRol.length){ const h=document.createElement("div"); h.className="help"; h.id="helpTxt"; h.innerHTML=HELP; r.appendChild(h); }
+  validar();
+}
+function validar(){
+  const ok=$("fIni").value&&$("fFin").value&&$("fIni").value<=$("fFin").value&&sel.length&&$("fTer").checked&&CON_ROL.filter(id=>sel.includes(id)).every(id=>roles[id].e||roles[id].r);
+  $("mCreate").disabled=!ok;
+}
+function fmt(d){const [y,m,dd]=d.split("-");return dd+"/"+m+"/"+y;}
+function crear(){
+  const tipos=sel.map(id=>CON_ROL.includes(id)?{id,e:roles[id].e,r:roles[id].r}:{id,e:true,r:true});
+  solicitudes.unshift({nombre:$("fNom").value.trim()||"Solicitud octubre",ini:fmt($("fIni").value),fin:fmt($("fFin").value),tipos,estatus:"Solicitud creada",nueva:true});
+  closeModal(); route={name:"lista"}; renderView(); toast("Solicitud creada");
+}
+function usarAnterior(k){
+  if(!k) return; const a=ANT[k];
+  $("fIni").value=a.ini; $("fFin").value=a.fin; sel=a.tipos.map(t=>t.id); roles={};
+  a.tipos.forEach(t=>{ if(CON_ROL.includes(t.id)) roles[t.id]={e:t.e,r:t.r}; });
+  renderTipos();
+}
+
+$("mClose").onclick=closeModal; $("mCancel").onclick=closeModal; $("mCreate").onclick=crear;
+["fIni","fFin","fTer"].forEach(id=>$(id).addEventListener("input",validar));
+$("fTer").addEventListener("change",validar);
+$("fAnt").onchange=e=>usarAnterior(e.target.value);
+renderView(); renderTipos();
+
+/* Recorrido guiado */
+function prepNueva(){ route={name:"lista"}; renderView(); openModal(); $("fIni").value="2026-09-01"; $("fFin").value="2026-09-30"; $("fTer").checked=true; }
+const STEPS=[
+  {sel:"#btnNueva",t:"Crear una solicitud",x:"Desde Solicitudes, el usuario abre la ventana \"Crear nueva solicitud\". La pestaña Conciliación es la única que cambia.",s:()=>{closeModal();route={name:"lista"};renderView();}},
+  {sel:"#tipo-I",t:"Marcar Ingreso",x:"Al marcar Ingreso, Egreso o Pago aparece debajo un bloque nuevo con su nombre. Hoy esta opción no existe.",s:()=>{prepNueva();renderTipos();}},
+  {sel:"#rol-I",t:"Casillas nuevas, ambas marcadas",x:"\"Como emisor\" y \"Como receptor\" aparecen marcadas. Si el usuario no las toca, la conciliación queda igual que hoy.",s:()=>{prepNueva();toggleTipo("I");}},
+  {sel:"#helpTxt",t:"Texto de ayuda",x:"Aparece una sola vez debajo de los bloques, para que el usuario no confunda sus compras con Egreso. Las compras son Ingreso como receptor.",s:()=>{prepNueva();toggleTipo("I");toggleTipo("E");}},
+  {sel:"#rol-E",t:"Cada tipo con su propia elección",x:"Aquí Ingreso queda solo como emisor y Egreso solo como receptor. Un bloque no afecta al otro.",s:()=>{prepNueva();toggleTipo("I");toggleTipo("E");roles.I.r=false;roles.E.e=false;renderTipos();}},
+  {sel:"#rol-I",t:"Validación",x:"Si un tipo queda sin ninguna casilla aparece \"Selecciona al menos emisor o receptor\" y el botón \"Crear Conciliación\" se deshabilita. Lo demás capturado se conserva.",s:()=>{prepNueva();toggleTipo("I");roles.I.e=false;roles.I.r=false;renderTipos();}},
+  {sel:"#tipo-T",t:"Traslado y Nómina no cambian",x:"Estos dos tipos no muestran casillas de emisor y receptor.",s:()=>{prepNueva();toggleTipo("T");}},
+  {sel:"#fAnt",t:"Conciliación anterior",x:"Al elegir una conciliación anterior se copian también emisor y receptor. Las creadas antes de este cambio se toman con ambas casillas marcadas.",s:()=>{prepNueva();$("fAnt").value="a1";usarAnterior("a1");}},
+  {sel:"#tipos0",t:"Se ve en la lista",x:"La columna de tipos de factura muestra el papel elegido, por ejemplo \"Ingreso · Emisor\" o \"Pago · Emisor y receptor\".",s:()=>{closeModal();route={name:"lista"};renderView();}},
+  {sel:"#concHead",t:"Y en la conciliación",x:"El encabezado repite la elección. La tabla trae solo facturas de ese papel, tanto del SAT como del ERP.",s:()=>{closeModal();route={name:"conc",i:0};renderView();}}
+];
+let cur=-1;
+function clearSpot(){document.querySelectorAll(".tour-spot").forEach(e=>e.classList.remove("tour-spot"));}
+function showStep(i){
+  clearSpot(); cur=i; const st=STEPS[i]; st.s();
+  const el=document.querySelector(st.sel); const tip=$("tourTip");
+  $("tTitle").textContent=(i+1)+". "+st.t; $("tText").textContent=st.x; $("tCount").textContent=(i+1)+"/"+STEPS.length;
+  $("tPrev").style.visibility=i?"visible":"hidden"; $("tNext").textContent=i===STEPS.length-1?"Terminar":"Siguiente";
+  tip.hidden=false;
+  if(el){ el.classList.add("tour-spot"); el.scrollIntoView({block:"center",behavior:"smooth"});
+    setTimeout(()=>{const r=el.getBoundingClientRect(),h=tip.offsetHeight;let top=r.bottom+14;if(top+h>innerHeight)top=Math.max(14,r.top-h-14);tip.style.top=top+"px";tip.style.left=Math.min(Math.max(14,r.left),innerWidth-tip.offsetWidth-14)+"px";},260); }
+}
+function endTour(){clearSpot();$("tourTip").hidden=true;cur=-1;}
+$("tourStart").onclick=()=>showStep(0);
+$("tNext").onclick=()=>cur>=STEPS.length-1?endTour():showStep(cur+1);
+$("tPrev").onclick=()=>cur>0&&showStep(cur-1);
+$("tSkip").onclick=endTour;
+</script>
+</body>
+</html>

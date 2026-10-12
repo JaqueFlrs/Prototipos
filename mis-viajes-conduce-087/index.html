@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -258,12 +257,123 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
 .demo-panel .dp-btn{display:block;width:100%;background:#f8f9fb;border:1px solid #e5e7eb;color:#565a5f;font-size:10.5px;font-weight:600;padding:7px 10px;border-radius:8px;cursor:pointer;margin-bottom:6px;text-align:left;}
 .demo-panel .dp-btn:last-child{margin-bottom:0;}
 .demo-panel .dp-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+/* ===== Ampliación HU52716-5 a 11 ===== */
+.trip-line{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:9px 12px;margin:-6px 0 14px;font-size:11.5px;color:var(--ink);}
+.trip-line .tl-ic{width:28px;height:28px;border-radius:8px;background:var(--accent-soft);color:var(--accent-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.trip-line .tl-ic .ic{width:15px;height:15px;}
+.trip-line .k{font-size:9.5px;color:var(--sub-2);font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+.trip-line .v{font-size:12px;font-weight:700;}
+.letrero{display:none;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin:-6px 0 14px;font-size:12px;font-weight:700;}
+.letrero.show{display:flex;}
+.letrero.warn{background:var(--warn-bg);color:#8a5a00;border:1px solid #f3d892;}
+.letrero.crit{background:var(--crit-bg);color:var(--crit);border:1px solid #f5c2bd;}
+.offline-bar{display:none;align-items:center;gap:8px;background:#22252a;color:#fff;font-size:10.5px;font-weight:600;padding:8px 12px;border-radius:10px;margin:0 0 12px;}
+.offline-bar.show{display:flex;}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.tile{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 11px;cursor:pointer;display:flex;align-items:center;gap:8px;min-width:0;}
+.tile .ti{width:28px;height:28px;border-radius:8px;background:#EEF0F2;color:var(--sub);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tile .ti .ic{width:15px;height:15px;}
+.tile .tt{font-size:11px;font-weight:700;color:var(--ink);line-height:1.25;}
+.tile:hover{border-color:var(--accent);}
+.tag{display:inline-block;font-size:9px;font-weight:800;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.tag.ok{background:var(--safe-bg);color:var(--safe);}
+.tag.pendf{background:var(--warn-bg);color:#8a5a00;}
+.tag.sinact{background:#EEF0F2;color:var(--sub);}
+.hist-row .tag{margin-top:3px;}
+.err-txt{color:var(--crit);font-size:10.5px;font-weight:600;margin-top:5px;display:none;}
+.err-txt.show{display:block;}
+.field.has-err input,.field.has-err select,.field.has-err textarea{border-color:var(--crit);}
+.field-ro{display:flex;align-items:center;gap:10px;background:#F7F8F9;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;}
+.field-ro .txt{font-size:12.5px;color:var(--ink);font-weight:600;}
+.chip-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+.chip-li{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:8px 10px;font-size:12px;}
+.chip-li .n{width:18px;height:18px;border-radius:50%;background:var(--accent-soft);color:var(--accent-dark);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.chip-li .t{flex:1;}
+.chip-li .x{color:var(--sub-2);cursor:pointer;font-weight:700;padding:0 4px;}
+.row2{display:flex;gap:8px;}
+.row2 > *{flex:1;min-width:0;}
+.btn-mini{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:0 12px;font-size:12px;font-weight:700;color:var(--accent-dark);cursor:pointer;flex:0 0 auto !important;}
+.hist-row.click{cursor:pointer;}
+.hist-row .rt{display:flex;align-items:center;gap:8px;}
+.tl-entry .fix{background:none;border:1px solid var(--border);border-radius:8px;font-size:10px;font-weight:700;color:var(--accent-dark);padding:4px 8px;cursor:pointer;margin-left:6px;}
+.day-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.day-head .d{font-size:13px;font-weight:800;}
+.mini-kv{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:11px;color:var(--sub);line-height:1.6;}
+.mini-kv b{color:var(--ink);}
+.pdf-wrap{background:#E3E5E8;border-radius:12px;padding:10px;margin-bottom:12px;}
+.pdf-page{background:#fff;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.15);padding:10px 10px 12px;font-size:7.6px;color:#222;line-height:1.35;}
+.pdf-page .h{font-size:9px;font-weight:800;text-align:center;margin-bottom:6px;}
+.pdf-page .g{display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;margin-bottom:6px;}
+.pdf-page .g b{font-weight:700;}
+.pdf-day{margin-top:5px;}
+.pdf-day .dl{font-weight:700;margin-bottom:2px;}
+.pdf-grid{display:grid;grid-template-columns:44px 1fr;gap:1px;}
+.pdf-grid .rl{font-size:6.6px;color:#555;}
+.pdf-grid .rb{height:6px;background:repeating-linear-gradient(90deg,#eee 0,#eee 1px,#fff 1px,#fff 4.1%);position:relative;}
+.pdf-grid .rb i{position:absolute;top:0;bottom:0;background:#1a1a1a;}
+.pdf-sign{display:flex;gap:10px;margin-top:8px;}
+.pdf-sign > div{flex:1;text-align:center;border-top:1px solid #444;padding-top:2px;font-size:6.8px;position:relative;}
+.pdf-sign svg{position:absolute;top:-16px;left:20%;width:60%;height:16px;}
+.pdf-more{text-align:center;font-size:10px;color:var(--sub);margin-top:8px;}
+.map-box{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);margin-bottom:10px;}
+.map-box svg{display:block;width:100%;height:auto;}
+.map-pop{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(255,255,255,.97);border-radius:12px;padding:9px 12px;font-size:11px;box-shadow:0 4px 14px rgba(0,0,0,.18);display:none;}
+.map-pop.show{display:block;}
+.seg-sm{display:flex;background:#EEF0F2;border-radius:10px;padding:3px;margin-bottom:10px;}
+.seg-sm span{flex:1;text-align:center;font-size:11px;font-weight:700;color:var(--sub);padding:7px;border-radius:8px;cursor:pointer;}
+.seg-sm span.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12);}
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer;}
+.chart-card .ct{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;}
+.ring-row{display:flex;align-items:center;gap:14px;}
+.ring-row .big{font-size:20px;font-weight:800;}
+.ring-row .sm{font-size:11px;color:var(--sub-2);}
+.bars7{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.bars7 div{flex:1;background:var(--act-conduciendo);border-radius:4px 4px 0 0;position:relative;}
+.bars7 div span{position:absolute;bottom:-14px;left:0;right:0;text-align:center;font-size:8.5px;color:var(--sub-2);}
+.act-table{width:100%;border-collapse:collapse;font-size:11.5px;}
+.act-table td{padding:6px 2px;border-bottom:1px solid #F0F1F3;}
+.act-table td:last-child{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;}
+.rule-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:11px 13px;margin-bottom:9px;}
+.rule-card .rt{font-size:12.5px;font-weight:800;color:var(--ink);}
+.rule-card .rd{font-size:11px;color:var(--sub);margin-top:3px;line-height:1.45;}
+.lock-note{display:flex;gap:8px;align-items:center;background:#F3F7FF;border:1px solid #d6e3fb;color:#1A4F9C;border-radius:10px;padding:9px 11px;font-size:10.5px;font-weight:600;margin-bottom:12px;}
+.full-ov{position:absolute;inset:0;background:#fff;z-index:210;display:none;flex-direction:column;padding:44px 18px 18px;}
+.full-ov.open{display:flex;}
+
+/* ===== Recorrido de desarrollo ===== */
+.tour-launch{background:var(--ink);color:#fff;border:none;font-weight:700;font-size:12.5px;padding:9px 18px;border-radius:20px;cursor:pointer;}
+.tour-spot{outline:3px solid var(--accent) !important;outline-offset:2px;box-shadow:0 0 0 7px rgba(232,96,15,.18) !important;border-radius:12px;position:relative;z-index:5;}
+#tourbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:3px solid var(--accent);box-shadow:0 -8px 24px rgba(0,0,0,.15);z-index:1500;display:none;padding:12px 18px 14px;}
+#tourbar.open{display:block;}
+#tourbar .tb-in{max-width:1000px;margin:0 auto;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;}
+#tourbar .tb-main{flex:1;min-width:260px;}
+#tourbar .tb-loc{font-size:10.5px;color:var(--sub-2);font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+#tourbar .tb-ttl{font-size:14.5px;font-weight:800;margin:3px 0 5px;color:var(--ink);}
+#tourbar ul{margin:0;padding-left:18px;font-size:12px;color:#3a3f45;line-height:1.5;}
+#tourbar .tb-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+#tourbar .tb-prog{width:180px;height:5px;background:#EEF0F2;border-radius:3px;overflow:hidden;}
+#tourbar .tb-prog i{display:block;height:100%;background:var(--accent);}
+#tourbar .tb-btns{display:flex;gap:8px;}
+#tourbar .tb-btns button{border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;}
+#tourbar .tb-prev{background:#F1F1F3;color:#3a3f45;}
+#tourbar .tb-next{background:var(--accent);color:#fff;}
+#tourbar .tb-count{font-size:11px;color:var(--sub-2);}
+body.touring{padding-bottom:200px;}
+
+.tyc-row{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:#333;margin:14px 0 4px;cursor:pointer;line-height:1.4;}
+.tyc-row input{width:20px;height:20px;flex-shrink:0;margin:0;accent-color:var(--accent);background:#fff;}
+.tyc-row a{color:var(--accent);font-weight:700;}
+.bp:disabled{opacity:.45;cursor:not-allowed;}
+.tyc-text{font-size:12px;line-height:1.55;color:#3a3f45;max-height:260px;overflow-y:auto;margin:8px 0 14px;}
+.tyc-text p{margin:0 0 8px;}
 </style>
 </head>
 <body>
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:0 0 20px;border-radius:8px;"><div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div><p style="margin:0 0 4px;">Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p><p style="margin:0 0 4px;">⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para Mis Viajes, eso significa colores, tipografía y componentes propios de la app.</p><p style="margin:0;">Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p></div>
 
 <div class="page-title">Bitácora de Conducción en Mis Viajes</div>
-<div class="page-sub">Mockup navegable, nivel UX/UI de alta fidelidad — diseñado para uso rápido y con una sola mano, en cabina. Toca dentro del teléfono para recorrer el flujo.</div>
+<div class="page-sub">Mockup navegable, nivel UX/UI de alta fidelidad — diseñado para uso rápido y con una sola mano, en cabina. Toca dentro del teléfono para recorrer el flujo. Incluye la ampliación HU52716-5 a 11: viaje ligado, datos del viaje, hoja para la autoridad, reglas por tipo de servicio, correcciones, días anteriores, sin conexión, mapa, gráficas y mis datos.</div>
 
 <div class="notas-bar">
   <button class="notas-btn" onclick="openBig('notas')">📝 Notas del análisis</button>
@@ -400,7 +510,7 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
               <div class="gauge-track"><div class="gauge-fill" id="gauge-fill-p1" style="width:45%;background:var(--safe);"></div></div>
               <div class="gauge-foot"><span>Pausa obligatoria de 30 min al llegar al límite</span></div>
               <div class="gauge-sub">
-                <div class="item"><div class="l">Acumulado hoy</div><div class="v">2h 14m / 14h</div></div>
+                <div class="item"><div class="l">Últimas 24 horas</div><div class="v">2h 14m / 14h</div></div>
                 <div class="item right"><div class="l">Disponible</div><div class="v" style="color:var(--safe);">11h 46m</div></div>
               </div>
             </div>
@@ -561,8 +671,9 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
             <div class="field"><label>Número de licencia</label><input value="234567FESSS"/></div>
             <div class="field"><label>Vencimiento de licencia</label><input type="date" value="2027-04-30"/></div>
             <div class="field"><label>Correo electrónico (opcional)</label><input type="email" placeholder="tucorreo@ejemplo.com"/></div>
+            <label class="tyc-row" id="tyc-row"><input type="checkbox" id="tyc-chk" onchange="tycChange()"/><span>Acepto los <a href="javascript:void(0)" onclick="event.preventDefault();showModal('m-tyc')">términos y condiciones</a></span></label>
           </div>
-          <div class="bottombar"><button class="bp" onclick="go('p2','nogm-empresa')">Guardar y continuar</button></div>
+          <div class="bottombar"><button class="bp" id="tyc-btn" disabled onclick="go('p2','nogm-empresa')">Guardar y continuar</button></div>
         </div>
 
         <div class="pg" id="nogm-empresa">
@@ -611,7 +722,7 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
               <div class="gauge-track"><div class="gauge-fill" style="width:0%;background:var(--safe);"></div></div>
               <div class="gauge-foot"><span>Pausa obligatoria de 30 min al llegar al límite</span></div>
               <div class="gauge-sub">
-                <div class="item"><div class="l">Acumulado hoy</div><div class="v">0h 00m / 14h</div></div>
+                <div class="item"><div class="l">Últimas 24 horas</div><div class="v">0h 00m / 14h</div></div>
                 <div class="item right"><div class="l">Disponible</div><div class="v" style="color:var(--safe);">14h 00m</div></div>
               </div>
             </div>
@@ -651,6 +762,18 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
           <div><div class="ntitle">Descanso necesario</div><div class="nbody">Llevas 14h de conducción acumulada. Toma tu descanso obligatorio.</div></div>
         </div>
 
+        <div class="modal-ov" id="m-tyc">
+          <div class="modal-sheet">
+            <h4>Términos y condiciones</h4>
+            <div class="tyc-text">
+              <p><b>Uso de la Bitácora de Conducción</b></p>
+              <p>Texto de ejemplo. El contenido real de los términos y condiciones lo proporciona GM Transport.</p>
+              <p>La información que registres se usa para generar tu bitácora de horas de servicio conforme a la NOM-087-SCT-2-2017 y se guarda ligada a tu RFC personal.</p>
+              <p>Tu ubicación se toma del GPS del teléfono cada vez que registras un cambio de actividad.</p>
+            </div>
+            <div class="modal-actions"><button class="bp" onclick="hideModal('m-tyc')">Cerrar</button></div>
+          </div>
+        </div>
         <div class="modal-ov" id="m-capture-p2">
           <div class="modal-sheet">
             <h4 id="cap-title-p2">Conduciendo</h4>
@@ -708,7 +831,7 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
     <div class="big-modal-bd">
       <h5>Decisiones cerradas</h5>
       <div class="decision"><b>Identidad del operador ancla en RFC personal, no en la empresa.</b> Así su bitácora lo sigue si cambia de empleador — es lo que pidió Dirección. El RFC ya existe en el sistema por nómina, no se pide un dato nuevo.</div>
-      <div class="decision"><b>No se guarda historial de para quién trabajó.</b> Solo se conserva su bitácora de horas; la empresa/unidad es un dato que se captura por jornada, no una relación permanente.</div>
+      <div class="decision"><b>El operador independiente no queda relacionado con ninguna empresa.</b> La empresa y la unidad se capturan por jornada. El operador cliente GM sí queda relacionado con su cliente por periodo (HU51004-0, ver prototipo del portal).</div>
       <div class="decision"><b>El operador cliente GM no tiene un segundo login.</b> Usa su sesión normal de Mis Viajes (RFC+usuario+contraseña); la bitácora es un módulo más dentro de la misma app.</div>
       <div class="decision"><b>El operador independiente (no-GM) solo ve el módulo de bitácora.</b> No ve viajes, gastos ni liquidaciones porque esos dependen de ser cliente GM.</div>
       <div class="decision"><b>El alta del operador independiente no pasa por autorización administrativa de GM.</b> En cuanto confirma su teléfono por SMS y completa su perfil, entra directo a su bitácora — sin esperar aprobación, a diferencia de lo que hacía Conduce 087 hoy.</div>
@@ -717,9 +840,23 @@ input,select,textarea{color-scheme:light;background:#fff;color:#14171A;font-fami
       <div class="decision"><b>El correo electrónico del perfil es opcional.</b></div>
       <div class="decision"><b>Los datos completos de la empresa (domicilio, tipo de servicio, modalidad, unidad completa, responsable) se piden solo la primera vez que se trabaja para esa empresa y unidad.</b> En Conduce 087 esto se capturaba solo una vez en la vida del operador, pero eso dejaba los datos desactualizados si cambiaba de empleador — aquí se vuelve a pedir únicamente cuando cambia de empresa o de unidad, no cada día.</div>
       <div class="decision"><b>El GPS es obligatorio para registrar cualquier cambio de actividad.</b> Sin permiso de ubicación o con el GPS desactivado, el sistema no abre el registro y pide activarlo primero.</div>
-      <div class="decision"><b>Seleccionar "Otra(s)"/"Otro(s)" en Auxiliares o Excepción muestra un campo de texto opcional</b> para especificar cuál, sin obligar a capturarlo.</div>
+      <div class="decision"><b>Seleccionar "Otra(s)"/"Otro(s)" en Auxiliares o Excepción muestra un campo para describirlo, opcional</b>: se puede registrar aunque quede vacío (HU52716-10).</div>
       <div class="decision"><b>No se permite firmar un día sin ninguna actividad registrada.</b></div>
       <div class="decision"><b>Si hay una actividad en curso al momento de firmar, la firma aplica solo a las actividades ya cerradas.</b> La actividad en curso permanece abierta — el operador sí puede cerrarla después cambiando de actividad, aunque el día ya esté firmado.</div>
+      <h5>Ampliación HU52716-5 a 11 (decisiones del 08/10/2026)</h5>
+      <div class="decision"><b>La bitácora del operador GM se liga a su viaje.</b> Con salida marcada se liga sola; sin salida elige viaje o "Sin viaje" con observación obligatoria; con dos viajes con salida elige cuál; al marcar llegada vuelve a preguntar.</div>
+      <div class="decision"><b>El operador independiente captura sus datos del viaje</b> (origen, destino, intermedios, salida, llegada). Sin origen, destino y salida no puede firmar. Esa regla y la de "llegada no anterior a la salida" son nuevas; Conduce 087 no valida nada de esto.</div>
+      <div class="decision"><b>Hoja para la autoridad</b> con el formato de Conduce 087: últimos 7 días por defecto, botón Compartir y funciona sin internet con lo guardado en el teléfono.</div>
+      <div class="decision"><b>Corregir un día ya firmado quita la firma</b> y hay que volver a firmar. En Conduce 087 la firma se conservaba; aquí cambia a propósito.</div>
+      <div class="decision"><b>Las 14 horas se cuentan en las últimas 24 horas corridas</b>, no por día de calendario.</div>
+      <div class="decision"><b>Tipo de Servicio es lista con 4 opciones</b>; las de pasajeros activan el aviso de segundo conductor. La excepción de servicio directo de 5 a 7 horas queda fuera.</div>
+      <div class="decision"><b>Los avisos NOM-087 no se pueden apagar.</b> La casilla de notificación del ERP desaparece.</div>
+      <div class="decision"><b>Operador GM sin RFC en el catálogo:</b> se le pide capturarlo la primera vez.</div>
+      <div class="decision"><b>Pantalla principal por niveles (HU52716-10).</b> Arriba y sin scroll: actividad en curso con viaje, barra "Próximo límite" y botones. Una sola tarjeta de pendiente por prioridad. Consulta en "Mi día" (lista y mapa) e "Historial". Tocar la barra abre Mi avance con las reglas. "Hoja para la autoridad" fija en el encabezado. Mis datos: perfil del independiente en el encabezado; el operador GM en Perfil de Mis Viajes (en este prototipo, tocando el avatar del Inicio).</div>
+      <h5>Interpretaciones aplicadas — confirmar</h5>
+      <div class="ux"><b>La actividad en curso conserva el viaje con que se registró</b>, aunque después se marque la salida de otro viaje.</div>
+      <div class="ux"><b>Una corrección conserva el historial de cambios</b> del registro, por la regla de no borrar nada.</div>
+      <div class="ux"><b>Los textos de mensajes</b> de esta ampliación son propuestos.</div>
     </div>
   </div>
 </div>
@@ -922,7 +1059,8 @@ var HU_INFO = {
     '<li>Teléfono ya confirmado por otro RFC: rechaza el registro, no envía código.</li>'+
     '<li>Correo electrónico es opcional en el perfil.</li>'+
     '<li>Los datos completos de la empresa (domicilio, tipo de servicio, modalidad, datos de la unidad, responsable) se piden solo la primera vez que se trabaja para esa empresa y unidad; se repiten solo si cambia de empresa o de unidad.</li>'+
-    '<li>No requiere autorización administrativa de GM.</li></ul>'},
+    '<li>No requiere autorización administrativa de GM.</li>'+
+    '<li>En "Completa tu perfil" aparece la casilla "Acepto los términos y condiciones" con un enlace para leerlos; "Guardar y continuar" queda deshabilitado hasta marcarla. Se acepta una sola vez: al reingresar desde otro dispositivo no se vuelve a pedir. El texto lo proporciona GM.</li></ul>'},
   'HU52716-2':{title:'HU52716-2 — Registrar cambio de actividad', body:
     '<h5>Quién y para qué</h5><ul><li>Operador con acceso a la Bitácora cambia de actividad con un toque, para cumplir el registro de horas de la NOM-087.</li></ul>'+
     '<h5>Reglas clave</h5><ul>'+
@@ -977,6 +1115,7 @@ function finishSign(){
 }
 function showModal(id){ document.getElementById(id).classList.add('open'); }
 function hideModal(id){ document.getElementById(id).classList.remove('open'); }
+function tycChange(){ el('tyc-btn').disabled = !el('tyc-chk').checked; }
 function toast(msg){
   var t = document.getElementById('toast');
   t.innerHTML = ICONS.check.replace('#fff','#4ADE80') + '<span>'+msg+'</span>';
@@ -1020,8 +1159,948 @@ setInterval(function(){
     if(el) el.textContent = t;
   });
 }, 1000);
+
+/* ===== Ampliación HU52716-5 a 11 ===== */
+ICONS.map = '<svg viewBox="0 0 24 24" class="ic"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>';
+ICONS.sheet = '<svg viewBox="0 0 24 24" class="ic"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
+ICONS.gauge = '<svg viewBox="0 0 24 24" class="ic"><path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-6"/></svg>';
+ICONS.book = '<svg viewBox="0 0 24 24" class="ic"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z"/><path d="M8 7h7"/></svg>';
+ICONS.user = '<svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
+ICONS.route = '<svg viewBox="0 0 24 24" class="ic"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8 18h6a4 4 0 0 0 0-8H10a4 4 0 0 1 0-8h6"/></svg>';
+ICONS.wifi = '<svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><path d="M3 3l18 18"/></svg>';
+
+var VIAJES = [
+  {id:'MXL-000000886', o:'Tecate, B.C.', d:'Los Cabos, B.C.S.', sal:'06:00', lle:'14:30'},
+  {id:'MXL-000000891', o:'Los Cabos, B.C.S.', d:'Tecate, B.C.', sal:'', lle:''}
+];
+var viajeModo = 'one';      /* one = un viaje con salida marcada, none = sin salida, two = dos viajes con salida */
+var offline = {p1:false, p2:false}, pendientesEnvio = {p1:0, p2:0};
+var datosViaje = {origen:'', destino:'', salida:'', llegada:'', inter:[]};
+var cur = {p1:'gm-selector', p2:'nogm-selector'};
+var todayLabel = '24/09/2026';
+var HIST = {
+  p1: [
+    {f:'24/09/2026', l:'Hoy · Jueves 24 Sep', h:'2h 14m', w:16, firm:false},
+    {f:'23/09/2026', l:'Miércoles 23 Sep', h:'7h 40m', w:55, firm:true},
+    {f:'22/09/2026', l:'Martes 22 Sep', h:'6h 05m', w:43, firm:true},
+    {f:'21/09/2026', l:'Lunes 21 Sep', h:'8h 12m', w:58, firm:false},
+    {f:'20/09/2026', l:'Domingo 20 Sep', h:'0h 00m', w:0, firm:false},
+    {f:'19/09/2026', l:'Sábado 19 Sep', h:'4h 20m', w:30, firm:true}
+  ],
+  p2: [
+    {f:'24/09/2026', l:'Hoy · Jueves 24 Sep', h:'0h 00m', w:0, firm:false},
+    {f:'23/09/2026', l:'Miércoles 23 Sep', h:'5h 10m', w:37, firm:false,
+     dv:{origen:'Querétaro, Qro.', destino:'', salida:'2026-09-23T07:00', llegada:'', inter:[]},
+     emp:{empresa:'Industria Iluminadora de Almacenes', marca:'Tractocamión Ramírez', modelo:'2023', placas:'XYZ-4567'}},
+    {f:'22/09/2026', l:'Martes 22 Sep', h:'3h 05m', w:22, firm:true,
+     dv:{origen:'Monterrey, N.L.', destino:'Querétaro, Qro.', salida:'2026-09-22T22:00', llegada:'', inter:['Saltillo, Coah.']},
+     emp:{empresa:'Industria Iluminadora de Almacenes', marca:'Tractocamión Ramírez', modelo:'2023', placas:'XYZ-4576'}},
+    {f:'21/09/2026', l:'Lunes 21 Sep', h:'0h 00m', w:0, firm:false},
+    {f:'19/09/2026', l:'Sábado 19 Sep', h:'2h 00m', w:14, firm:true,
+     dv:{origen:'Monterrey, N.L.', destino:'Saltillo, Coah.', salida:'2026-09-19T08:00', llegada:'2026-09-19T10:00', inter:[]},
+     emp:{empresa:'Industria Iluminadora de Almacenes', marca:'Tractocamión Ramírez', modelo:'2023', placas:'XYZ-4567'}}
+  ]
+};
+var DAYSEGS = [ [0,6,'descanso'], [6,6.5,'aux'], [6.5,13.2,'conduciendo'], [13.2,13.7,'pausa'], [13.7,17.9,'conduciendo'], [17.9,24,'fuera'] ];
+var corrigiendo = null;
+
+function actBy(k){ return ACTIVITIES.filter(function(x){return x.key===k;})[0]; }
+function el(id){ return document.getElementById(id); }
+function viajeTxt(v){ return v.id+' · '+v.o+' a '+v.d; }
+
+/* ---------- navegación con "Ver especificación" por pantalla ---------- */
+var _go = go;
+go = function(phone, id){
+  _go(phone, id); cur[phone] = id;
+  document.querySelectorAll('#'+phone+' .full-ov').forEach(function(o){ o.classList.remove('open'); });
+  if(id==='historial'||id==='historial-p2') buildHist(phone);
+};
+document.querySelector('#p1 .spec-link').onclick = function(){ openSpec(SPECS[cur.p1] ? cur.p1 : 'gm-login'); };
+document.querySelector('#p2 .spec-link').onclick = function(){ openSpec(SPECS[cur.p2] ? cur.p2 : 'nogm-login'); };
+
+/* ---------- inyección de elementos en pantallas existentes ---------- */
+function injectHome(phone){
+  var hero = el('hero-'+phone);
+  var html = '';
+  if(phone==='p1') html += '<div class="trip-line" id="trip-line-p1"></div>';
+  html += '<div class="letrero" id="letrero-'+phone+'"></div>';
+  hero.insertAdjacentHTML('afterend', html);
+  hero.insertAdjacentHTML('beforebegin','<div class="offline-bar" id="offline-'+phone+'">'+ICONS.wifi+'<span>Sin conexión: tus registros se enviarán cuando vuelva la señal</span></div>');
+}
+injectHome('p1'); injectHome('p2');
+
+function tile(phone, page, icon, label, hu){
+  return '<div class="tile" id="tile-'+page+'" onclick="go(\''+phone+'\',\''+page+'\')"><div class="ti">'+ICONS[icon]+'</div><div class="tt">'+label+(hu?' <span class="hu-chip" style="margin-left:2px;" onclick="event.stopPropagation();openHu(\''+hu+'\')">'+hu.replace('HU52716-','HU-')+'</span>':'')+'</div></div>';
+}
+(function(){
+  var firmaP1 = document.querySelector('#home-bitacora .section-link[onclick*="goFirma"]');
+  firmaP1.insertAdjacentHTML('afterend',
+    '<div class="chip-lbl" style="margin-top:6px;">Más de tu bitácora</div><div class="tiles">'+
+    tile('p1','hoja-p1','sheet','Hoja para la autoridad','HU52716-7')+
+    tile('p1','mapa-p1','map','Mapa del recorrido','HU52716-10')+
+    tile('p1','avance-p1','gauge','Mi avance','HU52716-10')+
+    tile('p1','reglas-p1','book','Reglas NOM-087','HU52716-10')+
+    tile('p1','misdatos-p1','user','Mis datos','HU52716-10')+'</div>');
+  var histP2 = document.querySelector('#nogm-home .section-link[onclick*="historial-p2"]');
+  histP2.insertAdjacentHTML('beforebegin',
+    '<div class="section-link" id="link-datosviaje" onclick="go(\'p2\',\'datosviaje\')"><span class="l">Datos del viaje de hoy <span class="hu-chip" onclick="event.stopPropagation();openHu(\'HU52716-6\')">HU52716-6</span></span><span class="r" id="dv-resumen">Sin capturar <span class="icn">'+ICONS.chev+'</span></span></div>');
+  histP2.insertAdjacentHTML('afterend',
+    '<div class="section-link" onclick="goFirmaP2()"><span class="l">Firmar jornada de hoy</span><span class="r">'+ICONS.pen+' '+ICONS.chev+'</span></div>'+
+    '<div class="chip-lbl" style="margin-top:6px;">Más de tu bitácora</div><div class="tiles">'+
+    tile('p2','hoja-p2','sheet','Hoja para la autoridad','HU52716-7')+
+    tile('p2','mapa-p2','map','Mapa del recorrido','HU52716-10')+
+    tile('p2','avance-p2','gauge','Mi avance','HU52716-10')+
+    tile('p2','reglas-p2','book','Reglas NOM-087','HU52716-10')+
+    tile('p2','misdatos-p2','user','Mis datos','HU52716-10')+'</div>');
+})();
+
+/* Tipo de Servicio como lista (HU52716-8) */
+(function(){
+  var inp = document.querySelector('#empresa-completa input[value="Autotransporte de Carga Federal"]');
+  var f = inp.parentNode;
+  f.innerHTML = '<label>Tipo de Servicio <span class="hu-chip" onclick="openHu(\'HU52716-8\')">HU52716-8</span></label><select id="tipo-servicio"><option>Autotransporte de carga federal</option><option>Transporte privado</option><option>Autotransporte de pasaje y turismo</option><option>Transporte privado de pasajeros</option></select>';
+})();
+
+/* Campo Viaje en la ventana de registro del operador GM (HU52716-5) */
+(function(){
+  var ub = document.querySelector('#m-capture-p1 .field-ic-row').parentNode;
+  ub.insertAdjacentHTML('beforebegin',
+    '<div class="field" id="viaje-field"><label>Viaje <span class="hu-chip" onclick="openHu(\'HU52716-5\')">HU52716-5</span></label>'+
+      '<div class="field-ro" id="viaje-auto"><span class="icn">'+ICONS.route+'</span><span class="txt" id="viaje-auto-txt"></span></div>'+
+      '<select id="viaje-sel" onchange="viajeChange()"></select>'+
+      '<div class="err-txt" id="err-viaje">Elige un viaje o la opción Sin viaje</div></div>'+
+    '<div class="field" id="obs-field" style="display:none;"><label>Observación</label><input id="obs-in" placeholder="¿Por qué no hay viaje?"/><div class="err-txt" id="err-obs">Escribe por qué no hay viaje</div></div>');
+})();
+
+/* "Otro(s)" con texto opcional (HU52716-10) */
+['p1','p2'].forEach(function(ph){
+  var f = el('cap-otro-'+ph);
+  f.querySelector('label').id = 'otro-lbl-'+ph;
+  f.insertAdjacentHTML('beforeend','<div class="err-txt" id="err-otro-'+ph+'">Describe el caso para poder registrar</div>');
+});
+toggleOtro = function(phone){
+  var sel = el('cap-detalle-select-'+phone);
+  var show = (sel.value === 'Otra(s)' || sel.value === 'Otro(s)');
+  el('cap-otro-'+phone).style.display = show ? 'block' : 'none';
+  el('otro-lbl-'+phone).textContent = sel.value==='Otra(s)' ? 'Describe la actividad (opcional)' : 'Describe el caso (opcional)';
+  el('cap-otro-input-'+phone).placeholder = 'Opcional';
+  el('err-otro-'+phone).classList.remove('show');
+};
+
+function setupViaje(){
+  var auto = el('viaje-auto'), sel = el('viaje-sel');
+  el('err-viaje').classList.remove('show'); el('err-obs').classList.remove('show');
+  el('obs-field').style.display = 'none'; el('obs-in').value = '';
+  if(viajeModo==='one'){
+    auto.style.display='flex'; sel.style.display='none';
+    el('viaje-auto-txt').textContent = viajeTxt(VIAJES[0]);
+  } else {
+    auto.style.display='none'; sel.style.display='block';
+    var opts = VIAJES.map(function(v,i){ return '<option value="'+i+'">'+viajeTxt(v)+'</option>'; }).join('');
+    sel.innerHTML = '<option value="">Elige un viaje</option>'+opts+(viajeModo==='none' ? '<option value="sin">Sin viaje</option>' : '');
+  }
+}
+function viajeChange(){
+  var v = el('viaje-sel').value;
+  el('err-viaje').classList.remove('show');
+  el('obs-field').style.display = v==='sin' ? 'block' : 'none';
+}
+var _chipTap = chipTap;
+chipTap = function(phone, key){
+  _chipTap(phone, key);
+  if(phone==='p1') setupViaje();
+  el('err-otro-'+phone).classList.remove('show');
+};
+finishActivity = function(phone){
+  var sel = el('cap-detalle-select-'+phone);
+  var viajeTexto = null;
+  if(phone==='p1'){
+    if(viajeModo==='one'){ viajeTexto = VIAJES[0].id; }
+    else {
+      var v = el('viaje-sel').value;
+      if(!v){ el('err-viaje').classList.add('show'); return; }
+      if(v==='sin'){
+        if(!el('obs-in').value.trim()){ el('err-obs').classList.add('show'); return; }
+        viajeTexto = 'Sin viaje';
+      } else viajeTexto = VIAJES[+v].id;
+    }
+  }
+  hideModal('m-capture-'+phone);
+  applyActivity(phone, pendingActivity);
+  if(phone==='p1') setTripLine(viajeTexto);
+  if(offline[phone]){
+    pendientesEnvio[phone]++;
+    toast('Guardado en el teléfono: se enviará al volver la señal');
+  } else toast('Actividad registrada: '+pendingActivity.label);
+};
+function setTripLine(t){
+  var box = el('trip-line-p1');
+  var v = VIAJES.filter(function(x){return x.id===t;})[0];
+  box.innerHTML = '<div class="tl-ic">'+ICONS.route+'</div><div><div class="k">Viaje de la actividad en curso</div><div class="v">'+(v ? viajeTxt(v) : 'Sin viaje')+'</div></div>';
+}
+setTripLine(VIAJES[0].id);
+
+/* ---------- páginas nuevas ---------- */
+function page(phone, id, title, sub, body, bottom, back){
+  var html = '<div class="pg" id="'+id+'"><div class="appbar"><div class="bk" onclick="go(\''+phone+'\',\''+(back||(phone==='p1'?'home-bitacora':'nogm-home'))+'\')"><span class="icn">'+ICONS.back+'</span></div><div style="min-width:0;"><div class="ttl-row"><div class="ttl">'+title+'</div></div><div class="sub">'+sub+'</div></div></div><div class="pg-scroll">'+body+'</div>'+(bottom?'<div class="bottombar">'+bottom+'</div>':'')+'</div>';
+  el(phone).querySelector('.home-indicator') ? null : null;
+  var anchor = el(phone).querySelector('.modal-ov');
+  anchor.insertAdjacentHTML('beforebegin', html);
+}
+function hojaBody(phone){
+  return '<div class="row2" style="margin-bottom:10px;"><div class="field" style="margin:0;"><label>Desde</label><input id="hoja-desde-'+phone+'" value="18/09/2026"/></div><div class="field" style="margin:0;"><label>Hasta</label><input id="hoja-hasta-'+phone+'" value="24/09/2026"/></div></div>'+
+    '<button class="bs" style="margin-bottom:12px;" onclick="hojaGenerar(\''+phone+'\')">Generar hoja</button>'+
+    '<div class="err-txt" id="hoja-err-'+phone+'" style="margin:-4px 0 10px;"></div>'+
+    '<div class="pdf-wrap" id="hoja-pdf-'+phone+'">'+pdfHtml(phone)+'</div>';
+}
+function pdfHtml(phone){
+  var gm = phone==='p1';
+  var emp = gm ? 'TRANSPORTES LEGASPY E HIJOS' : 'Industria Iluminadora de Almacenes';
+  var op = gm ? 'FLORES RAMOS JAQUELINE' : 'José Ramírez Ortega';
+  var org = gm ? VIAJES[0].o : (datosViaje.origen||'—'), des = gm ? VIAJES[0].d : (datosViaje.destino||'—');
+  var sal = gm ? VIAJES[0].sal : (datosViaje.salida ? datosViaje.salida.replace('T',' ') : '—');
+  var lle = gm ? VIAJES[0].lle : (datosViaje.llegada ? datosViaje.llegada.replace('T',' ') : '—');
+  function dayGrid(lbl, firm){
+    var rows = [['Conduciendo','conduciendo'],['Pausa','pausa'],['Auxiliares','aux'],['Excepción','excepcion'],['Descanso','descanso'],['Fuera de servicio','fuera']];
+    return '<div class="pdf-day"><div class="dl">'+lbl+(firm?'':' · sin firmar')+'</div><div class="pdf-grid">'+rows.map(function(r){
+      return '<div class="rl">'+r[0]+'</div><div class="rb">'+DAYSEGS.filter(function(s){return s[2]===r[1];}).map(function(s){ return '<i style="left:'+(s[0]/24*100)+'%;width:'+((s[1]-s[0])/24*100)+'%;"></i>'; }).join('')+'</div>';
+    }).join('')+'</div></div>';
+  }
+  return '<div class="pdf-page"><div class="h">BITÁCORA DE HORAS DE SERVICIO · NOM-087-SCT-2-2017</div>'+
+    '<div class="g"><div><b>Permisionario:</b> '+emp+'</div><div><b>Tipo de servicio:</b> Autotransporte de carga federal</div>'+
+    '<div><b>Domicilio:</b> La Escondida 1800, Hermosillo, Son.</div><div><b>Modalidad:</b> Carga general</div>'+
+    '<div><b>Unidad:</b> Tractocamión 2023 · XYZ-4567</div><div><b>Operador:</b> '+op+'</div>'+
+    '<div><b>Licencia:</b> 234567FESSS · vence 30/04/2027</div><div><b>Origen:</b> '+org+'</div>'+
+    '<div><b>Destino:</b> '+des+'</div><div><b>Salida / Llegada:</b> '+sal+' / '+lle+'</div></div>'+
+    dayGrid('Jueves 24/09/2026', false)+dayGrid('Miércoles 23/09/2026', true)+dayGrid('Martes 22/09/2026', true)+
+    '<div class="pdf-sign"><div><svg viewBox="0 0 200 40"><path d="M10,30 C30,5 40,35 55,18 S80,4 95,25 S130,35 150,12 S180,30 190,18" stroke="#14171A" stroke-width="2" fill="none"/></svg>Firma del Operador</div><div>Firma del Responsable<br>Laura Méndez Torres</div></div>'+
+    '</div><div class="pdf-more">+ 4 días más en las páginas siguientes</div>';
+}
+function hojaGenerar(phone){
+  var e = el('hoja-err-'+phone); e.classList.remove('show');
+  var desde = el('hoja-desde-'+phone).value;
+  if(offline[phone] && desde!=='18/09/2026'){
+    e.textContent = 'Para consultar esos días necesitas conexión a internet'; e.classList.add('show'); return;
+  }
+  if(desde.indexOf('/08/')>-1){
+    e.textContent = 'No hay bitácoras registradas en ese rango de fechas'; e.classList.add('show'); el('hoja-pdf-'+phone).style.display='none'; return;
+  }
+  el('hoja-pdf-'+phone).style.display='block'; el('hoja-pdf-'+phone).innerHTML = pdfHtml(phone);
+  toast('Hoja generada');
+}
+function mapaBody(phone){
+  return '<div class="seg-sm" id="mapa-seg-'+phone+'"><span class="on" onclick="mapaVista(\''+phone+'\',false)">Mapa</span><span onclick="mapaVista(\''+phone+'\',true)">Satélite</span></div>'+
+  '<div class="map-box"><svg viewBox="0 0 320 300" id="mapa-svg-'+phone+'">'+
+   '<rect class="m-bg" width="320" height="300" fill="#EEF1EC"/><rect class="m-park" x="200" y="30" width="90" height="70" rx="8" fill="#D8EBD3"/><path class="m-water" d="M0 250 Q80 230 160 260 T320 245 V300 H0z" fill="#CFE3F2"/>'+
+   '<g class="m-st" stroke="#fff" stroke-width="9" fill="none"><path d="M0 70 H320"/><path d="M0 170 H320"/><path d="M70 0 V300"/><path d="M180 0 V300"/><path d="M0 230 L320 120"/></g>'+
+   '<polyline points="40,200 110,170 180,120 260,70" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-dasharray="6 4"/>'+
+   [[40,200,'descanso','Descanso','12:00 AM','Mexicali, B.C.'],[110,170,'aux','Actividades Auxiliares · Carga Combustible','06:00 AM','La Rumorosa, B.C.'],[180,120,'conduciendo','Conduciendo','06:30 AM','Tecate, B.C.'],[260,70,'pausa','Pausa','01:12 PM','Ensenada, B.C.']].map(function(m,i){
+     return '<g style="cursor:pointer;" onclick="mapaPop(\''+phone+'\',\''+m[3]+'\',\''+m[4]+'\',\''+m[5]+'\')"><circle cx="'+m[0]+'" cy="'+m[1]+'" r="11" fill="'+cssv(actBy(m[2]).color)+'" stroke="#fff" stroke-width="3"/><text x="'+m[0]+'" y="'+(m[1]+4)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">'+(i+1)+'</text></g>';
+   }).join('')+'</svg><div class="map-pop" id="mapa-pop-'+phone+'"></div></div>'+
+  '<div class="hint" style="font-size:10.5px;color:var(--sub-2);">Un marcador por cada actividad registrada hoy, unidos en el orden en que se registraron. Toca un marcador para ver su detalle.</div>';
+}
+function mapaPop(phone,a,h,u){ var p = el('mapa-pop-'+phone); p.innerHTML = '<b>'+a+'</b><br>Inicio: '+h+'<br>'+u; p.classList.add('show'); }
+function mapaVista(phone, sat){
+  var s = el('mapa-svg-'+phone);
+  s.querySelector('.m-bg').setAttribute('fill', sat ? '#5f6b4e' : '#EEF1EC');
+  s.querySelector('.m-park').setAttribute('fill', sat ? '#3f5a32' : '#D8EBD3');
+  s.querySelector('.m-water').setAttribute('fill', sat ? '#2c4a63' : '#CFE3F2');
+  s.querySelector('.m-st').setAttribute('stroke', sat ? '#a9a497' : '#fff');
+  var spans = el('mapa-seg-'+phone).querySelectorAll('span');
+  spans[0].classList.toggle('on', !sat); spans[1].classList.toggle('on', sat);
+}
+function avanceBody(phone){
+  var gm = phone==='p1';
+  var h24 = gm ? 9.2 : 3.1, pct = Math.round(h24/14*100);
+  return '<div class="chart-card" onclick="fullChart(\''+phone+'\',\'24\')"><div class="ct">Últimas 24 horas</div><div class="ring-row">'+ring(pct)+'<div><div class="big">'+durLabel(h24)+'</div><div class="sm">conducidas de 14h · disponibles '+durLabel(14-h24)+'</div></div></div></div>'+
+    '<div class="chart-card" onclick="fullChart(\''+phone+'\',\'7\')"><div class="ct">Últimos 7 días</div><div class="bars7" style="margin-bottom:16px;">'+[7.6,6.1,8.2,0,4.3,5.0,2.2].map(function(h,i){ return '<div style="height:'+(h/14*100)+'%;"><span>'+['V','S','D','L','M','M','J'][i]+'</span></div>'; }).join('')+'</div></div>'+
+    '<div class="chip-lbl">Tiempo por actividad hoy</div><table class="act-table">'+[['conduciendo','2h 14m'],['pausa','0h 00m'],['aux','0h 30m'],['excepcion','0h 00m'],['descanso','1h 42m'],['fuera','6h 00m']].map(function(r){ return '<tr><td><span class="tl-legend-item"><span class="dot" style="background:'+cssv(actBy(r[0]).color)+';"></span>'+actBy(r[0]).label+'</span></td><td>'+r[1]+'</td></tr>'; }).join('')+'</table>'+
+    '<div class="full-ov" id="full-'+phone+'"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><b id="full-t-'+phone+'"></b><button class="bs" style="width:auto;padding:8px 14px;" onclick="el(\'full-'+phone+'\').classList.remove(\'open\')">Cerrar</button></div><div id="full-b-'+phone+'"></div></div>';
+}
+function ring(p){
+  var c = 2*Math.PI*26, col = p>=100 ? cssv('--crit') : (p>=85 ? cssv('--warn') : cssv('--safe'));
+  return '<svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" stroke="#EEF0F2" stroke-width="8" fill="none"/><circle cx="32" cy="32" r="26" stroke="'+col+'" stroke-width="8" fill="none" stroke-dasharray="'+(c*p/100)+' '+c+'" transform="rotate(-90 32 32)" stroke-linecap="round"/><text x="32" y="36" text-anchor="middle" font-size="12" font-weight="800" fill="#14171A">'+p+'%</text></svg>';
+}
+function fullChart(phone, which){
+  el('full-t-'+phone).textContent = which==='24' ? 'Últimas 24 horas' : 'Últimos 7 días';
+  el('full-b-'+phone).innerHTML = which==='24' ? '<div style="display:flex;justify-content:center;transform:scale(2.6);transform-origin:top center;height:200px;">'+ring(phone==='p1'?66:22)+'</div>' : '<div class="bars7" style="height:260px;">'+[7.6,6.1,8.2,0,4.3,5.0,2.2].map(function(h,i){ return '<div style="height:'+(h/14*100)+'%;"><span>'+['V','S','D','L','M','M','J'][i]+'</span></div>'; }).join('')+'</div>';
+  el('full-'+phone).classList.add('open');
+}
+function reglasBody(phone){
+  var gm = phone==='p1';
+  return '<div class="lock-note">'+(gm ? 'Tiempos configurados por tu empresa' : 'Tiempos de la NOM-087')+'</div>'+
+    '<div class="rule-card"><div class="rt">Pausa de 30 minutos cada 5 horas</div><div class="rd">Al conducir 5 horas continuas debes tomar una pausa de 30 minutos (numeral 4.1). Las pausas no se acumulan (4.2).</div></div>'+
+    '<div class="rule-card"><div class="rt">Descanso de 8 horas cada 14 horas</div><div class="rd">En rutas de hasta 14 horas de conducción debes tener una pausa de al menos 8 horas continuas (4.6).</div></div>'+
+    '<div class="rule-card"><div class="rt">Máximo 14 horas en 24 horas</div><div class="rd">El tiempo de conducción en cualquier periodo de 24 horas nunca puede pasar de 14 horas (4.7).</div></div>'+
+    '<div class="rule-card"><div class="rt">Pasajeros: segundo conductor</div><div class="rd">En pasaje y transporte privado de pasajeros, si el trayecto pasa de 9 horas se requiere un segundo conductor (4.5).</div></div>';
+}
+function misdatosBody(phone){
+  if(phone==='p1'){
+    return '<div class="lock-note">Estos datos los administra tu empresa. Si algo está mal, pídele a tu empresa que lo corrija.</div>'+
+      ro('Nombre','FLORES RAMOS JAQUELINE')+ro('RFC personal','FORJ900101AB2')+ro('Licencia','B1234567 · vence 15/06/2027')+ro('Empresa','TRANSPORTES LEGASPY E HIJOS')+ro('Unidad','T17 · TRACTOCAMIÓN · XYZ-4567');
+  }
+  return '<div class="field"><label>Nombre completo</label><input value="José Ramírez Ortega"/></div>'+
+    '<div class="field"><label>Número de licencia</label><input value="234567FESSS"/></div>'+
+    '<div class="field"><label>Vencimiento de licencia</label><input type="date" id="md-venc" value="2027-04-30"/></div>'+
+    '<div class="field"><label>Correo electrónico (opcional)</label><input type="email" placeholder="tucorreo@ejemplo.com"/></div>'+
+    '<div class="hint" style="font-size:10.5px;color:var(--sub-2);">Los días que ya registraste conservan los datos que tenías ese día.</div>';
+}
+function ro(l,v){ return '<div class="field"><label>'+l+'</label><div class="field-ro"><span class="txt">'+v+'</span></div></div>'; }
+
+['p1','p2'].forEach(function(ph){
+  var hu7 = ' <span class="hu-chip" onclick="openHu(\'HU52716-7\')">HU52716-7</span>';
+  page(ph,'hoja-'+ph,'Hoja para la autoridad','Bitácora de horas de servicio',hojaBody(ph),'<button class="bp" onclick="toast(\'Se abrieron las opciones del teléfono para compartir el PDF\')">Compartir</button>');
+  page(ph,'mapa-'+ph,'Mapa del recorrido','Jueves 24 de septiembre',mapaBody(ph));
+  page(ph,'avance-'+ph,'Mi avance','Contra los límites de la NOM-087',avanceBody(ph));
+  page(ph,'reglas-'+ph,'Reglas NOM-087','Tiempos de conducción y pausas',reglasBody(ph));
+  page(ph,'misdatos-'+ph,'Mis datos',ph==='p1'?'Solo consulta':'Tu perfil',misdatosBody(ph), ph==='p2' ? '<button class="bp" onclick="toast(\'Datos guardados\');go(\'p2\',\'nogm-home\')">Guardar</button>' : '');
+  page(ph,'dia-'+ph,'Detalle del día','',
+    '<div class="day-head"><span class="d" id="dia-t-'+ph+'"></span><span id="dia-tag-'+ph+'"></span></div>'+
+    '<div class="mini-kv" id="dia-kv-'+ph+'"></div>'+
+    (ph==='p2' ? '<div id="dia-bloq-p2" class="mini-kv" style="display:none;border-color:var(--warn);background:var(--warn-bg);"><b>No se puede firmar todavía.</b><br><span id="dia-bloq-txt"></span><br><button class="btn-mini" style="margin-top:8px;padding:8px 12px;" onclick="abrirDvDia()">Ir a Datos del viaje</button></div>'+
+      '<div class="row2" style="margin-bottom:12px;"><button class="bs" onclick="abrirDvDia()">Datos del viaje</button><button class="bs" onclick="abrirEmpDia()">Empresa y unidad de este día</button></div>' : '')+
+    '<div class="chip-lbl">Actividades <span class="hu-chip" onclick="openHu(\'HU52716-9\')">HU52716-9</span></div><div id="dia-list-'+ph+'"></div>'+
+    '<button class="link-btn" onclick="abrirCorreccion(\''+ph+'\',null)">+ Agregar actividad en un hueco del día</button>',
+    '<button class="bp" id="dia-firmar-'+ph+'" onclick="firmarDia(\''+ph+'\')">'+ICONS.check+' Firmar jornada de este día</button>', ph==='p1'?'historial':'historial-p2');
+});
+
+/* Datos del viaje y empresa/unidad de un día anterior — operador independiente (HU52716-6) */
+page('p2','dvdia-p2','Datos del viaje','',
+  '<div class="field"><label>Origen</label><input id="dvd-origen"/></div>'+
+  '<div class="field"><label>Destino</label><input id="dvd-destino"/></div>'+
+  '<div class="field"><label>Puntos intermedios (opcional)</label><div class="chip-list" id="dvd-inter"></div><div class="row2"><input id="dvd-inter-in" placeholder="Escribe un punto" style="border:1.5px solid var(--border);border-radius:10px;padding:11px 12px;font-size:13px;"/><button class="btn-mini" onclick="dvdAgregar()">Agregar</button></div></div>'+
+  '<div class="field"><label>Salida</label><input type="datetime-local" id="dvd-salida"/></div>'+
+  '<div class="field" id="dvd-lle-f"><label>Llegada</label><input type="datetime-local" id="dvd-llegada"/><div class="err-txt" id="err-dvd-llegada">La llegada no puede ser anterior a la salida</div><div style="font-size:11px;color:var(--sub-2);margin-top:6px;">Si tu viaje cruzó la medianoche, captura aquí la llegada aunque sea del día siguiente.</div></div>',
+  '<button class="bp" onclick="dvdGuardar()">Guardar</button>','dia-p2');
+page('p2','empdia-p2','Empresa y unidad de este día','',
+  '<p style="font-size:12px;color:var(--sub);margin:4px 0 14px;line-height:1.5;">Corrige solo los datos de este día. Los de hoy no cambian.</p>'+
+  '<div class="field"><label>Razón social de la empresa</label><input id="emd-empresa"/></div>'+
+  '<div class="field"><label>Descripción/Marca de la unidad</label><input id="emd-marca"/></div>'+
+  '<div class="row2"><div class="field"><label>Modelo</label><input id="emd-modelo"/></div><div class="field"><label>Placas</label><input id="emd-placas"/></div></div>',
+  '<button class="bp" onclick="empGuardar()">Guardar</button>','dia-p2');
+var dvdInter = [];
+function diaSel(){ return HIST.p2[diaActual.p2]; }
+function asegurarDia(d){
+  if(!d.dv) d.dv = {origen:'Monterrey, N.L.', destino:'Querétaro, Qro.', salida:'', llegada:'', inter:[]};
+  if(!d.emp) d.emp = {empresa:'Industria Iluminadora de Almacenes', marca:'Tractocamión Ramírez', modelo:'2023', placas:'XYZ-4567'};
+}
+function dvdPintar(){
+  el('dvd-inter').innerHTML = dvdInter.map(function(p,i){ return '<div class="chip-li"><span class="n">'+(i+1)+'</span><span class="t">'+p+'</span><span class="x" onclick="dvdInter.splice('+i+',1);dvdPintar()">✕</span></div>'; }).join('');
+}
+function dvdAgregar(){ var v = el('dvd-inter-in').value.trim(); if(!v) return; dvdInter.push(v); el('dvd-inter-in').value=''; dvdPintar(); }
+function abrirDvDia(){
+  var d = diaSel(); asegurarDia(d);
+  go('p2','dvdia-p2');
+  el('dvdia-p2').querySelector('.sub').textContent = d.l;
+  el('dvd-origen').value = d.dv.origen; el('dvd-destino').value = d.dv.destino;
+  el('dvd-salida').value = d.dv.salida; el('dvd-llegada').value = d.dv.llegada;
+  dvdInter = d.dv.inter.slice(); dvdPintar();
+  el('err-dvd-llegada').classList.remove('show'); el('dvd-lle-f').classList.remove('has-err');
+}
+function quitarFirmaSiAplica(d, msgOk){
+  if(d.firm){ d.firm = false; toast('Corregiste un día ya firmado. Vuelve a firmar la jornada del '+d.f); }
+  else toast(msgOk);
+}
+function dvdGuardar(){
+  var d = diaSel(), s = el('dvd-salida').value, l = el('dvd-llegada').value;
+  el('err-dvd-llegada').classList.remove('show'); el('dvd-lle-f').classList.remove('has-err');
+  if(s && l && l < s){ el('err-dvd-llegada').classList.add('show'); el('dvd-lle-f').classList.add('has-err'); return; }
+  d.dv = {origen:el('dvd-origen').value.trim(), destino:el('dvd-destino').value.trim(), salida:s, llegada:l, inter:dvdInter.slice()};
+  quitarFirmaSiAplica(d, 'Datos del viaje guardados');
+  buildHist('p2'); abrirDia('p2', diaActual.p2);
+}
+function abrirEmpDia(){
+  var d = diaSel(); asegurarDia(d);
+  go('p2','empdia-p2');
+  el('empdia-p2').querySelector('.sub').textContent = d.l;
+  el('emd-empresa').value = d.emp.empresa; el('emd-marca').value = d.emp.marca;
+  el('emd-modelo').value = d.emp.modelo; el('emd-placas').value = d.emp.placas;
+}
+function empGuardar(){
+  var d = diaSel();
+  d.emp = {empresa:el('emd-empresa').value.trim(), marca:el('emd-marca').value.trim(), modelo:el('emd-modelo').value.trim(), placas:el('emd-placas').value.trim().toUpperCase()};
+  quitarFirmaSiAplica(d, 'Datos de empresa y unidad guardados');
+  buildHist('p2'); abrirDia('p2', diaActual.p2);
+}
+
+/* Datos del viaje de hoy — operador independiente (HU52716-6) */
+page('p2','datosviaje','Datos del viaje de hoy','Jueves 24 de septiembre',
+  '<div class="field"><label>Origen</label><input id="dv-origen" placeholder="Ej. Monterrey, N.L."/></div>'+
+  '<div class="field"><label>Destino</label><input id="dv-destino" placeholder="Ej. Querétaro, Qro."/></div>'+
+  '<div class="field"><label>Puntos intermedios (opcional)</label><div class="chip-list" id="dv-inter"></div><div class="row2"><input id="dv-inter-in" placeholder="Escribe un punto" style="border:1.5px solid var(--border);border-radius:10px;padding:11px 12px;font-size:13px;"/><button class="btn-mini" onclick="dvAgregar()">Agregar</button></div></div>'+
+  '<div class="field"><label>Salida</label><input type="datetime-local" id="dv-salida"/></div>'+
+  '<div class="field" id="dv-lle-f"><label>Llegada</label><input type="datetime-local" id="dv-llegada"/><div class="err-txt" id="err-llegada">La llegada no puede ser anterior a la salida</div></div>',
+  '<button class="bp" onclick="dvGuardar()">Guardar</button>');
+function dvPintar(){
+  el('dv-inter').innerHTML = datosViaje.inter.map(function(p,i){ return '<div class="chip-li"><span class="n">'+(i+1)+'</span><span class="t">'+p+'</span><span class="x" onclick="dvQuitar('+i+')">✕</span></div>'; }).join('');
+}
+function dvAgregar(){ var v = el('dv-inter-in').value.trim(); if(!v) return; datosViaje.inter.push(v); el('dv-inter-in').value=''; dvPintar(); }
+function dvQuitar(i){ datosViaje.inter.splice(i,1); dvPintar(); }
+function dvGuardar(){
+  var s = el('dv-salida').value, l = el('dv-llegada').value;
+  el('err-llegada').classList.remove('show'); el('dv-lle-f').classList.remove('has-err');
+  if(s && l && l < s){ el('err-llegada').classList.add('show'); el('dv-lle-f').classList.add('has-err'); return; }
+  datosViaje.origen = el('dv-origen').value.trim(); datosViaje.destino = el('dv-destino').value.trim();
+  datosViaje.salida = s; datosViaje.llegada = l;
+  var ok = datosViaje.origen && datosViaje.destino && datosViaje.salida;
+  el('dv-resumen').innerHTML = (ok ? datosViaje.origen+' a '+datosViaje.destino : 'Incompleto')+' <span class="icn">'+ICONS.chev+'</span>';
+  toast('Datos del viaje guardados');
+  go('p2','nogm-home');
+}
+page('p2','firma-p2','Firma de la jornada','Cierra el día de hoy',
+  '<div id="firma2-bloq" class="block-pane"><div class="ic-wrap">'+ICONS.warn+'</div><h4>Faltan datos del viaje</h4><p>Antes de firmar captura el origen, el destino y la salida del viaje de hoy.</p><button class="bp" style="margin-top:16px;" onclick="go(\'p2\',\'datosviaje\')">Ir a Datos del viaje</button></div>'+
+  '<div id="firma2-ok"><div class="sig-pad"><div class="baseline"></div><svg viewBox="0 0 200 60" style="width:80%;"><path d="M10,45 C30,10 40,50 55,25 S80,5 95,35 S130,50 150,20 S180,45 190,25" stroke="#14171A" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="sig-hint">Firma con el dedo sobre esta área</div></div></div>',
+  '<button class="bp" id="firma2-btn" onclick="HIST.p2[0].firm=true;toast(\'Jornada firmada\');go(\'p2\',\'nogm-home\')">'+ICONS.check+' Confirmar y firmar</button>');
+function goFirmaP2(){
+  var ok = datosViaje.origen && datosViaje.destino && datosViaje.salida;
+  go('p2','firma-p2');
+  el('firma2-bloq').style.display = ok ? 'none' : 'block';
+  el('firma2-ok').style.display = ok ? 'block' : 'none';
+  el('firma2-btn').parentNode.style.display = ok ? 'flex' : 'none';
+}
+
+/* RFC del operador GM sin RFC en el catálogo (HU51004-0) */
+page('p1','gm-rfc','Captura tu RFC personal','Solo esta vez',
+  '<p style="font-size:12px;color:var(--sub);margin:4px 0 16px;line-height:1.5;">Tu bitácora queda ligada a tu RFC personal para que te siga aunque cambies de empresa o de celular.</p>'+
+  '<div class="field" id="rfc-f"><label>RFC <span class="hu-chip" onclick="openHu(\'HU51004-0\')">HU51004-0</span></label><input id="rfc-in" placeholder="13 caracteres" style="text-transform:uppercase;"/><div class="err-txt" id="err-rfc">El RFC no tiene un formato válido</div></div>',
+  '<button class="bp" onclick="rfcContinuar()">Continuar</button>','inicio-real');
+function rfcContinuar(){
+  var v = el('rfc-in').value.trim().toUpperCase();
+  var okFmt = /^[A-ZÑ&]{4}\d{6}[A-Z0-9]{3}$/.test(v);
+  el('err-rfc').classList.toggle('show', !okFmt); el('rfc-f').classList.toggle('has-err', !okFmt);
+  if(!okFmt) return;
+  toast('RFC guardado. Ya puedes usar tu bitácora');
+  go('p1','home-bitacora');
+}
+
+/* ---------- historial con firma y detalle del día (HU52716-9) ---------- */
+function tagDia(d){
+  if(d.h==='0h 00m' && !d.firm) return '<span class="tag sinact">Sin actividad</span>';
+  return '<span class="tag '+(d.firm?'ok':'pendf')+'">'+(d.firm?'Firmado':'Pendiente de firmar')+'</span>';
+}
+function buildHist(phone){
+  var box = document.querySelector('#'+(phone==='p1'?'historial':'historial-p2')+' .pg-scroll');
+  box.innerHTML = HIST[phone].map(function(d,i){
+    return '<div class="hist-row click" onclick="abrirDia(\''+phone+'\','+i+')"><span class="d">'+d.l+'<br>'+tagDia(d)+'</span><span class="rt"><span class="bar"><i style="width:'+d.w+'%;"></i></span><span class="v">'+d.h+'</span>'+ICONS.chev+'</span></div>';
+  }).join('');
+}
+var diaActual = {p1:0, p2:0};
+function abrirDia(phone, i){
+  diaActual[phone] = i;
+  var d = HIST[phone][i];
+  go(phone, 'dia-'+phone);
+  el('dia-t-'+phone).textContent = d.l;
+  el('dia-tag-'+phone).innerHTML = tagDia(d);
+  el('dia-kv-'+phone).innerHTML = phone==='p1'
+    ? '<b>Viaje:</b> '+viajeTxt(VIAJES[0])+'<br><b>Salida:</b> 06:00 · <b>Llegada:</b> 14:30'
+    : kvDiaP2(d);
+  if(phone==='p2') el('dia-bloq-p2').style.display='none';
+  el('dia-list-'+phone).innerHTML = d.h==='0h 00m' ? '<div class="hint" style="font-size:11px;color:var(--sub-2);padding:10px 0;">Sin actividades registradas este día.</div>' :
+    DAYSEGS.map(function(s,k){ var a = actBy(s[2]); return '<div class="tl-entry"><span class="dot" style="background:'+cssv(a.color)+';"></span><span class="rng">'+hLabel(s[0])+' – '+hLabel(s[1])+'</span><span class="nm">'+a.label+'</span><button class="fix" onclick="abrirCorreccion(\''+phone+'\','+k+')">Corregir</button></div>'; }).join('');
+  el('dia-firmar-'+phone).parentNode.style.display = (d.firm || d.h==='0h 00m') ? 'none' : 'flex';
+}
+function dvDiaOk(d){ return !d.dv || (d.dv.origen && d.dv.destino && d.dv.salida); }
+function fmtFH(v){ if(!v) return '—'; var p=v.split('T'), f=p[0].split('-'); return f[2]+'/'+f[1]+'/'+f[0]+' '+p[1]; }
+function kvDiaP2(d){
+  var e = d.emp || {empresa:'Industria Iluminadora de Almacenes', placas:'XYZ-4567'};
+  var v = d.dv || {origen:'Monterrey, N.L.', destino:'Querétaro, Qro.', salida:'', llegada:''};
+  return '<b>Empresa:</b> '+e.empresa+' · <b>Placas:</b> '+e.placas+'<br><b>Origen:</b> '+(v.origen||'—')+' · <b>Destino:</b> '+(v.destino||'—')+'<br><b>Salida:</b> '+fmtFH(v.salida)+' · <b>Llegada:</b> '+fmtFH(v.llegada);
+}
+function firmarDia(phone){
+  var dd = HIST[phone][diaActual[phone]];
+  if(phone==='p2' && !dvDiaOk(dd)){
+    el('dia-bloq-txt').textContent = 'Antes de firmar captura el origen, el destino y la salida del viaje del '+dd.f+'.';
+    el('dia-bloq-p2').style.display='block';
+    return;
+  }
+  HIST[phone][diaActual[phone]].firm = true;
+  toast('Jornada del '+HIST[phone][diaActual[phone]].f+' firmada');
+  abrirDia(phone, diaActual[phone]);
+}
+/* ventana de corrección dentro del teléfono */
+['p1','p2'].forEach(function(ph){
+  el(ph).insertAdjacentHTML('beforeend',
+  '<div class="modal-ov" id="m-fix-'+ph+'"><div class="modal-sheet"><h4 id="fix-t-'+ph+'">Corregir registro</h4>'+
+  '<div class="field"><label>Actividad</label><select id="fix-act-'+ph+'">'+ACTIVITIES.map(function(a){ return '<option value="'+a.key+'">'+a.label+'</option>'; }).join('')+'</select></div>'+
+  '<div class="row2"><div class="field"><label>Hora de inicio</label><input type="time" id="fix-ini-'+ph+'"/></div><div class="field"><label>Hora final</label><input type="time" id="fix-fin-'+ph+'"/></div></div>'+
+  '<div class="err-txt" id="err-fix-'+ph+'" style="margin:-6px 0 10px;">La hora de inicio y la hora final no pueden ser iguales</div>'+
+  '<div class="modal-actions"><button class="bs" onclick="hideModal(\'m-fix-'+ph+'\')">Cancelar</button><button class="bp" onclick="guardarCorreccion(\''+ph+'\')">Guardar</button></div></div></div>');
+});
+function hhmm(h){ var m = Math.round(h*60); return ('0'+Math.floor(m/60)%24).slice(-2)+':'+('0'+m%60).slice(-2); }
+function abrirCorreccion(phone, k){
+  corrigiendo = k;
+  el('err-fix-'+phone).classList.remove('show');
+  el('fix-t-'+phone).textContent = k===null ? 'Agregar actividad en un hueco' : 'Corregir registro';
+  if(k===null){ el('fix-act-'+phone).value='aux'; el('fix-ini-'+phone).value='12:00'; el('fix-fin-'+phone).value='13:00'; }
+  else { var s = DAYSEGS[k]; el('fix-act-'+phone).value=s[2]; el('fix-ini-'+phone).value=hhmm(s[0]); el('fix-fin-'+phone).value=hhmm(s[1]); }
+  showModal('m-fix-'+phone);
+}
+function guardarCorreccion(phone){
+  if(el('fix-ini-'+phone).value === el('fix-fin-'+phone).value){ el('err-fix-'+phone).classList.add('show'); return; }
+  hideModal('m-fix-'+phone);
+  var d = HIST[phone][diaActual[phone]];
+  if(d.firm){
+    d.firm = false;
+    toast('Corregiste un día ya firmado. Vuelve a firmar la jornada del '+d.f);
+  } else toast(corrigiendo===null ? 'Actividad agregada' : 'Registro corregido');
+  abrirDia(phone, diaActual[phone]);
+}
+/* línea de tiempo de hoy: botón Corregir por tramo */
+['p1','p2'].forEach(function(ph){
+  document.querySelectorAll('#tl-list-'+ph+' .tl-entry').forEach(function(e){
+    e.insertAdjacentHTML('beforeend','<button class="fix" onclick="diaActual.'+ph+'=0;abrirCorreccion(\''+ph+'\',2)">Corregir</button>');
+  });
+});
+
+/* ---------- firma p1 marca hoy ---------- */
+var _finishSign = finishSign;
+finishSign = function(){ HIST.p1[0].firm = true; _finishSign(); };
+
+/* ---------- letreros, sin conexión, avisos ---------- */
+function letrero(phone, nivel){
+  var l = el('letrero-'+phone);
+  if(!nivel){ l.className='letrero'; return; }
+  l.className = 'letrero show '+(nivel==='prox'?'warn':'crit');
+  l.innerHTML = ICONS.warn+'<span>'+(nivel==='prox' ? 'Pausa próxima: llevas 4h 35m conduciendo' : 'Pausa necesaria: llegaste a 5h de conducción continua')+'</span>';
+}
+var letreroEstado = {p1:0, p2:0};
+function ciclarLetrero(phone){
+  letreroEstado[phone] = (letreroEstado[phone]+1)%3;
+  letrero(phone, [null,'prox','nec'][letreroEstado[phone]]);
+  go(phone, phone==='p1'?'home-bitacora':'nogm-home');
+}
+var _applyActivity = applyActivity;
+applyActivity = function(phone, a){ _applyActivity(phone, a); if(a.key==='pausa'){ letreroEstado[phone]=0; letrero(phone,null); } };
+function toggleOffline(phone){
+  offline[phone] = !offline[phone];
+  el('offline-'+phone).classList.toggle('show', offline[phone]);
+  el('off-btn-'+phone).textContent = offline[phone] ? '🔧 Recuperar la señal' : '🔧 Simular sin conexión';
+  if(!offline[phone] && pendientesEnvio[phone]){ toast('Se enviaron '+pendientesEnvio[phone]+' registros guardados sin conexión'); pendientesEnvio[phone]=0; }
+  go(phone, phone==='p1'?'home-bitacora':'nogm-home');
+}
+function notif(title, body){
+  var n = el('os-notif');
+  n.querySelector('.ntitle').textContent = title; n.querySelector('.nbody').textContent = body;
+  n.classList.add('show'); setTimeout(function(){ n.classList.remove('show'); }, 3600);
+}
+var _fireNotif = fireNotif;
+fireNotif = function(){ notif('Descanso necesario','Llevas 14h de conducción en las últimas 24 horas. Toma tu descanso obligatorio.'); };
+function setViajeModo(m){
+  viajeModo = m;
+  var msg = {one:'Viaje '+VIAJES[0].id+' con salida marcada: la actividad se liga sola', none:'Sin salida marcada: el operador elige el viaje o Sin viaje', two:'Dos viajes con salida marcada: el operador elige cuál'}[m];
+  toast(msg);
+  go('p1','home-bitacora');
+}
+function marcarLlegada(){
+  viajeModo = 'none';
+  toast('Llegada del viaje '+VIAJES[0].id+' marcada: la siguiente actividad vuelve a preguntar el viaje');
+  go('p1','home-bitacora');
+}
+
+/* ---------- panel de simulaciones ampliado ---------- */
+(function(){
+  var dp1 = document.querySelector('#p1').closest('.phone').parentNode.querySelector('.demo-panel');
+  dp1.insertAdjacentHTML('beforeend',
+    '<div class="dp-label" style="margin-top:10px;">Viaje del operador · HU52716-5</div>'+
+    '<button class="dp-btn" onclick="setViajeModo(\'one\')">🔧 Un viaje con salida marcada</button>'+
+    '<button class="dp-btn" onclick="setViajeModo(\'none\')">🔧 Ningún viaje con salida marcada</button>'+
+    '<button class="dp-btn" onclick="setViajeModo(\'two\')">🔧 Dos viajes con salida marcada</button>'+
+    '<button class="dp-btn" onclick="marcarLlegada()">🔧 Marcar llegada del viaje</button>'+
+    '<div class="dp-label" style="margin-top:10px;">Otros casos</div>'+
+    '<button class="dp-btn" id="off-btn-p1" onclick="toggleOffline(\'p1\')">🔧 Simular sin conexión</button>'+
+    '<button class="dp-btn" onclick="ciclarLetrero(\'p1\')">🔧 Simular letrero de pausa en pantalla</button>'+
+    '<button class="dp-btn" onclick="go(\'p1\',\'gm-rfc\')">🔧 Operador GM sin RFC en el catálogo</button>');
+  var dp2 = document.querySelector('#phone2col .demo-panel');
+  dp2.insertAdjacentHTML('beforeend',
+    '<div class="dp-label" style="margin-top:10px;">Ampliación</div>'+
+    '<button class="dp-btn" id="off-btn-p2" onclick="toggleOffline(\'p2\')">🔧 Simular sin conexión</button>'+
+    '<button class="dp-btn" onclick="ciclarLetrero(\'p2\')">🔧 Simular letrero de pausa en pantalla</button>'+
+    '<button class="dp-btn" onclick="notif(\'Segundo conductor requerido\',\'Llevas 9 horas desde tu salida. La NOM-087 pide un segundo conductor en trayectos de pasajeros de más de 9 horas.\')">🔔 Simular aviso de segundo conductor (pasajeros)</button>');
+})();
+
+/* ---------- fichas de HU y especificaciones ---------- */
+HU_INFO['HU52716-3'].body = HU_INFO['HU52716-3'].body.replace('Descanso próximo (13h30 del día), Descanso necesario (14h del día)','Descanso próximo (13h30 en 24 horas), Descanso necesario (14h en 24 horas)').replace('El conteo de conducción del día reinicia a partir de la medianoche.','El límite de 14 horas se cuenta en las últimas 24 horas corridas, sin reiniciar a medianoche (ver HU52716-8).');
+HU_INFO['HU52716-4'].body += '<h5>Ajuste</h5><ul><li>Corregir un registro de un día ya firmado quita la firma de ese día y el operador debe volver a firmar (ver HU52716-9).</li></ul>';
+HU_INFO['HU52716-2'].body = HU_INFO['HU52716-2'].body.replace('aparece un campo de texto opcional para especificar cuál','aparece el campo "Describe el caso (opcional)"; se puede registrar aunque quede vacío (ver HU52716-10)');
+HU_INFO['HU52716-5'] = {title:'HU52716-5 — Ligar la bitácora con el viaje del operador GM', body:
+  '<h5>Quién y para qué</h5><ul><li>Operador cliente GM: cada actividad queda ligada a su viaje, para que la hoja oficial tenga origen, destino, salida y llegada sin capturarlos.</li></ul>'+
+  '<h5>Reglas clave</h5><ul><li>Se agrega el dato nuevo "Viaje" a la ventana de cambio de actividad.</li><li>Un viaje con salida marcada y sin llegada: se liga solo, no se elige nada.</li><li>Ningún viaje con salida: el operador elige uno de sus viajes o "Sin viaje". Sin elegir no se registra ("Elige un viaje o la opción Sin viaje").</li><li>"Sin viaje" pide "Observación" obligatoria ("Escribe por qué no hay viaje").</li><li>Dos viajes con salida marcada: elige cuál, solo entre esos dos.</li><li>Al marcar llegada, la siguiente actividad vuelve a preguntar; al marcar salida de otro viaje, se liga sola a ese.</li><li>La actividad en curso conserva el viaje con que se registró.</li><li>La pantalla principal muestra el viaje de la actividad en curso.</li></ul>'+
+  '<h5>Fuera de alcance</h5><ul><li>Operador independiente (ver HU52716-6). No cambia la regla de Mis Viajes que permite dos viajes con salida a la vez.</li></ul>'};
+HU_INFO['HU52716-6'] = {title:'HU52716-6 — Datos del viaje del operador independiente', body:
+  '<h5>Quién y para qué</h5><ul><li>Operador independiente captura origen, destino, puntos intermedios, salida y llegada del día (numeral 8.2.1 de la NOM).</li></ul>'+
+  '<h5>Reglas clave</h5><ul><li>Enlace nuevo "Datos del viaje de hoy" en la pantalla principal.</li><li>Puntos intermedios: se agregan uno a uno, no se agrega uno vacío, se pueden quitar.</li><li>La llegada no puede ser anterior a la salida.</li><li>No se puede firmar la jornada sin origen, destino y salida.</li><li>Al día siguiente los datos empiezan vacíos; los del día anterior se conservan.</li><li>Se puede guardar aunque falte algún dato; la tarjeta de pendiente sigue hasta tener origen, destino y salida.</li><li>Cada día guarda la empresa y la unidad con que se trabajó; se corrigen con "Empresa y unidad de este día" en el detalle del día y no cambian los de hoy.</li><li>Los datos del viaje de un día anterior se corrigen desde su detalle en el Historial; ahí se captura la llegada de un viaje que cruzó la medianoche.</li><li>Un día anterior sin origen, destino y salida no se puede firmar; lleva a "Ir a Datos del viaje".</li><li>Corregir datos de un día firmado quita la firma de ese día.</li></ul>'};
+HU_INFO['HU52716-7'] = {title:'HU52716-7 — Hoja oficial para la autoridad', body:
+  '<h5>Quién y para qué</h5><ul><li>Cualquier operador genera la "Bitácora de horas de servicio" para mostrarla a la autoridad (numeral 4.3).</li></ul>'+
+  '<h5>Reglas clave</h5><ul><li>Mismo formato y gráfica de 24 horas que hoy genera Conduce 087.</li><li>Por defecto: últimos 7 días; el operador puede cambiar el rango.</li><li>Incluye permisionario, domicilio, servicio, modalidad, unidad, operador, licencia, origen, intermedios, destino, salida, llegada, horas por actividad y casos de excepción.</li><li>Firma del operador si el día está firmado; si no, espacio vacío. Espacio vacío "Firma del Responsable" con su nombre debajo.</li><li>Botón "Compartir" abre las opciones del teléfono.</li><li>Funciona sin internet con los días guardados en el teléfono; para otros días pide conexión.</li><li>Rango sin bitácoras: "No hay bitácoras registradas en ese rango de fechas".</li></ul>'};
+HU_INFO['HU52716-8'] = {title:'HU52716-8 — Reglas por tipo de servicio', body:
+  '<h5>Reglas clave</h5><ul><li>"Tipo de Servicio" es lista con 4 opciones: Autotransporte de carga federal, Transporte privado, Autotransporte de pasaje y turismo, Transporte privado de pasajeros.</li><li>El límite de 14 horas cuenta las últimas 24 horas corridas; el cambio de día no lo reinicia.</li><li>Pasajeros, operador GM: si la ruta del viaje tiene tiempo estimado mayor a 9 horas, aviso "Segundo conductor requerido".</li><li>Pasajeros, independiente: el aviso sale al cumplir 9 horas desde la salida capturada sin llegada.</li><li>Carga: nunca muestra ese aviso.</li><li>Operador GM usa los tiempos de su cliente; independiente usa los de la NOM.</li><li>Los avisos no se pueden apagar y nunca bloquean.</li></ul>'+
+  '<h5>Fuera de alcance</h5><ul><li>Excepción 4.5 c) de servicio directo de 5 a 7 horas.</li></ul>'};
+HU_INFO['HU52716-9'] = {title:'HU52716-9 — Corregir, días anteriores, sin internet y corte de día', body:
+  '<h5>Reglas clave</h5><ul><li>Botón "Corregir" en cada tramo: cambia actividad y horas; los registros de al lado se acomodan como en Conduce 087.</li><li>Inicio y fin iguales: "La hora de inicio y la hora final no pueden ser iguales".</li><li>Se puede agregar una actividad para cubrir un hueco.</li><li>Corregir un día firmado quita la firma: "Corregiste un día ya firmado. Vuelve a firmar la jornada del ...".</li><li>Historial con etiqueta "Firmado" o "Pendiente de firmar"; tocar un día abre su detalle y permite firmarlo.</li><li>Sin conexión: se registra con la hora del teléfono, aviso "Sin conexión: tus registros se enviarán cuando vuelva la señal"; al volver la señal se envía solo y sin duplicar.</li><li>Actividad que cruza medianoche se parte en dos días; el día nuevo empieza sin datos del viaje y sin firma.</li><li>Una corrección conserva el historial de cambios; nada se borra.</li></ul>'};
+HU_INFO['HU52716-10'] = {title:'HU52716-10 — Mapa, gráficas, avisos en pantalla y mis datos', body:
+  '<h5>Reglas clave</h5><ul><li>4 enlaces nuevos: Mapa del recorrido, Mi avance, Reglas NOM-087, Mis datos.</li><li>Mapa: un marcador por actividad unidos en orden; vista Mapa o Satélite; al tocar un marcador muestra actividad, hora y ubicación.</li><li>Mi avance: conducido contra el límite de 14h y últimos 7 días, tabla por actividad; tocar una gráfica la abre a pantalla completa.</li><li>Letrero en la pantalla principal "Pausa próxima" / "Pausa necesaria", además de la notificación; desaparece al registrar Pausa.</li><li>"Otro(s)"/"Otra(s)" muestra un campo para describirlo, opcional.</li><li>Mis datos: el independiente edita; el operador GM solo consulta los datos de su empresa.</li></ul>'+
+  '<h5>Fuera de alcance</h5><ul><li>La revisión del teléfono al abrir la app que hace Conduce 087.</li></ul>'};
+HU_INFO['HU51004-0'] = {title:'HU51004-0 — Relación del operador con el cliente GM (pantalla de RFC)', body:
+  '<h5>Lo que toca a la app</h5><ul><li>Si el operador GM no tiene RFC personal en el catálogo de operadores, la primera vez que abre la bitácora se le pide "Captura tu RFC personal".</li><li>Formato válido de persona física; si no: "El RFC no tiene un formato válido".</li><li>Si el RFC ya pertenece a otro perfil, pide confirmar identidad igual que HU52716-1.</li><li>El resto de la HU (relación por periodo, qué ve cada cliente) vive en el portal — ver prototipo del portal.</li></ul>'};
+['hoja','mapa','avance','reglas','misdatos','dia'].forEach(function(k){
+  var map = {hoja:['Hoja para la autoridad','HU52716-7'], mapa:['Mapa del recorrido','HU52716-10'], avance:['Mi avance','HU52716-10'], reglas:['Reglas NOM-087','HU52716-10'], misdatos:['Mis datos','HU52716-10'], dia:['Detalle del día','HU52716-9']}[k];
+  ['p1','p2'].forEach(function(ph){ SPECS[k+'-'+ph] = {title:map[0], body:HU_INFO[map[1]].body}; });
+});
+SPECS['datosviaje'] = {title:'Datos del viaje de hoy', body:HU_INFO['HU52716-6'].body};
+SPECS['firma-p2'] = {title:'Firma de la jornada (independiente)', body:'<h5>Reglas</h5><ul><li>No se firma sin origen, destino y salida del viaje de hoy (HU52716-6).</li><li>No se firma un día sin actividades (HU52716-4).</li></ul>'};
+SPECS['gm-rfc'] = {title:'Captura tu RFC personal', body:HU_INFO['HU51004-0'].body};
+SPECS['home-bitacora'] = {title:'Pantalla principal (operador GM)', body:SPECS.home.body+'<h5>Ampliación</h5><ul><li>Muestra el viaje de la actividad en curso (HU52716-5).</li><li>Letrero de pausa o descanso en pantalla (HU52716-10).</li><li>Aviso de sin conexión (HU52716-9).</li><li>Enlaces nuevos: Hoja para la autoridad, Mapa, Mi avance, Reglas, Mis datos.</li></ul>'};
+SPECS['nogm-home'] = {title:'Pantalla principal (independiente)', body:SPECS.home.body+'<h5>Ampliación</h5><ul><li>Enlace "Datos del viaje de hoy" (HU52716-6) y "Firmar jornada de hoy".</li><li>Mismos enlaces nuevos que el operador GM.</li></ul>'};
+
+/* ---------- recorrido de desarrollo ---------- */
+var TOUR = [
+  {hu:'HU52716-5', loc:'Operador GM › Bitácora', t:'La pantalla principal muestra el viaje de la actividad en curso', b:['Dato nuevo debajo del cronómetro.','Si la actividad se registró "Sin viaje", lo dice así.'], sel:'#trip-line-p1', setup:function(){ go('p1','home-bitacora'); }},
+  {hu:'HU52716-5', loc:'Operador GM › Cambiar actividad', t:'Con salida marcada, el viaje se liga solo', b:['El campo "Viaje" aparece lleno y no se puede cambiar.','Viene del viaje que tiene salida marcada y sin llegada.'], sel:'#viaje-field', setup:function(){ go('p1','home-bitacora'); viajeModo='one'; chipTap('p1','pausa'); }},
+  {hu:'HU52716-5', loc:'Operador GM › Cambiar actividad', t:'Sin salida marcada, elige viaje o "Sin viaje"', b:['La lista trae sus viajes y la opción "Sin viaje".','"Sin viaje" pide una observación obligatoria.','Con dos viajes con salida, la lista trae solo esos dos.'], sel:'#viaje-field', setup:function(){ go('p1','home-bitacora'); viajeModo='none'; chipTap('p1','pausa'); el('viaje-sel').value='sin'; viajeChange(); }},
+  {hu:'HU52716-10', loc:'Operador GM › Bitácora', t:'Enlaces nuevos de la bitácora', b:['Hoja para la autoridad, Mapa del recorrido, Mi avance, Reglas NOM-087 y Mis datos.','Replican lo que hoy tiene Conduce 087.'], sel:'#home-bitacora .tiles', setup:function(){ hideModal('m-capture-p1'); go('p1','home-bitacora'); el('home-bitacora').querySelector('.tiles').scrollIntoView({block:'center'}); }},
+  {hu:'HU52716-7', loc:'Operador GM › Hoja para la autoridad', t:'Hoja oficial con los últimos 7 días', b:['Mismo formato que Conduce 087, en PDF.','Firma del operador si el día está firmado; espacio para la firma del responsable.','"Compartir" abre las opciones del teléfono. Funciona sin internet con lo guardado.'], sel:'#hoja-pdf-p1', setup:function(){ go('p1','hoja-p1'); }},
+  {hu:'HU52716-9', loc:'Operador GM › Historial', t:'Cada día dice si está firmado o pendiente', b:['Tocar un día abre su detalle.','Desde el detalle se corrige y se firma.'], sel:'#historial .pg-scroll', setup:function(){ go('p1','historial'); }},
+  {hu:'HU52716-9', loc:'Operador GM › Detalle del día', t:'Corregir un registro', b:['Botón "Corregir" en cada actividad.','Si el día estaba firmado, la firma se quita y hay que volver a firmar.','Inicio y fin iguales no se guardan.'], sel:'#dia-list-p1', setup:function(){ abrirDia('p1',1); }},
+  {hu:'HU52716-10', loc:'Operador GM › Mapa del recorrido', t:'Mapa con un marcador por actividad', b:['Unidos en el orden en que se registraron.','Vista Mapa o Satélite.'], sel:'#mapa-svg-p1', setup:function(){ go('p1','mapa-p1'); }},
+  {hu:'HU51004-0', loc:'Operador GM sin RFC', t:'Se le pide su RFC personal la primera vez', b:['Solo si su catálogo de operadores no tiene RFC.','Valida formato de persona física.'], sel:'#rfc-f', setup:function(){ go('p1','gm-rfc'); }},
+  {hu:'HU52716-8', loc:'Independiente › ¿Para quién manejas hoy?', t:'Tipo de Servicio pasa a lista', b:['4 opciones; las de pasajeros son nuevas.','Define qué reglas de aviso aplican.'], sel:'#tipo-servicio', setup:function(){ setEmpresaModo(false); el('tipo-servicio').scrollIntoView({block:'center'}); }},
+  {hu:'HU52716-6', loc:'Independiente › Bitácora', t:'Datos del viaje de hoy', b:['Origen, destino, puntos intermedios, salida y llegada.','La llegada no puede ser anterior a la salida.'], sel:'#link-datosviaje', setup:function(){ go('p2','nogm-home'); }},
+  {hu:'HU52716-6', loc:'Independiente › Firmar jornada', t:'No se firma sin origen, destino y salida', b:['Lleva directo a capturarlos.'], sel:'#firma2-bloq', setup:function(){ datosViaje.origen=''; goFirmaP2(); }}
+];
+var tourI = -1;
+document.querySelector('.notas-bar').insertAdjacentHTML('beforeend','<button class="tour-launch" id="tour-btn" onclick="tourToggle()">▶ Recorrido de desarrollo</button>');
+document.body.insertAdjacentHTML('beforeend','<div id="tourbar"><div class="tb-in"><div class="tb-main"><div class="tb-loc" id="tb-loc"></div><div class="tb-ttl" id="tb-ttl"></div><ul id="tb-ul"></ul></div><div class="tb-side"><span id="tb-hu"></span><div class="tb-prog"><i id="tb-prog"></i></div><span class="tb-count" id="tb-count"></span><div class="tb-btns"><button class="tb-prev" onclick="tourGo(tourI-1)">Anterior</button><button class="tb-next" id="tb-next" onclick="tourGo(tourI+1)">Siguiente</button></div></div></div></div>');
+function tourToggle(){ if(tourI>=0) tourEnd(); else tourGo(0); }
+function tourEnd(){ tourI=-1; document.querySelectorAll('.tour-spot').forEach(function(e){e.classList.remove('tour-spot');}); el('tourbar').classList.remove('open'); document.body.classList.remove('touring'); el('tour-btn').textContent='▶ Recorrido de desarrollo'; }
+function tourGo(i){
+  if(i<0) return; if(i>=TOUR.length){ tourEnd(); return; }
+  tourI = i; var s = TOUR[i];
+  document.querySelectorAll('.tour-spot').forEach(function(e){e.classList.remove('tour-spot');});
+  document.querySelectorAll('.modal-ov.open').forEach(function(m){ if(!/m-capture-p1/.test(m.id)) m.classList.remove('open'); });
+  if(!/Cambiar actividad/.test(s.loc)) hideModal('m-capture-p1');
+  s.setup();
+  var t = document.querySelector(s.sel);
+  if(t){ t.classList.add('tour-spot'); var ph = t.closest('.phone'); (ph||t).scrollIntoView({block:'center',behavior:'smooth'}); }
+  el('tb-loc').textContent = s.loc; el('tb-ttl').textContent = s.t;
+  el('tb-ul').innerHTML = s.b.map(function(x){return '<li>'+x+'</li>';}).join('');
+  el('tb-hu').innerHTML = '<span class="hu-chip" onclick="openHu(\''+s.hu+'\')">'+s.hu+'</span>';
+  el('tb-prog').style.width = ((i+1)/TOUR.length*100)+'%';
+  el('tb-count').textContent = (i+1)+' de '+TOUR.length;
+  el('tb-next').textContent = i===TOUR.length-1 ? 'Terminar' : 'Siguiente';
+  el('tourbar').classList.add('open'); document.body.classList.add('touring'); el('tour-btn').textContent='■ Salir del recorrido';
+}
+
+
+/* ===== Rediseño por niveles (HU52716-10) ===== */
+(function(){
+  var css = document.createElement('style');
+  css.textContent =
+  '.hdr-btn{display:flex;align-items:center;gap:6px;background:var(--ink);color:#fff;border:none;border-radius:20px;padding:8px 12px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;}'+
+  '.hdr-btn .ic{width:15px;height:15px;stroke:#fff;}'+
+  '.hdr-av{width:32px;height:32px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--sub);}'+
+  '.hdr-av .ic{width:17px;height:17px;}'+
+  '.hero-extra{margin-top:12px;padding-top:11px;border-top:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;gap:6px;}'+
+  '.hx-trip{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;opacity:.9;cursor:pointer;}'+
+  '.hx-trip .ic{width:15px;height:15px;}'+
+  '.hx-off{display:none;align-self:flex-start;align-items:center;gap:6px;background:#22252a;color:#fff;font-size:10px;font-weight:700;padding:4px 9px;border-radius:12px;}'+
+  '.hx-off.show{display:inline-flex;}'+
+  '.lim{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:14px;cursor:pointer;}'+
+  '.lim-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}'+
+  '.lim-t{font-size:14px;font-weight:800;}'+
+  '.lim-s{font-size:10.5px;color:var(--sub-2);font-weight:700;}'+
+  '.lim.warn{background:var(--warn-bg);border-color:#f3d892;} .lim.warn .lim-t{color:#8a5a00;}'+
+  '.lim.crit{background:var(--crit-bg);border-color:#f5c2bd;} .lim.crit .lim-t{color:var(--crit);}'+
+  '.pend{display:none;align-items:center;gap:11px;background:var(--accent-soft);border:1px solid #f5d9c0;border-radius:14px;padding:12px 14px;margin-bottom:12px;cursor:pointer;}'+
+  '.pend.show{display:flex;}'+
+  '.pend .pi{width:32px;height:32px;border-radius:9px;background:#fff;color:var(--accent-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0;}'+
+  '.pend .pi .ic{width:16px;height:16px;}'+
+  '.pend .pt{flex:1;font-size:12.5px;font-weight:800;color:#7a3a0c;}'+
+  '.entries{display:flex;gap:8px;}'+
+  '.entry{flex:1;background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:12.5px;font-weight:700;}'+
+  '.entry .ic{width:15px;height:15px;color:var(--sub-2);}'+'#home-bitacora .hero,#nogm-home .hero{padding:14px 16px;margin-bottom:12px;}#home-bitacora .hero .top-row,#nogm-home .hero .top-row{margin-bottom:8px;}#home-bitacora .hero .timer,#nogm-home .hero .timer{font-size:30px;}.hero-extra{margin-top:10px;padding-top:9px;}.lim{padding:10px 14px;margin-bottom:12px;}'+'#home-bitacora .appbar > div[style*="flex:1"],#nogm-home .appbar > div[style*="flex:1"]{min-width:0;}#home-bitacora .appbar .ttl,#home-bitacora .appbar .sub,#nogm-home .appbar .ttl,#nogm-home .appbar .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.hdr-btn{padding:7px 10px;font-size:10.5px;}';
+  document.head.appendChild(css);
+})();
+
+ICONS.shield = '<svg viewBox="0 0 24 24" class="ic"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>';
+var HOME = {p1:'home-bitacora', p2:'nogm-home'};
+var MIDIA = {p1:'linea-tiempo', p2:'linea-tiempo-p2'};
+var HISTP = {p1:'historial', p2:'historial-p2'};
+var limState = {p1:'ok', p2:'ok'};
+
+['p1','p2'].forEach(function(ph){
+  var home = el(HOME[ph]);
+  var sc = home.querySelector('.pg-scroll');
+  var hero = el('hero-'+ph);
+  var lbl = sc.querySelector('.chip-lbl');
+  var chips = el('chips-'+ph);
+  /* nivel 1 */
+  hero.insertAdjacentHTML('beforeend','<div class="hero-extra"><div class="hx-trip" id="hx-trip-'+ph+'"></div><span class="hx-off" id="offline-'+ph+'">'+ICONS.wifi+'Sin señal · se enviará al volver la señal</span></div>');
+  ['trip-line-'+ph,'letrero-'+ph].forEach(function(id){ var n=el(id); if(n) n.remove(); });
+  var oldOff = sc.querySelector('.offline-bar'); if(oldOff) oldOff.remove();
+  var nodes = [hero];
+  sc.innerHTML = '';
+  sc.appendChild(hero);
+  sc.insertAdjacentHTML('beforeend','<div class="lim" id="lim-'+ph+'" onclick="go(\''+ph+'\',\'avance-'+ph+'\')"><div class="lim-hd"><span class="lim-t" id="lim-t-'+ph+'"></span><span class="lim-s">Próximo límite ›</span></div><div class="gauge-track"><div class="gauge-fill" id="lim-f-'+ph+'"></div></div></div>');
+  sc.appendChild(lbl); sc.appendChild(chips);
+  /* nivel 2 y 3 */
+  sc.insertAdjacentHTML('beforeend',
+    '<div class="pend" id="pend-'+ph+'"><div class="pi">'+ICONS.pen+'</div><div class="pt" id="pend-t-'+ph+'"></div>'+ICONS.chev+'</div>'+
+    '<div class="entries" id="entries-'+ph+'"><div class="entry" onclick="go(\''+ph+'\',\''+MIDIA[ph]+'\')">Mi día '+ICONS.chev+'</div><div class="entry" onclick="go(\''+ph+'\',\''+HISTP[ph]+'\')">Historial '+ICONS.chev+'</div></div>');
+  /* encabezado: Hoja para la autoridad fija + perfil del independiente */
+  var bar = home.querySelector('.appbar');
+  var info = bar.querySelector('.bk[onclick*="openSpec"]'); if(info) info.remove();
+  if(ph==='p2') bar.insertAdjacentHTML('beforeend','<div class="hdr-av" title="Mis datos" onclick="go(\'p2\',\'misdatos-p2\')">'+ICONS.user+'</div>');
+  bar.insertAdjacentHTML('beforeend','<button class="hdr-btn" id="hoja-btn-'+ph+'" onclick="go(\''+ph+'\',\'hoja-'+ph+'\')">'+ICONS.shield+'Hoja para la autoridad</button>');
+  /* Mi día = línea de tiempo + mapa */
+  var md = el(MIDIA[ph]); var mdsc = md.querySelector('.pg-scroll');
+  md.querySelector('.ttl').textContent = 'Mi día';
+  var lista = document.createElement('div'); lista.id = 'md-lista-'+ph;
+  while(mdsc.firstChild) lista.appendChild(mdsc.firstChild);
+  var mapa = document.createElement('div'); mapa.id = 'md-mapa-'+ph; mapa.style.display='none';
+  var mpsc = el('mapa-'+ph).querySelector('.pg-scroll');
+  while(mpsc.firstChild) mapa.appendChild(mpsc.firstChild);
+  mdsc.insertAdjacentHTML('beforeend','<div class="seg-sm" id="md-seg-'+ph+'"><span class="on" onclick="miDia(\''+ph+'\',\'lista\')">Lista</span><span onclick="miDia(\''+ph+'\',\'mapa\')">Mapa</span></div>');
+  mdsc.appendChild(lista); mdsc.appendChild(mapa);
+  el('mapa-'+ph).remove();
+  /* Mi avance + reglas */
+  var av = el('avance-'+ph).querySelector('.pg-scroll');
+  var rg = el('reglas-'+ph).querySelector('.pg-scroll');
+  av.insertAdjacentHTML('beforeend','<div class="chip-lbl" style="margin-top:16px;">Reglas que te aplican</div>');
+  while(rg.firstChild) av.appendChild(rg.firstChild);
+  el('reglas-'+ph).remove();
+});
+/* GM: Mis datos vive en el Perfil de Mis Viajes */
+(function(){
+  var av = document.querySelector('#inicio-real .mv-avatar');
+  av.style.cursor='pointer'; av.title='Perfil'; av.onclick = function(){ go('p1','misdatos-p1'); };
+  var p = el('misdatos-p1');
+  p.querySelector('.ttl').textContent = 'Perfil';
+  p.querySelector('.sub').textContent = 'Mis datos de bitácora';
+  p.querySelector('.bk').setAttribute('onclick',"go('p1','inicio-real')");
+})();
+
+function miDia(ph, v){
+  el('md-lista-'+ph).style.display = v==='lista' ? 'block' : 'none';
+  el('md-mapa-'+ph).style.display = v==='mapa' ? 'block' : 'none';
+  var s = el('md-seg-'+ph).querySelectorAll('span');
+  s[0].classList.toggle('on', v==='lista'); s[1].classList.toggle('on', v==='mapa');
+}
+function pintarLimite(ph){
+  var box = el('lim-'+ph), st = limState[ph];
+  var base = ph==='p1' ? {t:'Pausa en 2h 46m', w:45} : {t:'Pausa en 5h 00m', w:2};
+  var cfg = {ok:{c:'', t:base.t, w:base.w, col:'--safe'}, prox:{c:'warn', t:'Pausa próxima: en 25m', w:92, col:'--warn'}, nec:{c:'crit', t:'Pausa necesaria', w:100, col:'--crit'}}[st];
+  box.className = 'lim '+cfg.c;
+  el('lim-t-'+ph).textContent = cfg.t;
+  el('lim-f-'+ph).style.width = cfg.w+'%'; el('lim-f-'+ph).style.background = cssv(cfg.col);
+}
+function pintarPendiente(ph){
+  var card = el('pend-'+ph), t = null, fn = null;
+  var dvOk = datosViaje.origen && datosViaje.destino && datosViaje.salida;
+  var sinFirmar = HIST[ph].slice(1).filter(function(d){ return !d.firm && d.h!=='0h 00m'; }).length;
+  if(ph==='p2' && !dvOk){ t='Faltan los datos del viaje de hoy'; fn=function(){ go('p2','datosviaje'); }; }
+  else if(sinFirmar){ t='Tienes '+sinFirmar+(sinFirmar===1?' día':' días')+' sin firmar'; fn=function(){ go(ph, HISTP[ph]); }; }
+  else if(!HIST[ph][0].firm && !(ph==='p1' && sinActividad.p1)){ t='Firma tu jornada de hoy'; fn=function(){ ph==='p1' ? goFirma('p1') : goFirmaP2(); }; }
+  card.classList.toggle('show', !!t);
+  if(t){ el('pend-t-'+ph).textContent = t; card.onclick = fn; }
+}
+function pintarViaje(ph){
+  var box = el('hx-trip-'+ph);
+  if(ph==='p2'){
+    var ok = datosViaje.origen && datosViaje.destino;
+    box.style.display = ok ? 'flex' : 'none';
+    box.innerHTML = ICONS.route+'<span>'+datosViaje.origen+' → '+datosViaje.destino+'</span>';
+    box.onclick = function(){ go('p2','datosviaje'); };
+  }
+}
+setTripLine = function(t){
+  var v = VIAJES.filter(function(x){return x.id===t;})[0];
+  el('hx-trip-p1').innerHTML = ICONS.route+'<span>'+(v ? v.id+' · '+v.o+' → '+v.d : 'Sin viaje')+'</span>';
+};
+setTripLine(VIAJES[0].id);
+letrero = function(ph, nivel){ limState[ph] = nivel==='prox' ? 'prox' : nivel==='nec' ? 'nec' : 'ok'; pintarLimite(ph); };
+toggleOffline = function(ph){
+  offline[ph] = !offline[ph];
+  el('offline-'+ph).classList.toggle('show', offline[ph]);
+  el('off-btn-'+ph).textContent = offline[ph] ? '🔧 Recuperar la señal' : '🔧 Simular sin conexión';
+  if(!offline[ph] && pendientesEnvio[ph]){ toast('Se enviaron '+pendientesEnvio[ph]+' registros guardados sin conexión'); pendientesEnvio[ph]=0; }
+  go(ph, HOME[ph]);
+};
+var _go2 = go;
+go = function(ph, id){
+  _go2(ph, id);
+  if(id===HOME[ph]){ pintarPendiente(ph); pintarLimite(ph); pintarViaje(ph); }
+};
+['p1','p2'].forEach(function(ph){ pintarLimite(ph); pintarPendiente(ph); pintarViaje(ph); });
+document.querySelectorAll('.dp-btn').forEach(function(b){ if(/letrero de pausa/.test(b.textContent)) b.textContent = '🔧 Simular cercanía al límite (verde → ámbar → rojo)'; });
+
+/* Ver especificación fuera del frame */
+document.querySelectorAll('.spec-link').forEach(function(b){
+  var col = b.closest('.phone').parentNode;
+  b.style.cssText = 'position:static;display:block;margin:10px auto 0;font-size:11px;padding:6px 14px;border-radius:14px;';
+  col.querySelector('.col-caption').insertAdjacentElement('afterend', b);
+  b.textContent = 'Ver especificación de esta pantalla';
+});
+/* fichas y especificaciones */
+HU_INFO['HU52716-10'] = {title:'HU52716-10 — Pantalla principal por niveles, Mi día, Mi avance y mis datos', body:
+  '<h5>Orden de la pantalla principal</h5><ul><li>Encabezado con botón fijo "Hoja para la autoridad".</li><li>Tarjeta de la actividad en curso con cronómetro, viaje y etiqueta "Sin señal".</li><li>Barra "Próximo límite": muestra el límite más cercano (pausa o descanso); ámbar a 30 min ("Pausa próxima: en 25m"), roja al llegar ("Pausa necesaria"); vuelve a verde al registrar Pausa. Reemplaza el letrero.</li><li>Los 6 botones de actividad.</li><li>Una sola tarjeta de pendiente, por prioridad: "Faltan los datos del viaje de hoy" → "Tienes N días sin firmar" → "Firma tu jornada de hoy". Sin pendientes no aparece.</li><li>Entradas "Mi día" e "Historial".</li><li>Encabezado, actividad, barra y botones se ven sin scroll.</li></ul>'+
+  '<h5>Consultas</h5><ul><li>Mi día: selector Lista / Mapa (marcadores por actividad, vista Satélite).</li><li>Tocar la barra abre Mi avance (24 horas, 7 días, tabla por actividad, pantalla completa) con las reglas debajo.</li><li>Mis datos: el independiente desde el ícono de perfil del encabezado; el operador GM en la pestaña Perfil de Mis Viajes, solo consulta.</li><li>"Otro(s)"/"Otra(s)" muestra un campo para describirlo, opcional.</li></ul>'};
+SPECS['home-bitacora'] = {title:'Pantalla principal (operador GM)', body:HU_INFO['HU52716-10'].body};
+SPECS['nogm-home'] = {title:'Pantalla principal (independiente)', body:HU_INFO['HU52716-10'].body};
+SPECS['linea-tiempo'] = SPECS['linea-tiempo-p2'] = {title:'Mi día', body:'<ul><li>Selector Lista / Mapa.</li><li>Lista: línea de tiempo de 24 horas con detalle y botón "Corregir" (HU52716-4, HU52716-9).</li><li>Mapa: un marcador por actividad unidos en orden; vista Satélite (HU52716-10).</li></ul>'};
+
+/* recorrido actualizado */
+TOUR = [
+  {hu:'HU52716-10', loc:'Operador GM › Bitácora', t:'Pantalla ordenada por frecuencia de uso', b:['Arriba y sin scroll: actividad, límite y botones.','Lo de una vez al día aparece como tarjeta de pendiente.','Lo de consulta queda en "Mi día" e "Historial".'], sel:'#home-bitacora .pg-scroll', setup:function(){ hideModal('m-capture-p1'); go('p1','home-bitacora'); }},
+  {hu:'HU52716-7', loc:'Operador GM › Encabezado', t:'Hoja para la autoridad siempre a un toque', b:['Botón fijo en el encabezado.','Es la excepción: poco frecuente pero urgente.'], sel:'#hoja-btn-p1', setup:function(){ go('p1','home-bitacora'); }},
+  {hu:'HU52716-5', loc:'Operador GM › Actividad en curso', t:'El viaje va dentro de la tarjeta de la actividad', b:['Muestra el viaje ligado o "Sin viaje".','Sin conexión aparece aquí una etiqueta "Sin señal", no una barra aparte.'], sel:'#hero-p1', setup:function(){ go('p1','home-bitacora'); }},
+  {hu:'HU52716-10', loc:'Operador GM › Barra Próximo límite', t:'Una sola barra con el límite más cercano', b:['Verde, ámbar a 30 min y roja al llegar.','Reemplaza el letrero.','Al tocarla abre Mi avance con las reglas.'], sel:'#lim-p1', setup:function(){ letrero('p1','prox'); go('p1','home-bitacora'); }},
+  {hu:'HU52716-5', loc:'Operador GM › Cambiar actividad', t:'Sin salida marcada, elige viaje o "Sin viaje"', b:['Con salida marcada, el viaje se liga solo.','"Sin viaje" pide observación obligatoria.','Con dos viajes con salida, elige entre esos dos.'], sel:'#viaje-field', setup:function(){ letrero('p1',null); go('p1','home-bitacora'); viajeModo='none'; chipTap('p1','pausa'); el('viaje-sel').value='sin'; viajeChange(); }},
+  {hu:'HU52716-10', loc:'Operador GM › Tarjeta de pendiente', t:'Un solo pendiente, el más importante', b:['Datos del viaje → días sin firmar → firma de hoy.','Sin pendientes, no aparece.'], sel:'#pend-p1', setup:function(){ hideModal('m-capture-p1'); viajeModo='one'; go('p1','home-bitacora'); }},
+  {hu:'HU52716-10', loc:'Operador GM › Mi día', t:'Línea de tiempo y mapa en la misma pantalla', b:['Selector Lista / Mapa.','Desde la lista se corrige un registro.'], sel:'#md-seg-p1', setup:function(){ go('p1','linea-tiempo'); miDia('p1','mapa'); }},
+  {hu:'HU52716-9', loc:'Operador GM › Historial', t:'Cada día dice si está firmado o pendiente', b:['Tocar un día abre su detalle, se corrige y se firma.','Corregir un día firmado quita la firma.'], sel:'#historial .pg-scroll', setup:function(){ miDia('p1','lista'); go('p1','historial'); }},
+  {hu:'HU52716-7', loc:'Operador GM › Hoja para la autoridad', t:'Hoja oficial con los últimos 7 días', b:['Mismo formato que Conduce 087.','"Compartir" abre las opciones del teléfono.'], sel:'#hoja-pdf-p1', setup:function(){ go('p1','hoja-p1'); }},
+  {hu:'HU51004-0', loc:'Operador GM sin RFC', t:'Se le pide su RFC personal la primera vez', b:['Solo si su catálogo de operadores no tiene RFC.'], sel:'#rfc-f', setup:function(){ go('p1','gm-rfc'); }},
+  {hu:'HU52716-1', loc:'Independiente › Completa tu perfil', t:'Acepta términos y condiciones una sola vez', b:['Casilla con enlace para leerlos.','"Guardar y continuar" se habilita hasta marcarla.','Al reingresar desde otro dispositivo ya no se vuelve a pedir.'], sel:'#tyc-row', setup:function(){ go('p2','nogm-perfil'); }},
+  {hu:'HU52716-10', loc:'Independiente › Registrar Excepción', t:'"Otro(s)" se describe, pero es opcional', b:['Al elegir "Otro(s)" aparece "Describe el caso (opcional)".','Se puede registrar aunque quede vacío.','Igual con "Otra(s)" en Auxiliares.'], sel:'#cap-otro-p2', setup:function(){ go('p2','nogm-home'); chipTap('p2','excepcion'); var sl=el('cap-detalle-select-p2'); sl.value='Otro(s)'; toggleOtro('p2'); }},
+  {hu:'HU52716-6', loc:'Independiente › Bitácora', t:'Pendiente: datos del viaje de hoy', b:['Hasta capturarlos, es el pendiente principal.','Ya capturados, el origen y destino aparecen en la tarjeta de la actividad.'], sel:'#pend-p2', setup:function(){ datosViaje.origen=''; go('p2','nogm-home'); }},
+  {hu:'HU52716-8', loc:'Independiente › ¿Para quién manejas hoy?', t:'Tipo de Servicio pasa a lista', b:['4 opciones; las de pasajeros son nuevas.'], sel:'#tipo-servicio', setup:function(){ setEmpresaModo(false); el('tipo-servicio').scrollIntoView({block:'center'}); }}
+];
+
+
+/* ===== Ajustes para cabina de tráiler (solo mockup, sin Gherkin todavía) ===== */
+(function(){
+  var css = document.createElement('style');
+  css.textContent =
+  /* 2. todo más grande */
+  '.cab .chip-row{gap:10px;margin-bottom:14px;}'+
+  '.cab .act-chip{flex:1 1 calc(50% - 5px);min-width:calc(50% - 5px);max-width:calc(50% - 5px);min-height:58px;padding:9px 9px;border-radius:16px;gap:7px;border-width:2px;}'+
+  '.cab .act-chip .ic-dot{width:28px;height:28px;}'+
+  '.cab .act-chip .ic-dot .ic{width:16px;height:16px;}'+
+  '.cab .act-chip .n{font-size:14px;font-weight:800;letter-spacing:-.2px;}'+
+  '.cab .act-chip .hlp{display:block;font-size:11.5px;font-weight:600;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'+
+  '.cab .act-chip .lbls{min-width:0;}'+
+  '.cab .chip-lbl{display:none;}'+
+  '.cab .hero{padding:12px 16px !important;}'+
+  '.cab .hero .top-row{margin-bottom:6px !important;}'+
+  '.cab .hero .act-name{font-size:19px;}'+
+  '.cab .hero .act-since{font-size:12.5px;}'+
+  '.cab .hero .timer{font-size:32px !important;}'+
+  '.cab .hx-trip{font-size:13px;}'+
+  '.cab .hx-off{font-size:12px;padding:5px 10px;}'+
+  '.cab .lim-t{font-size:16.5px;}'+
+  '.cab .lim-s{font-size:12px;}'+
+  '.cab .gauge-track{height:12px;}'+
+  '.cab .pend{min-height:56px;}'+
+  '.cab .pend .pt{font-size:15px;}'+
+  '.cab .entry{min-height:56px;font-size:15.5px;}'+
+  '.cab .hdr-btn{font-size:12px;padding:9px 12px;}'+
+  '.cab .appbar .ttl{font-size:17px;}'+
+  '.cab .appbar .sub{font-size:12px;}'+
+  '.cab .bk,.cab .hdr-av{width:40px;height:40px;}'+
+  /* 1. deshacer */
+  '.undo{position:absolute;left:12px;right:12px;bottom:22px;background:#22252a;color:#fff;border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700;z-index:180;transform:translateY(140%);opacity:0;transition:transform .3s,opacity .3s;box-shadow:0 10px 24px rgba(0,0,0,.3);}'+
+  '.undo.show{transform:translateY(0);opacity:1;}'+
+  '.undo button{background:none;border:none;color:#FFB27A;font-size:15px;font-weight:800;cursor:pointer;padding:6px 4px;}'+
+  /* 3. modo oscuro de noche */
+  '.night{--bg:#0E1013;--ink:#E9EBEE;--sub:#A9AFB7;--sub-2:#8A9099;--border:#262A31;--accent-soft:#3A2414;'+
+    '--act-conduciendo-bg:#16263D;--act-pausa-bg:#33270F;--act-aux-bg:#0F2B27;--act-excepcion-bg:#351A13;--act-descanso-bg:#1E1F3D;--act-fuera-bg:#1D2025;'+
+    '--act-conduciendo:#7FB0F5;--act-pausa:#E8B25A;--act-aux:#5CC9B7;--act-excepcion:#F08A70;--act-descanso:#A3A6F5;--act-fuera:#B3B8C0;'+
+    '--safe-bg:#12301C;--warn-bg:#3A2C0A;--crit-bg:#3D1512;color:var(--ink);}'+
+  '.night .statusbar{color:#E9EBEE;}'+
+  '.night .act-chip,.night .lim,.night .entry,.night .bk,.night .hdr-av,.night .card,.night .section-link,.night .gauge-card,.night .secstat,.night .applist-row,.night .trip-card,.night .tile,.night .rule-card,.night .chart-card,.night .mini-kv{background:#171A1F !important;border-color:#262A31 !important;color:var(--ink);}'+
+  '.night .gauge-track{background:#262A31;}'+
+  '.night .pend{background:#3A2414;border-color:#5A3518;}.night .pend .pt{color:#FFC59A;}.night .pend .pi{background:#171A1F;}'+
+  '.night .hdr-btn{background:#E9EBEE;color:#0E1013;}.night .hdr-btn .ic{stroke:#0E1013;}'+
+  '.night .badge-ic{background:#0E1013 !important;}'+
+  '.night .bottombar{background:linear-gradient(180deg,rgba(14,16,19,0),#0E1013 30%);}'+
+  '.night .modal-sheet{background:#171A1F;color:var(--ink);}.night .modal-sheet p{color:var(--sub);}'+
+  '.night .field input,.night .field select,.night .field textarea{background:#0E1013 !important;color:#E9EBEE !important;border-color:#2F343C;color-scheme:dark;}'+
+  '.night .field-ic-row,.night .field-ro{background:#0E1013;border-color:#2F343C;}'+
+  '.night .bs{background:#262A31;color:#E9EBEE;}'+
+  '.night .tl-entry{border-color:#262A31;}';
+  document.head.appendChild(css);
+  document.querySelectorAll('.phone-screen').forEach(function(p){ p.classList.add('cab'); });
+})();
+
+/* 4. nombres con ayuda corta */
+var AYUDA = {aux:'carga, diésel', excepcion:'choque, retén', fuera:'sin operar', descanso:'jornada', pausa:'30 min', conduciendo:'manejando'};
+var CORTO = {};
+buildChips = function(phone){
+  var row = el('chips-'+phone);
+  row.innerHTML = ACTIVITIES.map(function(a){
+    var isCurrent = currentState[phone] === a.key;
+    var style = isCurrent ? 'background:'+cssv(a.color)+';border-color:'+cssv(a.color)+';color:#fff;' : 'color:'+cssv(a.color)+';';
+    var dotStyle = isCurrent ? 'background:rgba(255,255,255,.25);' : 'background:'+cssv(a.bg)+';color:'+cssv(a.color)+';';
+    var txtCol = isCurrent ? 'color:#fff;' : '';
+    return '<div class="act-chip'+(isCurrent?' current':'')+'" style="'+style+'" '+(isCurrent?'':'onclick="chipTap(\''+phone+'\',\''+a.key+'\')"')+'>'+
+      '<div class="ic-wrap ic-dot" style="'+dotStyle+'">'+ICONS[a.icon]+'</div>'+
+      '<div class="lbls"><div class="n" style="'+txtCol+'">'+(CORTO[a.key]||a.short)+'</div><span class="hlp" style="'+txtCol+'">'+(isCurrent?'en curso':AYUDA[a.key])+'</span></div>'+
+    '</div>';
+  }).join('');
+};
+/* los colores de las variables cambian de noche: redibujar con el valor vigente del teléfono */
+cssv = function(name){ return getComputedStyle(window.__scope || document.documentElement).getPropertyValue(name).trim(); };
+function conScope(fn){ return function(ph){ var s=window.__scope; window.__scope=el(ph); try{ return fn.apply(this, arguments); } finally { window.__scope=s; } }; }
+buildChips = conScope(buildChips);
+applyActivity = conScope(applyActivity);
+pintarLimite = conScope(pintarLimite);
+
+/* 1. un toque + Deshacer cuando no hay nada que elegir */
+['p1','p2'].forEach(function(ph){ el(ph).insertAdjacentHTML('beforeend','<div class="undo" id="undo-'+ph+'"><span id="undo-t-'+ph+'"></span><button onclick="deshacer(\''+ph+'\')">Deshacer</button></div>'); });
+var undoInfo = {p1:null, p2:null}, undoTimer = {p1:null, p2:null};
+var _chipTap2 = chipTap;
+chipTap = function(phone, key){
+  var a = actBy(key);
+  var simple = !DETALLES[key] && (phone==='p2' || viajeModo==='one');
+  if(gpsOff[phone] || !simple){ _chipTap2(phone, key); return; }
+  undoInfo[phone] = {key:currentState[phone], since:el('hero-since-'+phone).textContent, el:elapsed[phone]};
+  window.__scope = el(phone);
+  applyActivity(phone, a);
+  window.__scope = null;
+  if(phone==='p1') setTripLine(VIAJES[0].id);
+  if(offline[phone]) pendientesEnvio[phone]++;
+  el('undo-t-'+phone).textContent = a.label+' registrada';
+  var u = el('undo-'+phone); u.classList.add('show');
+  clearTimeout(undoTimer[phone]); undoTimer[phone] = setTimeout(function(){ u.classList.remove('show'); undoInfo[phone]=null; }, 5000);
+};
+function deshacer(phone){
+  var inf = undoInfo[phone]; if(!inf) return;
+  window.__scope = el(phone);
+  applyActivity(phone, actBy(inf.key));
+  window.__scope = null;
+  el('hero-since-'+phone).textContent = inf.since; elapsed[phone] = inf.el;
+  if(offline[phone] && pendientesEnvio[phone]) pendientesEnvio[phone]--;
+  el('undo-'+phone).classList.remove('show'); undoInfo[phone] = null;
+  toast('Se deshizo el cambio');
+}
+
+/* 3. noche */
+var noche = {p1:false, p2:false};
+function toggleNoche(phone){
+  noche[phone] = !noche[phone];
+  el(phone).classList.toggle('night', noche[phone]);
+  el(phone).querySelector('.statusbar span').textContent = noche[phone] ? '22:40' : '10:24';
+  el('noche-btn-'+phone).textContent = noche[phone] ? '🔧 Volver a modo de día' : '🔧 Simular de noche (modo oscuro automático)';
+  window.__scope = el(phone);
+  buildChips(phone);
+  var a = actBy(currentState[phone]);
+  el('hero-'+phone).style.background = cssv(a.bg); el('hero-'+phone).style.color = cssv(a.color); el('hero-badge-'+phone).style.color = cssv(a.color);
+  window.__scope = null;
+  pintarLimite(phone);
+}
+['p1','p2'].forEach(function(ph){
+  var dp = ph==='p1' ? document.querySelector('#p1').closest('.phone').parentNode.querySelector('.demo-panel') : document.querySelector('#phone2col .demo-panel');
+  dp.insertAdjacentHTML('afterbegin','<div class="dp-label">Ajustes para cabina de tráiler</div><button class="dp-btn" id="noche-btn-'+ph+'" onclick="toggleNoche(\''+ph+'\')">🔧 Simular de noche (modo oscuro automático)</button><div class="dp-label" style="margin-top:10px;">Casos</div>');
+});
+buildChips('p1'); buildChips('p2');
+document.querySelector('.page-sub').insertAdjacentHTML('afterend','<div style="max-width:760px;margin:-6px auto 18px;background:#FFF4DE;border:1px solid #f3d892;color:#7a5200;border-radius:10px;padding:10px 14px;font-size:12px;text-align:center;">Propuesta para cabina de tráiler, pendiente de llevar a los Gherkins: cambio de actividad en un toque con "Deshacer", textos y botones más grandes, modo oscuro automático de noche y ayuda corta en cada actividad.</div>');
+
+
+/* encabezado sin saludo */
+['home-bitacora','nogm-home'].forEach(function(id){
+  var d = el(id).querySelector('.appbar > div[style*="flex:1"]');
+  if(d) d.innerHTML = '';
+});
 </script>
 </body>
 </html>
-
-</body></html>

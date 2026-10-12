@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Portal Bitácora de Conducción</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+html{color-scheme:light;}
+*{box-sizing:border-box;}
+:root{
+  --orange:#ee7d1e; --orange-2:#d96a0d; --orange-bg:#fdece0;
+  --ink:#1e2533; --sub:#6b7280; --sub-2:#9aa0a9; --border:#e5e7eb; --page:#f6f7f9;
+  --ok:#1f9254; --ok-bg:#e2f8ec; --warn:#b9791f; --warn-bg:#fdf3e3; --bad:#d64545; --bad-bg:#fdeaea;
+  --erp-dark:#2f3238; --erp-dark-2:#45484f; --erp-orange:#e8863c;
+  --c-cond:#1A5FB4; --c-pausa:#B4740E; --c-aux:#0F7A6B; --c-exc:#B23A22; --c-desc:#4B4FB8; --c-fuera:#5B6168;
+}
+body{font-family:'Inter',system-ui,Arial,sans-serif;font-size:13px;color:var(--ink);background:#eceef1;margin:0;padding:24px 16px 120px;}
+input,select,textarea{color-scheme:light;background:#fff;color:var(--ink);font-family:inherit;}
+.page-title{text-align:center;font-size:21px;font-weight:800;margin:0 0 4px;}
+.page-sub{text-align:center;font-size:12.5px;color:var(--sub);margin:0 auto 16px;max-width:880px;}
+.topbtns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.topbtns button{background:#fff;border:1.5px solid var(--orange);color:var(--orange);font-weight:700;font-size:12.5px;padding:9px 18px;border-radius:20px;cursor:pointer;}
+.topbtns .dark{background:var(--ink);border-color:var(--ink);color:#fff;}
+.stage{max-width:1180px;margin:0 auto;}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+/* ===== ERP (punto de entrada) ===== */
+.erp{border:1px solid #aaa;background:#fff;display:none;}
+.erp.on{display:block;}
+.erp-top{background:var(--erp-dark);color:#fff;padding:7px 12px;font-weight:700;font-size:13px;display:flex;justify-content:space-between;}
+.erp-body{display:flex;min-height:470px;}
+.erp-side{width:220px;background:var(--erp-dark);padding:8px 0;flex-shrink:0;}
+.erp-item{padding:9px 14px;font-size:12.5px;color:#c7c9cc;border-left:3px solid transparent;}
+.erp-item.mod{color:var(--erp-orange);font-weight:700;background:var(--erp-dark-2);border-left-color:var(--erp-orange);cursor:pointer;}
+.erp-sub{padding:7px 14px 7px 34px;font-size:12px;color:#e3e4e6;cursor:pointer;}
+.erp-sub:hover{color:var(--erp-orange);}
+.erp-main{flex:1;padding:18px;background:#fff;}
+.erp-title{color:var(--erp-orange);font-weight:700;font-size:14px;border-bottom:1px solid #ccc;padding-bottom:6px;margin-bottom:12px;}
+.erp-note{font-size:12px;color:#555;line-height:1.6;}
+
+.erp-sub.on{color:var(--erp-orange);font-weight:700;}
+.erp-tabbar{background:#6e6e6e;display:flex;gap:2px;padding:4px 6px;margin:-4px 0 12px;}
+.erp-tab{padding:5px 16px;font-size:12px;color:#fff;}
+.erp-tab.on{background:#fff;color:var(--erp-orange);font-weight:700;}
+.erp-tbl{width:100%;border-collapse:collapse;font-size:12px;max-width:620px;}
+.erp-tbl th{background:#f0f0f0;color:#333;padding:6px 8px;text-align:left;border-bottom:1px solid #ccc;}
+.erp-tbl td{padding:5px 8px;border-bottom:1px solid #eee;cursor:pointer;}
+.erp-tbl tr.sel td{background:#fdeee0;}
+.erp-btns{display:flex;gap:8px;margin-top:14px;}
+.erp-btn{background:var(--erp-orange);color:#fff;border:none;border-radius:4px;padding:6px 20px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.erp-btn:disabled{opacity:.4;cursor:not-allowed;}
+.erp-frm{display:grid;grid-template-columns:120px 1fr;gap:8px 10px;align-items:center;font-size:12px;}
+.erp-frm input{border:1px solid #aaa;padding:4px 7px;font-size:12px;}
+.erp-msg{color:#c62828;font-size:12px;margin-top:8px;display:none;}
+.erp-msg.show{display:block;}
+.hoja{background:#E3E5E8;border-radius:8px;padding:14px;}
+.hoja-page{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);padding:16px 18px;font-size:11px;color:#222;line-height:1.45;margin-bottom:10px;}
+.hoja-page .h{font-size:13px;font-weight:800;text-align:center;margin-bottom:10px;}
+.hoja-page .g{display:grid;grid-template-columns:1fr 1fr;gap:3px 14px;margin-bottom:10px;}
+.hoja-day{border-top:1px solid #ddd;padding-top:6px;margin-top:6px;}
+.hoja-day .dl{font-weight:700;margin-bottom:4px;}
+.hoja-grid{display:grid;grid-template-columns:110px 1fr;gap:2px 8px;align-items:center;}
+.hoja-grid .rb{position:relative;height:9px;background:repeating-linear-gradient(90deg,#f1f2f4 0 calc(100%/24 - 1px),#dfe1e5 calc(100%/24 - 1px) calc(100%/24));}
+.hoja-grid .rb i{position:absolute;top:0;bottom:0;background:#26292c;}
+.hoja-sign{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:26px;text-align:center;font-size:10.5px;}
+.hoja-sign div{border-top:1px solid #333;padding-top:4px;}
+.hoja-sign svg{display:block;margin:-34px auto 2px;width:150px;height:30px;}
+.lst-err{color:var(--bad);font-size:12px;font-weight:600;margin-top:8px;display:none;}
+.lst-err.show{display:block;}
+
+/* ===== Portal ===== */
+.portal{border:1px solid #dfe1e5;border-radius:8px;background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none;min-height:620px;}
+.portal.on{display:flex;}
+.p-side{width:220px;border-right:1px solid var(--border);padding:14px 0;display:flex;flex-direction:column;flex-shrink:0;}
+.p-brand{display:flex;align-items:center;gap:9px;padding:0 16px 14px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.p-brand .box{width:30px;height:30px;border-radius:8px;background:#2b2e35;color:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;}
+.p-brand .nm{font-size:12.5px;font-weight:800;line-height:1.2;}
+.p-brand .nm small{display:block;font-weight:500;color:var(--sub);font-size:10.5px;}
+.p-item{padding:9px 18px;font-size:12.5px;color:#565a5f;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.p-item.on{background:var(--orange-bg);color:var(--orange);font-weight:700;}
+.p-item .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.6;}
+.p-foot{margin-top:auto;padding:12px 18px 0;border-top:1px solid var(--border);font-size:11px;color:var(--sub);line-height:1.7;}
+.p-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.p-top{display:flex;align-items:center;justify-content:space-between;padding:11px 22px;border-bottom:1px solid var(--border);}
+.p-top .t{font-size:14px;font-weight:800;}
+.p-top .u{display:flex;align-items:center;gap:10px;font-size:11px;text-align:right;}
+.p-top .u b{display:block;color:#3b5bdb;}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--orange);color:#fff;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;}
+.p-body{padding:20px 22px;background:var(--page);flex:1;position:relative;}
+.h1{font-size:19px;font-weight:800;margin:0 0 3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.h-sub{font-size:12.5px;color:var(--sub);margin:0 0 16px;}
+.spec-btn{position:absolute;top:18px;right:22px;background:#fff;border:1px solid var(--border);color:#555;font-size:11px;font-weight:700;padding:5px 11px;border-radius:14px;cursor:pointer;}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
+.filters{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;}
+.f{display:flex;flex-direction:column;gap:4px;}
+.f label{font-size:11px;color:var(--sub);font-weight:600;}
+.f input,.f select{border:1px solid #d6d9de;border-radius:7px;padding:7px 10px;font-size:12.5px;}
+.f .cat{display:flex;gap:4px;}
+.f .cat input{width:110px;}
+.f .cat .nm{width:220px;background:#f7f8f9;color:var(--sub);}
+.dots{border:1px solid #d6d9de;background:#f3f4f6;border-radius:7px;padding:0 10px;font-weight:800;cursor:pointer;}
+.btn{background:var(--orange);color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.btn:hover{background:var(--orange-2);}
+.btn-g{background:#fff;color:#3a3f45;border:1px solid #d6d9de;border-radius:7px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;background:#fff;}
+table.t{border-collapse:collapse;width:100%;min-width:860px;font-size:12px;}
+table.t th{background:#fafbfc;color:#7b828b;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;font-weight:700;padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+table.t td{padding:8px 10px;border-bottom:1px solid #f1f2f4;white-space:nowrap;font-variant-numeric:tabular-nums;}
+table.t tr.row{cursor:pointer;}
+table.t tr.row:hover td{background:#fafbfc;}
+table.t tr.sel td{background:var(--orange-bg);}
+table.t td.num{text-align:right;}
+.empty td{text-align:center;color:var(--sub-2);font-style:italic;padding:26px;}
+.pager{display:flex;justify-content:space-between;align-items:center;padding:10px 4px 0;font-size:12px;color:var(--sub);}
+.pager .pb{display:flex;gap:6px;}
+.pager button{border:1px solid #d6d9de;background:#fff;border-radius:6px;padding:5px 11px;font-size:12px;cursor:pointer;}
+.pager button.on{background:var(--orange);color:#fff;border-color:var(--orange);}
+.pager button:disabled{opacity:.4;cursor:not-allowed;}
+.detail{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;margin-top:14px;}
+.map{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;}
+.map svg{display:block;width:100%;height:auto;}
+.menu-wrap{position:relative;}
+.dd{position:absolute;right:0;top:34px;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:6px;z-index:30;display:none;min-width:170px;}
+.dd.open{display:block;}
+.dd div{padding:8px 10px;font-size:12px;border-radius:6px;cursor:pointer;}
+.dd div:hover{background:#f5f6f7;}
+.pill{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:12px;}
+.pill.ok{background:var(--ok-bg);color:var(--ok);}
+.pill.warn{background:var(--warn-bg);color:var(--warn);}
+.pill.gray{background:#eef0f2;color:var(--sub);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;max-width:760px;}
+.form-grid .f input,.form-grid .f select{width:100%;}
+.nom-box{background:#fbfbfc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.6;color:#3a3f45;margin:14px 0;max-width:760px;}
+.nom-box mark{background:#fde9c8;padding:0 2px;}
+.times{display:grid;grid-template-columns:auto 80px auto 70px auto;gap:10px 10px;align-items:center;font-size:12.5px;max-width:760px;}
+.times input{width:100%;border:1px solid #d6d9de;border-radius:7px;padding:7px 9px;text-align:center;}
+.times input.err{border-color:var(--bad);}
+.err{color:var(--bad);font-size:11px;font-weight:600;display:none;margin-top:6px;}
+.err.show{display:block;}
+.callout{display:flex;gap:10px;background:#f3f7ff;border:1px solid #d6e3fb;color:#1A4F9C;border-radius:8px;padding:10px 12px;font-size:12px;margin-bottom:14px;}
+.hu{display:inline-flex;align-items:center;background:#eef0f2;color:var(--sub);font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:10px;cursor:pointer;border:1px solid var(--border);letter-spacing:.2px;}
+.hu:hover{background:var(--orange-bg);color:var(--orange-2);}
+.modal-ov{position:fixed;inset:0;background:rgba(20,22,24,.45);display:none;align-items:center;justify-content:center;z-index:900;padding:20px;}
+.modal-ov.open{display:flex;}
+.modal{background:#fff;border-radius:12px;width:min(640px,100%);max-height:84vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+.modal-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;}
+.modal-hd h3{margin:0;font-size:15px;}
+.modal-hd button{border:none;background:none;font-size:18px;color:#999;cursor:pointer;}
+.modal-bd{padding:14px 18px 20px;font-size:12.5px;line-height:1.6;color:#333;}
+.modal-bd h5{font-size:11px;color:var(--orange);text-transform:uppercase;letter-spacing:.4px;margin:14px 0 6px;}
+.modal-bd h5:first-child{margin-top:0;}
+.modal-bd ul{margin:0;padding-left:18px;}
+.dec{background:#fff9f5;border-left:3px solid var(--orange);border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:8px;font-size:12px;}
+.int{background:#f3f7ff;border-left:3px solid #1A5FB4;border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:8px;font-size:12px;}
+.cond td{white-space:normal;}
+.toast{position:fixed;bottom:24px;right:24px;background:#26292c;color:#fff;padding:11px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:2000;opacity:0;transition:opacity .25s;pointer-events:none;max-width:380px;}
+.toast.show{opacity:1;}
+.sim{max-width:1180px;margin:16px auto 0;background:#fff;border:1px dashed #cfd3d8;border-radius:10px;padding:12px 14px;}
+.sim .lbl{font-size:10px;font-weight:800;color:var(--sub-2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;}
+.sim .row{display:flex;gap:8px;flex-wrap:wrap;}
+.sim button{background:#f8f9fb;border:1px solid var(--border);color:#565a5f;font-size:11.5px;font-weight:600;padding:7px 11px;border-radius:8px;cursor:pointer;}
+.sim button.on{border-color:var(--orange);color:var(--orange-2);background:var(--orange-bg);}
+.tour-spot{outline:3px solid var(--orange) !important;outline-offset:3px;border-radius:8px;box-shadow:0 0 0 8px rgba(238,125,30,.15) !important;}
+#tourbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:3px solid var(--orange);box-shadow:0 -8px 24px rgba(0,0,0,.15);z-index:1500;display:none;padding:12px 18px 14px;}
+#tourbar.open{display:block;}
+#tourbar .in{max-width:1100px;margin:0 auto;display:flex;gap:18px;flex-wrap:wrap;}
+#tourbar .mn{flex:1;min-width:260px;}
+#tourbar .loc{font-size:10.5px;color:var(--sub-2);font-weight:700;text-transform:uppercase;}
+#tourbar .tt{font-size:14.5px;font-weight:800;margin:3px 0 5px;}
+#tourbar ul{margin:0;padding-left:18px;font-size:12px;line-height:1.5;}
+#tourbar .sd{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+#tourbar .pg{width:180px;height:5px;background:#eef0f2;border-radius:3px;overflow:hidden;}
+#tourbar .pg i{display:block;height:100%;background:var(--orange);}
+#tourbar .bt{display:flex;gap:8px;}
+#tourbar .bt button{border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;background:#f1f1f3;}
+#tourbar .bt .nx{background:var(--orange);color:#fff;}
+body.touring{padding-bottom:220px;}
+@media (max-width:820px){ .p-side,.erp-side{display:none;} .detail{grid-template-columns:1fr;} .form-grid{grid-template-columns:1fr;} .f .cat .nm{width:140px;} }
+</style>
+</head>
+<body>
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:0 0 20px;border-radius:8px;"><div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div><p style="margin:0 0 4px;">Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p><p style="margin:0 0 4px;">⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para el ERP GM Transport y el portal de Bitácora de Conducción, eso significa colores, tipografía, estructura de paneles y componentes propios de cada sistema.</p><p style="margin:0;">Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p></div>
+
+<div class="page-title">Portal de Bitácora de Conducción</div>
+<div class="page-sub">Prototipo navegable del portal web que reemplaza el módulo Bitácora de Conducción del ERP (HU51004-0 a 4). El cliente GM entra desde el menú de su ERP, igual que hoy con Doble Check y Fiscal. Catálogos se queda en el ERP solo con el Listado de Teléfonos. El nombre técnico del sistema lo define desarrollo.</div>
+<div class="topbtns">
+  <button onclick="openM('notas')">Notas del análisis</button>
+  <button class="dark" id="tour-btn" onclick="tourToggle()">▶ Recorrido de desarrollo</button>
+</div>
+
+<div class="stage">
+  <!-- ===== ERP: punto de entrada ===== -->
+  <div class="erp on" id="erp">
+    <div class="erp-top"><span>ERP GM Transport — Transportes Legaspy e Hijos</span><span>Usuario: lmendez</span></div>
+    <div class="erp-body">
+      <div class="erp-side">
+        <div class="erp-item">Indicadores</div><div class="erp-item">Configuración</div><div class="erp-item">Facturación</div><div class="erp-item">Tráfico</div><div class="erp-item">Banco</div>
+        <div id="erp-menu">
+          <div class="erp-item mod">Bitácora de Conducción</div>
+          <div class="erp-sub" id="erp-sub-cat" onclick="erpCatalogos()">Catálogos</div>
+          <div class="erp-sub" id="erp-sub-bit" onclick="abrirPortal('listado')">Bitácora de Conducción</div>
+          <div class="erp-sub" id="erp-sub-rep" onclick="abrirPortal('reporte')">Reportes</div>
+        </div>
+        <div class="erp-item">Nómina</div><div class="erp-item">Transporte de Personal</div>
+      </div>
+      <div class="erp-main" id="erp-main"></div>
+    </div>
+  </div>
+
+  <!-- ===== Portal ===== -->
+  <div class="portal" id="portal">
+    <div class="p-side">
+      <div class="p-brand"><div class="box">GM</div><div class="nm">Bitácora de Conducción<small>NOM-087-SCT-2-2017</small></div></div>
+      <div class="p-item" id="nav-listado" onclick="ruta('listado')"><span class="dot"></span>Bitácoras</div>
+      <div class="p-item" id="nav-reporte" onclick="ruta('reporte')"><span class="dot"></span>Reporte Promedio</div>
+      <div class="p-item" id="nav-parametros" onclick="ruta('parametros')"><span class="dot"></span>Parámetros de Configuración</div>
+      <div class="p-foot">Versión 1.0.0<br><a href="javascript:void(0)" onclick="volverErp()" style="color:var(--orange);">Volver al ERP</a></div>
+    </div>
+    <div class="p-main">
+      <div class="p-top"><div class="t" id="p-title">Bitácoras</div><div class="u"><div><b id="p-emp">Transportes Legaspy e Hijos</b>Laura Méndez · Administración</div><div class="avatar">LM</div></div></div>
+      <div class="p-body" id="p-body"></div>
+    </div>
+  </div>
+</div>
+
+<div class="sim">
+  <div class="lbl">Simulaciones para probar (fuera del portal)</div>
+  <div class="row">
+    <button id="s-a" class="on" onclick="setEmpresa('A')">Entrar como Transportes Legaspy e Hijos</button>
+    <button id="s-b" onclick="setEmpresa('B')">Entrar como Fletes del Pacífico</button>
+    <button id="s-baja" onclick="toggleBaja()">Desactivar a RAMÍREZ ORTEGA JOSÉ el 15/09/2026</button>
+    <button id="s-perm" onclick="togglePermiso()">Usuario sin permiso al menú</button>
+    <button id="s-imp" onclick="toggleImprimir()">Usuario sin permiso de imprimir</button>
+    <button onclick="volverErp()">Volver al menú del ERP</button>
+  </div>
+</div>
+
+<div class="modal-ov" id="m-spec"><div class="modal"><div class="modal-hd"><h3 id="spec-t"></h3><button onclick="closeM('spec')">✕</button></div><div class="modal-bd" id="spec-b"></div></div></div>
+<div class="modal-ov" id="m-cat"><div class="modal"><div class="modal-hd"><h3>Catálogo de Operadores</h3><button onclick="closeM('cat')">✕</button></div><div class="modal-bd"><div class="tbl-wrap"><table class="t" style="min-width:0;"><thead><tr><th>Número</th><th>Nombre</th></tr></thead><tbody id="cat-body"></tbody></table></div></div></div></div>
+<div class="modal-ov" id="m-cond"><div class="modal"><div class="modal-hd"><h3>Condiciones Del Reporte</h3><button onclick="closeM('cond')">✕</button></div><div class="modal-bd"><div class="tbl-wrap"><table class="t cond" style="min-width:0;"><thead><tr><th>Concepto</th><th>Detalle</th></tr></thead><tbody id="cond-body"></tbody></table></div></div></div></div>
+<div class="modal-ov" id="m-notas"><div class="modal"><div class="modal-hd"><h3>Notas del análisis</h3><button onclick="closeM('notas')">✕</button></div><div class="modal-bd">
+  <h5>Decisiones cerradas</h5>
+  <div class="dec"><b>El módulo sale del ERP a un portal propio</b>, como GM Integra. El menú del ERP abre el portal igual que hoy con Doble Check y Fiscal, sin volver a iniciar sesión.</div>
+  <div class="dec"><b>Las bitácoras viven fuera del ERP, ligadas al RFC personal del operador.</b> Para que cada cliente vea las suyas se guarda la relación operador y cliente GM, con fecha de inicio y de fin.</div>
+  <div class="dec"><b>La relación se crea sola</b> la primera vez que el operador entra a Mis Viajes con la cuenta del cliente. Termina cuando el cliente desactiva al operador en su catálogo de operadores del ERP. Reactivarlo abre un periodo nuevo.</div>
+  <div class="dec"><b>Un operador puede trabajar para dos clientes a la vez.</b> Cada cliente ve solo lo que el operador registró con la cuenta de ese cliente.</div>
+  <div class="dec"><b>El operador independiente nunca aparece en el portal de un cliente</b>, aunque capture una empresa que sí sea cliente GM.</div>
+  <div class="dec"><b>Operador GM sin RFC en el catálogo:</b> la app le pide capturarlo la primera vez.</div>
+  <div class="dec"><b>Parámetros por cliente</b>, igual que hoy en el ERP. Tipo de Servicio con 4 opciones. Se elimina la casilla de notificación: los avisos quedan siempre encendidos.</div>
+  <div class="dec"><b>El Listado de Teléfonos se queda en el ERP.</b> Catálogos sigue abriendo la ventana "Parámetros de Configuración" del ERP, ahora solo con esa pestaña y con Registrar, Modificar y Eliminar como hoy. Bitácora de Conducción y Reportes abren el portal.</div>
+  <div class="dec"><b>"Imprimir hoja oficial"</b> en el listado: genera la hoja "Bitácora de horas de servicio" de un operador y un rango de fechas, con el mismo formato que la hoja del operador en la app. Requiere permiso de imprimir y queda en la bitácora de auditoría, igual que hoy en el ERP.</div>
+  <div class="dec"><b>Reporte Promedio con los mismos cálculos que el ERP.</b> "02 - Reporteador" era un error y no pasa al portal.</div>
+  <div class="dec"><b>La migración del historial es una mejora próxima</b> ("pend Migración del historial") y no entra en esta fase.</div>
+  <div class="dec"><b>Nada se borra</b>; se conserva al menos 2 años (numeral 8.5 de la NOM).</div>
+  <h5>Pendientes y tareas previas</h5>
+  <div class="int"><b>Tarea previa del reporte:</b> la fórmula de Trayectos, Total y Promedio no está documentada; hay que regenerar la ficha del método del reporte actual y replicarla tal cual.</div>
+  <div class="int"><b>Pendiente de decidir:</b> mientras no exista la migración, ¿el ERP conserva sus pantallas para consultar el historial anterior, o el menú abre solo el portal?</div>
+  <h5>Interpretaciones aplicadas — confirmar</h5>
+  <div class="int"><b>Columnas nuevas en el detalle del listado:</b> "Viaje" y "Observación", que vienen de HU52716-5.</div>
+  <div class="int"><b>Los tiempos de parámetros solo aceptan enteros mayores a cero</b>; los textos de mensajes, incluidos los de "Imprimir hoja oficial", son propuestos.</div>
+</div></div></div>
+
+<div class="modal-ov" id="m-tel"><div class="modal" style="width:min(460px,100%);"><div class="modal-hd"><h3 id="tel-t">Registrar teléfono</h3><button onclick="closeM('tel')">✕</button></div><div class="modal-bd">
+  <div class="erp-frm"><label>No. Teléfono</label><input id="tel-num" maxlength="10" placeholder="10 dígitos"/><label>Operador</label><div style="display:flex;gap:4px;"><input id="tel-op" style="width:90px;" placeholder="Número"/><button class="dots" onclick="abrirCat('tel-op')">...</button><input id="tel-op-nm" readonly style="flex:1;background:#f7f8f9;"/></div></div>
+  <div class="erp-msg" id="tel-err"></div>
+  <div style="text-align:center;margin-top:16px;"><button class="erp-btn" onclick="guardarTel()">Grabar</button></div>
+</div></div></div>
+<div class="modal-ov" id="m-hoja"><div class="modal" style="width:min(820px,100%);"><div class="modal-hd"><h3>Bitácora de horas de servicio</h3><button onclick="closeM('hoja')">✕</button></div><div class="modal-bd"><div class="hoja" id="hoja-body"></div><div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;"><button class="btn-g" onclick="closeM('hoja')">Cerrar</button><button class="btn" onclick="toast('Se descargó la hoja oficial en PDF')">Descargar PDF</button></div></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+var empresa = 'A', baja = false, sinPermiso = false, sinImprimir = false, telSel = -1, telModo = 'alta', route = 'listado', selRow = -1, pagina = 1;
+var EMP = {A:'Transportes Legaspy e Hijos', B:'Fletes del Pacífico'};
+var OPS = [
+  {n:'024554', nm:'RAMÍREZ ORTEGA JOSÉ', rfc:'RAOJ850314H21', rel:{A:'01/07/2026', B:'01/09/2026'}},
+  {n:'024540', nm:'SANTOS LUNA MARIO', rfc:'SALM800210KJ3', rel:{A:'01/07/2026'}},
+  {n:'024541', nm:'HERRERA PAZ SAMUEL', rfc:'HEPS910522TQ8', rel:{B:'10/08/2026'}},
+  {n:'000015', nm:'MONTES ELIZONDO LUIS', rfc:'', rel:{A:'01/07/2026'}}
+];
+function fmt(m){ var h=Math.floor(m/60), mm=m%60; return h+'h '+('0'+mm).slice(-2)+'m'; }
+/* bitácoras: cada día de cada operador se registró con la cuenta de UNA empresa */
+var BIT = [];
+(function(){
+  var dias = ['08/09','09/09','10/09','11/09','12/09','13/09','14/09','15/09','16/09','17/09','18/09','19/09','20/09','21/09','22/09','23/09','24/09'];
+  dias.forEach(function(d,i){
+    BIT.push({f:d+'/2026', op:'024554', cta: i%3===2 ? 'B':'A', a:[i%2?412:395,30,30+(i%4)*10,0,480,483-(i%2?17:0)]});
+    if(i%2===0) BIT.push({f:d+'/2026', op:'024540', cta:'A', a:[540,60,45,i%6===0?50:0,480,265]});
+    if(i%3===0) BIT.push({f:d+'/2026', op:'024541', cta:'B', a:[600,60,30,0,480,270]});
+    if(i===4) BIT.push({f:d+'/2026', op:'000015', cta:'A', a:[300,30,0,0,480,630]});
+  });
+})();
+function opBy(n){ return OPS.filter(function(o){return o.n===n;})[0]; }
+function d2n(f){ var p=f.split('/'); return +(p[2]+p[1]+p[0]); }
+function visibles(desde, hasta, opFiltro){
+  return BIT.filter(function(b){
+    var o = opBy(b.op);
+    if(b.cta!==empresa) return false;
+    if(!o.rfc) return false;
+    if(!o.rel[empresa]) return false;
+    if(baja && b.op==='024554' && empresa==='A' && d2n(b.f) > d2n('15/09/2026')) return false;
+    if(desde && d2n(b.f) < d2n(desde)) return false;
+    if(hasta && d2n(b.f) > d2n(hasta)) return false;
+    if(opFiltro && b.op!==opFiltro) return false;
+    return true;
+  });
+}
+
+function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},2800); }
+function openM(k){ document.getElementById('m-'+k).classList.add('open'); }
+function closeM(k){ document.getElementById('m-'+k).classList.remove('open'); }
+function hu(k){ return '<span class="hu" onclick="openHu(\''+k+'\')">'+k+'</span>'; }
+
+function abrirPortal(r){
+  if(sinPermiso) return;
+  erpMenuOn(r==='reporte' ? 'erp-sub-rep' : 'erp-sub-bit');
+  document.getElementById('erp').classList.remove('on');
+  document.getElementById('portal').classList.add('on');
+  toast('Se abrió el portal de Bitácora de Conducción sin volver a iniciar sesión');
+  ruta(r);
+}
+function volverErp(){ document.getElementById('portal').classList.remove('on'); document.getElementById('erp').classList.add('on'); erpHome(); }
+var TELS = [{tel:'6861234567', op:'024554'},{tel:'6869876543', op:'024540'},{tel:'6865550142', op:'000015'}];
+function erpMenuOn(id){ ['erp-sub-cat','erp-sub-bit','erp-sub-rep'].forEach(function(x){ document.getElementById(x).classList.toggle('on', x===id); }); }
+function erpHome(){
+  erpMenuOn('');
+  document.getElementById('erp-main').innerHTML = '<div class="erp-title">Bienvenida</div><div class="erp-note">Selecciona una opción del menú.</div>';
+}
+function erpCatalogos(){
+  if(sinPermiso) return;
+  erpMenuOn('erp-sub-cat'); telSel = -1;
+  document.getElementById('erp-main').innerHTML =
+    '<div class="erp-title">Parámetros de Configuración '+hu('HU51004-1')+'</div>'+
+    '<div class="erp-tabbar" id="erp-tabs"><div class="erp-tab on">Listado de Teléfonos</div></div>'+
+    '<div id="erp-tel"><table class="erp-tbl"><thead><tr><th>No. Teléfono</th><th>Número</th><th>Nombre</th></tr></thead><tbody id="tel-body"></tbody></table>'+
+    '<div class="erp-btns"><button class="erp-btn" onclick="telAbrir(\'alta\')">Registrar</button><button class="erp-btn" id="tel-mod" disabled onclick="telAbrir(\'mod\')">Modificar</button><button class="erp-btn" id="tel-del" disabled onclick="telEliminar()">Eliminar</button></div></div>';
+  pintarTels();
+}
+function pintarTels(){
+  document.getElementById('tel-body').innerHTML = TELS.map(function(t,i){ var o = opBy(t.op); return '<tr class="'+(i===telSel?'sel':'')+'" onclick="telSel='+i+';pintarTels()"><td class="mono">'+t.tel+'</td><td class="mono">'+t.op+'</td><td>'+(o?o.nm:'')+'</td></tr>'; }).join('');
+  document.getElementById('tel-mod').disabled = telSel<0; document.getElementById('tel-del').disabled = telSel<0;
+}
+function telAbrir(modo){
+  telModo = modo; var t = modo==='mod' ? TELS[telSel] : {tel:'', op:''};
+  document.getElementById('tel-t').textContent = modo==='mod' ? 'Modificar teléfono' : 'Registrar teléfono';
+  document.getElementById('tel-num').value = t.tel; document.getElementById('tel-op').value = t.op;
+  document.getElementById('tel-op-nm').value = t.op ? opBy(t.op).nm : '';
+  document.getElementById('tel-err').classList.remove('show');
+  openM('tel');
+}
+function guardarTel(){
+  var n = document.getElementById('tel-num').value.trim(), op = document.getElementById('tel-op').value.trim(), e = document.getElementById('tel-err');
+  if(!/^\d{10}$/.test(n) || !opBy(op)){ e.textContent = 'Captura el teléfono a 10 dígitos y el operador'; e.classList.add('show'); return; }
+  if(telModo==='mod') TELS[telSel] = {tel:n, op:op}; else TELS.push({tel:n, op:op});
+  closeM('tel'); telSel = -1; pintarTels(); toast(telModo==='mod' ? 'Teléfono modificado' : 'Teléfono registrado');
+}
+function telEliminar(){
+  if(telSel<0) return;
+  if(!confirm('¿Deseas eliminar el teléfono '+TELS[telSel].tel+'?')) return;
+  TELS.splice(telSel,1); telSel = -1; pintarTels(); toast('Teléfono eliminado');
+}
+function ruta(r){
+  route = r; selRow = -1; pagina = 1;
+  ['listado','reporte','parametros'].forEach(function(x){ document.getElementById('nav-'+x).classList.toggle('on', x===r); });
+  document.getElementById('p-title').textContent = {listado:'Bitácoras', reporte:'Reporte Promedio de Conducción', parametros:'Parámetros de Configuración'}[r];
+  render();
+}
+function render(){
+  var b = document.getElementById('p-body');
+  b.innerHTML = '<button class="spec-btn" onclick="openSpec(route)">Ver especificación</button>' + (route==='listado' ? vListado() : route==='reporte' ? vReporte() : vParam());
+  if(route==='listado') pintarListado();
+}
+
+/* ===== Listado (HU51004-3) ===== */
+var filtro = {desde:'01/09/2026', hasta:'24/09/2026', op:''};
+function catField(id, val){
+  var o = val ? opBy(val) : null;
+  return '<div class="cat"><input id="'+id+'" value="'+(val||'')+'" placeholder="Número"/><button class="dots" onclick="abrirCat(\''+id+'\')">...</button><input class="nm" id="'+id+'-nm" value="'+(o?o.nm:'')+'" readonly/></div>';
+}
+function vListado(){
+  return '<div class="h1">Listado de Bitácoras de Conducción '+hu('HU51004-3')+'</div><div class="h-sub">Un renglón por operador y por día. Solo aparecen las bitácoras que los operadores registraron con la cuenta de '+EMP[empresa]+' '+hu('HU51004-0')+'</div>'+
+  '<div class="card" id="lst-filtros"><div class="filters"><div class="f"><label>Desde</label><input id="f-desde" value="'+filtro.desde+'"/></div><div class="f"><label>Hasta</label><input id="f-hasta" value="'+filtro.hasta+'"/></div><div class="f"><label>Filtrar x Operador</label>'+catField('f-op', filtro.op)+'</div><button class="btn" onclick="aplicar()">Aplicar</button>'+(sinImprimir ? '' : '<button class="btn-g" id="btn-imp" onclick="imprimirHoja()">Imprimir hoja oficial</button>')+
+  '<div class="menu-wrap" style="margin-left:auto;"><button class="btn-g" onclick="document.getElementById(\'dd-exp\').classList.toggle(\'open\')">Exportar ▾</button><div class="dd" id="dd-exp"><div onclick="toast(\'Se descargó el listado en Excel\');this.parentNode.classList.remove(\'open\')">Exportar a Excel</div><div onclick="toast(\'Se descargó el listado en PDF\');this.parentNode.classList.remove(\'open\')">Imprimir en PDF</div></div></div></div><div class="lst-err" id="imp-err"></div></div>'+
+  '<div class="tbl-wrap" id="lst-tabla"><table class="t"><thead><tr><th>Fecha</th><th>Número</th><th>Nombre</th><th>Conduciendo</th><th>Pausa</th><th>Act. Auxiliares</th><th>Casos de Excepción</th><th>Descanso</th><th>Fuera de Servicio</th><th>Total</th></tr></thead><tbody id="lst-body"></tbody></table></div>'+
+  '<div class="pager" id="lst-pager"></div><div id="lst-det"></div>';
+}
+function aplicar(){
+  filtro.desde = document.getElementById('f-desde').value; filtro.hasta = document.getElementById('f-hasta').value; filtro.op = document.getElementById('f-op').value.trim();
+  selRow = -1; pagina = 1; pintarListado();
+}
+var PAG = 11, filasVis = [];
+function pintarListado(){
+  filasVis = visibles(filtro.desde, filtro.hasta, filtro.op);
+  var body = document.getElementById('lst-body');
+  if(!filasVis.length){
+    body.innerHTML = '<tr class="empty"><td colspan="10">No hay bitácoras en el rango seleccionado</td></tr>';
+    document.getElementById('lst-pager').innerHTML=''; document.getElementById('lst-det').innerHTML=''; return;
+  }
+  var ini = (pagina-1)*PAG, fin = Math.min(ini+PAG, filasVis.length);
+  body.innerHTML = filasVis.slice(ini,fin).map(function(r,k){
+    var i = ini+k, o = opBy(r.op), tot = r.a.reduce(function(x,y){return x+y;},0);
+    return '<tr class="row'+(i===selRow?' sel':'')+'" onclick="selFila('+i+')"><td>'+r.f+'</td><td class="mono">'+r.op+'</td><td>'+o.nm+'</td>'+r.a.map(function(m){return '<td class="num">'+(m?fmt(m):'')+'</td>';}).join('')+'<td class="num"><b>'+fmt(Math.min(tot,1439))+'</b></td></tr>';
+  }).join('');
+  var pags = Math.ceil(filasVis.length/PAG), btns='';
+  for(var p=1;p<=pags;p++) btns += '<button class="'+(p===pagina?'on':'')+'" onclick="pagina='+p+';pintarListado()">'+p+'</button>';
+  document.getElementById('lst-pager').innerHTML = '<span>Mostrando del registro '+(ini+1)+' al '+fin+' de un total de '+filasVis.length+' registros</span><div class="pb"><button '+(pagina===1?'disabled':'')+' onclick="pagina--;pintarListado()">Anterior</button>'+btns+'<button '+(pagina===pags?'disabled':'')+' onclick="pagina++;pintarListado()">Siguiente</button></div>';
+  if(selRow>=0) pintarDetalle();
+}
+function selFila(i){ selRow = i; pintarListado(); }
+function imprimirHoja(){
+  var e = document.getElementById('imp-err'); e.classList.remove('show');
+  var op = document.getElementById('f-op').value.trim(), de = document.getElementById('f-desde').value, ha = document.getElementById('f-hasta').value;
+  if(!op){ e.textContent = 'Elige un operador para imprimir su hoja oficial'; e.classList.add('show'); return; }
+  var dias = visibles(de, ha, op);
+  if(!dias.length){ e.textContent = 'No hay bitácoras en el rango seleccionado'; e.classList.add('show'); return; }
+  document.getElementById('hoja-body').innerHTML = hojaHtml(opBy(op), dias, de, ha);
+  openM('hoja');
+  toast('Impresión registrada en la bitácora de auditoría');
+}
+var SEGS = [[0,8,'descanso'],[8,8.5,'aux'],[8.5,13.5,'conduciendo'],[13.5,14,'pausa'],[14,15.6,'conduciendo'],[15.6,24,'fuera']];
+function hojaHtml(o, dias, de, ha){
+  var p = PARAM[empresa];
+  var rows = [['Conduciendo','conduciendo'],['Pausa','pausa'],['Auxiliares','aux'],['Excepción','excepcion'],['Descanso','descanso'],['Fuera de servicio','fuera']];
+  function dia(d, firmado){
+    return '<div class="hoja-day"><div class="dl">'+d.f+(firmado?'':' · sin firmar')+'</div><div class="hoja-grid">'+rows.map(function(r){
+      return '<div>'+r[0]+'</div><div class="rb">'+SEGS.filter(function(x){return x[2]===r[1];}).map(function(x){ return '<i style="left:'+(x[0]/24*100)+'%;width:'+((x[1]-x[0])/24*100)+'%;"></i>'; }).join('')+'</div>';
+    }).join('')+'</div></div>';
+  }
+  var muestra = dias.slice(0,3);
+  return '<div class="hoja-page"><div class="h">BITÁCORA DE HORAS DE SERVICIO · NOM-087-SCT-2-2017</div>'+
+    '<div class="g"><div><b>Permisionario:</b> '+EMP[empresa].toUpperCase()+'</div><div><b>Tipo de servicio:</b> '+p.tipo+'</div>'+
+    '<div><b>Domicilio:</b> La Escondida 1800, Hermosillo, Son.</div><div><b>Modalidad:</b> '+(p.mod||'—')+'</div>'+
+    '<div><b>Unidad:</b> Tractocamión 2023 · XYZ-4567</div><div><b>Operador:</b> '+o.nm+'</div>'+
+    '<div><b>Licencia:</b> 234567FESSS · vence 30/04/2027</div><div><b>Periodo:</b> '+de+' al '+ha+'</div>'+
+    '<div><b>Origen / Destino:</b> Mexicali, B.C. / Ensenada, B.C.</div><div><b>Viaje:</b> MXL-000000886</div></div>'+
+    muestra.map(function(d,i){ return dia(d, i>0); }).join('')+
+    '<div class="hoja-sign"><div><svg viewBox="0 0 200 40"><path d="M10,30 C30,5 40,35 55,18 S80,4 95,25 S130,35 150,12 S180,30 190,18" stroke="#14171A" stroke-width="2" fill="none"/></svg>Firma del Operador</div><div>Firma del Responsable<br>'+(p.resp||'')+'</div></div>'+
+    '</div>'+(dias.length>3 ? '<div style="text-align:center;font-size:11.5px;color:var(--sub);">+ '+(dias.length-3)+' días más en las páginas siguientes</div>' : '');
+}
+function pintarDetalle(){
+  var r = filasVis[selRow];
+  var acts = [
+    ['00:00','Descanso','8h 00m','Mexicali, B.C.','','',''],
+    ['08:00','Actividades Auxiliares · Carga Combustible','0h 30m','La Rumorosa, B.C.','MXL-000000886',''],
+    ['08:30','Conduciendo','5h 00m','Tecate, B.C.','MXL-000000886',''],
+    ['13:30','Pausa','0h 30m','Ensenada, B.C.','MXL-000000886',''],
+    ['14:00','Conduciendo','1h 35m','San Quintín, B.C.','Sin viaje','Traslado de la unidad al taller'],
+    ['15:35','Fuera de Servicio','8h 24m','San Quintín, B.C.','Sin viaje','']
+  ];
+  document.getElementById('lst-det').innerHTML = '<div class="detail" id="lst-detalle"><div class="tbl-wrap"><table class="t" style="min-width:560px;"><thead><tr><th>Actividad</th><th>Inicio</th><th>Tiempo</th><th>Ubicación</th><th>Viaje '+hu('HU52716-5')+'</th><th>Observación</th></tr></thead><tbody>'+
+    acts.map(function(a){ return '<tr><td>'+a[1]+'</td><td>'+a[0]+'</td><td>'+a[2]+'</td><td>'+a[3]+'</td><td class="mono">'+(a[4]||'')+'</td><td style="white-space:normal;">'+(a[5]||'')+'</td></tr>'; }).join('')+
+    '</tbody></table></div><div class="map"><svg viewBox="0 0 400 260"><rect width="400" height="260" fill="#eef1ec"/><path d="M0 210 Q100 190 200 220 T400 200 V260 H0z" fill="#cfe3f2"/><g stroke="#fff" stroke-width="8" fill="none"><path d="M0 60H400"/><path d="M0 150H400"/><path d="M90 0V260"/><path d="M250 0V260"/></g><polyline points="50,170 120,140 200,100 280,70 330,120" fill="none" stroke="#ee7d1e" stroke-width="3" stroke-dasharray="6 4"/>'+
+    [[50,170,'#4B4FB8'],[120,140,'#0F7A6B'],[200,100,'#1A5FB4'],[280,70,'#B4740E'],[330,120,'#1A5FB4']].map(function(m,i){ return '<circle cx="'+m[0]+'" cy="'+m[1]+'" r="10" fill="'+m[2]+'" stroke="#fff" stroke-width="3"/><text x="'+m[0]+'" y="'+(m[1]+4)+'" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">'+(i+1)+'</text>'; }).join('')+
+    '</svg></div></div>';
+}
+
+/* ===== Catálogo de operadores ===== */
+var catTarget = null;
+function abrirCat(id){
+  catTarget = id;
+  document.getElementById('cat-body').innerHTML = OPS.filter(function(o){ return o.rel[empresa] && o.rfc; }).map(function(o){ return '<tr class="row" onclick="elegirOp(\''+o.n+'\')"><td class="mono">'+o.n+'</td><td>'+o.nm+'</td></tr>'; }).join('');
+  openM('cat');
+}
+function elegirOp(n){ document.getElementById(catTarget).value = n; document.getElementById(catTarget+'-nm').value = opBy(n).nm; closeM('cat'); }
+
+/* ===== Reporte (HU51004-4) ===== */
+var COND = [['Código','Código del operador.'],['Nombre de operador','Nombre completo del operador.'],['Número de trayectos','Cantidad de trayectos del operador en el rango de fechas.'],['Tiempo total','Suma del tiempo registrado en todos los trayectos.'],['Promedio de conducción','Tiempo total entre número de trayectos.'],['Conduciendo','Tiempo total en conducción.'],['Pausa','Tiempo total en pausa.'],['Total actividades auxiliares','Tiempo acumulado en actividades auxiliares.'],['Carga o descarga','Tiempo en carga o descarga.'],['Limpieza unidad','Tiempo en limpieza de la unidad.'],['Mantenimiento técnico unidad','Tiempo en mantenimiento técnico.'],['Carga combustible','Tiempo en carga de combustible.'],['Otros (auxiliares)','Otras actividades auxiliares.'],['Total casos de excepción','Tiempo acumulado en casos de excepción.'],['Percance vial','Tiempo por percances viales.'],['Avería del vehículo','Tiempo por fallas mecánicas.'],['Bloqueo carretero','Tiempo por bloqueos.'],['Eventos climatológicos','Tiempo por clima.'],['Operativos / retenes','Tiempo por revisiones u operativos.'],['Otros (excepción)','Otros casos de excepción.'],['Descanso','Tiempo en descanso.'],['Fuera de servicio','Tiempo fuera de servicio.']];
+function vReporte(){
+  return '<div class="h1">Reporte Promedio de Conducción '+hu('HU51004-4')+'</div><div class="h-sub">Mismos filtros, columnas y cálculos que el reporte "01 - Reporte Bitácora Conducción" del ERP. Se descarga directo en Excel.</div>'+
+  '<div class="card" id="rep-card" style="max-width:820px;"><div style="display:flex;justify-content:flex-end;"><a href="javascript:void(0)" style="color:var(--orange);font-size:12px;font-weight:700;" onclick="condAbrir()">Consultar condiciones del reporte</a></div>'+
+  '<div style="font-weight:700;font-size:12px;color:var(--sub);margin:4px 0 8px;">Rango de fechas</div><div class="filters"><div class="f"><label>Desde</label><input id="r-desde" value="01/07/2026"/></div><div class="f"><label>Hasta</label><input id="r-hasta" value="24/09/2026"/></div></div>'+
+  '<div style="font-weight:700;font-size:12px;color:var(--sub);margin:16px 0 8px;">Rango de Operadores</div><div class="filters" style="flex-direction:column;align-items:flex-start;"><div class="f"><label>Desde</label>'+catField('r-op1','024540')+'</div><div class="f"><label>Hasta</label>'+catField('r-op2','024554')+'</div></div>'+
+  '<div class="err" id="r-err">No hay información para el rango seleccionado</div>'+
+  '<div style="text-align:center;margin-top:18px;"><button class="btn" onclick="generar()">Generar</button></div></div>'+
+  '<div class="callout">Tarea previa para desarrollo: confirmar la fórmula de Trayectos, Total y Promedio del reporte actual del ERP antes de construirlo. '+hu('HU51004-4')+'</div>';
+}
+function condAbrir(){ document.getElementById('cond-body').innerHTML = COND.map(function(c){ return '<tr><td><b>'+c[0]+'</b></td><td>Se visualizará: '+c[1]+'</td></tr>'; }).join(''); openM('cond'); }
+function generar(){
+  var e = document.getElementById('r-err'); e.classList.remove('show');
+  var n = visibles(document.getElementById('r-desde').value, document.getElementById('r-hasta').value).length;
+  if(!n){ e.classList.add('show'); return; }
+  toast('Se descargó ReportePromedioConduccion_2026-10-08.xlsx');
+}
+
+/* ===== Parámetros (HU51004-2) ===== */
+var PARAM = {A:{tipo:'Autotransporte de carga federal', mod:'Carga general', resp:'Laura Méndez Torres', t:[30,5,8,14], grabado:true}, B:{tipo:'Autotransporte de carga federal', mod:'', resp:'', t:[30,5,8,14], grabado:false}};
+function vParam(){
+  var p = PARAM[empresa];
+  var tipos = ['Autotransporte de carga federal','Transporte privado','Autotransporte de pasaje y turismo','Transporte privado de pasajeros'];
+  return '<div class="h1">Parámetros de Configuración '+hu('HU51004-2')+'</div><div class="h-sub">Solo para '+EMP[empresa]+'. '+(p.grabado?'':'Esta empresa nunca ha grabado sus parámetros: se muestran los tiempos de la NOM-087.')+'</div>'+
+  '<div class="card" id="par-card"><div class="form-grid"><div class="f"><label>Tipo de Servicio '+hu('HU52716-8')+'</label><select id="p-tipo">'+tipos.map(function(t){return '<option'+(t===p.tipo?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div><div class="f"><label>Modalidad</label><input id="p-mod" value="'+p.mod+'"/></div><div class="f" style="grid-column:1/-1;"><label>Responsable</label><input id="p-resp" value="'+p.resp+'"/></div></div>'+
+  '<div class="nom-box"><b>NOM-087-SCT-2-2017 · Tiempos de conducción y pausas</b><br>4.1 Todo conductor debe realizar una pausa de <mark>30 minutos</mark> al conducir hasta <mark>cinco horas</mark> continuas.<br>4.6 En rutas de hasta 14 horas de conducción, el conductor debe tener una <mark>pausa no menor a 8 horas continuas</mark>.<br>4.7 <mark>El tiempo máximo de conducción en 24 horas nunca podrá exceder las 14 horas.</mark><br><a href="https://dof.gob.mx/nota_detalle.php?codigo=5529381&fecha=28/06/2018" target="_blank" style="color:#3b5bdb;">Publicación en el Diario Oficial de la Federación</a></div>'+
+  '<div class="times" id="par-times"><span>Tiempo de pausa en minutos</span><input id="t0" value="'+p.t[0]+'"/><span>cuando haya conducido continuamente</span><input id="t1" value="'+p.t[1]+'"/><span>horas</span><span>Tiempo de descanso en horas</span><input id="t2" value="'+p.t[2]+'"/><span>cuando haya conducido un total de</span><input id="t3" value="'+p.t[3]+'"/><span>horas</span></div>'+
+  '<div class="err" id="t-err">Captura un número mayor a cero</div>'+
+  '<div style="text-align:center;margin-top:18px;"><button class="btn" onclick="grabar()">Grabar</button></div></div>'+
+  '<div class="callout">Ya no aparece la casilla "Notificación NOM-087-SCT2-2017": los avisos quedan siempre encendidos. El Listado de Teléfonos se queda en Catálogos del ERP. '+hu('HU51004-1')+'</div>';
+}
+function grabar(){
+  var ok = true;
+  [0,1,2,3].forEach(function(i){ var inp=document.getElementById('t'+i), v=inp.value.trim(); var bad = !/^\d+$/.test(v) || +v<=0; inp.classList.toggle('err',bad); if(bad) ok=false; });
+  document.getElementById('t-err').classList.toggle('show', !ok);
+  if(!ok) return;
+  var p = PARAM[empresa];
+  p.tipo=document.getElementById('p-tipo').value; p.mod=document.getElementById('p-mod').value; p.resp=document.getElementById('p-resp').value;
+  p.t=[0,1,2,3].map(function(i){return +document.getElementById('t'+i).value;}); p.grabado=true;
+  toast('Parámetros guardados. Aplican a las bitácoras nuevas; las ya registradas conservan los datos de su día');
+}
+
+/* ===== Simulaciones ===== */
+function setEmpresa(e){
+  empresa = e;
+  document.getElementById('s-a').classList.toggle('on', e==='A'); document.getElementById('s-b').classList.toggle('on', e==='B');
+  document.getElementById('p-emp').textContent = EMP[e];
+  document.querySelector('.erp-top span').textContent = 'ERP GM Transport — '+EMP[e];
+  filtro.op=''; if(document.getElementById('portal').classList.contains('on')) render();
+  toast('Ahora ves el portal como '+EMP[e]);
+}
+function toggleBaja(){
+  baja = !baja; document.getElementById('s-baja').classList.toggle('on', baja);
+  toast(baja ? 'RAMÍREZ ORTEGA JOSÉ desactivado el 15/09/2026: Transportes Legaspy e Hijos deja de ver lo posterior; Fletes del Pacífico sigue igual' : 'Operador reactivado');
+  if(document.getElementById('portal').classList.contains('on')) render();
+}
+function toggleImprimir(){
+  sinImprimir = !sinImprimir; document.getElementById('s-imp').classList.toggle('on', sinImprimir);
+  if(!document.getElementById('portal').classList.contains('on')) abrirPortal('listado'); else ruta('listado');
+  toast(sinImprimir ? 'Usuario sin permiso de imprimir: no ve el botón "Imprimir hoja oficial"' : 'Usuario con permiso de imprimir');
+}
+function togglePermiso(){
+  sinPermiso = !sinPermiso; document.getElementById('s-perm').classList.toggle('on', sinPermiso);
+  document.getElementById('erp-menu').style.display = sinPermiso ? 'none' : 'block';
+  volverErp();
+}
+
+/* ===== Fichas de HU y especificaciones ===== */
+var HU = {
+ 'HU51004-0':['Relación del operador con el cliente GM','<h5>Reglas</h5><ul><li>Se guarda la relación operador y cliente GM con fecha de inicio y de fin.</li><li>Se crea sola la primera vez que el operador entra a Mis Viajes con la cuenta del cliente; volver a entrar no crea otra.</li><li>Un operador puede tener relación activa con dos clientes a la vez.</li><li>Cada cliente ve solo lo que el operador registró con su cuenta.</li><li>Termina cuando el cliente desactiva al operador en su catálogo del ERP; el cliente sigue viendo el periodo trabajado y no ve lo posterior.</li><li>Reactivarlo abre un periodo nuevo y conserva el anterior.</li><li>El independiente nunca queda relacionado.</li><li>Operador GM sin RFC: la app le pide capturarlo (formato de persona física; si ya existe, confirma identidad).</li></ul><h5>Fuera de alcance</h5><ul><li>No cambia el catálogo de operadores del ERP.</li></ul>'],
+ 'HU51004-2':['Parámetros de la bitácora en el portal','<h5>Reglas</h5><ul><li>Mismo contenido que la pestaña "Parámetros Generales" del ERP.</li><li>Tipo de Servicio: lista de 4 opciones.</li><li>Sin parámetros grabados: tiempos de la NOM (30 min / 5 h / 8 h / 14 h).</li><li>Se guardan por cliente; un cliente no cambia los de otro.</li><li>Tiempos: enteros mayores a cero ("Captura un número mayor a cero").</li><li>Los cambios aplican a bitácoras nuevas; las registradas conservan los datos de su día.</li><li>Sin casilla de notificación.</li><li>La pestaña Listado de Teléfonos no pasa al portal: se queda en el ERP (ver HU51004-1).</li></ul>'],
+ 'HU51004-3':['Listado de bitácoras en el portal','<h5>Reglas</h5><ul><li>Mismo contenido que el listado del ERP: Desde, Hasta, Filtrar x Operador (campo + "..."), Aplicar.</li><li>Columnas: Fecha, Número, Nombre, Conduciendo, Pausa, Actividades Auxiliares, Casos de Excepción, Descanso, Fuera de Servicio, Total, en formato "23h 59m".</li><li>Solo lo registrado con la cuenta del cliente; nunca operadores independientes.</li><li>Al seleccionar un renglón: detalle con Actividad, Inicio, Tiempo, Ubicación y mapa; columnas nuevas Viaje y Observación.</li><li>Rango vacío: "No hay bitácoras en el rango seleccionado".</li><li>Paginado: "Mostrando del registro 1 al 11 de un total de N registros", Anterior/Siguiente.</li><li>Exportar a Excel o PDF.</li></ul><h5>Imprimir hoja oficial</h5><ul><li>Botón nuevo "Imprimir hoja oficial" (hoy el ERP tiene "Imprimir").</li><li>Con operador y rango: genera la hoja "Bitácora de horas de servicio" de ese operador y ese rango, con el mismo formato que la hoja del operador (ver HU52716-7).</li><li>Trae la firma del operador en los días firmados y el espacio para la firma del responsable.</li><li>Solo incluye los días registrados con la cuenta del cliente.</li><li>Sin operador: "Elige un operador para imprimir su hoja oficial".</li><li>Rango sin bitácoras: "No hay bitácoras en el rango seleccionado".</li><li>Sin permiso de imprimir no se ve el botón.</li><li>La impresión queda en la bitácora de auditoría con usuario, operador, fecha y hora.</li></ul>'],
+ 'HU51004-4':['Reporte Promedio de Conducción en el portal','<h5>Reglas</h5><ul><li>Filtros: rango de fechas y rango de operadores con "...", botón Generar, liga "Consultar condiciones del reporte".</li><li>Descarga Excel sin vista previa, un renglón por operador, las 22 columnas actuales, horas con dos decimales.</li><li>Mismo resultado que el ERP con los mismos datos.</li><li>Solo suma lo registrado con la cuenta del cliente.</li><li>Rango vacío: "No hay información para el rango seleccionado".</li></ul><h5>Tarea previa</h5><ul><li>Regenerar la ficha del método del reporte actual para replicar la fórmula de Trayectos, Total y Promedio.</li></ul><h5>Fuera de alcance</h5><ul><li>"02 - Reporteador" (error del ERP).</li></ul>'],
+ 'HU51004-1':['Acceso al portal desde el ERP','<h5>Reglas</h5><ul><li>El menú "Bitácora de Conducción" del ERP conserva sus opciones Catálogos, Bitácora de Conducción y Reportes.</li><li>"Bitácora de Conducción" y "Reportes" abren el portal, igual que hoy Doble Check y Fiscal, sin volver a iniciar sesión.</li><li>"Catálogos" sigue abriendo la ventana "Parámetros de Configuración" del ERP, solo con la pestaña "Listado de Teléfonos" y con Registrar, Modificar y Eliminar como hoy.</li><li>La pestaña "Parámetros Generales" ya no está en el ERP: pasó al portal (ver HU51004-2).</li><li>Sin permiso al menú, no se ve la opción.</li></ul><h5>Fuera de alcance</h5><ul><li>La migración del historial del ERP y de Conduce 087 (mejora próxima "Migración del historial").</li><li>Retirar la app Conduce 087.</li></ul>'],
+ 'HU52716-7':['Hoja oficial NOM-087 para la autoridad','<ul><li>Formato de la hoja "Bitácora de horas de servicio" que también genera el operador en la app. Ver prototipo de la app.</li></ul>'],
+ 'HU52716-5':['Ligar la bitácora con el viaje','<ul><li>Origen del dato "Viaje" y "Observación" del detalle. Ver prototipo de la app.</li></ul>'],
+ 'HU52716-8':['Reglas por tipo de servicio','<ul><li>Tipo de Servicio con 4 opciones; las de pasajeros activan el aviso de segundo conductor. Ver prototipo de la app.</li></ul>']
+};
+function openHu(k){ var h=HU[k]; document.getElementById('spec-t').textContent = k+' — '+h[0]; document.getElementById('spec-b').innerHTML = h[1]; openM('spec'); }
+function openSpec(r){ var k = {listado:'HU51004-3', reporte:'HU51004-4', parametros:'HU51004-2'}[r]; openHu(k); }
+
+/* ===== Recorrido de desarrollo ===== */
+var TOUR = [
+ {hu:'HU51004-1', loc:'ERP › Menú', t:'Bitácora y Reportes abren el portal', b:['"Bitácora de Conducción" y "Reportes" abren el portal en su sección.','No pide volver a iniciar sesión.','Sin permiso al menú, la opción no aparece.'], sel:'#erp-menu', setup:function(){ if(sinPermiso) togglePermiso(); volverErp(); }},
+ {hu:'HU51004-1', loc:'ERP › Catálogos', t:'El Listado de Teléfonos se queda en el ERP', b:['"Catálogos" abre la ventana del ERP de siempre.','Solo queda la pestaña "Listado de Teléfonos".','Registrar, Modificar y Eliminar funcionan como hoy.'], sel:'#erp-main', setup:function(){ if(sinPermiso) togglePermiso(); volverErp(); erpCatalogos(); }},
+ {hu:'HU51004-3', loc:'Portal › Bitácoras', t:'Filtros iguales a los del ERP', b:['Desde, Hasta y Filtrar x Operador con su botón "..." de catálogo.','Exportar a Excel o PDF.'], sel:'#lst-filtros', setup:function(){ abrirPortal('listado'); }},
+ {hu:'HU51004-0', loc:'Portal › Bitácoras', t:'Solo lo hecho con la cuenta de este cliente', b:['RAMÍREZ ORTEGA JOSÉ trabaja para los dos clientes: aquí solo salen sus días con la cuenta de Transportes Legaspy e Hijos.','MONTES ELIZONDO LUIS no tiene RFC y no aparece.','Los independientes nunca aparecen.'], sel:'#lst-tabla', setup:function(){ abrirPortal('listado'); }},
+ {hu:'HU51004-3', loc:'Portal › Bitácoras › Detalle', t:'Detalle del día con viaje y observación', b:['Actividad, Inicio, Tiempo, Ubicación y mapa, como en el ERP.','Columnas nuevas: Viaje y Observación.'], sel:'#lst-det', setup:function(){ abrirPortal('listado'); selFila(0); }},
+ {hu:'HU51004-3', loc:'Portal › Bitácoras', t:'Imprimir hoja oficial de un operador', b:['Con operador y rango genera la "Bitácora de horas de servicio".','Mismo formato que la hoja del operador en la app, con firmas.','Sin operador o sin bitácoras en el rango muestra un mensaje.','Sin permiso de imprimir no se ve el botón.'], sel:'#m-hoja .modal', setup:function(){ if(sinImprimir) toggleImprimir(); abrirPortal('listado'); document.getElementById('f-op').value='024554'; document.getElementById('f-op-nm').value=opBy('024554').nm; imprimirHoja(); }},
+ {hu:'HU51004-0', loc:'Simulación', t:'Al desactivar al operador termina la relación', b:['El cliente sigue viendo lo anterior al 15/09/2026.','Lo posterior ya no aparece.','El otro cliente sigue igual.'], sel:'#lst-tabla', setup:function(){ abrirPortal('listado'); if(!baja) toggleBaja(); }},
+ {hu:'HU51004-4', loc:'Portal › Reporte Promedio', t:'Mismo reporte del ERP', b:['Rango de fechas y rango de operadores.','Generar descarga el Excel de 22 columnas.','Tarea previa: confirmar la fórmula del reporte actual.'], sel:'#rep-card', setup:function(){ if(baja) toggleBaja(); abrirPortal('reporte'); }},
+ {hu:'HU51004-2', loc:'Portal › Parámetros', t:'Parámetros por cliente', b:['Tipo de Servicio con 4 opciones.','Los tiempos solo aceptan enteros mayores a cero.','Sin casilla de notificación ni listado de teléfonos.'], sel:'#par-card', setup:function(){ abrirPortal('parametros'); }}
+];
+var ti = -1;
+erpHome();
+document.body.insertAdjacentHTML('beforeend','<div id="tourbar"><div class="in"><div class="mn"><div class="loc" id="tb-loc"></div><div class="tt" id="tb-t"></div><ul id="tb-b"></ul></div><div class="sd"><span id="tb-hu"></span><div class="pg"><i id="tb-p"></i></div><span id="tb-c" style="font-size:11px;color:var(--sub-2);"></span><div class="bt"><button onclick="tourGo(ti-1)">Anterior</button><button class="nx" id="tb-n" onclick="tourGo(ti+1)">Siguiente</button></div></div></div></div>');
+function tourToggle(){ if(ti>=0) tourEnd(); else tourGo(0); }
+function tourEnd(){ ti=-1; document.querySelectorAll('.tour-spot').forEach(function(e){e.classList.remove('tour-spot');}); document.getElementById('tourbar').classList.remove('open'); document.body.classList.remove('touring'); document.getElementById('tour-btn').textContent='▶ Recorrido de desarrollo'; }
+function tourGo(i){
+  if(i<0) return; closeM('hoja'); if(i>=TOUR.length){ tourEnd(); return; }
+  ti=i; var s=TOUR[i];
+  document.querySelectorAll('.tour-spot').forEach(function(e){e.classList.remove('tour-spot');});
+  s.setup();
+  var t=document.querySelector(s.sel); if(t){ t.classList.add('tour-spot'); t.scrollIntoView({block:'center',behavior:'smooth'}); }
+  document.getElementById('tb-loc').textContent=s.loc; document.getElementById('tb-t').textContent=s.t;
+  document.getElementById('tb-b').innerHTML=s.b.map(function(x){return '<li>'+x+'</li>';}).join('');
+  document.getElementById('tb-hu').innerHTML=hu(s.hu);
+  document.getElementById('tb-p').style.width=((i+1)/TOUR.length*100)+'%';
+  document.getElementById('tb-c').textContent=(i+1)+' de '+TOUR.length;
+  document.getElementById('tb-n').textContent = i===TOUR.length-1 ? 'Terminar' : 'Siguiente';
+  document.getElementById('tourbar').classList.add('open'); document.body.classList.add('touring'); document.getElementById('tour-btn').textContent='■ Salir del recorrido';
+}
+</script>
+</body>
+</html>

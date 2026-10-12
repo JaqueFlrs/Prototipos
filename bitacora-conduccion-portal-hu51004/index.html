@@ -190,6 +190,13 @@ body.touring{padding-bottom:220px;}
   <button class="dark" id="tour-btn" onclick="tourToggle()">▶ Recorrido de desarrollo</button>
 </div>
 
+<div class="page-title">Portal de Bitácora de Conducción</div>
+<div class="page-sub">Prototipo navegable del portal web que reemplaza el módulo Bitácora de Conducción del ERP (HU51004-0 a 4). El cliente GM entra desde el menú de su ERP, igual que hoy con Doble Check y Fiscal. El menú del ERP agrega la opción "Portal de Bitácora de Conducción"; Bitácora de Conducción y Reportes siguen abriendo las pantallas del ERP para el historial. Catálogos se queda en el ERP solo con el Listado de Teléfonos. El nombre técnico del sistema lo define desarrollo.</div>
+<div class="topbtns">
+  <button onclick="openM('notas')">Notas del análisis</button>
+  <button class="dark" id="tour-btn" onclick="tourToggle()">▶ Recorrido de desarrollo</button>
+</div>
+
 <div class="stage">
   <!-- ===== ERP: punto de entrada ===== -->
   <div class="erp on" id="erp">
@@ -200,8 +207,9 @@ body.touring{padding-bottom:220px;}
         <div id="erp-menu">
           <div class="erp-item mod">Bitácora de Conducción</div>
           <div class="erp-sub" id="erp-sub-cat" onclick="erpCatalogos()">Catálogos</div>
-          <div class="erp-sub" id="erp-sub-bit" onclick="abrirPortal('listado')">Bitácora de Conducción</div>
-          <div class="erp-sub" id="erp-sub-rep" onclick="abrirPortal('reporte')">Reportes</div>
+          <div class="erp-sub" id="erp-sub-bit" onclick="erpPantalla('bit')">Bitácora de Conducción</div>
+          <div class="erp-sub" id="erp-sub-rep" onclick="erpPantalla('rep')">Reportes</div>
+          <div class="erp-sub" id="erp-sub-portal" onclick="abrirPortal('listado')">Portal de Bitácora de Conducción</div>
         </div>
         <div class="erp-item">Nómina</div><div class="erp-item">Transporte de Personal</div>
       </div>
@@ -242,14 +250,14 @@ body.touring{padding-bottom:220px;}
 <div class="modal-ov" id="m-cond"><div class="modal"><div class="modal-hd"><h3>Condiciones Del Reporte</h3><button onclick="closeM('cond')">✕</button></div><div class="modal-bd"><div class="tbl-wrap"><table class="t cond" style="min-width:0;"><thead><tr><th>Concepto</th><th>Detalle</th></tr></thead><tbody id="cond-body"></tbody></table></div></div></div></div>
 <div class="modal-ov" id="m-notas"><div class="modal"><div class="modal-hd"><h3>Notas del análisis</h3><button onclick="closeM('notas')">✕</button></div><div class="modal-bd">
   <h5>Decisiones cerradas</h5>
-  <div class="dec"><b>El módulo sale del ERP a un portal propio</b>, como GM Integra. El menú del ERP abre el portal igual que hoy con Doble Check y Fiscal, sin volver a iniciar sesión.</div>
+  <div class="dec"><b>El módulo sale del ERP a un portal propio</b>, como GM Integra. Una opción nueva del menú del ERP abre el portal igual que hoy con Doble Check y Fiscal, sin volver a iniciar sesión.</div>
   <div class="dec"><b>Las bitácoras viven fuera del ERP, ligadas al RFC personal del operador.</b> Para que cada cliente vea las suyas se guarda la relación operador y cliente GM, con fecha de inicio y de fin.</div>
   <div class="dec"><b>La relación se crea sola</b> la primera vez que el operador entra a Mis Viajes con la cuenta del cliente. Termina cuando el cliente desactiva al operador en su catálogo de operadores del ERP. Reactivarlo abre un periodo nuevo.</div>
   <div class="dec"><b>Un operador puede trabajar para dos clientes a la vez.</b> Cada cliente ve solo lo que el operador registró con la cuenta de ese cliente.</div>
   <div class="dec"><b>El operador independiente nunca aparece en el portal de un cliente</b>, aunque capture una empresa que sí sea cliente GM.</div>
   <div class="dec"><b>Operador GM sin RFC en el catálogo:</b> la app le pide capturarlo la primera vez.</div>
   <div class="dec"><b>Parámetros por cliente</b>, igual que hoy en el ERP. Tipo de Servicio con 4 opciones. Se elimina la casilla de notificación: los avisos quedan siempre encendidos.</div>
-  <div class="dec"><b>El Listado de Teléfonos se queda en el ERP.</b> Catálogos sigue abriendo la ventana "Parámetros de Configuración" del ERP, ahora solo con esa pestaña y con Registrar, Modificar y Eliminar como hoy. Bitácora de Conducción y Reportes abren el portal.</div>
+  <div class="dec"><b>El Listado de Teléfonos se queda en el ERP.</b> Catálogos sigue abriendo la ventana "Parámetros de Configuración" del ERP, ahora solo con esa pestaña y con Registrar, Modificar y Eliminar como hoy. Bitácora de Conducción y Reportes siguen en el ERP para consultar el historial mientras no exista la migración.</div>
   <div class="dec"><b>"Imprimir hoja oficial"</b> en el listado: genera la hoja "Bitácora de horas de servicio" de un operador y un rango de fechas, con el mismo formato que la hoja del operador en la app. Requiere permiso de imprimir y queda en la bitácora de auditoría, igual que hoy en el ERP.</div>
   <div class="dec"><b>Reporte Promedio con los mismos cálculos que el ERP.</b> "02 - Reporteador" era un error y no pasa al portal.</div>
   <div class="dec"><b>La migración del historial es una mejora próxima</b> ("pend Migración del historial") y no entra en esta fase.</div>
@@ -314,15 +322,25 @@ function hu(k){ return '<span class="hu" onclick="openHu(\''+k+'\')">'+k+'</span
 
 function abrirPortal(r){
   if(sinPermiso) return;
-  erpMenuOn(r==='reporte' ? 'erp-sub-rep' : 'erp-sub-bit');
+  erpMenuOn('erp-sub-portal');
   document.getElementById('erp').classList.remove('on');
   document.getElementById('portal').classList.add('on');
   toast('Se abrió el portal de Bitácora de Conducción sin volver a iniciar sesión');
   ruta(r);
 }
+function erpPantalla(k){
+  if(sinPermiso) return;
+  erpMenuOn(k==='rep' ? 'erp-sub-rep' : 'erp-sub-bit');
+  document.getElementById('erp-main').innerHTML =
+    '<div class="erp-title">'+(k==='rep' ? '01 - Reporte Bitácora Conducción' : 'Bitácora de Conducción')+' '+hu('HU51004-1')+'</div>'+
+    '<div class="callout">Pantalla actual del ERP, sin cambios. Muestra las bitácoras que ya están registradas en el ERP. Las bitácoras registradas en Mis Viajes se consultan en "Portal de Bitácora de Conducción".</div>'+
+    '<table class="erp-tbl"><thead><tr><th>Operador</th><th>Fecha</th><th>Conducción</th></tr></thead><tbody>'+
+    '<tr><td>024554 RAMÍREZ ORTEGA JOSÉ</td><td>30/09/2026</td><td>9h 20m</td></tr>'+
+    '<tr><td>024540 LÓPEZ DÍAZ MARIO</td><td>29/09/2026</td><td>7h 45m</td></tr></tbody></table>';
+}
 function volverErp(){ document.getElementById('portal').classList.remove('on'); document.getElementById('erp').classList.add('on'); erpHome(); }
 var TELS = [{tel:'6861234567', op:'024554'},{tel:'6869876543', op:'024540'},{tel:'6865550142', op:'000015'}];
-function erpMenuOn(id){ ['erp-sub-cat','erp-sub-bit','erp-sub-rep'].forEach(function(x){ document.getElementById(x).classList.toggle('on', x===id); }); }
+function erpMenuOn(id){ ['erp-sub-cat','erp-sub-bit','erp-sub-rep','erp-sub-portal'].forEach(function(x){ document.getElementById(x).classList.toggle('on', x===id); }); }
 function erpHome(){
   erpMenuOn('');
   document.getElementById('erp-main').innerHTML = '<div class="erp-title">Bienvenida</div><div class="erp-note">Selecciona una opción del menú.</div>';
@@ -538,7 +556,7 @@ var HU = {
  'HU51004-2':['Parámetros de la bitácora en el portal','<h5>Reglas</h5><ul><li>Mismo contenido que la pestaña "Parámetros Generales" del ERP.</li><li>Tipo de Servicio: lista de 4 opciones.</li><li>Sin parámetros grabados: tiempos de la NOM (30 min / 5 h / 8 h / 14 h).</li><li>Se guardan por cliente; un cliente no cambia los de otro.</li><li>Tiempos: enteros mayores a cero ("Captura un número mayor a cero").</li><li>Los cambios aplican a bitácoras nuevas; las registradas conservan los datos de su día.</li><li>Sin casilla de notificación.</li><li>La pestaña Listado de Teléfonos no pasa al portal: se queda en el ERP (ver HU51004-1).</li></ul>'],
  'HU51004-3':['Listado de bitácoras en el portal','<h5>Reglas</h5><ul><li>Mismo contenido que el listado del ERP: Desde, Hasta, Filtrar x Operador (campo + "..."), Aplicar.</li><li>Columnas: Fecha, Número, Nombre, Conduciendo, Pausa, Actividades Auxiliares, Casos de Excepción, Descanso, Fuera de Servicio, Total, en formato "23h 59m".</li><li>Solo lo registrado con la cuenta del cliente; nunca operadores independientes.</li><li>Al seleccionar un renglón: detalle con Actividad, Inicio, Tiempo, Ubicación y mapa; columnas nuevas Viaje y Observación.</li><li>Rango vacío: "No hay bitácoras en el rango seleccionado".</li><li>Paginado: "Mostrando del registro 1 al 11 de un total de N registros", Anterior/Siguiente.</li><li>Exportar a Excel o PDF.</li></ul><h5>Imprimir hoja oficial</h5><ul><li>Botón nuevo "Imprimir hoja oficial" (hoy el ERP tiene "Imprimir").</li><li>Con operador y rango: genera la hoja "Bitácora de horas de servicio" de ese operador y ese rango, con el mismo formato que la hoja del operador (ver HU52716-7).</li><li>Trae la firma del operador en los días firmados y el espacio para la firma del responsable.</li><li>Solo incluye los días registrados con la cuenta del cliente.</li><li>Sin operador: "Elige un operador para imprimir su hoja oficial".</li><li>Rango sin bitácoras: "No hay bitácoras en el rango seleccionado".</li><li>Sin permiso de imprimir no se ve el botón.</li><li>La impresión queda en la bitácora de auditoría con usuario, operador, fecha y hora.</li></ul>'],
  'HU51004-4':['Reporte Promedio de Conducción en el portal','<h5>Reglas</h5><ul><li>Filtros: rango de fechas y rango de operadores con "...", botón Generar, liga "Consultar condiciones del reporte".</li><li>Descarga Excel sin vista previa, un renglón por operador, las 22 columnas actuales, horas con dos decimales.</li><li>Mismo resultado que el ERP con los mismos datos.</li><li>Solo suma lo registrado con la cuenta del cliente.</li><li>Rango vacío: "No hay información para el rango seleccionado".</li></ul><h5>Tarea previa</h5><ul><li>Regenerar la ficha del método del reporte actual para replicar la fórmula de Trayectos, Total y Promedio.</li></ul><h5>Fuera de alcance</h5><ul><li>"02 - Reporteador" (error del ERP).</li></ul>'],
- 'HU51004-1':['Acceso al portal desde el ERP','<h5>Reglas</h5><ul><li>El menú "Bitácora de Conducción" del ERP conserva sus opciones Catálogos, Bitácora de Conducción y Reportes.</li><li>"Bitácora de Conducción" y "Reportes" abren el portal, igual que hoy Doble Check y Fiscal, sin volver a iniciar sesión.</li><li>"Catálogos" sigue abriendo la ventana "Parámetros de Configuración" del ERP, solo con la pestaña "Listado de Teléfonos" y con Registrar, Modificar y Eliminar como hoy.</li><li>La pestaña "Parámetros Generales" ya no está en el ERP: pasó al portal (ver HU51004-2).</li><li>Sin permiso al menú, no se ve la opción.</li></ul><h5>Fuera de alcance</h5><ul><li>La migración del historial del ERP y de Conduce 087 (mejora próxima "Migración del historial").</li><li>Retirar la app Conduce 087.</li></ul>'],
+ 'HU51004-1':['Acceso al portal desde el ERP','<h5>Reglas</h5><ul><li>El menú "Bitácora de Conducción" del ERP conserva sus opciones Catálogos, Bitácora de Conducción y Reportes.</li><li>Se agrega la opción nueva "Portal de Bitácora de Conducción", que abre el portal igual que hoy Doble Check y Fiscal, sin volver a iniciar sesión.</li><li>"Bitácora de Conducción" y "Reportes" siguen abriendo las pantallas del ERP sin cambios, con las bitácoras ya registradas en el ERP.</li><li>"Catálogos" sigue abriendo la ventana "Parámetros de Configuración" del ERP, solo con la pestaña "Listado de Teléfonos" y con Registrar, Modificar y Eliminar como hoy.</li><li>La pestaña "Parámetros Generales" ya no está en el ERP: pasó al portal (ver HU51004-2).</li><li>Sin permiso al menú, no se ve la opción.</li></ul><h5>Fuera de alcance</h5><ul><li>La migración del historial del ERP y de Conduce 087 (mejora próxima "Migración del historial").</li><li>Retirar la app Conduce 087.</li></ul>'],
  'HU52716-7':['Hoja oficial NOM-087 para la autoridad','<ul><li>Formato de la hoja "Bitácora de horas de servicio" que también genera el operador en la app. Ver prototipo de la app.</li></ul>'],
  'HU52716-5':['Ligar la bitácora con el viaje','<ul><li>Origen del dato "Viaje" y "Observación" del detalle. Ver prototipo de la app.</li></ul>'],
  'HU52716-8':['Reglas por tipo de servicio','<ul><li>Tipo de Servicio con 4 opciones; las de pasajeros activan el aviso de segundo conductor. Ver prototipo de la app.</li></ul>']
@@ -548,7 +566,7 @@ function openSpec(r){ var k = {listado:'HU51004-3', reporte:'HU51004-4', paramet
 
 /* ===== Recorrido de desarrollo ===== */
 var TOUR = [
- {hu:'HU51004-1', loc:'ERP › Menú', t:'Bitácora y Reportes abren el portal', b:['"Bitácora de Conducción" y "Reportes" abren el portal en su sección.','No pide volver a iniciar sesión.','Sin permiso al menú, la opción no aparece.'], sel:'#erp-menu', setup:function(){ if(sinPermiso) togglePermiso(); volverErp(); }},
+ {hu:'HU51004-1', loc:'ERP › Menú', t:'Opción nueva para abrir el portal', b:['"Portal de Bitácora de Conducción" abre el portal.','"Bitácora de Conducción" y "Reportes" siguen en el ERP para el historial.','No pide volver a iniciar sesión.','Sin permiso al menú, la opción no aparece.'], sel:'#erp-menu', setup:function(){ if(sinPermiso) togglePermiso(); volverErp(); }},
  {hu:'HU51004-1', loc:'ERP › Catálogos', t:'El Listado de Teléfonos se queda en el ERP', b:['"Catálogos" abre la ventana del ERP de siempre.','Solo queda la pestaña "Listado de Teléfonos".','Registrar, Modificar y Eliminar funcionan como hoy.'], sel:'#erp-main', setup:function(){ if(sinPermiso) togglePermiso(); volverErp(); erpCatalogos(); }},
  {hu:'HU51004-3', loc:'Portal › Bitácoras', t:'Filtros iguales a los del ERP', b:['Desde, Hasta y Filtrar x Operador con su botón "..." de catálogo.','Exportar a Excel o PDF.'], sel:'#lst-filtros', setup:function(){ abrirPortal('listado'); }},
  {hu:'HU51004-0', loc:'Portal › Bitácoras', t:'Solo lo hecho con la cuenta de este cliente', b:['RAMÍREZ ORTEGA JOSÉ trabaja para los dos clientes: aquí solo salen sus días con la cuenta de Transportes Legaspy e Hijos.','MONTES ELIZONDO LUIS no tiene RFC y no aparece.','Los independientes nunca aparecen.'], sel:'#lst-tabla', setup:function(){ abrirPortal('listado'); }},

@@ -380,6 +380,14 @@ body.touring{padding-bottom:200px;}
   <button class="notas-btn ghost" onclick="openBig('ux')">🎯 Criterio de diseño (UX)</button>
 </div>
 
+<div class="page-title">Bitácora de Conducción en Mis Viajes</div>
+<div class="page-sub">Mockup navegable, nivel UX/UI de alta fidelidad — diseñado para uso rápido y con una sola mano, en cabina. Toca dentro del teléfono para recorrer el flujo. Incluye la ampliación HU52716-5 a 11: viaje ligado, datos del viaje, hoja para la autoridad, reglas por tipo de servicio, correcciones, días anteriores, sin conexión, mapa, gráficas y mis datos.</div>
+
+<div class="notas-bar">
+  <button class="notas-btn" onclick="openBig('notas')">📝 Notas del análisis</button>
+  <button class="notas-btn ghost" onclick="openBig('ux')">🎯 Criterio de diseño (UX)</button>
+</div>
+
 <div class="wrap">
 
   <!-- ================= TELEFONO 1: FLUJO CLIENTE GM ================= -->
@@ -1326,12 +1334,10 @@ finishActivity = function(phone){
     }
   }
   hideModal('m-capture-'+phone);
+  if(offline[phone]){ toast('Sin conexión. Intenta de nuevo cuando tengas señal'); return; }
   applyActivity(phone, pendingActivity);
   if(phone==='p1') setTripLine(viajeTexto);
-  if(offline[phone]){
-    pendientesEnvio[phone]++;
-    toast('Guardado en el teléfono: se enviará al volver la señal');
-  } else toast('Actividad registrada: '+pendingActivity.label);
+  toast('Actividad registrada: '+pendingActivity.label);
 };
 function setTripLine(t){
   var box = el('trip-line-p1');
@@ -1379,9 +1385,6 @@ function pdfHtml(phone){
 function hojaGenerar(phone){
   var e = el('hoja-err-'+phone); e.classList.remove('show');
   var desde = el('hoja-desde-'+phone).value;
-  if(offline[phone] && desde!=='18/09/2026'){
-    e.textContent = 'Para consultar esos días necesitas conexión a internet'; e.classList.add('show'); return;
-  }
   if(desde.indexOf('/08/')>-1){
     e.textContent = 'No hay bitácoras registradas en ese rango de fechas'; e.classList.add('show'); el('hoja-pdf-'+phone).style.display='none'; return;
   }
@@ -1736,7 +1739,7 @@ HU_INFO['HU52716-8'] = {title:'HU52716-8 — Reglas por tipo de servicio', body:
   '<h5>Reglas clave</h5><ul><li>"Tipo de Servicio" es lista con 4 opciones: Autotransporte de carga federal, Transporte privado, Autotransporte de pasaje y turismo, Transporte privado de pasajeros.</li><li>El límite de 14 horas cuenta las últimas 24 horas corridas; el cambio de día no lo reinicia.</li><li>Pasajeros, operador GM: si la ruta del viaje tiene tiempo estimado mayor a 9 horas, aviso "Segundo conductor requerido".</li><li>Pasajeros, independiente: el aviso sale al cumplir 9 horas desde la salida capturada sin llegada.</li><li>Carga: nunca muestra ese aviso.</li><li>Operador GM usa los tiempos de su cliente; independiente usa los de la NOM.</li><li>Los avisos no se pueden apagar y nunca bloquean.</li></ul>'+
   '<h5>Fuera de alcance</h5><ul><li>Excepción 4.5 c) de servicio directo de 5 a 7 horas.</li></ul>'};
 HU_INFO['HU52716-9'] = {title:'HU52716-9 — Corregir, días anteriores, sin internet y corte de día', body:
-  '<h5>Reglas clave</h5><ul><li>Botón "Corregir" en cada tramo: cambia actividad y horas; los registros de al lado se acomodan como en Conduce 087.</li><li>Inicio y fin iguales: "La hora de inicio y la hora final no pueden ser iguales".</li><li>Se puede agregar una actividad para cubrir un hueco.</li><li>Corregir un día firmado quita la firma: "Corregiste un día ya firmado. Vuelve a firmar la jornada del ...".</li><li>Historial con etiqueta "Firmado" o "Pendiente de firmar"; tocar un día abre su detalle y permite firmarlo.</li><li>Sin conexión: se registra con la hora del teléfono, aviso "Sin conexión: tus registros se enviarán cuando vuelva la señal"; al volver la señal se envía solo y sin duplicar.</li><li>Actividad que cruza medianoche se parte en dos días; el día nuevo empieza sin datos del viaje y sin firma.</li><li>Una corrección conserva el historial de cambios; nada se borra.</li></ul>'};
+  '<h5>Reglas clave</h5><ul><li>Botón "Corregir" en cada tramo: cambia actividad y horas; los registros de al lado se acomodan como en Conduce 087.</li><li>Inicio y fin iguales: "La hora de inicio y la hora final no pueden ser iguales".</li><li>Se puede agregar una actividad para cubrir un hueco.</li><li>Corregir un día firmado quita la firma: "Corregiste un día ya firmado. Vuelve a firmar la jornada del ...".</li><li>Historial con etiqueta "Firmado" o "Pendiente de firmar"; tocar un día abre su detalle y permite firmarlo.</li><li>Trabajar sin conexión a internet queda fuera de esta fase: sin señal no se registra y se muestra "Sin conexión. Intenta de nuevo cuando tengas señal".</li><li>Actividad que cruza medianoche se parte en dos días; el día nuevo empieza sin datos del viaje y sin firma.</li><li>Una corrección conserva el historial de cambios; nada se borra.</li></ul>'};
 HU_INFO['HU52716-10'] = {title:'HU52716-10 — Mapa, gráficas, avisos en pantalla y mis datos', body:
   '<h5>Reglas clave</h5><ul><li>4 enlaces nuevos: Mapa del recorrido, Mi avance, Reglas NOM-087, Mis datos.</li><li>Mapa: un marcador por actividad unidos en orden; vista Mapa o Satélite; al tocar un marcador muestra actividad, hora y ubicación.</li><li>Mi avance: conducido contra el límite de 14h y últimos 7 días, tabla por actividad; tocar una gráfica la abre a pantalla completa.</li><li>Letrero en la pantalla principal "Pausa próxima" / "Pausa necesaria", además de la notificación; desaparece al registrar Pausa.</li><li>"Otro(s)"/"Otra(s)" muestra un campo para describirlo, opcional.</li><li>Mis datos: el independiente edita; el operador GM solo consulta los datos de su empresa.</li></ul>'+
   '<h5>Fuera de alcance</h5><ul><li>La revisión del teléfono al abrir la app que hace Conduce 087.</li></ul>'};
@@ -1749,7 +1752,7 @@ HU_INFO['HU51004-0'] = {title:'HU51004-0 — Relación del operador con el clien
 SPECS['datosviaje'] = {title:'Datos del viaje de hoy', body:HU_INFO['HU52716-6'].body};
 SPECS['firma-p2'] = {title:'Firma de la jornada (independiente)', body:'<h5>Reglas</h5><ul><li>No se firma sin origen, destino y salida del viaje de hoy (HU52716-6).</li><li>No se firma un día sin actividades (HU52716-4).</li></ul>'};
 SPECS['gm-rfc'] = {title:'Captura tu RFC personal', body:HU_INFO['HU51004-0'].body};
-SPECS['home-bitacora'] = {title:'Pantalla principal (operador GM)', body:SPECS.home.body+'<h5>Ampliación</h5><ul><li>Muestra el viaje de la actividad en curso (HU52716-5).</li><li>Letrero de pausa o descanso en pantalla (HU52716-10).</li><li>Aviso de sin conexión (HU52716-9).</li><li>Enlaces nuevos: Hoja para la autoridad, Mapa, Mi avance, Reglas, Mis datos.</li></ul>'};
+SPECS['home-bitacora'] = {title:'Pantalla principal (operador GM)', body:SPECS.home.body+'<h5>Ampliación</h5><ul><li>Muestra el viaje de la actividad en curso (HU52716-5).</li><li>Letrero de pausa o descanso en pantalla (HU52716-10).</li><li>Sin conexión a internet no se registra: mensaje "Sin conexión. Intenta de nuevo cuando tengas señal" (HU52716-2).</li><li>Enlaces nuevos: Hoja para la autoridad, Mapa, Mi avance, Reglas, Mis datos.</li></ul>'};
 SPECS['nogm-home'] = {title:'Pantalla principal (independiente)', body:SPECS.home.body+'<h5>Ampliación</h5><ul><li>Enlace "Datos del viaje de hoy" (HU52716-6) y "Firmar jornada de hoy".</li><li>Mismos enlaces nuevos que el operador GM.</li></ul>'};
 
 /* ---------- recorrido de desarrollo ---------- */
@@ -1834,7 +1837,7 @@ var limState = {p1:'ok', p2:'ok'};
   var lbl = sc.querySelector('.chip-lbl');
   var chips = el('chips-'+ph);
   /* nivel 1 */
-  hero.insertAdjacentHTML('beforeend','<div class="hero-extra"><div class="hx-trip" id="hx-trip-'+ph+'"></div><span class="hx-off" id="offline-'+ph+'">'+ICONS.wifi+'Sin señal · se enviará al volver la señal</span></div>');
+  hero.insertAdjacentHTML('beforeend','<div class="hero-extra"><div class="hx-trip" id="hx-trip-'+ph+'"></div><span class="hx-off" id="offline-'+ph+'" style="display:none!important;"></span></div>');
   ['trip-line-'+ph,'letrero-'+ph].forEach(function(id){ var n=el(id); if(n) n.remove(); });
   var oldOff = sc.querySelector('.offline-bar'); if(oldOff) oldOff.remove();
   var nodes = [hero];
@@ -1920,9 +1923,7 @@ setTripLine(VIAJES[0].id);
 letrero = function(ph, nivel){ limState[ph] = nivel==='prox' ? 'prox' : nivel==='nec' ? 'nec' : 'ok'; pintarLimite(ph); };
 toggleOffline = function(ph){
   offline[ph] = !offline[ph];
-  el('offline-'+ph).classList.toggle('show', offline[ph]);
   el('off-btn-'+ph).textContent = offline[ph] ? '🔧 Recuperar la señal' : '🔧 Simular sin conexión';
-  if(!offline[ph] && pendientesEnvio[ph]){ toast('Se enviaron '+pendientesEnvio[ph]+' registros guardados sin conexión'); pendientesEnvio[ph]=0; }
   go(ph, HOME[ph]);
 };
 var _go2 = go;
@@ -1942,7 +1943,7 @@ document.querySelectorAll('.spec-link').forEach(function(b){
 });
 /* fichas y especificaciones */
 HU_INFO['HU52716-10'] = {title:'HU52716-10 — Pantalla principal por niveles, Mi día, Mi avance y mis datos', body:
-  '<h5>Orden de la pantalla principal</h5><ul><li>Encabezado con botón fijo "Hoja para la autoridad".</li><li>Tarjeta de la actividad en curso con cronómetro, viaje y etiqueta "Sin señal".</li><li>Barra "Próximo límite": muestra el límite más cercano (pausa o descanso); ámbar a 30 min ("Pausa próxima: en 25m"), roja al llegar ("Pausa necesaria"); vuelve a verde al registrar Pausa. Reemplaza el letrero.</li><li>Los 6 botones de actividad.</li><li>Una sola tarjeta de pendiente, por prioridad: "Faltan los datos del viaje de hoy" → "Tienes N días sin firmar" → "Firma tu jornada de hoy". Sin pendientes no aparece.</li><li>Entradas "Mi día" e "Historial".</li><li>Encabezado, actividad, barra y botones se ven sin scroll.</li></ul>'+
+  '<h5>Orden de la pantalla principal</h5><ul><li>Encabezado con botón fijo "Hoja para la autoridad".</li><li>Tarjeta de la actividad en curso con cronómetro y viaje.</li><li>Barra "Próximo límite": muestra el límite más cercano (pausa o descanso); ámbar a 30 min ("Pausa próxima: en 25m"), roja al llegar ("Pausa necesaria"); vuelve a verde al registrar Pausa. Reemplaza el letrero.</li><li>Los 6 botones de actividad.</li><li>Una sola tarjeta de pendiente, por prioridad: "Faltan los datos del viaje de hoy" → "Tienes N días sin firmar" → "Firma tu jornada de hoy". Sin pendientes no aparece.</li><li>Entradas "Mi día" e "Historial".</li><li>Encabezado, actividad, barra y botones se ven sin scroll.</li></ul>'+
   '<h5>Consultas</h5><ul><li>Mi día: selector Lista / Mapa (marcadores por actividad, vista Satélite).</li><li>Tocar la barra abre Mi avance (24 horas, 7 días, tabla por actividad, pantalla completa) con las reglas debajo.</li><li>Mis datos: el independiente desde el ícono de perfil del encabezado; el operador GM en la pestaña Perfil de Mis Viajes, solo consulta.</li><li>"Otro(s)"/"Otra(s)" muestra un campo para describirlo, opcional.</li></ul>'};
 SPECS['home-bitacora'] = {title:'Pantalla principal (operador GM)', body:HU_INFO['HU52716-10'].body};
 SPECS['nogm-home'] = {title:'Pantalla principal (independiente)', body:HU_INFO['HU52716-10'].body};
@@ -1952,7 +1953,7 @@ SPECS['linea-tiempo'] = SPECS['linea-tiempo-p2'] = {title:'Mi día', body:'<ul><
 TOUR = [
   {hu:'HU52716-10', loc:'Operador GM › Bitácora', t:'Pantalla ordenada por frecuencia de uso', b:['Arriba y sin scroll: actividad, límite y botones.','Lo de una vez al día aparece como tarjeta de pendiente.','Lo de consulta queda en "Mi día" e "Historial".'], sel:'#home-bitacora .pg-scroll', setup:function(){ hideModal('m-capture-p1'); go('p1','home-bitacora'); }},
   {hu:'HU52716-7', loc:'Operador GM › Encabezado', t:'Hoja para la autoridad siempre a un toque', b:['Botón fijo en el encabezado.','Es la excepción: poco frecuente pero urgente.'], sel:'#hoja-btn-p1', setup:function(){ go('p1','home-bitacora'); }},
-  {hu:'HU52716-5', loc:'Operador GM › Actividad en curso', t:'El viaje va dentro de la tarjeta de la actividad', b:['Muestra el viaje ligado o "Sin viaje".','Sin conexión aparece aquí una etiqueta "Sin señal", no una barra aparte.'], sel:'#hero-p1', setup:function(){ go('p1','home-bitacora'); }},
+  {hu:'HU52716-5', loc:'Operador GM › Actividad en curso', t:'El viaje va dentro de la tarjeta de la actividad', b:['Muestra el viaje ligado o "Sin viaje".','Sin conexión a internet no se registra el cambio de actividad.'], sel:'#hero-p1', setup:function(){ go('p1','home-bitacora'); }},
   {hu:'HU52716-10', loc:'Operador GM › Barra Próximo límite', t:'Una sola barra con el límite más cercano', b:['Verde, ámbar a 30 min y roja al llegar.','Reemplaza el letrero.','Al tocarla abre Mi avance con las reglas.'], sel:'#lim-p1', setup:function(){ letrero('p1','prox'); go('p1','home-bitacora'); }},
   {hu:'HU52716-5', loc:'Operador GM › Cambiar actividad', t:'Sin salida marcada, elige viaje o "Sin viaje"', b:['Con salida marcada, el viaje se liga solo.','"Sin viaje" pide observación obligatoria.','Con dos viajes con salida, elige entre esos dos.'], sel:'#viaje-field', setup:function(){ letrero('p1',null); go('p1','home-bitacora'); viajeModo='none'; chipTap('p1','pausa'); el('viaje-sel').value='sin'; viajeChange(); }},
   {hu:'HU52716-10', loc:'Operador GM › Tarjeta de pendiente', t:'Un solo pendiente, el más importante', b:['Datos del viaje → días sin firmar → firma de hoy.','Sin pendientes, no aparece.'], sel:'#pend-p1', setup:function(){ hideModal('m-capture-p1'); viajeModo='one'; go('p1','home-bitacora'); }},
@@ -2052,13 +2053,13 @@ var _chipTap2 = chipTap;
 chipTap = function(phone, key){
   var a = actBy(key);
   var simple = !DETALLES[key] && (phone==='p2' || viajeModo==='one');
+  if(offline[phone]){ toast('Sin conexión. Intenta de nuevo cuando tengas señal'); return; }
   if(gpsOff[phone] || !simple){ _chipTap2(phone, key); return; }
   undoInfo[phone] = {key:currentState[phone], since:el('hero-since-'+phone).textContent, el:elapsed[phone]};
   window.__scope = el(phone);
   applyActivity(phone, a);
   window.__scope = null;
   if(phone==='p1') setTripLine(VIAJES[0].id);
-  if(offline[phone]) pendientesEnvio[phone]++;
   el('undo-t-'+phone).textContent = a.label+' registrada';
   var u = el('undo-'+phone); u.classList.add('show');
   clearTimeout(undoTimer[phone]); undoTimer[phone] = setTimeout(function(){ u.classList.remove('show'); undoInfo[phone]=null; }, 5000);

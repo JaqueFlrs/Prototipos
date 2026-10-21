@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tickets de Temis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: página de trabajo; arriba el encabezado del mockup, al centro el frame con el shell real de gm-temis, abajo el panel de simulación y la barra del recorrido. */
+:root{
+  --page:#eceae7; --surface:#ffffff; --chrome:#f4f4f4; --chrome-border:#d4d4d4;
+  --ink:#191c20; --sub:#6b6f76; --line:#e7e7e7;
+  --side:#686868; --side-fg:#ffffff; --side-dim:rgba(255,255,255,.72);
+  --accent:#f08a2c; --accent-2:#d9731a; --accent-soft:#fdeedf; --accent-ink:#8a4210;
+  --ok:#16a34a; --ok-bg:#e4f6ea; --warn:#b45f06; --warn-bg:#fdf1dc;
+  --bad:#dc2626; --bad-bg:#fdeaea; --info:#1d4ed8; --info-bg:#e6edfc;
+  --dev:#7e3ad6; --dev-bg:#f1e8fd; --qa:#0d8478; --qa-bg:#dff4f1;
+  --muted-bg:#f0f0f0; --shadow:0 10px 30px rgba(20,20,25,.16);
+  --spec:#2457c5; --spec-bg:#eef3fd;
+  --f-ui:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:4px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --page:#18191b; --surface:#232427; --chrome:#2b2c30; --chrome-border:#3d3e43;
+  --ink:#ecedee; --sub:#a3a6ad; --line:#36373b;
+  --side:#2e2f33; --side-fg:#f3f3f3; --side-dim:rgba(255,255,255,.62);
+  --accent:#f39a48; --accent-2:#f6ab66; --accent-soft:#3d2a19; --accent-ink:#f8c28f;
+  --ok:#4ade80; --ok-bg:#16301f; --warn:#f4b45a; --warn-bg:#3a2a12;
+  --bad:#f87171; --bad-bg:#3b1a1a; --info:#8fb0ff; --info-bg:#1c2640;
+  --dev:#c4a1ff; --dev-bg:#2c2140; --qa:#5fd4c6; --qa-bg:#16312e;
+  --muted-bg:#2d2e32; --shadow:0 10px 30px rgba(0,0,0,.5);
+  --spec:#8fb0ff; --spec-bg:#1c2640; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --page:#18191b; --surface:#232427; --chrome:#2b2c30; --chrome-border:#3d3e43;
+  --ink:#ecedee; --sub:#a3a6ad; --line:#36373b;
+  --side:#2e2f33; --side-fg:#f3f3f3; --side-dim:rgba(255,255,255,.62);
+  --accent:#f39a48; --accent-2:#f6ab66; --accent-soft:#3d2a19; --accent-ink:#f8c28f;
+  --ok:#4ade80; --ok-bg:#16301f; --warn:#f4b45a; --warn-bg:#3a2a12;
+  --bad:#f87171; --bad-bg:#3b1a1a; --info:#8fb0ff; --info-bg:#1c2640;
+  --dev:#c4a1ff; --dev-bg:#2c2140; --qa:#5fd4c6; --qa-bg:#16312e;
+  --muted-bg:#2d2e32; --shadow:0 10px 30px rgba(0,0,0,.5);
+  --spec:#8fb0ff; --spec-bg:#1c2640; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--ink);font-family:var(--f-ui);font-size:13px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 140px}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--chrome-border);border-radius:var(--r);padding:6px 9px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+
+/* Encabezado del mockup (fuera del frame) */
+.mk-head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between}
+.mk-head h1{margin:0;font-size:20px;letter-spacing:-.01em;text-wrap:balance}
+.mk-head p{margin:2px 0 0;color:var(--sub);max-width:70ch}
+.mk-actions{display:flex;gap:8px;flex-wrap:wrap}
+.mk-btn{border:1px solid var(--chrome-border);background:var(--surface);border-radius:var(--r);padding:7px 12px;font-weight:600}
+.mk-btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.scope{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--sub);font-size:12px}
+.chip-hu{border:1px solid var(--spec);color:var(--spec);background:var(--spec-bg);border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700;letter-spacing:.02em}
+.chip-hu:hover{filter:brightness(1.1)}
+
+/* Frame: shell real de gm-temis */
+.frame{border:1px solid var(--chrome-border);border-radius:6px;overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;min-height:640px;position:relative}
+.side{width:206px;flex-shrink:0;background:var(--side);color:var(--side-fg);display:flex;flex-direction:column;padding:12px 0}
+.brand{display:flex;align-items:center;gap:9px;padding:2px 14px 14px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:6px}
+.brand .lg{width:28px;height:28px;border-radius:6px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800}
+.brand b{font-size:14px}
+.brand small{display:block;color:var(--side-dim);font-size:10.5px}
+.nav-g{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--side-dim);padding:10px 16px 4px}
+.nav{display:flex;align-items:center;gap:9px;padding:7px 16px;color:var(--side-fg);border:0;background:none;width:100%;text-align:left;border-left:3px solid transparent}
+.nav .ico{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.8}
+.nav:hover{background:rgba(255,255,255,.08)}
+.nav.on{background:rgba(255,255,255,.15);border-left-color:var(--accent);font-weight:700}
+.nav.off{color:rgba(255,255,255,.4);cursor:not-allowed}
+.nav.off:hover{background:none}
+.nav .new{margin-left:auto;font-size:9.5px;background:var(--accent);color:#fff;border-radius:3px;padding:0 5px;font-weight:700}
+.side-foot{margin-top:auto;padding:10px 16px 0;border-top:1px solid rgba(255,255,255,.14);color:var(--side-dim);font-size:11px}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--surface)}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px;background:var(--chrome);border-bottom:1px solid var(--chrome-border)}
+.top h2{margin:0;font-size:16px;white-space:nowrap}
+.top .mid{flex:1;display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
+.top .right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.live{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ok);font-weight:600}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0}
+.avatar.sm{width:22px;height:22px;font-size:9.5px}
+.spec-link{font-size:11.5px;color:var(--spec);background:none;border:0;text-decoration:underline;padding:0}
+
+/* Timer global */
+.tpill{display:flex;align-items:center;gap:8px;border:1px solid var(--chrome-border);background:var(--surface);border-radius:20px;padding:4px 6px 4px 12px}
+.tpill.run{border-color:var(--accent);background:var(--accent-soft)}
+.tpill .tt{font-size:12px;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpill .tc{font-weight:600;font-size:12.5px}
+.tbtn{width:26px;height:26px;border-radius:50%;border:0;display:grid;place-items:center;background:var(--accent);color:#fff}
+.tbtn.ghost{background:var(--muted-bg);color:var(--ink)}
+.tbtn svg{width:12px;height:12px;fill:currentColor}
+
+.body{padding:14px 16px;flex:1;min-width:0}
+.banner{display:flex;gap:12px;align-items:center;border:1px solid var(--warn);background:var(--warn-bg);color:var(--ink);border-radius:var(--r);padding:9px 12px;margin-bottom:12px}
+.banner b{color:var(--warn)}
+.banner .sp{flex:1}
+
+/* Controles */
+.seg{display:flex;border:1px solid var(--chrome-border);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.seg button{white-space:nowrap;border:0;background:none;padding:6px 11px;font-size:12px;color:var(--sub)}
+.seg button.on{background:var(--ink);color:var(--surface);font-weight:600}
+.btn{border:1px solid var(--chrome-border);background:var(--surface);border-radius:var(--r);padding:6px 12px;font-weight:600;font-size:12.5px}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover{background:var(--accent-2)}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,transparent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.search{width:220px;max-width:100%}
+
+/* Tabla */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;min-width:960px}
+th{background:var(--chrome);color:var(--sub);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+tr.flash td{animation:flash 2.2s ease}
+@keyframes flash{0%,40%{background:var(--accent-soft)}100%{background:transparent}}
+.tit{font-weight:600;min-width:260px}
+.tit small{display:block;color:var(--sub);font-weight:400;font-size:11.5px}
+.folio{font-family:var(--f-mono);font-size:12px;color:var(--sub)}
+.tipo{display:inline-flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
+.tipo .dot{width:8px;height:8px;border-radius:50%}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.st small{font-weight:500;opacity:.85}
+.st.n{background:var(--muted-bg);color:var(--sub)}
+.st.a{background:var(--info-bg);color:var(--info)}
+.st.w{background:var(--warn-bg);color:var(--warn)}
+.st.d{background:var(--dev-bg);color:var(--dev)}
+.st.q{background:var(--qa-bg);color:var(--qa)}
+.st.l{background:var(--accent-soft);color:var(--accent-ink)}
+.st.ok{background:var(--ok-bg);color:var(--ok)}
+.st.x{background:var(--bad-bg);color:var(--bad)}
+.resp{display:flex}
+.resp .avatar{border:2px solid var(--surface);margin-left:-6px}
+.resp .avatar:first-child{margin-left:0}
+.r-sop{background:#8a8f98}.r-ana{background:#c2410c}.r-dev{background:#7e3ad6}.r-qa{background:#0d8478}
+.late{color:var(--bad);font-weight:600}
+.rowtimer{border:1px solid var(--chrome-border);background:var(--surface);border-radius:20px;padding:3px 10px 3px 7px;display:inline-flex;gap:6px;align-items:center;font-size:12px}
+.rowtimer svg{width:11px;height:11px;fill:currentColor}
+.rowtimer.run{background:var(--accent);border-color:var(--accent);color:#fff}
+.empty{padding:28px;text-align:center;color:var(--sub)}
+
+/* Detalle (panel lateral dentro del frame) */
+.det-bg{position:absolute;inset:0;background:rgba(15,15,20,.28);display:flex;justify-content:flex-end;z-index:20}
+.det{width:min(560px,100%);background:var(--surface);height:100%;overflow-y:auto;border-left:1px solid var(--chrome-border);box-shadow:var(--shadow);display:flex;flex-direction:column}
+.det-h{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:flex-start;position:sticky;top:0;background:var(--surface);z-index:1}
+.det-h h3{margin:2px 0 0;font-size:16px;text-wrap:balance}
+.det-h .x{margin-left:auto;border:0;background:none;font-size:20px;line-height:1;color:var(--sub)}
+.sec{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.sec h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);display:flex;gap:8px;align-items:center}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+.kv label{display:block;font-size:11px;color:var(--sub);margin-bottom:3px}
+.kv select,.kv input{width:100%}
+.path{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.path span{font-size:11px;padding:3px 7px;border-radius:3px;background:var(--muted-bg);color:var(--sub)}
+.path span.done{background:var(--ok-bg);color:var(--ok)}
+.path span.cur{background:var(--accent);color:#fff;font-weight:700}
+.path em{color:var(--sub);font-style:normal;font-size:10px}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.person{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:var(--r);padding:7px 9px}
+.person .rl{font-size:10.5px;color:var(--sub);display:block}
+.person select{flex:1;min-width:0;padding:3px 6px;font-size:12px}
+.tlist{display:flex;flex-direction:column;gap:6px}
+.trow{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:var(--r);padding:7px 10px}
+.trow .nm{flex:1;min-width:0}
+.trow .nm small{display:block;color:var(--sub);font-size:11px}
+.trow .hr{font-weight:600}
+.link{border:0;background:none;color:var(--info);padding:0;font-size:12px;text-decoration:underline}
+.hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:12px}
+.hist li{display:flex;gap:10px}
+.hist time{color:var(--sub);white-space:nowrap;font-family:var(--f-mono);font-size:11px}
+.inc{border:1px solid var(--line);border-left:3px solid var(--qa);border-radius:var(--r);padding:8px 10px;font-size:12px}
+.inc small{color:var(--sub);display:block}
+.src{font-size:10px;font-weight:700;background:var(--qa-bg);color:var(--qa);border-radius:3px;padding:1px 6px}
+
+/* En vivo */
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pc{border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.pc.run{border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+.pc .hd{display:flex;gap:10px;align-items:center}
+.pc .hd b{display:block}
+.pc .hd small{color:var(--sub)}
+.pc .now{font-size:12.5px}
+.pc .clock{font-size:20px;font-weight:600}
+.pc .state{font-size:11.5px;font-weight:700}
+.sum{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px;color:var(--sub);font-size:12.5px}
+.sum b{color:var(--ink);font-size:15px;margin-right:4px}
+
+/* Horarios / Origen */
+.grid2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;align-items:start}
+.box{border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.box h3{margin:0;font-size:14px}
+.box p{margin:0;color:var(--sub);font-size:12.5px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
+.opt:first-of-type{border-top:0}
+.opt input{margin-top:2px}
+.opt small{display:block;color:var(--sub)}
+.phase{font-size:10px;font-weight:700;border-radius:3px;padding:1px 6px;background:var(--muted-bg);color:var(--sub);margin-left:6px}
+.phase.on{background:var(--ok-bg);color:var(--ok)}
+.bar{height:8px;border-radius:4px;background:var(--muted-bg);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.srcrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.srcrow:first-of-type{border-top:0}
+.srcrow .nm{flex:1}
+.tag{font-size:11px;font-weight:700;border-radius:3px;padding:2px 7px}
+.tag.mix{background:var(--info-bg);color:var(--info)}
+.tag.z{background:var(--warn-bg);color:var(--warn)}
+.tag.t{background:var(--ok-bg);color:var(--ok)}
+.switch{display:flex;align-items:center;gap:10px;border:1px dashed var(--bad);border-radius:6px;padding:12px}
+
+/* Modales (UI real) */
+.mod-bg{position:fixed;inset:0;background:rgba(10,10,14,.45);display:grid;place-items:center;z-index:60;padding:16px}
+.mod{background:var(--surface);border-radius:8px;box-shadow:var(--shadow);width:min(440px,100%);overflow:hidden}
+.mod-h{padding:14px 18px;font-weight:700;border-bottom:1px solid var(--line)}
+.mod-b{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.mod-b label{font-size:11.5px;color:var(--sub);display:block;margin-bottom:3px}
+.mod-b input,.mod-b textarea,.mod-b select{width:100%}
+.mod-f{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;background:var(--chrome)}
+.err{color:var(--bad);font-size:12px}
+
+.toast{position:fixed;right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(96px + env(safe-area-inset-bottom,0px));background:#26292c;color:#fff;padding:11px 16px;border-radius:6px;font-size:12.5px;box-shadow:var(--shadow);z-index:90;max-width:340px}
+.bnot{position:absolute;top:56px;right:16px;width:320px;max-width:calc(100% - 32px);background:var(--surface);border:1px solid var(--chrome-border);border-radius:8px;box-shadow:var(--shadow);padding:12px 14px;z-index:30;display:flex;gap:10px}
+.bnot .lg{width:32px;height:32px;border-radius:6px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;flex-shrink:0}
+.bnot small{color:var(--sub);display:block;font-size:11px}
+
+/* Panel de simulación (fuera del frame) */
+.sim{border:1px dashed var(--chrome-border);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:color-mix(in srgb,var(--surface) 60%,transparent)}
+.sim h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.sim .row{display:flex;flex-wrap:wrap;gap:8px}
+.sim button{border:1px solid var(--chrome-border);background:var(--surface);border-radius:20px;padding:6px 12px;font-size:12px}
+.sim button:hover{border-color:var(--spec);color:var(--spec)}
+.teams{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--chrome-border);border-radius:8px;background:var(--surface);padding:10px 12px;max-width:420px}
+.teams .lg{width:30px;height:30px;border-radius:6px;background:#5059c9;color:#fff;display:grid;place-items:center;font-weight:800;flex-shrink:0}
+.teams small{color:var(--sub);display:block;font-size:11px}
+
+/* Drawer de ficha y modal de especificación (documentación, fuera del UI) */
+.doc-bg{position:fixed;inset:0;background:rgba(10,10,14,.4);z-index:70;display:flex;justify-content:flex-end}
+.doc{width:min(520px,100%);height:100%;overflow-y:auto;background:var(--surface);border-left:4px solid var(--spec);padding:18px 20px calc(30px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+.doc.center{margin:auto;height:auto;max-height:88vh;border-left:0;border-top:4px solid var(--spec);border-radius:8px;width:min(760px,100%)}
+.doc-bg.c{justify-content:center;align-items:center;padding:16px}
+.doc h3{margin:0;font-size:17px;text-wrap:balance}
+.doc h5{margin:6px 0 0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--spec)}
+.doc ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.doc p{margin:0;max-width:68ch}
+.doc .close{align-self:flex-end;border:1px solid var(--chrome-border);background:var(--surface);border-radius:var(--r);padding:4px 10px}
+.pend{border:1px solid var(--warn);background:var(--warn-bg);border-radius:6px;padding:10px 12px}
+.pend li{color:var(--ink)}
+
+/* Recorrido */
+.tour-spot{outline:3px solid var(--accent)!important;outline-offset:3px;box-shadow:0 0 0 9999px rgba(15,15,20,.22),0 0 22px rgba(240,138,44,.6)!important;position:relative;z-index:15;border-radius:4px}
+.tourbar{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--surface);border-top:3px solid var(--accent);box-shadow:0 -8px 24px rgba(0,0,0,.14);
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.tourbar .in{max-width:1280px;margin:0 auto;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.tourbar .txt{flex:1;min-width:240px}
+.tourbar .loc{font-size:11px;color:var(--sub)}
+.tourbar b{font-size:14px}
+.tourbar ul{margin:4px 0 0;padding-left:18px;font-size:12.5px}
+.tourbar .prog{height:4px;background:var(--muted-bg);border-radius:2px;margin-top:8px;overflow:hidden}
+.tourbar .prog i{display:block;height:100%;background:var(--accent)}
+.fab{position:fixed;left:calc(20px + env(safe-area-inset-left,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:75;display:flex;align-items:center;gap:10px;
+  background:var(--accent-soft);color:var(--accent-ink);border:2px solid var(--accent);border-radius:30px;padding:9px 18px 9px 9px;font-weight:700;box-shadow:0 8px 22px rgba(240,138,44,.35)}
+.fab .face{width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.fab .face svg{width:20px;height:20px}
+.fab:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.fab:hover{transform:none}}
+
+@media (max-width:900px){
+  .frame{flex-direction:column}
+  .side{width:100%;flex-direction:row;flex-wrap:wrap;padding:8px}
+  .brand{border:0;margin:0;padding:4px 8px}
+  .nav-g,.side-foot{display:none}
+  .nav{width:auto;border-left:0;border-bottom:3px solid transparent;padding:6px 10px}
+  .nav.on{border-bottom-color:var(--accent)}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid2{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .cards,.kv,.people{grid-template-columns:minmax(0,1fr)}
+  .search{width:100%}
+  .tpill .tt{max-width:110px}
+}
+</style>
+
+<div class="proto-banner" style="background:#fffde7;border:1px solid #c8a800;border-radius:6px;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;max-width:1280px;margin:0 auto 14px;">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p style="margin:0 0 4px">Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención, no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p style="margin:0 0 4px">⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para gm-temis, eso significa sus temas, colores, tipografía, menú lateral y componentes propios.</p>
+  <p style="margin:0">Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo y lo ajustamos juntos. 🙌</p>
+</div>
+<div class="wrap">
+  <header class="mk-head">
+    <div>
+      <h1>Tickets de Temis · Etapa 1</h1>
+      <p>Reemplazo sencillo de Zoho Projects para el equipo de mantenimiento ERP, dentro de gm-temis. Recorre las pantallas con clics o con el recorrido guiado.</p>
+    </div>
+    <div class="mk-actions">
+      <button class="mk-btn" id="btnSpec">Especificación de esta pantalla</button>
+      <button class="mk-btn" id="btnNotas">Notas del análisis</button>
+      <button class="mk-btn" id="btnTourTop">Recorrido de desarrollo</button>
+    </div>
+  </header>
+  <div class="scope" id="scope"><span>Alcance aprobado:</span></div>
+
+  <div class="frame" id="frame">
+    <aside class="side" id="side"></aside>
+    <section class="main">
+      <div class="top" id="top"></div>
+      <div class="body" id="body"></div>
+    </section>
+    <div id="detSlot"></div>
+    <div id="bnotSlot"></div>
+  </div>
+
+  <section class="sim" aria-label="Panel de simulación">
+    <h3>Simulación para probar el mockup (no es parte de la pantalla)</h3>
+    <div class="row">
+      <button id="simLive">Otra persona cambia un ticket</button>
+      <button id="simPhone">Pausar mi timer desde el celular</button>
+      <button id="simDesk">Llega un ticket escalado de Desk</button>
+      <button id="simIn">Son las 08:00 y no prendí el timer</button>
+      <button id="simOut">Son las 17:30 y sigue prendido</button>
+      <button id="simReset">Reiniciar datos</button>
+    </div>
+    <div id="teamsSlot"></div>
+  </section>
+</div>
+
+<button class="fab" id="fab" aria-label="Iniciar el recorrido guiado">
+  <span class="face"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#fff"/><circle cx="9" cy="10.5" r="1.3" fill="#d9731a"/><circle cx="15" cy="10.5" r="1.3" fill="#d9731a"/><path d="M8.5 14.2c1.9 2 5.1 2 7 0" stroke="#d9731a" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="7.3" cy="13.4" r="1.1" fill="#f8b98a"/><circle cx="16.7" cy="13.4" r="1.1" fill="#f8b98a"/></svg></span>
+  <span>¿Te enseño cómo funciona?</span>
+</button>
+<div id="tourSlot"></div>
+<div id="modSlot"></div>
+<div id="docSlot"></div>
+<div id="toastSlot"></div>
+
+<script>
+/* ---------- Catálogos ---------- */
+const PEOPLE = {
+  "Marco Ruiz":{ini:"MR",rol:"Desarrollo",h:"08:00 a 17:30",dias:"L a V"},
+  "Diego Salas":{ini:"DS",rol:"Desarrollo",h:"09:00 a 18:30",dias:"L a V"},
+  "Iván Cordero":{ini:"IC",rol:"Desarrollo",h:"08:00 a 17:30",dias:"L a V",vac:"20/10/2026 al 24/10/2026"},
+  "Laura Méndez":{ini:"LM",rol:"Calidad",h:"08:00 a 17:30",dias:"L a V"},
+  "Renata Lozano":{ini:"RL",rol:"Calidad",h:"07:30 a 17:00",dias:"L a V"},
+  "Sofía Treviño":{ini:"ST",rol:"Analista",h:"08:00 a 17:30",dias:"L a V"},
+  "Paola Ibarra":{ini:"PI",rol:"Soporte",h:"07:00 a 16:00",dias:"L a S"}
+};
+const ME = "Marco Ruiz";
+const ROLES = [["soporte","Soporte","r-sop"],["analista","Analista","r-ana"],["dev","Desarrollo","r-dev"],["qa","Calidad","r-qa"]];
+const TIPOS = {error:["Error del sistema","var(--bad)"],cotizacion:["Cotización","var(--warn)"],mejora:["Mejora","var(--info)"]};
+const P_COT = [["Nuevo"],["En análisis","Cotización"],["Esperando al cliente","Cotización"],["En análisis","Prototipo"],["Esperando al cliente","Prototipo"],["Documentando"],["En desarrollo"],["En calidad"],["Por liberar"],["Liberado"],["Cerrado"]];
+const P_ERR = [["Nuevo"],["En análisis"],["En desarrollo"],["En calidad"],["Por liberar"],["Liberado"],["Cerrado"]];
+const ST_CLASS = {"Nuevo":"n","En análisis":"a","Esperando al cliente":"w","Documentando":"a","En desarrollo":"d","En calidad":"q","Por liberar":"l","Liberado":"ok","Cerrado":"ok","Cancelado":"x"};
+const CLOSED = ["Liberado","Cerrado","Cancelado"];
+const pathOf = t => t.tipo==="error" ? P_ERR : P_COT;
+const stOf = t => t.cancel ? ["Cancelado"] : pathOf(t)[t.step];
+
+/* ---------- Datos de ejemplo ---------- */
+function seed(){
+  return [
+    {id:48230,titulo:"No abre la pantalla de anticipos",cliente:"Logística Ruiz",modulo:"Tráfico",tipo:"error",prio:"Alta",step:0,fecha:"",ver:"",resp:{soporte:"Paola Ibarra",analista:"",dev:"",qa:""},t:{},inc:[],hist:[["21/10/2026 09:14","Llegó de Desk al escalarse a mantenimiento"]],fh:[],reb:0},
+    {id:48210,titulo:"La factura no toma el tipo de cambio del día",cliente:"Transportes del Bajío",modulo:"Facturación",tipo:"error",prio:"Alta",step:2,fecha:"24/10/2026",ver:"8.4.12",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"Marco Ruiz",qa:"Laura Méndez"},t:{"Marco Ruiz":11100,"Sofía Treviño":2700},inc:[["Segunda Vuelta · 17/10/2026 12:40","El tipo de cambio se toma del día anterior cuando la factura se timbra después de las 12:00."]],hist:[["15/10/2026 10:02","Sofía Treviño pasó a En desarrollo"],["14/10/2026 16:20","Paola Ibarra lo escaló desde Desk"]],fh:[["14/10/2026 16:25","Se fijó 22/10/2026","Sofía Treviño"],["20/10/2026 11:10","Cambió a 24/10/2026: se agregó el caso de timbrado tardío","Sofía Treviño"]],reb:0},
+    {id:48177,titulo:"Reporte de rendimiento de diésel por unidad",cliente:"Fletes Montemayor",modulo:"Tráfico",tipo:"cotizacion",prio:"Media",step:1,fecha:"05/11/2026",ver:"",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"",qa:""},t:{"Sofía Treviño":5400},inc:[],hist:[["16/10/2026 09:30","Sofía Treviño pasó a En análisis · Cotización"]],fh:[],reb:0},
+    {id:48152,titulo:"Filtro por operador en liquidaciones",cliente:"Logística Ruiz",modulo:"Tráfico",tipo:"mejora",prio:"Media",step:4,fecha:"12/11/2026",ver:"",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"Diego Salas",qa:""},t:{"Sofía Treviño":9900},inc:[],hist:[["18/10/2026 13:05","Se envió el prototipo al cliente"]],fh:[],reb:0},
+    {id:48133,titulo:"La póliza de nómina duplica el IMSS patronal",cliente:"Autotransportes Garza",modulo:"Contabilidad",tipo:"error",prio:"Urgente",step:3,fecha:"20/10/2026",ver:"8.4.12",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"Diego Salas",qa:"Laura Méndez"},t:{"Diego Salas":15300,"Laura Méndez":3600},inc:[["Segunda Vuelta · 19/10/2026 10:15","Con dos patrones registrados se sigue duplicando el cargo en el segundo registro."]],hist:[["19/10/2026 17:40","Diego Salas pasó a En calidad"],["19/10/2026 10:20","Laura Méndez lo regresó a desarrollo"]],fh:[],reb:1},
+    {id:48120,titulo:"Addenda nueva para cliente de autopartes",cliente:"Carga Express del Norte",modulo:"Facturación",tipo:"cotizacion",prio:"Media",step:5,fecha:"30/10/2026",ver:"8.4.13",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"Marco Ruiz",qa:"Renata Lozano"},t:{"Sofía Treviño":14400},inc:[],hist:[["20/10/2026 12:00","El cliente aprobó el prototipo"]],fh:[],reb:0},
+    {id:48098,titulo:"La carta porte no valida el peso bruto",cliente:"Transportes del Bajío",modulo:"Tráfico",tipo:"error",prio:"Alta",step:4,fecha:"22/10/2026",ver:"8.4.12",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"Iván Cordero",qa:"Renata Lozano"},t:{"Iván Cordero":8100,"Renata Lozano":2400},inc:[],hist:[["19/10/2026 15:30","Renata Lozano pasó a Por liberar"]],fh:[],reb:0},
+    {id:48071,titulo:"Exportar estado de cuenta a Excel",cliente:"Fletes Montemayor",modulo:"Cobranza",tipo:"mejora",prio:"Baja",step:9,fecha:"17/10/2026",ver:"8.4.11",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"Diego Salas",qa:"Laura Méndez"},t:{"Diego Salas":7200,"Laura Méndez":1800,"Sofía Treviño":3000},inc:[],hist:[["17/10/2026 18:05","Se liberó en la versión 8.4.11"]],fh:[],reb:0}
+  ];
+}
+let S;
+function reset(){
+  S = {tickets:seed(),route:"tickets",filter:"todos",q:"",open:null,
+       timer:{id:48210,since:Date.now()-41*60*1000},
+       others:{"Diego Salas":{id:48133,since:Date.now()-72*60*1000},"Laura Méndez":{id:48133,since:Date.now()-18*60*1000},"Sofía Treviño":{id:48177,since:Date.now()-55*60*1000},"Renata Lozano":null,"Iván Cordero":"vac","Paola Ibarra":null},
+       banner:null,emergency:false,log:[]};
+}
+reset();
+
+/* ---------- Utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const fmt = sec => {sec=Math.max(0,Math.floor(sec));return pad(Math.floor(sec/3600))+":"+pad(Math.floor(sec%3600/60))+":"+pad(sec%60)};
+const fmtH = sec => {const h=Math.floor(sec/3600),m=Math.round(sec%3600/60);return h+" h "+pad(m)+" min"};
+const now = () => {const d=new Date(2026,9,21,new Date().getHours(),new Date().getMinutes());return pad(d.getDate())+"/"+pad(d.getMonth()+1)+"/"+d.getFullYear()+" "+pad(d.getHours())+":"+pad(d.getMinutes())};
+const tk = id => S.tickets.find(t=>t.id===id);
+const runSec = (t,p) => (t.t[p]||0) + (p===ME && S.timer && S.timer.id===t.id ? (Date.now()-S.timer.since)/1000 : 0) + (S.others[p] && S.others[p].id===t.id ? (Date.now()-S.others[p].since)/1000 : 0);
+const totalSec = t => Object.keys(PEOPLE).reduce((a,p)=>a+runSec(t,p),0);
+const lateDate = f => {if(!f)return false;const [d,m,y]=f.split("/").map(Number);return new Date(y,m-1,d) < new Date(2026,9,21)};
+function stPill(t){const [e,s]=stOf(t);return `<span class="st ${ST_CLASS[e]}">${esc(e)}${s?` <small>· ${esc(s)}</small>`:""}</span>`}
+function toast(m){const el=document.createElement("div");el.className="toast";el.setAttribute("role","status");el.textContent=m;$("#toastSlot").replaceChildren(el);clearTimeout(toast.t);toast.t=setTimeout(()=>el.remove(),3400)}
+const ICO = {
+  dash:'<path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  tix:'<path d="M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/><path d="M10 7v12" stroke-dasharray="2 2"/>',
+  live:'<circle cx="12" cy="12" r="3"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7"/>',
+  team:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/>',
+  bars:'<path d="M5 20V10M12 20V4M19 20v-7"/>',
+  alert:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  db:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>'
+};
+const svg = k => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
+const PLAY = '<svg viewBox="0 0 12 12"><path d="M3 1.5v9l7.5-4.5z"/></svg>';
+const PAUSE = '<svg viewBox="0 0 12 12"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z"/></svg>';
+
+/* ---------- Alcance (fichas) ---------- */
+const HU = {
+  "A1":{t:"Ticket único con tipo",como:"analista o soporte",quiero:"un solo registro de trabajo por ticket escalado, con su tipo",para:"dejar de manejar HU y subtareas como en Zoho",pant:"Tickets y Detalle",impl:["Un solo tipo de registro: el Ticket. No existen HU ni subtareas.","Tipo: Error del sistema, Cotización o Mejora. Lo pone cualquier analista o soporte y se puede cambiar.","Campos: folio de Desk, título, cliente, módulo, prioridad, tipo, estatus, fecha de entrega al cliente y versión.","Responsables por rol: Soporte, Analista, Desarrollo y Calidad.","El ticket nace solo cuando Desk lo escala a mantenimiento."],reglas:["Una sola fecha de entrega al cliente para todos los tipos, con historial de cambios.","El campo Versión es obligatorio antes de pasar a Por liberar."],alt:["Si se cambia el tipo, el ticket conserva su estatus cuando existe en el nuevo camino; si no existe, regresa a En análisis."],fuera:["Comentarios y adjuntos: pendiente de definir.","Horas estimadas de la cotización: pendiente de definir."],dep:["A2","A6"]},
+  "A2":{t:"Diez estatus y dos caminos",como:"equipo de mantenimiento",quiero:"una lista corta de estatus",para:"saber en qué va cada ticket sin los 28 estatus de Zoho",pant:"Detalle del ticket",impl:["Estatus: Nuevo, En análisis, Esperando al cliente, Documentando, En desarrollo, En calidad, Por liberar, Liberado, Cerrado y Cancelado.","En análisis y Esperando al cliente muestran solos la etiqueta Cotización o Prototipo, según si el cliente ya aprobó la cotización.","Cotización o mejora: Nuevo, Análisis·Cotización, Esperando·Cotización, Análisis·Prototipo, Esperando·Prototipo, Documentando, Desarrollo, Calidad, Por liberar, Liberado, Cerrado.","Error del sistema: Nuevo, Análisis, Desarrollo, Calidad, Por liberar, Liberado, Cerrado. No pasa por Documentando."],reglas:["Esperando al cliente ofrece dos salidas: el cliente aprobó o pidió ajustes, que regresa a En análisis con la misma etiqueta.","En calidad ofrece dos salidas: pasa calidad o regresar a desarrollo, que suma un rebote.","Cancelar está disponible antes de Liberado y pide confirmación."],alt:["Un rebote se cuenta cuando el ticket pasa de En calidad o un estatus posterior a En análisis o En desarrollo."],fuera:["Paso automático de Liberado a Cerrado a los 7 días hábiles: pendiente de definir."],dep:["A1","A5"]},
+  "A3":{t:"Timer por persona",como:"responsable de un ticket",quiero:"medir mi tiempo con un botón",para:"tener horas reales sin capturarlas a mano en Zoho",pant:"Barra superior, Tickets y Detalle",impl:["Cada responsable lleva su propio tiempo en cualquier ticket.","Solo un timer corriendo por persona: al arrancar otro, el anterior se pausa solo y se avisa.","El mismo timer se ve y se controla igual desde cualquier pestaña, equipo o celular.","Sigue corriendo aunque se cierre Temis.","Se detiene solo si el ticket pasa a Liberado, Cerrado o Cancelado.","Corrección manual con motivo obligatorio; queda quién cambió, cuándo y el valor anterior."],reglas:["Si el timer cruza la medianoche, el tiempo se reparte por día para los reportes.","En un ticket Liberado, Cerrado o Cancelado no se puede arrancar el timer."],alt:["Si se pausa desde otro dispositivo, todas las pestañas lo reflejan al instante."],fuera:["Si el líder puede corregir el tiempo de su equipo: pendiente de definir."],dep:["A4","A5"]},
+  "A4":{t:"Horario y avisos",como:"trabajador de mantenimiento",quiero:"que Temis me avise si olvidé prender o apagar el timer",para:"que las horas registradas sean reales",pant:"Configuración · Horarios y avisos",impl:["Horario y vacaciones por persona, como función nueva de Temis.","Aviso al entrar si a la hora de entrada no tiene timer corriendo.","Aviso al salir si a la hora de salida sigue corriendo.","Los avisos llegan solo al trabajador. En vacaciones y días festivos no salen.","Fase 1: dentro de Temis, notificación del navegador y mensaje de Teams. Fase 2: Temis instalable en el celular. Fase 3: WhatsApp."],reglas:["El aviso de entrada sale una sola vez por día.","El aviso de salida no detiene el timer; solo avisa."],alt:[],fuera:["Fases 2 y 3 de avisos."],dep:["A3"]},
+  "A5":{t:"Tiempo real y vista de líderes",como:"líder de equipo",quiero:"ver en vivo quién trabaja en qué",para:"conocer la carga real sin preguntar",pant:"En vivo y todas las pantallas",impl:["Cualquier cambio en un ticket lo ven todos al instante, sin recargar.","Varias pestañas y sesiones de la misma persona quedan sincronizadas.","La pantalla En vivo muestra a cada persona: ticket en el que trabaja, tiempo corriendo, sin timer o de vacaciones."],reglas:["Si dos personas cambian el mismo ticket a la vez, gana el último cambio, ambos lo ven y queda en el historial.","La pantalla En vivo requiere un permiso nuevo de líder."],alt:["Si se pierde la conexión, la pantalla lo indica y se pone al día al reconectar."],fuera:[],dep:["A3"]},
+  "A6":{t:"Transición desde Zoho",como:"dueña del sistema",quiero:"pasar de Zoho a Temis sin que se caigan las pantallas",para:"que Calendario, Dashboard, Carga de trabajo y Aeropuerto sigan funcionando",pant:"Configuración · Origen de datos",impl:["Al arrancar se migran de Projects los tickets abiertos con su estatus convertido, y también el histórico.","Desde ese día mantenimiento captura solo en Temis; Projects queda como consulta.","Durante la transición las pantallas leen de Temis y de Zoho a la vez: lo que ya vive en Temis sale de Temis, lo demás de Zoho.","El switch queda solo como freno de emergencia para volver a leer únicamente de Zoho."],reglas:["Solo la dueña del sistema puede mover el switch, con confirmación.","Los tickets nacen en Temis cuando Desk los escala; Desk sigue en Zoho hasta la etapa 2."],alt:["Si un ticket se cierra en Desk pero sigue abierto en Temis, se marca para revisión; no se cierra solo."],fuera:["Momento exacto en que Desk escala un ticket: pendiente de confirmar."],dep:["A1","A2"]},
+  "A7":{t:"Incidencias de SPD",como:"calidad",quiero:"que las incidencias de la Segunda Vuelta se vean en el ticket",para:"no matar el proyecto SPD ni capturar dos veces",pant:"Detalle del ticket",impl:["Temis toma las incidencias de la Segunda Vuelta de GM-SPD y las muestra dentro del ticket que corresponde.","Se ven de solo lectura, con fecha y origen."],reglas:["SPD sigue siendo donde se registran."],alt:[],fuera:[],dep:["A2"]}
+};
+const huTag = k => `<button class="chip-hu" data-hu="${k}" title="${esc(HU[k].t)}">${k}</button>`;
+
+/* ---------- Especificación por pantalla ---------- */
+const SPEC = {
+  tickets:{t:"Tickets",obj:"Listado de todos los tickets de mantenimiento con su estatus, responsables, fecha de entrega y timer.",hu:["A1","A2","A3","A5"],datos:["Folio de Desk, título, cliente, módulo, tipo, estatus con etiqueta, responsables, fecha de entrega, versión y tiempo total."],acc:["Buscar por folio, título o cliente.","Filtrar: Todos, Míos, Errores, Cotizaciones y mejoras, Cerrados.","Arrancar o pausar mi timer desde la fila.","Clic en la fila abre el detalle encima del listado, sin cambiar de pantalla."],val:["Por default no se muestran Cerrados ni Cancelados; tienen su propio filtro.","La fecha vencida se pinta en rojo si el ticket no está Liberado, Cerrado o Cancelado.","El botón de timer no aparece en tickets Liberados, Cerrados o Cancelados, ni si no soy responsable."],estados:["Sin resultados: mensaje que dice qué filtro está activo y botón para quitarlo."]},
+  envivo:{t:"En vivo",obj:"Que los líderes vean quién está trabajando en qué en este momento.",hu:["A5","A3"],datos:["Una tarjeta por persona: nombre, rol, ticket con timer corriendo y su tiempo, o Sin timer, o De vacaciones."],acc:["Clic en el ticket de una tarjeta abre su detalle."],val:["Solo visible con el permiso de líder."],estados:["Trabajando, Sin timer, De vacaciones."]},
+  horarios:{t:"Horarios y avisos",obj:"Capturar el horario y vacaciones de cada persona y los canales de aviso del timer.",hu:["A4"],datos:["Persona, rol, horario, días laborales y vacaciones."],acc:["Editar horario y vacaciones de una persona.","Activar canales de aviso de la fase 1."],val:["La hora de salida debe ser mayor a la de entrada.","Las fases 2 y 3 se muestran deshabilitadas."],estados:[]},
+  origen:{t:"Origen de datos",obj:"Ver el avance de la migración y de dónde lee cada pantalla durante la transición.",hu:["A6"],datos:["Avance de migración de tickets abiertos e histórico; origen por pantalla."],acc:["Freno de emergencia: volver a leer solo de Zoho, con confirmación."],val:["Solo la dueña del sistema puede usar el freno."],estados:["Leyendo de Temis y Zoho, Solo Zoho por emergencia."]},
+  detalle:{t:"Detalle del ticket",obj:"Ver y trabajar un ticket: tipo, estatus, responsables, fecha, versión, tiempo e incidencias.",hu:["A1","A2","A3","A7"],datos:["Todos los campos del ticket, camino de estatus, tiempo por persona, historial de fecha y de estatus, incidencias de SPD."],acc:["Cambiar tipo, prioridad y versión.","Avanzar estatus con los botones que permite el camino.","Asignar responsables por rol.","Mover la fecha de entrega con motivo.","Corregir mi tiempo con motivo."],val:["Pasar a Por liberar requiere versión.","Mover la fecha requiere motivo.","Corregir tiempo requiere motivo y no acepta negativos."],estados:["Al pasar a Liberado o Cancelado, los timers de ese ticket se detienen."]}
+};
+
+/* ---------- Render principal ---------- */
+function render(){renderScope();renderSide();renderTop();renderBody();renderDet()}
+function renderScope(){$("#scope").innerHTML='<span>Alcance aprobado:</span>'+Object.keys(HU).map(huTag).join("")}
+function renderSide(){
+  const it=(r,ico,l,opt={})=>`<button class="nav ${S.route===r?"on":""} ${opt.off?"off":""}" ${opt.off?'aria-disabled="true" title="Existe hoy en Temis; no cambia en este mockup"':`data-go="${r}"`} id="nav-${r}">${svg(ico)}<span>${l}</span></button>`;
+  $("#side").innerHTML=`<div class="brand"><span class="lg">T</span><div><b>Temis</b><small>GM Transport</small></div></div>
+    <div class="nav-g">Seguimiento</div>
+    ${it("dashboard","dash","Dashboard",{off:1})}${it("calendario","cal","Calendario",{off:1})}
+    ${it("tickets","tix","Tickets",{isNew:1})}${it("envivo","live","En vivo",{isNew:1})}
+    ${it("kanban","team","Kanban Equipo",{off:1})}${it("carga","bars","Carga de trabajo",{off:1})}${it("alertas","alert","Alertas",{off:1})}
+    <div class="nav-g">Configuración</div>
+    ${it("horarios","clock","Horarios y avisos",{isNew:1})}${it("origen","db","Origen de datos",{isNew:1})}
+    <div class="side-foot">Versión 2.4.0</div>`;
+}
+function timerPill(){
+  if(S.timer){const t=tk(S.timer.id);return `<div class="tpill run" id="tpill"><span class="tt"><span class="folio">#${t.id}</span> ${esc(t.titulo)}</span><span class="tc mono" id="tclock">${fmt(runSec(t,ME))}</span><button class="tbtn" data-pause="1" aria-label="Pausar timer">${PAUSE}</button></div>`}
+  return `<div class="tpill" id="tpill"><span class="tt" style="color:var(--sub)">Sin timer corriendo</span><button class="tbtn ghost" disabled aria-label="Sin timer">${PLAY}</button></div>`;
+}
+function renderTop(){
+  const titles={tickets:"Tickets",envivo:"En vivo",horarios:"Horarios y avisos",origen:"Origen de datos"};
+  let mid="";
+  if(S.route==="tickets"){
+    const f=[["todos","Todos"],["mios","Míos"],["error","Errores"],["cotmej","Cotizaciones y mejoras"],["cerrados","Cerrados"]];
+    mid=`<input class="search" id="q" type="search" placeholder="Buscar folio, título o cliente" value="${esc(S.q)}" aria-label="Buscar">
+      <div class="seg" id="filters">${f.map(([k,l])=>`<button data-f="${k}" class="${S.filter===k?"on":""}">${l}</button>`).join("")}</div>`;
+  }
+  $("#top").innerHTML=`<h2>${titles[S.route]}</h2><div class="mid">${mid}</div>
+    <div class="right"><span class="live" id="liveDot" title="Los cambios se ven al instante"><i></i>En vivo</span>${timerPill()}<span class="avatar" title="${ME}">${PEOPLE[ME].ini}</span></div>`;
+}
+function bannerHtml(){
+  if(!S.banner)return"";
+  const b=S.banner;
+  return `<div class="banner" id="banner" role="status"><span><b>${esc(b.t)}</b> ${esc(b.m)}</span><span class="sp"></span>${b.act?`<button class="btn pri" data-banact="1">${esc(b.act)}</button>`:""}<button class="btn" data-bandis="1">Entendido</button></div>`;
+}
+function renderBody(){
+  let h=bannerHtml();
+  if(S.route==="tickets")h+=viewTickets();
+  if(S.route==="envivo")h+=viewLive();
+  if(S.route==="horarios")h+=viewHorarios();
+  if(S.route==="origen")h+=viewOrigen();
+  $("#body").innerHTML=h;
+}
+function filtered(){
+  const q=S.q.trim().toLowerCase();
+  return S.tickets.filter(t=>{
+    const e=stOf(t)[0];const closed=e==="Cerrado"||e==="Cancelado";
+    if(S.filter==="cerrados")return closed;
+    if(closed)return false;
+    if(S.filter==="mios"&&!Object.values(t.resp).includes(ME))return false;
+    if(S.filter==="error"&&t.tipo!=="error")return false;
+    if(S.filter==="cotmej"&&t.tipo==="error")return false;
+    if(q&&!(String(t.id).includes(q)||t.titulo.toLowerCase().includes(q)||t.cliente.toLowerCase().includes(q)))return false;
+    return true;
+  });
+}
+function rowTimer(t){
+  const mine=Object.values(t.resp).includes(ME);
+  if(!mine||CLOSED.includes(stOf(t)[0]))return '<span style="color:var(--sub)">—</span>';
+  const run=S.timer&&S.timer.id===t.id;
+  return `<button class="rowtimer ${run?"run":""}" data-timer="${t.id}" aria-label="${run?"Pausar":"Iniciar"} timer de #${t.id}">${run?PAUSE:PLAY}<span class="mono" data-clock="${t.id}">${fmt(runSec(t,ME))}</span></button>`;
+}
+function viewTickets(){
+  const rows=filtered();
+  const labels={todos:"Todos",mios:"Míos",error:"Errores",cotmej:"Cotizaciones y mejoras",cerrados:"Cerrados"};
+  if(!rows.length)return `<div class="tbl-wrap"><div class="empty">No hay tickets con el filtro <b>${labels[S.filter]}</b>${S.q?` y la búsqueda <b>${esc(S.q)}</b>`:""}.<br><br><button class="btn" data-clear="1">Quitar filtros</button></div></div>`;
+  return `<div class="tbl-wrap" id="tbl"><table><thead><tr><th>Folio</th><th>Ticket</th><th>Tipo</th><th>Estatus</th><th>Responsables</th><th>Entrega al cliente</th><th>Versión</th><th>Tiempo total</th><th>Mi timer</th></tr></thead><tbody>
+  ${rows.map(t=>{const [tl,col]=TIPOS[t.tipo];const late=lateDate(t.fecha)&&!CLOSED.includes(stOf(t)[0]);
+    return `<tr data-open="${t.id}" id="row-${t.id}"><td class="folio">#${t.id}</td>
+    <td class="tit">${esc(t.titulo)}<small>${esc(t.cliente)} · ${esc(t.modulo)} · ${esc(t.prio)}</small></td>
+    <td><span class="tipo"><span class="dot" style="background:${col}"></span>${tl}</span></td>
+    <td>${stPill(t)}</td>
+    <td><div class="resp">${ROLES.filter(([k])=>t.resp[k]).map(([k,l,c])=>`<span class="avatar sm ${c}" title="${l}: ${esc(t.resp[k])}">${PEOPLE[t.resp[k]].ini}</span>`).join("")||'<span style="color:var(--sub)">Sin asignar</span>'}</div></td>
+    <td class="mono ${late?"late":""}">${t.fecha||'<span style="color:var(--sub)">Sin fecha</span>'}</td>
+    <td class="mono">${t.ver||"—"}</td>
+    <td class="mono" data-total="${t.id}">${fmtH(totalSec(t))}</td>
+    <td>${rowTimer(t)}</td></tr>`}).join("")}
+  </tbody></table></div>`;
+}
+function viewLive(){
+  const ppl=Object.keys(PEOPLE);
+  const st=p=>p===ME?(S.timer?{id:S.timer.id,since:S.timer.since}:null):S.others[p];
+  const working=ppl.filter(p=>{const s=st(p);return s&&s!=="vac"}).length,vac=ppl.filter(p=>st(p)==="vac").length;
+  return `<div class="sum"><span><b>${working}</b>trabajando</span><span><b>${ppl.length-working-vac}</b>sin timer</span><span><b>${vac}</b>de vacaciones</span></div>
+  <div class="cards" id="cards">${ppl.map(p=>{const s=st(p),inf=PEOPLE[p];
+    let body;
+    if(s==="vac")body=`<span class="state" style="color:var(--sub)">De vacaciones</span><span style="color:var(--sub);font-size:12px">${inf.vac}</span>`;
+    else if(s){const t=tk(s.id);body=`<span class="state" style="color:var(--accent-ink)">Trabajando</span><button class="link" data-open="${t.id}" style="text-align:left">#${t.id} ${esc(t.titulo)}</button><span class="clock mono" data-live="${p}">${fmt((Date.now()-s.since)/1000)}</span>`}
+    else body=`<span class="state" style="color:var(--warn)">Sin timer</span><span style="color:var(--sub);font-size:12px">Horario ${inf.h}</span>`;
+    return `<div class="pc ${s&&s!=="vac"?"run":""}"><div class="hd"><span class="avatar">${inf.ini}</span><div><b>${esc(p)}</b><small>${inf.rol}</small></div></div>${body}</div>`}).join("")}</div>`;
+}
+function viewHorarios(){
+  return `<div class="grid2"><div class="box" id="hBox"><h3>Horario por persona</h3><p>De aquí salen los avisos del timer. En vacaciones y días festivos no se envían avisos.</p>
+  <div class="tbl-wrap"><table style="min-width:560px"><thead><tr><th>Persona</th><th>Rol</th><th>Horario</th><th>Días</th><th>Vacaciones</th><th></th></tr></thead><tbody>
+  ${Object.entries(PEOPLE).map(([p,i])=>`<tr><td>${esc(p)}</td><td>${i.rol}</td><td class="mono">${i.h}</td><td>${i.dias}</td><td>${i.vac||'<span style="color:var(--sub)">—</span>'}</td><td><button class="btn" data-edith="${esc(p)}">Editar</button></td></tr>`).join("")}
+  </tbody></table></div></div>
+  <div class="box" id="avBox"><h3>Avisos del timer</h3><p>Le llegan solo al trabajador.</p>
+    <div class="opt"><input type="checkbox" id="av1" checked><label for="av1"><b>Al entrar</b><small>Si a su hora de entrada no tiene timer corriendo.</small></label></div>
+    <div class="opt"><input type="checkbox" id="av2" checked><label for="av2"><b>Al salir</b><small>Si a su hora de salida sigue corriendo. No lo detiene.</small></label></div>
+    <h3 style="margin-top:6px">Canales</h3>
+    <div class="opt"><input type="checkbox" id="c1" checked disabled><label for="c1"><b>Dentro de Temis</b><span class="phase on">Fase 1</span><small>Siempre activo.</small></label></div>
+    <div class="opt"><input type="checkbox" id="c2" checked><label for="c2"><b>Notificación del navegador</b><span class="phase on">Fase 1</span></label></div>
+    <div class="opt"><input type="checkbox" id="c3" checked><label for="c3"><b>Mensaje de Teams</b><span class="phase on">Fase 1</span></label></div>
+    <div class="opt"><input type="checkbox" id="c4" disabled><label for="c4" style="opacity:.55"><b>Temis instalado en el celular</b><span class="phase">Fase 2</span></label></div>
+    <div class="opt"><input type="checkbox" id="c5" disabled><label for="c5" style="opacity:.55"><b>WhatsApp</b><span class="phase">Fase 3</span></label></div>
+  </div></div>`;
+}
+function viewOrigen(){
+  const screens=[["Calendario"],["Dashboard"],["Carga de trabajo"],["Kanban Equipo"],["Mis Tickets"],["Aeropuerto"]];
+  return `<div class="grid2"><div class="box"><h3>Migración desde Zoho Projects</h3><p>Corrió el 03/11/2026 07:00. Desde entonces mantenimiento captura solo en Temis.</p>
+    <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Tickets abiertos</span><b class="mono">312 de 312</b></div><div class="bar"><i style="width:100%"></i></div></div>
+    <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Histórico desde 01/01/2025</span><b class="mono">4,980 de 4,980</b></div><div class="bar"><i style="width:100%"></i></div></div>
+    <h3 style="margin-top:8px">De dónde lee cada pantalla</h3>
+    <div id="srcList">${screens.map(([n])=>`<div class="srcrow"><span class="nm">${n}</span>${S.emergency?'<span class="tag z">Solo Zoho</span>':'<span class="tag mix">Temis y Zoho</span>'}</div>`).join("")}</div></div>
+  <div class="box"><h3>Freno de emergencia</h3><p>Úsalo solo si algo falla. Las pantallas vuelven a leer únicamente de Zoho, como antes de la migración.</p>
+    <div class="switch" id="switchBox"><div style="flex:1"><b>${S.emergency?"Activado: leyendo solo de Zoho":"Desactivado"}</b><small style="display:block;color:var(--sub)">Solo la dueña del sistema puede moverlo.</small></div><button class="btn ${S.emergency?"pri":"danger"}" id="btnEm">${S.emergency?"Volver a Temis y Zoho":"Leer solo de Zoho"}</button></div>
+    ${S.log.length?`<ul class="hist">${S.log.map(([d,m])=>`<li><time>${d}</time><span>${esc(m)}</span></li>`).join("")}</ul>`:""}
+  </div></div>`;
+}
+
+/* ---------- Detalle ---------- */
+function nextActions(t){
+  if(t.cancel)return [];
+  const [e,s]=stOf(t),p=pathOf(t),i=t.step,A=[];
+  const nx=p[i+1];
+  if(e==="Esperando al cliente"){A.push(["approve",s==="Cotización"?"El cliente aprobó la cotización":"El cliente aprobó el prototipo","pri"]);A.push(["adjust","El cliente pidió ajustes",""])}
+  else if(e==="En calidad"){A.push(["next","Pasa calidad","pri"]);A.push(["back","Regresar a desarrollo",""])}
+  else if(nx){A.push(["next","Pasar a "+nx[0]+(nx[1]?" · "+nx[1]:""),"pri"])}
+  if(!CLOSED.includes(e))A.push(["cancel","Cancelar ticket","danger"]);
+  return A;
+}
+function renderDet(){
+  if(!S.open){$("#detSlot").innerHTML="";return}
+  const t=tk(S.open),[tl]=TIPOS[t.tipo],p=pathOf(t),closed=CLOSED.includes(stOf(t)[0]);
+  const pathHtml=p.map((x,i)=>`<span class="${t.cancel?"":i<t.step?"done":i===t.step?"cur":""}">${x[0]}${x[1]?" · "+x[1]:""}</span>`).join('<em>›</em>')+(t.cancel?'<em>›</em><span class="cur" style="background:var(--bad)">Cancelado</span>':"");
+  const persons=Object.keys(PEOPLE).filter(n=>runSec(t,n)>0||Object.values(t.resp).includes(n));
+  $("#detSlot").innerHTML=`<div class="det-bg" data-closebg="1"><div class="det" id="det" role="dialog" aria-label="Detalle del ticket #${t.id}">
+   <div class="det-h"><div><span class="folio">Desk #${t.id}</span> ${stPill(t)}<h3>${esc(t.titulo)}</h3></div><button class="x" data-close="1" aria-label="Cerrar">×</button></div>
+   <div class="sec" id="secDatos"><h4>Datos</h4><div class="kv">
+     <div><label for="dTipo">Tipo</label><select id="dTipo">${Object.entries(TIPOS).map(([k,[l]])=>`<option value="${k}" ${k===t.tipo?"selected":""}>${l}</option>`).join("")}</select></div>
+     <div><label for="dPrio">Prioridad</label><select id="dPrio">${["Urgente","Alta","Media","Baja"].map(x=>`<option ${x===t.prio?"selected":""}>${x}</option>`).join("")}</select></div>
+     <div><label>Cliente</label><div>${esc(t.cliente)}</div></div><div><label>Módulo</label><div>${esc(t.modulo)}</div></div>
+     <div><label for="dVer">Versión</label><input id="dVer" value="${esc(t.ver)}" placeholder="Ej. 8.4.13"></div>
+     <div id="secFecha"><label>Entrega al cliente</label><div style="display:flex;gap:8px;align-items:center"><span class="mono ${lateDate(t.fecha)&&!closed?"late":""}">${t.fecha||"Sin fecha"}</span><button class="link" data-fecha="1">${t.fecha?"Mover":"Poner fecha"}</button></div></div>
+   </div></div>
+   <div class="sec" id="secEstatus"><h4>Estatus</h4><div class="path">${pathHtml}</div>
+     ${t.reb?`<div style="font-size:12px;color:var(--bad)">Regresó de calidad ${t.reb} ${t.reb===1?"vez":"veces"}</div>`:""}
+     <div class="acts" id="acts">${nextActions(t).map(([k,l,c])=>`<button class="btn ${c}" data-act="${k}">${l}</button>`).join("")||'<span style="color:var(--sub)">Ticket cerrado.</span>'}</div></div>
+   <div class="sec" id="secResp"><h4>Responsables</h4><div class="people">${ROLES.map(([k,l,c])=>`<div class="person"><span class="avatar sm ${c}">${t.resp[k]?PEOPLE[t.resp[k]].ini:"?"}</span><div style="flex:1;min-width:0"><span class="rl">${l}</span><select data-resp="${k}" aria-label="${l}"><option value="">Sin asignar</option>${Object.entries(PEOPLE).filter(([,i])=>i.rol===l||(k==="analista"&&i.rol==="Analista")).map(([n])=>`<option ${t.resp[k]===n?"selected":""}>${n}</option>`).join("")}</select></div></div>`).join("")}</div></div>
+   <div class="sec" id="secTiempo"><h4>Tiempo</h4><div class="tlist">
+     ${persons.length?persons.map(n=>{const run=(n===ME&&S.timer&&S.timer.id===t.id)||(S.others[n]&&S.others[n].id===t.id);return `<div class="trow"><span class="avatar sm">${PEOPLE[n].ini}</span><div class="nm">${esc(n)}<small>${PEOPLE[n].rol}${run?" · corriendo ahora":""}</small></div><span class="hr mono" data-pt="${esc(n)}">${fmt(runSec(t,n))}</span>${n===ME?`${closed?"":`<button class="rowtimer ${run?"run":""}" data-timer="${t.id}">${run?PAUSE+" Pausar":PLAY+" Iniciar"}</button>`}<button class="link" data-fix="1">Corregir</button>`:""}</div>`}).join(""):'<div style="color:var(--sub)">Nadie ha registrado tiempo.</div>'}
+     <div style="font-size:12px;color:var(--sub)">Total: <b class="mono" style="color:var(--ink)" data-total="${t.id}">${fmtH(totalSec(t))}</b></div></div></div>
+   <div class="sec" id="secInc"><h4>Incidencias de calidad</h4>${t.inc.length?t.inc.map(([d,m])=>`<div class="inc"><small><span class="src">SPD</span> ${esc(d)}</small>${esc(m)}</div>`).join(""):'<div style="color:var(--sub)">Sin incidencias de la Segunda Vuelta.</div>'}</div>
+   <div class="sec"><h4>Historial de la fecha de entrega</h4>${t.fh.length?`<ul class="hist">${t.fh.map(([d,m,w])=>`<li><time>${d}</time><span>${esc(m)} · ${esc(w)}</span></li>`).join("")}</ul>`:'<div style="color:var(--sub)">Sin cambios.</div>'}</div>
+   <div class="sec"><h4>Historial</h4><ul class="hist">${t.hist.map(([d,m])=>`<li><time>${d}</time><span>${esc(m)}</span></li>`).join("")}</ul></div>
+  </div></div>`;
+}
+
+/* ---------- Acciones ---------- */
+function addHist(t,m){t.hist.unshift([now(),m])}
+function startTimer(id){
+  const t=tk(id);
+  if(S.timer&&S.timer.id===id){pauseTimer("Pausaste tu timer de #"+id);return}
+  let msg="Iniciaste tu timer en #"+id;
+  if(S.timer){const prev=tk(S.timer.id);prev.t[ME]=runSec(prev,ME);msg="Pausamos #"+prev.id+" y arrancamos #"+id+". Solo puede correr un timer a la vez."}
+  S.timer={id,since:Date.now()};
+  if(S.banner&&S.banner.kind==="in")S.banner=null;
+  toast(msg);render();
+}
+function pauseTimer(msg){if(!S.timer)return;const t=tk(S.timer.id);t.t[ME]=runSec(t,ME);S.timer=null;toast(msg);render()}
+function stopTimersFor(t){
+  let stopped=false;
+  if(S.timer&&S.timer.id===t.id){t.t[ME]=runSec(t,ME);S.timer=null;stopped=true}
+  Object.keys(S.others).forEach(p=>{const o=S.others[p];if(o&&o!=="vac"&&o.id===t.id){t.t[p]=(t.t[p]||0)+(Date.now()-o.since)/1000;S.others[p]=null;stopped=true}});
+  return stopped;
+}
+function setStep(t,i,msg){
+  t.step=i;const e=stOf(t)[0];addHist(t,ME+" "+msg);
+  let extra="";
+  if(CLOSED.includes(e)&&stopTimersFor(t))extra=" Los timers de este ticket se detuvieron.";
+  toast("#"+t.id+": "+msg+"."+extra);render();
+}
+function doAct(k){
+  const t=tk(S.open),p=pathOf(t),[e,s]=stOf(t);
+  if(k==="next"){
+    const nx=p[t.step+1];
+    if(nx[0]==="Por liberar"&&!t.ver){toast("Captura la versión antes de pasar a Por liberar.");document.getElementById("dVer").focus();return}
+    setStep(t,t.step+1,"pasó a "+nx[0]+(nx[1]?" · "+nx[1]:""));
+  }
+  if(k==="approve")setStep(t,t.step+1,s==="Cotización"?"registró que el cliente aprobó la cotización":"registró que el cliente aprobó el prototipo");
+  if(k==="adjust")setStep(t,t.step-1,"regresó a En análisis · "+s+" porque el cliente pidió ajustes");
+  if(k==="back"){t.reb++;setStep(t,p.findIndex(x=>x[0]==="En desarrollo"),"lo regresó a desarrollo desde calidad")}
+  if(k==="cancel")confirmBox("Cancelar ticket #"+t.id,"El ticket se marca como Cancelado y se detienen sus timers. Esta acción queda en el historial.","Cancelar ticket",()=>{t.cancel=true;addHist(t,ME+" canceló el ticket");stopTimersFor(t);toast("#"+t.id+" cancelado. Los timers se detuvieron.");render()});
+}
+function changeTipo(v){
+  const t=tk(S.open),[e]=stOf(t),np=v==="error"?P_ERR:P_COT;
+  let i=np.findIndex(x=>x[0]===e&&(!x[1]||x[1]===stOf(t)[1]));
+  if(i<0)i=np.findIndex(x=>x[0]===e);
+  if(i<0)i=1;
+  const old=TIPOS[t.tipo][0];t.tipo=v;t.step=i;addHist(t,ME+" cambió el tipo de "+old+" a "+TIPOS[v][0]);
+  toast("Tipo cambiado a "+TIPOS[v][0]+". Estatus: "+stOf(t).join(" · "));render();
+}
+
+/* ---------- Modales ---------- */
+function modal(html){$("#modSlot").innerHTML=`<div class="mod-bg" data-modbg="1"><div class="mod" role="dialog">${html}</div></div>`}
+function closeModal(){$("#modSlot").innerHTML=""}
+function confirmBox(title,msg,okLabel,ok){
+  modal(`<div class="mod-h">${esc(title)}</div><div class="mod-b"><p style="margin:0">${esc(msg)}</p></div><div class="mod-f"><button class="btn" data-mclose="1">No, regresar</button><button class="btn pri" id="mOk">${esc(okLabel)}</button></div>`);
+  $("#mOk").onclick=()=>{closeModal();ok()};
+}
+function fechaModal(){
+  const t=tk(S.open);
+  modal(`<div class="mod-h">${t.fecha?"Mover":"Poner"} fecha de entrega · #${t.id}</div><form class="mod-b" id="fForm" novalidate>
+    <div><label for="fNew">Nueva fecha</label><input id="fNew" type="date" value="2026-10-28"></div>
+    <div><label for="fWhy">Motivo${t.fecha?"":" (opcional)"}</label><textarea id="fWhy" rows="3" placeholder="Ej. el cliente agregó un caso nuevo"></textarea></div>
+    <div class="err" id="fErr" hidden></div></form>
+    <div class="mod-f"><button class="btn" data-mclose="1">Cancelar</button><button class="btn pri" id="fOk">Guardar fecha</button></div>`);
+  $("#fOk").onclick=()=>{
+    const v=$("#fNew").value,why=$("#fWhy").value.trim();
+    if(!v){$("#fErr").textContent="Elige la nueva fecha.";$("#fErr").hidden=false;return}
+    if(t.fecha&&!why){$("#fErr").textContent="Escribe el motivo del cambio; queda en el historial.";$("#fErr").hidden=false;return}
+    const [y,m,d]=v.split("-");const nf=d+"/"+m+"/"+y;
+    t.fh.push([now(),(t.fecha?"Cambió a ":"Se fijó ")+nf+(why?": "+why:""),ME]);t.fecha=nf;addHist(t,ME+" cambió la fecha de entrega a "+nf);
+    closeModal();toast("Fecha de entrega: "+nf);render();
+  };
+}
+function fixModal(){
+  const t=tk(S.open),cur=Math.round(runSec(t,ME)/60);
+  modal(`<div class="mod-h">Corregir mi tiempo · #${t.id}</div><form class="mod-b" novalidate>
+    <div><label>Tiempo actual</label><b class="mono">${fmtH(runSec(t,ME))}</b></div>
+    <div style="display:flex;gap:10px"><div style="flex:1"><label for="xH">Horas</label><input id="xH" type="number" min="0" value="${Math.floor(cur/60)}"></div><div style="flex:1"><label for="xM">Minutos</label><input id="xM" type="number" min="0" max="59" value="${cur%60}"></div></div>
+    <div><label for="xWhy">Motivo</label><textarea id="xWhy" rows="3" placeholder="Ej. olvidé prender el timer en la mañana"></textarea></div>
+    <div class="err" id="xErr" hidden></div></form>
+    <div class="mod-f"><button class="btn" data-mclose="1">Cancelar</button><button class="btn pri" id="xOk">Guardar corrección</button></div>`);
+  $("#xOk").onclick=()=>{
+    const h=Number($("#xH").value),m=Number($("#xM").value),why=$("#xWhy").value.trim();
+    if(!(h>=0&&m>=0&&m<60)){$("#xErr").textContent="Revisa las horas y los minutos: no se aceptan negativos y los minutos van de 0 a 59.";$("#xErr").hidden=false;return}
+    if(!why){$("#xErr").textContent="Escribe el motivo; queda registrado quién corrigió y cuánto había antes.";$("#xErr").hidden=false;return}
+    const before=fmtH(runSec(t,ME));
+    if(S.timer&&S.timer.id===t.id)S.timer.since=Date.now();
+    t.t[ME]=(h*60+m)*60;addHist(t,ME+" corrigió su tiempo de "+before+" a "+fmtH(t.t[ME])+": "+why);
+    closeModal();toast("Tiempo corregido. Quedó en el historial.");render();
+  };
+}
+function horarioModal(p){
+  const i=PEOPLE[p],[a,b]=i.h.split(" a ");
+  modal(`<div class="mod-h">Horario de ${esc(p)}</div><form class="mod-b" novalidate>
+    <div style="display:flex;gap:10px"><div style="flex:1"><label for="hIn">Entrada</label><input id="hIn" type="time" value="${a}"></div><div style="flex:1"><label for="hOut">Salida</label><input id="hOut" type="time" value="${b}"></div></div>
+    <div><label for="hDias">Días</label><select id="hDias"><option ${i.dias==="L a V"?"selected":""}>L a V</option><option ${i.dias==="L a S"?"selected":""}>L a S</option></select></div>
+    <div style="display:flex;gap:10px"><div style="flex:1"><label for="vIni">Vacaciones desde</label><input id="vIni" type="date"></div><div style="flex:1"><label for="vFin">Hasta</label><input id="vFin" type="date"></div></div>
+    <div class="err" id="hErr" hidden></div></form>
+    <div class="mod-f"><button class="btn" data-mclose="1">Cancelar</button><button class="btn pri" id="hOk">Guardar</button></div>`);
+  $("#hOk").onclick=()=>{
+    const x=$("#hIn").value,y=$("#hOut").value,vi=$("#vIni").value,vf=$("#vFin").value;
+    if(!x||!y||y<=x){$("#hErr").textContent="La hora de salida debe ser mayor a la de entrada.";$("#hErr").hidden=false;return}
+    if((vi&&!vf)||(!vi&&vf)||(vi&&vf&&vf<vi)){$("#hErr").textContent="Las vacaciones necesitan fecha de inicio y de fin, y el fin no puede ser antes del inicio.";$("#hErr").hidden=false;return}
+    i.h=x+" a "+y;i.dias=$("#hDias").value;
+    if(vi){const f=s=>s.split("-").reverse().join("/");i.vac=f(vi)+" al "+f(vf)}
+    closeModal();toast("Horario de "+p+" guardado.");render();
+  };
+}
+
+/* ---------- Documentación (ficha, especificación, notas) ---------- */
+function doc(html,center){$("#docSlot").innerHTML=`<div class="doc-bg ${center?"c":""}" data-docbg="1"><div class="doc ${center?"center":""}" role="dialog">${html}<button class="close" data-docclose="1">Cerrar</button></div></div>`}
+const li = a => a&&a.length?`<ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:'<p style="color:var(--sub)">Sin puntos.</p>';
+function showHU(k){const h=HU[k];doc(`<span class="chip-hu" style="align-self:flex-start">${k}</span><h3>${esc(h.t)}</h3>
+  <p><b>Como</b> ${esc(h.como)}, <b>quiero</b> ${esc(h.quiero)}, <b>para</b> ${esc(h.para)}.</p><p><b>Pantalla:</b> ${esc(h.pant)}</p>
+  <h5>Qué debe implementarse</h5>${li(h.impl)}<h5>Reglas de negocio</h5>${li(h.reglas)}<h5>Escenarios alternos</h5>${li(h.alt)}
+  <h5>Fuera de alcance o pendiente</h5>${li(h.fuera)}<h5>Depende de</h5><div style="display:flex;gap:6px">${h.dep.map(huTag).join("")||"Ninguna"}</div>`)}
+function showSpec(k){const s=SPEC[k];doc(`<h3>Especificación · ${esc(s.t)}</h3><p>${esc(s.obj)}</p><h5>Alcance relacionado</h5><div style="display:flex;gap:6px;flex-wrap:wrap">${s.hu.map(huTag).join("")}</div>
+  <h5>Datos que muestra</h5>${li(s.datos)}<h5>Acciones del usuario</h5>${li(s.acc)}<h5>Validaciones y reglas</h5>${li(s.val)}<h5>Estados</h5>${li(s.estados)}`,true)}
+function showNotas(){doc(`<h3>Notas del análisis</h3>
+  <h5>Decisiones cerradas</h5><ul>
+   <li>Un solo registro, el Ticket, con tipo Error del sistema, Cotización o Mejora. Sin HU ni subtareas.</li>
+   <li>Diez estatus en lugar de los 28 de Zoho. En análisis y Esperando al cliente llevan la etiqueta automática Cotización o Prototipo.</li>
+   <li>Los errores del sistema no pasan por Documentando; calidad los revisa y levanta las incidencias.</li>
+   <li>Una sola fecha de entrega al cliente, con historial de cambios.</li>
+   <li>Responsables por rol: Soporte, Analista, Desarrollo y Calidad.</li>
+   <li>Un solo timer corriendo por persona, sincronizado entre pestañas y dispositivos, que sigue corriendo aunque se cierre Temis.</li>
+   <li>Horario y vacaciones por persona como función nueva de Temis. Avisos solo al trabajador, por fases.</li>
+   <li>Los líderes ven en vivo quién trabaja en qué.</li>
+   <li>Migración de abiertos e histórico; las pantallas leen de Temis y Zoho a la vez durante la transición; el switch es solo freno de emergencia.</li>
+   <li>Las incidencias siguen en GM-SPD y se muestran dentro del ticket.</li>
+   <li>El ticket lleva el campo Versión.</li></ul>
+  <h5>Interpretaciones aplicadas</h5><ul>
+   <li>Esperando al cliente ofrece "pidió ajustes", que regresa a En análisis con la misma etiqueta. Se tomó del botón "Pidió ajustes" que ya existe en Seguimiento.</li>
+   <li>Si cambia el tipo, se conserva el estatus si existe en el nuevo camino; si no, el ticket regresa a En análisis.</li>
+   <li>La versión es obligatoria para pasar a Por liberar, porque el Calendario la usa para pintar lo liberado.</li>
+   <li>Los timers de un ticket se detienen al pasar a Liberado, Cerrado o Cancelado.</li>
+   <li>El aviso de salida solo avisa; no detiene el timer, porque se acordó que sigue corriendo.</li></ul>
+  <div class="pend"><h5 style="color:var(--warn);margin:0 0 6px">Pendiente de definir</h5><ul>
+   <li>En qué momento exacto se escala un ticket en Desk. Lo revisa Jaqueline; probablemente al tomar un estatus CH.</li>
+   <li>Si el ticket lleva comentarios y adjuntos, o se siguen haciendo en Desk.</li>
+   <li>Si se capturan las horas estimadas de la cotización para comparar contra las reales.</li>
+   <li>Si el líder puede corregir el tiempo de su equipo. En el mockup solo cada quien corrige el suyo.</li>
+   <li>Si un ticket pasa solo de Liberado a Cerrado a los 7 días hábiles. En el mockup se cierra a mano.</li></ul></div>`,true)}
+
+/* ---------- Simulación ---------- */
+function flashRow(id){const r=document.getElementById("row-"+id);if(r){r.classList.remove("flash");void r.offsetWidth;r.classList.add("flash")}}
+function simLive(){
+  const t=tk(48133);
+  if(stOf(t)[0]==="En calidad"){t.step=P_ERR.findIndex(x=>x[0]==="Por liberar");addHist(t,"Laura Méndez pasó a Por liberar");stopTimersFor(t)}
+  else{t.prio=t.prio==="Urgente"?"Alta":"Urgente";addHist(t,"Laura Méndez cambió la prioridad a "+t.prio)}
+  render();flashRow(48133);toast("Laura Méndez actualizó #48133. Lo ves al instante, sin recargar.");
+}
+function simPhone(){if(!S.timer){toast("No tienes un timer corriendo. Arranca uno primero.");return}const id=S.timer.id;const t=tk(id);t.t[ME]=runSec(t,ME);S.timer=null;render();toast("Pausaste #"+id+" desde tu celular. Esta pestaña ya lo refleja.")}
+function simDesk(){
+  if(tk(48241)){toast("El ticket #48241 ya llegó.");return}
+  S.tickets.unshift({id:48241,titulo:"El estado de cuenta no suma los abonos parciales",cliente:"Autotransportes Garza",modulo:"Cobranza",tipo:"error",prio:"Media",step:0,fecha:"",ver:"",resp:{soporte:"Paola Ibarra",analista:"",dev:"",qa:""},t:{},inc:[],hist:[[now(),"Llegó de Desk al escalarse a mantenimiento"]],fh:[],reb:0});
+  if(S.route!=="tickets")S.route="tickets";
+  S.filter="todos";render();flashRow(48241);toast("Llegó #48241 desde Desk.");
+}
+function teams(m){$("#teamsSlot").innerHTML=`<div style="font-size:11px;color:var(--sub);margin-bottom:4px">Así llega también por Teams:</div><div class="teams"><span class="lg">T</span><div><b>Temis</b><small>${now()}</small>${esc(m)}</div></div>`}
+function browserNot(t,m){$("#bnotSlot").innerHTML=`<div class="bnot" role="status"><span class="lg">T</span><div><b>${esc(t)}</b><small>Notificación del navegador</small>${esc(m)}</div></div>`;setTimeout(()=>{$("#bnotSlot").innerHTML=""},5000)}
+function simIn(){
+  if(S.timer){const t=tk(S.timer.id);t.t[ME]=runSec(t,ME);S.timer=null}
+  S.banner={kind:"in",t:"No has iniciado tu timer.",m:"Tu horario empezó a las 08:00.",act:"Iniciar en #48210"};
+  render();browserNot("No has iniciado tu timer","Tu horario empezó a las 08:00.");teams("Buenos días, Marco. Tu horario empezó a las 08:00 y no tienes timer corriendo.");
+}
+function simOut(){
+  if(!S.timer)S.timer={id:48210,since:Date.now()-3*3600*1000};
+  S.banner={kind:"out",t:"Tu timer sigue prendido.",m:"Tu horario terminó a las 17:30. Si ya terminaste, páusalo.",act:"Pausar timer"};
+  render();browserNot("Tu timer sigue prendido","Tu horario terminó a las 17:30.");teams("Marco, tu horario terminó a las 17:30 y tu timer de #48210 sigue corriendo.");
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click",e=>{
+  const g=k=>e.target.closest(k);
+  let el;
+  if(el=g("[data-hu]")){e.stopPropagation();showHU(el.dataset.hu);return}
+  if(el=g("[data-spec]")){showSpec(el.dataset.spec);return}
+  if(g("[data-docclose]")||e.target.matches("[data-docbg]")){$("#docSlot").innerHTML="";return}
+  if(g("[data-mclose]")||e.target.matches("[data-modbg]")){closeModal();return}
+  if(el=g("[data-go]")){S.route=el.dataset.go;S.open=null;render();return}
+  if(el=g("[data-f]")){S.filter=el.dataset.f;render();return}
+  if(g("[data-clear]")){S.filter="todos";S.q="";render();return}
+  if(el=g("[data-timer]")){e.stopPropagation();startTimer(Number(el.dataset.timer));return}
+  if(g("[data-pause]")){pauseTimer("Pausaste tu timer.");return}
+  if(el=g("[data-open]")){S.open=Number(el.dataset.open);renderDet();return}
+  if(g("[data-close]")||e.target.matches("[data-closebg]")){S.open=null;renderDet();return}
+  if(el=g("[data-act]")){doAct(el.dataset.act);return}
+  if(g("[data-fecha]")){fechaModal();return}
+  if(g("[data-fix]")){fixModal();return}
+  if(el=g("[data-edith]")){horarioModal(el.dataset.edith);return}
+  if(g("[data-bandis]")){S.banner=null;render();return}
+  if(g("[data-banact]")){const k=S.banner.kind;S.banner=null;if(k==="in")startTimer(48210);else pauseTimer("Pausaste tu timer.");return}
+  if(g("#btnEm")){const on=!S.emergency;confirmBox(on?"Leer solo de Zoho":"Volver a Temis y Zoho",on?"Calendario, Dashboard, Carga de trabajo, Kanban, Mis Tickets y Aeropuerto dejarán de leer de Temis hasta que lo regreses.":"Las pantallas vuelven a leer de Temis y de Zoho a la vez.",on?"Sí, leer solo de Zoho":"Sí, volver",()=>{S.emergency=on;S.log.unshift([now(),ME+(on?" activó el freno de emergencia":" desactivó el freno de emergencia")]);toast(on?"Las pantallas leen solo de Zoho.":"Las pantallas leen de Temis y Zoho.");render()});return}
+});
+document.addEventListener("change",e=>{
+  if(e.target.id==="dTipo")changeTipo(e.target.value);
+  if(e.target.id==="dPrio"){const t=tk(S.open);t.prio=e.target.value;addHist(t,ME+" cambió la prioridad a "+t.prio);toast("Prioridad: "+t.prio);render()}
+  if(e.target.id==="dVer"){const t=tk(S.open);t.ver=e.target.value.trim();addHist(t,ME+" puso la versión "+(t.ver||"vacía"));render()}
+  if(e.target.dataset.resp){const t=tk(S.open);t.resp[e.target.dataset.resp]=e.target.value;addHist(t,ME+" asignó "+(e.target.value||"nadie")+" como "+ROLES.find(r=>r[0]===e.target.dataset.resp)[1]);toast("Responsable actualizado.");render()}
+});
+document.addEventListener("input",e=>{if(e.target.id==="q"){S.q=e.target.value;const pos=e.target.selectionStart;renderBody();const q=$("#q");if(q){q.focus();q.setSelectionRange(pos,pos)}}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("#docSlot").innerHTML)$("#docSlot").innerHTML="";else if($("#modSlot").innerHTML)closeModal();else if(S.open){S.open=null;renderDet()}}});
+$("#btnNotas").onclick=showNotas;
+$("#btnSpec").onclick=()=>showSpec(S.open?"detalle":S.route);
+$("#simLive").onclick=simLive;$("#simPhone").onclick=simPhone;$("#simDesk").onclick=simDesk;$("#simIn").onclick=simIn;$("#simOut").onclick=simOut;
+$("#simReset").onclick=()=>{reset();$("#teamsSlot").innerHTML="";render();toast("Datos reiniciados.")};
+
+/* Reloj: actualiza solo los números, sin redibujar */
+setInterval(()=>{
+  const c=$("#tclock");if(c&&S.timer)c.textContent=fmt(runSec(tk(S.timer.id),ME));
+  document.querySelectorAll("[data-clock]").forEach(x=>x.textContent=fmt(runSec(tk(Number(x.dataset.clock)),ME)));
+  document.querySelectorAll("[data-total]").forEach(x=>x.textContent=fmtH(totalSec(tk(Number(x.dataset.total)))));
+  document.querySelectorAll("[data-live]").forEach(x=>{const p=x.dataset.live,s=p===ME?S.timer:S.others[p];if(s&&s!=="vac")x.textContent=fmt((Date.now()-s.since)/1000)});
+  if(S.open)document.querySelectorAll("[data-pt]").forEach(x=>x.textContent=fmt(runSec(tk(S.open),x.dataset.pt)));
+},1000);
+
+/* ---------- Recorrido de desarrollo ---------- */
+const TOUR=[
+  {hu:"A1",loc:"Temis › Tickets",t:"Un solo listado de tickets",b:["Reemplaza a Zoho Projects para mantenimiento.","Sin HU ni subtareas: cada fila es un ticket escalado de Desk.","Por default no salen Cerrados ni Cancelados."],sel:"#tbl",setup:()=>go("tickets")},
+  {hu:"A1",loc:"Temis › Tickets › Filtros",t:"Filtros en la fila del título",b:["Buscar por folio, título o cliente.","Míos, Errores, Cotizaciones y mejoras, Cerrados."],sel:"#filters",setup:()=>go("tickets")},
+  {hu:"A3",loc:"Temis › Barra superior",t:"Mi timer siempre visible",b:["Muestra el ticket y el tiempo corriendo.","Se pausa desde aquí, desde la fila o desde el detalle.","Es el mismo en todas las pestañas y dispositivos."],sel:"#tpill",setup:()=>go("tickets")},
+  {hu:"A3",loc:"Temis › Tickets › Míos › Fila #48120",t:"Solo un timer a la vez",b:["Al arrancar otro ticket, el anterior se pausa solo.","El aviso dice cuál se pausó y cuál arrancó."],sel:"#row-48120",setup:()=>{go("tickets");S.filter="mios";render()}},
+  {hu:"A1",loc:"Temis › Tickets › Detalle #48210",t:"El detalle se abre encima del listado",b:["Tipo, prioridad, versión y fecha de entrega.","El tipo se puede cambiar; lo pone analista o soporte."],sel:"#secDatos",setup:()=>{go("tickets");S.open=48210;renderDet()}},
+  {hu:"A2",loc:"Detalle #48152 › Estatus",t:"Camino de estatus con etiqueta",b:["Esperando al cliente lleva la etiqueta Prototipo porque la cotización ya se aprobó.","Dos salidas: el cliente aprobó o pidió ajustes."],sel:"#secEstatus",setup:()=>{go("tickets");S.open=48152;renderDet()}},
+  {hu:"A2",loc:"Detalle #48133 › Estatus",t:"Calidad aprueba o regresa",b:["Regresar a desarrollo suma un rebote.","El contador se ve en el detalle."],sel:"#acts",setup:()=>{go("tickets");S.open=48133;renderDet()}},
+  {hu:"A1",loc:"Detalle #48210 › Responsables",t:"Responsables por rol",b:["Soporte, Analista, Desarrollo y Calidad.","Cada cambio queda en el historial."],sel:"#secResp",setup:()=>{go("tickets");S.open=48210;renderDet()}},
+  {hu:"A3",loc:"Detalle #48210 › Tiempo",t:"Tiempo por persona y corrección",b:["Cada responsable lleva su propio tiempo.","Corregir pide motivo y guarda el valor anterior."],sel:"#secTiempo",setup:()=>{go("tickets");S.open=48210;renderDet()}},
+  {hu:"A7",loc:"Detalle #48210 › Incidencias",t:"Incidencias de la Segunda Vuelta",b:["Vienen de GM-SPD, de solo lectura.","SPD sigue siendo donde se registran."],sel:"#secInc",setup:()=>{go("tickets");S.open=48210;renderDet()}},
+  {hu:"A5",loc:"Temis › En vivo",t:"Quién trabaja en qué, en vivo",b:["Una tarjeta por persona con su timer corriendo.","Sin timer y de vacaciones se distinguen a simple vista."],sel:"#cards",setup:()=>go("envivo")},
+  {hu:"A4",loc:"Configuración › Horarios y avisos",t:"Horario por persona",b:["Función nueva de Temis.","De aquí salen los avisos de entrada y salida."],sel:"#hBox",setup:()=>go("horarios")},
+  {hu:"A4",loc:"Configuración › Horarios y avisos",t:"Avisos por fases",b:["Fase 1: Temis, navegador y Teams.","Fase 2 celular y fase 3 WhatsApp, deshabilitadas por ahora."],sel:"#avBox",setup:()=>go("horarios")},
+  {hu:"A6",loc:"Configuración › Origen de datos",t:"Transición sin romper pantallas",b:["Las pantallas leen de Temis y Zoho a la vez.","El switch es solo un freno de emergencia."],sel:"#switchBox",setup:()=>go("origen")}
+];
+let TI=-1;
+function go(r){S.route=r;S.open=null;S.filter=r==="tickets"?"todos":S.filter;$("#docSlot").innerHTML="";closeModal();render()}
+function tourShow(i){
+  TI=i;const s=TOUR[i];
+  document.querySelectorAll(".tour-spot").forEach(x=>x.classList.remove("tour-spot"));
+  s.setup();
+  const el=document.querySelector(s.sel);
+  if(el){el.classList.add("tour-spot");el.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"})}
+  $("#tourSlot").innerHTML=`<div class="tourbar" role="region" aria-label="Recorrido de desarrollo"><div class="in"><div class="txt"><div class="loc">Paso ${i+1} de ${TOUR.length} · ${esc(s.loc)} ${huTag(s.hu)}</div><b>${esc(s.t)}</b><ul>${s.b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="prog"><i style="width:${(i+1)/TOUR.length*100}%"></i></div></div>
+   <div style="display:flex;gap:8px"><button class="btn" id="tPrev" ${i===0?"disabled":""}>Anterior</button><button class="btn pri" id="tNext">${i===TOUR.length-1?"Terminar":"Siguiente"}</button><button class="btn" id="tExit">Salir del recorrido</button></div></div></div>`;
+  $("#tPrev").onclick=()=>tourShow(TI-1);
+  $("#tNext").onclick=()=>TI===TOUR.length-1?tourEnd():tourShow(TI+1);
+  $("#tExit").onclick=tourEnd;
+  $("#fab").hidden=true;$("#btnTourTop").textContent="Salir del recorrido";
+}
+function tourEnd(){TI=-1;document.querySelectorAll(".tour-spot").forEach(x=>x.classList.remove("tour-spot"));$("#tourSlot").innerHTML="";$("#fab").hidden=false;$("#btnTourTop").textContent="Recorrido de desarrollo"}
+$("#fab").onclick=()=>tourShow(0);
+$("#btnTourTop").onclick=()=>TI<0?tourShow(0):tourEnd();
+
+render();
+</script>
+
+</html>

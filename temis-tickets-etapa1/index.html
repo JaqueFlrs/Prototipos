@@ -20,7 +20,7 @@
   --spec:#2457c5; --spec-bg:#eef3fd;
   --f-ui:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-  --r:4px;
+  --r:10px; --rc:16px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --page:#18191b; --surface:#232427; --chrome:#2b2c30; --chrome-border:#3d3e43;
@@ -64,7 +64,7 @@ input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink);backgr
 .chip-hu:hover{filter:brightness(1.1)}
 
 /* Frame: shell real de gm-temis */
-.frame{border:1px solid var(--chrome-border);border-radius:6px;overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;min-height:640px;position:relative}
+.frame{border:1px solid var(--chrome-border);border-radius:var(--rc);overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;min-height:640px;position:relative}
 .side{width:206px;flex-shrink:0;background:var(--side);color:var(--side-fg);display:flex;flex-direction:column;padding:12px 0}
 .brand{display:flex;align-items:center;gap:9px;padding:2px 14px 14px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:6px}
 .brand .lg{width:28px;height:28px;border-radius:6px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800}
@@ -81,7 +81,7 @@ input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink);backgr
 .side-foot{margin-top:auto;padding:10px 16px 0;border-top:1px solid rgba(255,255,255,.14);color:var(--side-dim);font-size:11px}
 
 .main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--surface)}
-.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px;background:var(--chrome);border-bottom:1px solid var(--chrome-border)}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 20px;background:var(--chrome);border-bottom:1px solid var(--chrome-border)}
 .top h2{margin:0;font-size:16px;white-space:nowrap}
 .top .mid{flex:1;display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
 .top .right{display:flex;align-items:center;gap:10px;margin-left:auto}
@@ -101,7 +101,7 @@ input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink);backgr
 .tbtn.ghost{background:var(--muted-bg);color:var(--ink)}
 .tbtn svg{width:12px;height:12px;fill:currentColor}
 
-.body{padding:14px 16px;flex:1;min-width:0}
+.body{padding:18px 20px;flex:1;min-width:0}
 .banner{display:flex;gap:12px;align-items:center;border:1px solid var(--warn);background:var(--warn-bg);color:var(--ink);border-radius:var(--r);padding:9px 12px;margin-bottom:12px}
 .banner b{color:var(--warn)}
 .banner .sp{flex:1}
@@ -119,10 +119,10 @@ input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink);backgr
 .search{width:220px;max-width:100%}
 
 /* Tabla */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
-table{border-collapse:collapse;width:100%;min-width:960px}
-th{background:var(--chrome);color:var(--sub);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--rc)}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th{background:var(--surface);color:var(--sub);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
 tbody tr{cursor:pointer}
 tbody tr:hover td{background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
 tr.flash td{animation:flash 2.2s ease}
@@ -188,7 +188,7 @@ tr.flash td{animation:flash 2.2s ease}
 
 /* En vivo */
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.pc{border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.pc{border:1px solid var(--line);border-radius:var(--rc);padding:14px;display:flex;flex-direction:column;gap:10px}
 .pc.run{border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
 .pc .hd{display:flex;gap:10px;align-items:center}
 .pc .hd b{display:block}
@@ -201,7 +201,7 @@ tr.flash td{animation:flash 2.2s ease}
 
 /* Horarios / Origen */
 .grid2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;align-items:start}
-.box{border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.box{border:1px solid var(--line);border-radius:var(--rc);padding:14px;display:flex;flex-direction:column;gap:10px}
 .box h3{margin:0;font-size:14px}
 .box p{margin:0;color:var(--sub);font-size:12.5px}
 .opt{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
@@ -223,7 +223,7 @@ tr.flash td{animation:flash 2.2s ease}
 
 /* Modales (UI real) */
 .mod-bg{position:fixed;inset:0;background:rgba(10,10,14,.45);display:grid;place-items:center;z-index:60;padding:16px}
-.mod{background:var(--surface);border-radius:8px;box-shadow:var(--shadow);width:min(440px,100%);overflow:hidden}
+.mod{background:var(--surface);border-radius:var(--rc);box-shadow:var(--shadow);width:min(440px,100%);overflow:hidden}
 .mod-h{padding:14px 18px;font-weight:700;border-bottom:1px solid var(--line)}
 .mod-b{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
 .mod-b label{font-size:11.5px;color:var(--sub);display:block;margin-bottom:3px}
@@ -292,6 +292,62 @@ tr.flash td{animation:flash 2.2s ease}
   .search{width:100%}
   .tpill .tt{max-width:110px}
 }
+
+/* Detalle v2: ligero, sin cajas */
+.det{width:min(600px,100%)}
+.dh{padding:18px 22px 14px;display:flex;flex-direction:column;gap:10px;position:sticky;top:0;background:var(--surface);z-index:2;border-bottom:1px solid var(--line)}
+.dh-top{display:flex;align-items:center;gap:10px}
+.dh-top .x{margin-left:auto;border:0;background:none;font-size:22px;line-height:1;color:var(--sub)}
+.dh h3{margin:0;font-size:18px;line-height:1.3;text-wrap:balance}
+.dh-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dh-row .sp{flex:1}
+.clockbtn{display:flex;align-items:center;gap:10px;border:1px solid var(--chrome-border);background:var(--surface);border-radius:30px;padding:5px 14px 5px 5px}
+.clockbtn .cb{width:34px;height:34px;border-radius:50%;background:var(--muted-bg);display:grid;place-items:center;color:var(--ink)}
+.clockbtn .cb svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9}
+.clockbtn.run{border-color:var(--accent);background:var(--accent-soft)}
+.clockbtn.run .cb{background:var(--accent);color:#fff}
+.clockbtn small{display:block;font-size:10.5px;color:var(--sub);text-align:left}
+.clockbtn b{font-size:14px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.acts .lnk-cancel{margin-left:auto;border:0;background:none;color:var(--bad);font-size:12px;text-decoration:underline}
+.dsec{padding:16px 22px;display:flex;flex-direction:column;gap:12px}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 18px}
+.fields label{display:block;font-size:11px;color:var(--sub);margin-bottom:4px}
+.fields select,.fields input{width:100%;border-color:transparent;background:var(--muted-bg);border-radius:var(--r)}
+.fields .val{padding:6px 0;font-weight:500}
+.ms{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--muted-bg);border-radius:var(--r);padding:6px}
+.ms .pchip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border-radius:20px;padding:2px 4px 2px 2px;font-size:12px}
+.ms .pchip button{border:0;background:none;color:var(--sub);font-size:15px;line-height:1;padding:0 4px}
+.ms select{border:0;background:transparent;flex:1;min-width:150px;color:var(--sub)}
+.dtabs{display:flex;gap:4px;padding:0 22px;border-bottom:1px solid var(--line)}
+.dtabs button{border:0;background:none;padding:10px 12px;font-weight:600;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px}
+.dtabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
+.dtabs .n{font-size:11px;background:var(--muted-bg);border-radius:10px;padding:0 6px;margin-left:4px}
+.tabb{padding:16px 22px 26px;display:flex;flex-direction:column;gap:14px}
+.composer{display:flex;flex-direction:column;gap:8px;background:var(--muted-bg);border-radius:var(--rc);padding:12px}
+.composer textarea{border:0;background:transparent;resize:vertical;min-height:54px;padding:2px}
+.composer .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.composer .note{font-size:11px;color:var(--sub);margin-right:auto}
+.fchip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:12px}
+.fchip svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
+.fchip button{border:0;background:none;color:var(--sub);padding:0}
+.cmt{display:flex;gap:10px}
+.cmt .cb{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.cmt .who{font-size:12px}
+.cmt .who time{color:var(--sub);margin-left:6px;font-family:var(--f-mono);font-size:11px}
+.cmt p{margin:0;max-width:62ch}
+.cmt.spd .avatar{background:var(--qa)}
+.gf{border:1px solid var(--line);border-radius:var(--rc);overflow:hidden}
+.gf>button{width:100%;display:flex;gap:10px;align-items:center;border:0;background:var(--surface);padding:12px 14px;text-align:left}
+.gf>button small{display:block;color:var(--sub);font-size:11px}
+.gf>button .nm{flex:1;min-width:0}
+.gf>button .nm b{display:block;font-size:13px;overflow-wrap:anywhere}
+.gf pre{margin:0;padding:14px 16px;background:var(--muted-bg);font-family:var(--f-mono);font-size:12px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.gf pre .k{color:var(--dev);font-weight:600}
+.gf pre .c{color:var(--sub)}
+.gnote{font-size:12px;color:var(--sub)}
+.gnote a{color:var(--info)}
+@media (max-width:560px){.fields{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div class="proto-banner" style="background:#fffde7;border:1px solid #c8a800;border-radius:6px;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;max-width:1280px;margin:0 auto 14px;">
@@ -381,9 +437,45 @@ function seed(){
     {id:48071,titulo:"Exportar estado de cuenta a Excel",cliente:"Fletes Montemayor",modulo:"Cobranza",tipo:"mejora",prio:"Baja",step:9,fecha:"17/10/2026",ver:"8.4.11",resp:{soporte:"Paola Ibarra",analista:"Sofía Treviño",dev:"Diego Salas",qa:"Laura Méndez"},t:{"Diego Salas":7200,"Laura Méndez":1800,"Sofía Treviño":3000},inc:[],hist:[["17/10/2026 18:05","Se liberó en la versión 8.4.11"]],fh:[],reb:0}
   ];
 }
+const COMMENTS = {
+  48210:[{w:"Marco Ruiz",d:"20/10/2026 16:42",x:"Ya encontré la causa: se toma la fecha de captura y no la de timbrado. Mañana subo el cambio.",f:[]},
+         {w:"Sofía Treviño",d:"17/10/2026 09:05",x:"Lo reproduje con la factura F-20931 del cliente. Adjunto el XML y la captura.",f:[["F-20931.xml","38 KB"],["captura-tipo-cambio.png","412 KB"]]}],
+  48120:[{w:"Sofía Treviño",d:"20/10/2026 12:10",x:"El cliente firmó el prototipo. Adjunto el documento firmado.",f:[["Prototipo firmado 48120.pdf","1.2 MB"]]}],
+  48133:[{w:"Diego Salas",d:"19/10/2026 17:38",x:"Corregido el caso de dos registros patronales. Lo regreso a calidad.",f:[]}]
+};
+const GHERKIN = {
+  48210:[{file:"48210 Tipo de cambio en timbrado tardío.feature",path:"erp-mexico/facturacion/2026/Octubre",date:"16/10/2026 11:20",body:`# language: es
+Característica: Tipo de cambio al timbrar una factura en otro día
+
+  Escenario: Se timbra el mismo día de la captura
+    Dado una factura en dólares capturada el 15/10/2026
+    Cuando se timbra el 15/10/2026
+    Entonces se usa el tipo de cambio publicado para el 15/10/2026
+
+  Escenario: Se timbra un día después de la captura
+    Dado una factura en dólares capturada el 15/10/2026
+    Cuando se timbra el 16/10/2026
+    Entonces se usa el tipo de cambio publicado para el 16/10/2026`}],
+  48120:[{file:"48120-1 Configuración de la addenda de autopartes.feature",path:"erp-mexico/facturacion/backlog",date:"20/10/2026 13:02",body:`# language: es
+Característica: Configurar la addenda de autopartes por cliente
+
+  Escenario: Activar la addenda para un cliente
+    Dado un cliente sin addenda configurada
+    Cuando el usuario elige la addenda de autopartes y guarda
+    Entonces las facturas nuevas del cliente incluyen la addenda`},
+         {file:"48120-2 Validación del número de proveedor.feature",path:"erp-mexico/facturacion/backlog",date:"20/10/2026 13:04",body:`# language: es
+Característica: Número de proveedor obligatorio en la addenda
+
+  Escenario: Falta el número de proveedor
+    Dado un cliente con la addenda de autopartes activa
+    Cuando se intenta timbrar una factura sin número de proveedor
+    Entonces el sistema muestra "Captura el número de proveedor del cliente"`}]
+};
 let S;
 function reset(){
-  S = {tickets:seed(),route:"tickets",filter:"todos",q:"",open:null,
+  const tks=seed();
+  tks.forEach(t=>{t.resp=[...new Set(Object.values(t.resp).filter(Boolean))];t.c=(COMMENTS[t.id]||[]).map(c=>({...c}));t.g=GHERKIN[t.id]||[]});
+  S = {tickets:tks,route:"tickets",filter:"todos",q:"",open:null,tab:"comentarios",gOpen:null,files:[],
        timer:{id:48210,since:Date.now()-41*60*1000},
        others:{"Diego Salas":{id:48133,since:Date.now()-72*60*1000},"Laura Méndez":{id:48133,since:Date.now()-18*60*1000},"Sofía Treviño":{id:48177,since:Date.now()-55*60*1000},"Renata Lozano":null,"Iván Cordero":"vac","Paola Ibarra":null},
        banner:null,emergency:false,log:[]};
@@ -420,27 +512,28 @@ const PAUSE = '<svg viewBox="0 0 12 12"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9
 
 /* ---------- Alcance (fichas) ---------- */
 const HU = {
-  "A1":{t:"Ticket único con tipo",como:"analista o soporte",quiero:"un solo registro de trabajo por ticket escalado, con su tipo",para:"dejar de manejar HU y subtareas como en Zoho",pant:"Tickets y Detalle",impl:["Un solo tipo de registro: el Ticket. No existen HU ni subtareas.","Tipo: Error del sistema, Cotización o Mejora. Lo pone cualquier analista o soporte y se puede cambiar.","Campos: folio de Desk, título, cliente, módulo, prioridad, tipo, estatus, fecha de entrega al cliente y versión.","Responsables por rol: Soporte, Analista, Desarrollo y Calidad.","El ticket nace solo cuando Desk lo escala a mantenimiento."],reglas:["Una sola fecha de entrega al cliente para todos los tipos, con historial de cambios.","El campo Versión es obligatorio antes de pasar a Por liberar."],alt:["Si se cambia el tipo, el ticket conserva su estatus cuando existe en el nuevo camino; si no existe, regresa a En análisis."],fuera:["Comentarios y adjuntos: pendiente de definir.","Horas estimadas de la cotización: pendiente de definir."],dep:["A2","A6"]},
+  "A1":{t:"Ticket único con tipo",como:"analista o soporte",quiero:"un solo registro de trabajo por ticket escalado, con su tipo",para:"dejar de manejar HU y subtareas como en Zoho",pant:"Tickets y Detalle",impl:["Un solo tipo de registro: el Ticket. No existen HU ni subtareas.","Comentarios internos del equipo con documentos adjuntos. No se envían al cliente.","Tipo: Error del sistema, Cotización o Mejora. Lo pone cualquier analista o soporte y se puede cambiar.","Campos: folio de Desk, título, cliente, módulo, prioridad, tipo, estatus, fecha de entrega al cliente y versión.","Responsables: un solo campo de selección múltiple con cualquier persona del equipo.","El ticket nace solo cuando Desk lo escala a mantenimiento."],reglas:["Una sola fecha de entrega al cliente para todos los tipos, con historial de cambios.","El campo Versión es obligatorio antes de pasar a Por liberar."],alt:["Si se cambia el tipo, el ticket conserva su estatus cuando existe en el nuevo camino; si no existe, regresa a En análisis."],fuera:["Horas estimadas de la cotización: pendiente de definir."],dep:["A2","A6","A8"]},
   "A2":{t:"Diez estatus y dos caminos",como:"equipo de mantenimiento",quiero:"una lista corta de estatus",para:"saber en qué va cada ticket sin los 28 estatus de Zoho",pant:"Detalle del ticket",impl:["Estatus: Nuevo, En análisis, Esperando al cliente, Documentando, En desarrollo, En calidad, Por liberar, Liberado, Cerrado y Cancelado.","En análisis y Esperando al cliente muestran solos la etiqueta Cotización o Prototipo, según si el cliente ya aprobó la cotización.","Cotización o mejora: Nuevo, Análisis·Cotización, Esperando·Cotización, Análisis·Prototipo, Esperando·Prototipo, Documentando, Desarrollo, Calidad, Por liberar, Liberado, Cerrado.","Error del sistema: Nuevo, Análisis, Desarrollo, Calidad, Por liberar, Liberado, Cerrado. No pasa por Documentando."],reglas:["Esperando al cliente ofrece dos salidas: el cliente aprobó o pidió ajustes, que regresa a En análisis con la misma etiqueta.","En calidad ofrece dos salidas: pasa calidad o regresar a desarrollo, que suma un rebote.","Cancelar está disponible antes de Liberado y pide confirmación."],alt:["Un rebote se cuenta cuando el ticket pasa de En calidad o un estatus posterior a En análisis o En desarrollo."],fuera:["Paso automático de Liberado a Cerrado a los 7 días hábiles: pendiente de definir."],dep:["A1","A5"]},
-  "A3":{t:"Timer por persona",como:"responsable de un ticket",quiero:"medir mi tiempo con un botón",para:"tener horas reales sin capturarlas a mano en Zoho",pant:"Barra superior, Tickets y Detalle",impl:["Cada responsable lleva su propio tiempo en cualquier ticket.","Solo un timer corriendo por persona: al arrancar otro, el anterior se pausa solo y se avisa.","El mismo timer se ve y se controla igual desde cualquier pestaña, equipo o celular.","Sigue corriendo aunque se cierre Temis.","Se detiene solo si el ticket pasa a Liberado, Cerrado o Cancelado.","Corrección manual con motivo obligatorio; queda quién cambió, cuándo y el valor anterior."],reglas:["Si el timer cruza la medianoche, el tiempo se reparte por día para los reportes.","En un ticket Liberado, Cerrado o Cancelado no se puede arrancar el timer."],alt:["Si se pausa desde otro dispositivo, todas las pestañas lo reflejan al instante."],fuera:["Si el líder puede corregir el tiempo de su equipo: pendiente de definir."],dep:["A4","A5"]},
+  "A3":{t:"Timer por persona",como:"responsable de un ticket",quiero:"medir mi tiempo con un botón",para:"tener horas reales sin capturarlas a mano en Zoho",pant:"Barra superior y encabezado del ticket",impl:["Un solo reloj en el ticket. Quien lo prende queda registrado, sea o no responsable.","Cada persona ve solo su propio tiempo en ese ticket.","Solo un timer corriendo por persona: al arrancar otro, el anterior se pausa solo y se avisa.","El mismo timer se ve y se controla igual desde cualquier pestaña, equipo o celular.","Sigue corriendo aunque se cierre Temis.","Se detiene solo si el ticket pasa a Liberado, Cerrado o Cancelado.","Corrección manual con motivo obligatorio; queda quién cambió, cuándo y el valor anterior."],reglas:["Si el timer cruza la medianoche, el tiempo se reparte por día para los reportes.","En un ticket Liberado, Cerrado o Cancelado no se puede arrancar el timer."],alt:["Si se pausa desde otro dispositivo, todas las pestañas lo reflejan al instante."],fuera:["Si el líder puede corregir el tiempo de su equipo: pendiente de definir."],dep:["A4","A5"]},
   "A4":{t:"Horario y avisos",como:"trabajador de mantenimiento",quiero:"que Temis me avise si olvidé prender o apagar el timer",para:"que las horas registradas sean reales",pant:"Configuración · Horarios y avisos",impl:["Horario y vacaciones por persona, como función nueva de Temis.","Aviso al entrar si a la hora de entrada no tiene timer corriendo.","Aviso al salir si a la hora de salida sigue corriendo.","Los avisos llegan solo al trabajador. En vacaciones y días festivos no salen.","Fase 1: dentro de Temis, notificación del navegador y mensaje de Teams. Fase 2: Temis instalable en el celular. Fase 3: WhatsApp."],reglas:["El aviso de entrada sale una sola vez por día.","El aviso de salida no detiene el timer; solo avisa."],alt:[],fuera:["Fases 2 y 3 de avisos."],dep:["A3"]},
   "A5":{t:"Tiempo real y vista de líderes",como:"líder de equipo",quiero:"ver en vivo quién trabaja en qué",para:"conocer la carga real sin preguntar",pant:"En vivo y todas las pantallas",impl:["Cualquier cambio en un ticket lo ven todos al instante, sin recargar.","Varias pestañas y sesiones de la misma persona quedan sincronizadas.","La pantalla En vivo muestra a cada persona: ticket en el que trabaja, tiempo corriendo, sin timer o de vacaciones."],reglas:["Si dos personas cambian el mismo ticket a la vez, gana el último cambio, ambos lo ven y queda en el historial.","La pantalla En vivo requiere un permiso nuevo de líder."],alt:["Si se pierde la conexión, la pantalla lo indica y se pone al día al reconectar."],fuera:[],dep:["A3"]},
   "A6":{t:"Transición desde Zoho",como:"dueña del sistema",quiero:"pasar de Zoho a Temis sin que se caigan las pantallas",para:"que Calendario, Dashboard, Carga de trabajo y Aeropuerto sigan funcionando",pant:"Configuración · Origen de datos",impl:["Al arrancar se migran de Projects los tickets abiertos con su estatus convertido, y también el histórico.","Desde ese día mantenimiento captura solo en Temis; Projects queda como consulta.","Durante la transición las pantallas leen de Temis y de Zoho a la vez: lo que ya vive en Temis sale de Temis, lo demás de Zoho.","El switch queda solo como freno de emergencia para volver a leer únicamente de Zoho."],reglas:["Solo la dueña del sistema puede mover el switch, con confirmación.","Los tickets nacen en Temis cuando Desk los escala; Desk sigue en Zoho hasta la etapa 2."],alt:["Si un ticket se cierra en Desk pero sigue abierto en Temis, se marca para revisión; no se cierra solo."],fuera:["Momento exacto en que Desk escala un ticket: pendiente de confirmar."],dep:["A1","A2"]},
-  "A7":{t:"Incidencias de SPD",como:"calidad",quiero:"que las incidencias de la Segunda Vuelta se vean en el ticket",para:"no matar el proyecto SPD ni capturar dos veces",pant:"Detalle del ticket",impl:["Temis toma las incidencias de la Segunda Vuelta de GM-SPD y las muestra dentro del ticket que corresponde.","Se ven de solo lectura, con fecha y origen."],reglas:["SPD sigue siendo donde se registran."],alt:[],fuera:[],dep:["A2"]}
+  "A8":{t:"Análisis desde Git",como:"desarrollador o calidad",quiero:"ver el análisis en Gherkin dentro del ticket",para:"no buscar los archivos en el repositorio",pant:"Ticket · pestaña Análisis",impl:["Temis lee el repositorio ERP de GitHub y muestra los archivos .feature del ticket.","Se ven legibles, de solo lectura, con su carpeta y fecha de actualización, y una liga al repositorio.","Los archivos se relacionan por el folio del ticket al inicio del nombre."],reglas:["Los Gherkins se siguen escribiendo y guardando en Git como hoy."],alt:["Tickets migrados de Zoho: se buscan también los archivos de sus HU viejas, usando la relación que trae Zoho."],fuera:["Editar el Gherkin desde Temis."],dep:["A1"]},
+  "A7":{t:"Incidencias de SPD",como:"calidad",quiero:"que las incidencias de la Segunda Vuelta se vean en el ticket",para:"no matar el proyecto SPD ni capturar dos veces",pant:"Detalle del ticket",impl:["Temis toma las incidencias de la Segunda Vuelta de GM-SPD y las muestra en los comentarios del ticket.","Se ven de solo lectura, marcadas como SPD, con su fecha."],reglas:["SPD sigue siendo donde se registran."],alt:[],fuera:[],dep:["A2"]}
 };
 const huTag = k => `<button class="chip-hu" data-hu="${k}" title="${esc(HU[k].t)}">${k}</button>`;
 
 /* ---------- Especificación por pantalla ---------- */
 const SPEC = {
-  tickets:{t:"Tickets",obj:"Listado de todos los tickets de mantenimiento con su estatus, responsables, fecha de entrega y timer.",hu:["A1","A2","A3","A5"],datos:["Folio de Desk, título, cliente, módulo, tipo, estatus con etiqueta, responsables, fecha de entrega, versión y tiempo total."],acc:["Buscar por folio, título o cliente.","Filtrar: Todos, Míos, Errores, Cotizaciones y mejoras, Cerrados.","Arrancar o pausar mi timer desde la fila.","Clic en la fila abre el detalle encima del listado, sin cambiar de pantalla."],val:["Por default no se muestran Cerrados ni Cancelados; tienen su propio filtro.","La fecha vencida se pinta en rojo si el ticket no está Liberado, Cerrado o Cancelado.","El botón de timer no aparece en tickets Liberados, Cerrados o Cancelados, ni si no soy responsable."],estados:["Sin resultados: mensaje que dice qué filtro está activo y botón para quitarlo."]},
+  tickets:{t:"Tickets",obj:"Listado de todos los tickets de mantenimiento con su estatus, responsables, fecha de entrega y timer.",hu:["A1","A2","A3","A5"],datos:["Folio de Desk, título, cliente, módulo, prioridad, tipo, estatus con etiqueta, responsables y fecha de entrega al cliente."],acc:["Buscar por folio, título o cliente.","Filtrar: Todos, Míos, Errores, Cotizaciones y mejoras, Cerrados.","Clic en la fila abre el detalle encima del listado, sin cambiar de pantalla."],val:["Por default no se muestran Cerrados ni Cancelados; tienen su propio filtro.","La fecha vencida se pinta en rojo si el ticket no está Liberado, Cerrado o Cancelado."],estados:["Sin resultados: mensaje que dice qué filtro está activo y botón para quitarlo."]},
   envivo:{t:"En vivo",obj:"Que los líderes vean quién está trabajando en qué en este momento.",hu:["A5","A3"],datos:["Una tarjeta por persona: nombre, rol, ticket con timer corriendo y su tiempo, o Sin timer, o De vacaciones."],acc:["Clic en el ticket de una tarjeta abre su detalle."],val:["Solo visible con el permiso de líder."],estados:["Trabajando, Sin timer, De vacaciones."]},
   horarios:{t:"Horarios y avisos",obj:"Capturar el horario y vacaciones de cada persona y los canales de aviso del timer.",hu:["A4"],datos:["Persona, rol, horario, días laborales y vacaciones."],acc:["Editar horario y vacaciones de una persona.","Activar canales de aviso de la fase 1."],val:["La hora de salida debe ser mayor a la de entrada.","Las fases 2 y 3 se muestran deshabilitadas."],estados:[]},
   origen:{t:"Origen de datos",obj:"Ver el avance de la migración y de dónde lee cada pantalla durante la transición.",hu:["A6"],datos:["Avance de migración de tickets abiertos e histórico; origen por pantalla."],acc:["Freno de emergencia: volver a leer solo de Zoho, con confirmación."],val:["Solo la dueña del sistema puede usar el freno."],estados:["Leyendo de Temis y Zoho, Solo Zoho por emergencia."]},
-  detalle:{t:"Detalle del ticket",obj:"Ver y trabajar un ticket: tipo, estatus, responsables, fecha, versión, tiempo e incidencias.",hu:["A1","A2","A3","A7"],datos:["Todos los campos del ticket, camino de estatus, tiempo por persona, historial de fecha y de estatus, incidencias de SPD."],acc:["Cambiar tipo, prioridad y versión.","Avanzar estatus con los botones que permite el camino.","Asignar responsables por rol.","Mover la fecha de entrega con motivo.","Corregir mi tiempo con motivo."],val:["Pasar a Por liberar requiere versión.","Mover la fecha requiere motivo.","Corregir tiempo requiere motivo y no acepta negativos."],estados:["Al pasar a Liberado o Cancelado, los timers de ese ticket se detienen."]}
+  detalle:{t:"Detalle del ticket",obj:"Ver y trabajar un ticket sin saturar: encabezado con estatus y reloj, datos, responsables y tres pestañas.",hu:["A1","A2","A3","A7","A8"],datos:["Encabezado: folio, tipo, título, estatus actual, reloj con mi tiempo y botones del siguiente paso.","Datos: tipo, prioridad, versión, cliente, módulo y fecha de entrega.","Responsables en un solo campo múltiple.","Pestañas: Comentarios con adjuntos e incidencias de SPD, Análisis con los Gherkins de Git, Historial."],acc:["Prender o pausar mi reloj en el ticket.","Avanzar al siguiente estatus o cancelar.","Agregar o quitar responsables.","Comentar y adjuntar documentos.","Mover la fecha de entrega con motivo.","Corregir mi tiempo con motivo."],val:["Pasar a Por liberar requiere versión.","Mover la fecha requiere motivo.","Corregir tiempo requiere motivo y no acepta negativos."],estados:["Al pasar a Liberado, Cerrado o Cancelado, los relojes de ese ticket se detienen y ya no se muestra el reloj.","No se muestra el camino completo de estatus; solo el actual y el siguiente paso."]}
 };
 
 /* ---------- Render principal ---------- */
-function render(){renderScope();renderSide();renderTop();renderBody();renderDet()}
+function render(){const d=document.getElementById("det");if(d)renderDet.keep=d.scrollTop;renderScope();renderSide();renderTop();renderBody();renderDet()}
 function renderScope(){$("#scope").innerHTML='<span>Alcance aprobado:</span>'+Object.keys(HU).map(huTag).join("")}
 function renderSide(){
   const it=(r,ico,l,opt={})=>`<button class="nav ${S.route===r?"on":""} ${opt.off?"off":""}" ${opt.off?'aria-disabled="true" title="Existe hoy en Temis; no cambia en este mockup"':`data-go="${r}"`} id="nav-${r}">${svg(ico)}<span>${l}</span></button>`;
@@ -504,17 +597,15 @@ function viewTickets(){
   const rows=filtered();
   const labels={todos:"Todos",mios:"Míos",error:"Errores",cotmej:"Cotizaciones y mejoras",cerrados:"Cerrados"};
   if(!rows.length)return `<div class="tbl-wrap"><div class="empty">No hay tickets con el filtro <b>${labels[S.filter]}</b>${S.q?` y la búsqueda <b>${esc(S.q)}</b>`:""}.<br><br><button class="btn" data-clear="1">Quitar filtros</button></div></div>`;
-  return `<div class="tbl-wrap" id="tbl"><table><thead><tr><th>Folio</th><th>Ticket</th><th>Tipo</th><th>Estatus</th><th>Responsables</th><th>Entrega al cliente</th><th>Versión</th><th>Tiempo total</th><th>Mi timer</th></tr></thead><tbody>
+  return `<div class="tbl-wrap" id="tbl"><table><thead><tr><th>Folio</th><th>Ticket</th><th>Tipo</th><th>Estatus</th><th>Responsables</th><th>Entrega al cliente</th></tr></thead><tbody>
   ${rows.map(t=>{const [tl,col]=TIPOS[t.tipo];const late=lateDate(t.fecha)&&!CLOSED.includes(stOf(t)[0]);
     return `<tr data-open="${t.id}" id="row-${t.id}"><td class="folio">#${t.id}</td>
     <td class="tit">${esc(t.titulo)}<small>${esc(t.cliente)} · ${esc(t.modulo)} · ${esc(t.prio)}</small></td>
     <td><span class="tipo"><span class="dot" style="background:${col}"></span>${tl}</span></td>
     <td>${stPill(t)}</td>
-    <td><div class="resp">${ROLES.filter(([k])=>t.resp[k]).map(([k,l,c])=>`<span class="avatar sm ${c}" title="${l}: ${esc(t.resp[k])}">${PEOPLE[t.resp[k]].ini}</span>`).join("")||'<span style="color:var(--sub)">Sin asignar</span>'}</div></td>
+    <td><div class="resp">${t.resp.map(n=>`<span class="avatar sm ${roleClass(n)}" title="${esc(n)} · ${PEOPLE[n].rol}">${PEOPLE[n].ini}</span>`).join("")||'<span style="color:var(--sub)">Sin asignar</span>'}</div></td>
     <td class="mono ${late?"late":""}">${t.fecha||'<span style="color:var(--sub)">Sin fecha</span>'}</td>
-    <td class="mono">${t.ver||"—"}</td>
-    <td class="mono" data-total="${t.id}">${fmtH(totalSec(t))}</td>
-    <td>${rowTimer(t)}</td></tr>`}).join("")}
+</tr>`}).join("")}
   </tbody></table></div>`;
 }
 function viewLive(){
@@ -569,31 +660,63 @@ function nextActions(t){
   if(!CLOSED.includes(e))A.push(["cancel","Cancelar ticket","danger"]);
   return A;
 }
+const roleClass = n => ({Soporte:"r-sop",Analista:"r-ana",Desarrollo:"r-dev",Calidad:"r-qa"})[PEOPLE[n].rol];
+const CLOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 3h5M12 3v2"/></svg>';
+const CLIP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4L15 7.1"/></svg>';
+function gherkinHtml(b){return esc(b).split("\n").map(l=>/^\s*#/.test(l)?`<span class="c">${l}</span>`:l.replace(/^(\s*)(Característica|Escenario|Antecedentes|Dado|Cuando|Entonces|Y|Pero)\b/,'$1<span class="k">$2</span>')).join("\n")}
+function tabBody(t){
+  if(S.tab==="comentarios"){
+    const spd=t.inc.map(([d,m])=>({w:"SPD",d:d.replace("Segunda Vuelta · ",""),x:m,f:[],spd:1}));
+    const all=[...t.c,...spd].sort((a,b)=>{const k=s=>s.d.split(" ")[0].split("/").reverse().join("")+s.d.split(" ")[1];return k(b)<k(a)?-1:1});
+    return `<div class="composer" id="composer"><textarea id="cTxt" placeholder="Escribe un comentario para el equipo" aria-label="Comentario"></textarea>
+      ${S.files.length?`<div class="row">${S.files.map((f,i)=>`<span class="fchip">${CLIP}${esc(f[0])}<button data-rmfile="${i}" aria-label="Quitar">×</button></span>`).join("")}</div>`:""}
+      <div class="row"><span class="note">Solo lo ve el equipo. No se envía al cliente.</span>
+      <label class="btn" for="cFile" style="display:inline-flex;gap:6px;align-items:center">Adjuntar</label><input id="cFile" type="file" multiple hidden>
+      <button class="btn pri" id="cSend">Comentar</button></div></div>
+      ${all.length?all.map(c=>`<div class="cmt ${c.spd?"spd":""}"><span class="avatar sm ${c.spd?"":roleClass(c.w)}">${c.spd?"QA":PEOPLE[c.w].ini}</span><div class="cb"><div class="who"><b>${c.spd?"Incidencia de la Segunda Vuelta":esc(c.w)}</b>${c.spd?' <span class="src">SPD</span>':""}<time>${c.d}</time></div><p>${esc(c.x)}</p>${c.f.length?`<div class="row" style="display:flex;gap:6px;flex-wrap:wrap">${c.f.map(f=>`<span class="fchip">${CLIP}${esc(f[0])} <span style="color:var(--sub)">${f[1]}</span></span>`).join("")}</div>`:""}</div></div>`).join(""):'<p style="color:var(--sub);margin:0">Todavía no hay comentarios.</p>'}`;
+  }
+  if(S.tab==="analisis"){
+    const files=t.g;
+    return (files.length?files.map((g,i)=>`<div class="gf"><button data-g="${i}" aria-expanded="${S.gOpen===i}"><span class="nm"><b>${esc(g.file)}</b><small>${esc(g.path)} · actualizado ${g.date}</small></span><span style="color:var(--sub)">${S.gOpen===i?"Ocultar":"Ver"}</span></button>${S.gOpen===i?`<pre>${gherkinHtml(g.body)}</pre>`:""}</div>`).join("")
+      :`<p style="margin:0">Todavía no hay análisis para este ticket.</p>`)+
+      `<p class="gnote">Se leen del repositorio ERP en GitHub. Aparecen aquí los archivos .feature cuyo nombre empieza con el folio <b class="mono">${t.id}</b>. <a href="https://github.com/GM-Transport-Operaciones/ERP" target="_blank" rel="noopener">Abrir el repositorio</a></p>`;
+  }
+  const h=[...t.hist.map(([d,m])=>[d,m]),...t.fh.map(([d,m,w])=>[d,"Fecha de entrega: "+m+" · "+w])];
+  return `<ul class="hist">${h.map(([d,m])=>`<li><time>${d}</time><span>${esc(m)}</span></li>`).join("")}</ul>`;
+}
 function renderDet(){
   if(!S.open){$("#detSlot").innerHTML="";return}
-  const t=tk(S.open),[tl]=TIPOS[t.tipo],p=pathOf(t),closed=CLOSED.includes(stOf(t)[0]);
-  const pathHtml=p.map((x,i)=>`<span class="${t.cancel?"":i<t.step?"done":i===t.step?"cur":""}">${x[0]}${x[1]?" · "+x[1]:""}</span>`).join('<em>›</em>')+(t.cancel?'<em>›</em><span class="cur" style="background:var(--bad)">Cancelado</span>':"");
-  const persons=Object.keys(PEOPLE).filter(n=>runSec(t,n)>0||Object.values(t.resp).includes(n));
-  $("#detSlot").innerHTML=`<div class="det-bg" data-closebg="1"><div class="det" id="det" role="dialog" aria-label="Detalle del ticket #${t.id}">
-   <div class="det-h"><div><span class="folio">Desk #${t.id}</span> ${stPill(t)}<h3>${esc(t.titulo)}</h3></div><button class="x" data-close="1" aria-label="Cerrar">×</button></div>
-   <div class="sec" id="secDatos"><h4>Datos</h4><div class="kv">
+  const t=tk(S.open),[tl,col]=TIPOS[t.tipo],closed=CLOSED.includes(stOf(t)[0]),run=S.timer&&S.timer.id===t.id;
+  const acts=nextActions(t);
+  $("#detSlot").innerHTML=`<div class="det-bg" data-closebg="1"><div class="det" id="det" role="dialog" aria-label="Ticket #${t.id}">
+   <div class="dh" id="dHead">
+     <div class="dh-top"><span class="folio">#${t.id}</span><span class="tipo"><span class="dot" style="background:${col}"></span>${tl}</span><button class="x" data-close="1" aria-label="Cerrar">×</button></div>
+     <h3>${esc(t.titulo)}</h3>
+     <div class="dh-row">${stPill(t)}${t.reb?`<span style="font-size:12px;color:var(--bad)">Regresó de calidad ${t.reb} ${t.reb===1?"vez":"veces"}</span>`:""}<span class="sp"></span>
+       ${closed?"":`<button class="clockbtn ${run?"run":""}" id="dClock" data-timer="${t.id}" aria-label="${run?"Pausar":"Iniciar"} mi reloj en este ticket"><span class="cb">${run?PAUSE.replace("<svg","<svg style=\"fill:#fff;stroke:none;width:12px\""):CLOCK}</span><span><small>${run?"Corriendo · tu tiempo":"Tu tiempo"}</small><b class="mono" data-pt="${ME}">${fmt(runSec(t,ME))}</b></span></button>`}
+       <button class="link" data-fix="1">Corregir</button></div>
+     <div class="acts" id="dActs">${acts.filter(a=>a[0]!=="cancel").map(([k,l,c])=>`<button class="btn ${c}" data-act="${k}">${l}</button>`).join("")}${acts.some(a=>a[0]==="cancel")?'<button class="lnk-cancel" data-act="cancel">Cancelar ticket</button>':""}</div>
+   </div>
+   <div class="dsec" id="dDatos"><div class="fields">
      <div><label for="dTipo">Tipo</label><select id="dTipo">${Object.entries(TIPOS).map(([k,[l]])=>`<option value="${k}" ${k===t.tipo?"selected":""}>${l}</option>`).join("")}</select></div>
      <div><label for="dPrio">Prioridad</label><select id="dPrio">${["Urgente","Alta","Media","Baja"].map(x=>`<option ${x===t.prio?"selected":""}>${x}</option>`).join("")}</select></div>
-     <div><label>Cliente</label><div>${esc(t.cliente)}</div></div><div><label>Módulo</label><div>${esc(t.modulo)}</div></div>
      <div><label for="dVer">Versión</label><input id="dVer" value="${esc(t.ver)}" placeholder="Ej. 8.4.13"></div>
-     <div id="secFecha"><label>Entrega al cliente</label><div style="display:flex;gap:8px;align-items:center"><span class="mono ${lateDate(t.fecha)&&!closed?"late":""}">${t.fecha||"Sin fecha"}</span><button class="link" data-fecha="1">${t.fecha?"Mover":"Poner fecha"}</button></div></div>
-   </div></div>
-   <div class="sec" id="secEstatus"><h4>Estatus</h4><div class="path">${pathHtml}</div>
-     ${t.reb?`<div style="font-size:12px;color:var(--bad)">Regresó de calidad ${t.reb} ${t.reb===1?"vez":"veces"}</div>`:""}
-     <div class="acts" id="acts">${nextActions(t).map(([k,l,c])=>`<button class="btn ${c}" data-act="${k}">${l}</button>`).join("")||'<span style="color:var(--sub)">Ticket cerrado.</span>'}</div></div>
-   <div class="sec" id="secResp"><h4>Responsables</h4><div class="people">${ROLES.map(([k,l,c])=>`<div class="person"><span class="avatar sm ${c}">${t.resp[k]?PEOPLE[t.resp[k]].ini:"?"}</span><div style="flex:1;min-width:0"><span class="rl">${l}</span><select data-resp="${k}" aria-label="${l}"><option value="">Sin asignar</option>${Object.entries(PEOPLE).filter(([,i])=>i.rol===l||(k==="analista"&&i.rol==="Analista")).map(([n])=>`<option ${t.resp[k]===n?"selected":""}>${n}</option>`).join("")}</select></div></div>`).join("")}</div></div>
-   <div class="sec" id="secTiempo"><h4>Tiempo</h4><div class="tlist">
-     ${persons.length?persons.map(n=>{const run=(n===ME&&S.timer&&S.timer.id===t.id)||(S.others[n]&&S.others[n].id===t.id);return `<div class="trow"><span class="avatar sm">${PEOPLE[n].ini}</span><div class="nm">${esc(n)}<small>${PEOPLE[n].rol}${run?" · corriendo ahora":""}</small></div><span class="hr mono" data-pt="${esc(n)}">${fmt(runSec(t,n))}</span>${n===ME?`${closed?"":`<button class="rowtimer ${run?"run":""}" data-timer="${t.id}">${run?PAUSE+" Pausar":PLAY+" Iniciar"}</button>`}<button class="link" data-fix="1">Corregir</button>`:""}</div>`}).join(""):'<div style="color:var(--sub)">Nadie ha registrado tiempo.</div>'}
-     <div style="font-size:12px;color:var(--sub)">Total: <b class="mono" style="color:var(--ink)" data-total="${t.id}">${fmtH(totalSec(t))}</b></div></div></div>
-   <div class="sec" id="secInc"><h4>Incidencias de calidad</h4>${t.inc.length?t.inc.map(([d,m])=>`<div class="inc"><small><span class="src">SPD</span> ${esc(d)}</small>${esc(m)}</div>`).join(""):'<div style="color:var(--sub)">Sin incidencias de la Segunda Vuelta.</div>'}</div>
-   <div class="sec"><h4>Historial de la fecha de entrega</h4>${t.fh.length?`<ul class="hist">${t.fh.map(([d,m,w])=>`<li><time>${d}</time><span>${esc(m)} · ${esc(w)}</span></li>`).join("")}</ul>`:'<div style="color:var(--sub)">Sin cambios.</div>'}</div>
-   <div class="sec"><h4>Historial</h4><ul class="hist">${t.hist.map(([d,m])=>`<li><time>${d}</time><span>${esc(m)}</span></li>`).join("")}</ul></div>
+     <div><label>Cliente</label><div class="val">${esc(t.cliente)}</div></div>
+     <div><label>Módulo</label><div class="val">${esc(t.modulo)}</div></div>
+     <div><label>Entrega al cliente</label><div class="val"><span class="mono ${lateDate(t.fecha)&&!closed?"late":""}">${t.fecha||"Sin fecha"}</span> <button class="link" data-fecha="1">${t.fecha?"Mover":"Poner"}</button></div></div>
+   </div>
+   <div id="dResp"><label for="addResp" style="display:block;font-size:11px;color:var(--sub);margin-bottom:4px">Responsables</label>
+     <div class="ms">${t.resp.map(n=>`<span class="pchip"><span class="avatar sm ${roleClass(n)}">${PEOPLE[n].ini}</span>${esc(n)}<button data-rmresp="${esc(n)}" aria-label="Quitar a ${esc(n)}">×</button></span>`).join("")}
+     <select id="addResp"><option value="">Agregar persona…</option>${Object.keys(PEOPLE).filter(n=>!t.resp.includes(n)).map(n=>`<option value="${esc(n)}">${esc(n)} · ${PEOPLE[n].rol}</option>`).join("")}</select></div></div>
+   </div>
+   <div class="dtabs" id="dTabs" role="tablist">
+     <button role="tab" class="${S.tab==="comentarios"?"on":""}" data-tab="comentarios">Comentarios<span class="n">${t.c.length+t.inc.length}</span></button>
+     <button role="tab" class="${S.tab==="analisis"?"on":""}" data-tab="analisis">Análisis<span class="n">${t.g.length}</span></button>
+     <button role="tab" class="${S.tab==="historial"?"on":""}" data-tab="historial">Historial</button>
+   </div>
+   <div class="tabb" id="dTabBody">${tabBody(t)}</div>
   </div></div>`;
+  const d=$("#det");if(renderDet.keep!=null){d.scrollTop=renderDet.keep;renderDet.keep=null}
 }
 
 /* ---------- Acciones ---------- */
@@ -715,12 +838,15 @@ function showNotas(){doc(`<h3>Notas del análisis</h3>
    <li>Diez estatus en lugar de los 28 de Zoho. En análisis y Esperando al cliente llevan la etiqueta automática Cotización o Prototipo.</li>
    <li>Los errores del sistema no pasan por Documentando; calidad los revisa y levanta las incidencias.</li>
    <li>Una sola fecha de entrega al cliente, con historial de cambios.</li>
-   <li>Responsables por rol: Soporte, Analista, Desarrollo y Calidad.</li>
-   <li>Un solo timer corriendo por persona, sincronizado entre pestañas y dispositivos, que sigue corriendo aunque se cierre Temis.</li>
+   <li>Responsables en un solo campo de selección múltiple.</li>
+   <li>Comentarios solo internos, con documentos adjuntos.</li>
+   <li>El análisis se muestra desde los Gherkins del repositorio ERP en GitHub.</li>
+   <li>Un solo reloj en el ticket: quien lo prende queda registrado, aunque no sea responsable.</li>
+   <li>Un solo reloj corriendo por persona, sincronizado entre pestañas y dispositivos, que sigue corriendo aunque se cierre Temis.</li>
    <li>Horario y vacaciones por persona como función nueva de Temis. Avisos solo al trabajador, por fases.</li>
    <li>Los líderes ven en vivo quién trabaja en qué.</li>
    <li>Migración de abiertos e histórico; las pantallas leen de Temis y Zoho a la vez durante la transición; el switch es solo freno de emergencia.</li>
-   <li>Las incidencias siguen en GM-SPD y se muestran dentro del ticket.</li>
+   <li>Las incidencias siguen en GM-SPD y se muestran en los comentarios del ticket.</li>
    <li>El ticket lleva el campo Versión.</li></ul>
   <h5>Interpretaciones aplicadas</h5><ul>
    <li>Esperando al cliente ofrece "pidió ajustes", que regresa a En análisis con la misma etiqueta. Se tomó del botón "Pidió ajustes" que ya existe en Seguimiento.</li>
@@ -730,7 +856,7 @@ function showNotas(){doc(`<h3>Notas del análisis</h3>
    <li>El aviso de salida solo avisa; no detiene el timer, porque se acordó que sigue corriendo.</li></ul>
   <div class="pend"><h5 style="color:var(--warn);margin:0 0 6px">Pendiente de definir</h5><ul>
    <li>En qué momento exacto se escala un ticket en Desk. Lo revisa Jaqueline; probablemente al tomar un estatus CH.</li>
-   <li>Si el ticket lleva comentarios y adjuntos, o se siguen haciendo en Desk.</li>
+   <li>Nombrar los Gherkins nuevos con el folio del ticket. Es la propuesta usada en el mockup.</li>
    <li>Si se capturan las horas estimadas de la cotización para comparar contra las reales.</li>
    <li>Si el líder puede corregir el tiempo de su equipo. En el mockup solo cada quien corrige el suyo.</li>
    <li>Si un ticket pasa solo de Liberado a Cerrado a los 7 días hábiles. En el mockup se cierra a mano.</li></ul></div>`,true)}
@@ -746,7 +872,7 @@ function simLive(){
 function simPhone(){if(!S.timer){toast("No tienes un timer corriendo. Arranca uno primero.");return}const id=S.timer.id;const t=tk(id);t.t[ME]=runSec(t,ME);S.timer=null;render();toast("Pausaste #"+id+" desde tu celular. Esta pestaña ya lo refleja.")}
 function simDesk(){
   if(tk(48241)){toast("El ticket #48241 ya llegó.");return}
-  S.tickets.unshift({id:48241,titulo:"El estado de cuenta no suma los abonos parciales",cliente:"Autotransportes Garza",modulo:"Cobranza",tipo:"error",prio:"Media",step:0,fecha:"",ver:"",resp:{soporte:"Paola Ibarra",analista:"",dev:"",qa:""},t:{},inc:[],hist:[[now(),"Llegó de Desk al escalarse a mantenimiento"]],fh:[],reb:0});
+  S.tickets.unshift({id:48241,titulo:"El estado de cuenta no suma los abonos parciales",cliente:"Autotransportes Garza",modulo:"Cobranza",tipo:"error",prio:"Media",step:0,fecha:"",ver:"",resp:["Paola Ibarra"],c:[],g:[],t:{},inc:[],hist:[[now(),"Llegó de Desk al escalarse a mantenimiento"]],fh:[],reb:0});
   if(S.route!=="tickets")S.route="tickets";
   S.filter="todos";render();flashRow(48241);toast("Llegó #48241 desde Desk.");
 }
@@ -776,7 +902,12 @@ document.addEventListener("click",e=>{
   if(g("[data-clear]")){S.filter="todos";S.q="";render();return}
   if(el=g("[data-timer]")){e.stopPropagation();startTimer(Number(el.dataset.timer));return}
   if(g("[data-pause]")){pauseTimer("Pausaste tu timer.");return}
-  if(el=g("[data-open]")){S.open=Number(el.dataset.open);renderDet();return}
+  if(el=g("[data-open]")){S.open=Number(el.dataset.open);S.tab="comentarios";S.gOpen=null;S.files=[];renderDet();return}
+  if(el=g("[data-tab]")){S.tab=el.dataset.tab;S.gOpen=null;render();return}
+  if(el=g("[data-g]")){const i=Number(el.dataset.g);S.gOpen=S.gOpen===i?null:i;render();return}
+  if(el=g("[data-rmresp]")){const t=tk(S.open),n=el.dataset.rmresp;t.resp=t.resp.filter(x=>x!==n);addHist(t,ME+" quitó a "+n+" de responsables");toast(n+" ya no es responsable.");render();return}
+  if(el=g("[data-rmfile]")){S.files.splice(Number(el.dataset.rmfile),1);render();return}
+  if(g("#cSend")){const t=tk(S.open),x=$("#cTxt").value.trim();if(!x&&!S.files.length){toast("Escribe un comentario o adjunta un documento.");$("#cTxt").focus();return}t.c.unshift({w:ME,d:now(),x:x||"Adjuntó documentos.",f:S.files});S.files=[];toast("Comentario publicado. El equipo lo ve al instante.");render();return}
   if(g("[data-close]")||e.target.matches("[data-closebg]")){S.open=null;renderDet();return}
   if(el=g("[data-act]")){doAct(el.dataset.act);return}
   if(g("[data-fecha]")){fechaModal();return}
@@ -790,7 +921,8 @@ document.addEventListener("change",e=>{
   if(e.target.id==="dTipo")changeTipo(e.target.value);
   if(e.target.id==="dPrio"){const t=tk(S.open);t.prio=e.target.value;addHist(t,ME+" cambió la prioridad a "+t.prio);toast("Prioridad: "+t.prio);render()}
   if(e.target.id==="dVer"){const t=tk(S.open);t.ver=e.target.value.trim();addHist(t,ME+" puso la versión "+(t.ver||"vacía"));render()}
-  if(e.target.dataset.resp){const t=tk(S.open);t.resp[e.target.dataset.resp]=e.target.value;addHist(t,ME+" asignó "+(e.target.value||"nadie")+" como "+ROLES.find(r=>r[0]===e.target.dataset.resp)[1]);toast("Responsable actualizado.");render()}
+  if(e.target.id==="addResp"&&e.target.value){const t=tk(S.open),n=e.target.value;t.resp.push(n);addHist(t,ME+" agregó a "+n+" como responsable");toast(n+" agregado como responsable.");render()}
+  if(e.target.id==="cFile"){[...e.target.files].forEach(f=>S.files.push([f.name,f.size>1048576?(f.size/1048576).toFixed(1)+" MB":Math.max(1,Math.round(f.size/1024))+" KB"]));render()}
 });
 document.addEventListener("input",e=>{if(e.target.id==="q"){S.q=e.target.value;const pos=e.target.selectionStart;renderBody();const q=$("#q");if(q){q.focus();q.setSelectionRange(pos,pos)}}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("#docSlot").innerHTML)$("#docSlot").innerHTML="";else if($("#modSlot").innerHTML)closeModal();else if(S.open){S.open=null;renderDet()}}});
@@ -812,14 +944,13 @@ setInterval(()=>{
 const TOUR=[
   {hu:"A1",loc:"Temis › Tickets",t:"Un solo listado de tickets",b:["Reemplaza a Zoho Projects para mantenimiento.","Sin HU ni subtareas: cada fila es un ticket escalado de Desk.","Por default no salen Cerrados ni Cancelados."],sel:"#tbl",setup:()=>go("tickets")},
   {hu:"A1",loc:"Temis › Tickets › Filtros",t:"Filtros en la fila del título",b:["Buscar por folio, título o cliente.","Míos, Errores, Cotizaciones y mejoras, Cerrados."],sel:"#filters",setup:()=>go("tickets")},
-  {hu:"A3",loc:"Temis › Barra superior",t:"Mi timer siempre visible",b:["Muestra el ticket y el tiempo corriendo.","Se pausa desde aquí, desde la fila o desde el detalle.","Es el mismo en todas las pestañas y dispositivos."],sel:"#tpill",setup:()=>go("tickets")},
-  {hu:"A3",loc:"Temis › Tickets › Míos › Fila #48120",t:"Solo un timer a la vez",b:["Al arrancar otro ticket, el anterior se pausa solo.","El aviso dice cuál se pausó y cuál arrancó."],sel:"#row-48120",setup:()=>{go("tickets");S.filter="mios";render()}},
-  {hu:"A1",loc:"Temis › Tickets › Detalle #48210",t:"El detalle se abre encima del listado",b:["Tipo, prioridad, versión y fecha de entrega.","El tipo se puede cambiar; lo pone analista o soporte."],sel:"#secDatos",setup:()=>{go("tickets");S.open=48210;renderDet()}},
-  {hu:"A2",loc:"Detalle #48152 › Estatus",t:"Camino de estatus con etiqueta",b:["Esperando al cliente lleva la etiqueta Prototipo porque la cotización ya se aprobó.","Dos salidas: el cliente aprobó o pidió ajustes."],sel:"#secEstatus",setup:()=>{go("tickets");S.open=48152;renderDet()}},
-  {hu:"A2",loc:"Detalle #48133 › Estatus",t:"Calidad aprueba o regresa",b:["Regresar a desarrollo suma un rebote.","El contador se ve en el detalle."],sel:"#acts",setup:()=>{go("tickets");S.open=48133;renderDet()}},
-  {hu:"A1",loc:"Detalle #48210 › Responsables",t:"Responsables por rol",b:["Soporte, Analista, Desarrollo y Calidad.","Cada cambio queda en el historial."],sel:"#secResp",setup:()=>{go("tickets");S.open=48210;renderDet()}},
-  {hu:"A3",loc:"Detalle #48210 › Tiempo",t:"Tiempo por persona y corrección",b:["Cada responsable lleva su propio tiempo.","Corregir pide motivo y guarda el valor anterior."],sel:"#secTiempo",setup:()=>{go("tickets");S.open=48210;renderDet()}},
-  {hu:"A7",loc:"Detalle #48210 › Incidencias",t:"Incidencias de la Segunda Vuelta",b:["Vienen de GM-SPD, de solo lectura.","SPD sigue siendo donde se registran."],sel:"#secInc",setup:()=>{go("tickets");S.open=48210;renderDet()}},
+  {hu:"A3",loc:"Temis › Barra superior",t:"Mi timer siempre visible",b:["Muestra el ticket y el tiempo corriendo.","Se pausa desde aquí o desde el detalle.","Es el mismo en todas las pestañas y dispositivos."],sel:"#tpill",setup:()=>go("tickets")},
+  {hu:"A1",loc:"Temis › Tickets › Ticket #48210",t:"El ticket se abre encima del listado",b:["Sin cambiar de pantalla.","Arriba lo importante: estatus, reloj y siguiente paso."],sel:"#dHead",setup:()=>{go("tickets");S.open=48210;S.tab="comentarios";renderDet()}},
+  {hu:"A3",loc:"Ticket #48120 › Encabezado",t:"Un reloj en el ticket",b:["Quien lo prende queda registrado, aunque no sea responsable.","Solo ves tu propio tiempo. Si tenías otro corriendo, se pausa solo."],sel:"#dClock",setup:()=>{go("tickets");S.open=48120;S.tab="comentarios";renderDet()}},
+  {hu:"A2",loc:"Ticket #48152 › Encabezado",t:"Solo el estatus actual y el siguiente paso",b:["No se muestra el camino completo.","Esperando al cliente ofrece: aprobó o pidió ajustes. Cancelar queda aparte."],sel:"#dActs",setup:()=>{go("tickets");S.open=48152;S.tab="comentarios";renderDet()}},
+  {hu:"A1",loc:"Ticket #48210 › Datos",t:"Datos y responsables",b:["Tipo, prioridad, versión, cliente, módulo y fecha de entrega.","Responsables en un solo campo múltiple."],sel:"#dDatos",setup:()=>{go("tickets");S.open=48210;S.tab="comentarios";renderDet()}},
+  {hu:"A1",loc:"Ticket #48210 › Comentarios",t:"Comentarios internos con adjuntos",b:["Solo los ve el equipo; no se envían al cliente.","Las incidencias de la Segunda Vuelta de SPD aparecen aquí marcadas."],sel:"#dTabBody",setup:()=>{go("tickets");S.open=48210;S.tab="comentarios";renderDet()}},
+  {hu:"A8",loc:"Ticket #48120 › Análisis",t:"El análisis viene de Git",b:["Muestra los Gherkins del repositorio ERP cuyo nombre empieza con el folio.","Se leen aquí; se siguen escribiendo en Git."],sel:"#dTabBody",setup:()=>{go("tickets");S.open=48120;S.tab="analisis";S.gOpen=0;renderDet()}},
   {hu:"A5",loc:"Temis › En vivo",t:"Quién trabaja en qué, en vivo",b:["Una tarjeta por persona con su timer corriendo.","Sin timer y de vacaciones se distinguen a simple vista."],sel:"#cards",setup:()=>go("envivo")},
   {hu:"A4",loc:"Configuración › Horarios y avisos",t:"Horario por persona",b:["Función nueva de Temis.","De aquí salen los avisos de entrada y salida."],sel:"#hBox",setup:()=>go("horarios")},
   {hu:"A4",loc:"Configuración › Horarios y avisos",t:"Avisos por fases",b:["Fase 1: Temis, navegador y Teams.","Fase 2 celular y fase 3 WhatsApp, deshabilitadas por ahora."],sel:"#avBox",setup:()=>go("horarios")},

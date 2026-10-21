@@ -301,6 +301,18 @@ tr.flash td{animation:flash 2.2s ease}
 .dh h3{margin:0;font-size:18px;line-height:1.3;text-wrap:balance}
 .dh-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .dh-row .sp{flex:1}
+.stdd{position:relative}
+.stbtn{border:0;font-size:12.5px;padding:7px 14px;display:inline-flex;gap:8px;align-items:center}
+.stbtn .car{font-size:10px;opacity:.8}
+.stmenu{position:absolute;top:calc(100% + 6px);left:0;background:var(--surface);border:1px solid var(--chrome-border);border-radius:var(--rc);box-shadow:var(--shadow);min-width:280px;padding:6px;z-index:6;display:flex;flex-direction:column}
+.stmenu button{border:0;background:none;text-align:left;padding:8px 10px;border-radius:var(--r);display:flex;align-items:center;gap:8px;font-size:13px}
+.stmenu button:hover{background:var(--muted-bg)}
+.stmenu button.cur{font-weight:700}
+.stmenu .tagn{margin-left:auto;font-size:10.5px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);border-radius:10px;padding:1px 7px}
+.stmenu .chk{margin-left:auto;color:var(--ok);font-weight:700}
+.stmenu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+.stmenu .cx{color:var(--bad)}
+.stmenu .dotc{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .clockbtn{display:flex;align-items:center;gap:10px;border:1px solid var(--chrome-border);background:var(--surface);border-radius:30px;padding:5px 14px 5px 5px}
 .clockbtn .cb{width:34px;height:34px;border-radius:50%;background:var(--muted-bg);display:grid;place-items:center;color:var(--ink)}
 .clockbtn .cb svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9}
@@ -324,7 +336,7 @@ tr.flash td{animation:flash 2.2s ease}
 .dtabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
 .dtabs .n{font-size:11px;background:var(--muted-bg);border-radius:10px;padding:0 6px;margin-left:4px}
 .tabb{padding:16px 22px 26px;display:flex;flex-direction:column;gap:14px}
-.composer{display:flex;flex-direction:column;gap:8px;background:var(--muted-bg);border-radius:var(--rc);padding:12px}
+.composer{position:relative;display:flex;flex-direction:column;gap:8px;background:var(--muted-bg);border-radius:var(--rc);padding:12px}
 .composer textarea{border:0;background:transparent;resize:vertical;min-height:54px;padding:2px}
 .composer .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .composer .note{font-size:11px;color:var(--sub);margin-right:auto}
@@ -337,6 +349,11 @@ tr.flash td{animation:flash 2.2s ease}
 .cmt .who time{color:var(--sub);margin-left:6px;font-family:var(--f-mono);font-size:11px}
 .cmt p{margin:0;max-width:62ch}
 .cmt.spd .avatar{background:var(--qa)}
+.mention{color:var(--info);font-weight:600;background:var(--info-bg);border-radius:4px;padding:0 3px}
+.mlist{position:absolute;left:12px;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--chrome-border);border-radius:var(--rc);box-shadow:var(--shadow);padding:6px;z-index:7;min-width:240px;display:flex;flex-direction:column}
+.mlist button{border:0;background:none;display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--r);text-align:left;font-size:13px}
+.mlist button:hover,.mlist button.on{background:var(--muted-bg)}
+.mlist small{color:var(--sub);margin-left:auto;font-size:11px}
 .gf{border:1px solid var(--line);border-radius:var(--rc);overflow:hidden}
 .gf>button{width:100%;display:flex;gap:10px;align-items:center;border:0;background:var(--surface);padding:12px 14px;text-align:left}
 .gf>button small{display:block;color:var(--sub);font-size:11px}
@@ -348,6 +365,144 @@ tr.flash td{animation:flash 2.2s ease}
 .gnote{font-size:12px;color:var(--sub)}
 .gnote a{color:var(--info)}
 @media (max-width:560px){.fields{grid-template-columns:minmax(0,1fr)}}
+/* Mis tiempos */
+.tpill{position:relative}
+.startbtn{border:0;background:var(--accent);color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.startbtn svg{width:11px;height:11px;fill:currentColor}
+.spop{position:absolute;right:0;top:calc(100% + 6px);width:340px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--chrome-border);border-radius:var(--rc);box-shadow:var(--shadow);padding:8px;z-index:12;display:flex;flex-direction:column;gap:4px}
+.spop input{width:100%}
+.spop h6{margin:6px 6px 2px;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.spop button.it{border:0;background:none;text-align:left;padding:7px 8px;border-radius:var(--r);display:flex;gap:8px;align-items:center;font-size:12.5px;min-width:0}
+.spop button.it:hover{background:var(--muted-bg)}
+.spop button.it span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.spop .none{color:var(--sub);font-size:12px;padding:6px 8px}
+.wk{display:flex;align-items:center;gap:6px}
+.wk button{border:1px solid var(--chrome-border);background:var(--surface);border-radius:50%;width:28px;height:28px}
+.wk span{font-size:12.5px;font-weight:600;white-space:nowrap}
+.kpis{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:16px}
+.kpis div{display:flex;flex-direction:column}
+.kpis small{color:var(--sub);font-size:11.5px}
+.kpis b{font-size:20px;font-weight:600}
+.day{display:flex;flex-direction:column;margin-bottom:18px}
+.day-h{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 6px;border-bottom:1px solid var(--line)}
+.day-h b{font-size:13px}
+.day-h span{color:var(--sub);font-size:12px}
+.ent{display:grid;grid-template-columns:118px minmax(0,1fr) 92px 84px 70px;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
+.ent .what{min-width:0}
+.ent .what b{font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ent .what small{color:var(--sub);font-size:11.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ent .when{font-family:var(--f-mono);font-size:12px}
+.ent .dur{font-family:var(--f-mono);font-weight:600;text-align:right}
+.ent.live{background:color-mix(in srgb,var(--accent-soft) 55%,transparent);border-radius:var(--r)}
+.ochip{font-size:11px;font-weight:700;border-radius:20px;padding:2px 9px;justify-self:start;white-space:nowrap}
+.ochip.reloj{background:var(--muted-bg);color:var(--sub)}
+.ochip.manual{background:var(--info-bg);color:var(--info)}
+.ochip.editado{background:var(--warn-bg);color:var(--warn)}
+.ochip.curso{background:var(--accent-soft);color:var(--accent-ink)}
+.actchip{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;background:var(--dev-bg);color:var(--dev);margin-right:6px}
+.lock{font-size:11px;color:var(--sub)}
+.actrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.actrow:first-of-type{border-top:0}
+.actrow .nm{flex:1}
+.actrow .def{font-size:10.5px;color:var(--sub);margin-left:6px}
+.inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media (max-width:700px){.ent{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}.ent .when{grid-column:1}.ent .dur{grid-column:2;grid-row:1}}
+
+/* v4: Mis tickets, Kanban, Backlog, etiquetas, seguimiento, mascota, perfil */
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;border-radius:20px;padding:1px 8px;white-space:nowrap}
+.tag button{border:0;background:none;color:inherit;padding:0;font-size:13px;line-height:1}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.tg0{background:var(--info-bg);color:var(--info)}.tg1{background:var(--dev-bg);color:var(--dev)}.tg2{background:var(--qa-bg);color:var(--qa)}
+.tg3{background:var(--warn-bg);color:var(--warn)}.tg4{background:var(--ok-bg);color:var(--ok)}.tg5{background:var(--accent-soft);color:var(--accent-ink)}
+.origin{font-size:11.5px;color:var(--sub)}
+.grp{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.grp-h{display:flex;align-items:baseline;gap:8px}
+.grp-h h3{margin:0;font-size:14px}
+.grp-h span{color:var(--sub);font-size:12px}
+.tcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tcard{border:1px solid var(--line);border-radius:var(--rc);padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--surface);cursor:pointer;text-align:left}
+.tcard:hover{border-color:var(--accent)}
+.tcard .tt{font-weight:600;line-height:1.35}
+.tcard .ft{display:flex;align-items:center;gap:8px;justify-content:space-between;font-size:12px;color:var(--sub)}
+.nudge{font-size:12px;color:var(--accent-ink);background:var(--accent-soft);border-radius:10px;padding:6px 10px}
+.kb{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.kcol{flex:0 0 250px;background:var(--muted-bg);border-radius:var(--rc);padding:10px;display:flex;flex-direction:column;gap:8px;min-height:360px}
+.kcol.over{outline:2px dashed var(--accent);outline-offset:-2px}
+.kcol-h{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:12.5px;padding:2px 4px}
+.kcol-h span{font-weight:500;color:var(--sub)}
+.kcard{background:var(--surface);border-radius:12px;padding:10px 11px;display:flex;flex-direction:column;gap:6px;cursor:grab;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.kcard.drag{opacity:.45}
+.kcard .tt{font-size:12.5px;font-weight:600;line-height:1.3}
+.kcard .ft{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--sub)}
+.kcard .run{color:var(--accent-ink);font-weight:700;font-size:11px}
+.fsel{display:flex;gap:8px;flex-wrap:wrap}
+.fsel select{padding:5px 8px;font-size:12px}
+.bl{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--rc);overflow:hidden}
+.blr{display:grid;grid-template-columns:34px 44px minmax(0,1fr) 150px 110px 88px;gap:10px;align-items:center;padding:11px 12px;border-top:1px solid var(--line);background:var(--surface)}
+.blr:first-child{border-top:0}
+.blr.drag{opacity:.4}.blr.over{box-shadow:inset 0 3px 0 var(--accent)}
+.blr .pos{font-family:var(--f-mono);font-weight:700;color:var(--sub);text-align:center}
+.blr .hd{display:flex;flex-direction:column;gap:2px;align-items:center}
+.blr .hd button{border:0;background:none;color:var(--sub);font-size:11px;padding:0 4px;line-height:1.2}
+.blr .grip{cursor:grab;color:var(--sub);font-size:16px;text-align:center;user-select:none}
+.blr .t{min-width:0;cursor:pointer}
+.blr .t b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.blr .t small{color:var(--sub)}
+.lockmsg{font-size:12px;color:var(--sub);margin-bottom:10px}
+.seg-acts{display:flex;flex-wrap:wrap;gap:6px}
+.seg-acts button{border:1px solid var(--chrome-border);background:var(--surface);border-radius:20px;padding:5px 11px;font-size:12px}
+.seg-acts button:hover{border-color:var(--accent);color:var(--accent-ink)}
+.mach{border:1px solid var(--line);border-radius:var(--rc);overflow:hidden}
+.mach>div{display:flex;align-items:center;gap:8px;padding:10px 12px}
+.mach>div b{flex:1}
+.mach pre{margin:0;padding:12px 14px;background:var(--muted-bg);white-space:pre-wrap;font-family:var(--f-ui);font-size:12.5px;line-height:1.55;max-height:260px;overflow:auto}
+.cfgrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
+.cfgrow:first-of-type{border-top:0}
+.cfgrow .nm{flex:1;min-width:200px}
+.cfgrow .nm small{display:block;color:var(--sub)}
+/* Mascota pixel art */
+.pet{position:absolute;right:18px;bottom:16px;z-index:25;border:0;background:none;padding:0;width:64px;height:64px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.18))}
+.pet svg,.petsvg{image-rendering:pixelated;shape-rendering:crispEdges;width:100%;height:100%}
+.pet .bob{animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.pet .badge{position:absolute;top:-2px;right:-2px;background:var(--bad);color:#fff;border-radius:10px;font-size:10px;font-weight:700;padding:0 6px;border:2px solid var(--surface)}
+.petpanel{position:absolute;right:18px;bottom:90px;width:340px;max-width:calc(100% - 36px);background:var(--surface);border:1px solid var(--chrome-border);border-radius:18px;box-shadow:var(--shadow);z-index:26;display:flex;flex-direction:column;overflow:hidden}
+.pp-h{display:flex;gap:12px;align-items:center;padding:14px 16px;background:var(--accent-soft)}
+.pp-h .face{width:52px;height:52px;flex-shrink:0}
+.pp-h p{margin:0;font-size:13px;line-height:1.45}
+.pp-b{padding:10px;display:flex;flex-direction:column;gap:4px;max-height:360px;overflow:auto}
+.pp-b>button.op{border:0;background:none;text-align:left;padding:9px 10px;border-radius:12px;display:flex;flex-direction:column;font-size:13px}
+.pp-b>button.op:hover{background:var(--muted-bg)}
+.pp-b>button.op small{color:var(--sub);font-size:11.5px}
+.ask{display:flex;gap:6px;padding:8px 10px}
+.ask input{flex:1;min-width:0}
+.bubble{background:var(--muted-bg);border-radius:12px;padding:9px 11px;font-size:12.5px;margin:0 10px}
+.bubble.me{background:var(--accent-soft);align-self:flex-end;margin-left:40px}
+.phase2{font-size:10px;font-weight:700;background:var(--info-bg);color:var(--info);border-radius:3px;padding:1px 5px;margin-left:6px}
+.news li{margin-bottom:6px}
+.news time{font-family:var(--f-mono);font-size:11px;color:var(--sub);margin-right:6px}
+.dotnew{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--bad);margin-left:6px;vertical-align:middle}
+.petpick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.petpick button{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px}
+.petpick button.on{border-color:var(--accent);background:var(--accent-soft)}
+.petpick .sp{width:56px;height:56px}
+/* Perfil */
+.prof{position:absolute;top:58px;right:14px;width:360px;max-width:calc(100% - 28px);max-height:calc(100% - 72px);overflow:auto;background:var(--surface);border:1px solid var(--chrome-border);border-radius:18px;box-shadow:var(--shadow);z-index:27;display:flex;flex-direction:column}
+.prof .ph{display:flex;gap:12px;align-items:center;padding:16px}
+.prof .ph .avatar{width:48px;height:48px;font-size:16px}
+.prof .ph small{display:block;color:var(--sub)}
+.prof section{padding:12px 16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.prof h5{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.sw{display:flex;flex-wrap:wrap;gap:8px}
+.sw button{width:26px;height:26px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--chrome-border)}
+.sw button.on{box-shadow:0 0 0 2px var(--ink)}
+.prof .seg button{padding:5px 9px}
+.prof .lnk{border:0;background:none;text-align:left;padding:6px 0;font-size:13px;display:flex;align-items:center}
+.frame.compact td{padding:7px 10px}.frame.compact .tcard{padding:10px;gap:5px}.frame.compact .kcard{padding:7px 9px}
+.simrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px}
+.simrow select{border-radius:20px;padding:5px 10px;font-size:12px}
+@media (max-width:900px){.tcards{grid-template-columns:repeat(2,minmax(0,1fr))}.blr{grid-template-columns:30px minmax(0,1fr) 110px}.blr .hd,.blr .x1,.blr .x2{display:none}}
+@media (max-width:560px){.tcards{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div class="proto-banner" style="background:#fffde7;border:1px solid #c8a800;border-radius:6px;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;max-width:1280px;margin:0 auto 14px;">
@@ -378,6 +533,8 @@ tr.flash td{animation:flash 2.2s ease}
     </section>
     <div id="detSlot"></div>
     <div id="bnotSlot"></div>
+    <div id="petSlot"></div>
+    <div id="profSlot"></div>
   </div>
 
   <section class="sim" aria-label="Panel de simulación">
@@ -390,6 +547,7 @@ tr.flash td{animation:flash 2.2s ease}
       <button id="simOut">Son las 17:30 y sigue prendido</button>
       <button id="simReset">Reiniciar datos</button>
     </div>
+    <div class="simrow"><label for="verComo">Ver Temis como:</label><select id="verComo"><option value="Marco Ruiz">Marco Ruiz · Desarrollo</option><option value="Sofía Treviño">Sofía Treviño · Analista y líder</option><option value="Laura Méndez">Laura Méndez · Calidad</option><option value="Diego Salas">Diego Salas · Desarrollo y líder</option></select></div>
     <div id="teamsSlot"></div>
   </section>
 </div>
@@ -407,14 +565,28 @@ tr.flash td{animation:flash 2.2s ease}
 /* ---------- Catálogos ---------- */
 const PEOPLE = {
   "Marco Ruiz":{ini:"MR",rol:"Desarrollo",h:"08:00 a 17:30",dias:"L a V"},
-  "Diego Salas":{ini:"DS",rol:"Desarrollo",h:"09:00 a 18:30",dias:"L a V"},
+  "Diego Salas":{ini:"DS",rol:"Desarrollo",lider:true,h:"09:00 a 18:30",dias:"L a V"},
   "Iván Cordero":{ini:"IC",rol:"Desarrollo",h:"08:00 a 17:30",dias:"L a V",vac:"20/10/2026 al 24/10/2026"},
   "Laura Méndez":{ini:"LM",rol:"Calidad",h:"08:00 a 17:30",dias:"L a V"},
   "Renata Lozano":{ini:"RL",rol:"Calidad",h:"07:30 a 17:00",dias:"L a V"},
-  "Sofía Treviño":{ini:"ST",rol:"Analista",h:"08:00 a 17:30",dias:"L a V"},
+  "Sofía Treviño":{ini:"ST",rol:"Analista",lider:true,h:"08:00 a 17:30",dias:"L a V"},
   "Paola Ibarra":{ini:"PI",rol:"Soporte",h:"07:00 a 16:00",dias:"L a S"}
 };
-const ME = "Marco Ruiz";
+let ME = "Marco Ruiz";
+const fid = id => {const t=tk(id);return t&&t.origen==="temis"?"T-"+String(id).padStart(4,"0"):"#"+id};
+const TAGC = n => "tg"+([...n].reduce((a,c)=>a+c.charCodeAt(0),0)%6);
+const tagHtml = (n,rm) => `<span class="tag ${TAGC(n)}">${esc(n)}${rm?`<button data-rmtag="${esc(n)}" aria-label="Quitar etiqueta ${esc(n)}">×</button>`:""}</span>`;
+const isLider = () => !!PEOPLE[ME].lider;
+const isAnalista = () => PEOPLE[ME].rol==="Analista";
+function bizDays(fromStr){let d=dParse(fromStr.split(" ")[0]),n=0;const end=new Date(2026,9,21);while(d<end){d.setDate(d.getDate()+1);const w=d.getDay();if(w!==0&&w!==6)n++}return n}
+const PROBLEMAS = ["Error de código","Error de configuración","Falta en el análisis","Datos del cliente","Infraestructura","No era error"];
+const CLIENTES = {
+  "Logística Ruiz":["LRU190312KJ4","sistemas@logisticaruiz.mx"],
+  "Transportes del Bajío":["TBA080915QW2","facturacion@tbajio.com.mx"],
+  "Fletes Montemayor":["FMO110524HT8","admin@fletesmontemayor.mx"],
+  "Autotransportes Garza":["AGA050720PL1","contabilidad@atgarza.com"],
+  "Carga Express del Norte":["CEN150903RX6","ti@cargaexpressnorte.mx"]
+};
 const ROLES = [["soporte","Soporte","r-sop"],["analista","Analista","r-ana"],["dev","Desarrollo","r-dev"],["qa","Calidad","r-qa"]];
 const TIPOS = {error:["Error del sistema","var(--bad)"],cotizacion:["Cotización","var(--warn)"],mejora:["Mejora","var(--info)"]};
 const P_COT = [["Nuevo"],["En análisis","Cotización"],["Esperando al cliente","Cotización"],["En análisis","Prototipo"],["Esperando al cliente","Prototipo"],["Documentando"],["En desarrollo"],["En calidad"],["Por liberar"],["Liberado"],["Cerrado"]];
@@ -438,7 +610,7 @@ function seed(){
   ];
 }
 const COMMENTS = {
-  48210:[{w:"Marco Ruiz",d:"20/10/2026 16:42",x:"Ya encontré la causa: se toma la fecha de captura y no la de timbrado. Mañana subo el cambio.",f:[]},
+  48210:[{w:"Marco Ruiz",d:"20/10/2026 16:42",x:"Ya encontré la causa: se toma la fecha de captura y no la de timbrado. @Laura Méndez mañana te lo paso a calidad.",f:[]},
          {w:"Sofía Treviño",d:"17/10/2026 09:05",x:"Lo reproduje con la factura F-20931 del cliente. Adjunto el XML y la captura.",f:[["F-20931.xml","38 KB"],["captura-tipo-cambio.png","412 KB"]]}],
   48120:[{w:"Sofía Treviño",d:"20/10/2026 12:10",x:"El cliente firmó el prototipo. Adjunto el documento firmado.",f:[["Prototipo firmado 48120.pdf","1.2 MB"]]}],
   48133:[{w:"Diego Salas",d:"19/10/2026 17:38",x:"Corregido el caso de dos registros patronales. Lo regreso a calidad.",f:[]}]
@@ -471,11 +643,32 @@ Característica: Número de proveedor obligatorio en la addenda
     Cuando se intenta timbrar una factura sin número de proveedor
     Entonces el sistema muestra "Captura el número de proveedor del cliente"`}]
 };
+function seedEntries(){
+  const E=(id,date,ini,fin,kind,ref,origen,extra={})=>({id,date,ini,fin,kind,ref,origen,who:"Marco Ruiz",...extra});
+  return [
+    E(1,"13/10/2026","09:00","12:10","ticket",48098,"reloj"),
+    E(2,"13/10/2026","12:30","13:00","act","Junta","manual",{motivo:"Revisión de la versión 8.4.12; no prendí el reloj"}),
+    E(3,"19/10/2026","08:05","08:20","act","Daily","reloj"),
+    E(4,"19/10/2026","08:25","11:40","ticket",48210,"reloj"),
+    E(5,"19/10/2026","12:00","13:00","act","Junta","manual",{motivo:"Junta de planeación; olvidé prender el reloj"}),
+    E(6,"19/10/2026","14:00","17:20","ticket",48210,"editado",{orig:"14:00 a 18:45",motivo:"Se quedó prendido después de mi salida"}),
+    E(7,"20/10/2026","08:02","08:17","act","Daily","reloj"),
+    E(8,"20/10/2026","08:20","12:30","ticket",48120,"reloj"),
+    E(9,"20/10/2026","13:30","15:00","act","Curso","manual",{motivo:"Curso de seguridad de la información"}),
+    E(10,"20/10/2026","15:05","17:25","ticket",48210,"reloj"),
+    E(11,"21/10/2026","08:03","08:18","act","Daily","reloj")
+  ];
+}
 let S;
 function reset(){
   const tks=seed();
-  tks.forEach(t=>{t.resp=[...new Set(Object.values(t.resp).filter(Boolean))];t.c=(COMMENTS[t.id]||[]).map(c=>({...c}));t.g=GHERKIN[t.id]||[]});
-  S = {tickets:tks,route:"tickets",filter:"todos",q:"",open:null,tab:"comentarios",gOpen:null,files:[],
+  tks.push({id:3,origen:"temis",creado:["Sofía Treviño","20/10/2026 10:12"],titulo:"Mensajes de error más claros al timbrar",cliente:"",modulo:"Facturación",tipo:"mejora",prio:"Baja",step:0,fecha:"",ver:"",resp:{soporte:"",analista:"Sofía Treviño",dev:"",qa:""},t:{},inc:[],hist:[["20/10/2026 10:12","Sofía Treviño lo creó en Temis"]],fh:[],reb:0});
+  const TAGS={48210:["Timbrado","Cliente Top"],48133:["Nómina"],48120:["Addenda","Cliente Top"],48098:["Carta porte"],3:["Interno"]};
+  const SEG={48152:[["14/10/2026 10:00","Envié el prototipo","Sofía Treviño",""],["16/10/2026 09:30","Di seguimiento","Sofía Treviño","Dice que lo revisa con su gerente"]],48177:[],48120:[["13/10/2026 11:00","Envié la cotización","Sofía Treviño",""],["15/10/2026 16:20","El cliente contestó","Sofía Treviño","Aprobó la cotización"],["17/10/2026 12:00","Envié el prototipo","Sofía Treviño",""],["20/10/2026 12:00","El cliente contestó","Sofía Treviño","Firmó el prototipo"]]};
+  tks.forEach(t=>{t.tags=TAGS[t.id]||[];t.seg=(SEG[t.id]||[]).map(x=>[...x]);if(!t.origen){t.origen="desk";t.creado=["Paola Ibarra",(t.hist[t.hist.length-1]||["14/10/2026 09:00"])[0]]}});
+  tks.forEach(t=>{if(t.id===48098){t.prob="Error de código";t.orig="Iván Cordero"}if(t.id===48133){t.prob="Error de código";t.orig="Diego Salas"}t.resp=[...new Set(Object.values(t.resp).filter(Boolean))];t.c=(COMMENTS[t.id]||[]).map(c=>({...c}));t.g=GHERKIN[t.id]||[]});
+  S = {route0:"mis",cfg:{segDias:2,cierreAuto:true,cierreDias:7},order:[48230,48152,48120,3,48177],kf:{p:"",t:"",g:""},pet:"axo",petOpen:false,profOpen:false,chat:[],mode:"auto",theme:"gm",dens:"comoda",home:"mis",seen:false,entries:seedEntries(),eid:100,acts:[{n:"Daily",on:true,def:true},{n:"Junta",on:true,def:true},{n:"Curso",on:true,def:true},{n:"Otro",on:true,def:true}],diasEdit:7,week:0,
+       tickets:tks,route:"mis",filter:"todos",q:"",open:null,tab:"comentarios",gOpen:null,files:[],
        timer:{id:48210,since:Date.now()-41*60*1000},
        others:{"Diego Salas":{id:48133,since:Date.now()-72*60*1000},"Laura Méndez":{id:48133,since:Date.now()-18*60*1000},"Sofía Treviño":{id:48177,since:Date.now()-55*60*1000},"Renata Lozano":null,"Iván Cordero":"vac","Paola Ibarra":null},
        banner:null,emergency:false,log:[]};
@@ -490,7 +683,15 @@ const fmt = sec => {sec=Math.max(0,Math.floor(sec));return pad(Math.floor(sec/36
 const fmtH = sec => {const h=Math.floor(sec/3600),m=Math.round(sec%3600/60);return h+" h "+pad(m)+" min"};
 const now = () => {const d=new Date(2026,9,21,new Date().getHours(),new Date().getMinutes());return pad(d.getDate())+"/"+pad(d.getMonth()+1)+"/"+d.getFullYear()+" "+pad(d.getHours())+":"+pad(d.getMinutes())};
 const tk = id => S.tickets.find(t=>t.id===id);
-const runSec = (t,p) => (t.t[p]||0) + (p===ME && S.timer && S.timer.id===t.id ? (Date.now()-S.timer.since)/1000 : 0) + (S.others[p] && S.others[p].id===t.id ? (Date.now()-S.others[p].since)/1000 : 0);
+const toMin = h => {const [a,b]=h.split(":").map(Number);return a*60+b};
+const hm = ms => {const d=new Date(ms);return pad(d.getHours())+":"+pad(d.getMinutes())};
+const durMin = e => toMin(e.fin)-toMin(e.ini);
+const fmtM = m => Math.floor(m/60)+" h "+pad(m%60)+" min";
+const dParse = d => {const [a,b,c]=d.split("/").map(Number);return new Date(c,b-1,a)};
+const TODAY = new Date(2026,9,21);
+const daysAgo = d => Math.round((TODAY-dParse(d))/86400000);
+const ticketEntriesSec = id => S.entries.filter(e=>e.who===ME&&e.kind==="ticket"&&e.ref===id).reduce((a,e)=>a+durMin(e)*60,0);
+const runSec = (t,p) => (p===ME ? ticketEntriesSec(t.id) : (t.t[p]||0)) + (p===ME && S.timer && S.timer.id===t.id ? (Date.now()-S.timer.since)/1000 : 0) + (S.others[p] && S.others[p].id===t.id ? (Date.now()-S.others[p].since)/1000 : 0);
 const totalSec = t => Object.keys(PEOPLE).reduce((a,p)=>a+runSec(t,p),0);
 const lateDate = f => {if(!f)return false;const [d,m,y]=f.split("/").map(Number);return new Date(y,m-1,d) < new Date(2026,9,21)};
 function stPill(t){const [e,s]=stOf(t);return `<span class="st ${ST_CLASS[e]}">${esc(e)}${s?` <small>· ${esc(s)}</small>`:""}</span>`}
@@ -512,12 +713,18 @@ const PAUSE = '<svg viewBox="0 0 12 12"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9
 
 /* ---------- Alcance (fichas) ---------- */
 const HU = {
-  "A1":{t:"Ticket único con tipo",como:"analista o soporte",quiero:"un solo registro de trabajo por ticket escalado, con su tipo",para:"dejar de manejar HU y subtareas como en Zoho",pant:"Tickets y Detalle",impl:["Un solo tipo de registro: el Ticket. No existen HU ni subtareas.","Comentarios internos del equipo con documentos adjuntos. No se envían al cliente.","Tipo: Error del sistema, Cotización o Mejora. Lo pone cualquier analista o soporte y se puede cambiar.","Campos: folio de Desk, título, cliente, módulo, prioridad, tipo, estatus, fecha de entrega al cliente y versión.","Responsables: un solo campo de selección múltiple con cualquier persona del equipo.","El ticket nace solo cuando Desk lo escala a mantenimiento."],reglas:["Una sola fecha de entrega al cliente para todos los tipos, con historial de cambios.","El campo Versión es obligatorio antes de pasar a Por liberar."],alt:["Si se cambia el tipo, el ticket conserva su estatus cuando existe en el nuevo camino; si no existe, regresa a En análisis."],fuera:["Horas estimadas de la cotización: pendiente de definir."],dep:["A2","A6","A8"]},
-  "A2":{t:"Diez estatus y dos caminos",como:"equipo de mantenimiento",quiero:"una lista corta de estatus",para:"saber en qué va cada ticket sin los 28 estatus de Zoho",pant:"Detalle del ticket",impl:["Estatus: Nuevo, En análisis, Esperando al cliente, Documentando, En desarrollo, En calidad, Por liberar, Liberado, Cerrado y Cancelado.","En análisis y Esperando al cliente muestran solos la etiqueta Cotización o Prototipo, según si el cliente ya aprobó la cotización.","Cotización o mejora: Nuevo, Análisis·Cotización, Esperando·Cotización, Análisis·Prototipo, Esperando·Prototipo, Documentando, Desarrollo, Calidad, Por liberar, Liberado, Cerrado.","Error del sistema: Nuevo, Análisis, Desarrollo, Calidad, Por liberar, Liberado, Cerrado. No pasa por Documentando."],reglas:["Esperando al cliente ofrece dos salidas: el cliente aprobó o pidió ajustes, que regresa a En análisis con la misma etiqueta.","En calidad ofrece dos salidas: pasa calidad o regresar a desarrollo, que suma un rebote.","Cancelar está disponible antes de Liberado y pide confirmación."],alt:["Un rebote se cuenta cuando el ticket pasa de En calidad o un estatus posterior a En análisis o En desarrollo."],fuera:["Paso automático de Liberado a Cerrado a los 7 días hábiles: pendiente de definir."],dep:["A1","A5"]},
-  "A3":{t:"Timer por persona",como:"responsable de un ticket",quiero:"medir mi tiempo con un botón",para:"tener horas reales sin capturarlas a mano en Zoho",pant:"Barra superior y encabezado del ticket",impl:["Un solo reloj en el ticket. Quien lo prende queda registrado, sea o no responsable.","Cada persona ve solo su propio tiempo en ese ticket.","Solo un timer corriendo por persona: al arrancar otro, el anterior se pausa solo y se avisa.","El mismo timer se ve y se controla igual desde cualquier pestaña, equipo o celular.","Sigue corriendo aunque se cierre Temis.","Se detiene solo si el ticket pasa a Liberado, Cerrado o Cancelado.","Corrección manual con motivo obligatorio; queda quién cambió, cuándo y el valor anterior."],reglas:["Si el timer cruza la medianoche, el tiempo se reparte por día para los reportes.","En un ticket Liberado, Cerrado o Cancelado no se puede arrancar el timer."],alt:["Si se pausa desde otro dispositivo, todas las pestañas lo reflejan al instante."],fuera:["Si el líder puede corregir el tiempo de su equipo: pendiente de definir."],dep:["A4","A5"]},
+  "A1":{t:"Ticket único con tipo",como:"analista o soporte",quiero:"un solo registro de trabajo por ticket escalado, con su tipo",para:"dejar de manejar HU y subtareas como en Zoho",pant:"Tickets y Detalle",impl:["Un solo tipo de registro: el Ticket. No existen HU ni subtareas.","Comentarios internos del equipo con documentos adjuntos. No se envían al cliente.","Al escribir @ se puede mencionar a cualquier persona; le llega un aviso por los canales de la fase 1.","Tipo: Error del sistema, Cotización o Mejora. Lo pone cualquier analista o soporte y se puede cambiar.","Campos: folio de Desk, título, cliente con su RFC y correo, módulo, prioridad, tipo, estatus, fecha de entrega al cliente y versión.","Solo en errores del sistema: Tipo de problema y Desarrollador que lo originó.","Responsables: un solo campo de selección múltiple con cualquier persona del equipo.","El ticket nace solo cuando Desk lo escala a mantenimiento."],reglas:["Una sola fecha de entrega al cliente para todos los tipos, con historial de cambios.","El campo Versión es obligatorio antes de pasar a Por liberar.","En errores del sistema, Tipo de problema y Desarrollador que lo originó son obligatorios antes de pasar a Por liberar. Desarrollador acepta No aplica."],alt:["Si se cambia el tipo, el ticket conserva su estatus cuando existe en el nuevo camino; si no existe, regresa a En análisis."],fuera:["Horas estimadas de la cotización: pendiente de definir."],dep:["A2","A6","A8"]},
+  "A2":{t:"Diez estatus y dos caminos",como:"equipo de mantenimiento",quiero:"una lista corta de estatus",para:"saber en qué va cada ticket sin los 28 estatus de Zoho",pant:"Detalle del ticket",impl:["Estatus: Nuevo, En análisis, Esperando al cliente, Documentando, En desarrollo, En calidad, Por liberar, Liberado, Cerrado y Cancelado.","En análisis y Esperando al cliente muestran solos la etiqueta Cotización o Prototipo, según si el cliente ya aprobó la cotización.","Cotización o mejora: Nuevo, Análisis·Cotización, Esperando·Cotización, Análisis·Prototipo, Esperando·Prototipo, Documentando, Desarrollo, Calidad, Por liberar, Liberado, Cerrado.","Error del sistema: Nuevo, Análisis, Desarrollo, Calidad, Por liberar, Liberado, Cerrado. No pasa por Documentando."],reglas:["El estatus es un botón: al dar clic se abren todos los estatus del camino del ticket y Cancelado, y se elige cualquiera.","El estatus actual se marca como Actual y el que sigue como Siguiente.","Cancelado pide confirmación y detiene los relojes del ticket.","Pasar a Por liberar o posterior requiere versión.","Elegir un estatus desde Cancelado reactiva el ticket."],alt:["Un rebote se cuenta cuando el ticket pasa de En calidad o un estatus posterior a En análisis o En desarrollo."],fuera:["Paso automático de Liberado a Cerrado a los 7 días hábiles: pendiente de definir."],dep:["A1","A5"]},
+  "A3":{t:"Timer por persona",como:"responsable de un ticket",quiero:"medir mi tiempo con un botón",para:"tener horas reales sin capturarlas a mano en Zoho",pant:"Barra superior y encabezado del ticket",impl:["Un solo reloj en el ticket. Quien lo prende queda registrado, sea o no responsable.","Cada persona ve solo su propio tiempo en ese ticket.","Solo un timer corriendo por persona: al arrancar otro, el anterior se pausa solo y se avisa.","El mismo timer se ve y se controla igual desde cualquier pestaña, equipo o celular.","Sigue corriendo aunque se cierre Temis.","Se detiene solo si el ticket pasa a Liberado, Cerrado o Cancelado.","Al pausar, el tramo queda como registro de Reloj en Mis tiempos.","Desde la barra superior, Iniciar reloj abre un buscador de tickets por folio o título y de actividades administrativas como Daily, Junta o Curso."],reglas:["Si el timer cruza la medianoche, el tiempo se reparte por día para los reportes.","En un ticket Liberado, Cerrado o Cancelado no se puede arrancar el timer."],alt:["Si se pausa desde otro dispositivo, todas las pestañas lo reflejan al instante."],fuera:["Si el líder puede corregir el tiempo de su equipo: pendiente de definir."],dep:["A4","A5"]},
   "A4":{t:"Horario y avisos",como:"trabajador de mantenimiento",quiero:"que Temis me avise si olvidé prender o apagar el timer",para:"que las horas registradas sean reales",pant:"Configuración · Horarios y avisos",impl:["Horario y vacaciones por persona, como función nueva de Temis.","Aviso al entrar si a la hora de entrada no tiene timer corriendo.","Aviso al salir si a la hora de salida sigue corriendo.","Los avisos llegan solo al trabajador. En vacaciones y días festivos no salen.","Fase 1: dentro de Temis, notificación del navegador y mensaje de Teams. Fase 2: Temis instalable en el celular. Fase 3: WhatsApp."],reglas:["El aviso de entrada sale una sola vez por día.","El aviso de salida no detiene el timer; solo avisa."],alt:[],fuera:["Fases 2 y 3 de avisos."],dep:["A3"]},
   "A5":{t:"Tiempo real y vista de líderes",como:"líder de equipo",quiero:"ver en vivo quién trabaja en qué",para:"conocer la carga real sin preguntar",pant:"En vivo y todas las pantallas",impl:["Cualquier cambio en un ticket lo ven todos al instante, sin recargar.","Varias pestañas y sesiones de la misma persona quedan sincronizadas.","La pantalla En vivo muestra a cada persona: ticket en el que trabaja, tiempo corriendo, sin timer o de vacaciones."],reglas:["Si dos personas cambian el mismo ticket a la vez, gana el último cambio, ambos lo ven y queda en el historial.","La pantalla En vivo requiere un permiso nuevo de líder."],alt:["Si se pierde la conexión, la pantalla lo indica y se pone al día al reconectar."],fuera:[],dep:["A3"]},
   "A6":{t:"Transición desde Zoho",como:"dueña del sistema",quiero:"pasar de Zoho a Temis sin que se caigan las pantallas",para:"que Calendario, Dashboard, Carga de trabajo y Aeropuerto sigan funcionando",pant:"Configuración · Origen de datos",impl:["Al arrancar se migran de Projects los tickets abiertos con su estatus convertido, y también el histórico.","Desde ese día mantenimiento captura solo en Temis; Projects queda como consulta.","Durante la transición las pantallas leen de Temis y de Zoho a la vez: lo que ya vive en Temis sale de Temis, lo demás de Zoho.","El switch queda solo como freno de emergencia para volver a leer únicamente de Zoho."],reglas:["Solo la dueña del sistema puede mover el switch, con confirmación.","Los tickets nacen en Temis cuando Desk los escala; Desk sigue en Zoho hasta la etapa 2."],alt:["Si un ticket se cierra en Desk pero sigue abierto en Temis, se marca para revisión; no se cierra solo."],fuera:["Momento exacto en que Desk escala un ticket: pendiente de confirmar."],dep:["A1","A2"]},
+  "A9":{t:"Mis tiempos y actividades",como:"integrante del equipo",quiero:"ver todos mis tiempos y agregar o editar los que faltan",para:"que mis horas reflejen tickets, Daily, juntas y cursos",pant:"Mis tiempos · Configuración › Actividades y tiempos",impl:["Mis tiempos: registros por semana agrupados por día, con totales de semana, tickets y actividades.","Cada registro muestra cómo se metió: Reloj, Manual o Editado. Los editados guardan el valor original.","Agregar tiempo manual: ticket o actividad, día, inicio, fin y motivo.","Editar un registro de Reloj lo convierte en Editado; los manuales se pueden eliminar.","Actividades administrables: Daily, Junta, Curso y Otro por default; se pueden agregar y desactivar.","El plazo para agregar o editar es configurable en días."],reglas:["Motivo obligatorio en manuales y editados.","No se permiten registros que se empalmen ni en días futuros.","Fuera del plazo configurado, los registros quedan Cerrados."],alt:["El tramo en curso aparece en el día de hoy y se puede pausar desde ahí."],fuera:["Si el líder puede corregir el tiempo de su equipo: pendiente de definir."],dep:["A3"]},
+  "A10":{t:"Kanban y Backlog",como:"equipo de mantenimiento",quiero:"ver lo que se trabaja y lo que está en espera",para:"saber qué sigue sin preguntar",pant:"Kanban · Backlog",impl:["Kanban: columnas En análisis, Esperando al cliente, Documentando, En desarrollo, En calidad y Por liberar. Reemplaza al Kanban Equipo.","Arrastrar una tarjeta a otra columna cambia su estatus, con las mismas validaciones del ticket.","Tarjeta: folio, título, tipo, etiquetas, responsables, fecha y quién tiene el reloj corriendo.","Backlog: lista ordenada de lo que está en espera: Nuevos, Esperando al cliente y Documentando.","Filtros por persona, tipo y etiqueta en los dos."],reglas:["Solo los líderes reordenan el backlog, arrastrando o con flechas.","Un ticket que no pasa por una columna, como un error en Documentando, no se puede soltar ahí."],alt:[],fuera:[],dep:["A2"]},
+  "A11":{t:"Mis tickets y seguimiento",como:"integrante del equipo",quiero:"ver solo lo mío y lo que me toca",para:"no perder tickets ni seguimientos",pant:"Mis tickets · pestaña Seguimiento del ticket",impl:["Mis tickets para todos: Te toca a ti y En proceso. Los analistas también ven Esperando al cliente.","Te toca a ti según el rol: analista en Nuevo, En análisis y Documentando; desarrollo en En desarrollo; calidad en En calidad.","Solo analistas: pestaña Seguimiento con bitácora de botones rápidos y correos para copiar del paso actual.","Aviso amable de seguimiento cuando un ticket Esperando al cliente pasa el plazo configurado sin registro en la bitácora."],reglas:["El aviso se quita en cuanto se registra algo en la bitácora.","El plazo de seguimiento se configura en Reglas y plazos."],alt:["Desarrollo prende su reloj y adjunta su análisis; calidad registra incidencias."],fuera:[],dep:["A1","A3"]},
+  "A12":{t:"Etiquetas y tickets creados en Temis",como:"equipo de mantenimiento",quiero:"etiquetar tickets y crear los míos",para:"agrupar y no depender solo de Desk",pant:"Tickets · Detalle",impl:["Etiquetas libres: cualquiera las crea al escribirlas y dar Enter; colores automáticos.","Filtrar por etiqueta en Tickets, Kanban y Backlog.","Botón Nuevo ticket: título, descripción, tipo, prioridad, cliente opcional y módulo.","Cada ticket muestra su origen: Llegó de Desk o Creado en Temis, con quién y cuándo."],reglas:["Los tickets creados en Temis llevan folio propio T-0001.","El cliente es opcional para tickets internos."],alt:[],fuera:[],dep:["A1"]},
+  "A13":{t:"Mascota de ayuda",como:"usuario de Temis",quiero:"una mascota que me salude y me ayude",para:"resolver dudas y reportar fallas sin buscar a nadie",pant:"Esquina inferior de todas las pantallas",impl:["Mascota en pixel art, animada, con un número cuando hay cosas que te tocan.","Al abrirla saluda con un resumen: tickets que te tocan y seguimientos.","Opciones: ver lo que me toca, cómo se usa esta pantalla, pregúntame, qué hay de nuevo, reportar falla y sugerir mejora.","Reportes y sugerencias le llegan a Jaqueline con la pantalla, el usuario y la hora."],reglas:["Pregúntame responde con IA en la fase 2."],alt:[],fuera:["Respuestas con IA en la fase 1."],dep:["A14"]},
+  "A14":{t:"Mi perfil",como:"usuario de Temis",quiero:"acomodar Temis a mi gusto",para:"trabajar más cómodo",pant:"Avatar de la barra superior",impl:["Apariencia: los 12 temas, modo Claro, Atenuado, Oscuro o Automático, y densidad Cómoda o Compacta.","Elegir mascota o apagarla.","Pantalla de inicio, avisos que quiero recibir y mi horario solo de consulta.","Ayuda: recorrido, novedades, reportar falla y sugerir mejora."],reglas:["Las preferencias son de cada persona."],alt:[],fuera:["Videos, comunidad, seminarios y apps."],dep:["A13"]},
   "A8":{t:"Análisis desde Git",como:"desarrollador o calidad",quiero:"ver el análisis en Gherkin dentro del ticket",para:"no buscar los archivos en el repositorio",pant:"Ticket · pestaña Análisis",impl:["Temis lee el repositorio ERP de GitHub y muestra los archivos .feature del ticket.","Se ven legibles, de solo lectura, con su carpeta y fecha de actualización, y una liga al repositorio.","Los archivos se relacionan por el folio del ticket al inicio del nombre."],reglas:["Los Gherkins se siguen escribiendo y guardando en Git como hoy."],alt:["Tickets migrados de Zoho: se buscan también los archivos de sus HU viejas, usando la relación que trae Zoho."],fuera:["Editar el Gherkin desde Temis."],dep:["A1"]},
   "A7":{t:"Incidencias de SPD",como:"calidad",quiero:"que las incidencias de la Segunda Vuelta se vean en el ticket",para:"no matar el proyecto SPD ni capturar dos veces",pant:"Detalle del ticket",impl:["Temis toma las incidencias de la Segunda Vuelta de GM-SPD y las muestra en los comentarios del ticket.","Se ven de solo lectura, marcadas como SPD, con su fecha."],reglas:["SPD sigue siendo donde se registran."],alt:[],fuera:[],dep:["A2"]}
 };
@@ -525,41 +732,135 @@ const huTag = k => `<button class="chip-hu" data-hu="${k}" title="${esc(HU[k].t)
 
 /* ---------- Especificación por pantalla ---------- */
 const SPEC = {
+  mis:{t:"Mis tickets",obj:"Ver solo mis tickets y lo que me toca hacer.",hu:["A11"],datos:["Tarjetas de 3 por fila: folio, tipo, título, estatus, aviso de seguimiento, etiquetas, cliente y fecha."],acc:["Abrir el ticket encima de la lista."],val:["Solo tickets abiertos donde soy responsable."],estados:["Te toca a ti, Esperando al cliente solo para analistas, En proceso."]},
+  kanban:{t:"Kanban",obj:"Ver lo que se está trabajando y moverlo de estatus arrastrando.",hu:["A10"],datos:["Seis columnas con tarjetas por ticket."],acc:["Arrastrar entre columnas.","Filtrar por persona, tipo y etiqueta.","Abrir el ticket."],val:["Mismas validaciones del cambio de estatus del ticket."],estados:["Reloj corriendo en la tarjeta."]},
+  backlog:{t:"Backlog",obj:"Ver y ordenar lo que está en espera.",hu:["A10"],datos:["Posición, folio, título, tipo, cliente, prioridad, etiquetas, estatus, responsables y fecha."],acc:["Reordenar arrastrando o con flechas, solo líderes.","Abrir el ticket."],val:["Solo líderes reordenan."],estados:["Vista de solo lectura para quien no es líder."]},
+  reglas:{t:"Reglas y plazos",obj:"Configurar los plazos del equipo.",hu:["A11","A2","A9"],datos:["Días de seguimiento, cierre automático y plazo de edición de tiempo."],acc:["Guardar reglas."],val:["Números de días válidos."],estados:[]},
   tickets:{t:"Tickets",obj:"Listado de todos los tickets de mantenimiento con su estatus, responsables, fecha de entrega y timer.",hu:["A1","A2","A3","A5"],datos:["Folio de Desk, título, cliente, módulo, prioridad, tipo, estatus con etiqueta, responsables y fecha de entrega al cliente."],acc:["Buscar por folio, título o cliente.","Filtrar: Todos, Míos, Errores, Cotizaciones y mejoras, Cerrados.","Clic en la fila abre el detalle encima del listado, sin cambiar de pantalla."],val:["Por default no se muestran Cerrados ni Cancelados; tienen su propio filtro.","La fecha vencida se pinta en rojo si el ticket no está Liberado, Cerrado o Cancelado."],estados:["Sin resultados: mensaje que dice qué filtro está activo y botón para quitarlo."]},
   envivo:{t:"En vivo",obj:"Que los líderes vean quién está trabajando en qué en este momento.",hu:["A5","A3"],datos:["Una tarjeta por persona: nombre, rol, ticket con timer corriendo y su tiempo, o Sin timer, o De vacaciones."],acc:["Clic en el ticket de una tarjeta abre su detalle."],val:["Solo visible con el permiso de líder."],estados:["Trabajando, Sin timer, De vacaciones."]},
   horarios:{t:"Horarios y avisos",obj:"Capturar el horario y vacaciones de cada persona y los canales de aviso del timer.",hu:["A4"],datos:["Persona, rol, horario, días laborales y vacaciones."],acc:["Editar horario y vacaciones de una persona.","Activar canales de aviso de la fase 1."],val:["La hora de salida debe ser mayor a la de entrada.","Las fases 2 y 3 se muestran deshabilitadas."],estados:[]},
   origen:{t:"Origen de datos",obj:"Ver el avance de la migración y de dónde lee cada pantalla durante la transición.",hu:["A6"],datos:["Avance de migración de tickets abiertos e histórico; origen por pantalla."],acc:["Freno de emergencia: volver a leer solo de Zoho, con confirmación."],val:["Solo la dueña del sistema puede usar el freno."],estados:["Leyendo de Temis y Zoho, Solo Zoho por emergencia."]},
-  detalle:{t:"Detalle del ticket",obj:"Ver y trabajar un ticket sin saturar: encabezado con estatus y reloj, datos, responsables y tres pestañas.",hu:["A1","A2","A3","A7","A8"],datos:["Encabezado: folio, tipo, título, estatus actual, reloj con mi tiempo y botones del siguiente paso.","Datos: tipo, prioridad, versión, cliente, módulo y fecha de entrega.","Responsables en un solo campo múltiple.","Pestañas: Comentarios con adjuntos e incidencias de SPD, Análisis con los Gherkins de Git, Historial."],acc:["Prender o pausar mi reloj en el ticket.","Avanzar al siguiente estatus o cancelar.","Agregar o quitar responsables.","Comentar y adjuntar documentos.","Mover la fecha de entrega con motivo.","Corregir mi tiempo con motivo."],val:["Pasar a Por liberar requiere versión.","Mover la fecha requiere motivo.","Corregir tiempo requiere motivo y no acepta negativos."],estados:["Al pasar a Liberado, Cerrado o Cancelado, los relojes de ese ticket se detienen y ya no se muestra el reloj.","No se muestra el camino completo de estatus; solo el actual y el siguiente paso."]}
+  tiempos:{t:"Mis tiempos",obj:"Ver, agregar y editar todos mis tiempos, de tickets y de actividades.",hu:["A9","A3"],datos:["Totales de la semana: total, tickets, actividades y cuántos son manuales o editados.","Registros por día: horario, ticket o actividad, cómo se metió, duración."],acc:["Cambiar de semana.","Agregar tiempo manual.","Editar un registro dentro del plazo.","Pausar el tramo en curso."],val:["Motivo obligatorio.","Fin mayor que inicio.","Sin empalmes con otros registros del mismo día.","Sin días futuros ni fuera del plazo configurado."],estados:["Reloj, Manual, Editado, En curso, Cerrado."]},
+  actividades:{t:"Actividades y tiempos",obj:"Administrar las actividades fuera de tickets y el plazo para agregar o editar tiempo.",hu:["A9"],datos:["Lista de actividades con su estado; plazo en días."],acc:["Agregar actividad.","Activar o desactivar.","Guardar el plazo."],val:["No se repiten nombres.","Las de default no se borran, solo se desactivan.","Plazo entre 0 y 60 días."],estados:[]},
+  detalle:{t:"Detalle del ticket",obj:"Ver y trabajar un ticket sin saturar: encabezado con estatus y reloj, datos, responsables y tres pestañas.",hu:["A1","A2","A3","A7","A8"],datos:["Encabezado: folio, tipo, título, estatus actual, reloj con mi tiempo y botones del siguiente paso.","Datos: cliente, RFC, correo, tipo, prioridad, módulo, versión y fecha de entrega. Cliente, RFC y correo vienen de Desk y no se editan.","Responsables en un solo campo múltiple.","Pestañas: Comentarios con adjuntos e incidencias de SPD, Análisis con los Gherkins de Git, Historial."],acc:["Prender o pausar mi reloj en el ticket.","Avanzar al siguiente estatus o cancelar.","Agregar o quitar responsables.","Comentar y adjuntar documentos.","Mover la fecha de entrega con motivo.","El tiempo se agrega o edita en Mis tiempos, desde el menú."],val:["Pasar a Por liberar requiere versión.","Mover la fecha requiere motivo.","Corregir tiempo requiere motivo y no acepta negativos."],estados:["Al pasar a Liberado, Cerrado o Cancelado, los relojes de ese ticket se detienen y ya no se muestra el reloj.","No se muestra el camino completo de estatus; solo el actual y el siguiente paso."]}
 };
 
 /* ---------- Render principal ---------- */
-function render(){const d=document.getElementById("det");if(d)renderDet.keep=d.scrollTop;renderScope();renderSide();renderTop();renderBody();renderDet()}
+const SPR={
+ axo:{n:"Axo",d:"Ajolote",pal:{k:"#3b2236",p:"#f7a8c4",P:"#e46a9b",w:"#ffffff",c:"#ff7aa8",e:"#1b1b1b"},rows:[
+ "................","P..P........P..P",".PP.kkkkkkkk.PP.","PP.kppppppppk.PP","..kppppppppppk..","P.kpewppppewpk.P",".PkpeeppppeepkP.","..kpcppkkppcpk..","..kppppppppppk..","...kkppppppkk...","....kppppppk....","...kppwwwwppk...","...kppwwwwppk...","...kpppppppppk..","....kpk..kpk....","....kk....kk...."]},
+ fox:{n:"Zorri",d:"Zorrito",pal:{k:"#3a1d0e",o:"#f08a2c",O:"#c96413",w:"#fff7ee",e:"#1b1b1b",n:"#1b1b1b"},rows:[
+ "..k..........k..",".kok........kok.",".kOok......koOk.",".kooookkkkoooook","..koooooooooook..","..kowwooooowwok..","..koeeooooeeok...","..kowwwoowwwok...","...kwwwnnwwwk....","....kwwwwwwk.....","...kkoooooookk...","..koooowwoooook..","..kooowwwwoook...","..koooowwoooook..","...kook..kook....","...kk......kk...."]},
+ bot:{n:"Bit",d:"Robotcito",pal:{k:"#23262b",g:"#cfd5dc",G:"#9aa3ad",b:"#42d3f5",o:"#f08a2c",y:"#ffd23f"},rows:[
+ ".......yy.......",".......kk.......","....kkkkkkkk....","...kggggggggk...","...kgbbggbbgk...","...kgbbggbbgk...","...kggggggggk...","...kggkkkkggk...","...kggggggggk...","....kkkkkkkk....","..kkooooooookk..",".kGkoowwwwookGk.",".kGkooooooookGk.","..kkooooooookk..","....kGk..kGk....","....kk....kk...."]}
+};
+SPR.bot.pal.w="#fff";
+function sprite(id,cls="petsvg"){const s=SPR[id];let r="";s.rows.forEach((row,y)=>{row.padEnd(16,".").slice(0,16).split("").forEach((ch,x)=>{const c=s.pal[ch];if(c)r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${c}"/>`})});return `<svg class="${cls}" viewBox="0 0 16 16" aria-hidden="true">${r}</svg>`}
+const NEWS=[["21/10/2026","Mis tiempos: agrega o edita tus registros y elige actividades como Daily o Junta."],["21/10/2026","Menciones con @ en los comentarios."],["20/10/2026","Kanban y Backlog del equipo."]];
+function petGreeting(){const g=misGroups(),f=g.toca.filter(needsFollow).length,first=ME.split(" ")[0];
+  if(!g.toca.length)return `¡Hola, ${first}! Hoy no tienes nada pendiente. ¿Te ayudo con algo?`;
+  return `¡Hola, ${first}! Hoy te ${g.toca.length===1?"toca 1 ticket":"tocan "+g.toca.length+" tickets"}${f?` y ${f} ${f===1?"seguimiento":"seguimientos"} al cliente`:""}.`}
+function renderPet(){
+  if(S.pet==="off"){$("#petSlot").innerHTML="";return}
+  const g=misGroups();
+  let panel="";
+  if(S.petOpen){
+    const view=S.petView||"home";
+    let body="";
+    if(view==="home")body=`<button class="op" data-petgo="mis">Ver lo que me toca<small>${g.toca.length} en Mis tickets</small></button>
+      <button class="op" data-pethelp="1">¿Cómo se usa esta pantalla?<small>Te enseño con el recorrido</small></button>
+      <button class="op" data-petview="ask">Pregúntame<span class="phase2">Fase 2</span><small>Respondo con IA cómo hacer algo en Temis</small></button>
+      <button class="op" data-petview="news">¿Qué hay de nuevo?${S.seen?"":'<span class="dotnew"></span>'}<small>Cambios de las últimas versiones</small></button>
+      <button class="op" data-report="falla">Reportar una falla<small>Le llega a Jaqueline con la pantalla y la hora</small></button>
+      <button class="op" data-report="idea">Sugerir una mejora</button>`;
+    if(view==="news")body=`<button class="op" data-petview="home"><small>‹ Regresar</small></button><ul class="news" style="margin:0 10px;padding-left:16px">${NEWS.map(([d,m])=>`<li><time>${d}</time>${esc(m)}</li>`).join("")}</ul>`;
+    if(view==="ask")body=`<button class="op" data-petview="home"><small>‹ Regresar</small></button>${S.chat.map(([w,m])=>`<div class="bubble ${w==="me"?"me":""}">${esc(m)}</div>`).join("")||'<div class="bubble">Pregúntame algo, por ejemplo: ¿cómo muevo la fecha de entrega?</div>'}<form class="ask" id="askF"><input id="askQ" placeholder="Escribe tu duda" aria-label="Tu duda"><button class="btn pri">Enviar</button></form>`;
+    panel=`<div class="petpanel" id="petpanel" role="dialog" aria-label="Ayuda de ${SPR[S.pet].n}"><div class="pp-h"><span class="face">${sprite(S.pet)}</span><p><b>${SPR[S.pet].n}</b><br>${esc(petGreeting())}</p></div><div class="pp-b">${body}</div></div>`;
+  }
+  $("#petSlot").innerHTML=`${panel}<button class="pet" id="pet" aria-label="Abrir ayuda de ${SPR[S.pet].n}"><span class="bob" style="display:block;width:100%;height:100%">${sprite(S.pet)}</span>${g.toca.length&&!S.petOpen?`<span class="badge">${g.toca.length}</span>`:""}</button>`;
+}
+const THEMES=[["gm","Default","#f08a2c"],["bluegm","BlueGM","#ff9015"],["classic","Clásico","#e07a1f"],["light","Claro","#ef8417"],["dark","Oscuro","#c66a10"],["corporate","Corporativo","#2563eb"],["emerald","Esmeralda","#10b981"],["valentine","Valentine","#e96d7b"],["sunset","Atardecer","#fb7185"],["dracula","Drácula","#bd93f9"],["coffee","Café","#db924b"],["night","Noche","#38bdf8"]];
+function renderProf(){
+  if(!S.profOpen){$("#profSlot").innerHTML="";return}
+  const i=PEOPLE[ME];
+  $("#profSlot").innerHTML=`<div class="prof" id="prof" role="dialog" aria-label="Mi perfil">
+   <div class="ph"><span class="avatar ${roleClass(ME)}">${i.ini}</span><div><b>${esc(ME)}</b><small>${esc(ME.toLowerCase().replace(/ /g,".").normalize("NFD").replace(/[̀-ͯ]/g,""))}@gmtransporterp.com</small><small>${i.rol}${i.lider?" · Líder":""}</small></div></div>
+   <section><h5>Apariencia</h5><div class="sw">${THEMES.map(([k,n,c])=>`<button data-theme-pick="${k}" class="${S.theme===k?"on":""}" style="background:${c}" title="${n}" aria-label="Tema ${n}"></button>`).join("")}</div>
+     <div class="seg">${[["claro","Claro"],["atenuado","Atenuado"],["oscuro","Oscuro"],["auto","Automático"]].map(([k,l])=>`<button data-mode="${k}" class="${S.mode===k?"on":""}">${l}</button>`).join("")}</div>
+     <div class="seg">${[["comoda","Cómoda"],["compacta","Compacta"]].map(([k,l])=>`<button data-dens="${k}" class="${S.dens===k?"on":""}">${l}</button>`).join("")}</div></section>
+   <section><h5>Mi mascota</h5><div class="petpick">${Object.entries(SPR).map(([k,v])=>`<button data-petpick="${k}" class="${S.pet===k?"on":""}"><span class="sp">${sprite(k)}</span>${v.n}<small style="color:var(--sub)">${v.d}</small></button>`).join("")}</div>
+     <label class="inline" style="font-size:12.5px"><input type="checkbox" id="petOff" ${S.pet==="off"?"checked":""}> No mostrar mascota</label></section>
+   <section><h5>Inicio</h5><select id="homePick">${[["mis","Mis tickets"],["tickets","Tickets"],["kanban","Kanban"],["tiempos","Mis tiempos"]].map(([k,l])=>`<option value="${k}" ${S.home===k?"selected":""}>${l}</option>`).join("")}</select></section>
+   <section><h5>Mis avisos</h5>${[["Menciones","m1"],["Seguimiento al cliente","m2"],["Reloj al entrar y salir","m3"]].map(([l,id])=>`<label class="inline" style="font-size:12.5px"><input type="checkbox" id="${id}" checked> ${l}</label>`).join("")}<small style="color:var(--sub)">Llegan por Temis, el navegador y Teams.</small></section>
+   <section><h5>Mi horario</h5><span class="mono">${i.h} · ${i.dias}</span><small style="color:var(--sub)">Lo cambia el administrador.</small></section>
+   <section><h5>Ayuda</h5><button class="lnk" data-pethelp="1">¿Cómo se usa esta pantalla?</button><button class="lnk" data-petnews="1">¿Qué hay de nuevo?${S.seen?"":'<span class="dotnew"></span>'}</button><button class="lnk" data-report="falla">Reportar una falla</button><button class="lnk" data-report="idea">Sugerir una mejora</button></section>
+  </div>`;
+}
+function reportModal(kind){
+  const scr={mis:"Mis tickets",tickets:"Tickets",kanban:"Kanban",backlog:"Backlog",tiempos:"Mis tiempos",envivo:"En vivo",horarios:"Horarios y avisos",actividades:"Actividades y tiempos",reglas:"Reglas y plazos",origen:"Origen de datos"}[S.route]+(S.open?" · ticket "+fid(S.open):"");
+  modal(`<div class="mod-h">${kind==="falla"?"Reportar una falla":"Sugerir una mejora"}</div><form class="mod-b" novalidate>
+   <div><label for="rTxt">${kind==="falla"?"¿Qué pasó?":"¿Qué te gustaría?"}</label><textarea id="rTxt" rows="4" placeholder="${kind==="falla"?"Ej. al mover la fecha me salió un error":"Ej. poder filtrar por cliente en el Kanban"}"></textarea></div>
+   <div><label for="rFile">Captura (opcional)</label><input id="rFile" type="file" accept="image/*"></div>
+   <div style="font-size:12px;color:var(--sub)">Se envía con: pantalla <b>${esc(scr)}</b>, usuario <b>${esc(ME)}</b> y la hora <b>${now()}</b>. Le llega a Jaqueline.</div>
+   <div class="err" id="rErr" hidden></div></form>
+   <div class="mod-f"><button class="btn" data-mclose="1">Cancelar</button><button class="btn pri" id="rOk">Enviar</button></div>`);
+  $("#rOk").onclick=()=>{if(!$("#rTxt").value.trim()){$("#rErr").textContent="Cuéntanos qué pasó en una o dos líneas.";$("#rErr").hidden=false;return}closeModal();toast(kind==="falla"?"¡Gracias! Le avisamos a Jaqueline de la falla.":"¡Gracias! Tu idea le llegó a Jaqueline.")};
+}
+function newTicketModal(){
+  modal(`<div class="mod-h">Nuevo ticket</div><form class="mod-b" novalidate>
+   <div><label for="nT">Título</label><input id="nT" placeholder="Ej. Agregar filtro por cliente al reporte de cobranza"></div>
+   <div><label for="nD">Descripción</label><textarea id="nD" rows="3"></textarea></div>
+   <div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:1;min-width:150px"><label for="nTipo">Tipo</label><select id="nTipo">${Object.entries(TIPOS).map(([k,[l]])=>`<option value="${k}">${l}</option>`).join("")}</select></div><div style="flex:1;min-width:120px"><label for="nP">Prioridad</label><select id="nP"><option>Media</option><option>Urgente</option><option>Alta</option><option>Baja</option></select></div></div>
+   <div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:1;min-width:150px"><label for="nC">Cliente (opcional)</label><select id="nC"><option value="">Interno, sin cliente</option>${Object.keys(CLIENTES).map(c=>`<option>${esc(c)}</option>`).join("")}</select></div><div style="flex:1;min-width:120px"><label for="nM">Módulo</label><select id="nM">${["Facturación","Tráfico","Cobranza","Contabilidad","Nómina","Catálogos"].map(m=>`<option>${m}</option>`).join("")}</select></div></div>
+   <div style="font-size:12px;color:var(--sub)">Se crea con folio de Temis y queda registrado que lo creaste tú.</div><div class="err" id="nErr" hidden></div></form>
+   <div class="mod-f"><button class="btn" data-mclose="1">Cancelar</button><button class="btn pri" id="nOk">Crear ticket</button></div>`);
+  $("#nOk").onclick=()=>{const ti=$("#nT").value.trim();if(!ti){$("#nErr").textContent="Escribe un título para el ticket.";$("#nErr").hidden=false;return}
+    const id=Math.max(0,...S.tickets.filter(t=>t.origen==="temis").map(t=>t.id))+1;
+    S.tickets.unshift({id,origen:"temis",creado:[ME,now()],titulo:ti,cliente:$("#nC").value,modulo:$("#nM").value,tipo:$("#nTipo").value,prio:$("#nP").value,step:0,fecha:"",ver:"",resp:[ME],t:{},inc:[],hist:[[now(),ME+" lo creó en Temis"]],fh:[],reb:0,tags:[],seg:[],c:$("#nD").value.trim()?[{w:ME,d:now(),x:$("#nD").value.trim(),f:[]}]:[],g:[]});
+    closeModal();S.route="tickets";S.filter="todos";S.open=id;toast("Ticket "+fid(id)+" creado.");render()};
+}
+const ANSWERS=[[/fecha/,"En el ticket, junto a Entrega al cliente, da clic en Mover. Te pide la nueva fecha y el motivo, y queda en el historial."],[/tiempo|reloj|hora/,"Para agregar o editar tiempo ve a Mis tiempos en el menú. Ahí está Agregar tiempo manual; cada registro guarda si fue Reloj, Manual o Editado."],[/estatus|cancel/,"Da clic en el estatus del ticket, arriba a la izquierda. Se abren todos los estatus y eliges uno; Cancelado está al final."],[/etiqueta|tag/,"En el ticket, en Etiquetas, escribe el nombre y da Enter. Si no existe, se crea."]];
+function render(){const d=document.getElementById("det");if(d)renderDet.keep=d.scrollTop;renderScope();renderSide();renderTop();renderBody();renderDet();renderPet();renderProf();applyLook()}
+function applyLook(){const th=THEMES.find(x=>x[0]===S.theme);document.documentElement.style.setProperty("--accent",th[2]);$("#frame").classList.toggle("compact",S.dens==="compacta");const m=S.mode==="oscuro"?"dark":S.mode==="claro"?"light":null;if(m)document.documentElement.setAttribute("data-theme",m);else document.documentElement.removeAttribute("data-theme")}
 function renderScope(){$("#scope").innerHTML='<span>Alcance aprobado:</span>'+Object.keys(HU).map(huTag).join("")}
 function renderSide(){
   const it=(r,ico,l,opt={})=>`<button class="nav ${S.route===r?"on":""} ${opt.off?"off":""}" ${opt.off?'aria-disabled="true" title="Existe hoy en Temis; no cambia en este mockup"':`data-go="${r}"`} id="nav-${r}">${svg(ico)}<span>${l}</span></button>`;
   $("#side").innerHTML=`<div class="brand"><span class="lg">T</span><div><b>Temis</b><small>GM Transport</small></div></div>
     <div class="nav-g">Seguimiento</div>
     ${it("dashboard","dash","Dashboard",{off:1})}${it("calendario","cal","Calendario",{off:1})}
-    ${it("tickets","tix","Tickets",{isNew:1})}${it("envivo","live","En vivo",{isNew:1})}
-    ${it("kanban","team","Kanban Equipo",{off:1})}${it("carga","bars","Carga de trabajo",{off:1})}${it("alertas","alert","Alertas",{off:1})}
+    ${it("mis","tix","Mis tickets",{isNew:1})}${it("tickets","tix","Tickets",{isNew:1})}${it("kanban","team","Kanban",{isNew:1})}${it("backlog","bars","Backlog",{isNew:1})}${it("tiempos","clock","Mis tiempos",{isNew:1})}${it("envivo","live","En vivo",{isNew:1})}
+    ${it("carga","bars","Carga de trabajo",{off:1})}${it("alertas","alert","Alertas",{off:1})}
     <div class="nav-g">Configuración</div>
-    ${it("horarios","clock","Horarios y avisos",{isNew:1})}${it("origen","db","Origen de datos",{isNew:1})}
+    ${it("horarios","clock","Horarios y avisos",{isNew:1})}${it("actividades","tix","Actividades y tiempos",{isNew:1})}${it("reglas","clock","Reglas y plazos",{isNew:1})}${it("origen","db","Origen de datos",{isNew:1})}
     <div class="side-foot">Versión 2.4.0</div>`;
 }
+function timerLabel(tm){if(tm.id){const t=tk(tm.id);return `<span class="folio">${fid(t.id)}</span> ${esc(t.titulo)}`}return `<span class="actchip">${esc(tm.act)}</span>`}
+function spResults(){
+  const q=(S.spQ||"").trim().toLowerCase();
+  const acts=S.acts.filter(a=>a.on&&a.n.toLowerCase().includes(q));
+  const tix=S.tickets.filter(t=>!CLOSED.includes(stOf(t)[0])&&(!q||String(t.id).includes(q)||t.titulo.toLowerCase().includes(q)))
+    .sort((a,b)=>(b.resp.includes(ME)?1:0)-(a.resp.includes(ME)?1:0)).slice(0,6);
+  let h="";
+  if(tix.length)h+=`<h6>${q?"Tickets":"Mis tickets primero"}</h6>`+tix.map(t=>`<button class="it" data-sptix="${t.id}"><span class="folio">${fid(t.id)}</span><span class="t">${esc(t.titulo)}</span></button>`).join("");
+  if(acts.length)h+=`<h6>Actividades administrativas</h6>`+acts.map(a=>`<button class="it" data-spact="${esc(a.n)}"><span class="actchip">${esc(a.n)}</span></button>`).join("");
+  return h||`<div class="none">No encontramos tickets abiertos ni actividades con "${esc(q)}".</div>`;
+}
 function timerPill(){
-  if(S.timer){const t=tk(S.timer.id);return `<div class="tpill run" id="tpill"><span class="tt"><span class="folio">#${t.id}</span> ${esc(t.titulo)}</span><span class="tc mono" id="tclock">${fmt(runSec(t,ME))}</span><button class="tbtn" data-pause="1" aria-label="Pausar timer">${PAUSE}</button></div>`}
-  return `<div class="tpill" id="tpill"><span class="tt" style="color:var(--sub)">Sin timer corriendo</span><button class="tbtn ghost" disabled aria-label="Sin timer">${PLAY}</button></div>`;
+  if(S.timer)return `<div class="tpill run" id="tpill"><span class="tt">${timerLabel(S.timer)}</span><span class="tc mono" id="tclock">${fmt((Date.now()-S.timer.since)/1000)}</span><button class="tbtn" data-pause="1" aria-label="Pausar reloj">${PAUSE}</button></div>`;
+  return `<div class="tpill" id="tpill"><span class="tt" style="color:var(--sub)">Sin reloj</span><button class="startbtn" id="startBtn" aria-haspopup="dialog" aria-expanded="${!!S.spOpen}">${PLAY}Iniciar reloj</button>${S.spOpen?`<div class="spop" id="spop"><input id="spQ" type="search" placeholder="Busca un ticket por folio o título, o una actividad" aria-label="Buscar ticket o actividad" value="${esc(S.spQ||"")}"><div id="spRes">${spResults()}</div></div>`:""}</div>`;
 }
 function renderTop(){
-  const titles={tickets:"Tickets",envivo:"En vivo",horarios:"Horarios y avisos",origen:"Origen de datos"};
+  const titles={mis:"Mis tickets",kanban:"Kanban",backlog:"Backlog",reglas:"Reglas y plazos",tickets:"Tickets",tiempos:"Mis tiempos",actividades:"Actividades y tiempos",envivo:"En vivo",horarios:"Horarios y avisos",origen:"Origen de datos"};
   let mid="";
+  if(S.route==="kanban"||S.route==="backlog")mid=kFilters();
   if(S.route==="tickets"){
     const f=[["todos","Todos"],["mios","Míos"],["error","Errores"],["cotmej","Cotizaciones y mejoras"],["cerrados","Cerrados"]];
-    mid=`<input class="search" id="q" type="search" placeholder="Buscar folio, título o cliente" value="${esc(S.q)}" aria-label="Buscar">
+    mid=`<button class="btn pri" id="btnNew">Nuevo ticket</button><input class="search" id="q" type="search" placeholder="Buscar folio, título o cliente" value="${esc(S.q)}" aria-label="Buscar">
       <div class="seg" id="filters">${f.map(([k,l])=>`<button data-f="${k}" class="${S.filter===k?"on":""}">${l}</button>`).join("")}</div>`;
   }
+  if(S.route==="tiempos")mid=`<div class="wk"><button data-wk="-1" aria-label="Semana anterior">‹</button><span>${weekLabel()}</span><button data-wk="1" aria-label="Semana siguiente" ${S.week>=0?"disabled":""}>›</button></div><span style="flex:1"></span><button class="btn pri" id="btnAddT">Agregar tiempo manual</button>`;
   $("#top").innerHTML=`<h2>${titles[S.route]}</h2><div class="mid">${mid}</div>
-    <div class="right"><span class="live" id="liveDot" title="Los cambios se ven al instante"><i></i>En vivo</span>${timerPill()}<span class="avatar" title="${ME}">${PEOPLE[ME].ini}</span></div>`;
+    <div class="right"><span class="live" id="liveDot" title="Los cambios se ven al instante"><i></i>En vivo</span>${timerPill()}<button class="avatar ${roleClass(ME)}" id="btnProf" style="border:0" aria-label="Mi perfil" title="${esc(ME)}">${PEOPLE[ME].ini}</button></div>`;
 }
 function bannerHtml(){
   if(!S.banner)return"";
@@ -572,6 +873,12 @@ function renderBody(){
   if(S.route==="envivo")h+=viewLive();
   if(S.route==="horarios")h+=viewHorarios();
   if(S.route==="origen")h+=viewOrigen();
+  if(S.route==="tiempos")h+=viewTiempos();
+  if(S.route==="mis")h+=viewMis();
+  if(S.route==="kanban")h+=viewKanban();
+  if(S.route==="backlog")h+=viewBacklog();
+  if(S.route==="reglas")h+=viewReglas();
+  if(S.route==="actividades")h+=viewActividades();
   $("#body").innerHTML=h;
 }
 function filtered(){
@@ -583,7 +890,8 @@ function filtered(){
     if(S.filter==="mios"&&!Object.values(t.resp).includes(ME))return false;
     if(S.filter==="error"&&t.tipo!=="error")return false;
     if(S.filter==="cotmej"&&t.tipo==="error")return false;
-    if(q&&!(String(t.id).includes(q)||t.titulo.toLowerCase().includes(q)||t.cliente.toLowerCase().includes(q)))return false;
+    if(S.tagF&&!t.tags.includes(S.tagF))return false;
+    if(q&&!(fid(t.id).toLowerCase().includes(q)||t.tags.some(x=>x.toLowerCase().includes(q))||t.titulo.toLowerCase().includes(q)||t.cliente.toLowerCase().includes(q)))return false;
     return true;
   });
 }
@@ -599,8 +907,8 @@ function viewTickets(){
   if(!rows.length)return `<div class="tbl-wrap"><div class="empty">No hay tickets con el filtro <b>${labels[S.filter]}</b>${S.q?` y la búsqueda <b>${esc(S.q)}</b>`:""}.<br><br><button class="btn" data-clear="1">Quitar filtros</button></div></div>`;
   return `<div class="tbl-wrap" id="tbl"><table><thead><tr><th>Folio</th><th>Ticket</th><th>Tipo</th><th>Estatus</th><th>Responsables</th><th>Entrega al cliente</th></tr></thead><tbody>
   ${rows.map(t=>{const [tl,col]=TIPOS[t.tipo];const late=lateDate(t.fecha)&&!CLOSED.includes(stOf(t)[0]);
-    return `<tr data-open="${t.id}" id="row-${t.id}"><td class="folio">#${t.id}</td>
-    <td class="tit">${esc(t.titulo)}<small>${esc(t.cliente)} · ${esc(t.modulo)} · ${esc(t.prio)}</small></td>
+    return `<tr data-open="${t.id}" id="row-${t.id}"><td class="folio">${fid(t.id)}</td>
+    <td class="tit">${esc(t.titulo)}<small>${esc(t.cliente||"Interno")} · ${esc(t.modulo)} · ${esc(t.prio)}</small>${t.tags.length?`<div class="tags">${t.tags.map(x=>tagHtml(x)).join("")}</div>`:""}</td>
     <td><span class="tipo"><span class="dot" style="background:${col}"></span>${tl}</span></td>
     <td>${stPill(t)}</td>
     <td><div class="resp">${t.resp.map(n=>`<span class="avatar sm ${roleClass(n)}" title="${esc(n)} · ${PEOPLE[n].rol}">${PEOPLE[n].ini}</span>`).join("")||'<span style="color:var(--sub)">Sin asignar</span>'}</div></td>
@@ -608,15 +916,120 @@ function viewTickets(){
 </tr>`}).join("")}
   </tbody></table></div>`;
 }
+function weekDays(){const m=new Date(2026,9,19+S.week*7);return [...Array(7)].map((_,i)=>{const d=new Date(m);d.setDate(m.getDate()+i);return pad(d.getDate())+"/"+pad(d.getMonth()+1)+"/"+d.getFullYear()})}
+function weekLabel(){const w=weekDays();return "Semana del "+w[0]+" al "+w[6]}
+const DIAS=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+function entWhat(e){
+  if(e.kind==="ticket"){const t=tk(e.ref);return `<b><span class="folio">${fid(e.ref)}</span> ${esc(t?t.titulo:"")}</b><small>${t?esc(t.cliente):""}</small>`}
+  return `<b><span class="actchip">${esc(e.ref)}</span></b><small>Actividad</small>`;
+}
+const OR={reloj:"Reloj",manual:"Manual",editado:"Editado"};
+function viewTiempos(){
+  const days=weekDays(),es=S.entries.filter(e=>e.who===ME&&days.includes(e.date));
+  const tot=es.reduce((a,e)=>a+durMin(e),0)+(S.week===0&&S.timer?Math.floor((Date.now()-S.timer.since)/60000):0);
+  const tix=es.filter(e=>e.kind==="ticket").reduce((a,e)=>a+durMin(e),0),acts=es.filter(e=>e.kind==="act").reduce((a,e)=>a+durMin(e),0);
+  const marked=es.filter(e=>e.origen!=="reloj").length;
+  let h=`<div class="kpis" id="tKpis"><div><small>Total de la semana</small><b class="mono">${fmtM(tot)}</b></div><div><small>En tickets</small><b class="mono">${fmtM(tix)}</b></div><div><small>En actividades</small><b class="mono">${fmtM(acts)}</b></div><div><small>Manuales o editados</small><b class="mono">${marked}</b></div></div><div id="tList">`;
+  let any=false;
+  days.forEach((d,i)=>{
+    const de=es.filter(e=>e.date===d).sort((a,b)=>toMin(a.ini)-toMin(b.ini));
+    const live=S.week===0&&d==="21/10/2026"&&S.timer;
+    if(!de.length&&!live)return;any=true;
+    const sum=de.reduce((a,e)=>a+durMin(e),0);
+    const editable=daysAgo(d)<=S.diasEdit;
+    h+=`<div class="day"><div class="day-h"><b>${DIAS[i]} ${d}</b><span class="mono">${fmtM(sum)}</span></div>`;
+    de.forEach(e=>{h+=`<div class="ent" data-eid="${e.id}"><span class="when">${e.ini} a ${e.fin}</span><div class="what">${entWhat(e)}</div><span class="ochip ${e.origen}" title="${e.origen==="editado"?"Original: "+esc(e.orig)+". ":""}${e.motivo?"Motivo: "+esc(e.motivo):""}">${OR[e.origen]}</span><span class="dur">${fmtM(durMin(e))}</span>${editable?`<button class="link" data-edit="${e.id}">Editar</button>`:'<span class="lock">Cerrado</span>'}</div>`});
+    if(live)h+=`<div class="ent live"><span class="when">${hm(S.timer.since)} a ahora</span><div class="what">${S.timer.id?entWhat({kind:"ticket",ref:S.timer.id}):entWhat({kind:"act",ref:S.timer.act})}</div><span class="ochip curso">En curso</span><span class="dur" id="liveDur">${fmtM(Math.floor((Date.now()-S.timer.since)/60000))}</span><button class="link" data-pause="1">Pausar</button></div>`;
+    h+=`</div>`;
+  });
+  if(!any)h+=`<div class="empty">No hay tiempos registrados en esta semana.</div>`;
+  return h+`</div><p style="color:var(--sub);font-size:12px;margin:4px 0 0">Puedes agregar o editar tiempos de hasta ${S.diasEdit} días atrás. Los registros más viejos aparecen como Cerrado.</p>`;
+}
+function viewActividades(){
+  return `<div class="grid2"><div class="box" id="actBox"><h3>Actividades fuera de tickets</h3><p>Aparecen al iniciar el reloj y al agregar tiempo manual. Las que vienen por default se pueden desactivar, no borrar.</p>
+    <div>${S.acts.map((a,i)=>`<div class="actrow"><span class="nm"><span class="actchip">${esc(a.n)}</span>${a.def?'<span class="def">Por default</span>':""}</span><label class="inline" style="font-size:12px"><input type="checkbox" data-acton="${i}" ${a.on?"checked":""}> Activa</label></div>`).join("")}</div>
+    <div class="inline"><input id="newAct" placeholder="Ej. Capacitación a cliente" aria-label="Nueva actividad"><button class="btn" id="btnNewAct">Agregar actividad</button></div></div>
+  <div class="box" id="plazoBox"><h3>Plazo para agregar o editar tiempo</h3><p>Después de este plazo los registros quedan cerrados y ya no se pueden agregar ni editar.</p>
+    <div class="inline"><label for="diasEdit">Hasta</label><input id="diasEdit" type="number" min="0" max="60" value="${S.diasEdit}" style="width:80px"><span>días atrás</span><button class="btn pri" id="btnDias">Guardar</button></div>
+    <p>Todo registro guarda cómo se metió: Reloj, Manual o Editado. Los manuales y editados piden motivo.</p></div></div>`;
+}
+const ACTIVE_BY_ROL={Analista:["Nuevo","En análisis","Documentando"],Desarrollo:["En desarrollo"],Calidad:["En calidad"],Soporte:["Nuevo"]};
+const lastSeg = t => t.seg.length?t.seg[t.seg.length-1][0]:null;
+const needsFollow = t => stOf(t)[0]==="Esperando al cliente"&&lastSeg(t)&&bizDays(lastSeg(t))>=S.cfg.segDias;
+function misGroups(){
+  const mine=S.tickets.filter(t=>t.resp.includes(ME)&&!CLOSED.includes(stOf(t)[0])&&!t.cancel);
+  const act=ACTIVE_BY_ROL[PEOPLE[ME].rol]||[];
+  const toca=mine.filter(t=>act.includes(stOf(t)[0])||(isAnalista()&&needsFollow(t)));
+  const esp=isAnalista()?mine.filter(t=>stOf(t)[0]==="Esperando al cliente"&&!toca.includes(t)):[];
+  const proc=mine.filter(t=>!toca.includes(t)&&!esp.includes(t));
+  return {toca,esp,proc};
+}
+function tcard(t){
+  const [tl,col]=TIPOS[t.tipo];const f=needsFollow(t)&&isAnalista();
+  return `<button class="tcard" data-open="${t.id}"><div style="display:flex;gap:8px;align-items:center"><span class="folio">${fid(t.id)}</span><span class="tipo"><span class="dot" style="background:${col}"></span>${tl}</span></div>
+  <span class="tt">${esc(t.titulo)}</span>${stPill(t)}${f?`<span class="nudge">Lleva ${bizDays(lastSeg(t))} días hábiles sin seguimiento. ¿Le escribimos?</span>`:""}
+  ${t.tags.length?`<div class="tags">${t.tags.map(x=>tagHtml(x)).join("")}</div>`:""}
+  <div class="ft"><span>${esc(t.cliente||"Interno")}</span><span class="mono ${lateDate(t.fecha)?"late":""}">${t.fecha||"Sin fecha"}</span></div></button>`;
+}
+function viewMis(){
+  const g=misGroups();
+  const sec=(id,ti,sub,arr,empty)=>`<div class="grp" id="${id}"><div class="grp-h"><h3>${ti}</h3><span>${arr.length} · ${sub}</span></div>${arr.length?`<div class="tcards">${arr.map(tcard).join("")}</div>`:`<p style="margin:0;color:var(--sub)">${empty}</p>`}</div>`;
+  return sec("gToca","Te toca a ti",isAnalista()?"incluye seguimientos al cliente":"lo que espera algo tuyo",g.toca,"Nada pendiente por ahora.")+
+    (isAnalista()?sec("gEsp","Esperando al cliente","todavía dentro del plazo de seguimiento",g.esp,"Ningún ticket esperando al cliente."):"")+
+    sec("gProc","En proceso","en manos de otra persona; solo para que lo veas",g.proc,"Nada en proceso.");
+}
+function kFilters(){
+  const tags=[...new Set(S.tickets.flatMap(t=>t.tags))].sort();
+  return `<div class="fsel" id="kFil"><select id="kP" aria-label="Persona"><option value="">Todas las personas</option>${Object.keys(PEOPLE).map(n=>`<option ${S.kf.p===n?"selected":""}>${esc(n)}</option>`).join("")}</select>
+  <select id="kT" aria-label="Tipo"><option value="">Todos los tipos</option>${Object.entries(TIPOS).map(([k,[l]])=>`<option value="${k}" ${S.kf.t===k?"selected":""}>${l}</option>`).join("")}</select>
+  <select id="kG" aria-label="Etiqueta"><option value="">Todas las etiquetas</option>${tags.map(x=>`<option ${S.kf.g===x?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`;
+}
+const kPass = t => (!S.kf.p||t.resp.includes(S.kf.p))&&(!S.kf.t||t.tipo===S.kf.t)&&(!S.kf.g||t.tags.includes(S.kf.g));
+const KCOLS=["En análisis","Esperando al cliente","Documentando","En desarrollo","En calidad","Por liberar"];
+function whoRuns(t){const r=[];if(S.timer&&S.timer.id===t.id)r.push(ME);Object.entries(S.others).forEach(([p,o])=>{if(o&&o!=="vac"&&o.id===t.id)r.push(p)});return r}
+function viewKanban(){
+  const live=S.tickets.filter(t=>!t.cancel&&KCOLS.includes(stOf(t)[0])&&kPass(t));
+  return `<div class="kb" id="kb">${KCOLS.map(c=>{const arr=live.filter(t=>stOf(t)[0]===c);return `<div class="kcol" data-kcol="${c}"><div class="kcol-h">${c}<span>${arr.length}</span></div>
+  ${arr.map(t=>{const [,col]=TIPOS[t.tipo],sub=stOf(t)[1],r=whoRuns(t);return `<div class="kcard" draggable="true" data-kid="${t.id}" data-open="${t.id}" tabindex="0"><div style="display:flex;gap:6px;align-items:center"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:${col}"></span><span class="folio">${fid(t.id)}</span>${sub?`<span style="font-size:10.5px;color:var(--sub)">· ${sub}</span>`:""}</div>
+   <span class="tt">${esc(t.titulo)}</span>${t.tags.length?`<div class="tags">${t.tags.map(x=>tagHtml(x)).join("")}</div>`:""}
+   ${r.length?`<span class="run">Reloj corriendo: ${r.map(esc).join(", ")}</span>`:""}
+   <div class="ft"><div class="resp">${t.resp.map(n=>`<span class="avatar sm ${roleClass(n)}" title="${esc(n)}">${PEOPLE[n].ini}</span>`).join("")}</div><span class="mono ${lateDate(t.fecha)?"late":""}">${t.fecha||"Sin fecha"}</span></div></div>`}).join("")}</div>`}).join("")}</div>
+  <p style="color:var(--sub);font-size:12px;margin:6px 0 0">Arrastra una tarjeta a otra columna para cambiar su estatus. Reemplaza al Kanban Equipo.</p>`;
+}
+const ESPERA=["Nuevo","Esperando al cliente","Documentando"];
+function backlogList(){
+  const ids=S.tickets.filter(t=>!t.cancel&&ESPERA.includes(stOf(t)[0])).map(t=>t.id);
+  S.order=S.order.filter(id=>ids.includes(id));ids.forEach(id=>{if(!S.order.includes(id))S.order.push(id)});
+  return S.order.map(tk).filter(kPass);
+}
+function viewBacklog(){
+  const L=backlogList(),ld=isLider();
+  return `${ld?"":`<p class="lockmsg">Solo los líderes pueden cambiar el orden. Tú lo ves en el orden que decidieron.</p>`}
+  <div class="bl" id="bl">${L.map((t,i)=>{const [tl,col]=TIPOS[t.tipo];return `<div class="blr" ${ld?'draggable="true"':""} data-bid="${t.id}">
+   <span class="pos">${i+1}</span>
+   <span class="hd">${ld?`<button data-up="${t.id}" aria-label="Subir">▲</button><button data-down="${t.id}" aria-label="Bajar">▼</button>`:'<span class="grip" aria-hidden="true">·</span>'}</span>
+   <div class="t" data-open="${t.id}"><b><span class="folio">${fid(t.id)}</span> ${esc(t.titulo)}</b><small><span class="dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${col}"></span> ${tl} · ${esc(t.cliente||"Interno")} · ${esc(t.prio)}</small>${t.tags.length?`<div class="tags">${t.tags.map(x=>tagHtml(x)).join("")}</div>`:""}</div>
+   <span class="x1">${stPill(t)}</span>
+   <span class="x2"><div class="resp">${t.resp.map(n=>`<span class="avatar sm ${roleClass(n)}" title="${esc(n)}">${PEOPLE[n].ini}</span>`).join("")||'<span style="color:var(--sub);font-size:12px">Sin asignar</span>'}</div></span>
+   <span class="mono" style="font-size:12px">${t.fecha||"Sin fecha"}</span></div>`}).join("")||'<div class="empty">No hay tickets en espera con estos filtros.</div>'}</div>
+  <p style="color:var(--sub);font-size:12px;margin:8px 0 0">En espera: Nuevos, Esperando al cliente y Documentando. ${ld?"Arrastra o usa las flechas para cambiar el orden.":""}</p>`;
+}
+function viewReglas(){
+  return `<div class="box" id="reglasBox" style="max-width:720px"><h3>Reglas y plazos</h3><p>Todo es configurable. Los cambios aplican para todo el equipo.</p>
+   <div class="cfgrow"><span class="nm"><b>Aviso de seguimiento al cliente</b><small>Si un ticket Esperando al cliente no tiene nada nuevo en la bitácora, se le recuerda al analista.</small></span><span class="inline">Cada <input id="cfgSeg" type="number" min="1" max="30" value="${S.cfg.segDias}" style="width:70px"> días hábiles</span></div>
+   <div class="cfgrow"><span class="nm"><b>Cierre automático después de liberar</b><small>El ticket pasa solo de Liberado a Cerrado.</small></span><label class="inline"><input type="checkbox" id="cfgCierre" ${S.cfg.cierreAuto?"checked":""}> Activo</label><span class="inline">a los <input id="cfgCierreD" type="number" min="1" max="60" value="${S.cfg.cierreDias}" style="width:70px"> días hábiles</span></div>
+   <div class="cfgrow"><span class="nm"><b>Plazo para agregar o editar tiempo</b><small>También se ve en Actividades y tiempos.</small></span><span class="inline">Hasta <input id="cfgEdit" type="number" min="0" max="60" value="${S.diasEdit}" style="width:70px"> días atrás</span></div>
+   <div style="display:flex;justify-content:flex-end"><button class="btn pri" id="btnCfg">Guardar reglas</button></div></div>`;
+}
 function viewLive(){
   const ppl=Object.keys(PEOPLE);
-  const st=p=>p===ME?(S.timer?{id:S.timer.id,since:S.timer.since}:null):S.others[p];
+  const st=p=>p===ME?S.timer:S.others[p];
   const working=ppl.filter(p=>{const s=st(p);return s&&s!=="vac"}).length,vac=ppl.filter(p=>st(p)==="vac").length;
   return `<div class="sum"><span><b>${working}</b>trabajando</span><span><b>${ppl.length-working-vac}</b>sin timer</span><span><b>${vac}</b>de vacaciones</span></div>
   <div class="cards" id="cards">${ppl.map(p=>{const s=st(p),inf=PEOPLE[p];
     let body;
     if(s==="vac")body=`<span class="state" style="color:var(--sub)">De vacaciones</span><span style="color:var(--sub);font-size:12px">${inf.vac}</span>`;
-    else if(s){const t=tk(s.id);body=`<span class="state" style="color:var(--accent-ink)">Trabajando</span><button class="link" data-open="${t.id}" style="text-align:left">#${t.id} ${esc(t.titulo)}</button><span class="clock mono" data-live="${p}">${fmt((Date.now()-s.since)/1000)}</span>`}
+    else if(s){const t=s.id?tk(s.id):null;body=`<span class="state" style="color:var(--accent-ink)">Trabajando</span>${t?`<button class="link" data-open="${t.id}" style="text-align:left">#${t.id} ${esc(t.titulo)}</button>`:`<span><span class="actchip">${esc(s.act)}</span></span>`}<span class="clock mono" data-live="${p}">${fmt((Date.now()-s.since)/1000)}</span>`}
     else body=`<span class="state" style="color:var(--warn)">Sin timer</span><span style="color:var(--sub);font-size:12px">Horario ${inf.h}</span>`;
     return `<div class="pc ${s&&s!=="vac"?"run":""}"><div class="hd"><span class="avatar">${inf.ini}</span><div><b>${esc(p)}</b><small>${inf.rol}</small></div></div>${body}</div>`}).join("")}</div>`;
 }
@@ -664,16 +1077,56 @@ const roleClass = n => ({Soporte:"r-sop",Analista:"r-ana",Desarrollo:"r-dev",Cal
 const CLOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 3h5M12 3v2"/></svg>';
 const CLIP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4L15 7.1"/></svg>';
 function gherkinHtml(b){return esc(b).split("\n").map(l=>/^\s*#/.test(l)?`<span class="c">${l}</span>`:l.replace(/^(\s*)(Característica|Escenario|Antecedentes|Dado|Cuando|Entonces|Y|Pero)\b/,'$1<span class="k">$2</span>')).join("\n")}
+function mentionHtml(x){let h=esc(x);Object.keys(PEOPLE).forEach(n=>{h=h.split("@"+esc(n)).join(`<span class="mention">@${esc(n)}</span>`)});return h}
+function mentionQuery(ta){const m=ta.value.slice(0,ta.selectionStart).match(/(^|\s)@([^\s@]*)$/);return m?m[2]:null}
+function showMentions(ta){
+  const q=mentionQuery(ta),box=document.getElementById("mlist");
+  if(q===null){if(box)box.remove();return}
+  const nq=q.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  const ppl=Object.keys(PEOPLE).filter(n=>n.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().includes(nq)).slice(0,6);
+  if(!ppl.length){if(box)box.remove();return}
+  const html=ppl.map((n,i)=>`<button type="button" data-mention="${esc(n)}" class="${i===0?"on":""}"><span class="avatar sm ${roleClass(n)}">${PEOPLE[n].ini}</span>${esc(n)}<small>${PEOPLE[n].rol}</small></button>`).join("");
+  if(box)box.innerHTML=html;else ta.closest(".composer").insertAdjacentHTML("beforeend",`<div class="mlist" id="mlist" role="listbox">${html}</div>`);
+}
+function insertMention(n){
+  const ta=document.getElementById("cTxt"),pos=ta.selectionStart,before=ta.value.slice(0,pos).replace(/@([^\s@]*)$/,"@"+n+" ");
+  ta.value=before+ta.value.slice(pos);ta.focus();ta.setSelectionRange(before.length,before.length);
+  const b=document.getElementById("mlist");if(b)b.remove();
+}
+function machotes(t){
+  const [e,sub]=stOf(t),c=t.cliente||"cliente",f=fid(t.id);
+  const firma="\n\nQuedo atenta a sus comentarios.\n\nAtentamente,\n"+ME+"\nVersiones · GM Transport";
+  const L=[];
+  if(e==="En análisis"&&sub==="Cotización")L.push(["Envío de cotización",`Estimado cliente de ${c}:\n\nPor medio del presente le hacemos llegar la cotización correspondiente a su solicitud ${f}, "${t.titulo}".\n\nLe agradeceremos revisarla y confirmarnos su aprobación para continuar con el análisis.`+firma]);
+  if(e==="Esperando al cliente"){
+    L.push(["Seguimiento",`Estimado cliente de ${c}:\n\nLe damos seguimiento al ${sub==="Cotización"?"envío de la cotización":"prototipo de desarrollo"} de su solicitud ${f}, "${t.titulo}", enviado previamente.\n\nQuedamos en espera de su respuesta para continuar.`+firma]);
+    L.push(["Reenvío por ajustes",`Estimado cliente de ${c}:\n\nAtendiendo a sus comentarios, le compartimos ${sub==="Cotización"?"la cotización":"el prototipo"} actualizado de la solicitud ${f}, "${t.titulo}", con los ajustes solicitados.`+firma]);
+    L.push(["Cierre por falta de respuesta",`Estimado cliente de ${c}:\n\nAl no contar con respuesta sobre la solicitud ${f}, "${t.titulo}", procederemos a cerrarla. Si desea retomarla, con gusto la reabrimos.`+firma]);
+  }
+  if(e==="En análisis"&&sub==="Prototipo")L.push(["Envío de prototipo",`Estimado cliente de ${c}:\n\nLe hacemos llegar el Prototipo de Desarrollo de su solicitud ${f}, "${t.titulo}", para su revisión y firma.`+firma]);
+  if(e==="Liberado"||e==="Por liberar")L.push(["Entrega",`Estimado cliente de ${c}:\n\nLe informamos que el cambio de su solicitud ${f}, "${t.titulo}", ya fue liberado e implementado en su sistema en la versión ${t.ver||"vigente"}.\n\nContará con ${S.cfg.cierreDias} días hábiles para validarlo; transcurrido ese plazo sin comentarios, la solicitud se dará por cerrada.`+firma]);
+  if(!L.length)L.push(["Seguimiento general",`Estimado cliente de ${c}:\n\nLe compartimos el avance de su solicitud ${f}, "${t.titulo}": actualmente se encuentra en ${e}.`+firma]);
+  return L;
+}
 function tabBody(t){
   if(S.tab==="comentarios"){
     const spd=t.inc.map(([d,m])=>({w:"SPD",d:d.replace("Segunda Vuelta · ",""),x:m,f:[],spd:1}));
     const all=[...t.c,...spd].sort((a,b)=>{const k=s=>s.d.split(" ")[0].split("/").reverse().join("")+s.d.split(" ")[1];return k(b)<k(a)?-1:1});
-    return `<div class="composer" id="composer"><textarea id="cTxt" placeholder="Escribe un comentario para el equipo" aria-label="Comentario"></textarea>
+    return `<div class="composer" id="composer"><textarea id="cTxt" placeholder="Escribe un comentario. Usa @ para mencionar a alguien" aria-label="Comentario"></textarea>
       ${S.files.length?`<div class="row">${S.files.map((f,i)=>`<span class="fchip">${CLIP}${esc(f[0])}<button data-rmfile="${i}" aria-label="Quitar">×</button></span>`).join("")}</div>`:""}
-      <div class="row"><span class="note">Solo lo ve el equipo. No se envía al cliente.</span>
+      <div class="row"><span class="note">Solo lo ve el equipo. A quien menciones con @ le llega un aviso.</span>
       <label class="btn" for="cFile" style="display:inline-flex;gap:6px;align-items:center">Adjuntar</label><input id="cFile" type="file" multiple hidden>
       <button class="btn pri" id="cSend">Comentar</button></div></div>
-      ${all.length?all.map(c=>`<div class="cmt ${c.spd?"spd":""}"><span class="avatar sm ${c.spd?"":roleClass(c.w)}">${c.spd?"QA":PEOPLE[c.w].ini}</span><div class="cb"><div class="who"><b>${c.spd?"Incidencia de la Segunda Vuelta":esc(c.w)}</b>${c.spd?' <span class="src">SPD</span>':""}<time>${c.d}</time></div><p>${esc(c.x)}</p>${c.f.length?`<div class="row" style="display:flex;gap:6px;flex-wrap:wrap">${c.f.map(f=>`<span class="fchip">${CLIP}${esc(f[0])} <span style="color:var(--sub)">${f[1]}</span></span>`).join("")}</div>`:""}</div></div>`).join(""):'<p style="color:var(--sub);margin:0">Todavía no hay comentarios.</p>'}`;
+      ${all.length?all.map(c=>`<div class="cmt ${c.spd?"spd":""}"><span class="avatar sm ${c.spd?"":roleClass(c.w)}">${c.spd?"QA":PEOPLE[c.w].ini}</span><div class="cb"><div class="who"><b>${c.spd?"Incidencia de la Segunda Vuelta":esc(c.w)}</b>${c.spd?' <span class="src">SPD</span>':""}<time>${c.d}</time></div><p>${mentionHtml(c.x)}</p>${c.f.length?`<div class="row" style="display:flex;gap:6px;flex-wrap:wrap">${c.f.map(f=>`<span class="fchip">${CLIP}${esc(f[0])} <span style="color:var(--sub)">${f[1]}</span></span>`).join("")}</div>`:""}</div></div>`).join(""):'<p style="color:var(--sub);margin:0">Todavía no hay comentarios.</p>'}`;
+  }
+  if(S.tab==="seguimiento"&&isAnalista()){
+    const BT=["Envié la cotización","Envié el prototipo","Di seguimiento","El cliente contestó","Pidió ajustes","Envié el correo de entrega"];
+    const ms=machotes(t);
+    return `${needsFollow(t)?`<span class="nudge">Lleva ${bizDays(lastSeg(t))} días hábiles sin seguimiento. Abajo está el correo listo para copiar.</span>`:""}
+    <div><div style="font-size:11px;color:var(--sub);margin-bottom:6px">Registrar en la bitácora</div><div class="seg-acts" id="segActs">${BT.map(b=>`<button data-seg="${b}">${b}</button>`).join("")}</div>
+    <input id="segNote" placeholder="Nota opcional, por ejemplo: dice que lo revisa con su gerente" style="width:100%;margin-top:8px"></div>
+    <div id="machotes" style="display:flex;flex-direction:column;gap:8px"><div style="font-size:11px;color:var(--sub)">Correos para este paso</div>${ms.map((m,i)=>`<div class="mach"><div><b>${m[0]}</b><button class="btn" data-copy="${i}">Copiar</button></div><pre id="mach${i}">${esc(m[1])}</pre></div>`).join("")}</div>
+    <div><div style="font-size:11px;color:var(--sub);margin-bottom:6px">Bitácora</div>${t.seg.length?`<ul class="hist">${[...t.seg].reverse().map(([d,a,w,n])=>`<li><time>${d}</time><span><b>${esc(a)}</b> · ${esc(w)}${n?` · ${esc(n)}`:""}</span></li>`).join("")}</ul>`:'<p style="margin:0;color:var(--sub)">Sin registros todavía.</p>'}</div>`;
   }
   if(S.tab==="analisis"){
     const files=t.g;
@@ -682,7 +1135,25 @@ function tabBody(t){
       `<p class="gnote">Se leen del repositorio ERP en GitHub. Aparecen aquí los archivos .feature cuyo nombre empieza con el folio <b class="mono">${t.id}</b>. <a href="https://github.com/GM-Transport-Operaciones/ERP" target="_blank" rel="noopener">Abrir el repositorio</a></p>`;
   }
   const h=[...t.hist.map(([d,m])=>[d,m]),...t.fh.map(([d,m,w])=>[d,"Fecha de entrega: "+m+" · "+w])];
-  return `<ul class="hist">${h.map(([d,m])=>`<li><time>${d}</time><span>${esc(m)}</span></li>`).join("")}</ul>`;
+  return `${t.reb?`<p style="margin:0;font-size:12px;color:var(--sub)">Regresos de calidad a desarrollo: <b class="mono" style="color:var(--ink)">${t.reb}</b></p>`:""}<ul class="hist">${h.map(([d,m])=>`<li><time>${d}</time><span>${esc(m)}</span></li>`).join("")}</ul>`;
+}
+const ST_DOT={n:"var(--sub)",a:"var(--info)",w:"var(--warn)",d:"var(--dev)",q:"var(--qa)",l:"var(--accent)",ok:"var(--ok)",x:"var(--bad)"};
+function stDropdown(t){
+  const [e,sub]=stOf(t),p=pathOf(t);
+  const menu=S.stOpen?`<div class="stmenu" role="menu">${p.map((x,i)=>{const cur=!t.cancel&&i===t.step,nx=!t.cancel&&i===t.step+1;return `<button role="menuitem" class="${cur?"cur":""}" data-setstep="${i}"><span class="dotc" style="background:${ST_DOT[ST_CLASS[x[0]]]}"></span>${x[0]}${x[1]?" · "+x[1]:""}${cur?'<span class="chk">Actual</span>':nx?'<span class="tagn">Siguiente</span>':""}</button>`}).join("")}<hr><button role="menuitem" class="cx ${t.cancel?"cur":""}" data-setstep="cancel"><span class="dotc" style="background:var(--bad)"></span>Cancelado${t.cancel?'<span class="chk">Actual</span>':""}</button></div>`:"";
+  return `<div class="stdd" id="dActs"><button class="st ${ST_CLASS[e]} stbtn" data-stmenu="1" aria-haspopup="menu" aria-expanded="${!!S.stOpen}">${esc(e)}${sub?` <small>· ${esc(sub)}</small>`:""}<span class="car">▼</span></button>${menu}</div>`;
+}
+function setStatus(v){
+  const t=tk(S.open),p=pathOf(t);S.stOpen=false;
+  if(v==="cancel"){if(t.cancel){render();return}confirmBox("Cancelar ticket #"+t.id,"El ticket se marca como Cancelado y se detienen sus relojes. Queda en el historial.","Sí, cancelar",()=>{t.cancel=true;addHist(t,ME+" canceló el ticket");stopTimersFor(t);toast(fid(t.id)+" cancelado.");render()});render();return}
+  const i=Number(v);
+  if(!t.cancel&&i===t.step){render();return}
+  const target=p[i],iLib=p.findIndex(x=>x[0]==="Por liberar"),iCal=p.findIndex(x=>x[0]==="En calidad");
+  if(t.tipo==="error"&&i>=iLib&&(!t.prob||!t.orig)){toast("Para pasar a "+target[0]+" define el tipo de problema y el desarrollador que lo originó.");render();return}
+  if(i>=iLib&&!t.ver){toast("Captura la versión antes de pasar a "+target[0]+".");render();document.getElementById("dVer")&&document.getElementById("dVer").focus();return}
+  if(!t.cancel&&t.step>=iCal&&(target[0]==="En desarrollo"||target[0]==="En análisis"))t.reb++;
+  const was=t.cancel;t.cancel=false;
+  setStep(t,i,(was?"reactivó el ticket en ":"cambió el estatus a ")+target[0]+(target[1]?" · "+target[1]:""));
 }
 function renderDet(){
   if(!S.open){$("#detSlot").innerHTML="";return}
@@ -690,28 +1161,34 @@ function renderDet(){
   const acts=nextActions(t);
   $("#detSlot").innerHTML=`<div class="det-bg" data-closebg="1"><div class="det" id="det" role="dialog" aria-label="Ticket #${t.id}">
    <div class="dh" id="dHead">
-     <div class="dh-top"><span class="folio">#${t.id}</span><span class="tipo"><span class="dot" style="background:${col}"></span>${tl}</span><button class="x" data-close="1" aria-label="Cerrar">×</button></div>
+     <div class="dh-top"><span class="folio">${fid(t.id)}</span><span class="tipo"><span class="dot" style="background:${col}"></span>${tl}</span><button class="x" data-close="1" aria-label="Cerrar">×</button></div>
      <h3>${esc(t.titulo)}</h3>
-     <div class="dh-row">${stPill(t)}${t.reb?`<span style="font-size:12px;color:var(--bad)">Regresó de calidad ${t.reb} ${t.reb===1?"vez":"veces"}</span>`:""}<span class="sp"></span>
-       ${closed?"":`<button class="clockbtn ${run?"run":""}" id="dClock" data-timer="${t.id}" aria-label="${run?"Pausar":"Iniciar"} mi reloj en este ticket"><span class="cb">${run?PAUSE.replace("<svg","<svg style=\"fill:#fff;stroke:none;width:12px\""):CLOCK}</span><span><small>${run?"Corriendo · tu tiempo":"Tu tiempo"}</small><b class="mono" data-pt="${ME}">${fmt(runSec(t,ME))}</b></span></button>`}
-       <button class="link" data-fix="1">Corregir</button></div>
-     <div class="acts" id="dActs">${acts.filter(a=>a[0]!=="cancel").map(([k,l,c])=>`<button class="btn ${c}" data-act="${k}">${l}</button>`).join("")}${acts.some(a=>a[0]==="cancel")?'<button class="lnk-cancel" data-act="cancel">Cancelar ticket</button>':""}</div>
+     <span class="origin">${t.origen==="temis"?`Creado en Temis por ${esc(t.creado[0])} · ${t.creado[1]}`:`Llegó de Desk ${fid(t.id)} · ${t.creado[1]}`}</span>
+     <div class="dh-row">${stDropdown(t)}<span class="sp"></span>
+       ${closed?"":`<button class="clockbtn ${run?"run":""}" id="dClock" data-timer="${t.id}" aria-label="${run?"Pausar":"Iniciar"} mi reloj en este ticket"><span class="cb">${run?PAUSE.replace("<svg","<svg style=\"fill:#fff;stroke:none;width:12px\""):CLOCK}</span><span><small>${run?"Corriendo · tu tiempo":"Tu tiempo"}</small><b class="mono" data-pt="${ME}">${fmt(runSec(t,ME))}</b></span></button>`}</div>
    </div>
    <div class="dsec" id="dDatos"><div class="fields">
+     <div><label>Cliente</label><div class="val">${esc(t.cliente)}</div></div>
+     <div><label>RFC</label><div class="val mono">${(CLIENTES[t.cliente]||["—"])[0]}</div></div>
+     <div><label>Correo</label><div class="val" style="overflow-wrap:anywhere;user-select:all">${(CLIENTES[t.cliente]||["","—"])[1]}</div></div>
      <div><label for="dTipo">Tipo</label><select id="dTipo">${Object.entries(TIPOS).map(([k,[l]])=>`<option value="${k}" ${k===t.tipo?"selected":""}>${l}</option>`).join("")}</select></div>
      <div><label for="dPrio">Prioridad</label><select id="dPrio">${["Urgente","Alta","Media","Baja"].map(x=>`<option ${x===t.prio?"selected":""}>${x}</option>`).join("")}</select></div>
-     <div><label for="dVer">Versión</label><input id="dVer" value="${esc(t.ver)}" placeholder="Ej. 8.4.13"></div>
-     <div><label>Cliente</label><div class="val">${esc(t.cliente)}</div></div>
      <div><label>Módulo</label><div class="val">${esc(t.modulo)}</div></div>
+          <div><label for="dVer">Versión</label><input id="dVer" value="${esc(t.ver)}" placeholder="Ej. 8.4.13"></div>
+     ${t.tipo==="error"?`<div><label for="dProb">Tipo de problema</label><select id="dProb"><option value="">Sin definir</option>${PROBLEMAS.map(x=>`<option ${t.prob===x?"selected":""}>${x}</option>`).join("")}</select></div>
+     <div><label for="dOrig">Desarrollador que lo originó</label><select id="dOrig"><option value="">Sin definir</option>${Object.keys(PEOPLE).filter(n=>PEOPLE[n].rol==="Desarrollo").map(n=>`<option ${t.orig===n?"selected":""}>${n}</option>`).join("")}<option ${t.orig==="No aplica"?"selected":""}>No aplica</option></select></div>`:""}
      <div><label>Entrega al cliente</label><div class="val"><span class="mono ${lateDate(t.fecha)&&!closed?"late":""}">${t.fecha||"Sin fecha"}</span> <button class="link" data-fecha="1">${t.fecha?"Mover":"Poner"}</button></div></div>
    </div>
    <div id="dResp"><label for="addResp" style="display:block;font-size:11px;color:var(--sub);margin-bottom:4px">Responsables</label>
      <div class="ms">${t.resp.map(n=>`<span class="pchip"><span class="avatar sm ${roleClass(n)}">${PEOPLE[n].ini}</span>${esc(n)}<button data-rmresp="${esc(n)}" aria-label="Quitar a ${esc(n)}">×</button></span>`).join("")}
      <select id="addResp"><option value="">Agregar persona…</option>${Object.keys(PEOPLE).filter(n=>!t.resp.includes(n)).map(n=>`<option value="${esc(n)}">${esc(n)} · ${PEOPLE[n].rol}</option>`).join("")}</select></div></div>
+   <div id="dTags"><label for="addTag" style="display:block;font-size:11px;color:var(--sub);margin-bottom:4px">Etiquetas</label>
+     <div class="ms">${t.tags.map(x=>tagHtml(x,1)).join("")}<input id="addTag" list="tagList" placeholder="Agregar etiqueta y Enter" style="border:0;background:transparent;flex:1;min-width:150px"><datalist id="tagList">${[...new Set(S.tickets.flatMap(x=>x.tags))].filter(x=>!t.tags.includes(x)).map(x=>`<option value="${esc(x)}">`).join("")}</datalist></div></div>
    </div>
    <div class="dtabs" id="dTabs" role="tablist">
      <button role="tab" class="${S.tab==="comentarios"?"on":""}" data-tab="comentarios">Comentarios<span class="n">${t.c.length+t.inc.length}</span></button>
      <button role="tab" class="${S.tab==="analisis"?"on":""}" data-tab="analisis">Análisis<span class="n">${t.g.length}</span></button>
+     ${isAnalista()?`<button role="tab" class="${S.tab==="seguimiento"?"on":""}" data-tab="seguimiento">Seguimiento${needsFollow(t)?'<span class="dotnew" aria-label="Toca seguimiento"></span>':""}</button>`:""}
      <button role="tab" class="${S.tab==="historial"?"on":""}" data-tab="historial">Historial</button>
    </div>
    <div class="tabb" id="dTabBody">${tabBody(t)}</div>
@@ -721,19 +1198,28 @@ function renderDet(){
 
 /* ---------- Acciones ---------- */
 function addHist(t,m){t.hist.unshift([now(),m])}
-function startTimer(id){
-  const t=tk(id);
-  if(S.timer&&S.timer.id===id){pauseTimer("Pausaste tu timer de #"+id);return}
-  let msg="Iniciaste tu timer en #"+id;
-  if(S.timer){const prev=tk(S.timer.id);prev.t[ME]=runSec(prev,ME);msg="Pausamos #"+prev.id+" y arrancamos #"+id+". Solo puede correr un timer a la vez."}
-  S.timer={id,since:Date.now()};
+function finishTimer(){
+  if(!S.timer)return null;
+  const tm=S.timer;S.timer=null;
+  const ini=hm(tm.since),fin=hm(Date.now());
+  if(toMin(fin)>toMin(ini))S.entries.push({id:++S.eid,who:ME,date:"21/10/2026",ini,fin,kind:tm.id?"ticket":"act",ref:tm.id||tm.act,origen:"reloj"});
+  return tm;
+}
+const tmName = tm => tm.id?fid(tm.id):tm.act;
+function startTarget(tgt){
+  const same=S.timer&&(tgt.id?S.timer.id===tgt.id:S.timer.act===tgt.act);
+  if(same){pauseTimer("Pausaste tu reloj de "+tmName(tgt));return}
+  let msg="Iniciaste tu reloj en "+tmName(tgt);
+  if(S.timer){const prev=finishTimer();msg="Pausamos "+tmName(prev)+" y arrancamos "+tmName(tgt)+". Solo puede correr un reloj a la vez."}
+  S.timer={...tgt,since:Date.now()};
   if(S.banner&&S.banner.kind==="in")S.banner=null;
   toast(msg);render();
 }
-function pauseTimer(msg){if(!S.timer)return;const t=tk(S.timer.id);t.t[ME]=runSec(t,ME);S.timer=null;toast(msg);render()}
+const startTimer = id => startTarget({id});
+function pauseTimer(msg){if(!S.timer)return;finishTimer();toast(msg+" Quedó en Mis tiempos.");render()}
 function stopTimersFor(t){
   let stopped=false;
-  if(S.timer&&S.timer.id===t.id){t.t[ME]=runSec(t,ME);S.timer=null;stopped=true}
+  if(S.timer&&S.timer.id===t.id){finishTimer();stopped=true}
   Object.keys(S.others).forEach(p=>{const o=S.others[p];if(o&&o!=="vac"&&o.id===t.id){t.t[p]=(t.t[p]||0)+(Date.now()-o.since)/1000;S.others[p]=null;stopped=true}});
   return stopped;
 }
@@ -741,7 +1227,7 @@ function setStep(t,i,msg){
   t.step=i;const e=stOf(t)[0];addHist(t,ME+" "+msg);
   let extra="";
   if(CLOSED.includes(e)&&stopTimersFor(t))extra=" Los timers de este ticket se detuvieron.";
-  toast("#"+t.id+": "+msg+"."+extra);render();
+  toast(fid(t.id)+": "+msg+"."+extra);render();
 }
 function doAct(k){
   const t=tk(S.open),p=pathOf(t),[e,s]=stOf(t);
@@ -753,7 +1239,7 @@ function doAct(k){
   if(k==="approve")setStep(t,t.step+1,s==="Cotización"?"registró que el cliente aprobó la cotización":"registró que el cliente aprobó el prototipo");
   if(k==="adjust")setStep(t,t.step-1,"regresó a En análisis · "+s+" porque el cliente pidió ajustes");
   if(k==="back"){t.reb++;setStep(t,p.findIndex(x=>x[0]==="En desarrollo"),"lo regresó a desarrollo desde calidad")}
-  if(k==="cancel")confirmBox("Cancelar ticket #"+t.id,"El ticket se marca como Cancelado y se detienen sus timers. Esta acción queda en el historial.","Cancelar ticket",()=>{t.cancel=true;addHist(t,ME+" canceló el ticket");stopTimersFor(t);toast("#"+t.id+" cancelado. Los timers se detuvieron.");render()});
+  if(k==="cancel")confirmBox("Cancelar ticket #"+t.id,"El ticket se marca como Cancelado y se detienen sus timers. Esta acción queda en el historial.","Cancelar ticket",()=>{t.cancel=true;addHist(t,ME+" canceló el ticket");stopTimersFor(t);toast(fid(t.id)+" cancelado. Los timers se detuvieron.");render()});
 }
 function changeTipo(v){
   const t=tk(S.open),[e]=stOf(t),np=v==="error"?P_ERR:P_COT;
@@ -787,22 +1273,40 @@ function fechaModal(){
     closeModal();toast("Fecha de entrega: "+nf);render();
   };
 }
-function fixModal(){
-  const t=tk(S.open),cur=Math.round(runSec(t,ME)/60);
-  modal(`<div class="mod-h">Corregir mi tiempo · #${t.id}</div><form class="mod-b" novalidate>
-    <div><label>Tiempo actual</label><b class="mono">${fmtH(runSec(t,ME))}</b></div>
-    <div style="display:flex;gap:10px"><div style="flex:1"><label for="xH">Horas</label><input id="xH" type="number" min="0" value="${Math.floor(cur/60)}"></div><div style="flex:1"><label for="xM">Minutos</label><input id="xM" type="number" min="0" max="59" value="${cur%60}"></div></div>
-    <div><label for="xWhy">Motivo</label><textarea id="xWhy" rows="3" placeholder="Ej. olvidé prender el timer en la mañana"></textarea></div>
-    <div class="err" id="xErr" hidden></div></form>
-    <div class="mod-f"><button class="btn" data-mclose="1">Cancelar</button><button class="btn pri" id="xOk">Guardar corrección</button></div>`);
-  $("#xOk").onclick=()=>{
-    const h=Number($("#xH").value),m=Number($("#xM").value),why=$("#xWhy").value.trim();
-    if(!(h>=0&&m>=0&&m<60)){$("#xErr").textContent="Revisa las horas y los minutos: no se aceptan negativos y los minutos van de 0 a 59.";$("#xErr").hidden=false;return}
-    if(!why){$("#xErr").textContent="Escribe el motivo; queda registrado quién corrigió y cuánto había antes.";$("#xErr").hidden=false;return}
-    const before=fmtH(runSec(t,ME));
-    if(S.timer&&S.timer.id===t.id)S.timer.since=Date.now();
-    t.t[ME]=(h*60+m)*60;addHist(t,ME+" corrigió su tiempo de "+before+" a "+fmtH(t.t[ME])+": "+why);
-    closeModal();toast("Tiempo corregido. Quedó en el historial.");render();
+function tiempoModal(eid){
+  const e=eid?S.entries.find(x=>x.id===eid):null;
+  const kind=e?e.kind:"ticket";
+  const tOpts=S.tickets.filter(t=>!t.cancel&&stOf(t)[0]!=="Cerrado").map(t=>`<option value="${t.id}" ${e&&e.kind==="ticket"&&e.ref===t.id?"selected":""}>${fid(t.id)} ${esc(t.titulo)}</option>`).join("");
+  const aOpts=S.acts.filter(a=>a.on||(e&&e.ref===a.n)).map(a=>`<option ${e&&e.ref===a.n?"selected":""}>${esc(a.n)}</option>`).join("");
+  const iso=d=>d.split("/").reverse().join("-");
+  modal(`<div class="mod-h">${e?"Editar tiempo":"Agregar tiempo manual"}</div><form class="mod-b" novalidate>
+    ${e?`<div style="font-size:12px;color:var(--sub)">Registrado por <b>${OR[e.origen]}</b>${e.origen==="editado"?" · original "+esc(e.orig):""}. Al guardar quedará como <b>${e.origen==="reloj"||e.origen==="editado"?"Editado":"Manual"}</b>.</div>`:""}
+    <div><label>¿En qué?</label><div class="seg" id="tKind"><button type="button" data-kind="ticket" class="${kind==="ticket"?"on":""}">Ticket</button><button type="button" data-kind="act" class="${kind==="act"?"on":""}">Actividad</button></div></div>
+    <div id="kTicket" ${kind==="ticket"?"":"hidden"}><label for="tTicket">Ticket</label><select id="tTicket">${tOpts}</select></div>
+    <div id="kAct" ${kind==="act"?"":"hidden"}><label for="tAct">Actividad</label><select id="tAct">${aOpts}</select></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:1.3;min-width:130px"><label for="tDate">Día</label><input id="tDate" type="date" value="${e?iso(e.date):"2026-10-21"}"></div><div style="flex:1;min-width:90px"><label for="tIni">Inicio</label><input id="tIni" type="time" value="${e?e.ini:"09:00"}"></div><div style="flex:1;min-width:90px"><label for="tFin">Fin</label><input id="tFin" type="time" value="${e?e.fin:"10:00"}"></div></div>
+    <div><label for="tWhy">Motivo</label><textarea id="tWhy" rows="2" placeholder="${e?"Ej. se quedó prendido después de mi salida":"Ej. junta con el cliente, olvidé prender el reloj"}"></textarea></div>
+    <div class="err" id="tErr" hidden></div></form>
+    <div class="mod-f">${e&&e.origen==="manual"?'<button class="btn danger" id="tDel" style="margin-right:auto">Eliminar</button>':""}<button class="btn" data-mclose="1">Cancelar</button><button class="btn pri" id="tOk">Guardar</button></div>`);
+  let k=kind;
+  document.querySelectorAll("#tKind [data-kind]").forEach(b=>b.onclick=()=>{k=b.dataset.kind;document.querySelectorAll("#tKind button").forEach(x=>x.classList.toggle("on",x===b));$("#kTicket").hidden=k!=="ticket";$("#kAct").hidden=k!=="act"});
+  const err=m=>{$("#tErr").textContent=m;$("#tErr").hidden=false};
+  if($("#tDel"))$("#tDel").onclick=()=>{S.entries=S.entries.filter(x=>x!==e);closeModal();toast("Registro manual eliminado.");render()};
+  $("#tOk").onclick=()=>{
+    const dv=$("#tDate").value,ini=$("#tIni").value,fin=$("#tFin").value,why=$("#tWhy").value.trim();
+    if(!dv||!ini||!fin)return err("Completa el día, la hora de inicio y la de fin.");
+    const d=dv.split("-").reverse().join("/");
+    if(dParse(d)>TODAY)return err("No se puede registrar tiempo en un día futuro.");
+    if(daysAgo(d)>S.diasEdit)return err("Solo se puede registrar tiempo de hasta "+S.diasEdit+" días atrás.");
+    if(toMin(fin)<=toMin(ini))return err("La hora de fin debe ser mayor a la de inicio.");
+    if(!why)return err("Escribe el motivo; queda guardado junto con el registro.");
+    const ref=k==="ticket"?Number($("#tTicket").value):$("#tAct").value;
+    if(!ref)return err(k==="ticket"?"Elige el ticket.":"Elige la actividad.");
+    const clash=S.entries.find(x=>x!==e&&x.who===ME&&x.date===d&&toMin(ini)<toMin(x.fin)&&toMin(fin)>toMin(x.ini));
+    if(clash)return err("Se empalma con otro registro de ese día, de "+clash.ini+" a "+clash.fin+".");
+    if(e){if(e.origen==="reloj"){e.orig=e.ini+" a "+e.fin;e.origen="editado"}Object.assign(e,{date:d,ini,fin,kind:k,ref,motivo:why})}
+    else S.entries.push({id:++S.eid,who:ME,date:d,ini,fin,kind:k,ref,origen:"manual",motivo:why});
+    closeModal();toast(e?"Registro actualizado. Quedó marcado como "+OR[e.origen]+".":"Tiempo manual agregado.");render();
   };
 }
 function horarioModal(p){
@@ -839,15 +1343,26 @@ function showNotas(){doc(`<h3>Notas del análisis</h3>
    <li>Los errores del sistema no pasan por Documentando; calidad los revisa y levanta las incidencias.</li>
    <li>Una sola fecha de entrega al cliente, con historial de cambios.</li>
    <li>Responsables en un solo campo de selección múltiple.</li>
-   <li>Comentarios solo internos, con documentos adjuntos.</li>
-   <li>El análisis se muestra desde los Gherkins del repositorio ERP en GitHub.</li>
+   <li>Comentarios solo internos, con documentos adjuntos y menciones con @. La persona mencionada recibe aviso.</li>
+   <li>El análisis se muestra desde los Gherkins del repositorio ERP en GitHub. Los Gherkins nuevos se nombran con el folio del ticket al inicio.</li>
    <li>Un solo reloj en el ticket: quien lo prende queda registrado, aunque no sea responsable.</li>
    <li>Un solo reloj corriendo por persona, sincronizado entre pestañas y dispositivos, que sigue corriendo aunque se cierre Temis.</li>
    <li>Horario y vacaciones por persona como función nueva de Temis. Avisos solo al trabajador, por fases.</li>
    <li>Los líderes ven en vivo quién trabaja en qué.</li>
+   <li>La corrección de tiempo no va en el ticket: vive en Mis tiempos, con registros de Reloj, Manual o Editado.</li>
+   <li>Hay reloj para actividades fuera de tickets. La lista es administrable y trae Daily, Junta, Curso y Otro por default.</li>
+   <li>El plazo para agregar o editar tiempo es configurable.</li>
    <li>Migración de abiertos e histórico; las pantallas leen de Temis y Zoho a la vez durante la transición; el switch es solo freno de emergencia.</li>
+   <li>Kanban de lo que se trabaja, que reemplaza al Kanban Equipo, y Backlog de lo que está en espera: Nuevos, Esperando al cliente y Documentando. Solo los líderes ordenan el backlog.</li>
+   <li>Mis tickets para todos. El seguimiento con bitácora, correos para copiar y aviso es solo para analistas; desarrollo prende su reloj y adjunta su análisis, y calidad registra incidencias.</li>
+   <li>Todo plazo es configurable en Reglas y plazos.</li>
+   <li>Etiquetas libres que cualquiera crea.</li>
+   <li>Mantenimiento puede crear tickets en Temis; cada ticket guarda su origen y quién lo creó.</li>
+   <li>Mascota nueva en pixel art. Reportes y sugerencias le llegan a Jaqueline. La IA de Pregúntame entra en la fase 2.</li>
+   <li>Panel Mi perfil con apariencia, mascota, inicio, avisos, horario y ayuda.</li>
    <li>Las incidencias siguen en GM-SPD y se muestran en los comentarios del ticket.</li>
-   <li>El ticket lleva el campo Versión.</li></ul>
+   <li>El ticket lleva el campo Versión.</li>
+   <li>Los errores del sistema llevan Tipo de problema y Desarrollador que lo originó. Catálogo: Error de código, Error de configuración, Falta en el análisis, Datos del cliente, Infraestructura y No era error.</li></ul>
   <h5>Interpretaciones aplicadas</h5><ul>
    <li>Esperando al cliente ofrece "pidió ajustes", que regresa a En análisis con la misma etiqueta. Se tomó del botón "Pidió ajustes" que ya existe en Seguimiento.</li>
    <li>Si cambia el tipo, se conserva el estatus si existe en el nuevo camino; si no, el ticket regresa a En análisis.</li>
@@ -856,10 +1371,12 @@ function showNotas(){doc(`<h3>Notas del análisis</h3>
    <li>El aviso de salida solo avisa; no detiene el timer, porque se acordó que sigue corriendo.</li></ul>
   <div class="pend"><h5 style="color:var(--warn);margin:0 0 6px">Pendiente de definir</h5><ul>
    <li>En qué momento exacto se escala un ticket en Desk. Lo revisa Jaqueline; probablemente al tomar un estatus CH.</li>
-   <li>Nombrar los Gherkins nuevos con el folio del ticket. Es la propuesta usada en el mockup.</li>
    <li>Si se capturan las horas estimadas de la cotización para comparar contra las reales.</li>
-   <li>Si el líder puede corregir el tiempo de su equipo. En el mockup solo cada quien corrige el suyo.</li>
-   <li>Si un ticket pasa solo de Liberado a Cerrado a los 7 días hábiles. En el mockup se cierra a mano.</li></ul></div>`,true)}
+   <li>Si el líder puede corregir el tiempo de su equipo. En el mockup cada quien corrige solo el suyo en Mis tiempos.</li>
+   <li>Folio de los tickets creados en Temis: el mockup usa T-0001, propio de Temis.</li>
+   <li>Cliente opcional en tickets creados en Temis, para los internos.</li>
+   <li>Qué mascota: el mockup propone Axo el ajolote, Zorri el zorrito y Bit el robotcito.</li>
+   <li>Si las incidencias de calidad se registran en Temis o se siguen tomando de SPD.</li></ul></div>`,true)}
 
 /* ---------- Simulación ---------- */
 function flashRow(id){const r=document.getElementById("row-"+id);if(r){r.classList.remove("flash");void r.offsetWidth;r.classList.add("flash")}}
@@ -869,17 +1386,17 @@ function simLive(){
   else{t.prio=t.prio==="Urgente"?"Alta":"Urgente";addHist(t,"Laura Méndez cambió la prioridad a "+t.prio)}
   render();flashRow(48133);toast("Laura Méndez actualizó #48133. Lo ves al instante, sin recargar.");
 }
-function simPhone(){if(!S.timer){toast("No tienes un timer corriendo. Arranca uno primero.");return}const id=S.timer.id;const t=tk(id);t.t[ME]=runSec(t,ME);S.timer=null;render();toast("Pausaste #"+id+" desde tu celular. Esta pestaña ya lo refleja.")}
+function simPhone(){if(!S.timer){toast("No tienes un reloj corriendo. Arranca uno primero.");return}const tm=finishTimer();render();toast("Pausaste "+tmName(tm)+" desde tu celular. Esta pestaña ya lo refleja.")}
 function simDesk(){
   if(tk(48241)){toast("El ticket #48241 ya llegó.");return}
-  S.tickets.unshift({id:48241,titulo:"El estado de cuenta no suma los abonos parciales",cliente:"Autotransportes Garza",modulo:"Cobranza",tipo:"error",prio:"Media",step:0,fecha:"",ver:"",resp:["Paola Ibarra"],c:[],g:[],t:{},inc:[],hist:[[now(),"Llegó de Desk al escalarse a mantenimiento"]],fh:[],reb:0});
+  S.tickets.unshift({id:48241,titulo:"El estado de cuenta no suma los abonos parciales",cliente:"Autotransportes Garza",modulo:"Cobranza",tipo:"error",prio:"Media",step:0,fecha:"",ver:"",resp:["Paola Ibarra"],tags:[],seg:[],origen:"desk",creado:["Paola Ibarra",now()],c:[],g:[],t:{},inc:[],hist:[[now(),"Llegó de Desk al escalarse a mantenimiento"]],fh:[],reb:0});
   if(S.route!=="tickets")S.route="tickets";
   S.filter="todos";render();flashRow(48241);toast("Llegó #48241 desde Desk.");
 }
 function teams(m){$("#teamsSlot").innerHTML=`<div style="font-size:11px;color:var(--sub);margin-bottom:4px">Así llega también por Teams:</div><div class="teams"><span class="lg">T</span><div><b>Temis</b><small>${now()}</small>${esc(m)}</div></div>`}
 function browserNot(t,m){$("#bnotSlot").innerHTML=`<div class="bnot" role="status"><span class="lg">T</span><div><b>${esc(t)}</b><small>Notificación del navegador</small>${esc(m)}</div></div>`;setTimeout(()=>{$("#bnotSlot").innerHTML=""},5000)}
 function simIn(){
-  if(S.timer){const t=tk(S.timer.id);t.t[ME]=runSec(t,ME);S.timer=null}
+  finishTimer();
   S.banner={kind:"in",t:"No has iniciado tu timer.",m:"Tu horario empezó a las 08:00.",act:"Iniciar en #48210"};
   render();browserNot("No has iniciado tu timer","Tu horario empezó a las 08:00.");teams("Buenos días, Marco. Tu horario empezó a las 08:00 y no tienes timer corriendo.");
 }
@@ -901,39 +1418,92 @@ document.addEventListener("click",e=>{
   if(el=g("[data-f]")){S.filter=el.dataset.f;render();return}
   if(g("[data-clear]")){S.filter="todos";S.q="";render();return}
   if(el=g("[data-timer]")){e.stopPropagation();startTimer(Number(el.dataset.timer));return}
-  if(g("[data-pause]")){pauseTimer("Pausaste tu timer.");return}
-  if(el=g("[data-open]")){S.open=Number(el.dataset.open);S.tab="comentarios";S.gOpen=null;S.files=[];renderDet();return}
+  if(g("#startBtn")){S.spOpen=!S.spOpen;S.spQ="";renderTop();if(S.spOpen)$("#spQ").focus();return}
+  if(el=g("[data-sptix]")){S.spOpen=false;startTarget({id:Number(el.dataset.sptix)});return}
+  if(el=g("[data-spact]")){S.spOpen=false;startTarget({act:el.dataset.spact});return}
+  if(S.spOpen&&!g("#spop")){S.spOpen=false;renderTop()}
+  if(g("[data-pause]")){pauseTimer("Pausaste tu reloj.");return}
+  if(el=g("[data-wk]")){S.week=Math.min(0,S.week+Number(el.dataset.wk));render();return}
+  if(g("#btnAddT")){tiempoModal(null);return}
+  if(el=g("[data-edit]")){tiempoModal(Number(el.dataset.edit));return}
+  if(g("#btnNewAct")){const v=$("#newAct").value.trim();if(!v){toast("Escribe el nombre de la actividad.");return}if(S.acts.some(a=>a.n.toLowerCase()===v.toLowerCase())){toast("Esa actividad ya existe.");return}S.acts.push({n:v,on:true});toast("Actividad agregada: "+v);render();return}
+  if(g("#btnDias")){const n=Number($("#diasEdit").value);if(!(n>=0&&n<=60)){toast("Escribe un número de días entre 0 y 60.");return}S.diasEdit=n;toast("Plazo guardado: "+n+" días atrás.");render();return}
+  if(el=g("[data-open]")){if(S.dragged)return;S.open=Number(el.dataset.open);S.stOpen=false;S.petOpen=false;S.profOpen=false;S.tab="comentarios";S.gOpen=null;S.files=[];renderDet();return}
   if(el=g("[data-tab]")){S.tab=el.dataset.tab;S.gOpen=null;render();return}
+  if(g("#pet")){S.petOpen=!S.petOpen;S.petView="home";S.profOpen=false;renderPet();renderProf();return}
+  if(el=g("[data-petview]")){S.petView=el.dataset.petview;if(S.petView==="news")S.seen=true;renderPet();return}
+  if(el=g("[data-petgo]")){S.petOpen=false;go(el.dataset.petgo);return}
+  if(g("[data-pethelp]")){S.petOpen=false;S.profOpen=false;const i=TOUR.findIndex(x=>x.route===S.route);tourShow(i<0?0:i);return}
+  if(g("[data-petnews]")){S.profOpen=false;S.petOpen=true;S.petView="news";S.seen=true;render();return}
+  if(el=g("[data-report]")){S.petOpen=false;S.profOpen=false;render();reportModal(el.dataset.report);return}
+  if(g("#btnProf")){S.profOpen=!S.profOpen;S.petOpen=false;renderPet();renderProf();return}
+  if(el=g("[data-theme-pick]")){S.theme=el.dataset.themePick;render();toast("Tema "+THEMES.find(x=>x[0]===S.theme)[1]+" aplicado.");return}
+  if(el=g("[data-mode]")){S.mode=el.dataset.mode;render();if(S.mode==="atenuado")toast("En Temis, el modo Atenuado baja el brillo de los fondos.");if(S.mode==="auto")toast("Automático: claro de día y oscuro de noche.");return}
+  if(el=g("[data-dens]")){S.dens=el.dataset.dens;render();return}
+  if(el=g("[data-petpick]")){S.pet=el.dataset.petpick;render();toast("Ahora te acompaña "+SPR[S.pet].n+".");return}
+  if(g("#btnNew")){newTicketModal();return}
+  if(el=g("[data-rmtag]")){const t=tk(S.open);t.tags=t.tags.filter(x=>x!==el.dataset.rmtag);addHist(t,ME+" quitó la etiqueta "+el.dataset.rmtag);render();return}
+  if(el=g("[data-seg]")){const t=tk(S.open),n=($("#segNote")||{}).value||"";t.seg.push([now(),el.dataset.seg,ME,n.trim()]);toast("Registrado en la bitácora: "+el.dataset.seg+".");render();return}
+  if(el=g("[data-copy]")){const pre=$("#mach"+el.dataset.copy),txt=pre.textContent;const ok=()=>toast("Correo copiado. Pégalo en Outlook.");const fb=()=>{const r=document.createRange();r.selectNodeContents(pre);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);toast("Texto seleccionado. Copia con Ctrl+C.")};try{navigator.clipboard.writeText(txt).then(ok,fb)}catch(_){fb()}return}
+  if(el=g("[data-up]")||g("[data-down]")){const id=Number(el.dataset.up||el.dataset.down),i=S.order.indexOf(id),j=i+(el.dataset.up?-1:1);if(j>=0&&j<S.order.length){[S.order[i],S.order[j]]=[S.order[j],S.order[i]];render();toast(fid(id)+" ahora va en el lugar "+(j+1)+".")}return}
+  if(g("#btnCfg")){const a=Number($("#cfgSeg").value),b=Number($("#cfgCierreD").value),c=Number($("#cfgEdit").value);if(!(a>=1&&b>=1&&c>=0)){toast("Revisa los números: deben ser días válidos.");return}S.cfg.segDias=a;S.cfg.cierreDias=b;S.cfg.cierreAuto=$("#cfgCierre").checked;S.diasEdit=c;toast("Reglas guardadas para todo el equipo.");render();return}
+  if(S.petOpen&&!g("#petpanel")){S.petOpen=false;renderPet()}
+  if(S.profOpen&&!g("#prof")){S.profOpen=false;renderProf()}
   if(el=g("[data-g]")){const i=Number(el.dataset.g);S.gOpen=S.gOpen===i?null:i;render();return}
   if(el=g("[data-rmresp]")){const t=tk(S.open),n=el.dataset.rmresp;t.resp=t.resp.filter(x=>x!==n);addHist(t,ME+" quitó a "+n+" de responsables");toast(n+" ya no es responsable.");render();return}
   if(el=g("[data-rmfile]")){S.files.splice(Number(el.dataset.rmfile),1);render();return}
-  if(g("#cSend")){const t=tk(S.open),x=$("#cTxt").value.trim();if(!x&&!S.files.length){toast("Escribe un comentario o adjunta un documento.");$("#cTxt").focus();return}t.c.unshift({w:ME,d:now(),x:x||"Adjuntó documentos.",f:S.files});S.files=[];toast("Comentario publicado. El equipo lo ve al instante.");render();return}
+  if(el=g("[data-mention]")){insertMention(el.dataset.mention);return}
+  if(g("#cSend")){const t=tk(S.open),x=$("#cTxt").value.trim();if(!x&&!S.files.length){toast("Escribe un comentario o adjunta un documento.");$("#cTxt").focus();return}const men=Object.keys(PEOPLE).filter(n=>n!==ME&&x.includes("@"+n));t.c.unshift({w:ME,d:now(),x:x||"Adjuntó documentos.",f:S.files});S.files=[];toast(men.length?"Comentario publicado. Avisamos a "+men.join(", ")+".":"Comentario publicado. El equipo lo ve al instante.");render();return}
   if(g("[data-close]")||e.target.matches("[data-closebg]")){S.open=null;renderDet();return}
-  if(el=g("[data-act]")){doAct(el.dataset.act);return}
+  if(g("[data-stmenu]")){S.stOpen=!S.stOpen;renderDet();return}
+  if(el=g("[data-setstep]")){setStatus(el.dataset.setstep);return}
+  if(S.stOpen&&!g(".stdd")){S.stOpen=false;renderDet()}
   if(g("[data-fecha]")){fechaModal();return}
-  if(g("[data-fix]")){fixModal();return}
   if(el=g("[data-edith]")){horarioModal(el.dataset.edith);return}
   if(g("[data-bandis]")){S.banner=null;render();return}
   if(g("[data-banact]")){const k=S.banner.kind;S.banner=null;if(k==="in")startTimer(48210);else pauseTimer("Pausaste tu timer.");return}
   if(g("#btnEm")){const on=!S.emergency;confirmBox(on?"Leer solo de Zoho":"Volver a Temis y Zoho",on?"Calendario, Dashboard, Carga de trabajo, Kanban, Mis Tickets y Aeropuerto dejarán de leer de Temis hasta que lo regreses.":"Las pantallas vuelven a leer de Temis y de Zoho a la vez.",on?"Sí, leer solo de Zoho":"Sí, volver",()=>{S.emergency=on;S.log.unshift([now(),ME+(on?" activó el freno de emergencia":" desactivó el freno de emergencia")]);toast(on?"Las pantallas leen solo de Zoho.":"Las pantallas leen de Temis y Zoho.");render()});return}
 });
 document.addEventListener("change",e=>{
+  if(["kP","kT","kG"].includes(e.target.id)){S.kf[{kP:"p",kT:"t",kG:"g"}[e.target.id]]=e.target.value;render();return}
+  if(e.target.id==="petOff"){S.pet=e.target.checked?"off":"axo";render();return}
+  if(e.target.id==="homePick"){S.home=e.target.value;toast("Temis abrirá en "+e.target.selectedOptions[0].text+".");return}
+  if(e.target.id==="verComo"){const prev=ME;if(S.timer){S.others[prev]={...S.timer}}else S.others[prev]=null;ME=e.target.value;const o=S.others[ME];S.timer=o&&o!=="vac"?{...o}:null;delete S.others[ME];S.open=null;S.tab="comentarios";go("mis");toast("Ahora ves Temis como "+ME+" ("+PEOPLE[ME].rol+(PEOPLE[ME].lider?", líder":"")+").");return}
   if(e.target.id==="dTipo")changeTipo(e.target.value);
+  if(e.target.id==="dProb"||e.target.id==="dOrig"){const t=tk(S.open),k=e.target.id==="dProb"?"prob":"orig";t[k]=e.target.value;addHist(t,ME+(k==="prob"?" definió el tipo de problema: ":" definió quién lo originó: ")+(t[k]||"sin definir"));toast("Guardado.");render();return}
   if(e.target.id==="dPrio"){const t=tk(S.open);t.prio=e.target.value;addHist(t,ME+" cambió la prioridad a "+t.prio);toast("Prioridad: "+t.prio);render()}
   if(e.target.id==="dVer"){const t=tk(S.open);t.ver=e.target.value.trim();addHist(t,ME+" puso la versión "+(t.ver||"vacía"));render()}
   if(e.target.id==="addResp"&&e.target.value){const t=tk(S.open),n=e.target.value;t.resp.push(n);addHist(t,ME+" agregó a "+n+" como responsable");toast(n+" agregado como responsable.");render()}
+  if(e.target.dataset.acton!=null){const a=S.acts[Number(e.target.dataset.acton)];a.on=e.target.checked;toast(a.n+(a.on?" activada.":" desactivada."));render();return}
   if(e.target.id==="cFile"){[...e.target.files].forEach(f=>S.files.push([f.name,f.size>1048576?(f.size/1048576).toFixed(1)+" MB":Math.max(1,Math.round(f.size/1024))+" KB"]));render()}
 });
-document.addEventListener("input",e=>{if(e.target.id==="q"){S.q=e.target.value;const pos=e.target.selectionStart;renderBody();const q=$("#q");if(q){q.focus();q.setSelectionRange(pos,pos)}}});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("#docSlot").innerHTML)$("#docSlot").innerHTML="";else if($("#modSlot").innerHTML)closeModal();else if(S.open){S.open=null;renderDet()}}});
+document.addEventListener("submit",e=>{if(e.target.id==="askF"){e.preventDefault();const q=$("#askQ").value.trim();if(!q)return;const a=(ANSWERS.find(([r])=>r.test(q.toLowerCase()))||[0,"Todavía no sé eso, pero lo anoto. Mientras, puedes reportarlo como sugerencia."])[1];S.chat.push(["me",q],["pet",a]);renderPet();setTimeout(()=>{const i=$("#askQ");i&&i.focus()},0)}});
+document.addEventListener("input",e=>{if(e.target.id==="spQ"){S.spQ=e.target.value;$("#spRes").innerHTML=spResults();return}if(e.target.id==="cTxt"){showMentions(e.target);return}if(e.target.id==="q"){S.q=e.target.value;const pos=e.target.selectionStart;renderBody();const q=$("#q");if(q){q.focus();q.setSelectionRange(pos,pos)}}});
+document.addEventListener("keydown",e=>{
+  if(e.target.id==="addTag"&&e.key==="Enter"){e.preventDefault();const v=e.target.value.trim(),t=tk(S.open);if(!v)return;if(t.tags.some(x=>x.toLowerCase()===v.toLowerCase())){toast("El ticket ya tiene esa etiqueta.");return}const isNew=!S.tickets.some(x=>x.tags.includes(v));t.tags.push(v);addHist(t,ME+" agregó la etiqueta "+v);toast(isNew?"Etiqueta nueva creada: "+v:"Etiqueta agregada: "+v);render();setTimeout(()=>{const a=$("#addTag");a&&a.focus()},0);return}
+  const ml=document.getElementById("mlist");
+  if(ml&&e.target.id==="cTxt"&&["ArrowDown","ArrowUp","Enter","Tab","Escape"].includes(e.key)){
+    const bs=[...ml.querySelectorAll("button")];let i=bs.findIndex(b=>b.classList.contains("on"));
+    if(e.key==="Escape"){ml.remove();e.preventDefault();e.stopPropagation();return}
+    if(e.key==="Enter"||e.key==="Tab"){e.preventDefault();insertMention(bs[i].dataset.mention);return}
+    e.preventDefault();bs[i].classList.remove("on");i=(i+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length;bs[i].classList.add("on");return}if(e.key==="Escape"){if($("#docSlot").innerHTML)$("#docSlot").innerHTML="";else if($("#modSlot").innerHTML)closeModal();else if(S.open){S.open=null;renderDet()}}});
 $("#btnNotas").onclick=showNotas;
 $("#btnSpec").onclick=()=>showSpec(S.open?"detalle":S.route);
 $("#simLive").onclick=simLive;$("#simPhone").onclick=simPhone;$("#simDesk").onclick=simDesk;$("#simIn").onclick=simIn;$("#simOut").onclick=simOut;
 $("#simReset").onclick=()=>{reset();$("#teamsSlot").innerHTML="";render();toast("Datos reiniciados.")};
 
+/* Arrastrar y soltar */
+document.addEventListener("dragstart",e=>{const c=e.target.closest&&e.target.closest("[data-kid],[data-bid]");if(!c)return;S.drag=Number(c.dataset.kid||c.dataset.bid);S.dragged=true;c.classList.add("drag");e.dataTransfer.effectAllowed="move";try{e.dataTransfer.setData("text/plain",String(S.drag))}catch(_){}});
+document.addEventListener("dragend",e=>{document.querySelectorAll(".drag,.over").forEach(x=>x.classList.remove("drag","over"));setTimeout(()=>{S.dragged=false},50)});
+document.addEventListener("dragover",e=>{const col=e.target.closest&&e.target.closest("[data-kcol],[data-bid]");if(!col||S.drag==null)return;e.preventDefault();document.querySelectorAll(".over").forEach(x=>x!==col&&x.classList.remove("over"));col.classList.add("over")});
+document.addEventListener("drop",e=>{const col=e.target.closest&&e.target.closest("[data-kcol],[data-bid]");if(!col||S.drag==null)return;e.preventDefault();const id=S.drag;S.drag=null;
+  if(col.dataset.kcol){const t=tk(id),c=col.dataset.kcol;if(stOf(t)[0]===c){render();return}const p=pathOf(t);let idx=p.map((x,i)=>[x,i]).filter(([x])=>x[0]===c).map(([,i])=>i);if(!idx.length){toast("Un "+TIPOS[t.tipo][0].toLowerCase()+" no pasa por "+c+".");render();return}
+    const cotOk=t.step>p.findIndex(x=>x[0]==="Esperando al cliente");const i=idx.length>1?(cotOk?idx[1]:idx[0]):idx[0];S.open=id;setStatus(String(i));S.open=null;render();return}
+  const to=Number(col.dataset.bid);if(!isLider()||to===id)return;const a=S.order.indexOf(id);S.order.splice(a,1);S.order.splice(S.order.indexOf(to),0,id);toast(fid(id)+" ahora va en el lugar "+(S.order.indexOf(id)+1)+".");render()});
 /* Reloj: actualiza solo los números, sin redibujar */
 setInterval(()=>{
-  const c=$("#tclock");if(c&&S.timer)c.textContent=fmt(runSec(tk(S.timer.id),ME));
+  const c=$("#tclock");if(c&&S.timer)c.textContent=fmt((Date.now()-S.timer.since)/1000);
+  const lv=$("#liveDur");if(lv&&S.timer)lv.textContent=fmtM(Math.floor((Date.now()-S.timer.since)/60000));
   document.querySelectorAll("[data-clock]").forEach(x=>x.textContent=fmt(runSec(tk(Number(x.dataset.clock)),ME)));
   document.querySelectorAll("[data-total]").forEach(x=>x.textContent=fmtH(totalSec(tk(Number(x.dataset.total)))));
   document.querySelectorAll("[data-live]").forEach(x=>{const p=x.dataset.live,s=p===ME?S.timer:S.others[p];if(s&&s!=="vac")x.textContent=fmt((Date.now()-s.since)/1000)});
@@ -942,22 +1512,34 @@ setInterval(()=>{
 
 /* ---------- Recorrido de desarrollo ---------- */
 const TOUR=[
-  {hu:"A1",loc:"Temis › Tickets",t:"Un solo listado de tickets",b:["Reemplaza a Zoho Projects para mantenimiento.","Sin HU ni subtareas: cada fila es un ticket escalado de Desk.","Por default no salen Cerrados ni Cancelados."],sel:"#tbl",setup:()=>go("tickets")},
+  {route:"mis",hu:"A11",loc:"Temis › Mis tickets",t:"Lo tuyo, primero",b:["Te toca a ti según tu rol.","Las tarjetas avisan cuando toca dar seguimiento al cliente."],sel:"#gToca",setup:()=>go("mis")},
+  {route:"tickets",hu:"A1",loc:"Temis › Tickets",t:"Un solo listado de tickets",b:["Reemplaza a Zoho Projects para mantenimiento.","Sin HU ni subtareas: cada fila es un ticket escalado de Desk.","Por default no salen Cerrados ni Cancelados."],sel:"#tbl",setup:()=>go("tickets")},
   {hu:"A1",loc:"Temis › Tickets › Filtros",t:"Filtros en la fila del título",b:["Buscar por folio, título o cliente.","Míos, Errores, Cotizaciones y mejoras, Cerrados."],sel:"#filters",setup:()=>go("tickets")},
-  {hu:"A3",loc:"Temis › Barra superior",t:"Mi timer siempre visible",b:["Muestra el ticket y el tiempo corriendo.","Se pausa desde aquí o desde el detalle.","Es el mismo en todas las pestañas y dispositivos."],sel:"#tpill",setup:()=>go("tickets")},
+  {hu:"A3",loc:"Temis › Barra superior",t:"Mi timer siempre visible",b:["Muestra el ticket o actividad y el tiempo del tramo actual.","Se pausa desde aquí, desde el ticket o desde Mis tiempos.","Es el mismo en todas las pestañas y dispositivos."],sel:"#tpill",setup:()=>go("tickets")},
   {hu:"A1",loc:"Temis › Tickets › Ticket #48210",t:"El ticket se abre encima del listado",b:["Sin cambiar de pantalla.","Arriba lo importante: estatus, reloj y siguiente paso."],sel:"#dHead",setup:()=>{go("tickets");S.open=48210;S.tab="comentarios";renderDet()}},
   {hu:"A3",loc:"Ticket #48120 › Encabezado",t:"Un reloj en el ticket",b:["Quien lo prende queda registrado, aunque no sea responsable.","Solo ves tu propio tiempo. Si tenías otro corriendo, se pausa solo."],sel:"#dClock",setup:()=>{go("tickets");S.open=48120;S.tab="comentarios";renderDet()}},
-  {hu:"A2",loc:"Ticket #48152 › Encabezado",t:"Solo el estatus actual y el siguiente paso",b:["No se muestra el camino completo.","Esperando al cliente ofrece: aprobó o pidió ajustes. Cancelar queda aparte."],sel:"#dActs",setup:()=>{go("tickets");S.open=48152;S.tab="comentarios";renderDet()}},
+  {hu:"A2",loc:"Ticket #48152 › Encabezado",t:"Un botón con todos los estatus",b:["Al dar clic se abren todos los estatus del ticket; eliges cualquiera.","Marca el Actual y el Siguiente. Cancelado está en la misma lista."],sel:"#dActs",setup:()=>{go("tickets");S.open=48152;S.tab="comentarios";S.stOpen=true;renderDet()}},
   {hu:"A1",loc:"Ticket #48210 › Datos",t:"Datos y responsables",b:["Tipo, prioridad, versión, cliente, módulo y fecha de entrega.","Responsables en un solo campo múltiple."],sel:"#dDatos",setup:()=>{go("tickets");S.open=48210;S.tab="comentarios";renderDet()}},
   {hu:"A1",loc:"Ticket #48210 › Comentarios",t:"Comentarios internos con adjuntos",b:["Solo los ve el equipo; no se envían al cliente.","Las incidencias de la Segunda Vuelta de SPD aparecen aquí marcadas."],sel:"#dTabBody",setup:()=>{go("tickets");S.open=48210;S.tab="comentarios";renderDet()}},
   {hu:"A8",loc:"Ticket #48120 › Análisis",t:"El análisis viene de Git",b:["Muestra los Gherkins del repositorio ERP cuyo nombre empieza con el folio.","Se leen aquí; se siguen escribiendo en Git."],sel:"#dTabBody",setup:()=>{go("tickets");S.open=48120;S.tab="analisis";S.gOpen=0;renderDet()}},
-  {hu:"A5",loc:"Temis › En vivo",t:"Quién trabaja en qué, en vivo",b:["Una tarjeta por persona con su timer corriendo.","Sin timer y de vacaciones se distinguen a simple vista."],sel:"#cards",setup:()=>go("envivo")},
-  {hu:"A4",loc:"Configuración › Horarios y avisos",t:"Horario por persona",b:["Función nueva de Temis.","De aquí salen los avisos de entrada y salida."],sel:"#hBox",setup:()=>go("horarios")},
+  {route:"tiempos",hu:"A9",loc:"Temis › Mis tiempos",t:"Todos mis tiempos en un lugar",b:["Tickets y actividades, agrupados por día con sus totales.","Cada registro dice si fue Reloj, Manual o Editado."],sel:"#tList",setup:()=>go("tiempos")},
+  {hu:"A9",loc:"Temis › Mis tiempos",t:"Agregar tiempo manual",b:["Ticket o actividad, día, inicio, fin y motivo.","No se permiten empalmes ni días fuera del plazo."],sel:"#btnAddT",setup:()=>go("tiempos")},
+  {hu:"A3",loc:"Temis › Barra superior",t:"Reloj también para actividades",b:["Iniciar reloj abre un buscador: tickets por folio o título, y actividades administrativas.","Tus tickets salen primero. Sigue la regla de un solo reloj a la vez."],sel:"#tpill",setup:()=>{if(S.timer)finishTimer();go("tiempos")}},
+  {route:"actividades",hu:"A9",loc:"Configuración › Actividades y tiempos",t:"Actividades y plazo configurables",b:["Se agregan o desactivan actividades.","El plazo para agregar o editar se define en días."],sel:"#actBox",setup:()=>go("actividades")},
+  {route:"kanban",hu:"A10",loc:"Temis › Kanban",t:"Kanban del equipo",b:["Arrastra una tarjeta para cambiar su estatus.","Se ve quién tiene el reloj corriendo en cada tarjeta."],sel:"#kb",setup:()=>go("kanban")},
+  {route:"backlog",hu:"A10",loc:"Temis › Backlog",t:"Lo que está en espera, en orden",b:["Nuevos, Esperando al cliente y Documentando.","Solo los líderes cambian el orden."],sel:"#bl",setup:()=>go("backlog")},
+  {hu:"A12",loc:"Ticket #48210 › Etiquetas",t:"Etiquetas libres",b:["Escribe y da Enter; si no existe, se crea.","Sirven para filtrar en Tickets, Kanban y Backlog."],sel:"#dTags",setup:()=>{go("tickets");S.open=48210;renderDet()}},
+  {hu:"A11",loc:"Ticket #48152 › Seguimiento (vista de analista)",t:"Bitácora y correos para copiar",b:["Botones rápidos para registrar cada paso con el cliente.","Solo los correos del paso actual, ya llenos."],sel:"#dTabBody",setup:()=>{if(ME!=="Sofía Treviño"){const v=$("#verComo");v.value="Sofía Treviño";v.dispatchEvent(new Event("change",{bubbles:true}))}go("tickets");S.open=48152;S.tab="seguimiento";renderDet()}},
+  {route:"reglas",hu:"A11",loc:"Configuración › Reglas y plazos",t:"Todo configurable",b:["Días para el aviso de seguimiento.","Cierre automático y plazo para editar tiempos."],sel:"#reglasBox",setup:()=>go("reglas")},
+  {hu:"A13",loc:"Temis › Mascota",t:"Tu mascota de ayuda",b:["Saluda con lo que te toca hoy.","Dudas, novedades, reportar fallas y sugerencias."],sel:"#petpanel",setup:()=>{go("mis");S.petOpen=true;S.petView="home";renderPet()}},
+  {hu:"A14",loc:"Temis › Mi perfil",t:"Temis a tu gusto",b:["Tema, modo, densidad y mascota.","Inicio, avisos, horario y ayuda."],sel:"#prof",setup:()=>{go("mis");S.profOpen=true;renderProf()}},
+  {route:"envivo",hu:"A5",loc:"Temis › En vivo",t:"Quién trabaja en qué, en vivo",b:["Una tarjeta por persona con su timer corriendo.","Sin timer y de vacaciones se distinguen a simple vista."],sel:"#cards",setup:()=>go("envivo")},
+  {route:"horarios",hu:"A4",loc:"Configuración › Horarios y avisos",t:"Horario por persona",b:["Función nueva de Temis.","De aquí salen los avisos de entrada y salida."],sel:"#hBox",setup:()=>go("horarios")},
   {hu:"A4",loc:"Configuración › Horarios y avisos",t:"Avisos por fases",b:["Fase 1: Temis, navegador y Teams.","Fase 2 celular y fase 3 WhatsApp, deshabilitadas por ahora."],sel:"#avBox",setup:()=>go("horarios")},
-  {hu:"A6",loc:"Configuración › Origen de datos",t:"Transición sin romper pantallas",b:["Las pantallas leen de Temis y Zoho a la vez.","El switch es solo un freno de emergencia."],sel:"#switchBox",setup:()=>go("origen")}
+  {route:"origen",hu:"A6",loc:"Configuración › Origen de datos",t:"Transición sin romper pantallas",b:["Las pantallas leen de Temis y Zoho a la vez.","El switch es solo un freno de emergencia."],sel:"#switchBox",setup:()=>go("origen")}
 ];
 let TI=-1;
-function go(r){S.route=r;S.open=null;S.filter=r==="tickets"?"todos":S.filter;$("#docSlot").innerHTML="";closeModal();render()}
+function go(r){S.route=r;S.open=null;S.stOpen=false;S.petOpen=false;S.profOpen=false;S.filter=r==="tickets"?"todos":S.filter;$("#docSlot").innerHTML="";closeModal();render()}
 function tourShow(i){
   TI=i;const s=TOUR[i];
   document.querySelectorAll(".tour-spot").forEach(x=>x.classList.remove("tour-spot"));

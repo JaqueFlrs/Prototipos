@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Configuración de Tickets Temis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: una app Temis (barra lateral + contenido) dentro de un marco; controles de simulación y notas fuera del marco. */
+:root{
+  --bg:#eef0f2; --frame:#ffffff; --side:#f7f8f9; --ink:#1f2328; --sub:#69707a; --line:#e3e6ea; --soft:#f2f4f6;
+  --accent:#3b5bdb; --accent-soft:#e8edff; --ok:#1f8a55; --ok-soft:#e3f5ec; --warn:#a86a00; --warn-soft:#fdf1dc;
+  --bad:#c2372f; --bad-soft:#fbe7e5; --spec:#1e40af; --spec-soft:#eff4ff;
+  --f-display:"Inter Tight","Segoe UI",system-ui,sans-serif; --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14171b; --frame:#1b1f24; --side:#171a1f; --ink:#e7eaee; --sub:#9aa3ad; --line:#2c3239; --soft:#22272d;
+  --accent:#8ea2ff; --accent-soft:#252c47; --ok:#5cc98f; --ok-soft:#1c3328; --warn:#e0a94a; --warn-soft:#362b17;
+  --bad:#f08a82; --bad-soft:#3a2120; --spec:#9db6ff; --spec-soft:#1e2540; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#14171b; --frame:#1b1f24; --side:#171a1f; --ink:#e7eaee; --sub:#9aa3ad; --line:#2c3239; --soft:#22272d;
+  --accent:#8ea2ff; --accent-soft:#252c47; --ok:#5cc98f; --ok-soft:#1c3328; --warn:#e0a94a; --warn-soft:#362b17;
+  --bad:#f08a82; --bad-soft:#3a2120; --spec:#9db6ff; --spec-soft:#1e2540; color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;padding-block:20px 120px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;justify-content:space-between}
+.page-head h1{font-size:20px}
+.page-head p{margin:2px 0 0;color:var(--sub);font-size:13px}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+button{font-family:inherit;font-size:13px;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{border:1px solid var(--line);background:var(--frame);color:var(--ink);border-radius:7px;padding:6px 12px;font-weight:600}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--frame)}
+.btn.primary:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:3px 9px;font-size:12px}
+.chip-adr{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--spec);background:var(--spec-soft);border:1px solid transparent;border-radius:5px;padding:2px 7px;cursor:pointer}
+.chip-adr:hover{border-color:var(--spec)}
+
+/* Marco de la app */
+.frame{background:var(--frame);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;min-height:640px}
+.side{width:210px;flex-shrink:0;background:var(--side);border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.brand{font-family:var(--f-display);font-weight:700;padding:2px 8px 12px;font-size:15px}
+.brand small{display:block;font-family:var(--f-mono);font-weight:400;font-size:10.5px;color:var(--sub)}
+.grp{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--sub);font-weight:700;padding:10px 8px 4px}
+.nav{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--ink);padding:7px 10px;border-radius:7px;font-size:13.5px}
+.nav:hover{background:var(--soft)}
+.nav.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.nav.off{color:var(--sub);cursor:default}
+.nav.off:hover{background:transparent}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.title-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.title-row h2{font-size:17px;margin-right:6px}
+.tabs{display:flex;gap:2px;flex-wrap:wrap}
+.tab{border:0;background:transparent;color:var(--sub);padding:6px 11px;border-radius:7px;font-weight:600}
+.tab:hover{background:var(--soft);color:var(--ink)}
+.tab.on{background:var(--soft);color:var(--ink)}
+.tab .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--warn);margin-left:5px;vertical-align:middle}
+.spacer{flex:1}
+.spec-link{font-size:12px;color:var(--spec);background:none;border:0;text-decoration:underline;padding:0}
+.content{padding:16px 20px 24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.lead{color:var(--sub);font-size:13px;margin:0;max-width:75ch}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--frame);color:var(--sub);padding:6px 12px;font-weight:600}
+.seg button.on{background:var(--ink);color:var(--frame)}
+
+/* Tablas */
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:9px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--sub);font-weight:700;padding:9px 10px;border-bottom:1px solid var(--line);background:var(--side);white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tr.inactivo td{color:var(--sub)}
+tr.inactivo td input[type=text]{color:var(--sub)}
+td.c,th.c{text-align:center}
+.mono{font-family:var(--f-mono);font-size:12px;color:var(--sub)}
+.num{font-variant-numeric:tabular-nums}
+input[type=text],input[type=number],select{font-family:inherit;font-size:13px;color:var(--ink);background:var(--frame);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+input[type=text].plain{border-color:transparent;background:transparent;padding-left:4px;font-weight:600}
+input[type=text].plain:hover,input[type=text].plain:focus{border-color:var(--line);background:var(--frame)}
+input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
+.move{display:inline-flex;flex-direction:column;line-height:1}
+.move button{border:0;background:none;color:var(--sub);font-size:10px;padding:0 4px}
+.move button:hover{color:var(--ink)}
+.switch{position:relative;width:34px;height:19px;border-radius:12px;border:0;background:var(--line);vertical-align:middle;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:var(--frame);transition:left .15s}
+.switch.on{background:var(--ok)}
+.switch.on::after{left:17px}
+.switch:disabled{opacity:.4;cursor:not-allowed}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--soft);color:var(--sub);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.role{background:var(--accent-soft);color:var(--accent)}
+.pill button{border:0;background:none;color:inherit;padding:0 0 0 2px;font-size:13px;line-height:1}
+.footer-save{display:flex;align-items:center;gap:10px;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+.footer-save .note{color:var(--sub);font-size:12.5px;margin-right:auto}
+.two{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px}
+.sublist{display:flex;flex-direction:column;gap:2px}
+.box{border:1px solid var(--line);border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.row label{min-width:0}
+.hint{color:var(--sub);font-size:12px}
+.step{display:grid;grid-template-columns:30px minmax(140px,1fr) minmax(110px,170px) 110px 70px 60px;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step .n{font-family:var(--f-mono);font-size:12px;color:var(--sub);text-align:center}
+.steps-head{background:var(--side);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--sub);font-weight:700}
+
+/* Ventanas */
+.overlay{position:fixed;inset:0;background:rgba(10,12,16,.45);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px}
+.modal{background:var(--frame);border-radius:12px;width:min(460px,100%);box-shadow:0 18px 50px rgba(0,0,0,.3);overflow:hidden;max-height:90vh;display:flex;flex-direction:column}
+.modal.wide{width:min(720px,100%)}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.modal header h3{font-size:15px}
+.modal .body{padding:14px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;line-height:1.5}
+.modal footer{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;background:var(--side)}
+.modal ul{margin:0;padding-left:18px}
+.modal h4{margin:6px 0 0;font-family:var(--f-display);font-size:13px}
+.problem{background:var(--bad-soft);color:var(--bad);border-radius:7px;padding:8px 10px;font-size:13px}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--frame);border-left:1px solid var(--line);box-shadow:-10px 0 30px rgba(0,0,0,.15);z-index:55;display:flex;flex-direction:column}
+.drawer .body{padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.drawer header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.perm-grp{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--sub);font-weight:700;margin-top:6px}
+.perm{display:flex;gap:8px;align-items:center;font-size:13.5px;padding:3px 0}
+.toast{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(80px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--frame);padding:10px 16px;border-radius:8px;font-size:13px;z-index:90;max-width:340px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+/* Fuera del marco */
+.sim{border:1px dashed var(--line);border-radius:10px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13px;color:var(--sub)}
+.sim b{color:var(--ink)}
+.tourbar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--frame);z-index:70;padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tourbar .in{max-width:1240px;margin:0 auto;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.tourbar .txt{flex:1;min-width:240px}
+.tourbar .where{font-family:var(--f-mono);font-size:11px;opacity:.7}
+.tourbar h3{font-size:14.5px;margin:2px 0 4px}
+.tourbar ul{margin:0;padding-left:16px;font-size:13px;opacity:.9}
+.tourbar .prog{height:3px;background:rgba(255,255,255,.2);border-radius:2px;margin-top:8px}
+.tourbar .prog i{display:block;height:100%;background:var(--frame);border-radius:2px}
+.tourbar .btn{background:transparent;color:var(--frame);border-color:rgba(255,255,255,.35)}
+.tourbar .btn.primary{background:var(--frame);color:var(--ink)}
+.tour-spot{outline:3px solid var(--accent);outline-offset:3px;border-radius:8px;box-shadow:0 0 0 8px var(--accent-soft)}
+@media (max-width:820px){.frame{flex-direction:column}.side{width:auto;flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}.grp{width:100%}.two{grid-template-columns:minmax(0,1fr)}.step{grid-template-columns:24px minmax(0,1fr) minmax(0,1fr);}.step .hide-sm{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body style="margin:0">
+<div class="proto-banner" style="background:#fffde7;border-bottom:2px solid #c8a800;padding:10px 16px;font-size:12px;color:#444;line-height:1.7;font-family:Arial,sans-serif;margin:-20px -16px 16px;">
+  <div style="font-size:13px;font-weight:bold;color:#333;margin-bottom:3px;">💡 Sobre este prototipo</div>
+  <p style="margin:0 0 4px">Este prototipo es una representación visual de la funcionalidad solicitada, no un diseño final ni una especificación pixel a pixel. Su propósito es comunicar el flujo, los elementos y la intención — no reemplazar el criterio del desarrollador ni del diseñador.</p>
+  <p style="margin:0 0 4px">⚠️ El prototipo no debe copiarse tal cual. Lo que sí debe respetarse siempre es la apariencia del sistema destino: para Temis, eso significa sus colores, tipografía y componentes (Tailwind, daisyUI y shadcn).</p>
+  <p style="margin:0">Si algo del diseño propuesto aquí no encaja o parece descabellado, coméntalo antes de implementarlo — lo ajustamos juntos. 🙌</p>
+</div>
+
+<div class="wrap">
+  <div class="page-head">
+    <div>
+      <h1>Configuración de Tickets y Roles · Temis</h1>
+      <p>Mockup navegable. Los datos son de ejemplo. Diseño: <button class="chip-adr" data-adr="ADR-005">ADR-005</button> <button class="chip-adr" data-adr="ADR-006">ADR-006</button></p>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="btnNotas">Notas del análisis</button>
+      <button class="btn primary" id="btnTour">▶ Recorrido de desarrollo</button>
+    </div>
+  </div>
+
+  <div class="frame" id="frame">
+    <aside class="side" id="side"></aside>
+    <section class="main" id="main"></section>
+  </div>
+
+  <div class="sim" id="sim">
+    <b>Para probar el mockup:</b>
+    <label class="row" style="gap:6px">Ver como
+      <select id="simViewer"><option value="super">Jaqueline · Super admin</option><option value="admin">Sofía · Admin</option></select>
+    </label>
+    <button class="btn sm" id="simConflicto">Simular que otra persona guardó la configuración</button>
+    <span id="simEstado"></span>
+  </div>
+</div>
+
+<div id="layer"></div>
+<div class="tourbar" id="tourbar" hidden></div>
+
+<script>
+// ── Datos de ejemplo ──────────────────────────────────────────────────────────
+const S = {
+  route:{screen:"config", tab:"estatus", camino:"cotizacion", catalogo:"modulos", admin:"personas"},
+  viewer:"super", conflicto:false, revision:14, dirty:{},
+  estatus:[
+    {codigo:"nuevo",nombre:"Nuevo",tickets:9,activo:true,inicial:true,final:false,reabrir:false,siempre:false,kanban:false,backlog:true},
+    {codigo:"en_analisis",nombre:"En análisis",tickets:14,activo:true,inicial:false,final:false,reabrir:false,siempre:false,kanban:true,backlog:false},
+    {codigo:"esperando_cliente",nombre:"Esperando al cliente",tickets:21,activo:true,inicial:false,final:false,reabrir:false,siempre:false,kanban:true,backlog:true},
+    {codigo:"documentando",nombre:"Documentando",tickets:12,activo:true,inicial:false,final:false,reabrir:false,siempre:false,kanban:true,backlog:true},
+    {codigo:"en_desarrollo",nombre:"En desarrollo",tickets:18,activo:true,inicial:false,final:false,reabrir:false,siempre:false,kanban:true,backlog:false},
+    {codigo:"en_calidad",nombre:"En calidad",tickets:7,activo:true,inicial:false,final:false,reabrir:false,siempre:false,kanban:true,backlog:false},
+    {codigo:"por_liberar",nombre:"Por liberar",tickets:5,activo:true,inicial:false,final:false,reabrir:false,siempre:false,kanban:true,backlog:false},
+    {codigo:"liberado",nombre:"Liberado",tickets:63,activo:true,inicial:false,final:true,reabrir:false,siempre:false,kanban:false,backlog:false},
+    {codigo:"cerrado",nombre:"Cerrado",tickets:412,activo:true,inicial:false,final:true,reabrir:true,siempre:false,kanban:false,backlog:false},
+    {codigo:"cancelado",nombre:"Cancelado",tickets:38,activo:true,inicial:false,final:true,reabrir:true,siempre:true,kanban:false,backlog:false},
+  ],
+  etapas:[{codigo:"cotizacion",nombre:"Cotización",activo:true,tickets:11},{codigo:"prototipo",nombre:"Prototipo",activo:true,tickets:6}],
+  caminos:{
+    cotizacion:{nombre:"Cotización y mejora",rebote:"en_calidad",pasos:[
+      ["nuevo",null,false,4],["en_analisis","cotizacion",true,6],["esperando_cliente","cotizacion",false,9],["en_analisis","prototipo",true,3],["esperando_cliente","prototipo",false,5],
+      ["documentando",null,false,12],["en_desarrollo",null,true,11],["en_calidad",null,false,4],["por_liberar",null,false,2],["liberado",null,false,30],["cerrado",null,false,201]]},
+    error:{nombre:"Error del sistema",rebote:"en_calidad",pasos:[
+      ["nuevo",null,false,5],["en_analisis",null,true,5],["en_desarrollo",null,true,7],["en_calidad",null,false,3],["por_liberar",null,false,3],["liberado",null,false,33],["cerrado",null,false,211]]},
+  },
+  revisiones:{estimado_area:"Estimado de cada responsable de un área",version:"Versión capturada",tipo_problema:"Tipo de problema capturado",dev_origen:"Quién originó el problema, o No aplica"},
+  requisitos:{
+    cotizacion:[{rev:"estimado_area",desde:"en_desarrollo",area:"Desarrollo",activo:true},{rev:"estimado_area",desde:"en_calidad",area:"Calidad",activo:true},{rev:"version",desde:"por_liberar",activo:true}],
+    error:[{rev:"estimado_area",desde:"en_desarrollo",area:"Desarrollo",activo:true},{rev:"estimado_area",desde:"en_calidad",area:"Calidad",activo:true},{rev:"tipo_problema",desde:"por_liberar",activo:true},{rev:"dev_origen",desde:"por_liberar",activo:true},{rev:"version",desde:"por_liberar",activo:true}],
+  },
+  tipos:[{codigo:"cotizacion",nombre:"Cotización",camino:"cotizacion",activo:true,tickets:96},{codigo:"error",nombre:"Error del sistema",camino:"error",activo:true,tickets:267},{codigo:"mejora",nombre:"Mejora",camino:"cotizacion",activo:true,tickets:236}],
+  catalogos:{
+    modulos:{nombre:"Módulos",items:["Tráfico","Facturación","Cobranza","Cuentas por pagar","Banco","Contabilidad","Nómina","Inventarios y mantenimiento","Almacén","Catálogos y configuración","Doble Check","Fiscal","Mis Viajes","Hermes","GM Integra","Portalia","IA GM","Temis","Planeador","Pantalla Aeropuerto","Portal de Clientes","Administrador de Cobros"].map((n,i)=>({nombre:n,activo:true,tickets:[88,121,64,22,9,31,47,12,8,15,26,40,33,6,11,4,3,9,2,5,7,1][i]}))},
+    prioridades:{nombre:"Prioridades",items:[{nombre:"Urgente",activo:true,tickets:17},{nombre:"Alta",activo:true,tickets:102},{nombre:"Media",activo:true,tickets:398},{nombre:"Baja",activo:true,tickets:82}]},
+    etapas:{nombre:"Etapas",ref:"etapas"},
+    tiposProblema:{nombre:"Tipos de problema",items:["Error de código","Error de configuración","Falta en el análisis","Datos del cliente","Infraestructura","No era error"].map((n,i)=>({nombre:n,activo:true,tickets:[121,38,22,41,9,36][i]}))},
+    etiquetas:{nombre:"Etiquetas",items:[{nombre:"SAT",activo:true,tickets:44},{nombre:"Carta Porte",activo:true,tickets:29},{nombre:"Urgente cliente",activo:true,tickets:12},{nombre:"Addenda",activo:false,tickets:3}]},
+  },
+  acciones:[["ver","Ver tickets","tickets"],["crear","Crear tickets","tickets"],["editar","Editar datos del ticket","tickets"],["cambiar_estatus","Cambiar estatus","tickets"],["reabrir","Reabrir un ticket cerrado","tickets"],["mover_fecha","Poner o mover la fecha","tickets"],["asignar_responsable","Asignar responsables","tickets"],["quitar_responsable","Quitar responsables","tickets_lider"],["estimar","Capturar su estimado","tickets"],["comentar","Comentar","tickets"],["etiquetar","Poner y quitar etiquetas","tickets"],["ordenar_backlog","Ordenar el backlog","tickets_lider"],["configurar","Cambiar la configuración","tickets_config"]],
+  permisos:{"Tickets":[["tickets","Trabajar tickets"],["tickets_lider","Funciones de líder"],["tickets_config","Configuración de Tickets"]],"Administración":[["personas","Activar y desactivar personas"],["roles","Dar roles y editar sus permisos"]],"Resto de Temis":[["calendario","Calendario"],["kanban_equipo","Kanban del equipo"],["dashboard","Dashboard"],["carga_trabajo","Carga de trabajo"],["alertas_ver","Ver alertas"]]},
+  reglas:{fechaPasada:true,motivoFecha:true,notaIncidencias:true,seguimiento:2,cierreAuto:true,cierreDias:7,edicionTiempo:7},
+  roles:[
+    {codigo:"analista",nombre:"Analista",area:"Analista",permisos:["tickets","calendario","dashboard"]},
+    {codigo:"desarrollador",nombre:"Desarrollador",area:"Desarrollo",permisos:["tickets","kanban_equipo"]},
+    {codigo:"qa",nombre:"QA",area:"Calidad",permisos:["tickets","kanban_equipo"]},
+    {codigo:"soporte",nombre:"Soporte",area:"Soporte",permisos:["tickets","alertas_ver"]},
+    {codigo:"lider",nombre:"Líder",area:null,permisos:["tickets","tickets_lider","carga_trabajo"]},
+    {codigo:"admin",nombre:"Admin",area:null,permisos:["tickets","tickets_lider","tickets_config","personas"]},
+    {codigo:"super_admin",nombre:"Super admin",area:null,permisos:["tickets","tickets_lider","tickets_config","personas","roles","calendario","kanban_equipo","dashboard","carga_trabajo","alertas_ver"]},
+  ],
+  personas:[
+    {nombre:"Jaqueline Flores",correo:"jaqueline.versiones@…",roles:["analista","super_admin"],activa:true},
+    {nombre:"Sofía Treviño",correo:"sofia.versiones@…",roles:["analista","admin"],activa:true},
+    {nombre:"Marco Ruiz",correo:"marco.desarrollo@…",roles:["desarrollador","qa","lider"],activa:true},
+    {nombre:"Laura Méndez",correo:"laura.calidad@…",roles:["qa"],activa:true},
+    {nombre:"Diego Salas",correo:"diego.desarrollo@…",roles:["desarrollador"],activa:true},
+    {nombre:"Paola Ibarra",correo:"paola.soporte@…",roles:["soporte"],activa:true},
+    {nombre:"Renata Lozano",correo:"renata.productos@…",roles:["analista"],activa:false},
+  ],
+};
+const ESTATUS_NOMBRE = c => (S.estatus.find(e=>e.codigo===c)||{}).nombre || c;
+const ETAPA_NOMBRE = c => c ? (S.etapas.find(e=>e.codigo===c)||{}).nombre : "";
+const slug = t => t.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $ = s => document.querySelector(s);
+
+// ── Navegación ────────────────────────────────────────────────────────────────
+function goTo(r){ Object.assign(S.route, r); render(); }
+function marcar(tab){ S.dirty[tab]=true; renderTabs(); renderFooter(); }
+
+function renderSide(){
+  const n = (label, on, fn, off) => `<button class="nav ${on?"on":""} ${off?"off":""}" ${fn?`data-go='${fn}'`:""}>${label}</button>`;
+  $("#side").innerHTML = `<div class="brand">Temis<small>v1.4.0 · local</small></div>
+    ${n("Calendario",0,0,1)}${n("Mis Tickets",0,0,1)}${n("Dashboard",0,0,1)}
+    <div class="grp">Tickets</div>${n("Tickets",0,0,1)}${n("Kanban",0,0,1)}${n("Backlog",0,0,1)}
+    ${n("Configuración",S.route.screen==="config",'{"screen":"config"}')}
+    <div class="grp">Administración</div>${n("Personas y roles",S.route.screen==="admin",'{"screen":"admin"}')}`;
+}
+const TABS = [["estatus","Estatus"],["caminos","Caminos"],["bloqueos","Bloqueos"],["tipos","Tipos"],["catalogos","Catálogos"],["permisos","Permisos"],["reglas","Reglas"]];
+
+function render(){
+  renderSide();
+  if (S.route.screen==="config") renderConfig(); else renderAdmin();
+}
+function renderConfig(){
+  if (S.viewer!=="super" && S.viewer!=="admin") return;
+  $("#main").innerHTML = `<div class="title-row" id="cfgTitle"><h2>Configuración de Tickets</h2><div class="tabs" id="tabs"></div><span class="spacer"></span><button class="spec-link" data-spec="config">Ver especificación</button></div>
+    <div class="content" id="content"></div>`;
+  renderTabs(); renderTab();
+}
+function renderTabs(){
+  const el = $("#tabs"); if (!el) return;
+  el.innerHTML = TABS.map(([k,l])=>`<button class="tab ${S.route.tab===k?"on":""}" data-tab="${k}" id="tab-${k}">${l}${S.dirty[k]?'<span class="dot" title="Cambios sin guardar"></span>':""}</button>`).join("");
+}
+function renderTab(){
+  const c = $("#content");
+  const t = S.route.tab;
+  c.innerHTML = ({estatus:vEstatus,caminos:vCaminos,bloqueos:vBloqueos,tipos:vTipos,catalogos:vCatalogos,permisos:vPermisos,reglas:vReglas}[t])() + `<div class="footer-save" id="footer"></div>`;
+  renderFooter();
+}
+function renderFooter(){
+  const f = $("#footer"); if (!f) return;
+  const t = S.route.tab;
+  f.innerHTML = `<span class="note">Revisión de la configuración: <span class="mono">${S.revision}</span> · Cada cambio queda en la auditoría.</span>
+    ${S.dirty[t]?`<button class="btn" data-act="descartar">Descartar</button>`:""}
+    <button class="btn primary" id="btnGuardar" data-act="guardar" ${S.dirty[t]?"":"disabled"}>Guardar ${TABS.find(x=>x[0]===t)[1].toLowerCase()}</button>`;
+}
+
+// ── Pestañas ──────────────────────────────────────────────────────────────────
+function vEstatus(){
+  const ck = (e,i,k,extra="") => `<input type="checkbox" data-est="${i}" data-k="${k}" ${e[k]?"checked":""} ${extra} aria-label="${k}">`;
+  return `<div class="bar"><p class="lead">Los estatus se usan en todos los caminos. El código no cambia aunque se renombre. Lo que tiene tickets no se borra: se desactiva.</p><span class="spacer"></span><button class="btn" data-act="nuevoEstatus" id="btnNuevoEstatus">+ Agregar estatus</button></div>
+  <div class="tscroll" id="tablaEstatus"><table><thead><tr><th></th><th>Nombre</th><th>Código</th><th class="c">Inicial</th><th class="c">Final</th><th class="c" title="Salir de este estatus queda en la auditoría">Reabrir audita</th><th class="c" title="Se puede elegir desde cualquier paso, como Cancelado">Siempre disponible</th><th class="c">Kanban</th><th class="c">Backlog</th><th class="c">Tickets</th><th class="c">Activo</th></tr></thead><tbody>
+  ${S.estatus.map((e,i)=>`<tr class="${e.activo?"":"inactivo"}">
+    <td><span class="move"><button data-mover="${i}" data-d="-1" aria-label="Subir">▲</button><button data-mover="${i}" data-d="1" aria-label="Bajar">▼</button></span></td>
+    <td><input type="text" class="plain" value="${esc(e.nombre)}" data-est="${i}" data-k="nombre" aria-label="Nombre del estatus"></td>
+    <td class="mono">${e.codigo}</td>
+    <td class="c"><input type="radio" name="inicial" data-inicial="${i}" ${e.inicial?"checked":""} aria-label="Estatus inicial"></td>
+    <td class="c">${ck(e,i,"final")}</td><td class="c">${ck(e,i,"reabrir")}</td><td class="c">${ck(e,i,"siempre")}</td>
+    <td class="c">${ck(e,i,"kanban")}</td><td class="c">${ck(e,i,"backlog")}</td>
+    <td class="c num">${e.tickets}</td>
+    <td class="c"><button class="switch ${e.activo?"on":""}" data-activo="${i}" ${e.inicial?"disabled title='El estatus inicial no se puede desactivar'":""} aria-label="Activo"></button></td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+function vCaminos(){
+  const cam = S.caminos[S.route.camino];
+  const tipos = S.tipos.filter(t=>t.camino===S.route.camino).map(t=>t.nombre).join(", ");
+  const opEst = sel => S.estatus.filter(e=>e.activo && !e.siempre).map(e=>`<option value="${e.codigo}" ${e.codigo===sel?"selected":""}>${e.nombre}</option>`).join("");
+  const opEt = sel => `<option value="">Sin etapa</option>`+S.etapas.filter(e=>e.activo).map(e=>`<option value="${e.codigo}" ${e.codigo===sel?"selected":""}>${e.nombre}</option>`).join("");
+  return `<div class="bar"><div class="seg">${Object.entries(S.caminos).map(([k,v])=>`<button class="${S.route.camino===k?"on":""}" data-camino="${k}">${v.nombre}</button>`).join("")}</div>
+    <span class="hint">Lo usan: <b>${tipos||"ningún tipo"}</b></span><span class="spacer"></span><button class="btn" data-act="nuevoPaso" id="btnNuevoPaso">+ Agregar paso</button></div>
+  <div class="tscroll" id="tablaPasos"><div class="step steps-head"><span>#</span><span>Estatus</span><span>Etapa</span><span class="c hide-sm">Cuenta rebote</span><span class="c hide-sm">Tickets</span><span></span></div>
+  ${cam.pasos.map((p,i)=>`<div class="step"><span class="n"><span class="move"><button data-mpaso="${i}" data-d="-1" aria-label="Subir">▲</button><button data-mpaso="${i}" data-d="1" aria-label="Bajar">▼</button></span> ${i+1}</span>
+    <select data-paso="${i}" data-k="0" aria-label="Estatus del paso">${opEst(p[0])}</select>
+    <select data-paso="${i}" data-k="1" aria-label="Etapa del paso">${opEt(p[1])}</select>
+    <span class="c hide-sm"><input type="checkbox" data-paso="${i}" data-k="2" ${p[2]?"checked":""} aria-label="Cuenta rebote"></span>
+    <span class="c num hide-sm">${p[3]}</span>
+    <button class="btn ghost sm danger" data-quitarpaso="${i}" ${i===0?"disabled title='El primer paso es el estatus inicial'":""}>Quitar</button></div>`).join("")}
+  </div>
+  <div class="box" id="boxRebote"><div class="row"><label for="rebote"><b>El rebote cuenta desde</b></label>
+    <select id="rebote" data-rebote="1">${`<option value="">Sin rebote</option>`+cam.pasos.map(p=>p[0]).filter((v,i,a)=>a.indexOf(v)===i).map(c=>`<option value="${c}" ${cam.rebote===c?"selected":""}>${ESTATUS_NOMBRE(c)}</option>`).join("")}</select>
+    <span class="hint">Si un ticket está en este paso o después y regresa a un paso marcado con "Cuenta rebote", suma un rebote.</span></div>
+    <div class="hint">Los estatus que se eligen desde cualquier paso, como Cancelado, no se ponen en el camino.</div></div>`;
+}
+function vBloqueos(){
+  const cam = S.caminos[S.route.camino];
+  const reqs = S.requisitos[S.route.camino];
+  const estatusCamino = cam.pasos.map(p=>p[0]).filter((v,i,a)=>a.indexOf(v)===i);
+  const areas = [...new Set(S.roles.map(r=>r.area).filter(Boolean))];
+  return `<div class="bar"><div class="seg">${Object.entries(S.caminos).map(([k,v])=>`<button class="${S.route.camino===k?"on":""}" data-camino="${k}">${v.nombre}</button>`).join("")}</div>
+    <span class="hint">Se revisan en este orden; el primero que falle da el mensaje.</span><span class="spacer"></span><button class="btn" data-act="nuevoBloqueo" id="btnNuevoBloqueo">+ Agregar bloqueo</button></div>
+  <div class="tscroll" id="tablaBloqueos"><table><thead><tr><th></th><th>Qué revisa</th><th>Desde el estatus</th><th>Área</th><th>Mensaje que verá la persona</th><th class="c">Activo</th><th></th></tr></thead><tbody>
+  ${reqs.map((r,i)=>`<tr class="${r.activo?"":"inactivo"}"><td><span class="move"><button data-mreq="${i}" data-d="-1" aria-label="Subir">▲</button><button data-mreq="${i}" data-d="1" aria-label="Bajar">▼</button></span></td>
+    <td><b>${S.revisiones[r.rev]}</b></td>
+    <td><select data-req="${i}" data-k="desde" aria-label="Desde el estatus">${estatusCamino.map(c=>`<option value="${c}" ${c===r.desde?"selected":""}>${ESTATUS_NOMBRE(c)}</option>`).join("")}</select></td>
+    <td>${r.rev==="estimado_area"?`<select data-req="${i}" data-k="area" aria-label="Área">${areas.map(a=>`<option ${a===r.area?"selected":""}>${a}</option>`).join("")}</select>`:'<span class="hint">—</span>'}</td>
+    <td class="hint">${mensajeReq(r)}</td>
+    <td class="c"><button class="switch ${r.activo?"on":""}" data-reqact="${i}" aria-label="Activo"></button></td>
+    <td><button class="btn ghost sm danger" data-quitarreq="${i}">Quitar</button></td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+function mensajeReq(r){
+  const d = ESTATUS_NOMBRE(r.desde);
+  return {estimado_area:`Falta el tiempo estimado de Marco Ruiz (${r.area}) para pasar a ${d}.`,version:`Captura la versión antes de pasar a ${d}.`,tipo_problema:`Para pasar a ${d} define el tipo de problema.`,dev_origen:`Para pasar a ${d} define quién originó el problema, o marca No aplica.`}[r.rev];
+}
+function vTipos(){
+  return `<div class="bar"><p class="lead">Cada tipo sigue un camino. Al cambiar el camino de un tipo, sus tickets conservan su estatus si existe en el camino nuevo.</p><span class="spacer"></span><button class="btn" data-act="nuevoTipo">+ Agregar tipo</button></div>
+  <div class="tscroll"><table><thead><tr><th>Nombre</th><th>Código</th><th>Camino</th><th class="c">Tickets</th><th class="c">Activo</th></tr></thead><tbody>
+  ${S.tipos.map((t,i)=>`<tr class="${t.activo?"":"inactivo"}"><td><input type="text" class="plain" value="${esc(t.nombre)}" data-tipo="${i}" data-k="nombre" aria-label="Nombre del tipo"></td><td class="mono">${t.codigo}</td>
+  <td><select data-tipo="${i}" data-k="camino" aria-label="Camino">${Object.entries(S.caminos).map(([k,v])=>`<option value="${k}" ${k===t.camino?"selected":""}>${v.nombre}</option>`).join("")}</select></td>
+  <td class="c num">${t.tickets}</td><td class="c"><button class="switch ${t.activo?"on":""}" data-tipoact="${i}" aria-label="Activo"></button></td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+function itemsCat(k){ const c=S.catalogos[k]; return c.ref?S[c.ref]:c.items; }
+function vCatalogos(){
+  const k = S.route.catalogo, items = itemsCat(k);
+  return `<div class="two"><div class="sublist" id="listaCatalogos">${Object.entries(S.catalogos).map(([kk,v])=>`<button class="nav ${kk===k?"on":""}" data-cat="${kk}">${v.nombre} <span class="hint">· ${itemsCat(kk).length}</span></button>`).join("")}</div>
+  <div style="display:flex;flex-direction:column;gap:10px;min-width:0"><div class="bar"><h3 style="font-size:15px">${S.catalogos[k].nombre}</h3><span class="spacer"></span><button class="btn" data-act="nuevoItem" id="btnNuevoItem">+ Agregar</button></div>
+  ${k==="modulos"?'<p class="lead">Una sola lista: los módulos del ERP y los demás sistemas de GM. Al crear un ticket, el módulo se elige de aquí.</p>':""}
+  <div class="tscroll" id="tablaCatalogo"><table><thead><tr><th></th><th>Nombre</th><th class="c">Tickets</th><th class="c">Activo</th></tr></thead><tbody>
+  ${items.map((it,i)=>`<tr class="${it.activo?"":"inactivo"}"><td><span class="move"><button data-mitem="${i}" data-d="-1" aria-label="Subir">▲</button><button data-mitem="${i}" data-d="1" aria-label="Bajar">▼</button></span></td>
+  <td><input type="text" class="plain" value="${esc(it.nombre)}" data-item="${i}" aria-label="Nombre"></td><td class="c num">${it.tickets}</td>
+  <td class="c"><button class="switch ${it.activo?"on":""}" data-itemact="${i}" aria-label="Activo"></button></td></tr>`).join("")}
+  </tbody></table></div></div></div>`;
+}
+function vPermisos(){
+  const todos = Object.values(S.permisos).flat();
+  return `<p class="lead">Qué permiso pide cada acción. Qué permisos tiene cada rol se edita en Administración, pestaña Roles.</p>
+  <div class="tscroll" id="tablaPermisos"><table><thead><tr><th>Acción</th><th>Pide el permiso</th><th>Lo tienen</th></tr></thead><tbody>
+  ${S.acciones.map((a,i)=>`<tr><td><b>${a[1]}</b> <span class="mono">${a[0]}</span></td>
+  <td><select data-accion="${i}" aria-label="Permiso">${todos.map(p=>`<option value="${p[0]}" ${p[0]===a[2]?"selected":""}>${p[1]}</option>`).join("")}</select></td>
+  <td>${S.roles.filter(r=>r.permisos.includes(a[2])).map(r=>`<span class="pill role">${r.nombre}</span>`).join(" ")}</td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+function vReglas(){
+  const r = S.reglas, sw = (k,l,d) => `<div class="row"><button class="switch ${r[k]?"on":""}" data-regla="${k}" aria-label="${l}"></button><div><b>${l}</b><div class="hint">${d}</div></div></div>`;
+  const nu = (k,l,d) => `<div class="row"><input type="number" min="0" max="60" value="${r[k]}" data-reglanum="${k}" style="width:70px" aria-label="${l}"><div><b>${l}</b><div class="hint">${d}</div></div></div>`;
+  return `<div class="box" id="boxReglas">
+  ${sw("fechaPasada","Permitir fechas de entrega pasadas","Si se apaga, la fecha de entrega no puede ser anterior a hoy.")}
+  ${sw("motivoFecha","Pedir motivo al mover la fecha","La primera fecha nunca pide motivo; moverla sí, y queda en el historial.")}
+  ${sw("notaIncidencias","Pedir nota si calidad encuentra incidencias","Cuando QA marca incidencias en la revisión de una versión.")}
+  ${sw("cierreAuto","Cerrar solos los tickets liberados","Pasan a Cerrado si el cliente no responde en el plazo de abajo.")}
+  ${nu("cierreDias","Días hábiles para el cierre automático","Desde que el ticket pasa a Liberado.")}
+  ${nu("seguimiento","Días hábiles para el seguimiento con el cliente","Cada cuánto se recuerda dar seguimiento en Esperando al cliente.")}
+  ${nu("edicionTiempo","Días para corregir el tiempo propio","Después ya no se puede editar el tiempo registrado.")}
+  </div>`;
+}
+
+// ── Administración ────────────────────────────────────────────────────────────
+function renderAdmin(){
+  const t = S.route.admin;
+  $("#main").innerHTML = `<div class="title-row"><h2>Personas y roles</h2><div class="tabs">
+    <button class="tab ${t==="personas"?"on":""}" data-admin="personas" id="tab-personas">Personas</button><button class="tab ${t==="roles"?"on":""}" data-admin="roles" id="tab-roles">Roles</button></div>
+    <span class="spacer"></span><button class="spec-link" data-spec="${t}">Ver especificación</button></div><div class="content" id="content">${t==="personas"?vPersonas():vRoles()}</div>`;
+}
+function puedeRol(cod){ return S.viewer==="super" || cod!=="super_admin"; }
+function vPersonas(){
+  const nombreRol = c => S.roles.find(r=>r.codigo===c).nombre;
+  const areasDe = p => [...new Set(p.roles.map(c=>S.roles.find(r=>r.codigo===c).area).filter(Boolean))];
+  return `<p class="lead">Cada persona tiene todos los roles que necesite. Sus permisos son la suma de los de sus roles, y su área sale de sus roles${S.viewer==="admin"?". <b>Como Admin no puedes dar ni quitar el rol de Super admin.</b>":"."}</p>
+  <div class="tscroll" id="tablaPersonas"><table><thead><tr><th>Persona</th><th>Roles</th><th>Áreas</th><th class="c">Activa</th></tr></thead><tbody>
+  ${S.personas.map((p,i)=>`<tr class="${p.activa?"":"inactivo"}"><td><b>${p.nombre}</b><div class="mono">${p.correo}</div></td>
+  <td><div class="row" style="gap:6px">${p.roles.map(c=>`<span class="pill role">${nombreRol(c)}${puedeRol(c)?`<button data-quitarrol="${i}" data-rol="${c}" aria-label="Quitar ${nombreRol(c)}">×</button>`:""}</span>`).join("")}
+    <select data-darrol="${i}" aria-label="Agregar rol" style="padding:2px 6px;font-size:12px"><option value="">+ Rol</option>${S.roles.filter(r=>!p.roles.includes(r.codigo)).map(r=>`<option value="${r.codigo}" ${puedeRol(r.codigo)?"":"disabled"}>${r.nombre}</option>`).join("")}</select></div></td>
+  <td>${areasDe(p).map(a=>`<span class="pill">${a}</span>`).join(" ")||'<span class="hint">Sin área</span>'}</td>
+  <td class="c"><button class="switch ${p.activa?"on":""}" data-activa="${i}" aria-label="Activa"></button></td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+function vRoles(){
+  return `<div class="bar"><p class="lead">Los roles con área cuentan en los bloqueos de estimado. ${S.viewer==="super"?"Haz clic en un rol para editar sus permisos.":"<b>Solo un Super admin edita los permisos de los roles.</b>"}</p><span class="spacer"></span>${S.viewer==="super"?'<button class="btn" data-act="nuevoRol">+ Agregar rol</button>':""}</div>
+  <div class="tscroll" id="tablaRoles"><table><thead><tr><th>Rol</th><th>Área</th><th>Permisos</th><th class="c">Personas</th></tr></thead><tbody>
+  ${S.roles.map((r,i)=>`<tr style="cursor:${S.viewer==="super"?"pointer":"default"}" data-abrirrol="${i}"><td><b>${r.nombre}</b> <span class="mono">${r.codigo}</span></td><td>${r.area?`<span class="pill">${r.area}</span>`:'<span class="hint">—</span>'}</td>
+  <td class="hint">${r.permisos.length} permisos</td><td class="c num">${S.personas.filter(p=>p.roles.includes(r.codigo)).length}</td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+function abrirRol(i){
+  const r = S.roles[i];
+  $("#layer").innerHTML = `<div class="drawer" id="drawerRol" role="dialog" aria-label="Rol ${r.nombre}"><header><h3>${r.nombre}</h3><span class="mono">${r.codigo}</span><span class="spacer"></span><button class="btn ghost" data-cerrar="1" aria-label="Cerrar">✕</button></header>
+  <div class="body"><label class="row"><b>Área</b><select id="rolArea"><option value="">Sin área</option>${["Analista","Desarrollo","Calidad","Soporte"].map(a=>`<option ${a===r.area?"selected":""}>${a}</option>`).join("")}</select></label>
+  <span class="hint">El área decide en qué bloqueos de estimado cuenta quien tenga este rol.</span>
+  ${Object.entries(S.permisos).map(([g,ps])=>`<div class="perm-grp">${g}</div>${ps.map(p=>`<label class="perm"><input type="checkbox" data-permrol="${p[0]}" ${r.permisos.includes(p[0])?"checked":""}> ${p[1]}</label>`).join("")}`).join("")}
+  ${r.codigo==="super_admin"?'<div class="problem">El Super admin siempre conserva "Dar roles y editar sus permisos", para que nadie se quede fuera.</div>':""}
+  </div><footer><button class="btn" data-cerrar="1">Cancelar</button><button class="btn primary" data-guardarrol="${i}">Guardar rol</button></footer></div>`;
+}
+
+// ── Ventanas y avisos ─────────────────────────────────────────────────────────
+function modal(titulo, cuerpo, botones, wide){
+  $("#layer").innerHTML = `<div class="overlay" data-cerrar-fondo="1"><div class="modal ${wide?"wide":""}" role="dialog" aria-label="${esc(titulo)}"><header><h3>${titulo}</h3></header><div class="body">${cuerpo}</div><footer>${botones||'<button class="btn primary" data-cerrar="1">Entendido</button>'}</footer></div></div>`;
+}
+function cerrar(){ $("#layer").innerHTML=""; }
+let toastT;
+function toast(m){ clearTimeout(toastT); let t=$("#toast"); if(!t){t=document.createElement("div");t.className="toast";t.id="toast";document.body.appendChild(t);} t.textContent=m; t.hidden=false; toastT=setTimeout(()=>t.hidden=true,3200); }
+let confirmar = null;
+function pedirConfirmacion(titulo, texto, okTexto, fn){ confirmar=fn; modal(titulo, `<p style="margin:0">${texto}</p>`, `<button class="btn" data-cerrar="1">Cancelar</button><button class="btn primary" data-confirmar="1">${okTexto}</button>`); }
+
+// Revisión de la configuración completa antes de guardar, como revisarConfiguracion del dominio.
+function problemasConfig(){
+  const p = [];
+  const ini = S.estatus.filter(e=>e.inicial && e.activo);
+  if (ini.length!==1) p.push("Debe haber exactamente un estatus inicial activo.");
+  if (S.estatus.some(e=>e.inicial && e.final)) p.push("El estatus inicial no puede ser final.");
+  for (const [k,c] of Object.entries(S.caminos)){
+    if (c.pasos.length<2) p.push(`El camino ${c.nombre} necesita al menos dos pasos.`);
+    if (!S.estatus.find(e=>e.codigo===c.pasos[0][0])?.inicial) p.push(`El camino ${c.nombre} debe empezar en el estatus inicial.`);
+    const vistos = new Set();
+    c.pasos.forEach(x=>{ const key=x[0]+"|"+x[1]; if(vistos.has(key)) p.push(`El camino ${c.nombre} repite el paso ${ESTATUS_NOMBRE(x[0])}${x[1]?" · "+ETAPA_NOMBRE(x[1]):""}.`); vistos.add(key); });
+    S.requisitos[k].forEach(r=>{ if(!c.pasos.some(x=>x[0]===r.desde)) p.push(`Un bloqueo del camino ${c.nombre} empieza en ${ESTATUS_NOMBRE(r.desde)}, que ya no está en el camino.`); });
+  }
+  return p;
+}
+function guardar(){
+  const tab = S.route.tab;
+  if (S.conflicto){
+    modal("Alguien más guardó la configuración", `<p style="margin:0">Sofía Treviño guardó cambios hace un momento. Para no borrar lo suyo, recarga la configuración y vuelve a hacer tus cambios.</p><p class="hint" style="margin:0">Tu revisión era la ${S.revision}; la actual es la ${S.revision+1}.</p>`,
+      `<button class="btn" data-cerrar="1">Seguir viendo</button><button class="btn primary" data-act="recargar">Recargar configuración</button>`);
+    return;
+  }
+  const p = problemasConfig();
+  if (p.length){ modal("No se guardó: falta arreglar algo", p.map(x=>`<div class="problem">${x}</div>`).join(""), null); return; }
+  S.dirty[tab]=false; S.revision++; renderTabs(); renderFooter();
+  toast(`${TABS.find(x=>x[0]===tab)[1]} guardado. Queda en la auditoría.`);
+}
+
+// ── Eventos ───────────────────────────────────────────────────────────────────
+document.addEventListener("click", e => {
+  const d = e.target.closest("[data-go],[data-tab],[data-act],[data-mover],[data-activo],[data-camino],[data-mpaso],[data-quitarpaso],[data-mreq],[data-reqact],[data-quitarreq],[data-tipoact],[data-cat],[data-mitem],[data-itemact],[data-regla],[data-admin],[data-quitarrol],[data-activa],[data-abrirrol],[data-guardarrol],[data-cerrar],[data-confirmar],[data-spec],[data-adr],[data-cerrar-fondo]");
+  if (!d) return;
+  const ds = d.dataset;
+  if (ds.cerrarFondo!==undefined){ if (e.target===d) cerrar(); return; }
+  if (ds.go){ goTo(JSON.parse(ds.go)); return; }
+  if (ds.tab){ goTo({tab:ds.tab}); return; }
+  if (ds.admin){ goTo({admin:ds.admin}); return; }
+  if (ds.cerrar){ cerrar(); return; }
+  if (ds.confirmar){ const f=confirmar; cerrar(); f&&f(); return; }
+  if (ds.spec){ verSpec(ds.spec); return; }
+  if (ds.adr){ verAdr(ds.adr); return; }
+  if (ds.mover!==undefined){ mover(S.estatus,+ds.mover,+ds.d); marcar("estatus"); renderTab(); return; }
+  if (ds.activo!==undefined){ const est=S.estatus[+ds.activo];
+    if (est.activo && est.tickets>0){ pedirConfirmacion(`Desactivar ${est.nombre}`, `Hay <b>${est.tickets} tickets</b> en ${est.nombre}. Seguirán ahí, pero nadie podrá mover un ticket a ese estatus.`, "Sí, desactivar", ()=>{est.activo=false;marcar("estatus");renderTab();}); }
+    else { est.activo=!est.activo; marcar("estatus"); renderTab(); } return; }
+  if (ds.camino){ goTo({camino:ds.camino}); return; }
+  if (ds.mpaso!==undefined){ mover(S.caminos[S.route.camino].pasos,+ds.mpaso,+ds.d); marcar("caminos"); renderTab(); return; }
+  if (ds.quitarpaso!==undefined){ const cam=S.caminos[S.route.camino], i=+ds.quitarpaso, p=cam.pasos[i];
+    const quitar=()=>{cam.pasos.splice(i,1);marcar("caminos");renderTab();};
+    if (p[3]>0) pedirConfirmacion(`Quitar ${ESTATUS_NOMBRE(p[0])}${p[1]?" · "+ETAPA_NOMBRE(p[1]):""}`, `Hay <b>${p[3]} tickets</b> en este paso. No se pierden: se mostrarán fuera del camino y se podrán mover a cualquier paso.`, "Sí, quitar", quitar); else quitar(); return; }
+  if (ds.mreq!==undefined){ mover(S.requisitos[S.route.camino],+ds.mreq,+ds.d); marcar("bloqueos"); renderTab(); return; }
+  if (ds.reqact!==undefined){ const r=S.requisitos[S.route.camino][+ds.reqact]; r.activo=!r.activo; marcar("bloqueos"); renderTab(); return; }
+  if (ds.quitarreq!==undefined){ S.requisitos[S.route.camino].splice(+ds.quitarreq,1); marcar("bloqueos"); renderTab(); return; }
+  if (ds.tipoact!==undefined){ const t=S.tipos[+ds.tipoact];
+    if (t.activo) pedirConfirmacion(`Desactivar ${t.nombre}`, `Hay <b>${t.tickets} tickets</b> de este tipo. Los conservan, pero ya no se podrán crear tickets nuevos de ${t.nombre}.`, "Sí, desactivar", ()=>{t.activo=false;marcar("tipos");renderTab();});
+    else { t.activo=true; marcar("tipos"); renderTab(); } return; }
+  if (ds.cat){ goTo({catalogo:ds.cat}); return; }
+  if (ds.mitem!==undefined){ mover(itemsCat(S.route.catalogo),+ds.mitem,+ds.d); marcar("catalogos"); renderTab(); return; }
+  if (ds.itemact!==undefined){ const it=itemsCat(S.route.catalogo)[+ds.itemact];
+    if (it.activo && it.tickets>0) pedirConfirmacion(`Desactivar ${it.nombre}`, `Hay <b>${it.tickets} tickets</b> con ${it.nombre}. Lo conservan, pero ya no saldrá en las listas para elegir.`, "Sí, desactivar", ()=>{it.activo=false;marcar("catalogos");renderTab();});
+    else { it.activo=!it.activo; marcar("catalogos"); renderTab(); } return; }
+  if (ds.regla){ S.reglas[ds.regla]=!S.reglas[ds.regla]; marcar("reglas"); renderTab(); return; }
+  if (ds.quitarrol!==undefined){ const p=S.personas[+ds.quitarrol], rol=ds.rol;
+    if (rol==="super_admin" && S.personas.filter(x=>x.activa && x.roles.includes("super_admin")).length===1){ modal("No se puede quitar","<p style='margin:0'>Es el último Super admin activo. Primero da el rol de Super admin a otra persona.</p>"); return; }
+    p.roles=p.roles.filter(c=>c!==rol); toast(`Se quitó el rol a ${p.nombre}. Queda en la auditoría.`); renderAdmin(); return; }
+  if (ds.activa!==undefined){ const p=S.personas[+ds.activa];
+    if (p.activa && p.roles.includes("super_admin") && S.personas.filter(x=>x.activa && x.roles.includes("super_admin")).length===1){ modal("No se puede desactivar","<p style='margin:0'>Es el último Super admin activo.</p>"); return; }
+    if (p.activa) pedirConfirmacion(`Desactivar a ${p.nombre}`, "Ya no podrá entrar a Temis aunque su cuenta de Microsoft siga activa. Sus tickets y su historial se conservan.", "Sí, desactivar", ()=>{p.activa=false;toast(`${p.nombre} desactivada. Queda en la auditoría.`);renderAdmin();});
+    else { p.activa=true; toast(`${p.nombre} activa de nuevo.`); renderAdmin(); } return; }
+  if (ds.abrirrol!==undefined){ if (S.viewer==="super") abrirRol(+ds.abrirrol); return; }
+  if (ds.guardarrol!==undefined){ const r=S.roles[+ds.guardarrol];
+    r.area=$("#rolArea").value||null; r.permisos=[...document.querySelectorAll("[data-permrol]:checked")].map(x=>x.dataset.permrol);
+    if (r.codigo==="super_admin" && !r.permisos.includes("roles")) r.permisos.push("roles");
+    cerrar(); toast(`Rol ${r.nombre} guardado. Queda en la auditoría.`); renderAdmin(); return; }
+  const act = ds.act;
+  if (act==="guardar") guardar();
+  if (act==="descartar"){ S.dirty[S.route.tab]=false; renderTabs(); renderTab(); toast("Cambios descartados."); }
+  if (act==="recargar"){ S.conflicto=false; S.revision++; S.dirty={}; cerrar(); renderConfig(); $("#simEstado").textContent=""; toast("Configuración recargada con lo último."); }
+  if (act==="nuevoEstatus") nuevo("Agregar estatus","Nombre del estatus","En revisión del cliente", n=>{ S.estatus.splice(S.estatus.length-3,0,{codigo:slug(n),nombre:n,tickets:0,activo:true,inicial:false,final:false,reabrir:false,siempre:false,kanban:true,backlog:false}); marcar("estatus"); renderTab(); toast(`Estatus ${n} agregado. Ponlo en un camino para poder usarlo.`); }, true);
+  if (act==="nuevoPaso"){ const cam=S.caminos[S.route.camino]; cam.pasos.splice(cam.pasos.length-2,0,["documentando",null,false,0]); marcar("caminos"); renderTab(); toast("Paso agregado antes de Liberado. Elige su estatus."); }
+  if (act==="nuevoBloqueo") modal("Agregar bloqueo", `<label class="row"><b>Qué revisa</b><select id="nbRev">${Object.entries(S.revisiones).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></label><p class="hint" style="margin:0">Solo se pueden elegir las revisiones que el sistema sabe hacer. Una nueva se programa una vez, con sus pruebas.</p>`,
+      `<button class="btn" data-cerrar="1">Cancelar</button><button class="btn primary" data-act="crearBloqueo">Agregar</button>`);
+  if (act==="crearBloqueo"){ const rev=$("#nbRev").value; S.requisitos[S.route.camino].push({rev,desde:"por_liberar",area:rev==="estimado_area"?"Desarrollo":undefined,activo:true}); cerrar(); marcar("bloqueos"); renderTab(); }
+  if (act==="nuevoTipo") nuevo("Agregar tipo","Nombre del tipo","Soporte urgente", n=>{ S.tipos.push({codigo:slug(n),nombre:n,camino:"error",activo:true,tickets:0}); marcar("tipos"); renderTab(); }, true);
+  if (act==="nuevoItem") nuevo(`Agregar a ${S.catalogos[S.route.catalogo].nombre}`,"Nombre", S.route.catalogo==="modulos"?"Portal de Proveedores":"Nuevo", n=>{
+      const items=itemsCat(S.route.catalogo);
+      if (items.some(x=>slug(x.nombre)===slug(n))){ modal("Ya existe",`<p style="margin:0">Ya hay uno llamado <b>${esc(items.find(x=>slug(x.nombre)===slug(n)).nombre)}</b>. Los nombres no se repiten aunque cambien mayúsculas, acentos o espacios.</p>`); return; }
+      items.push({nombre:n,activo:true,tickets:0,codigo:slug(n)}); marcar("catalogos"); renderTab(); });
+  if (act==="nuevoRol") nuevo("Agregar rol","Nombre del rol","Consulta", n=>{ S.roles.push({codigo:slug(n),nombre:n,area:null,permisos:["tickets"]}); renderAdmin(); toast(`Rol ${n} agregado. Edita sus permisos.`); }, true);
+  if (act==="crearNuevo"){ const n=$("#nvNombre").value.trim(); if(!n){ $("#nvErr").hidden=false; return; } const f=nuevoFn; cerrar(); f(n); }
+});
+document.addEventListener("input", e => {
+  const d = e.target.dataset;
+  if (d.est!==undefined && d.k==="nombre"){ S.estatus[+d.est].nombre=e.target.value; marcar("estatus"); }
+  if (d.tipo!==undefined && d.k==="nombre"){ S.tipos[+d.tipo].nombre=e.target.value; marcar("tipos"); }
+  if (d.item!==undefined){ itemsCat(S.route.catalogo)[+d.item].nombre=e.target.value; marcar("catalogos"); }
+  if (d.reglanum){ S.reglas[d.reglanum]=+e.target.value; marcar("reglas"); }
+  if (e.target.id==="nvNombre"){ $("#nvCodigo").textContent = slug(e.target.value)||"—"; $("#nvErr").hidden=true; }
+});
+document.addEventListener("change", e => {
+  const d = e.target.dataset;
+  if (d.est!==undefined && d.k!=="nombre"){ S.estatus[+d.est][d.k]=e.target.checked; marcar("estatus"); }
+  if (d.inicial!==undefined){ S.estatus.forEach((x,i)=>x.inicial=i===+d.inicial); marcar("estatus"); renderTab(); }
+  if (d.paso!==undefined){ const p=S.caminos[S.route.camino].pasos[+d.paso]; p[+d.k] = d.k==="2"?e.target.checked:(e.target.value||null); marcar("caminos"); }
+  if (d.rebote){ S.caminos[S.route.camino].rebote=e.target.value||null; marcar("caminos"); }
+  if (d.req!==undefined){ S.requisitos[S.route.camino][+d.req][d.k]=e.target.value; marcar("bloqueos"); renderTab(); }
+  if (d.tipo!==undefined && d.k==="camino"){ S.tipos[+d.tipo].camino=e.target.value; marcar("tipos"); }
+  if (d.accion!==undefined){ S.acciones[+d.accion][2]=e.target.value; marcar("permisos"); renderTab(); }
+  if (d.darrol!==undefined && e.target.value){ const p=S.personas[+d.darrol]; p.roles.push(e.target.value); toast(`${p.nombre} ahora también es ${S.roles.find(r=>r.codigo===e.target.value).nombre}. Queda en la auditoría.`); renderAdmin(); }
+  if (e.target.id==="simViewer"){ S.viewer=e.target.value; render(); toast(S.viewer==="admin"?"Ahora ves Temis como Sofía, con rol Admin.":"Ahora ves Temis como Jaqueline, Super admin."); }
+});
+$("#simConflicto").onclick = () => { S.conflicto=true; $("#simEstado").innerHTML="<b>Listo:</b> al guardar cualquier pestaña saldrá el aviso de conflicto."; };
+function mover(arr,i,d){ const j=i+d; if(j<0||j>=arr.length) return; [arr[i],arr[j]]=[arr[j],arr[i]]; }
+let nuevoFn=null;
+function nuevo(titulo,label,ej,fn,conCodigo){ nuevoFn=fn;
+  modal(titulo, `<label style="display:flex;flex-direction:column;gap:4px"><b>${label}</b><input type="text" id="nvNombre" placeholder="Ej. ${esc(ej)}" autofocus></label>
+  ${conCodigo?`<div class="hint">Código: <span class="mono" id="nvCodigo">—</span> · Se arma solo con el nombre y ya no cambia aunque después lo renombres.</div>`:'<span id="nvCodigo" hidden></span>'}
+  <div class="problem" id="nvErr" hidden>Escribe el nombre.</div>`, `<button class="btn" data-cerrar="1">Cancelar</button><button class="btn primary" data-act="crearNuevo">Agregar</button>`);
+  setTimeout(()=>$("#nvNombre")?.focus(),30);
+}
+
+// ── Especificación, ADR y notas ───────────────────────────────────────────────
+const SPEC = {
+  config:{t:"Configuración de Tickets",h:`
+    <h4>Objetivo</h4><p>Cambiar desde una pantalla lo que ya es configurable en la base (ADR-005), sin SQL ni programar.</p>
+    <h4>Quién entra</h4><p>Quien tenga el permiso que pide la acción <span class="mono">configurar</span>, hoy <span class="mono">tickets_config</span> (roles Admin y Super admin).</p>
+    <h4>Cómo se guarda</h4><ul><li>Cada pestaña tiene su botón Guardar, que se habilita al cambiar algo; la pestaña con cambios sin guardar muestra un punto.</li><li>Todo lo de la pestaña entra en una sola transacción: <span class="mono">PUT /api/tk/configuracion/&lt;pestaña&gt;</span> con la revisión de la configuración.</li><li>Antes de guardar se revisa la configuración completa con <span class="mono">revisarConfiguracion</span>. Si hay problemas no guarda nada y los lista.</li><li>Si la revisión enviada no es la actual: 409 con aviso para recargar.</li><li>Cada guardado deja un renglón en <span class="mono">nucleo.auditoria</span> con persona, pestaña, antes y después.</li></ul>
+    <h4>Protecciones</h4><ul><li>Lo que tiene tickets no se borra, solo se desactiva; antes se avisa a cuántos tickets afecta.</li><li>El estatus inicial no se desactiva ni puede ser final; debe haber uno solo.</li><li>El primer paso de cada camino es el estatus inicial.</li><li>Los estatus siempre disponibles, como Cancelado, no van en los caminos.</li><li>Quitar un paso con tickets avisa; esos tickets quedan fuera del camino y se pueden mover a cualquier paso.</li><li>Las revisiones de los bloqueos salen de la lista del sistema: estimado por área, versión, tipo de problema y quién lo originó.</li><li>El código de lo nuevo se arma solo con el nombre, sin acentos y en minúsculas, y no cambia al renombrar.</li><li>Los nombres de los catálogos no se repiten aunque cambien mayúsculas, acentos o espacios.</li></ul>
+    <h4>Módulos</h4><p>Migración 008: <span class="mono">tickets.modulos</span> con nombre único, orden y activo; <span class="mono">tickets.tickets.modulo</span> pasa a <span class="mono">modulo_id</span>. Los textos existentes se convierten en módulos. Lista inicial: los 10 del ERP y los sistemas GM.</p>`},
+  personas:{t:"Administración · Personas",h:`
+    <h4>Objetivo</h4><p>Dar y quitar roles a cada persona, y activarla o desactivarla.</p>
+    <h4>Reglas</h4><ul><li>Una persona tiene todos los roles que necesite (ADR-006). Sus permisos son la suma de los de sus roles.</li><li>Sus áreas salen de sus roles; si tiene Desarrollador y QA, cuenta para los dos bloqueos de estimado con un solo estimado por ticket.</li><li>Solo un Super admin da o quita el rol de Super admin. Para un Admin esa opción sale deshabilitada.</li><li>No se puede quitar el rol ni desactivar al último Super admin activo.</li><li>Una persona desactivada no entra a Temis aunque su cuenta de Microsoft siga activa; sus tickets e historial se conservan.</li><li>Cada cambio de roles o de activación queda en la auditoría.</li></ul>
+    <h4>Permiso</h4><p><span class="mono">personas</span> para activar o desactivar; <span class="mono">roles</span> para dar roles.</p>`},
+  roles:{t:"Administración · Roles",h:`
+    <h4>Objetivo</h4><p>Definir qué permisos tiene cada rol y si trae un área.</p>
+    <h4>Reglas</h4><ul><li>Solo el Super admin edita roles; para los demás la tabla es de solo lectura.</li><li>El área de un rol decide en qué bloqueos de estimado cuenta quien lo tenga.</li><li>El rol Super admin siempre conserva el permiso <span class="mono">roles</span>.</li><li>Se pueden agregar roles, como uno de solo consulta para Dirección.</li><li>Tablas: <span class="mono">nucleo.roles</span>, <span class="mono">nucleo.roles_permisos</span>, <span class="mono">nucleo.personas_roles</span>.</li></ul>`},
+};
+function verSpec(k){ modal(`Especificación · ${SPEC[k].t}`, SPEC[k].h, null, true); }
+const ADR = {
+  "ADR-005":{t:"ADR-005 · Tickets configurable",h:`<p>El código sabe hacer una lista fija de revisiones; la configuración decide cuáles se usan, en qué paso y para qué tipo. Estatus, caminos, bloqueos, permisos por acción y reglas de captura viven en la base. La configuración inicial es la de hoy.</p>`},
+  "ADR-006":{t:"ADR-006 · Roles",h:`<p>Los permisos se dan a los roles, no a cada persona. Una persona tiene todos los roles que necesite y pertenece a todas sus áreas. Siempre queda un Super admin; el paso libre de la dueña en el código se quita. Primero Tickets y después el resto de Temis.</p>`},
+};
+function verAdr(k){ modal(ADR[k].t, ADR[k].h, null); }
+$("#btnNotas").onclick = () => modal("Notas del análisis", `
+  <h4>Decisiones cerradas</h4><ul>
+  <li>Los módulos son una sola lista: los del ERP y los demás sistemas de GM (Doble Check, Fiscal, Mis Viajes y demás).</li>
+  <li>Una persona puede tener varios roles, sin límite, incluidos varios con área.</li>
+  <li>Quien es Desarrollador y QA da un solo estimado por ticket, que cuenta para los dos bloqueos.</li>
+  <li>Roles iniciales: Analista, Desarrollador, QA, Soporte, Líder, Admin y Super admin. Se pueden agregar más.</li>
+  <li>Configurar Tickets lo hacen Admin y Super admin; editar los permisos de los roles, solo Super admin.</li>
+  <li>Reabrir lo puede hacer cualquiera con permiso de tickets y queda en la auditoría.</li>
+  <li>"No aplica" en quién originó el problema cumple el bloqueo de Por liberar.</li></ul>
+  <h4>Interpretaciones aplicadas</h4><ul>
+  <li>Cada pestaña se guarda por separado, para no perder lo de una por un error en otra.</li>
+  <li>El rol inicial de cada persona se calcula con el área de su correo y se corrige en Personas.</li>
+  <li>La pantalla de Personas y roles va en Administración porque cubre todo Temis, no solo Tickets.</li>
+  <li>Los permisos del resto de Temis se pasan a roles cuando se rehaga cada pantalla; mientras tanto siguen como hoy.</li></ul>`, null, true);
+
+// ── Recorrido de desarrollo ───────────────────────────────────────────────────
+const TOUR = [
+  {adr:"ADR-005",where:"Tickets › Configuración › Estatus",t:"Los estatus son un catálogo",b:["Se renombran, se ordenan y se agregan sin programar.","Cada uno tiene sus marcas: inicial, final, reabrir con auditoría, siempre disponible, Kanban y Backlog."],sel:"#tablaEstatus",setup:()=>goTo({screen:"config",tab:"estatus"})},
+  {adr:"ADR-005",where:"Tickets › Configuración › Estatus",t:"Agregar un estatus",b:["El código se arma solo con el nombre y ya no cambia.","Un estatus nuevo se usa hasta que se pone en un camino."],sel:"#btnNuevoEstatus",setup:()=>goTo({screen:"config",tab:"estatus"})},
+  {adr:"ADR-005",where:"Tickets › Configuración › Estatus",t:"Desactivar avisa a cuántos tickets afecta",b:["Nada con tickets se borra.","El estatus inicial no se puede desactivar."],sel:"#tablaEstatus tbody tr:nth-child(4)",setup:()=>goTo({screen:"config",tab:"estatus"})},
+  {adr:"ADR-005",where:"Tickets › Configuración › Caminos",t:"Los pasos de cada camino",b:["Orden, estatus y etapa de cada paso.","Qué pasos cuentan rebote y desde dónde empieza."],sel:"#tablaPasos",setup:()=>goTo({screen:"config",tab:"caminos",camino:"cotizacion"})},
+  {adr:"ADR-005",where:"Tickets › Configuración › Bloqueos",t:"Bloqueos que se prenden y apagan",b:["Cada bloqueo dice qué revisa, desde qué estatus y para qué área.","La columna de mensaje muestra lo que verá la persona."],sel:"#tablaBloqueos",setup:()=>goTo({screen:"config",tab:"bloqueos",camino:"error"})},
+  {adr:"ADR-005",where:"Tickets › Configuración › Catálogos",t:"Módulos como catálogo",b:["Una sola lista con el ERP y los sistemas GM.","Al crear un ticket el módulo se elige de aquí; los nombres no se repiten."],sel:"#tablaCatalogo",setup:()=>goTo({screen:"config",tab:"catalogos",catalogo:"modulos"})},
+  {adr:"ADR-005",where:"Tickets › Configuración › Permisos",t:"Qué permiso pide cada acción",b:["Por ejemplo, quitar responsables pide funciones de líder.","Al lado se ve qué roles lo tienen."],sel:"#tablaPermisos",setup:()=>goTo({screen:"config",tab:"permisos"})},
+  {adr:"ADR-005",where:"Tickets › Configuración",t:"Guardar revisa todo antes",b:["Si la configuración queda rota, no guarda y dice qué arreglar.","Si alguien más guardó, avisa para recargar.","Cada guardado queda en la auditoría."],sel:"#footer",setup:()=>{goTo({screen:"config",tab:"reglas"});}},
+  {adr:"ADR-006",where:"Administración › Personas y roles › Personas",t:"Varios roles por persona",b:["Marco es Desarrollador, QA y Líder a la vez.","Sus áreas salen de sus roles."],sel:"#tablaPersonas tbody tr:nth-child(3)",setup:()=>goTo({screen:"admin",admin:"personas"})},
+  {adr:"ADR-006",where:"Administración › Personas y roles › Roles",t:"Permisos por rol",b:["Solo el Super admin los edita.","El área del rol decide en qué bloqueos de estimado cuenta."],sel:"#tablaRoles",setup:()=>goTo({screen:"admin",admin:"roles"})},
+];
+let paso=-1;
+function tourPaso(i){
+  document.querySelectorAll(".tour-spot").forEach(x=>x.classList.remove("tour-spot"));
+  if (i<0||i>=TOUR.length){ paso=-1; $("#tourbar").hidden=true; $("#btnTour").textContent="▶ Recorrido de desarrollo"; return; }
+  paso=i; const s=TOUR[i]; cerrar(); s.setup();
+  const el=document.querySelector(s.sel); if(el){ el.classList.add("tour-spot"); el.scrollIntoView({block:"center",behavior:"smooth"}); }
+  $("#tourbar").hidden=false; $("#btnTour").textContent="■ Salir del recorrido";
+  $("#tourbar").innerHTML=`<div class="in"><div class="txt"><div class="where">${s.where} · <button class="chip-adr" data-adr="${s.adr}">${s.adr}</button> · ${i+1}/${TOUR.length}</div><h3>${s.t}</h3><ul>${s.b.map(x=>`<li>${x}</li>`).join("")}</ul><div class="prog"><i style="width:${(i+1)/TOUR.length*100}%"></i></div></div>
+  <button class="btn" id="tAnt" ${i===0?"disabled":""}>Anterior</button><button class="btn primary" id="tSig">${i===TOUR.length-1?"Terminar":"Siguiente"}</button></div>`;
+  $("#tAnt").onclick=()=>tourPaso(paso-1); $("#tSig").onclick=()=>tourPaso(paso+1);
+}
+$("#btnTour").onclick=()=>tourPaso(paso<0?0:-1);
+
+render();
+</script>
+</body>
+</html>
